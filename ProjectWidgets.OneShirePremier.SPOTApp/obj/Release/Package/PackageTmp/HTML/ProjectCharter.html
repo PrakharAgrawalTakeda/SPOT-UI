@@ -1,0 +1,998 @@
+﻿<div>
+    <div>
+
+        <div class="row">
+            <div id="noPadPanel" class="col-md-12 col-sm-12 col-xs-12 tab-panel-box">
+                <span class="panel-box-title"><h4>Project Charter Wizard</h4></span>
+                <div class="row column">
+                    <!-- btns row -->
+                    <!-- <div class="row align-right btnsRow mainColumnbtnsRow"> -->
+                    <!-- <p> -->
+                    <!-- <span><span class="k-icon k-i-plus"></span>&nbsp; Add Option</span> -->
+                    <!-- <button id="edit" class="k-primary">Import Data</button> -->
+                    <!-- </p> -->
+                    <!-- </div> -->
+                    <!-- btns row -->
+                    <!-- -->
+                    <div class="demo-section k-content">
+                        <div class="btnTabsControls">
+                            <button id="cancel" class="k-primary" ng-click="dialogProjectCharter.close()">Close</button>
+                            <button id="projectCharterSave" ng-show="vm.isEditable" class="k-primary float-R" ng-click="vm.updateProjectCharterInfo()">Save</button>
+                        </div>
+                        <div id="tabstrip" class="tabsstrip" kendo-tab-strip k-content-urls="[ null, null]">
+
+                            <ul>
+                                <li ng-click="vm.trackEventFunc('Project charter General tab')" class="k-state-active">General Info</li>
+                                <li ng-click="vm.trackEventFunc('Project charter scope tab')">Scope</li>
+                                <li ng-click="vm.trackEventFunc('Project charter Milestone tab')">Milestones</li>
+                                <li ng-click="vm.trackEventFunc('Project charter Team tab')">Project Team</li>
+                                <li ng-click="vm.trackEventFunc('Project charter Risk/Assumption tab')">Risks / Assumptions</li>
+                                <li ng-click="vm.trackEventFunc('Project charter Cost/Funding tab')">Cost / Funding</li>
+                                <li ng-click="vm.trackEventFunc('Project charter CAPS tab')">CAPS</li>
+                            </ul>
+
+                            <!-- General Info -->
+                            <div>
+                                <!-- btns row -->
+                                <!--<div class="row align-right btnsRow">
+                                    <p>
+                                        <button id="edit" class="k-primary">Edit</button>
+                                    </p>
+                                </div>-->
+                                <!-- btns row -->
+                                <!-- content row -->
+                                <div class="row contentRow">
+
+                                    <!-- Non Edit View -->
+                                    <!--<div class="nonEditView" style="display:none;">
+
+                                        <div class="row">
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Project ID</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Dummy Text</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Dummy Text</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Impacted Product</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Portfolio Owner</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Execution Scope</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Sponsor</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Business Case Author</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Additional Authors / Contributors</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Problem Description / Present Situation</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Risk / Impact of doing Nothing</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                            <div class="col-xs-12 info">
+                                                <label class="col-xs-6">Project Classification</label>
+                                                <span class="col-xs-6"><p>Dummy Text</p></span>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                    <!-- Non Edit View -->
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="col-xs-10 infoColumn">
+                                            <div class="row">
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Project ID</label>
+                                                    <div class="col-xs-7">
+                                                        <input kendotextbox class="k-textbox inputDisabled" ng-disabled="true" value="{{vm.projectCharterInfoSelected.ProblemID}}" style="width: 100%;background-color:#eae8e8" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Project Name</label>
+                                                    <div class="col-xs-7">
+                                                        <div class="">
+                                                            <input type="text" maxlength="200" ng-disabled="!vm.isEditable" class="form-control" ng-model="vm.projectCharterInfoSelected.ProjectName">
+                                                            <!--<span class="input-group-addon"><span class="k-icon k-i-question" kendo-tooltip k-content="''"></span></span>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                                        Primary Product<div class="ssk-tooltip" kendo-tooltip k-content="'Select the product which is most impacted by the project.  If multiple products without an obvious primary, select one out of the group'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_PC_PrimaryProduct" name="ddl_PC_PrimaryProduct" kendo-combo-box ng-disabled="!vm.isEditable"
+                                                                    k-placeholder="'Select and/or Type to Search'"
+                                                                    k-filter="'contains'"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsPrimaryProduct"
+                                                                    style="width: 100%"
+                                                                    k-ng-model="vm.projectCharterInfoSelected.PrimaryProductID"></select>
+                                                            <!--<span class="input-group-addon customSelectHelpicon"><span class="k-icon k-i-question"></span></span>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Other Impacted Product(s)<div class="ssk-tooltip" kendo-tooltip k-content="'Any additional products which are impacted by the project execution'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_PC_ImpactedProducts" kendo-multi-select k-options="vm.dsImpactedProducts" ng-disabled="!vm.isEditable"
+                                                                    k-ng-model="vm.projectCharterInfoSelected.OtherImpactedProducts"></select>
+                                                            <!--<select ng-show="vm.isEditable" kendo-multi-select k-options="vm.ImpactedProductOptions" k-ng-model="vm.ImpactedProductIds"></select>-->
+                                                            <!--<span class="input-group-addon customSelectHelpicon"><span class="k-icon k-i-question"></span></span>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Portfolio Owner<div class="ssk-tooltip" kendo-tooltip k-content="'The group which is responsible for the oversight and process adherance of the record'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_PC_PortfolioOwner" kendo-combo-box ng-disabled="!vm.isPortfolioOwnerEditablePC"
+                                                                    k-placeholder="'Select a value'"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsOwner"
+                                                                    style="width: 100%"
+                                                                    k-ng-model="vm.projectCharterInfoSelected.PortfolioOwnerID"
+                                                                    class=""></select>
+                                                            <!--<span class="input-group-addon customSelectHelpicon"><span class="k-icon k-i-question"></span></span>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Execution Scope<div class="ssk-tooltip" kendo-tooltip k-content="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_PC_ExecutionScope" kendo-multi-select k-options="vm.dsExecutionScope"
+                                                                    ng-disabled="!vm.isEditable" k-ng-model="vm.projectCharterInfoSelected.ExecutionScope"></select>
+                                                            <!--<span class="input-group-addon customSelectHelpicon"><span class="k-icon k-i-question"></span></span>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Sponsor</label>
+                                                    <div class="col-xs-7">
+                                                        <div class="input-group">
+                                                            <input ng-disabled="true" type="text" class="form-control" ng-model="vm.projectCharterInfoSelected.SponsorName">
+                                                            <!--<select ng-disabled="true" kendo-drop-down-list
+                                                                    k-filter="'contains'"
+                                                                    k-options="vm.customPeopleControl"
+                                                                    style="width: 100%"
+                                                                    k-ng-model="vm.projectCharterInfoSelected.SponsorADID"></select>-->
+                                                            <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Project Manager</label>
+                                                    <div class="col-xs-7">
+                                                        <div class="input-group">
+                                                            <input ng-disabled="true" type="text" class="form-control" ng-model="vm.projectCharterInfoSelected.ProjectManagerName">
+                                                            <!--<select ng-disabled="true" kendo-drop-down-list
+                                                            k-filter="'contains'"
+                                                            k-options="vm.customPeopleControl"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.projectCharterInfoSelected.ProjectManagerADID"></select>-->
+                                                            <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Parent Project / Program<div class="ssk-tooltip" kendo-tooltip k-content="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+
+                                                        <div class="row noPadding">
+                                                            <div id="programGrid">
+                                                                <select id="pc_parentProject" ng-disabled="!vm.isEditable" style="width: 100%"></select>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Primary KPI
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <select id="ddl_Primary_KPI_Charter" name="ddl_Primary_KPI_Charter" kendo-combo-box ng-disabled="!vm.isEditable"
+                                                                k-placeholder="'Select and/or Type to Search'"
+                                                                k-filter="'contains'"
+                                                                k-data-text-field="'LookUpMemberName'"
+                                                                k-data-value-field="'LookUpMemberID'"
+                                                                k-data-source="vm.dsPrimaryKPI"
+                                                                style="width: 100%"
+                                                                k-ng-model="vm.projectCharterInfoSelected.PrimaryKPI"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Agile Project ?
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <div class="fieldgroup inlineFieldGroup">
+                                                            <input type="radio" ng-disabled="!vm.isEditable" name="CharterAgile_Yes" ng-model="vm.projectCharterInfoSelected.IsAgile" ng-click="vm.changeAgile(true,$event)" ng-value="true">
+                                                            <label for="CharterAgile_Yes">
+                                                                Yes
+                                                            </label>
+                                                        </div>
+                                                        <div class="fieldgroup inlineFieldGroup">
+
+                                                            <input ng-disabled="!vm.isEditable" type="radio" name="CharterAgile_No" ng-model="vm.projectCharterInfoSelected.IsAgile" ng-click="vm.changeAgile(false,$event)" ng-value="false">
+                                                            <label for="CharterAgile_No">No</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info" ng-show="vm.agileVisibleCharter">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">AGILE Primary Workstream </label>
+                                                            <select tabindex="14" id="charterPrimaryWorkstation" name="charterPrimaryWorkstation"
+                                                                    kendo-combo-box
+                                                                    k-placeholder="'Select and/or Type to Search'"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsAgilePrimaryWorkstation"
+                                                                    k-filter="'contains'"
+                                                                    style="width: 100%"
+                                                                    ng-disabled="!vm.isEditable"
+                                                                    k-ng-model="vm.selectedAgilePrimaryWorkstream"></select>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">AGILE Secondary Workstream </label>
+                                                            <select id="agileSecondaryWorkstream" kendo-multi-select 
+                                                                    k-options="vm.dsAgileSecWorkstream"
+                                                                       ng-disabled="!vm.isEditable"
+                                                                    k-ng-model="vm.agileSecWorkstreamIds"></select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">AGILE Wave</label>
+                                                            <select tabindex="16" id="agileWaveCharter" name="agileWaveCharter"
+                                                                    kendo-combo-box
+                                                                    k-placeholder="'Select and/or Type to Search'"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsAgileWave"
+                                                                    k-filter="'contains'"
+                                                                    style="width: 100%"
+                                                                    ng-disabled="!vm.isEditable"
+                                                                    k-ng-model="vm.selectedAgileWave"></select>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--<div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Problem Description / Present Situation<div class="ssk-tooltip" kendo-tooltip k-content="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.projectCharterInfoSelected.ProjectDescription"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">SVP Element</label>
+                                                    <div class="col-xs-7">
+                                                        <input ng-disabled="true" type="text" class="form-control" ng-model="vm.projectCharterInfoSelected.SVPElementTypeID"/>
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Governance Body<div class="ssk-tooltip" kendo-tooltip k-content="'This should be the same as your Portfolio Owner, but you can choose a different body by exception if applicable'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <select id="pc_governanceBody" kendo-combo-box ng-disabled="!vm.isEditable"
+                                                                k-placeholder="'Select and/or Type to Search'"
+                                                                k-data-text-field="'LookUpMemberName'"
+                                                                k-data-value-field="'LookUpMemberID'"
+                                                                k-filter="'contains'"
+                                                                k-data-source="vm.dsOwner"
+                                                                style="width: 100%"
+                                                                k-ng-model="vm.projectCharterInfoSelected.GovernanceBodyTypeID"></select>
+
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <div class="form-group">
+                                                <label class="control-label">Date Approved</label>
+                                                <div class="input-group">
+                                                    <input id="PC_approvedDate" name="PC_approvedDate" ng-disabled="!vm.isEditable" kendo-date-picker placeholder="{{vm.dateFormatlabel}}" ng-model="vm.projectCharterInfoSelected.ApprovedDate" />
+                                                </div>
+                                                <span id="validationPCApprovedDate" style="color:red" ng-show="vm.pcApprovedDateError">{{vm.dateErrorMsg}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                                <!-- content row -->
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow bottom-butons-block">
+                                    <p>
+                                        <button id="edit" class="k-primary">Cancel</button>
+                                        <button id="edit" class="k-primary float-R" ng-click="vm.UpdateProjectDetails()">Save</button>
+                                    </p>
+                                </div>-->
+                                <!-- btns row -->
+                            </div>
+                            <!-- General Info -->
+                            <!-- Scope -->
+                            <div>
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <button id="edit" class="k-primary btnWhite float-R">Import Data</button>
+                                </div>-->
+                                <!-- btns row -->
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="col-xs-10 infoColumn">
+                                            <div class="row">
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Problem Description
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="form-control" row="5" ng-model="vm.projectCharterInfoSelected.ProjectDescription" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Target End State
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="form-control" row="5" ng-model="vm.projectCharterInfoSelected.TargetEndState" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Proposal Statement<div class="ssk-tooltip" kendo-tooltip k-content="'Single summary sentence of what, how, cost and by when'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="form-control" ng-model="vm.projectCharterInfoSelected.ProposalStatement" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Detailed Description<div class="ssk-tooltip" kendo-tooltip k-content="'More detailed information of how to execute the proposal'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.projectCharterInfoSelected.DetailedDescription"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Primary Impacted KPI
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <select id="ddl_Impacted_KPI" name="ddl_Impacted_KPI" kendo-combo-box ng-disabled="!vm.isEditable"
+                                                                k-placeholder="'Select and/or Type to Search'"
+                                                                k-filter="'contains'"
+                                                                k-data-text-field="'LookUpMemberName'"
+                                                                k-data-value-field="'LookUpMemberID'"
+                                                                k-data-source="vm.dsPrimaryKPI"
+                                                                style="width: 100%"
+                                                                k-ng-model="vm.projectCharterInfoSelected.PrimaryKPI"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                        <hr />
+
+
+
+                                        <div class="row">
+                                            <label class="tableHeading">Key Success Criteria</label>
+                                            <span style="margin-right: 16px;" class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectCharterKeySuccessCriteria')" ng-show="vm.isEditable">
+                                                <span class="k-icon k-i-plus"></span>Add New
+                                            </span>
+                                            <!--<a ng-click="vm.AddNewRow('gridProjectCharterKeySuccessCriteria')" class="k-icon k-i-plus AddNewRowicon" style="margin-right: 16px;"></a>-->
+                                        </div>
+                                        <div class="row">
+                                            <div id="gridProjectCharterKeySuccessCriteria"></div>
+                                        </div>
+                                        <hr />
+
+
+                                        <div class="clearfix"></div>
+
+                                        <!-- -->
+                                        <div class="col-xs-12 infoColumn">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                            In Scope <div class="ssk-tooltip" kendo-tooltip k-content="'List/Statements of critical In Scope elements'">
+                                                                <span class="k-icon k-i-question"></span>
+                                                            </div>
+                                                        </label>
+                                                        <div class="inputGroupContainer">
+                                                            <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.projectCharterInfoSelected.InScope"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                            Out of Scope<div class="ssk-tooltip" kendo-tooltip k-content="'List/Statements of critical out of Scope element'">
+                                                                <span class="k-icon k-i-question"></span>
+                                                            </div>
+                                                        </label>
+                                                        <div class="inputGroupContainer">
+                                                            <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.projectCharterInfoSelected.OutOfScope"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <!-- -->
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                                <!-- content row -->
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <p>
+                                        <button id="edit" class="k-primary">Cancel</button>
+                                        <button id="edit" class="k-primary float-R">Save</button>
+                                    </p>
+                                </div>-->
+                                <!-- btns row -->
+
+                            </div>
+                            <!-- Scope -->
+                            <!-- Milestones -->
+                            <div>
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <button id="edit" class="k-primary btnWhite float-R">Import Data</button>
+                                </div>-->
+                                <!-- btns row -->
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="row">
+                                            <label class="tableHeading">Milestones</label>
+                                            <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectCharterMilestone')" ng-show="vm.isEditable">
+                                                <span class="k-icon k-i-plus"></span>Add New
+                                            </span>
+                                            <span class="AddNewRowicon" ng-click="vm.CheckBulkEditGridUpdate('gridProjectCharterMilestone', 'dialogAddMilestoneCharter')" ng-show="vm.isEditable">
+                                                <span class="k-icon k-i-plus"></span>Standard Milestone Sets
+                                            </span>
+                                            <!--<a ng-click="vm.AddNewRow('gridProjectCharterMilestone')" class="k-icon k-i-plus AddNewRowicon"></a>-->
+                                        </div>
+                                        <div class="row">
+                                            <div>
+                                                <div id="gridProjectCharterMilestone"></div>
+                                                <div>&nbsp;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                                <!-- content row -->
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow bottom-butons-block">
+                                    <p>
+                                        <button id="edit" class="k-primary">Cancel</button>
+                                        <button id="edit" class="k-primary float-R">Save</button>
+                                    </p>
+                                </div>-->
+                                <!-- btns row -->
+
+                            </div>
+                            <!-- Milestones -->
+                            <!-- Project Team -->
+                            <div>
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <button id="edit" class="k-primary btnWhite float-R">Import Data</button>
+                                </div>-->
+                                <!-- btns row -->
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="row">
+                                            <label class="tableHeading">Teams</label>
+                                            <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectTeam')" ng-show="vm.isEditable">
+                                                <span class="k-icon k-i-plus"></span>Add New
+                                            </span>
+                                            <!--<a ng-click="vm.AddNewRow('gridProjectTeam')" class="k-icon k-i-plus AddNewRowicon"></a>-->
+                                        </div>
+                                        <div class="row">
+                                            <div id="gridProjectTeam"></div>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                                <!-- content row -->
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <p>
+                                        <button id="edit" class="k-primary">Cancel</button>
+                                        <button id="edit" class="k-primary float-R">Save</button>
+                                    </p>
+                                </div>-->
+                                <!-- btns row -->
+
+                            </div>
+                            <!-- Project Team -->
+                            <!-- Risks / Assumptions -->
+                            <div>
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <button id="edit" class="k-primary btnWhite float-R">Import Data</button>
+                                </div>-->
+                                <!-- btns row -->
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+
+                                                <div>
+                                                    <div class="row">
+                                                        <label class="tableHeading">Risks</label>
+                                                        <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectCharterRisk')" ng-show="vm.isEditable">
+                                                            <span class="k-icon k-i-plus"></span>Add New
+                                                        </span>
+                                                        <!--<a ng-click="vm.AddNewRow('gridProjectCharterRisk')" class="k-icon k-i-plus AddNewRowicon"></a>-->
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <!--<div id="riskGrid"></div>-->
+                                                        <div id="gridProjectCharterRisk"></div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="tableHeading">Key Assumptions</label>
+                                                        <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectCharterAssumption')" ng-show="vm.isEditable">
+                                                            <span class="k-icon k-i-plus"></span>Add New
+                                                        </span>
+                                                        <!--<a ng-click="vm.AddNewRow('gridProjectCharterAssumption')" class="k-icon k-i-plus AddNewRowicon"></a>-->
+                                                    </div>
+                                                    <div class="row">
+                                                        <!--<div id="riskAssumptionGrid"></div>-->
+                                                        <div id="gridProjectCharterAssumption"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                                <!-- content row -->
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <p>
+                                        <button id="edit" class="k-primary">Cancel</button>
+                                        <button id="edit" class="k-primary float-R">Save</button>
+                                    </p>
+                                </div>-->
+                                <!-- btns row -->
+
+                            </div>
+                            <!-- Risks / Assumptions -->
+                            <!-- Costs / Funding -->
+                            <div>
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <button id="edit" class="k-primary btnWhite float-R">Import Data</button>
+                                </div>-->
+                                <!-- btns row -->
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="clearfix"></div>
+
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+
+                                                <div class="row gridHeader">
+                                                    <div class="col-xs-3">
+                                                        <label>Category</label>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <div><label>Base Case</label></div>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <div><label>High Case</label></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row gridRow">
+                                                    <div class="col-xs-3 category">
+                                                        <label>Duration (Months)</label>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" placeholder="x-Months" ng-model="vm.projectCharterInfoSelected.DurationBaseCase" />
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" placeholder="x-Months" ng-model="vm.projectCharterInfoSelected.DurationHighCase" />
+                                                    </div>
+                                                </div>
+                                                <div class="row gridRow">
+                                                    <div class="col-xs-3 category">
+                                                        <span>People (FTE Months)</span>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" placeholder="x-Months" ng-model="vm.projectCharterInfoSelected.PeopleFTEMonthsRequiredBaseCase" />
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" placeholder="x-Months" ng-model="vm.projectCharterInfoSelected.PeopleFTEMonthsRequiredHighCase" />
+                                                    </div>
+                                                </div>
+                                                <div class="row gridRow">
+                                                    <div class="col-xs-3 category">
+                                                        <span>Total CAPEX <label ng-bind="vm.localCurrencyAbbre"></label></span>
+                                                        <div class="ssk-tooltip" kendo-tooltip k-content="'Please reference the Capital Request For Estimate (RFE) process prior to entering cost estimates (Veeva Document # GD-007364)'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" ng-model="vm.projectCharterInfoSelected.TotalCapExBaseCase" />
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" ng-model="vm.projectCharterInfoSelected.TotalCapExHighCase" />
+                                                    </div>
+                                                </div>
+                                                <div class="row gridRow">
+                                                    <div class="col-xs-3 category">
+                                                        <span>Total non-FTE OPEX <label ng-bind="vm.localCurrencyAbbre"></label></span>
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" ng-model="vm.projectCharterInfoSelected.TotalNonFTEOpExBaseCase" />
+                                                    </div>
+                                                    <div class="col-xs-2">
+                                                        <input class="txt-float-R" kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" ng-model="vm.projectCharterInfoSelected.TotalNonFTEOpExHighCase" />
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="clearfix"></div>
+
+                                        <div class="row">
+                                            <!-- -->
+                                            <div class="col-xs-12 infoColumn">
+                                                <div class="row">
+                                                    <div class="col-xs-12 info">
+                                                        <label class="col-xs-3 textFunctionRequired"># Functions Required</label>
+                                                        <div class="col-xs-4 padR0">
+                                                            <select kendo-combo-box id="functionRequired" ng-disabled="!vm.isEditable"
+                                                                    k-placeholder="'Select to Search'"
+                                                                    k-filter="'contains'"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.functionRequired"
+                                                                    style="width: 100%"
+                                                                    k-ng-model="vm.projectCharterInfoSelected.FunctionsRequiredID"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- -->
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <label class="tableHeading">Funding</label>
+                                            <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectCharterFunding1')" ng-show="vm.isEditable">
+                                                <span class="k-icon k-i-plus"></span>Add New
+                                            </span>
+                                            <!--<a ng-click="vm.AddNewRow('gridProjectCharterFunding1')" class="k-icon k-i-plus AddNewRowicon"></a>-->
+                                        </div>
+                                        <div class="row">
+                                            <div id="gridProjectCharterFunding1"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                                <!-- content row -->
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <p>
+                                        <button id="edit" class="k-primary">Cancel</button>
+                                        <button id="edit" class="k-primary float-R">Save</button>
+                                    </p>
+                                </div>-->
+                                <!-- btns row -->
+
+                            </div>
+                            <!-- Costs / Funding -->
+                            <!-- CAPS -->
+                            <div>
+                                <div class="row contentRow">
+                                    <div class="row rowMarMin15">
+                                        <!-- -->
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                                            <!--<div class="gridHeader2">-->
+                                            <div class="col-xs-5 info">
+                                                <div class="col-xs-6">
+                                                    <label class="horLabel">
+                                                        CAPS Project?
+                                                        <div class="ssk-tooltip" kendo-tooltip k-content="'{{vm.capsProjectTooltipCh}}'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <div>
+                                                        <input type="checkbox" id="capsProject" ng-model="vm.projectCharterInfoSelected.IsCapsProject" ng-disabled="vm.isCapsProjectChecked" />
+                                                        <!--<label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel" ng-bind="vm.tops.TOPSGroup">&nbsp;</label>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-7 info">
+                                                <div class="col-xs-4">
+                                                    <label class="horLabel padR0">Emissions Impact (tCO2e/Year)</label>
+                                                </div>
+                                                <div class="col-xs-4 input-group">
+                                                    <div>
+                                                        <input kendotextbox class="k-textbox k-state-disabled txt-float-R" ng-disabled="true" ng-model="vm.formattedCalculated" style="background-color:#eae8e8" />
+                                                        <!--<label class="horLabel" ng-bind="vm.formattedCalculated">&nbsp;</label>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -->
+                                    </div>
+                                    <div class="row rowMarMin15">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                                            <!--<div class="gridHeader2">-->
+                                            <div class="col-xs-5 info">
+                                                <div class="col-xs-6">
+                                                    <label class="horLabel">Environmental Portfolio
+                                                        <div class="ssk-tooltip" kendo-tooltip k-content="'{{vm.environmentalTootltipCh}}'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+
+                                                   
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <div class="dropdown-v-midle">
+                                                        <input kendotextbox class="k-textbox k-state-disabled"
+                                                               ng-disabled="vm.isCapsProjectChecked" ng-model="vm.projectCharterInfoSelected.EmissionPortfolioName"
+                                                               style="background-color:#eae8e8;width:100%;" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-7 info">
+                                                <div class="col-xs-4">
+                                                    <label class="horLabel">Energy Impact (per Year)</label>
+                                                </div>
+                                                <div class="col-xs-4 padL0">
+                                                    <div class="input-group">
+                                                        <input disabled="disabled" id="energyImpact" name="energyImpact"
+                                                               kendo-numerictextbox class="txt-float-R" options="vm.optionsCostImpact"
+                                                               ng-model="vm.projectCharterInfoSelected.EnergyImpact" />
+                                                        <label ng-bind="vm.projectCharterInfoSelected.AbbreviationEnergyImpact" class="charterUnitLabel"></label>
+
+                                                      </div>
+
+                                                </div>
+                                             
+                                                <div class="col-xs-4 padL0 padR0">
+                                                    <div class="input-group">
+                                                        <input kendo-numeric-text-box options="vm.optionsCostImpact"
+                                                                maxlength="14" 
+                                                               ng-disabled="(!vm.isEditable) || (vm.projectCharterInfoSelected.NoCarbonImpact==true) || (!(vm.isEMPortfolio && (vm.isUnitCost == null || vm.isUnitCost==false)) )" ng-model="vm.projectCharterInfoSelected.EnergyCostImpactPerYear" ng-change="vm.onChangeEnergyCostImpactCharter()" class="txt-float-R" />
+                                                        <label ng-bind="vm.projectCharterInfoSelected.LocalCurrencyAbbreviation " class="charterUnitLabel"></label>
+
+                                                     </div>
+
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row rowMarMin15">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                                            <!--<div class="gridHeader2">-->
+
+                                            <div class="col-xs-5 info">
+                                                <div class="col-xs-6">
+                                                    <label class="horLabel">Impact Realization Date</label>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <div class="input-group">
+                                                        <input ng-disabled="!(vm.isEMPortfolio && vm.isEditable)"  id="charterRealizationDate" name="charterRealizationDate"
+                                                               kendo-date-picker
+                                                               ng-model="vm.projectCharterInfoSelected.EmissionsImpactRealizationDate" />
+                                                    </div>
+                                                    <span id="realizationDateMsgCaps" style="color:red" ng-show="vm.RealizationDateCaps">{{vm.dateErrorMsg}}</span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-7 info">
+                                                <div class="col-xs-4">
+                                                    <label class="horLabel">Water Impact (per Year)</label>
+                                                </div>
+                                                <div class="col-xs-4 padL0">
+                                                    <div class="input-group">
+                                                        <input kendo-numeric-text-box options="vm.optionsCostImpact" maxlength="14" disabled="disabled" ng-model="vm.projectCharterInfoSelected.EnergyWaterImpactPerYear" class="txt-float-R" />
+                                                        <label ng-bind="vm.projectCharterInfoSelected.AbbreviationWaterImpact" class="charterUnitLabel"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4 padL0 padR0">
+                                                    <div class="input-group">
+                                                        <input kendo-numeric-text-box options="vm.optionsCostImpact" maxlength="14" 
+                                                               ng-disabled="(!vm.isEditable) || (!(vm.isEMPortfolio && (vm.isUnitCostWWC  == null || vm.isUnitCostWWC ==false)) )" ng-model="vm.projectCharterInfoSelected.EnergyWaterImpactCostPerYear" ng-change="vm.onChangeWWCostImpactCharter()" class="txt-float-R" />
+                                                        <label ng-bind="vm.projectCharterInfoSelected.LocalCurrencyAbbreviation" class="charterUnitLabel"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row rowMarMin15">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                                            <!--<div class="gridHeader2">-->
+
+                                            <div class="col-xs-5 info">
+
+                                            </div>
+                                            <div class="col-xs-7 info">
+                                                <div class="col-xs-4">
+                                                    <label class="horLabel">Waste Impact (per Year)</label>
+                                                </div>
+                                                <div class="col-xs-4 padL0">
+                                                    <div class="input-group">
+                                                        <input kendo-numeric-text-box options="vm.optionsCostImpact" maxlength="14" disabled="disabled" ng-model="vm.projectCharterInfoSelected.EnergyWasteImpactPerYear" class="txt-float-R" />
+                                                        <label ng-bind="vm.projectCharterInfoSelected.AbbreviationWasteImpact" class="charterUnitLabel"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4 padL0 padR0">
+                                                    <div class="input-group">
+                                                        <input kendo-numeric-text-box options="vm.optionsCostImpact" maxlength="14" 
+                                                               ng-disabled="(!vm.isEditable) || (!(vm.isEMPortfolio && (vm.isUnitCostWWC  == null || vm.isUnitCostWWC ==false)) )" ng-model="vm.projectCharterInfoSelected.EnergyWasteImpactCostPerYear" ng-change="vm.onChangeWWCostImpactCharter()" class="txt-float-R" />
+                                                        <label ng-bind="vm.projectCharterInfoSelected.LocalCurrencyAbbreviation " class="charterUnitLabel"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="tableHeading">Carbon</label>
+                                    </div>
+                                    <div class="row">
+                                        <div id="gridCapsCharter"></div>
+                                        <!--<div style="padding-left: 9px;padding-bottom: 10px;" ng-show="vm.noEMSOurceVisible"><h3>{{vm.noEMSource}}</h3></div>-->
+                                    </div>
+                                    <div class="row">
+                                        <div class="">
+                                            <div class="col-xs-12 info">
+                                                <div class="row">
+                                                    <div class="col-lg-3 p-0" style="padding-left: 9px;">
+                                                        <label class="horLabel" style="font-weight: 100;font-size: 13px;line-height: 20px;">No Carbon Impact</label>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <input ng-disabled="!(vm.isEMPortfolio && vm.isEditable)" type="checkbox" id="carbonImpact" ng-change="vm.onChangeCarbonImpact()" ng-model="vm.projectCharterInfoSelected.NoCarbonImpact" class="ng-pristine ng-valid ng-empty ng-touched ng-untouched" style="margin: 0px;position: relative;top: 4px;margin-left: 12px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row margT20B0 ">
+                                        <label class="tableHeading">Water and Waste</label>
+                                        <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridCapsWaterWasteCharter')" ng-show="vm.isEditable && vm.isEMPortfolio">
+                                            <span class="k-icon k-i-plus"></span>Add New
+                                        </span>
+                                        <!--<a class="k-icon k-i-plus AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseFundingOption2')"></a>-->
+                                    </div>
+                                    <div class="row">
+                                        <div id="gridCapsWaterWasteCharter"></div>
+                                        <!--<div style="padding-left: 9px;padding-bottom: 10px;" ng-show="vm.noEMSOurceVisible"><h3>{{vm.noEMSource}}</h3></div>-->
+                                    </div>
+                                </div>
+                            
+                               
+                            </div>
+                        </div>
+                        <!-- CAPS -->
+
+                    </div>
+
+                </div>
+                <!-- -->
+            </div>
+        </div>
+    </div>
+    <div id="dialogAddMilestoneCharter" kendo-window="dialogAddMilestoneCharter" k-title="'Standard Milestone Sets'" k-modal="true" k-visible="false">
+        <div class="tab-panel-box dialog-panel">
+            <span class="panel-box-title"><h4>Standard Milestone Sets</h4></span>
+            <div class="row">
+
+                <div class="col-md-12 bottom-butons-block">
+                    <a style="" ng-click="dialogAddMilestoneCharter.close()" class="k-button btnR  btnWhite baselineProject">Cancel</a>
+                    <a style="" ng-click="vm.AddMilestoneCharter()" class="k-button btnR margR5 btnWhite baselineProject">Add Milestones To the Project</a>
+                </div>
+            </div>
+            <div id="gridCharterAddMilestones"></div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <label style="font-size:smaller;color:#c5c5c5">All rights reserved</label>
+        </div>
+        <div class="col-md-6">
+            <label style="float:right;font-size:smaller;color:#c5c5c5">SPOT Version: {{vm.buildNo}} Release Date: {{vm.releaseDate}}</label>
+        </div>
+    </div>
+</div>
+

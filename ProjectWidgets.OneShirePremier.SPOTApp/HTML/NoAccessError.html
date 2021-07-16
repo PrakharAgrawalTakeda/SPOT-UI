@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link href="../Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="../Styles/site.css" rel="stylesheet" />
+      <style>
+	.errorPage {	
+		background: none;
+		position: absolute;
+		/* z-index: 999999999 !important; */
+		padding: 0px;
+		border: none !important;
+		-webkit-background-clip: padding-box;
+		background-clip: padding-box;
+		-moz-border-radius: 8px 8px 8px 8px;
+		border-radius: 0px;
+		/* width: 75% !important; */
+		max-width: 570px;
+		/* max-width: 1170px; */
+		/* min-width: 75% !important; */
+		/* max-width: 90% !important; */
+		max-height: 90% !important;
+		height: 250px;
+		margin: auto;
+		top: 0 !important;
+		left: 0 !important;
+		bottom: 0;
+		right: 0;
+		text-align: left;
+		box-shadow: none !important;
+		/* padding-top: 0px !important; */
+		background: #fff !important;
+		display: block;
+		}
+		.logoContainer {margin:10% 0%; text-align:center;}
+		.errorInfoContainer {margin:2% 0%;}
+		.errorInfoContainer h1 {
+			font-size: 4em;
+			padding-bottom: .1em;
+			border-bottom: #ccc 1px dashed;
+			margin-bottom: .3em;
+			color:#0071bc !important;
+		}
+		.errorInfoContainer h4 {
+			font-size: 1.5em;
+			line-height: 24px;
+		}
+		.errorInfoContainer a {
+			font-size: 1em;
+			display: block;
+			margin: 1em 0em;
+		}
+		.errorInfoContainer .k-primary {
+			color: #fff !important;
+			background: #0071bc !important !important;
+			border-color: #0071bc !important !important;
+			box-shadow: none !important;
+			background-image: none !important;
+			border: #0071bc 1px solid !important;
+			padding: 7px 10px;
+			margin: 1em 0em;
+		}
+	</style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="errorPage">
+            <div class="col-md-6 col-sm-6 col-xs-6 logoContainer">
+                <img src="../Styles/images/spotlogo.PNG" alt="" style="height:200px !important" />
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6 errorInfoContainer">
+                <h1>Access Error</h1>
+                <h4>You do not have access to this application.</h4>
+                <!--<a href="#" target="_blank">go to this link</a>
+                <button class="k-primary">click here...</button>-->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+﻿
+<div ng-controller="PortfolioExcelUpdateCtrl as vm" ng-init='vm.initPortfolioBudgetExcelUpdate()'>
+
+
+    <div class="row contentRow" id="noPadPanel">
+        <div class="EditView">
+            <div class="col-xs-12 infoColumn">
+                <div class="col-md-12 col-sm-12 col-xs-12 tab-panel-Budgetfilter">
+
+                    <div class="col-xs-12 info">
+
+
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">LBE Period</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select kendo-multi-select id="LBEPeriod"
+                                    k-options="vm.dsLBEPeriod"
+                                    k-ng-model="vm.LBEPeriodValue" style="width: 90%;" ng-disabled="vm.BudgetDataFor=='Historical'"></select>
+                            <!--k-data-text-field="'PeriodName'"
+         k-data-value-field="'DateMasterID'"
+         k-data-source="vm.dsLBEPeriod"-->
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                            Data For
+                        </label>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                            <input type="radio" name="chkHistorical" value="Forecast" ng-model="vm.BudgetDataFor">&nbsp;&nbsp;Forecast&nbsp;&nbsp;&nbsp;</b>
+                            <input type="radio" name="chkHistorical" value="Historical" ng-model="vm.BudgetDataFor">&nbsp;&nbsp;Historical
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                            <button class="k-button float-R" ng-click="vm.GetBudgetDataForExcel()">Get Data</button>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 info">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Project Ids</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input kendotextbox maxlength="4000" ng-model="vm.ProjId" class="k-textbox" style="width: 90%;" />
+                        </div>
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Budget Ids</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <input kendotextbox maxlength="4000" ng-model="vm.BudgetId" class="k-textbox" style="width: 90%;" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 tab-panel-Budgetfilter" ng-show="vm.IsForecast">
+                    <div class="col-xs-12 info">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Forecast Type</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <select kendo-drop-down-list id="ftype"
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.forecastType"
+                                    k-ng-model="vm.forecastTypeValue" k-on-change="vm.forecastChangeExcel()" style="width: 90%;"></select>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <button class="k-button float-R" ng-click="vm.SaveExcelData()" >Save changes</button>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 info">
+                        <div id="GridPortfolioForecastDataExcel" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 tab-panel-Budgetfilter" ng-show="vm.IsHistorical">
+                <div class="col-xs-12 info">
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2">Forecast Type</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <select kendo-drop-down-list id="ftype"
+                                k-data-text-field="'LookUpMemberName'"
+                                k-data-value-field="'LookUpMemberID'"
+                                k-data-source="vm.forecastType"
+                                k-ng-model="vm.forecastTypeHistoricalValue" k-on-change="vm.forecastChangeHistoricalExcel()" style="width: 90%;"></select>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <button class="k-button float-R" ng-click="vm.SaveExcelDataHistorical()">Save changes</button>
+
+                    </div>
+                </div>
+
+                <div class="col-xs-12 info">
+                    <div id="GridPortfolioHistoricalDataExcel" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>

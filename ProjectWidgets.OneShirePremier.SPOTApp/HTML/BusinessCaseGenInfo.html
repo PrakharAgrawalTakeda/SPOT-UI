@@ -1,0 +1,266 @@
+﻿<div>
+    <!-- btns row -->
+    <!--<div class="row align-right btnsRow">
+        <p>
+            <button id="edit" class="k-primary">Edit</button>
+        </p>
+    </div>-->
+    <!-- btns row -->
+    <!-- content row -->
+    <div class="row contentRow">
+
+        <!-- Non Edit View -->
+        <!--<div class="nonEditView" style="display:none;">
+            <div class="col-xs-6 infoColumn">
+                <div class="row">
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Project ID</label>
+                        <span class="col-xs-6"><p>New Problem / Opportunity</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Initiative Title</label>
+                        <span class="col-xs-6"><p>2</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Primary Product</label>
+                        <span class="col-xs-6"><p>Locutus</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Impacted Product</label>
+                        <span class="col-xs-6"><p>Hugh</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Portfolio Owner</label>
+                        <span class="col-xs-6"><p>Quality</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Execution Scope</label>
+                        <span class="col-xs-6"><p>Lexington</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Sponsor</label>
+                        <span class="col-xs-6"><p>Gammaguard</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Business Case Author</label>
+                        <span class="col-xs-6"><p>None</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Additional Authors / Contributors</label>
+                        <span class="col-xs-6"><p>None</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Problem Description / Present Situation</label>
+                        <span class="col-xs-6"><p>A block of text including the Strategic Rationale from the problem capture form &amp; or Business Case</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Risk / Impact of doing Nothing</label>
+                        <span class="col-xs-6"><p>A block of text including the Project Description from the problem capture form &amp; or Business Case</p></span>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-6">Project Classification</label>
+                        <span class="col-xs-6"><p>Value Improvement</p></span>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <!-- Non Edit View -->
+        <!-- Edit View -->
+        <div class="EditView">
+            <div class="col-xs-10 infoColumn">
+                <div class="row">
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Project IDs</label>
+                        <div class="col-xs-8">
+                            <input kendotextbox class="k-textbox inputDisabled" ng-disabled="true" ng-model="vm.SelectedProject.ProblemID" style="width: 100%;background-color:#eae8e8" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Initiative Title</label>
+                        <div class="col-xs-8">
+                            <div class="">
+                                <input type="text" class="form-control" ng-disabled="!vm.isEditable" ng-model="vm.SelectedProject.ProjectName">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            Primary Product
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'Select the product which is most impacted by the project.  If multiple products without an obvious primary, select one out of the group'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+                        </label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable" ng-bind="vm.SelectedProject.PrimaryProduct"></label>-->
+                            <select id="ddl_BC_PrimaryProduct" name="ddl_BC_PrimaryProduct" kendo-combo-box ng-disabled="!vm.isEditable"
+                                    k-placeholder="'Select and/or Type to Search'"                                   
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.dsBCPrimaryProduct"
+                                    k-filter="'contains'"
+                                    style="width: 100%"
+                                    k-ng-model="vm.selectedPrimaryProduct" required></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                           Other Impacted Product(s)
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'Any additional products which are impacted by the project execution'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+
+                        </label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable" ng-bind="vm.SelectedProject.ImpactedProductsName"></label>-->
+                            <select kendo-multi-select ng-disabled="!vm.isEditable" k-options="vm.ImpactedProductOptions" k-ng-model="vm.ImpactedProductIds"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            Portfolio Owner
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'The group which is responsible for the oversight and process adherence of the record'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+                        </label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable" ng-bind="vm.SelectedProject.PortfolioOwner.LookUpMemberName"></label>-->
+                            <select id="ddl_GI_PortfolioOwner" name="ddl_GI_PortfolioOwner" kendo-combo-box ng-disabled="!vm.isPortfolioOwnerEditableBC"
+                                    k-placeholder="'Select and/or Type to Search'"
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.dsBCPortfolioOwner"
+                                    style="width: 100%"
+                                    k-filter="'contains'"
+                                    k-ng-model="vm.selectedPortfolioOwner"
+                                    class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <label>
+                                Execution Scope  <div class="ssk-tooltip" kendo-tooltip k-content="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+                                    <span class="k-icon k-i-question"></span>
+                                </div>
+                            </label>
+
+                        </div>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable" ng-bind="vm.SelectedProject.ExecutionScopeName"></label>-->
+                            <select kendo-multi-select ng-disabled="!vm.isEditable" k-options="vm.ExecutionScopeOptions" k-ng-model="vm.ExecutionScopeIds"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Sponsor</label>
+                        <div class="col-xs-8">
+                            <div class="input-group">
+                                <!--<label ng-show="!vm.isEditable" ng-bind="vm.SelectedProject.Sponsor"></label>-->
+                                <select id="ddlSponsor" name="ddlSponsor" style="width: 100%" ng-disabled="!vm.isEditable"  />
+                                <!--<select kendo-drop-down-list id="ddlSponsor"
+                                        k-filter="'contains'"
+                                        k-options="vm.customOptions"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBC_Sponsor" required ng-disabled="!vm.isEditable"></select>-->
+                                <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Business Case Author</label>
+                        <div class="col-xs-8">
+                            <div class="input-group">
+                                <select id="ddlbusinessCaseAuthor" name="ddlbusinessCaseAuthor" style="width: 100%" ng-disabled="!vm.isEditable"  />
+                                <!--<select kendo-drop-down-list
+                                        k-filter="'contains'"
+                                        k-options="vm.customOptions"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBC_BusinessCaseAuthor" ng-disabled="!vm.isEditable"></select>-->
+                                <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Additional Authors / Contributors</label>
+                        <div class="col-xs-8">
+                            <div class="input-group">
+                                <!--<select kendo-multi-select id="ddl_GI_AdditionalAuthorsContributor"
+                                        k-filter="'contains'"
+                                        k-options="vm.customOptions"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBC_AdditionalAuthorsContributor" ng-disabled="!vm.isEditable"></select>-->
+                                <select id="ddl_GI_AdditionalAuthorsContributor" ng-disabled="!vm.isEditable" ></select>
+                                <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">
+                            Problem Description / Present Situation/ Submission Description
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+                        </label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable" ng-bind="vm.SelectedProject.ProjectDescription"></label>-->
+                            <textarea kendotextbox class="k-textbox form-control" ng-model="vm.SelectedProject.ProjectDescription" style="width: 100%;"
+                                      placeholder="" required ng-disabled="!vm.isEditable" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">
+                            Strategic Rationale
+                            <!--<div class="ssk-tooltip" kendo-tooltip k-content="'Why solve the problem now?'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>-->
+                        </label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable" ng-bind="vm.SelectedProject.ProjectDescription"></label>-->
+                            <textarea kendotextbox class="k-textbox form-control" ng-model="vm.SelectedProject.StrategicRationale" style="width: 100%;"
+                                      placeholder="Why solve the problem now?" ng-disabled="!vm.isEditable" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Risk / Impact of Doing Nothing</label>
+                        <div class="col-xs-8">
+                            <textarea class="form-control" ng-disabled="!vm.isEditable" ng-model="vm.SelectedProject.ImpactOfDoingNothing"></textarea>
+                        </div>
+                    </div>
+                    <!--<div class="col-xs-12 info">
+                        <label class="col-xs-4">Project Classification</label>
+                        <div class="col-xs-8">                            
+                            <select id="ddl_GI_Classification" kendo-combo-box
+                                    k-placeholder="'Select and/or Type to Search'"
+                                    k-filter="'contains'"
+                                    k-ng-model="vm.selectedProjectClassification"
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.dsGIProjectClassification"
+                                    style="width: 100%" required ng-disabled="!vm.isEditable"></select>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label class="control-label">Date Approved</label>
+                    <div class="input-group">
+                        <input id="BC_approvedDate" name="BC_approvedDate" ng-disabled="!vm.isEditable" ng-model="vm.SelectedProject.ApprovedDate" kendo-date-picker placeholder="{{vm.dateFormatlabel}}" />
+                    </div>
+                    <span id="validationBCApprovedDate" style="color:red" ng-show="vm.bcApprovedDateError">{{vm.dateErrorMsg}}</span>
+                </div>
+            </div>
+        </div>
+        <!-- Edit View -->
+
+    </div>
+    <!-- content row -->
+    <!-- btns row -->
+    <!--<div class="row btnsRow">
+        <p>
+            <button id="edit" class="k-primary">Cancel</button>
+            <button id="edit" ng-click="vm.AddBusinessCase()" class="k-primary float-R">Save</button>
+        </p>
+    </div>-->
+    <!-- btns row -->
+</div>

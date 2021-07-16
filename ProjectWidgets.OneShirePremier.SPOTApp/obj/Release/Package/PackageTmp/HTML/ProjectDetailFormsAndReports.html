@@ -1,0 +1,7 @@
+﻿<div ng-app="SPOTApp">
+    <div class="ng-cloak" ng-controller="ProjectHubHeaderCtrl as vm" ng-init='vm.initProjectHubHeader()'>
+        <a ng-click="vm.openModel()" class="k-primary">Project Details, Forms, Reports</a>
+        <div id="dialogPrjDetails" kendo-window="dialogPrjDetails" k-title="'Project Details And Forms'" k-visible="false" k-modal="true"
+             k-content="{ url: '{{ vm.projectDetailsAndFormsPagepath}}'}"></div>
+    </div>
+    </div>

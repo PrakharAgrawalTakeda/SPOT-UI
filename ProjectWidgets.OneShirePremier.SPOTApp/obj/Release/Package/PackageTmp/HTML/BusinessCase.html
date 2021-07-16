@@ -1,0 +1,47 @@
+﻿<div class="row">
+    <div id="noPadPanel" class="col-md-12 col-sm-12 col-xs-12 tab-panel-box">
+        <span class="panel-box-title"><h4>Business Case Wizard</h4></span>
+        <div class="row column">
+
+            <!-- -->
+            <div class="demo-section k-content">
+                <!-- btns row -->
+                <div ng-show="vm.isEditable" class="btnTabsControls">
+                    <!--<span class="addOptionBtn" ng-click="vm.addNewOption()">
+                        <span class="k-icon k-i-plus"></span>
+                        Add Option
+                    </span>-->
+                    <button id="cancel" class="k-primary" ng-click="vm.businessDialogClose('dialogBusinessCase')">Close</button>
+                    <button id="edit" class="k-primary" ng-click="vm.SaveBusinessCaseData()">Save</button>
+                </div>
+                <!-- btns row -->
+                <div id="businessCaseTabstrip" class="tabsstrip" kendo-tab-strip k-content-urls="[ null, null]">
+                    <ul>
+                        <li ng-click="vm.trackEventFunc('Business case General tab')" class="k-state-active">General Info</li>
+                        <li ng-click="vm.trackEventFunc('Business case Option 1')">Option 1</li>
+                        <li ng-click="vm.trackEventFunc('Business case Option 2')" ng-show="vm.isOption2">Option 2</li>
+                        <li ng-click="vm.trackEventFunc('Business case Option 3')" ng-show="vm.isOption3">Option 3</li>
+                    </ul>
+                    <div><directive-bus-case-gen-info></directive-bus-case-gen-info></div>
+                    <div><directive-bus-case-opt></directive-bus-case-opt></div>
+                    <div><directive-bus-case-opt-2></directive-bus-case-opt-2></div>
+                    <div><directive-bus-case-opt-3></directive-bus-case-opt-3></div>
+                </div>
+
+            </div>
+            <!-- -->
+
+           
+        </div>
+        
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <label style="font-size:smaller;color:#c5c5c5">All rights reserved</label>
+        </div>
+        <div class="col-md-6">
+            <label style="float:right;font-size:smaller;color:#c5c5c5">SPOT Version: {{vm.buildNo}} Release Date: {{vm.releaseDate}}</label>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,66 @@
+﻿<div class="row">
+    <div id="" class="col-xs-6 project-name">
+        <h2><span class="{{vm.IsActive}}">{{vm.ProblemID}} - {{vm.ProjectName}}</span></h2>
+    </div>
+    <div id="" class="col-xs-6 align-right secondTopBarBtns">
+        <!--<button id="projectDetails" class="k-primary">Project Details</button>-->
+        <directive-project-detail-forms-and-reports></directive-project-detail-forms-and-reports>
+    </div>
+    <div class="col-xs-12 projectHubStatus">
+        <div class="col-xs-10">
+            <div class="first">
+                <div class="box {{vm.OverallStatusIndicator}}"><span class="{{vm.OverallStatusSPOTLightInd}}"></span></div>
+                <div class="textContent">
+                    <span class="maintext">Overall Status</span>
+                    <span class="subtext">Status through {{vm.OverAllDataMain.StatusThrough | date : "dd-MMM-yy" }}</span>
+                </div>
+            </div>
+            <div class="second">
+                <div class="box {{vm.MileStoneIndicator}}"><span class="{{vm.ScheduleSPOTLightInd}}"></span></div>
+                <div class="textContent">
+                    <span class="maintext">Schedule</span>
+                    <!-- <span class="subtext">Status through 03 July 18</span> -->
+                </div>
+            </div>
+            <div class="third">
+                <div class="box {{vm.RiskIssueIndicator}}"><span class="{{vm.RiskIssueSPOTLightInd}}"></span></div>
+                <div class="textContent">
+                    <span class="maintext">Risks/Issues</span>
+                    <!-- <span class="subtext">Status through 03 July 18</span> -->
+                </div>
+            </div>
+            <div class="fifth">
+                <div class="box {{vm.AskNeedIndicator}}"><span class="{{vm.AskNeedSPOTLightInd}}"></span></div>
+                <div class="textContent">
+                    <span class="maintext">Asks/Needs</span>
+                    <!-- <span class="subtext">Status through 03 July 18</span> -->
+                </div>
+            </div>
+            <div class="fourth">
+                <div class="box {{vm.projectHubStatus.BudgetIndicator}}2"></div>
+                <div class="textContent">
+                    <span class="maintext">Budget/Spend</span>
+                    <!-- <span class="subtext">Status through 03 July 18</span> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2" ng-click="vm.GetDataQuality()">
+            <label style="cursor:pointer">Data Quality: <span class="{{vm.projectHubStatus.DataCompletenessColor}}Quality">{{vm.projectHubStatus.DataCompleteness}}</span></label>
+        </div>
+    </div>
+    <div id="dialogDataQuality" kendo-window="dialogDataQuality" k-title="'Project Data Quality'" k-visible="false" k-modal="true">
+        <div class="row" style="margin-top:15px">
+            <label class="col-xs-2">SPOT ID: <span>{{vm.projectHubStatus.ProblemID}}</span></label>
+
+            <label class="col-xs-3"><span>{{vm.projectHubStatus.ProjectName}}</span></label>
+
+            <label class="col-xs-4">Data Quality: <span class="{{vm.projectHubStatus.DataCompletenessColor}}Quality">{{vm.projectHubStatus.DataCompleteness}}</span><span style="margin-right:10px"> (Target 85%)</span> </label>
+        </div>
+        <div class="row">
+            <div id="GridDataQuality" class="FxRate"></div>
+        </div>
+        <div class="row">
+            <button id="cancel" class="k-primary float-R" ng-click="dialogDataQuality.close()">Close</button>
+        </div>
+    </div>
+</div>

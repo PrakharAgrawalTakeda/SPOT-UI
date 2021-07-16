@@ -1,0 +1,482 @@
+﻿<div>
+    <div>
+
+        <div class="row">
+            <div id="noPadPanel" class="col-md-12 col-sm-12 col-xs-12 tab-panel-box">
+                <span class="panel-box-title"><h4>Project Close Out Wizard</h4></span>
+                <div class="row column">
+
+                    <div class="demo-section k-content">
+                        <div class="btnTabsControls">
+                            <button id="cancel" class="k-primary" ng-click="dialogProjectCloseOut.close()">Close</button>
+                            <button id="projectCloseOutSave" ng-show="vm.isEditable" class="k-primary float-R" ng-click="vm.updateProjectCloseOutInfo()">Save</button>
+                        </div>
+                        <div id="tabstrip" class="tabsstrip" kendo-tab-strip k-content-urls="[ null, null]">
+                            <ul>
+                                <li class="k-state-active">General Info</li>
+                                <li>Outcomes</li>
+                                <li>Milestone Variance</li>
+                                <li>Schedule Baseline</li>
+                                <li>Budget Performance</li>
+                                <li>Lessons Learned</li>
+                            </ul>
+
+                            <!-- General Info -->
+                            <div>
+
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="col-xs-10 infoColumn">
+                                            <div class="row">
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Project ID</label>
+                                                    <div class="col-xs-7">
+                                                        <input kendotextbox class="k-textbox inputDisabled" ng-disabled="true" value="{{vm.projectCloseOutInfoSelected.ProblemID}}" style="width: 100%;background-color:#eae8e8" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Project Name</label>
+                                                    <div class="col-xs-7">
+                                                        <div class="">
+                                                            <input type="text" maxlength="200" ng-disabled="!vm.isEditable" class="form-control" ng-model="vm.projectCloseOutInfoSelected.ProjectName">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                                        Primary Product<div class="ssk-tooltip" kendo-tooltip k-content="'Select the product which is most impacted by the project.  If multiple products without an obvious primary, select one out of the group'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_CO_PrimaryProduct" name="ddl_CO_PrimaryProduct" kendo-combo-box ng-disabled="!vm.isEditable"
+                                                                    k-placeholder="'Select and/or Type to Search'"
+                                                                    k-filter="'contains'"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsPrimaryProduct"
+                                                                    style="width: 100%"
+                                                                    k-ng-model="vm.projectCloseOutInfoSelected.PrimaryProductID"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Other Impacted Products<div class="ssk-tooltip" kendo-tooltip k-content="'Any additional products which are impacted by the project execution'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_PC_ImpactedProducts" kendo-multi-select k-options="vm.dsImpactedProducts" ng-disabled="!vm.isEditable"
+                                                                    k-ng-model="vm.projectCloseOutInfoSelected.OtherImpactedProducts"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        OpU/Region
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <input kendotextbox class="k-textbox inputDisabled" ng-disabled="true" value="{{vm.projectCloseOutInfoSelected.OpU}}" style="width: 100%;background-color:#eae8e8" />
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Portfolio Owner<div class="ssk-tooltip" kendo-tooltip k-content="'The group which is responsible for the oversight and process adherance of the record'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_CO_PortfolioOwner" kendo-combo-box ng-disabled="!vm.isPortfolioOwnerEditablePC"
+                                                                    k-placeholder="'Select a value'"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsOwner"
+                                                                    style="width: 100%"
+                                                                    k-ng-model="vm.projectCloseOutInfoSelected.PortfolioOwnerID"
+                                                                    class=""
+                                                                    k-change="vm.PortfolioOwnerChange"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Execution Scope<div class="ssk-tooltip" kendo-tooltip k-content="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                                        <div class="">
+                                                            <select id="ddl_PC_ExecutionScope" kendo-multi-select k-options="vm.dsExecutionScope"
+                                                                    ng-disabled="!vm.isEditable" k-ng-model="vm.projectCloseOutInfoSelected.ExecutionScope"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Sponsor</label>
+                                                    <div class="col-xs-7">
+                                                        <div class="input-group">
+                                                            <select id="ddl_CO_Sponsor" name="ddl_CO_Sponsor" ng-disabled="!vm.isEditable"  style="width: 100%" />
+                                                            <!--<select kendo-drop-down-list id="ddlSponsor"
+                                                            k-filter="'contains'"
+                                                            k-options="vm.customOptions"
+                                                            style="width: 100%"
+                                                            k-ng-model="vm.selectedBC_Sponsor" required ng-disabled="!vm.isEditable"></select>-->
+                                                            <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>
+                                                            <!--<input type="text" class="form-control" ng-model="vm.projectCloseOutInfoSelected.SponsorName">
+
+                                                            <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">Project Manager</label>
+                                                    <div class="col-xs-7">
+                                                        <div class="input-group">
+                                                            <select id="ddl_CO_ProjectManager" ng-disabled="!vm.isEditable" name="ddl_CO_ProjectManager" style="width: 100%" />
+                                                            <!--<input ng-disabled="true" type="text" class="form-control" ng-model="vm.projectCloseOutInfoSelected.ProjectManagerName">-->
+
+                                                            <span class="input-group-addon addonBorder"><span class="k-icon k-i-user"></span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Parent Project / Program<div class="ssk-tooltip" kendo-tooltip k-content="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <div class="row noPadding">
+                                                            <div id="programGrid1" >
+                                                                <select id="ddl_Co_parentProjectCloseOut" name="ddl_Co_parentProjectCloseOut" ng-disabled="!vm.isEditable" style="width: 100%"></select>
+                                                             </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Good Practice?
+                                                    </label>
+                                                    <div class="col-xs-7">
+
+                                                        <div class="row noPadding">
+                                                            <div class="fieldgroup inlineFieldGroup">
+                                                                <input type="radio" ng-disabled="!vm.isEditable" name="GoodPractClose_Yes" ng-model="vm.projectCloseOutInfoSelected.IsGoodPractise" ng-value="true">
+                                                                <label for="GoodPractClose_Yes">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="fieldgroup inlineFieldGroup">
+                                                                <input type="radio" ng-disabled="!vm.isEditable" name="GoodPractClose_No" ng-model="vm.projectCloseOutInfoSelected.IsGoodPractise" ng-value="false">
+                                                                <label for="GoodPractClose_No">
+                                                                    No
+                                                                </label>
+                                                                <!--<input type="checkbox" id="goodPracticeCloseOut" ng-model="vm.projectCloseOutInfoSelected.IsGoodPractise" />-->
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <div class="form-group">
+                                                <label class="control-label">Date Approved</label>
+                                                <div class="input-group">
+                                                    <input id="PC_approvedDateCloseOut" name="PC_approvedDateCloseOut" ng-disabled="!vm.isEditable" kendo-date-picker placeholder="{{vm.dateFormatlabel}}" ng-model="vm.projectCloseOutInfoSelected.ApprovedDate" />
+                                                </div>
+                                                <span id="validationCloseOutApprovedDate" style="color:red" ng-show="vm.coApprovedDateError">{{vm.dateErrorMsg}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                                <!-- content row -->
+
+                            </div>
+                            <!-- General Info -->
+                            <!-- Outcomes -->
+                            <div>
+                                <!-- btns row -->
+                                <!--<div class="row btnsRow">
+                                    <button id="edit" class="k-primary btnWhite float-R">Import Data</button>
+                                </div>-->
+                                <!-- btns row -->
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="col-xs-10 infoColumn">
+                                            <div class="row">
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Problem Description
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="form-control" row="5" ng-model="vm.projectCloseOutInfoSelected.ProjectDescription" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Approach Taken to Solve Problem<div class="ssk-tooltip" kendo-tooltip k-content="'More detailed information of how to execute the proposal'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.projectCloseOutInfoSelected.DetailedDescription"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Target End State
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="form-control" row="5" ng-model="vm.projectCloseOutInfoSelected.TargetEndState" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <label class="col-xs-5">
+                                                        Benefits Realized/Outcome<div class="ssk-tooltip" kendo-tooltip k-content="'Single summary sentence of what, how, cost and by when'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-xs-7">
+                                                        <textarea maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="form-control" ng-model="vm.projectCloseOutInfoSelected.BenefitsRealizedOutcome" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                        <hr />
+
+
+
+                                        <div class="row">
+                                            <label class="tableHeading">Performance</label>
+                                            <span style="margin-right: 16px;" class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectCloseOutKeySuccessCriteria')" ng-show="vm.isEditable">
+                                                <span class="k-icon k-i-plus"></span>Add New
+                                            </span>
+                                            <!--<a ng-click="vm.AddNewRow('gridProjectCharterKeySuccessCriteria')" class="k-icon k-i-plus AddNewRowicon" style="margin-right: 16px;"></a>-->
+                                        </div>
+                                        <div class="row">
+                                            <div id="gridProjectCloseOutKeySuccessCriteria"></div>
+                                        </div>
+                                        <hr />
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                            </div>
+                            <!-- Outcomes -->
+                            <!--Milestone Variance -->
+                            <div>
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="row">
+                                            <label class="tableHeading">Milestone Variance</label>
+                                        </div>
+                                        <div class="row">
+                                            <div>
+                                                <div id="gridProjectCloseOutMilestoneVariance"></div>
+                                                <div>&nbsp;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                            </div>
+                            <!--Milestone Variance -->
+                            <!--Schedule Variance -->
+                            <div>
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="row">
+                                            <label class="tableHeading">Schedule Variance</label>
+                                        </div>
+                                        <div class="row">
+                                            <div>
+                                                <div id="gridProjectCloseOutScheduleVariance"></div>
+                                                <div>&nbsp;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                            </div>
+                            <!--Schedule Baseline -->
+                            <!--Budget Performance-->
+                            <div>
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <p style="font-weight:bold">NOTE: In addition to the data below, a bar graph showing Plan vs. Actual over the life of the project will be included in the report</p><br />
+                                        <div class="row">
+                                            <label class="tableHeading">Final Requirements</label><br />
+                                            <div class="col-xs-6">
+                                                <div class="col-xs-12 info">
+                                                    <input tabindex="1" ng-disabled="!vm.isEditable" ng-model="vm.budgetField1.checked" type="checkbox" value="vm.budgetField1.name" ng-show="vm.budgetField1.active" />
+                                                    <label class="control-label" ng-show="vm.budgetField1.active">{{vm.budgetField1.name}}</label>
+                                                </div>
+
+                                                <div class="col-xs-12 info">
+                                                    <input tabindex="2" ng-disabled="!vm.isEditable" ng-model="vm.budgetField2.checked" type="checkbox" value="vm.budgetField2.name" ng-show="vm.budgetField2.active" />
+                                                    <label class="control-label" ng-show="vm.budgetField2.active">{{vm.budgetField2.name}}</label>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <input tabindex="3" ng-disabled="!vm.isEditable" ng-model="vm.budgetField3.checked" type="checkbox" value="vm.budgetField3.name" ng-show="vm.budgetField3.active" />
+                                                    <label class="control-label" ng-show="vm.budgetField3.active">{{vm.budgetField3.name}}</label>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <input tabindex="4" ng-disabled="!vm.isEditable" ng-model="vm.budgetField4.checked" type="checkbox" value="vm.budgetField4.name" ng-show="vm.budgetField4.active" />
+                                                    <label class="control-label" ng-show="vm.budgetField4.active">{{vm.budgetField4.name}}</label>
+                                                </div>
+                                                <div class="col-xs-12 info">
+                                                    <input tabindex="5" ng-disabled="!vm.isEditable" ng-model="vm.budgetField5.checked" type="checkbox" value="vm.budgetField5.name" ng-show="vm.budgetField5.active" />
+                                                    <label class="control-label" ng-show="vm.budgetField5.active">{{vm.budgetField5.name}}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <label class="tableHeading">Budget Performance Detail</label><br />
+                                            <div class="col-xs-6">
+                                                <div class="row">
+                                                    <table class="table table-bordered" style="max-width: 750px;">
+                                                        <thead style="background: #4c4948;">
+                                                            <tr style="font-weight:bold;color:#fff;">
+                                                                <th>Type</th>
+                                                                <th>Total Approved</th>
+                                                                <th>Actual Spend</th>
+                                                                <th>Remaining Spend (Forecast)</th>
+                                                                <th>Variance</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>CAPEX ({{vm.projectCloseOutInfoSelected.LocalCurrencyAbbreviation}})</td>
+                                                                <td class="txt-float-R"><span> {{vm.projectCloseOutInfoSelected.TotalApprovedCapEx}}</span></td>
+                                                                <td class="txt-float-R"><span>{{vm.projectCloseOutInfoSelected.ActualSpend}}</span></td>
+                                                                <td class="txt-float-R"><span>{{vm.projectCloseOutInfoSelected.RemainingSpend}}</span></td>
+                                                                <td class="txt-float-R"><span> {{vm.projectCloseOutInfoSelected.Variance}} </span><br /><span class="txt-float-R">{{vm.projectCloseOutInfoSelected.VariancePercent}}</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>OPEX ({{vm.projectCloseOutInfoSelected.LocalCurrencyAbbreviation}})</td>
+                                                                <td class="txt-float-R"><span>{{vm.projectCloseOutInfoSelected.TotalApprovedOpEx}}</span></td>
+                                                                <td><span>&nbsp;</span></td>
+                                                                <td><span>&nbsp;</span></td>
+                                                                <td><span>&nbsp;</span></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <div class="row">
+                                                        <table class="table table-bordered" style="max-width: 750px;">
+                                                            <thead style="background: #4c4948;">
+                                                                <tr style="font-weight:bold;color:#fff;">
+                                                                    <th>Event</th>
+                                                                    <th>Target</th>
+                                                                    <th>Approved</th>
+                                                                    <th>Variance (Days)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>Funding</td>
+                                                                    <td><span class="txt-float-R"> {{vm.projectCloseOutInfoSelected.FundingApprovalNeedDate}}</span></td>
+                                                                    <td><span class="txt-float-R">{{vm.projectCloseOutInfoSelected.CRApprovalDate}}</span></td>
+                                                                    <td class="txt-float-R"><span > {{vm.projectCloseOutInfoSelected.FundingVariance}} </span></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Asset Placed In Service</td>
+                                                                    <td><span class="txt-float-R">{{vm.projectCloseOutInfoSelected.AssetPlacedinService}}</span></td>
+                                                                    <td><span>&nbsp;</span></td>
+                                                                    <td><span>&nbsp;</span></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="tableHeading">Budget Commentary</label><br />
+                                        <div class="col-xs-6">
+                                            <div class="row">
+                                                <textarea kendotextbox class="k-textbox" tabindex="1" ng-model="vm.projectCloseOutInfoSelected.BudgetComment" ng-disabled="!vm.isEditable" style="width: 100%;height:80px;" />
+                                            </div>
+                                        </div>
+                                   </div>
+
+                                </div>
+                                <!-- Edit View -->
+                            </div>
+
+                            <!-- Budget Performance -->
+                            <!-- Lessons Learned -->
+                            <div>
+                                <!-- content row -->
+                                <div class="row contentRow">
+                                    <!-- Edit View -->
+                                    <div class="EditView">
+                                        <div class="row">
+                                            <label class="tableHeading">Key Takeaways</label>
+                                            <textarea kendotextbox class="k-textbox" tabindex="1" ng-model="vm.projectCloseOutInfoSelected.KeyTakeaways" ng-disabled="!vm.isEditable" style="width: 100%;height:80px;" />
+                                        </div><br />
+                                        <div class="row">
+                                            <label class="tableHeading">Lessons Learned</label>
+                                            <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridProjectCloseOutLessonsLearnt')" ng-show="vm.isEditable">
+                                                <span class="k-icon k-i-plus"></span>Add New
+                                            </span>
+                                            <!--<a ng-click="vm.AddNewRow('gridProjectCharterMilestone')" class="k-icon k-i-plus AddNewRowicon"></a>-->
+                                        </div>
+                                        <div class="row">
+                                            <div>
+                                                <div id="gridProjectCloseOutLessonsLearnt"></div>
+                                                <div>&nbsp;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit View -->
+                                </div>
+                            </div>
+                            <!-- Lessons Learned -->
+
+
+
+                        </div>
+
+                    </div>
+                    <!-- -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <label style="font-size:smaller;color:#c5c5c5">All rights reserved</label>
+            </div>
+            <div class="col-md-6">
+                <label style="float:right;font-size:smaller;color:#c5c5c5">SPOT Version: {{vm.buildNo}} Release Date: {{vm.releaseDate}}</label>
+            </div>
+        </div>
+    </div>
+</div>

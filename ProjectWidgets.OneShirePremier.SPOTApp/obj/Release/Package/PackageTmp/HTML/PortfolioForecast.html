@@ -1,0 +1,47 @@
+﻿
+<div ng-controller="PortfolioForecastCtrl as vm" ng-init='vm.initPortfolioForecast()'>
+    
+    
+    <div class="row row-offcanvas row-offcanvas-left">
+        <div class="row form-group">
+            <label class="control-label">Forecast Type :</label>
+            <select kendo-drop-down-list id="ftype"
+                    k-data-text-field="'LookUpMemberName'"
+                    k-data-value-field="'LookUpMemberID'"
+                    k-data-source="vm.forecastType"
+                    style="width: 20%"
+                    k-ng-model="vm.forecastTypeValue" k-on-change="vm.forecastChange()"></select>
+            <label class="control-label" ng-show="vm.ShowLocalDropDown">Currency </label>
+            <select kendo-drop-down-list
+                    k-placeholder="'Select and/or Type to Search'"
+                    k-data-text-field="'LookUpMemberName'"
+                    k-data-value-field="'LookUpMemberID'"
+                    k-data-source="vm.PortfolioLocalCurrencyDS"
+                    k-ng-model="vm.PortfolioLocalCurrencyValue"
+                    k-on-change="vm.UpdateForecastCummulativeGrid()"
+                    ng-show="vm.ShowLocalDropDown"></select>
+            <button class="k-button float-R" ng-click="vm.GetFxRates()" style="margin-left:10px !important">FxRates</button>
+            <button id="edit" class="k-button float-R" ng-click="vm.SaveForecastData()" ng-show="vm.IsOpen">Submit Changes</button>
+        </div>
+        <!--<div>
+        <directive-top-menu></directive-top-menu>
+    </div>-->
+        <!--open container-->
+
+        <div class="row">
+            <div id="GridPortfolioForecastCummulative" ></div>
+        </div>
+        <div class="row">
+            <div id="GridPortfolioForecastCummulativeLocal" ></div>
+        </div>
+        <div class="row">
+            <span ng-bind="vm.PreliminaryMsg"></span>
+        </div>
+        <div class="row">
+            <div id="GridPortfolioForecastData"></div>
+        </div>
+        <textarea id="forcast" style="opacity: 0"></textarea>
+
+        <div id="dialogFxRate" kendo-window="dialogFxRate" k-title="'Fx Rate'" k-visible="false" k-modal="true"></div>
+    </div>
+</div>

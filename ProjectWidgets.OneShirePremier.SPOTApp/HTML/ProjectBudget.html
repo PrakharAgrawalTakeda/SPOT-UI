@@ -1,0 +1,716 @@
+﻿
+<div class="container-fluid" ng-controller="ProjectBudgetCtrl as vm" ng-init='vm.initProjectBudget()'>
+    <style>
+        .committed-spend input {
+            width: 100% !important;
+            min-height: auto !important;
+            height: 1rem !important;
+        }
+    </style>
+    <!--open container-->
+    <div class="row row-offcanvas row-offcanvas-left">
+        <div id="main-section" class="col-xs-12 column">
+
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 tab-panel-box">
+                    <!-- content row -->
+                    <div class="row contentRow">
+                        <div class="">
+                            <!-- -->
+                            <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0 info row">
+
+                                <div class="col-xs-6 info row">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <h3 class="tableHeading">General</h3>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 info row">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <button style="width:80px" id="edit" ng-show="vm.isEditable" class="k-primary btnR" ng-click="vm.updateBudgetdata()">Save</button>
+                                    </div>
+                                </div>
+
+                                <!--<div class="row">
+                        <div class="col-xs-12 info row">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">&nbsp;</label>-->
+                                <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+                                <!--</div>-->
+                                <!--</div>
+                        </div>-->
+                                <!--<div class="topForm">
+                            <label class="">Forecast Period</label>
+                            <input type="text" class="form-control">
+                            <button id="edit" class="k-primary" ng-click="vm.updateBudgetdata()">Submit</button>
+                        </div>-->
+
+                            </div>
+                            <!-- -->
+                            <div class="col-md-2 col-sm-2 col-xs-2 padL0 padR0">
+                                <div class="">
+                                    <div class="box-body">
+                                        <!-- -->
+                                        <div class="col-xs-12 info row">
+                                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">CAPEX Required?</label>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                <select kendo-drop-down-list tabindex="1" ng-disabled="!vm.isCapexRequiredEditable"
+                                                        k-ng-model="vm.SelectedBudget.CapExRequired"
+                                                        k-data-text-field="'LookUpMemberName'"
+                                                        k-data-value-field="'LookUpMemberID'"
+                                                        k-data-source="vm.dsCapExRequired"></select>
+                                                <!--k-on-change="vm.onCapexChange()"-->
+                                            </div>
+                                        </div>
+                                        <!-- -->
+                                        <div class="clearfix"></div>
+                                        <!-- -->
+                                        <div class="col-xs-12 info row">
+                                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">OPEX Required?</label>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <select kendo-drop-down-list tabindex="2" ng-disabled="!vm.isEditable"
+                                                        k-ng-model="vm.SelectedBudget.OpExRequired"
+                                                        k-data-text-field="'LookUpMemberName'"
+                                                        k-data-value-field="'LookUpMemberID'"
+                                                        k-data-source="vm.dsCapExRequired"></select>
+                                                <!--k-on-change="vm.onOpexChange()"-->
+
+                                            </div>
+                                        </div>
+                                        <!-- -->
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10 col-sm-10 col-xs-10 padL0 padR0">
+                                <div class="form-horizontal" id="frmbudget">
+                                    <div class="box-body">
+                                        <!-- -->
+                                        <div class="row" style="margin-bottom: 10px;">
+                                            <!-- -->
+                                            <div class="col-xs-4 info row">
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Parent Program</label>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <input type="text" class="form-control" ng-disabled="true" ng-model="vm.SelectedBudget.ParentProgram">
+                                                </div>
+                                            </div>
+                                            <!--<div class="col-xs-4 info row">
+                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Project ID</label>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <input type="text" ng-disabled="true" ng-model="vm.SelectedBudget.ProjectID" class="form-control">
+                                        </div>
+                                    </div>-->
+                                            <!-- -->
+                                            <!-- -->
+                                            <div class="col-xs-4 info row">
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">
+                                                    Local Currency <!--<span class="required">*</span>-->
+                                                    <span class="ssk-tooltip" kendo-tooltip k-content="'Currency Info'">
+                                                        <span class="k-icon k-i-question"></span>
+                                                    </span>
+                                                </label>
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <select kendo-combo-box tabindex="6" ng-disabled="true" id="currency"
+                                                            k-placeholder="'Select and/or Type to Search'"
+                                                            k-ng-model="vm.SelectedBudget.LocalCurrencyID "
+                                                            k-data-text-field="'LookUpMemberName'"
+                                                            k-data-value-field="'LookUpMemberID'"
+                                                            k-data-source="vm.dsLocalCurrency" style="width: 100%"></select>
+                                                </div>
+                                            </div>
+                                            <!--<div class="col-xs-4 info row">
+                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Phase</label>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <input type="text" class="form-control" ng-disabled="true" ng-model="vm.SelectedBudget.Phase">
+                                        </div>
+                                    </div>-->
+                                            <!-- -->
+                                            <!-- -->
+                                            <div class="col-xs-4 info row">
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Asset Placed In Service (Estimate)<span class="date-format"> (mm/dd/yyyy)</span></label>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <input name="APISDate" ng-disabled="!vm.isEditable" tabindex="5" id="APISDate" ng-model="vm.SelectedBudget.APISDate" kendo-date-picker placeholder="{{vm.dateFormatlabel}}" style="width: 100%;" />
+                                                    <!--<span style="color:red" ng-show="vm.APISDateError">{{vm.dateErrorMsg}}</span>-->
+                                                </div>
+                                            </div>
+                                            <!-- -->
+
+                                        </div>
+                                        <!-- -->
+                                        <div class="clearfix"></div>
+                                        <!-- -->
+                                        <div class="sectionBorder">
+                                            <div>
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Required for CAPEX Projects</label>
+                                            </div>
+                                            <div class="row">
+
+                                                <!-- -->
+                                                <!--<div class="{{vm.SelectedBudget.CapitalBudgetID == null?'whiteColor':'yellowColor'}}">-->
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Budget ID <span class="required">*</span>                                                   
+                                                    </label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <input id="budgetId" type="text" tabindex="3" ng-disabled="!vm.isBudgetIdEditable" class="form-control" ng-model="vm.SelectedBudget.CapitalBudgetID">
+                                                    </div>
+                                                </div>
+                                                <!--</div>-->
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">GMS Budget Owner <span class="required">*</span></label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <select kendo-combo-box tabindex="6" ng-disabled="!vm.isBudgetOwnerEditable" id="budgetOwner"
+                                                                k-placeholder="'Select and/or Type to Search'"
+                                                                k-ng-model="vm.SelectedBudget.BudgetOwner"
+                                                                k-data-text-field="'PortfolioOwner'"
+                                                                k-data-value-field="'PortfolioOwnerID'"
+                                                                k-data-source="vm.dsBudgetOwner" style="width: 100%"></select>
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+                                                <!-- -->
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Global/Regional Predefined Investment <span class="required">*</span></label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <select kendo-combo-box tabindex="12" id="preDefinedInvest" ng-disabled="!vm.isEditable"
+                                                                k-placeholder="'Select and/or Type to Search'"
+                                                                k-filter="'contains'"
+                                                                k-ng-model="vm.SelectedBudget.PredefinedInvestmentID"
+                                                                k-data-text-field="'LookUpMemberName'"
+                                                                k-data-value-field="'LookUpMemberID'"
+                                                                k-data-source="vm.dsPreDefinedInvestment" style="width: 100%"></select>
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+
+                                            </div>
+                                            <!-- -->
+                                            <div class="clearfix"></div>
+                                            <div class="row">
+
+                                                <!-- -->
+                                                <!-- -->
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Where <span class="required">*</span></label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <select kendo-combo-box tabindex="12" id="Where" ng-disabled="!vm.isEditable"
+                                                                k-placeholder="'Select and/or Type to Search'"
+                                                                k-filter="'contains'"
+                                                                k-ng-model="vm.SelectedBudget.WhereID"
+                                                                k-data-text-field="'LookUpMemberName'"
+                                                                k-data-value-field="'LookUpMemberID'"
+                                                                k-data-source="vm.dsBudgetWhere" style="width: 100%"></select>
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+                                                <!-- -->
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Why <span class="required">*</span></label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <select kendo-combo-box tabindex="12" id="Why" ng-disabled="!vm.isEditable"
+                                                                k-placeholder="'Select and/or Type to Search'"
+                                                                k-filter="'contains'"
+                                                                k-ng-model="vm.SelectedBudget.WhyID"
+                                                                k-data-text-field="'LookUpMemberName'"
+                                                                k-data-value-field="'LookUpMemberID'"
+                                                                k-data-source="vm.dsBudgetWhy" style="width: 100%"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Funding Approval Need Date<span class="required">*</span><span class="date-format"> (mm/dd/yyyy)</span></label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <input id="fundingNeedDate" ng-disabled="!vm.isEditable" tabindex="9" name="fundingNeedDate" kendo-date-picker ng-model="vm.SelectedBudget.FundingApprovalNeedDate" placeholder="{{vm.dateFormatlabel}}" style="width: 100%;" />
+                                                        <span style="color:red" ng-show="vm.fundingNeedDateError">{{vm.dateErrorMsg}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="sectionBorder">
+                                            <div>
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Funding Information</label>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Funding Status</label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <select kendo-combo-box tabindex="12" id="funding" ng-disabled="true"
+                                                                k-filter="'contains'"
+                                                                k-ng-model="vm.SelectedBudget.FundingStatusID"
+                                                                k-data-text-field="'LookUpMemberName'"
+                                                                k-data-value-field="'LookUpMemberID'"
+                                                                k-data-source="vm.dsFundingStatus" style="width: 100%"></select>
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+                                                <!-- -->
+                                                <!--<div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">CAR ID</label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <input type="text" ng-disabled="!vm.isEditable" tabindex="13" class="form-control" ng-model="vm.SelectedBudget.DefinitiveCRID">
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">CAR Approval Date<span class="date-format"> (mm/dd/yyyy)</span></label> <!--<span style="font-weight: normal;color: #D0D0D0;font-style: italic;display: inline-block;">{{vm.dateFormatlabel}}</span>-->
+                                                 <!--     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <input id="definitiveCRApprovalDate" ng-disabled="!vm.isEditable" tabindex="14" name="definitiveCRApprovalDate" ng-model="vm.SelectedBudget.DefinitiveCRApprovalDate" kendo-date-picker placeholder="{{vm.dateFormatlabel}}" style="width: 100%;" />
+                                                        <span style="color:red" ng-show="vm.definitiveCRDateError">{{vm.dateErrorMsg}}</span>
+                                                        <!--<input type="text" class="form-control" ng-model="vm.SelectedBudget.DefinitiveCRApprovalDate">-->
+                                                 <!--     </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>-->
+                                            <!-- -->
+                                            <!--<div class="row">-->
+                                                <!-- -->
+                                                <!--<div class="col-xs-4 info row">
+                                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">
+                                                Local Currency
+                                                <span class="ssk-tooltip" kendo-tooltip k-content="'Currency Info'">
+                                                    <span class="k-icon k-i-question"></span>
+                                                </span>
+                                            </label>
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <select kendo-combo-box tabindex="6" ng-disabled="true" id="currency"
+                                                        k-placeholder="'Select and/or Type to Search'"
+                                                        k-ng-model="vm.SelectedBudget.LocalCurrencyID "
+                                                        k-data-text-field="'LookUpMemberName'"
+                                                        k-data-value-field="'LookUpMemberID'"
+                                                        k-data-source="vm.dsLocalCurrency" style="width: 100%"></select>
+                                            </div>
+                                        </div>-->
+                                                <!--<div class="col-xs-4 info row">
+                                           
+                                                </div>-->
+                                                <!-- -->
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">
+                                                        Total Approved CAPEX
+                                                        <span>{{vm.LocalCurrencyAbb}}</span>
+                                                        <span class="ssk-tooltip" kendo-tooltip k-content="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
+                                                            <span class="k-icon k-i-question"></span>
+                                                        </span>
+
+                                                    </label>
+
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <input id="aprovedCapex"  disabled="disabled" maxlength="12" tabindex="7" kendo-numeric-text-box options="vm.options" ng-model="vm.SelectedBudget.TotalApprovedCapEx" />
+                                                    </div>
+                                                </div>
+                                                <!-- -->
+                                                <!-- -->
+                                                <div class="col-xs-4 info row">
+                                                    <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Total Approved OPEX <span>{{vm.LocalCurrencyAbb}}</span></label>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <input id="approvedOpex"  disabled="disabled" maxlength="12" tabindex="8" kendo-numeric-text-box options="vm.options" ng-model="vm.SelectedBudget.TotalApprovedOpEx">
+                                                    </div>
+                                                </div>
+
+                                                <!-- -->
+
+                                            </div>
+
+                                            <!-- -->
+                                            <div class="clearfix"></div>
+                                            <!-- -->
+                                            <!-- grid row -->
+                                            <div class="row">
+                                                <div class="col-xs-12 info" style="margin-top:20px;">
+                                                    <!--<label>Budget IO</label>-->
+                                                    <span class="AddNewRowicon" ng-click="vm.AddNewRow()" ng-show="vm.isEditable">
+                                                        <span class="k-icon k-i-plus"></span>Add New
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="gridbudgetIO"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <div class="col-xs-12 info row">
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Budget Commentary</label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <textarea tabindex="15" ng-disabled="!vm.isEditable" class="form-control" ng-model="vm.SelectedBudget.BudgetComment" />
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- grid row -->
+                                    <!-- -->
+                                    <div class="clearfix"></div>
+
+                                    <!-- -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- content row -->
+                    <!-- btns row -->
+                    <!-- <div class="row align-right btnsRow"> -->
+                    <!-- <p> -->
+                    <!-- <button id="edit" class="k-primary">Update</button> -->
+                    <!-- </p> -->
+                    <!-- </div> -->
+                    <!-- btns row -->
+                </div>
+            </div>
+            <!-- -->
+            <div class="sectionNoCapexOpex" ng-show="!vm.capexOpexSubmit">
+                <h3 style="float: left;padding: 0px 27px 5px;" class="tableHeading">CAPEX</h3>
+                <div style="text-align:center;line-height:25px;padding-left: 185px;" >
+                Capex Forecast Tables are displayed only when CAPEX Required is "Saved" to Yes
+                </div>
+            </div>            
+            <div class="sectionNoCapexOpex"  ng-show="!vm.capexOpexSubmit">
+                <h3 style="float: left;padding: 0px 27px 5px;" class="tableHeading">Non-FTE OPEX</h3>
+                <div style="text-align:center;line-height:25px">
+                Opex Forecast Tables are displayed only when OPEX Required is "Saved" to Yes
+                </div>
+            </div>
+            <div ng-show="vm.capexOpexSubmit" class="budget budgetBox" style="width: 100%;height: auto;margin-bottom: 0px;">
+
+                <div>
+                    <h3 class="tableHeading">&nbsp;</h3>
+                    <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0">
+                        <div class="form-horizontal">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-xs-4 info row">
+                                                <label class="col-lg-5 col-md-5 col-sm-12 col-xs-12 horLabel">Reference</label>
+                                                <label class="col-lg-5 col-md-5 col-sm-12 col-xs-12 horLabel">Period</label>
+                                            </div>
+                                            <!-- -->
+                                            <!-- -->
+                                            <div class="col-xs-4 info row">
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Last Submitted</label>
+                                                
+
+                                            </div>
+                                            <!-- -->
+                                            <!-- -->
+                                            <div class="col-xs-4 info row">
+                                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Submitted By</label>
+                                               
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-xs-4 info row">                                              
+                                                <!--<label style="margin-left: 167px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Period</label>-->
+                                                <input  type="text" disabled="disabled" class="col-lg-5 col-md-5 col-sm-12 col-xs-12 horLabel" value="Current" ng-disabled="true" style="background-color: #eee;border-width: 1px;height: 39px;"/>
+                                                <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+                                                    <input ng-disabled="true" type="text" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="vm.SelectedBudget.ForecastPeriod" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <!-- -->
+                                            <!-- -->
+                                            <div class="col-xs-4 info row">
+                                                <!--<label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Last Submitted</label>-->
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+                                                    <!--<input ng-disabled="true" ng-model="vm.SelectedBudget.LastSubmitted" kendo-date-picker />-->
+                                                    <input type="text" class="form-control" ng-disabled="true" value="{{vm.SelectedBudget.LastSubmitted + ' ' + vm.SelectedBudget.LastSubmittedPeriod}}">
+
+                                                    <!--<input type="text" class="form-control" ng-disabled="true" ng-model="vm.SelectedBudget.LastSubmitted + ' ' +vm.SelectedBudget.LastSubmittedPeriod">-->
+                                                   </div>
+
+                                            </div>
+                                            <!-- -->
+                                            <!-- -->
+                                            <div class="col-xs-4 info row">
+                                                <!--<label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Submitted By</label>-->
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+                                                    <input type="text" class="form-control" ng-disabled="true" ng-model="vm.SelectedBudget.SubmittedBy">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8" ng-show="vm.SelectedBudget.PreliminaryCount != 0">
+                                        <div class="row">
+                                            <div class="col-xs-4 info row">
+                                                <input type="text" disabled="disabled" class="col-lg-5 col-md-5 col-sm-12 col-xs-12 horLabel" value="Preliminary" ng-disabled="true" style="background-color: #eee;border-width: 1px;height: 39px;" />
+                                                <!--<label class="col-lg-5 col-md-5 col-sm-12 col-xs-12 horLabel" style="border: #ccc 1px solid;">Preliminary</label>-->
+                                                <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+                                                    <input ng-disabled="true" type="text" class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="vm.SelectedBudget.PreliminaryForecastPeriod" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4 info row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <input type="text" class="form-control" ng-disabled="true" ng-model="vm.SelectedBudget.PreliminaryLastSubmitted">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4 info row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <input type="text" class="form-control" ng-disabled="true" ng-model="vm.SelectedBudget.PreliminarySubmittedBy">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <!-- -->
+                                        <div class="info row">
+                                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel" ng-show="vm.SelectedBudget.PreliminaryCount == 0">&nbsp;</label>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
+                                                <!--padding-top: 50px;-->
+                                                <button class="k-button float-R" style="margin-left:10px !important" ng-click="vm.GetFxRates()">FxRates</button>
+                                                <button id="edit" ng-show="vm.IsOpen" class="k-primary btnR" ng-click="vm.UpdateForecastdata()">Submit Forecasts</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                 <div id="dialogFxRate" kendo-window="dialogFxRate" k-title="'Fx Rate'" k-visible="false" k-modal="true"></div>
+                                 
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--</div>-->
+                    <!-- -->
+
+                    <div class="CapExBox mid-info-box" ng-show="vm.capexRequired">
+                        <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0">
+                            <div class="form-horizontal">
+                                <div class="box-body">
+                                    <!-- -->
+                                
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <h3 class="tableHeading">CAPEX</h3>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <h3 class="tableHeading" style="color:black !important">Current {{vm.SelectedBudget.ForecastPeriod}} versus Plan {{vm.SelectedBudget.PlanPeriodName}}</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        &nbsp;
+                                    </div>
+                                    <!-- -->
+                                    <!-- mid-info-box -->
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0">
+                                            <div class="form-horizontal">
+                                                <div class="box-body">
+
+                                                    <!-- -->
+                                                    <div class="col-xs-4 info row">
+                                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Total Forecast Projection TFP ({{vm.LocalCurrencyPlaceholderAbb}})</label>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="budget-threshold">
+                                                                <span class="float-L {{vm.SelectedBudget.TotalForecastPerformanceText}}">{{vm.SelectedBudget.TotalForecastPerformance}}</span>
+                                                                <span class="float-R {{vm.SelectedBudget.TotalForecastPerformanceText}}">{{vm.SelectedBudget.TotalForecastPerformanceValue}}</span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- -->
+                                                    <!-- -->
+                                                    <div class="col-xs-4 info row">
+                                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Annual Forecast Performance AFP ({{vm.LocalCurrencyPlaceholderAbb}})</label>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="budget-threshold">
+                                                                <span class="float-L {{vm.SelectedBudget.AnnualForecastPerformanceText}}">{{vm.SelectedBudget.AnnualForecastPerformance}}</span>
+                                                                <span class="float-R {{vm.SelectedBudget.AnnualForecastPerformanceText}}">{{vm.SelectedBudget.AnnualForecastPerformanceValue}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- -->
+                                                    <!-- -->
+                                                    <div class="col-xs-4 info row">
+                                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">AFP Deviation Code</label>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <select kendo-combo-box ng-disabled="!vm.IsOpen"
+                                                                    k-placeholder="'Select and/or Type to Search'"
+                                                                    k-filter="'contains'"
+                                                                    k-ng-model="vm.SelectedBudget.AFPDeviationCodeID"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsCapitalDeviationYearly" style="width: 100%"></select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- -->
+                                                    <!-- -->
+                                                    <div class="col-xs-4 info row">
+                                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Year To Date Performance YTDP ({{vm.LocalCurrencyPlaceholderAbb}})</label>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="budget-threshold">
+                                                                <span class="float-L {{vm.SelectedBudget.YearToDatePerformanceText }}">{{vm.SelectedBudget.YearToDatePerformance}}</span>
+                                                                <span class="float-R {{vm.SelectedBudget.YearToDatePerformanceText }}">{{vm.SelectedBudget.YearToDatePerformanceValue}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- -->
+                                                    <!-- -->
+                                                    <div class="col-xs-4 info row">
+                                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Month To Date Performance MTDP ({{vm.LocalCurrencyPlaceholderAbb}})</label>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="budget-threshold">
+                                                                <span class="float-L {{vm.SelectedBudget.MonthToDatePerformanceText }}">{{vm.SelectedBudget.MonthToDatePerformance}}</span>
+                                                                <span class="float-R {{vm.SelectedBudget.MonthToDatePerformanceText}}">{{vm.SelectedBudget.MonthToDatePerformanceValue}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- -->
+                                                    <!-- -->
+                                                    <div class="col-xs-4 info row">
+                                                        <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">MTDP Deviation Code</label>
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <select kendo-combo-box ng-disabled="!vm.IsOpen"
+                                                                    k-placeholder="'Select and/or Type to Search'"
+                                                                    k-filter="'contains'"
+                                                                    k-ng-model="vm.SelectedBudget.MTDPDeviationCodeID"
+                                                                    k-data-text-field="'LookUpMemberName'"
+                                                                    k-data-value-field="'LookUpMemberID'"
+                                                                    k-data-source="vm.dsCapitalDeviationMonthly" style="width: 100%"></select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- -->
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--  -->
+         
+                                    <!--  -->
+                                    <!-- mid-info-box -->
+                                    <!-- -->
+                                    <div class="clearfix"></div>
+                                    <!-- -->
+                                    <!-- -->
+                                    <div class="col-xs-12 info row">
+                                        <!--<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 horLabel align-right">CapEx Forecast</label>-->
+                                        <!--<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">-->
+                                        <!--<div id="gridBudgetCapex"></div>-->
+                                        <div id="gridBudgetCapex"></div>
+
+                                        <!--<kendo-grid k-scope-field="gridbudgetcapex" options="mainGridOptions" tabindex="0"></kendo-grid>-->
+                                        <!--</div>-->
+                                    </div>
+                                    <!-- -->
+                                    <!-- -->
+                                    <div class="col-xs-12 info row">
+                                        <!--<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 horLabel align-right">Previous</label>-->
+                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 padL0 padR0 arrow_box">
+                                            <div id="gridBudgetCapexY1"></div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 padL0 padR0">
+                                            <div style="padding-left: 35px;
+    padding-top: 15px;
+">
+                                                <table style="width: 100%;
+    /* max-width: 160px; */
+    margin-left: auto;
+">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="border: 1px solid #ccc;background: #494949;color: #fff;padding: 7px 10px;">
+                                                                Committed Spend
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="committed-spend" style="border: 1px solid #dedede;padding-right: 5px;">
+                                                                <!--<input type="number" class="form-control txt-float-R commitedSpend" ng-disabled="!vm.IsOpen" ng-model="vm.capexForecastCommittedSpend">-->
+                                                                <input ng-disabled="!vm.IsOpen" style="min-height: auto !important;height: 32px !important;padding: 0px !important;border:0px !important" kendo-numeric-text-box class="form-control txt-float-R" options="vm.options" maxlength="10" ng-model="vm.capexForecastCommittedSpend" />
+
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- -->
+                                    <!-- -->
+
+                                </div>
+                                </div>
+
+                            <!-- -->
+                            <!-- -->
+
+                        </div>
+                    </div>
+                    <div class="mid-info-box" style="width:100%;"  ng-show="!vm.capexRequired">
+                        <h3 style="float: left;padding: 0px 27px 5px;" class="tableHeading">CAPEX</h3>
+                        <div style="text-align:center;margin-top:20px;line-height:25px;padding-left: 183px;">
+                        Capex Forecast Tables are displayed only when CAPEX Required is "Saved" to Yes
+                            </div>
+                    </div>
+                    <div class="mid-info-box" style="width:100%" ng-show="!vm.opexRequired">
+                        <h3 style="float: left;padding: 0px 27px 5px;" class="tableHeading">Non-FTE OPEX</h3>
+                        <div style="text-align:center">
+                        Opex Forecast Tables are displayed only when OPEX Required is "Saved" to Yes
+                            </div>
+                    </div>
+                    <div class="CapExBox mid-info-box" ng-show="vm.opexRequired">
+                        <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0">
+                            <div class="form-horizontal">
+                                <div class="box-body">
+                                    <!-- -->
+                                    <h3 class="tableHeading">Non-FTE OPEX</h3>
+                                    <div class="col-xs-12 info row">
+                                        <!--<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 horLabel align-right">Current</label>-->
+                                        <!--<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">-->
+                                        <div id="gridBudgetOpex"></div>
+                                        <!--</div>-->
+                                    </div>
+                                    <!-- -->
+                                    <div class="col-xs-12 info row">
+                                        <!--<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 horLabel align-right">Current</label>-->
+                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 padL0 padR0 arrow_box">
+                                            <div id="gridBudgetOpexY1"></div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 padL0 padR0">
+                                            <div style="padding-left: 35px;padding-top: 15px;">
+                                                <table style="width: 100%;/* max-width: 160px; */ margin-left: auto;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="border: 1px solid #ccc;background: #494949;color: #fff;padding: 7px 10px;">
+                                                                Committed Spend
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="committed-spend" style="border:1px solid #dedede;padding-right: 5px;">
+                                                                <!--<input type="number" pattern="[0-9]" class="form-control txt-float-R commitedSpend" ng-disabled="!vm.IsOpen" ng-model="vm.opexForecastCommittedSpend">-->
+                                                                <input ng-disabled="!vm.IsOpen" style="min-height: auto !important;height: 32px !important;padding: 0px !important;border:0px !important" kendo-numeric-text-box class="form-control txt-float-R" options="vm.options" maxlength="10" ng-model="vm.opexForecastCommittedSpend" />
+
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <textarea id="ta" style="opacity: 0"></textarea>
+
+        </div>
+        <!--close main column-->
+    </div>
+    <!--close row-->
+</div>
+    
+

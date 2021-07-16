@@ -1,0 +1,184 @@
+﻿
+<div id="tabstrip" kendo-tab-strip k-content-urls="[ null, null]">
+    <ul>
+        <li  ng-show="vm.showProjectHub" ng-click="vm.ProjectHubData()">Project Board </li>
+        <li  ng-show="vm.showProgramHub" ng-click="vm.ProgramHubData()">Program Board</li>
+        <li ng-click="vm.getAssociatedProjects()">Associated Projects</li> 
+        <li ng-show="vm.showBudget" ng-click="vm.BudgetData()">Budget</li>
+        <!--<li ng-show="vm.showDocument">Project Documents</li>-->
+        <li ng-show="vm.showDocument" ng-click="vm.ShowProjectDocument()">Project Documents</li>
+        <li ng-click="vm.getDataForTeam()" ng-show="vm.showTeam">Project Team</li>
+    </ul>
+    <!--Project Board -->
+    <div>
+        <directive-project-hub></directive-project-hub>
+    </div>
+    <!--Project Board -->
+    <!--ProgramHub-->
+    <div><directive-program-hub></directive-program-hub></div>
+    <!--ProgramHub-->
+    
+    <!--Associated Project -->
+    <div>
+        <div class="row column">
+            <div class="row col-xs-12">
+                <a ng-click=""></a>
+            </div>
+
+            <div class="row column">
+                <!-- <div class="col-md-2 col-sm-2 col-xs-2"> -->
+                <!-- <div class="left-info">&nbsp;</div> -->
+                <!-- </div> -->
+                <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0">
+                    <div class="col-lg-8 padL0">
+                        <button class="k-button k-button-icontext k-grid-excel" ng-click="vm.insertReports()">Program Report</button>
+                        <button class="k-button k-button-icontext k-grid-excel" ng-click="vm.ExportToExcel()">Export to Excel</button>
+                    </div>
+                    <div class="col-lg-2 right-info">
+                        <span ng-show="vm.Edit" class="addItem linkHover" ng-click="vm.getChildProject()"><span class="k-icon k-i-plus"></span> Link Project / Program</span>
+                        <div id="dialogProjectLinkChildProj" kendo-window="dialogProjectLinkChildProj" k-title="'Link Child Project/Program'" k-modal="true" k-visible="false">
+                            <div class="tab-panel-box dialog-panel">
+                                <div class="row">
+                                    <!--<div class="col-xs-12 info py10">
+                                        <label class="radio-inline col-xs-2 " >
+                                            <input type="radio" name="optradio" class="customRadio" ng-model="vm.IsAddChildProgram" ng-value="true" ng-click="vm.bindProjectProgramDropDown(true)">Child Program
+                                        </label>
+                                        <label class="radio-inline col-xs-2">
+                                            <input type="radio" name="optradio" class="customRadio" ng-model="vm.IsAddChildProgram" ng-value="false" ng-click="vm.bindProjectProgramDropDown(false)">Child Project
+                                        </label>
+                                    </div>-->
+                                    <div class="col-xs-12 info py10">
+                                        <div class="col-xs-6">
+                                            <!--<select id="ddl_ProjectProgram" name="ddl_ProjectProgram" kendo-combo-box
+                                                    k-placeholder="'Select and/or Type to Search'"
+                                                    k-data-text-field="'ProjectName'"
+                                                    k-data-value-field="'ProblemUniqueID'"
+                                                    k-data-source="vm.dsProjectProgram"
+                                                    k-filter="'contains'"
+                                                    style="width: 100%"
+                                                    k-ng-model="vm.selectedProjectProgram"
+                                                    class="form-control"></select>-->
+                                            <select id="ddl_ProjectProgram" style="width: 100%"></select>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button ng-click="vm.addProjectToChildGrid()" class="k-button">Add</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 info py10">
+                                        <hr class="hrStyle" />
+                                        <div id="gridImmediateChildProject"></div>
+                                    </div>
+                                    <!-- btns row -->
+                                    <div class="row align-right btnsRow">
+                                        <p>
+                                            <button id="btn_LinkChild" ng-show="vm.Edit" ng-click="vm.updateParentProject()" class="k-primary float-R">Save</button>
+                                            <button id="topsClose" ng-click="dialogProjectLinkChildProj.close()" class="k-primary float-L">Close</button>
+                                        </p>
+                                    </div>
+                                    <!-- btns row -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-2 right-info">
+                        <span ng-show="vm.Edit" class="addItem linkHover" ng-click="vm.getParentProject()"><span class="k-icon k-i-plus"></span> Update Parent Project</span>
+                        <div id="dialogParentProj" kendo-window="dialogParentProj" k-title="'Update Parent Project'" k-modal="true" k-visible="false">
+                            <div class="tab-panel-box dialog-panel">
+                                <div class="row">
+                          
+                                    <div class="col-xs-12 info py10">
+                                        <div class="col-xs-6">
+                                            <!--<select id="ddl_ProjectProgram" name="ddl_ProjectProgram" kendo-combo-box
+                                    k-placeholder="'Select and/or Type to Search'"
+                                    k-data-text-field="'ProjectName'"
+                                    k-data-value-field="'ProblemUniqueID'"
+                                    k-data-source="vm.dsProjectProgram"
+                                    k-filter="'contains'"
+                                    style="width: 100%"
+                                    k-ng-model="vm.selectedProjectProgram"
+                                    class="form-control"></select>-->
+                                            <select id="ddl_ParentProgram" style="width: 100%"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 info py10">
+                                        <hr class="hrStyle" />
+                                        <div id="gridImmediateChildProject"></div>
+                                    </div>
+                                    <!-- btns row -->
+                                    <div class="row align-right btnsRow">
+                                        <p>
+                                            <button id="btn_LinkChild" ng-show="vm.Edit" ng-click="vm.updateCurrentParentProject()" class="k-primary float-R">Save</button>
+                                            <button id="topsClose" ng-click="dialogParentProj.close()" class="k-primary float-L">Close</button>
+                                        </p>
+                                    </div>
+                                    <!-- btns row -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height:10px;"></div>
+            <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0">
+                <div id="treelistAssociatedProject"></div>
+            </div>
+
+        </div>
+    </div>
+    <!--Associated Project -->
+
+
+    <!--Budget -->
+    <div>
+        <!--<div class="col-md-12 col-sm-12 col-xs-12 tab-panel-box margTB20">-->
+            <directive-project-budget></directive-project-budget>
+
+        <!--</div>-->
+     
+    </div>
+    <!--Budget -->
+    <!--Project Documents -->
+    <div>
+        <!--<h3 style="font-size: 15px;font-style: italic;padding: 5px 0px 10px 0px;font-weight: 700;">
+            <span>Still<span class="blue" style="color: red !important;"> under</span> development.</span>
+           
+       </h3>-->
+        <div ng-show="true">
+            <directive-project-document></directive-project-document>
+        </div>
+    </div>
+    <!--Project Documents -->
+    <!--Project Team -->
+    <div>
+        <div class="">
+            <div class="row column">
+                <!-- <div class="col-md-2 col-sm-2 col-xs-2"> -->
+                <!-- <div class="left-info">&nbsp;</div> -->
+                <!-- </div> -->
+                <div class="col-md-12 col-sm-12 col-xs-12 padL0 padR0">
+                    <div class="right-info">
+                        <span ng-show="vm.Edit" class="vmEdit addItem" ng-click="vm.OpenNewRoleDialog()"><span class="k-icon k-i-plus"></span>Add New Role</span>
+                        <span ng-show="vm.Edit" class="vmEdit addItem" ng-click="dialogProjectTeamBulkEdit.open()"><span class="k-icon k-i-edit"></span>&nbsp;Bulk edit</span>
+                        <div id="dialogNewRole" kendo-window="dialogNewRole" k-title="'Add Project Team Role'" k-content="{ url: '{{vm.addNewRolePagepath}}'}" k-modal="true" k-visible="false"></div>
+                        <div id="dialogProjectTeamBulkEdit" kendo-window="dialogProjectTeamBulkEdit" k-title="'Bulk Edit Project Team'" k-modal="true" k-visible="false">
+                            <div class="tab-panel-box dialog-panel">
+                                <span class="panel-box-title"><h4>Bulk Edit Project Team</h4></span>
+                                <div id="gridTeamBulkEdit"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row column">
+                <div id="gridTeam"></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Project Team-->
+</div>
+

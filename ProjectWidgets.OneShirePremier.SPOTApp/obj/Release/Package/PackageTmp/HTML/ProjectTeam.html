@@ -1,0 +1,81 @@
+﻿<div class="container-fluid">
+    <!--open container-->
+    <div class="row row-offcanvas row-offcanvas-left">
+        <div id="main-section" class="col-xs-12 column">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 tab-panel-box">
+                    <span class="panel-box-title"><h4>Add Project Team Role</h4></span>
+                    <div class="row column">
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 padrl5">
+                            <div class="form-horizontal">
+                                <div class="box-body">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Role</label>
+                                        <div class="col-sm-6">
+                                            <select tabindex="1" id="teamRole"
+                                                    kendo-combo-box 
+                                                    k-placeholder="'Select and/or Type to Search'"
+                                                    k-ng-model="vm.projectTeam.role"
+                                                    k-data-text-field="'LookUpMemberName'"
+                                                    k-data-value-field="'LookUpMemberID'"
+                                                    k-data-source="vm.teamRole"
+                                                    style="width: 100%"></select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Team Member(s)</label>
+                                        <div class="col-sm-6">
+                                            <select id="teamuser" tabindex="2" name="teamuser" style="width: 100%" />
+                                            <!--<select tabindex="2"
+                                                    kendo-drop-down-list id="teamuser"
+                                                    k-filter="'contains'"
+                                                    k-options="vm.teamUsersList"
+                                                    style="width: 100%"
+                                                     k-on-change="vm.ShowPermission()"
+                                                    k-ng-model="vm.projectTeam.Member" required></select>-->
+                                        </div>
+                                    </div>
+                                    <div class="form-group" >
+                                        <label class="col-sm-3 control-label">Project Permission</label>
+                                        <div class="col-sm-6">
+                                            <select tabindex="3"
+                                                    kendo-drop-down-list
+                                                    id="permission"
+                                                    k-ng-model="vm.projectTeam.permission"
+                                                    k-data-text-field="'LookUpMemberName'"
+                                                    k-data-value-field="'LookUpMemberID'"
+                                                    k-data-source="vm.teamPermissions"
+                                                    style="width: 100%"></select>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- -->
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 butons-block">
+                            <a tabindex="4" ng-click="dialogNewRole.close()" class="k-button btnL">Cancel</a>
+                            <a tabindex="5" ng-click="vm.CreateProjectTeam('dialogNewRole')"  class="k-button btnR">Save</a>
+                        </div>
+                    </div>
+
+                    <!--Tab Panel-->
+                </div>
+
+
+            </div>
+
+        </div>
+        <!--close main column-->
+    </div>
+    <!--close row-->
+</div>
+<!--close container-->

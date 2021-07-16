@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Project Hub</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!--<link rel="stylesheet" href="../Styles/kendo.common-material.min.css" />
+    <link rel="stylesheet" href="../Styles/kendo.material.min.css" />
+    <link rel="stylesheet" href="../Styles/kendo.material.mobile.min.css" />-->
+    <!--<link rel ="icon" type="image/x-icon" href="../Images/favicon.ico" />-->
+    <script src="../GlobalJS/jquery.min.js"></script>
+    <script src="../GlobalJS/angular.min.js"></script>
+    <script src="../GlobalJS/bootstrap.min.js"></script>
+    <script src="../GlobalJS/angular-route.min.js"></script>
+    <script src="../GlobalJS/kendo.all.min.js"></script>
+    <!--<script src="https://kendo.cdn.telerik.com/2019.3.1023/js/kendo.all.min.js"></script>-->
+    <script src="../GlobalJS/Constants.js?ver=2.8"></script>
+    <!--<script src="../GlobalJS/Utility.js?ver=2.5"></script>-->
+    <script src="../GlobalJS/jszip.min.js"></script>
+    <script src="../GlobalJS/SPOTApp.js"></script>
+    <!--<script src="../Directive/Directive.js"></script>-->
+
+    <link rel="stylesheet" href="../Styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../Styles/kendo.common.min.css" type="text/css" />
+
+    <link rel="stylesheet" href="../Styles/kendo.default.min.css">
+    <script type="text/javascript">
+
+        var sdkInstance = "appInsightsSDK";
+        window[sdkInstance] = "appInsights";
+        var aiName = window[sdkInstance], aisdk = window[aiName] || function (e) {
+            function n(e) {
+                t[e] = function () {
+                    var n = arguments;
+                    t.queue.push(function () { t[e].apply(t, n) })
+                }
+            } var t = { config: e };
+            t.initialize = !0; var i = document, a = window;
+            setTimeout(function () {
+                var n = i.createElement("script");
+                n.src = e.url || "https://az416426.vo.msecnd.net/scripts/b/ai.2.min.js", i.getElementsByTagName("script")[0].parentNode.appendChild(n)
+            });
+            try { t.cookie = i.cookie } catch (e) { } t.queue = [], t.version = 2;
+            for (var r = ["Event", "PageView", "Exception", "Trace", "DependencyData", "Metric", "PageViewPerformance"]; r.length;)n("track" + r.pop()); n("startTrackPage"), n("stopTrackPage");
+            var s = "Track" + r[0]; if (n("start" + s), n("stop" + s), n("addTelemetryInitializer"), n("setAuthenticatedUserContext"), n("clearAuthenticatedUserContext"), n("flush"), t.SeverityLevel = { Verbose: 0, Information: 1, Warning: 2, Error: 3, Critical: 4 }, !(!0 === e.disableExceptionTracking || e.extensionConfig && e.extensionConfig.ApplicationInsightsAnalytics && !0 === e.extensionConfig.ApplicationInsightsAnalytics.disableExceptionTracking)) {
+                n("_" + (r = "onerror"));
+                var o = a[r]; a[r] = function (e, n, i, a, s) { var c = o && o(e, n, i, a, s); return !0 !== c && t["_" + r]({ message: e, url: n, lineNumber: i, columnNumber: a, error: s }), c }, e.autoExceptionInstrumented = !0
+            } return t
+        }(
+            {
+                instrumentationKey: instrumentationKeyValue
+            }
+        );
+        window[aiName] = aisdk, aisdk.queue && 0 === aisdk.queue.length && aisdk.trackPageView({});
+
+
+    </script>
+    <script>
+        var today = new Date();
+        var time = today + ":" + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        if (window.location.hostname != "localhost") {
+            $.get(window.location.protocol + "//" + window.location.host + "/.auth/me", function (data, status) {
+               
+                for (var key in data[0]["user_claims"]) {
+                    var obj = data[0]["user_claims"][key];
+                    if (obj.typ == "http://schemas.microsoft.com/identity/claims/objectidentifier") {
+                        currentUserId = obj.val;
+                        aisdk.setAuthenticatedUserContext(currentUserId);
+                    }
+                    if (obj.typ == "name") {
+                        currentUserName = obj.val;
+                    }
+                    if (currentUserName != "" && currentUserId != "") {
+                        // deferred.resolve(currentUserId);
+                        break;
+                    }
+
+                }
+
+            }).fail(function () {
+                location.reload();
+            });
+        }
+    </script>
+    <!--<script src="../GlobalJS/GETPostService.js?ver=2.5"></script>
+
+    <script src="../JS/GridColumn.js?ver=2.5"></script>
+    <script src="../Controller/ProjectHubMainCtrl.js?ver=2.5"></script>
+    <script src="../Controller/TopMenuCtrl.js?ver=2.5"></script>
+    <script src="../Controller/ProjectDocumentCtrl.js?ver=2.5"></script>
+    <script src="../Controller/ProjectHubCtrl.js?ver=2.5" type="text/javascript"></script>
+    <script src="../Controller/ProgramHubCtrl.js?ver=2.5"></script>
+    <script src="../Controller/ProjectHubHeaderCtrl.js?ver=2.5" type="text/javascript"></script>
+    <script src="../Controller/BusinessCaseCtrl.js?ver=2.5"></script>
+    <script src="../Controller/ProjectCharterCtrl.js?ver=2.5"></script>
+    <script src="../Controller/ProjectBudgetCtrl.js?ver=2.5"></script>-->
+
+    <script>
+        document.write("<script type='text/javascript' src='../GlobalJS/Utility.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../GlobalJS/Constants.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Directive/Directive.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../GlobalJS/GETPostService.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../JS/GridColumn.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProjectHubMainCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/TopMenuCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProjectDocumentCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProjectHubCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProgramHubCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProjectHubHeaderCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/BusinessCaseCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProjectCharterCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProjectBudgetCtrl.js?v=" + time + "'><\/script>" +
+            "<script type='text/javascript' src='../Controller/ProjectCloseOutCtrl.js?v=" + time + "'><\/script>" +
+            "<link rel='stylesheet' type='text/css' href='../Styles/site.css?v=" + time + "'/>");
+    </script>
+
+    <!--<link rel="stylesheet" href="../Styles/kendo.default.mobile.min.css" />-->
+    <!--<link rel="stylesheet" href="../Styles/CustomStyle.css" type="text/css" />-->
+    <!--<link rel="stylesheet" href="../Styles/site.css?ver=2.1" type="text/css" />-->
+    <!--<link href="../Styles/header-qa.css" rel="stylesheet" type="text/css" />-->
+    <!--<script src="../SiteAssets/KendoGrid1/KgridBusiness/KGridControllerBusiness.js" type="text/javascript"></script>-->
+    <script>
+
+        // Get HTML head element
+        var head = document.getElementsByTagName('HEAD')[0];
+        // Create new link Element
+        var link = document.createElement('link');
+        // set the attributes for link element
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        switch (environment) {
+            case "qa": link.href = '../Styles/header-qa.css'; break;
+            case "training": link.href = '../Styles/header-training.css'; break;
+            default: link.href = '../Styles/header.css';
+        }
+
+        // Append link element to HTML head
+        head.appendChild(link);
+    </script>
+</head>
+<body>
+    <div ng-app="SPOTApp">
+        <div class="ng-cloak" ng-controller="ProjectHubMainCtrl as vm" ng-init='vm.init()'>
+            <div class="container-fluid">
+                <!--open container-->
+                <div class="row row-offcanvas row-offcanvas-left">
+                    <div id="main-section" class="col-xs-12 column">
+                        <div>
+                            <directive-top-menu></directive-top-menu>
+                        </div>
+                        <div class="main-section-content row" style="">
+                            <!-- First row -->
+                            <div class="col-xs-12 secondTopBar">
+                                <directive-project-hub-header></directive-project-hub-header>
+                            </div>
+                            <!-- First row -->
+                            <!-- Second row -->
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div ng-click="vm.getEditPhaseData()" style="cursor:pointer" class="show-project-status">
+                                        <div class="labeled">Project State:<span class="status">{{vm.projectHubStatus.ProjectStatusName}}</span></div>
+                                    </div>
+
+                                    <div id="project-status">
+
+                                        <span ng-click="vm.getEditPhaseData()" class="{{vm.IntiateStyle}}"><a href="#">Initiate</a></span>
+                                        <span ng-click="vm.getEditPhaseData()" class="{{vm.DefineStyle}}"><a href="#">Define</a></span>
+                                        <span ng-click="vm.getEditPhaseData()" class="{{vm.PlanStyle}}"><a href="#">Plan</a></span>
+                                        <span ng-click="vm.getEditPhaseData()" class="{{vm.ExecuteStyle}}"><a href="#">Execute</a></span>
+                                        <span ng-click="vm.getEditPhaseData()" class="{{vm.CloseStyle}}"><a href="#">Close</a></span>
+                                        <span ng-click="vm.getEditPhaseData()" class="{{vm.TrackStyle}}"><a href="#">Track</a></span>
+
+                                    </div>
+
+                                    <div id="dialogPhaseHub" k-modal="true" kendo-window="dialogPhase" k-title="'Phase/State'" k-content="{ url: '{{vm.phasePagepath}}'}" k-visible="false"></div>
+                                </div>
+                            </div>
+                            <!-- Second row -->
+                            <div class="clearfix"></div>
+                            <div class="demo-section k-content">
+                                <directive-prj-hub-tabs></directive-prj-hub-tabs>
+                            </div>
+                        </div>
+                        <!--close main column-->
+                    </div>
+                    <!--close row-->
+                </div>
+            </div>
+
+            <div id="dialogImportData" kendo-window="dialogImportData" k-title="'Import Data'" k-modal="true" k-visible="false">
+                <directive-import-data></directive-import-data>
+            </div>
+            <!--Project Hub-->
+            <div id="dialogOverallStatus" kendo-window="dialogOverallStatus" k-title="'Overall Status'" k-modal="true" k-on-open="vm.SetDefaultOverallStatus()" k-visible="false">
+                <directive-overall-statusform></directive-overall-statusform>
+            </div>
+            <div id="dialogMilestone" kendo-window="dialogMilestone" k-title="'Milestone'" k-modal="true" k-visible="false">
+                <directive-milestoneform></directive-milestoneform>
+            </div>
+            <div id="dialogAskNeed" kendo-window="dialogAskNeed" k-title="'Ask Need'"
+                 k-modal="true" k-visible="false">
+                <directive-ask-needform></directive-ask-needform>
+            </div>
+            <div id="dialogRiskIssue" kendo-window="dialogRiskIssue" k-title="'Risk / Issue'" k-modal="true" k-visible="false">
+                <directive-risk-issueform></directive-risk-issueform>
+            </div>
+            <!--Project Hub-->
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <label style="font-size:smaller;color:#c5c5c5">All rights reserved</label>
+                </div>
+                <div class="col-md-6">
+                    <label style="float:right;font-size:smaller;color:#c5c5c5">SPOT Version: {{vm.buildNo}} Release Date: {{vm.releaseDate}}</label>
+                </div>
+            </div>
+        </div>
+        <div id="preloader" style="display:none">
+            <div id="loaderLogo"><img src="../Images/spotlogo1.PNG" width="90" height="72" /></div>
+            <div id="loader"></div>
+        </div>
+
+    </div>
+    <script id="riskIssuedetail-template" type="text/x-kendo-template">
+        <div class="row margBot20">
+            <div class="col-xs-6 align-center">
+                <label>This Is The Result</label>
+                # if (RiskIssueResult != null) { #
+                <p>#: RiskIssueResult #</p>
+                # } #
+
+            </div>
+            <div class="col-xs-6 align-center">
+                <label>Mitigation</label>
+                # if (Mitigation != null) { #
+                <p>#: Mitigation #</p>
+                # } #
+            </div>
+        </div>
+        <div class="row margBot20">
+            <div class="col-xs-4 align-center">
+                <label>Owner:</label>
+                # if (OwnerName != null) { #
+                <span>#: OwnerName #</span>
+                # } #
+            </div>
+            <div class="col-xs-4 align-center">
+                <label>Function:</label>
+                # if (FunctionGroup != null) { #
+                <span>#: FunctionGroup  #</span>
+                # } #
+            </div>
+            <div class="col-xs-4 align-center">
+                <label>Due Date:</label>
+                # if (DueDate != null) { #
+                <span>#=kendo.toString(kendo.parseDate(DueDate), 'dd-MMM-yy')#</span>
+                # } #
+
+            </div>
+        </div>
+
+
+
+    </script>
+    <script id="scheduledetail-template" type="text/x-kendo-template">
+
+        <div class="row margBot20">
+            <label>Comment:</label>
+            # if (Comments != null) { #
+            <div> #: Comments #</div>
+            # } #
+        </div>
+        <div class="row margBot20">
+            <label>Function Owner:</label>
+            # if (FunctionalGroupName != null) { #
+            <span>#: FunctionalGroupName  #</span>
+            # } #
+        </div>
+    </script>
+    <script id="askneeddetail-template" type="text/x-kendo-template">
+        # if (Comments != null) { #
+        <div> #: Comments #</div>
+        # } #
+    </script>
+</body>
+
+</html>

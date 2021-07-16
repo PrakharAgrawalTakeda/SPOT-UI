@@ -1,0 +1,294 @@
+﻿<div class="wrapper">
+
+    <!-- section starts -->
+    <section>
+        <div class="">
+            <!-- Block start -->
+            <div class="col-md-12 form-blocks customDlgcont" id="TechOpsProgram">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label">Project Name <span class="required">*</span></label>
+                            <div class="inputGroupContainer">
+                                <input kendotextbox class="k-textbox" tabindex="1" ng-model="vm.projectTypeSelector.Title" style="width: 100%" required />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Program ID</label>
+                            <div class="inputGroupContainer">
+                                <input kendotextbox class="k-textbox inputDisabled" tabindex="2" ng-disabled="true" value="To Be Assigned Upon Submission" style="width: 100%;background-color:#eae8e8" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group labeled-icon">
+                            <label class="control-label">Portfolio Owner <span class="required">*</span></label>
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'The group which is responsible for the oversight and process adherence of the record
+ '">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+                            <select tabindex="3"
+                                    kendo-combo-box
+                                    k-placeholder="'Select and/or Type to Search'"
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.dsOwner"
+                                    style="width: 100%"
+                                    k-filter="'contains'"
+                                    k-change="vm.techOps"
+                                    k-ng-model="vm.projectTypeSelector.PortfolioOwner" required></select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group labeled-icon">
+                            <label class="control-label">Execution Scope <span class="required">*</span></label>
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project
+'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+                            <select id="techOps" kendo-multi-select k-options="vm.dsExecutionScope"
+                                    tabindex="4"
+                                    k-ng-model="vm.projectTypeSelector.ExecutionScope" required></select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Submitted By <span class="required">*</span></label>
+                            <select tabindex="5"
+                                    kendo-drop-down-list id="customers"
+                                    k-filter="'contains'"
+                                    k-options="vm.customOptions"
+                                    style="width: 100%"
+                                    k-ng-model="vm.projectTypeSelector.ProblemOwner" required></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="labeled-icon">
+                            <!--<label class="control-label">Parent Program</label>-->
+                            <div class="inputGroupContainer">
+                                <div class="fieldgroup inlineFieldGroup radio-grp">
+                                    <input type="radio" ng-checked="true" name="parentProgram3" value="project" ng-click="vm.InitProject('project')"><b>Parent Project &nbsp;&nbsp;&nbsp;</b>
+                                    <input type="radio" name="parentProgram3" value="program" ng-click="vm.InitProject('program')"><b>Parent Program</b>
+                                </div>
+                                <div class="ssk-tooltip" kendo-tooltip k-content="'Select a Parent Program if this project is
+associated or part of an overall program (Program
+Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)
+'">
+                                    <span class="k-icon k-i-question"></span>
+                                </div>
+
+                            </div>
+                            <div class="form-group" ng-show="vm.projectVisible">
+
+                                <div class="row noPadding">
+                                    <div id="projectGrid">
+
+                                        <select tabindex="6"
+                                                kendo-combo-box
+                                                k-placeholder="'Select and/or Type to Search'"
+                                                k-data-text-field="'LookUpMemberName'"
+                                                k-data-value-field="'LookUpMemberID'"
+                                                k-data-source="vm.dsProject"
+                                                k-filter="'contains'"
+                                                style="width: 100%"
+                                                k-ng-model="vm.projectTypeSelector.ParentProject"></select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-show="vm.programVisible">
+
+                                <div class="row noPadding">
+                                    <div id="programGrid">
+
+                                        <select kendo-combo-box
+                                                k-placeholder="'Select and/or Type to Search'"
+                                                k-data-text-field="'LookUpMemberName'"
+                                                k-data-value-field="'LookUpMemberID'"
+                                                k-data-source="vm.dsProgram"
+                                                k-filter="'contains'"
+                                                style="width: 100%"
+                                                k-ng-model="vm.projectTypeSelector.ParentProgram"></select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group labeled-icon">
+                            <label class="control-label">Primary Product <span class="required">*</span></label>
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'Select the product which is most impacted by the project.  If multiple products without an obvious primary, select one out of the group
+'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+
+                            <select tabindex="7"
+                                    kendo-combo-box
+                                    k-placeholder="'Select and/or Type to Search'"
+                                    k-filter="'contains'"
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.dsPrimaryProduct"
+                                    style="width: 100%"
+                                    k-ng-model="vm.projectTypeSelector.PrimaryProduct" required></select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group labeled-icon">
+                            <label class="control-label">Other Impacted Product(s)</label>
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'Any additional products which are impacted by the project execution
+'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+
+                            <select kendo-multi-select k-options="vm.dsImpactedProducts" tabindex="8" k-ng-model="vm.projectTypeSelector.OtherImpactedProduct"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <div class="form-group labeled-icon col-md-12">
+                            <div class="">
+                                <label class="control-label">Problem Description / Present Situation <span class="required">*</span></label>
+                                <div class="ssk-tooltip" kendo-tooltip k-content="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria
+'">
+                                    <span class="k-icon k-i-question"></span>
+                                </div>
+                            </div>
+                            <div class="inputGroupContainer">
+                                <textarea kendotextbox class="k-textbox" tabindex="9" ng-model="vm.projectTypeSelector.ProblemDescription" style="width: 100%;height:80px;"
+                                          required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <div class="form-group labeled-icon col-md-12">
+                            <div class="">
+                                <label class="control-label">Strategic Rationale / Justification <span class="required">*</span></label>
+                                <div class="ssk-tooltip" kendo-tooltip k-content="'Why solve this now? Description covering the expected business benefits from solving the challenge. The description of benefits can contain both quantifiable and unquantifiable components
+'">
+                                    <span class="k-icon k-i-question"></span>
+                                </div>
+                            </div>
+                            <div class="inputGroupContainer">
+                                <textarea kendotextbox class="k-textbox" tabindex="10" ng-model="vm.projectTypeSelector.Justification" style="width: 100%;height:80px;" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="">
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Project Classification <span class="required">*</span></label>
+                            <div class="inputGroupContainer">
+                                <select tabindex="11"
+                                        kendo-combo-box
+                                        k-placeholder="'Select and/or Type to Search'"
+                                        k-filter="'contains'"
+                                        k-ng-model="vm.projectTypeSelector.ProjectClassification"
+                                        k-data-text-field="'LookUpMemberName'"
+                                        k-data-value-field="'LookUpMemberID'"
+                                        k-data-source="vm.dsProjectClassification"
+                                        style="width: 100%" required></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="">
+                        <div class="form-group option">
+                            <div class="col-md-2"><label class="control-label">OE Project?</label></div>
+                            <div class="col-md-10 inputGroupContainer">
+                                <div class="fieldgroup inlineFieldGroup">
+                                    <input type="radio" tabindex="12" name="oeproject4" ng-model="vm.projectTypeSelector.IsOEProject" value="True" ng-click="vm.OEProjectVisibleTechOps=true"><label for="Yes">
+                                        &nbsp;Yes
+                                    </label>
+                                </div>
+                                <div class="fieldgroup inlineFieldGroup">
+                                    <input type="radio" tabindex="13" name="oeproject4" ng-model="vm.projectTypeSelector.IsOEProject" value="False" ng-click="vm.oeTypeChangeTechOps()"><label for="No">&nbsp;No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+
+                            <div id="divOEProject" class="row noPadding" ng-show="vm.OEProjectVisibleTechOps">
+                                <div id="OEProject">
+                                    <select kendo-multi-select k-options="vm.dsOEType" tabindex="14" k-ng-model="vm.projectTypeSelector.OEProjectType"></select>
+                                    <!--<select kendo-combo-box
+                                    k-placeholder="'Select and/or Type to Search'"
+                                    k-filter="'contains'"
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.dsPrimaryProduct"
+                                    style="width: 100%"
+                                    k-ng-model="vm.projectTypeSelector.OEProjectValue"></select>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="">
+                        <div class="form-group">
+                            <!-- <label class="col-md-12 control-label">Is Confidential</label>-->
+                            <div class="col-md-12 inputGroupContainer" ng-show="vm.isConfidentialVisible">
+                                <input type="checkbox" tabindex="15" id="isConfi" ng-model="vm.projectTypeSelector.isConfidential" />
+                                <label for="isConfi">Is Confidential</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group">
+                        <div class="col-md-12 inputGroupContainer">
+                            <div class="col-md-6 bottom-butons-block no-padding">
+                                <lable ng-show="vm.techOpsValidationMessage" style="color:red" id="message" ng-bind="vm.validationMsg"></lable>
+                            </div>
+                            <div class="col-md-6 bottom-butons-block no-padding">
+
+                                <a id="btnSubmit" tabindex="16" ng-click="vm.CreateProblemCaptureData(vm.TechOpsProgram,'3')" class="k-button btnR">Submit</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+                <!-- Block end -->
+
+            </div>
+        </div>
+
+    </section>
+    <!-- section end -->
+
+</div>
+
+

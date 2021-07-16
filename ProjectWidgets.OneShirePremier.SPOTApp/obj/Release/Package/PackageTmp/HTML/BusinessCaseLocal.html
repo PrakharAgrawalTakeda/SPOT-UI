@@ -1,0 +1,267 @@
+﻿<meta charset="utf-8" />
+<script src="../GlobalJS/jquery.min.js"></script>
+<script src="../GlobalJS/angular.min.js"></script>
+<script src="../GlobalJS/bootstrap.min.js"></script>
+<script src="../GlobalJS/angular-route.min.js"></script>
+<script src="../GlobalJS/kendo.all.min.js"></script>
+<script src="../GlobalJS/angular-route.min.js"></script>
+<link rel="stylesheet" href="../Styles/kendo.mobile.all.min.css" />
+<link rel="stylesheet" href="../Styles/bootstrap.min.css" />
+<link rel="stylesheet" href="../Styles/kendo.common.min.css" type="text/css" />
+<link rel="stylesheet" href="../Styles/kendo.metro.min.css" type="text/css" />
+<link rel="stylesheet" href="../Styles/kendo.dataviz.min.css" type="text/css" />
+<link rel="stylesheet" href="../Styles/kendo.dataviz.metro.min.css" type="text/css" />
+<link rel="stylesheet" href="../Styles/kendo.common-material.min.css" />
+
+<link rel="stylesheet" href="../Styles/kendo.default.min.css">
+
+<link rel="stylesheet" href="../Styles/kendo.default.mobile.min.css" />
+<link rel="stylesheet" href="../Styles/kendo.material.mobile.min.css" />
+<link rel="stylesheet" href="../Styles/kendo.material.min.css" />
+
+<link rel="stylesheet" href="../Styles/KGridCSS.css" type="text/css" />
+<link rel="stylesheet" href="../Styles/CustomStyle.css" type="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<!--<script src="https://kendo.cdn.telerik.com/2017.3.913/js/kendo.aspnetmvc.min.js"></script>-->
+
+<script src="../GlobalJS/SPOTApp.js"></script>
+<script src="../Directive/Directive.js"></script>
+<script src="../GlobalJS/GETPostService.js"></script>
+<script src="../JS/BusinessCaseData.js"></script>
+<script src="../Controller/ProjectHubCtrl.js" type="text/javascript"></script>
+<!--<script src="..../SiteAssets/KendoGrid1/KgridBusiness/KGridControllerBusiness.js" type="text/javascript"></script>-->
+
+
+<div ng-app="SPOTApp" style="padding-top:3%;">
+    <div ng-controller="ProjectHubCtrl as vm" ng-init='vm.init()'>
+        <div class="col-xs-12"></div>
+        <div class="row" style="padding-right:0px !important;">
+            <div>
+                <ul kendo-menu class="bluBackground">
+                    <li ng-click="dialogProjectPortal.open()">
+                        +Create New
+                    </li>
+                    <li>
+                        Portfolio Center
+                    </li>
+                    <li>
+                        Project List
+                    </li>
+                    <li>
+                        Reports
+                    </li>
+                    <li>
+                        Help
+                    </li>
+                </ul>
+            </div>
+
+            <div kendo-window="dialogProjectPortal" k-title="'Project Type Selector'" k-width="950" k-height="550" k-position="{ top: 50, left: 250 }"
+                 k-modal="true" k-visible="false">
+                <div class="col-xs-12" style="width:97%;">
+                    <div class="row wrap" style="padding-top:3%;vertical-align:middle">
+                        <div class="col-xs-3" style="text-align:center;cursor:pointer;">
+                            <div ng-click="dialogNewProblem.open()">
+                                <img src="../SiteAssets/Images/New Problem.png" style="width:100px;height:100px" />
+                            </div>
+                            <div class="bigFont">
+                                New Problem- Site
+                            </div>
+                        </div>
+                        <div class="col-xs-8 inner">
+                            <span class="bigFont">
+                                A new problem which a solution has not been approved or agreed upon yet.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row wrap">
+                        <div class="col-xs-3" style="text-align:center;cursor:pointer;">
+                            <div ng-click="dialogSolutionIdentified.open()">
+                                <img src="../SiteAssets/Images/Solution Identified.png" style="width:100px;height:100px" />
+                            </div>
+                            <div class="bigFont">
+                                Solution Identified
+                            </div>
+                        </div>
+
+                        <div class="col-xs-8 inner" style="vertical-align:middle">
+                            <span class="bigFont">
+                                A problem in which a solution has already been identified and agreed upon (typical examples: Major CAPAs, Regulatory committments, etc
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row wrap">
+                        <div class="col-xs-3" style="text-align:center;cursor:pointer;" ng-click="dialogNewProgram.open()">
+                            <div>
+                                <img src="../SiteAssets/Images/Tech Ops Program.png" style="width:100px;height:100px" />
+                            </div>
+                            <div class="bigFont">
+                                Tech Ops Program
+                            </div>
+                        </div>
+                        <div class="col-xs-8 inner" style="vertical-align:middle">
+                            <span class="bigFont">
+                                A Tech Ops Program represents a collection of multiple projects being executed at a single or multiple sites.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row wrap">
+                        <div class="col-xs-3" style="text-align:center;cursor:pointer;" ng-click="dialogTechTransfer.open()">
+                            <div>
+                                <img src="../SiteAssets/Images/Tech Transfer.png" style="width:100px;height:100px" />
+                            </div>
+                            <div class="bigFont">
+                                Tech Transfer
+                            </div>
+                        </div>
+                        <div class="col-xs-8 inner" style="vertical-align:middle">
+                            <span class="bigFont">
+                                A Tech Transfer is defined by a project which involves the introduction, change or restart of a products manufacturing process.  This includes: New Product Introductions,
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div kendo-window="dialogNewProblem" k-title="'Problem Capture'"
+                     k-width="950" k-height="450" k-position="{ top: 80, left: 250 }"
+                     k-modal="true" k-visible="false"
+                     k-content="{ url: '../HTML/ProblemCapture.html' }"></div>
+                <div kendo-window="dialogSolutionIdentified" k-title="'Solution Identified Capture Form'"
+                     k-width="950" k-height="450" k-position="{ top: 80, left: 250 }"
+                     k-modal="true" k-visible="false"
+                     k-content="{ url: '../SiteAssets/KendoGrid1/SPOTBusiness/HTML/SolutionIdentified.html' }"></div>
+                <div kendo-window="dialogNewProgram" k-title="'Program Capture Form'"
+                     k-width="950" k-height="450" k-position="{ top: 80, left: 250 }"
+                     k-modal="true" k-visible="false"
+                     k-content="{ url: '../SiteAssets/KendoGrid1/SPOTBusiness/HTML/TechOpsProgram.html' }"></div>
+                <div kendo-window="dialogTechTransfer" k-title="'Tech Transfer Capture Form'"
+                     k-width="950" k-height="450" k-position="{ top: 80, left: 250 }"
+                     k-modal="true" k-visible="false"
+                     k-content="{ url: '../SiteAssets/KendoGrid1/SPOTBusiness/HTML/TechTransfer.html' }"></div>
+            </div>
+
+            <!--<a id="btnPortfolio" ng-click="dialogProjectPortfolio.open()">Portfolio Dashboard</a>-->
+
+            <div class="col-xs-11 nonePaddingtop" kendo-window="dialogProjectPortfolio" k-title="'Project Type Selector'" k-width="950" k-height="650" k-position="{ top: 0, left: 250 }"
+                 k-modal="true" k-visible="false">
+                <div class="row withBorder">
+                    <div class="col-xs-4">
+                        <span>Deliverable</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <div></div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div></div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div><span></span></div>
+                    </div>
+                </div>
+                <div class="row withBorder">
+                    <div class="col-xs-4">
+                        <span>Problem Capture</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button"><span>Open Wizard</span></div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button"><span>Generate Document</span></div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div><span></span></div>
+                    </div>
+                </div>
+                <div class="row withBorder">
+                    <div class="col-xs-4">
+                        <span>Business Case</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button" ng-click="dialogBusiness1.open()"><span>Open Wizard</span></div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button"><span>Generate Document</span></div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div><span></span></div>
+                    </div>
+                </div>
+                <div class="row withBorder">
+                    <div class="col-xs-4">
+                        <span>Project Charter</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button"><span>Open Wizard</span></div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button"><span>Generate Document</span></div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div><span></span></div>
+                    </div>
+                </div>
+                <div class="row withBorder">
+                    <div class="col-xs-4">
+                        <span>Integrated Project Plan</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button"><span>Open Wizard</span></div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="k-button"><span>Generate Document</span></div>
+                    </div>
+                    <div class="col-xs-2">
+                        <div><span></span></div>
+                    </div>
+                </div>
+            </div>
+            <div kendo-window="dialogBusiness1" k-title="'Business Case Wizard'" k-width="950" k-height="700" k-position="{ top: 50, left: 250 }"
+                 k-modal="true" k-visible="false">
+                <div class="row">
+                    <div class="col-xs-1"><button id="mybutton" class="k-state-active" ng-click="vm.GetBusinessCaseData()">General Info</button></div>
+                    <div class="col-xs-1"><button id="mybutton1" class="k-state-active" ng-click="vm.GetOptionData()">Option 1</button></div>
+                    <div class="col-xs-6"></div>
+                    <div class="col-xs-1"><a href="">+ Add Option</a></div>
+                </div>
+                <div id="dvGenralInfoOuter" ng-show="!vm.myvalue">
+                    <directive-bus-case-gen-info></directive-bus-case-gen-info>
+                </div>
+                <div id="dvOption" ng-show="vm.myvalue">
+                    <directive-bus-case-opt></directive-bus-case-opt>
+                </div>
+            </div>
+
+        </div>
+        <div class="row"><span> {{vm.ProjectName }} </span></div>
+        <div class="row"><span>Project Phase</span></div>
+        <div class="row" style="display:none;">
+            <div class="col-xs-6">
+                <ul kendo-button-group id="select-period" k-options="buttonGroupOptions" style="border:none;">
+                    <li style="background-color:#fff;" class="phase k-button" ng-click="dialog.open()">1</li>
+                    <li style="background-color:#dddddd;" class="phase k-button" ng-click="dialog.open()">2</li>
+                    <li style="background-color:#a2c4c9;" class="phase k-button" ng-click="dialog.open()">3</li>
+                    <li style="background-color:#b4a7d6" class="phase k-button" ng-click="dialog.open()">4</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div></div>
+            </div>
+            <div class="col-xs-6">
+                <div></div>
+            </div>
+        </div>
+        <div class="row">
+            <kendo-button class="k-primary" ng-click="">Project Details</kendo-button>
+            <kendo-button class="k-primary" ng-click="">Go To Schedule</kendo-button>
+            <a class="k-button" id="btnPortfolio" ng-click="dialogProjectPortfolio.open()">Portfolio Dashboard</a>
+            <!--<kendo-button class="k-primary" ng-click="dialogProjectPortfolio.open()">Portfolio Deliverables</kendo-button>-->
+        </div>
+        <div class="row">
+            <directive-prj-hub-tabs></directive-prj-hub-tabs>
+        </div>
+    </div>
+</div>
+

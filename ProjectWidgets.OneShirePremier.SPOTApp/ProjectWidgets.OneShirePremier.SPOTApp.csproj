@@ -1,0 +1,550 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{684EEE5C-4FE4-4E33-9F92-89CB79710439}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectWidgets.OneShirePremier.SPOTApp</RootNamespace>
+    <AssemblyName>ProjectWidgets.OneShirePremier.SPOTApp</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <ApplicationInsightsResourceId>/subscriptions/c5e6b1d9-3be9-4757-bace-d337f2c55c19/resourcegroups/ShireSPOTApp/providers/microsoft.insights/components/ShireSPOTApp</ApplicationInsightsResourceId>
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/c5e6b1d9-3be9-4757-bace-d337f2c55c19/resourcegroups/ShireSPOTApp/providers/microsoft.insights/components/ShireSPOTApp</ApplicationInsightsAnnotationResourceId>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="dotnet-bundle, Version=2.8.391.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BundlerMinifier.Core.2.8.391\lib\net452\dotnet-bundle.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.4.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.4.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.4.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.4.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.4.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel">
+      <HintPath>Assemblies\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.5.2.9\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Extensions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=69c3241e6f0468ca, processorArchitecture=MSIL">
+      <HintPath>Assemblies\Microsoft.IdentityModel.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Documents\Visual Studio 2017\Projects\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\Assemblies\Microsoft.SharePoint.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Documents\Visual Studio 2017\Projects\ProjectWidgets.OneShirePremier.SPOT\Product master\Product master\Assemblies\Microsoft.SharePoint.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Documents\Visual Studio 2017\Projects\ProjectWidgets.OneShirePremier.SPOT\Product master\Product master\Assemblies\Microsoft.SharePoint.Client.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NUglify, Version=1.5.11.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.5.11\lib\net40\NUglify.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Security.Claims, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Claims.4.3.0\lib\net46\System.Security.Claims.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>Assemblies\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assemblies\Microsoft.SharePoint.Client.dll" />
+    <Content Include="Assemblies\Microsoft.SharePoint.Client.Runtime.dll" />
+    <Content Include="Assemblies\Microsoft.SharePoint.dll" />
+    <Content Include="Assemblies\Newtonsoft.Json.dll" />
+    <Content Include="Controller\BusinessCaseCtrl.js" />
+    <Content Include="Controller\BusinessCaseCtrl.min.js">
+      <DependentUpon>BusinessCaseCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\MigrateProjectsCtrl.js" />
+    <Content Include="Controller\MyPreferenceCtrl.js" />
+    <Content Include="Controller\MyPreferenceCtrl.min.js">
+      <DependentUpon>MyPreferenceCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\PortfolioCenterCtrl.js" />
+    <Content Include="Controller\PortfolioCenterCtrl.min.js">
+      <DependentUpon>PortfolioCenterCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\PortfolioExcelUpdate.js" />
+    <Content Include="Controller\PortfolioExcelUpdate.min.js">
+      <DependentUpon>PortfolioExcelUpdate.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\PortfolioForecastCtrl.js" />
+    <Content Include="Controller\PortfolioForecastCtrl.min.js">
+      <DependentUpon>PortfolioForecastCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\ProgramHubCtrl.js" />
+    <Content Include="Controller\ProjectBudgetCtrl.js" />
+    <Content Include="Controller\ProjectBudgetCtrl.min.js">
+      <DependentUpon>ProjectBudgetCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\ProjectCloseOutCtrl.js" />
+    <Content Include="Controller\ProjectCharterCtrl - Copy.min.js">
+      <DependentUpon>ProjectCloseOutCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\ProjectCharterCtrl.js" />
+    <Content Include="Controller\ProjectCharterCtrl.min.js">
+      <DependentUpon>ProjectCharterCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\ProjectDocumentCtrl.js" />
+    <Content Include="Controller\ProjectDocumentCtrl.min.js">
+      <DependentUpon>ProjectDocumentCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\ProjectHubCtrl.js" />
+    <Content Include="Controller\ProjectHubCtrl.min.js">
+      <DependentUpon>ProjectHubCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\ProjectHubHeaderCtrl.js" />
+    <Content Include="Controller\ProjectHubHeaderCtrl.min.js">
+      <DependentUpon>ProjectHubHeaderCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\ProjectHubMainCtrl.js" />
+    <Content Include="Controller\SecurityGroupUsersCtrl.js" />
+    <Content Include="Controller\SecurityGroupUsersCtrl.min.js">
+      <DependentUpon>SecurityGroupUsersCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\TopMenuCtrl.js" />
+    <Content Include="Controller\TopMenuCtrl.min.js">
+      <DependentUpon>TopMenuCtrl.js</DependentUpon>
+    </Content>
+    <Content Include="Controller\UploadBulkDocCtrl.js" />
+    <Content Include="Directive\Directive.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\DejaVu\LICENSE.txt" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphs\KendoUIGlyphs.svg" />
+    <Content Include="fonts\glyphs\WebComponentsIcons.svg" />
+    <Content Include="GlobalJS\angular-route.min.js" />
+    <Content Include="GlobalJS\angular.min.js" />
+    <Content Include="GlobalJS\bootstrap.min.js" />
+    <Content Include="GlobalJS\Constants.js" />
+    <Content Include="GlobalJS\GETPostService.js" />
+    <Content Include="GlobalJS\jquery.min.js" />
+    <Content Include="GlobalJS\jszip.min.js" />
+    <Content Include="GlobalJS\kendo.all.min.js" />
+    <Content Include="GlobalJS\kendo.aspnetmvc.min.js" />
+    <Content Include="GlobalJS\SPOTApp.js" />
+    <Content Include="GlobalJS\Utility.js" />
+    <Content Include="GlobalJS\Utility.min.js">
+      <DependentUpon>Utility.js</DependentUpon>
+    </Content>
+    <Content Include="HTML\Baselinecount.html" />
+    <Content Include="HTML\CopyFile.html" />
+    <Content Include="HTML\CopyProject.html" />
+    <Content Include="HTML\CurrencyFxRate.html" />
+    <Content Include="HTML\DataQuality.html" />
+    <Content Include="HTML\MigrateProjects.html" />
+    <Content Include="HTML\MoveFile.html" />
+    <Content Include="HTML\CreateFolder.html" />
+    <Content Include="HTML\MyPreferences.html" />
+    <Content Include="HTML\NoAccessErrorUnderMaintenance.html" />
+    <Content Include="HTML\PortfolioForecastExcelUpdate.html" />
+    <Content Include="HTML\PowerBIReport.html" />
+    <Content Include="HTML\ProgramHub.html" />
+    <Content Include="HTML\ProjectBudget.html" />
+    <Content Include="HTML\AskNeed.html" />
+    <Content Include="HTML\BusinessCase.html" />
+    <Content Include="HTML\BusinessCaseDeliverable.html" />
+    <Content Include="HTML\BusinessCaseGenInfo.html" />
+    <Content Include="HTML\BusinessCaseLocal.html" />
+    <Content Include="HTML\BusinessCaseOption2.html" />
+    <Content Include="HTML\BusinessCaseOption3.html" />
+    <Content Include="HTML\BusinessCaseOption.html" />
+    <Content Include="HTML\EditDeliverables.html" />
+    <Content Include="HTML\ImportData.html" />
+    <Content Include="HTML\Milestone.html" />
+    <Content Include="HTML\NoAccessError.html" />
+    <Content Include="HTML\OverAllStatus.html" />
+    <Content Include="HTML\Phase.html" />
+    <Content Include="HTML\PortfolioCenter.html" />
+    <Content Include="HTML\ProblemCapture.html" />
+    <Content Include="HTML\ProjectCloseOut.html" />
+    <Content Include="HTML\ProjectCharter.html" />
+    <Content Include="HTML\ProjectCloseOutDeliverable.html" />
+    <Content Include="HTML\ProjectCharterDeliverable.html" />
+    <Content Include="HTML\ProjectDetailFormsAndReports.html" />
+    <Content Include="HTML\ProjectDetailsAndForms.html" />
+    <Content Include="HTML\ProjectDocument.html" />
+    <Content Include="HTML\ProjectHub.html" />
+    <Content Include="HTML\ProjectHubData.html" />
+    <Content Include="HTML\ProjectHubHeader.html" />
+    <Content Include="HTML\ProjectHubTabs.html" />
+    <Content Include="HTML\ProjectTeam.html" />
+    <Content Include="HTML\ProjectTypeSelector.html" />
+    <Content Include="HTML\RenameFolderFile.html" />
+    <Content Include="HTML\RiskIssue.html" />
+    <Content Include="HTML\PortfolioForecast.html" />
+    <Content Include="HTML\SecurityGroupUsers.html" />
+    <Content Include="HTML\SimpleProject.html" />
+    <Content Include="HTML\SolutionIdentified.html" />
+    <Content Include="HTML\StandardProject.html" />
+    <Content Include="HTML\TechOpsProgram.html" />
+    <Content Include="HTML\TechTransfer.html" />
+    <Content Include="HTML\TopMenu.html" />
+    <Content Include="HTML\UploadBulkDoc.html" />
+    <Content Include="HTML\UploadDocument.html" />
+    <Content Include="Images\blue.PNG" />
+    <Content Include="Images\clearAll.jpg" />
+    <Content Include="Images\favicon.ico" />
+    <Content Include="Images\gauge.png" />
+    <Content Include="Images\Gray1.png" />
+    <Content Include="Images\Gray2.png" />
+    <Content Include="Images\Gray3.png" />
+    <Content Include="Images\Gray4.png" />
+    <Content Include="Images\Gray5.png" />
+    <Content Include="Images\green.PNG" />
+    <Content Include="Images\high.PNG" />
+    <Content Include="Images\icon_filter.png" />
+    <Content Include="Images\Info.png" />
+    <Content Include="Images\low.PNG" />
+    <Content Include="Images\medium.PNG" />
+    <Content Include="Images\New Problem.PNG" />
+    <Content Include="Images\red.PNG" />
+    <Content Include="Images\schedule.png" />
+    <Content Include="Images\Simple Project.png" />
+    <Content Include="Images\site.png" />
+    <Content Include="Images\Solution Identified.PNG" />
+    <Content Include="Images\spot-qa-logo.svg" />
+    <Content Include="Images\spot-training-logo.svg" />
+    <Content Include="Images\spotlogo.PNG" />
+    <Content Include="Images\spotlogo1.PNG" />
+    <Content Include="Images\spot_logo.svg" />
+    <Content Include="Images\takeda_logo.svg" />
+    <Content Include="Images\Tech Ops Program.PNG" />
+    <Content Include="Images\Tech Transfer.png" />
+    <Content Include="Images\UP.png" />
+    <Content Include="Images\warning.png" />
+    <Content Include="Images\yellow.PNG" />
+    <Content Include="JS\BusinessCaseData.js" />
+    <Content Include="JS\GridColumn.js" />
+    <Content Include="JS\GridColumn.min.js">
+      <DependentUpon>GridColumn.js</DependentUpon>
+    </Content>
+    <Content Include="Service.svc" />
+    <Content Include="Styles\bootstrap.min.css" />
+    <Content Include="Styles\Bootstrap\editor.png" />
+    <Content Include="Styles\Bootstrap\imagebrowser.png" />
+    <Content Include="Styles\Bootstrap\indeterminate.gif" />
+    <Content Include="Styles\Bootstrap\loading-image.gif" />
+    <Content Include="Styles\Bootstrap\loading.gif" />
+    <Content Include="Styles\Bootstrap\loading_2x.gif" />
+    <Content Include="Styles\Bootstrap\markers.png" />
+    <Content Include="Styles\Bootstrap\markers_2x.png" />
+    <Content Include="Styles\Bootstrap\slider-h.gif" />
+    <Content Include="Styles\Bootstrap\slider-v.gif" />
+    <Content Include="Styles\Bootstrap\sprite.png" />
+    <Content Include="Styles\Bootstrap\sprite_2x.png" />
+    <Content Include="Styles\Bootstrap\sprite_kpi.png" />
+    <Content Include="Styles\Bootstrap\sprite_kpi_2x.png" />
+    <Content Include="Styles\CustomStyle.css" />
+    <Content Include="Styles\Default\loading-image.gif" />
+    <Content Include="Styles\Default\loading.gif" />
+    <Content Include="Styles\fonts\DejaVu\LICENSE.txt" />
+    <Content Include="Styles\fonts\glyphs\KendoUIGlyphs.svg" />
+    <Content Include="Styles\fonts\glyphs\WebComponentsIcons.svg" />
+    <Content Include="Styles\header-qa.css" />
+    <Content Include="Styles\header-training.css" />
+    <Content Include="Styles\header.css" />
+    <Content Include="Styles\images\back.png" />
+    <Content Include="Styles\images\kendoui.svg" />
+    <Content Include="Styles\images\spotlogo.PNG" />
+    <Content Include="Styles\images\wp8_icons.png" />
+    <Content Include="Styles\images\wp8_inverseicons.png" />
+    <Content Include="Styles\kendo.common-material.min.css" />
+    <Content Include="Styles\kendo.common.min.css" />
+    <Content Include="Styles\kendo.dataviz.metro.min.css" />
+    <Content Include="Styles\kendo.dataviz.min.css" />
+    <Content Include="Styles\kendo.default.min.css" />
+    <Content Include="Styles\kendo.default.mobile.min.css" />
+    <Content Include="Styles\kendo.material.min.css" />
+    <Content Include="Styles\kendo.material.mobile.min.css" />
+    <Content Include="Styles\kendo.metro.min.css" />
+    <Content Include="Styles\kendo.mobile.all.min.css" />
+    <Content Include="Styles\kendo.rtl.min.css" />
+    <Content Include="Styles\KGridCSS.css" />
+    <Content Include="Styles\site.css" />
+    <Content Include="Styles\textures\highlight.png" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\DataAccessClass.cs" />
+    <Compile Include="Data\Decryption.cs" />
+    <Compile Include="Global.asax.cs" />
+    <Compile Include="ProjectHubData.cs" />
+    <Compile Include="ProjectInfo.cs" />
+    <Compile Include="Service.svc.cs">
+      <DependentUpon>Service.svc</DependentUpon>
+    </Compile>
+    <Compile Include="IService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharePointContext.cs" />
+    <Compile Include="TokenHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="scripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GlobalJS\angular.min.js.map" />
+    <Content Include="GlobalJS\kendo.all.min.js.map" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSans-Bold.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSans-BoldOblique.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSans-ExtraLight.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSans-Oblique.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSans.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSansMono-Bold.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSansMono-BoldOblique.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSansMono-Oblique.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSansMono.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSerif-Bold.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSerif-BoldItalic.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSerif-Italic.ttf" />
+    <Content Include="Styles\fonts\DejaVu\DejaVuSerif.ttf" />
+    <Content Include="Styles\fonts\glyphs\KendoUIGlyphs.eot" />
+    <Content Include="Styles\fonts\glyphs\KendoUIGlyphs.ttf" />
+    <Content Include="Styles\fonts\glyphs\KendoUIGlyphs.woff" />
+    <Content Include="Styles\fonts\glyphs\WebComponentsIcons.eot" />
+    <Content Include="Styles\fonts\glyphs\WebComponentsIcons.ttf" />
+    <Content Include="Styles\fonts\glyphs\WebComponentsIcons.woff" />
+    <Content Include="Styles\getPortfolioOwner.json" />
+    <Content Include="Styles\images\kendoui.ttf" />
+    <Content Include="Styles\images\kendoui.woff" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="bundleconfig.json" />
+    <Content Include="fonts\DejaVu\DejaVuSans-Bold.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSans-BoldOblique.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSans-ExtraLight.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSans-Oblique.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSans.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSansMono-Bold.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSansMono-BoldOblique.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSansMono-Oblique.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSansMono.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSerif-Bold.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSerif-BoldItalic.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSerif-Italic.ttf" />
+    <Content Include="fonts\DejaVu\DejaVuSerif.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphs\KendoUIGlyphs.eot" />
+    <Content Include="fonts\glyphs\KendoUIGlyphs.ttf" />
+    <Content Include="fonts\glyphs\KendoUIGlyphs.woff" />
+    <Content Include="fonts\glyphs\WebComponentsIcons.eot" />
+    <Content Include="fonts\glyphs\WebComponentsIcons.ttf" />
+    <Content Include="fonts\glyphs\WebComponentsIcons.woff" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\PubishCode.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - FTP1.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - FTP2.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - FTP3.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - FTP4.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - Web Deploy1.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - Web Deploy2.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - Web Deploy3.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp - Web Deploy4.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp2020 - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp2020 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp2020 - ReadOnly - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp2020 - ReadOnly - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp2020 - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTApp2020 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTService - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\ShireSPOTService - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\SPOTADTEST - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\SPOTADTEST - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TOPPMADSHIFT - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\TOPPMADSHIFT - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\tospot - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\tospot - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTDEV - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTDEV - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTDEV - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTDEV - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTQA - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTQA - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTTRAINING - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\TOSPOTTRAINING - Web Deploy.pubxml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>22622</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:22622/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

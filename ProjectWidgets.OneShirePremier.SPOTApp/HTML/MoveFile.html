@@ -1,0 +1,44 @@
+﻿<div class="container-fluid">
+    <!--open container-->
+    <div class="row row-offcanvas row-offcanvas-left">
+        <div id="main-section" class="col-xs-12 column">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 tab-panel-box">
+                    <span class="panel-box-title"><h4>Move File</h4></span>
+                    <div class="row column">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Select Folder to move file</label>
+                                <div style="margin-top:10px">
+                                   <!--<input  type="text" class="form-control" id="moveFilePath" placeholder="Enter Destination path" />-->
+                                    <div id="FolderTreeView"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="bottom-butons-block newFolderActions">
+                                <a ng-click="dialogMoveFile.close()" class="k-button btnR">Cancel</a>
+                                <a ng-click="vm.moveDocument()" class="k-button btnR margR5">Move</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="row">
+                        <div class="col-md-12 bottom-butons-block">
+                            <a class="k-button btnL">Cancel</a>
+                            <a ng-click="vm.CreateFolder()" class="k-button btnR">Save</a>
+                        </div>
+                    </div>-->
+
+                    <!--Tab Panel-->
+                </div>
+
+
+            </div>
+
+        </div>
+        <!--close main column-->
+    </div>
+    <!--close row-->
+</div>
+<!--close container-->

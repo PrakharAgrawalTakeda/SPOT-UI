@@ -1,0 +1,102 @@
+﻿<div class="container-fluid">
+    <!--open container-->
+    <div class="row row-offcanvas row-offcanvas-left">
+        <div id="main-section" class="col-xs-12 column">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 popup-panel-box-heading"><h3>{{vm.askNeedTitle}}</h3></div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 tab-panel-box">
+                        <span class="panel-box-title"><h4>Edit Ask/Need</h4></span>
+                        <div class="row column">
+                            <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 padrl5">
+                                <div class="form-horizontal">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Ask/Need</label>
+                                            <div class="col-sm-8">
+                                                <input tabindex="1" ng-model="vm.askNeed.AskNeed" kendotextbox class="k-textbox" style="width: 100%" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Need From</label>
+                                            <div class="col-sm-8">
+                                                <select id="needfromUser" tabindex="3" name="needfromUser" style="width: 100%" />
+                                                <!--<select tabindex="3"
+                                            kendo-drop-down-list id="needfromUser"
+                                            k-filter="'contains'"
+                                            k-options="vm.askNeedUsersList"
+                                            style="width: 100%"
+                                            k-ng-model="vm.askNeed.NeedFromID" required></select>-->
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Need by Date<span class="date-format"> (mm/dd/yyyy)</span></label>
+                                            <div class="col-sm-8">
+                                                <input id="needByDate" name="needByDate" kendo-date-picker tabindex="4" ng-model="vm.askNeed.NeedByDate" style="width: 100%;" placeholder="{{vm.dateFormatlabel}}" />
+                                                <span id="validationNeedByDate" style="color:red" ng-show="vm.needByDateError">{{vm.dateErrorMsg}}</span>
+                                            </div>
+                                            <!--<label class="dateformatlabel">{{vm.dateFormatlabel}}</label>-->
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Comments</label>
+                                            <div class="col-sm-8">
+                                                <textarea kendotextbox class="k-textbox" tabindex="5" ng-model="vm.askNeed.Comments" style="width: 100%;height:80px;" />
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Close Date<span class="date-format"> (mm/dd/yyyy)</span></label>
+                                            <div class="col-sm-8">
+                                                <input id="askCloseDate" name="askCloseDate" kendo-date-picker tabindex="6" ng-model="vm.askNeed.CloseDate" style="width: 100%;" placeholder="{{vm.dateFormatlabel}}" />
+                                                <span id="validationaskCloseDate" style="color:red" ng-show="vm.askCloseDateError">{{vm.dateErrorMsg}}</span>
+                                            </div>
+                                            <!--<label class="dateformatlabel">{{vm.dateFormatlabel}}</label>-->
+                                        </div>
+                                          <!-- -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 padrl5">
+                                <div class="form-horizontal">
+                                    <div class="box-body">
+                                        <!-- -->
+                                        <div class="form-group">
+                                            <label class="col-sm-5 col-xs-12 control-label" style="padding-left:40px;padding-right:0px;">Log Date<span style="color:#9e9e9e;font-style: italic;"> (mm/dd/yyyy)</span></label>
+                                            <div class="col-sm-7 col-xs-12">
+                                                <input id="askLogDate" name="askLogDate" tabindex="2"
+                                                       kendo-date-picker
+                                                       ng-model="vm.askNeed.LogDate"
+                                                       value="vm.todayDate" placeholder="{{vm.dateFormatlabel}}" />
+                                                <span id="validationaskLogDate" style="color:red;float: left; margin: 5px 0px 0px 0px;line-height: 15px;" ng-show="vm.askLogDateError">{{vm.dateErrorMsg}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group iPDcheck">
+                                    <input tabindex="7" ng-model="vm.askNeed.IncludeInReport" ng-change="vm.AskNeedIncludeInReport()" type="checkbox" value="Include in Project Dashboard" />
+                                    <label class="control-label">Include in Project Dashboard</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 bottom-butons-block">
+                                <a tabindex="8" ng-click="dialogAskNeed.close()" class="k-button btnL">Cancel</a>
+                                <a tabindex="9" ng-click="vm.CreateAskNeedData('dialogAskNeed')" class="k-button btnR">Save</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--close main column-->
+        </div>
+        <!--close row-->
+    </div>
+    <!--close container-->
+    <!-- -->

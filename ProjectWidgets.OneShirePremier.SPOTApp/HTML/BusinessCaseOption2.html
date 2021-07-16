@@ -1,0 +1,994 @@
+﻿
+<div>
+    <!-- btns row -->
+    <div class="row btnsRow">
+        <div class="float-L">
+            <input type="checkbox" ng-disabled="!vm.isEditable" ng-click="event = $event" class="recommendCheckbox" ng-change="vm.recommendOnChange('Opt2',event)" ng-checked="vm.businessOption2InfoSelector.RecommendedOption" ng-model="vm.businessOption2InfoSelector.RecommendedOption" /> &nbsp; Recommended Option
+        </div>
+        <div class="float-R">
+            <a ng-click="vm.clearOption('Opt2')" class="k-button btnL" ng-show="vm.isEditable">Clear</a>
+        </div>
+        <!--<div class="form-group">
+            <a ng-show="vm.isEditable" ng-click="vm.updateBusinessCaseOptionInfo()" class="k-button btnR">Save</a>
+        </div>-->
+    </div>
+    <!-- btns row -->
+    <!-- Flow Tabs -->
+    <div id="businessCaseOptionTabstrip" kendo-tab-strip k-content-urls="[ null, null]">
+        <ul>
+            <li class="k-state-active">Option Info</li>
+            <li class="k-primary">Timeline</li>
+            <li id="edit" class="k-primary">Cost / Funding</li>
+            <li id="edit" class="k-primary">Benefits</li>
+            <li id="edit" class="k-primary">TOPS</li>
+            <li id="edit" class="k-primary">CAPS</li>
+            <li id="edit" class="k-primary">Risks / Assumptions</li>
+        </ul>
+        <!-- Flow Tabs -->
+        <!-- Option Info -->
+        <div>
+            <!-- Edit View -->
+            <div class="EditView">
+                <div class="row">
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Name</label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.OptionTitle}}</label>-->
+                            <input type="text" maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.OptionTitle" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Proposal Statement</label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.ProposalStatement}}</label>-->
+                            <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.businessOption2InfoSelector.ProposalStatement"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Detailed Description</label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.DetailedDescription}}</label>-->
+                            <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.businessOption2InfoSelector.DetailedDescription"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">Rationale Why (Or Why Not) Best Option</label>
+                        <div class="col-xs-8">
+                            <textarea maxlength="4000" class="form-control" ng-disabled="!vm.isEditable" row="5" ng-model="vm.businessOption2InfoSelector.RationaleWhyBestOption"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 info">
+                        <label class="col-xs-4">
+                            Tradeoffs &amp; Considerations  <div class="ssk-tooltip" kendo-tooltip k-content="'What are the downsides or opportunity cost of choosing this option? What do we NOT get with this option that we WOULD get with another option?'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+                        </label>
+                        <div class="col-xs-8">
+                            <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.TradeoffsConsiderations}}</label>-->
+                            <textarea maxlength="4000" ng-disabled="!vm.isEditable" class="form-control" row="5" ng-model="vm.businessOption2InfoSelector.TradeoffsConsiderations"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 padT0RLB15">
+                        <!-- -->
+                        <div class="row headingRow">
+                            <label class="tableHeading" style="font-size:16px;">Feasibility</label>
+                        </div>
+                        <!-- -->
+                        <!-- -->
+                        <div class="row gridHeader">
+                            <div class="col-xs-4">
+                                <span>Component</span>
+                            </div>
+                            <div class="col-xs-4">
+                                <div><span>Rating</span></div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div><span>Justification</span></div>
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-2 component">
+                                <span>People</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.People}}</label>-->
+                                <select id="peopleRating2" kendo-combo-box ng-disabled="!vm.isEditable"
+                                        k-placeholder="'Select a value'"
+                                        k-data-text-field="'LookUpMemberName'"
+                                        k-data-value-field="'LookUpMemberID'"
+                                        k-data-source="vm.dsFeasibilityPeople"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBCPeopleRatingOption2"></select>
+                            </div>
+                            <div class="col-xs-4">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.PeopleJustification}}</label>-->
+                                <input maxlength="4000" ng-disabled="!vm.isEditable" type="text" ng-model="vm.businessOption2InfoSelector.PeopleJustification" class="" />
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-2 component">
+                                <span>Technology</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.Technology}}</label>-->
+                                <select id="technologyRating2" kendo-combo-box ng-disabled="!vm.isEditable"
+                                        k-placeholder="'Select a value'"
+                                        k-data-text-field="'LookUpMemberName'"
+                                        k-data-value-field="'LookUpMemberID'"
+                                        k-data-source="vm.dsFeasibilityTechnology"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBCTechnologyRatingOption2"></select>
+                            </div>
+                            <div class="col-xs-4">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.TechnologyJustification}}</label>-->
+                                <input maxlength="4000" ng-disabled="!vm.isEditable" type="text" class="" ng-model="vm.businessOption2InfoSelector.TechnologyJustification" />
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-2 component">
+                                <span>Business Processes</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.BusinessCaseProcess}}</label>-->
+                                <select id="businessProcessRating2" kendo-combo-box ng-disabled="!vm.isEditable"
+                                        k-placeholder="'Select a value'"
+                                        k-data-text-field="'LookUpMemberName'"
+                                        k-data-value-field="'LookUpMemberID'"
+                                        k-data-source="vm.dsFeasibilityBusiness"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBCBusinessCaseProcessOption2"></select>
+                            </div>
+                            <div class="col-xs-4">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.BusinessProcessJustification}}</label>-->
+                                <input maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="" ng-model="vm.businessOption2InfoSelector.BusinessProcessJustification" />
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-2 component">
+                                <span>Manufacturing Processes</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.ManufacturingProcess}}</label>-->
+                                <select id="manufacturingRating2" kendo-combo-box ng-disabled="!vm.isEditable"
+                                        k-placeholder="'Select a value'"
+                                        k-data-text-field="'LookUpMemberName'"
+                                        k-data-value-field="'LookUpMemberID'"
+                                        k-data-source="vm.dsFeasibilityManufacturing"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBCManufacturingProcessoption2"></select>
+                            </div>
+                            <div class="col-xs-4">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.ManufacturingProcessJustification}}</label>-->
+                                <input maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="" ng-model="vm.businessOption2InfoSelector.ManufacturingProcessJustification" />
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-2 component">
+                                <span>Equipment</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.EquipmentRating}}</label>-->
+                                <select id="equipmentRating2" kendo-combo-box ng-disabled="!vm.isEditable"
+                                        k-placeholder="'Select a value'"
+                                        k-data-text-field="'LookUpMemberName'"
+                                        k-data-value-field="'LookUpMemberID'"
+                                        k-data-source="vm.dsFeasibilityEquipment"
+                                        style="width: 100%"
+                                        k-ng-model="vm.selectedBCEquipmentRatingOption2"></select>
+                            </div>
+                            <div class="col-xs-4">
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.EquipementJustification}}</label>-->
+                                <input maxlength="4000" type="text" ng-disabled="!vm.isEditable" class="" ng-model="vm.businessOption2InfoSelector.EquipementJustification" />
+                            </div>
+                        </div>
+                        <!-- -->
+                    </div>
+                </div>
+                <!-- -->
+            </div>
+            <!-- Edit View -->
+            <!-- Non Edit View -->
+            <div class="nonEditView">
+                <!-- -->
+                <!-- -->
+                <!-- -->
+                <!-- -->
+            </div>
+            <!-- Non Edit View -->
+        </div>
+        <!-- Option Info -->
+        <!-- Timeline -->
+        <div>
+            <div class="row execution-date-format">
+
+                <div class="col-sm-6 padL0">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-12 col-xs-12 padL0 padR0">Execution Start</label>
+                        <div class="input-group col-md-7 col-sm-12 col-xs-12 date-input">
+                            <input id="executionStartOpt2" name="executionStartOpt2" tabindex="2" placeholder="{{vm.dateFormatlabel}}"
+                                   kendo-date-picker
+                                   ng-model="vm.businessOption2InfoSelector.ExecutionStartDate"
+                                   ng-disabled="!vm.isEditable" />
+
+
+                            <!--<span class="k-widget k-datepicker k-header ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" style=""><span class="k-picker-wrap k-state-default"><input ng-model="vm.businessOption2InfoSelector.ExecutionStartDate" id="logDate" kendo-date-picker="" k-format="'dd-MMM-yy'" class="ng-valid k-input ng-not-empty ng-dirty ng-valid-parse ng-touched" data-role="datepicker" type="text" role="combobox" aria-expanded="false" aria-owns="logDate_dateview" aria-disabled="false" style="width: 100%;" aria-activedescendant="34976d41-4529-44af-9a25-aa4f9b9c6720_cell_selected"><span unselectable="on" class="k-select" aria-label="select" role="button" aria-controls="logDate_dateview"><span class="k-icon k-i-calendar"></span></span></span></span>-->
+
+                        </div>
+                        <span class="date-format"> (mm/dd/yyyy)</span>
+                        <span id="validationExecutionDateOpt2" style="color:red" ng-show="vm.executionStartOpt2DateError">{{vm.dateErrorMsg}}</span>
+
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-6 padR0">
+
+                    <div class="form-group">
+
+                        <label class="control-label col-md-4 col-sm-12 col-xs-12 padR0">Execution End</label>
+
+                        <div class="input-group col-md-7 col-sm-12 col-xs-12 date-input">
+
+                            <!--<input type="text" class="form-control">
+
+                            <span class="input-group-addon"><span class="k-icon k-i-calendar"></span></span>-->
+                            <!--<span class="k-widget k-datepicker k-header ng-pristine ng-untouched ng-valid ng-empty" style=""><span class="k-picker-wrap k-state-default"><input ng-model="vm.businessOption2InfoSelector.ExecutionEndDate" id="logDate" kendo-date-picker="" k-format="'dd-MMM-yy'" class="ng-pristine ng-untouched ng-valid k-input ng-empty" data-role="datepicker" type="text" role="combobox" aria-expanded="false" aria-owns="logDate_dateview" aria-disabled="false" style="width: 100%;"><span unselectable="on" class="k-select" aria-label="select" role="button" aria-controls="logDate_dateview"><span class="k-icon k-i-calendar"></span></span></span></span>-->
+                            <input id="executionEndOpt2" name="executionEndOpt2" tabindex="2" placeholder="{{vm.dateFormatlabel}}"
+                                   kendo-date-picker
+                                   ng-model="vm.businessOption2InfoSelector.ExecutionEndDate"
+                                   ng-disabled="!vm.isEditable" />
+                        </div>
+                        <span class="date-format"> (mm/dd/yyyy)</span>
+                        <span id="validationExecutionEndDateOpt2" style="color:red" ng-show="vm.executionEndOpt2DateError">{{vm.dateErrorMsg}}</span>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <label class="tableHeading">Milestone</label>
+                <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOpt2Timeline')" ng-show="vm.isEditable">
+                    <span class="k-icon k-i-plus"></span>Add New
+                </span>
+                <span class="AddNewRowicon" style="padding-right:15px !important" ng-click="vm.CheckBulkEditGridUpdateBC('gridBusinessCaseOpt2Timeline', 'dialogAddMilestoneBCOpt2')" ng-show="vm.isEditable">
+                    <span class="k-icon k-i-plus"></span>Standard Milestone Sets
+                </span>
+                <!--<a class="k-icon k-i-plus AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOpt2Timeline')"></a>-->
+            </div>
+
+            <div class="row">
+                <div>
+                    <div id="gridBusinessCaseOpt2Timeline"></div>
+                </div>
+            </div>
+            <!----------------------------Business Case Option 1 Milestone Set------------------------->
+            <div id="dialogAddMilestoneBCOpt2" kendo-window="dialogAddMilestoneBCOpt2" k-title="'Standard Milestone Sets'" k-modal="true" k-visible="false">
+                <div class="tab-panel-box dialog-panel">
+                    <span class="panel-box-title"><h4>Standard Milestone Sets</h4></span>
+                    <div class="row">
+
+                        <div class="col-md-12 bottom-butons-block">
+                            <a style="" ng-click="dialogAddMilestoneBCOpt2.close()" class="k-button btnR  btnWhite baselineProject">Cancel</a>
+                            <a style="" ng-click="vm.AddMilestoneBCOpt('Option2')" class="k-button btnR margR5 btnWhite baselineProject">Add Milestones to the Business Case</a>
+                        </div>
+                    </div>
+                    <div id="gridBCOptAddMilestones2"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Timeline -->
+        <!-- Cost / Funding -->
+        <div>
+            <!-- Edit View -->
+            <div class="EditView">
+
+                <div class="row">
+                    <div class="col-xs-8 info">
+                        <label class="col-md-6">CAPEX Required</label>
+                        <div class="col-xs-6">
+                            <input type="radio" ng-disabled="!vm.isEditable" name="CapexRequiredOption2" id="inlineRadio1Capex" ng-click="vm.changeShowCapex('Yes','Opt2',$event)" ng-model="vm.showCapexOpt2" value='1' />
+                            <label class="" for="inlineRadio1Capex">Yes</label>
+                            <input type="radio" ng-disabled="!vm.isEditable" name="CapexRequiredOption2" id="inlineRadio2Capex" ng-click="vm.changeShowCapex('No','Opt2',$event)" ng-model="vm.showCapexOpt2" value='0' />
+                            <label class="" for="inlineRadio2Capex">No</label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row" ng-show="vm.businessOption2InfoSelector.CapexRequired">
+                        <div class="col-xs-12 gridColumn">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <span></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div><span>Base Case <label ng-bind="vm.localCurrencyAbbre"></label></span></div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div><span>High Case <label ng-bind="vm.localCurrencyAbbre"></label></span></div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div><span>Current Year Planned Spend <label ng-bind="vm.localCurrencyAbbre"></label></span></div>
+                                </div>
+                            </div>
+                            <div class="row gridRow">
+                                <div class="col-xs-4 capex">
+                                    <span>Total CAPEX <label ng-bind="vm.localCurrencyAbbre"></label></span>
+                                    <div class="ssk-tooltip" kendo-tooltip k-content="'Please reference the Capital Request For Estimate (RFE) process prior to entering cost estimates (Veeva Document # GD-007364)'">
+                                        <span class="k-icon k-i-question"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.TotalCapexBaseCase}}</label>-->
+                                    <!--<div><input type="number" ng-show="vm.isEditable" class="form-control" placeholder="$USD" ng-model="vm.businessOption2InfoSelector.TotalCapexBaseCase" /></div>-->
+                                    <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalCapexBaseCase" class="form-control txt-float-R" /></div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.TotalCapexHighCase}}</label>-->
+                                    <!--<div><input type="number" ng-show="vm.isEditable" class="form-control" placeholder="$USD" ng-model="vm.businessOption2InfoSelector.TotalCapexHighCase" /></div>-->
+                                    <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalCapexHighCase" class="form-control txt-float-R" /></div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div>
+                                        <input kendo-numeric-text-box options="vm.optionsCurrency" class="form-control txt-float-R" maxlength="12" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.CurrentYearPlannedSpend" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row gridRow">
+                                <div class="col-xs-4 capex">
+                                    <span>Project Spend Start</span><span class="date-format"> (mm/dd/yyyy)</span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="input-group">
+                                        <!--<input type="text" class="form-control">
+                                        <span class="input-group-addon"><span class="k-icon k-i-calendar"></span></span>-->
+                                        <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.ProjectSpendStart}}</label>-->
+                                        <!--<input id="spendDate" ng-disabled="!vm.isEditable" kendo-date-picker k-format="'dd-MMM-yy'" ng-model="vm.businessOption2InfoSelector.ProjectSpendStart" />-->
+                                        <input id="spendDateOpt2" name="spendDateOpt2" placeholder="{{vm.dateFormatlabel}}"
+                                               kendo-date-picker
+                                               ng-model="vm.businessOption2InfoSelector.ProjectSpendStart"
+                                               ng-disabled="!vm.isEditable" />
+                                    </div>
+                                    <span id="ProjectSpendStartOpt2" style="color:red" ng-show="vm.ProjectSpendStartOpt2DateError">{{vm.dateErrorMsg}}</span>
+
+                                </div>
+                                <div class="col-xs-3">
+                                    <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.IsProjectSpentNA}}</label>-->
+                                    <div><input type="checkbox" ng-disabled="!vm.isEditable" id="projectSpentNA" ng-model="vm.businessOption2InfoSelector.IsProjectSpentNA" /><span class="CostFundingOption">N/A</span></div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div></div>
+                                </div>
+                            </div>
+                            <div class="row gridRow">
+                                <div class="col-xs-4 capex">
+                                    <span>Asset in Service</span><span class="date-format"> (mm/dd/yyyy)</span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="input-group">
+                                        <!--<input type="text" class="form-control">
+                                        <span class="input-group-addon"><span class="k-icon k-i-calendar"></span></span>-->
+                                        <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.AssetInService}}</label>-->
+                                        <!--<input id="assetDate" ng-disabled="!vm.isEditable" kendo-date-picker k-format="'dd-MMM-yy'" ng-model="vm.businessOption2InfoSelector.AssetInService" />-->
+                                        <input id="assetDateOpt2" name="assetDateOpt2" tabindex="2" placeholder="{{vm.dateFormatlabel}}"
+                                               kendo-date-picker
+                                               ng-model="vm.businessOption2InfoSelector.AssetInService"
+                                               ng-disabled="!vm.isEditable" />
+                                    </div>
+                                    <span id="AssetInServiceOpt2" style="color:red" ng-show="vm.AssetInServiceOpt2DateError">{{vm.dateErrorMsg}}</span>
+
+                                </div>
+                                <div class="col-xs-3">
+                                    <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.AssetInServiceNA}}</label>-->
+                                    <div><input type="checkbox" ng-disabled="!vm.isEditable" id="assestServiceNA" ng-model="vm.businessOption2InfoSelector.AssetInServiceNA" /><span class="CostFundingOption">N/A</span></div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8 info">
+                        <label class="col-md-6">OPEX Required (non-FTE)</label>
+                        <div class="col-xs-6">
+                            <input class="" type="radio" ng-disabled="!vm.isEditable" name="OpexRequiredOption2" id="inlineRadio1" value="1" ng-click="vm.changeShowOpex('Yes','Opt2',$event)" ng-model="vm.showOpexOpt2">
+                            <label class="" for="inlineRadio1">Yes</label>
+                            <input class="" type="radio" ng-disabled="!vm.isEditable" name="OpexRequiredOption2" id="inlineRadio2" value="0" ng-click="vm.changeShowOpex('No','Opt2',$event)" ng-model="vm.showOpexOpt2">
+                            <label class="" for="inlineRadio2">No</label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row" ng-show="vm.businessOption2InfoSelector.OpexRequired">
+                        <div class="col-xs-12 gridColumn">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <span></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div><span>Base Case <label ng-bind="vm.localCurrencyAbbre"></label></span></div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div><span>High Case <label ng-bind="vm.localCurrencyAbbre"></label></span></div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div><span></span></div>
+                                </div>
+                            </div>
+                            <div class="row gridRow">
+                                <div class="col-xs-4 opex">
+                                    <span>Total non-FTE <label ng-bind="vm.localCurrencyAbbre"></label></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.TotalNonFTEBaseCase}}</label>-->
+                                    <!--<div><input type="number" ng-show="vm.isEditable" class="form-control" placeholder="$USD" ng-model="vm.businessOption2InfoSelector.TotalNonFTEBaseCase" /></div>-->
+                                    <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalNonFTEBaseCase" class="form-control txt-float-R" /></div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.TotalNonFTEHighCase}}</label>-->
+                                    <!--<div><input type="number" ng-show="vm.isEditable" class="form-control" placeholder="$USD" ng-model="vm.businessOption2InfoSelector.TotalNonFTEHighCase" /></div>-->
+                                    <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalNonFTEHighCase" class="form-control txt-float-R" /></div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="tableHeading">Funding Plan</label>
+                    <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseFundingOption2')" ng-show="vm.isEditable">
+                        <span class="k-icon k-i-plus"></span>Add New
+                    </span>
+                    <!--<a class="k-icon k-i-plus AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseFundingOption2')"></a>-->
+                </div>
+                <div class="row">
+                    <div id="gridBusinessCaseFundingOption2"></div>
+                </div>
+            </div>
+            <!-- Edit View -->
+            <!-- nonEdit View -->
+            <div class="nonEditView">
+            </div>
+            <!-- nonEdit View -->
+        </div>
+        <!-- Cost / Funding -->
+        <!-- Benefits -->
+        <div>
+            <!-- Edit View -->
+            <div class="EditView">
+                <div class="row gridHeader">
+                    <div class="col-xs-12">
+                        <span>Benefits</span>
+                    </div>
+                </div>
+                <div class="row gridContentArea">
+                    <div class="col-md-4">
+                        <label class="control-label">
+                            Strategic Alignment
+                            <div class="ssk-tooltip" kendo-tooltip k-content="'Provide strategic alignment that is based on X-Matrix or business imperatives/key focus areas'">
+                                <span class="k-icon k-i-question"></span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-md-4">
+                        <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.StrategicAlignment}}</label>-->
+                        <textarea maxlength="4000" ng-disabled="!vm.isEditable" class="form-control" row="5" ng-model="vm.businessOption2InfoSelector.StrategicAlignment"></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.StrategicAlignmentJustification}}</label>-->
+                        <textarea maxlength="4000" ng-disabled="!vm.isEditable" type="text" class="form-control" placeholder="Justify linkage to the identified strategic element." ng-model="vm.businessOption2InfoSelector.StrategicAlignmentJustification" />
+                    </div>
+                </div>
+                <div class="row gridContentArea">
+                    <div class="col-md-4">
+                        <label class="control-label">NPV</label>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="col-md-6 padL0">
+                                <label class="control-label">
+                                    Base Case <label ng-bind="vm.localCurrencyAbbre"></label> <div class="ssk-tooltip" kendo-tooltip k-content="'Provide NPV calculation if applicable (base case)'">
+                                        <span class="k-icon k-i-question"></span>
+                                    </div>
+                                </label>
+                                <!--<label class="control-label">&nbsp;</label>-->
+                                <input ng-disabled="!vm.isEditable" class="form-control txt-float-R" options="vm.optionsCurrency" maxlength="12" kendo-numeric-text-box k-ng-model="vm.businessOption2InfoSelector.NPVBaseCase" />
+                            </div>
+                            <div class="col-md-6 padR0">
+                                <label class="control-label">
+                                    High Case <label ng-bind="vm.localCurrencyAbbre"></label> <div class="ssk-tooltip" kendo-tooltip k-content="'Provide NPV calculation if applicable (high case)'">
+                                        <span class="k-icon k-i-question"></span>
+                                    </div>
+                                </label>
+                                <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.NPVHighCase}}</label>-->
+                                <input ng-disabled="!vm.isEditable" class="form-control txt-float-R" options="vm.optionsCurrency" maxlength="12" kendo-numeric-text-box k-ng-model="vm.businessOption2InfoSelector.NPVHighCase" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <!--<label ng-show="!vm.isEditable">{{vm.businessOption2InfoSelector.NPVRationale}}</label>-->
+                        <textarea maxlength="4000" ng-disabled="!vm.isEditable" class="form-control" row="5" placeholder="N/A if no NPV calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with NPV as appropriate. NPV needed for capital projects > 5 OKU TPC" ng-model="vm.businessOption2InfoSelector.NPVRationale"></textarea>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <label class="tableHeading">
+                        Key Success Criteria  <div class="ssk-tooltip" kendo-tooltip k-content="'Document the high level outcomes expected to consider the proposed solution successful'">
+                            <span class="k-icon k-i-question"></span>
+                        </div>
+                    </label>
+                    <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOptKeySuccessCriteriaOption2')" ng-show="vm.isEditable">
+                        <span class="k-icon k-i-plus"></span>Add New
+                    </span>
+                    <!--<a class="k-icon k-i-plus AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOptKeySuccessCriteriaOption2')"></a>-->
+                </div>
+
+                <div class="row">
+                    <div id="gridBusinessCaseOptKeySuccessCriteriaOption2"></div>
+                </div>
+            </div>
+            <!-- Edit View -->
+            <!-- nonEdit View -->
+            <div class="nonEditView">
+            </div>
+            <!-- nonEdit View -->
+        </div>
+        <!-- Benefits -->
+        <!-- TOPS -->
+        <div>
+            <!-- btns row -->
+            <!-- btns row -->
+            <div class="row rowMarMin15">
+                <!-- -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                    <!--<div class="gridHeader2">-->
+                    <div class="col-xs-6 info">
+                        <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4 horLabel">TOPS Group :</label>
+                        <span class="col-lg-8 col-md-8 col-sm-8 col-xs-8 horSpan">{{vm.businessOption2InfoSelector.TOPSGroup}}</span>
+                    </div>
+                </div>
+                <!-- -->
+            </div>
+            <!-- Edit View -->
+            <div class="EditView">
+                <div class="row rowMarMin15">
+                    <div class="col-xs-6 info">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Functions Required :</label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <select kendo-combo-box id="functions2" ng-disabled="!vm.isEditable"
+                                        k-placeholder="'Select a value'"
+                                        k-filter="'contains'"
+                                        k-data-text-field="'LookUpMemberName'"
+                                        k-data-value-field="'LookUpMemberID'"
+                                        k-data-source="vm.dsTopsFunctions"
+                                        style="width: 100%"
+                                        k-ng-model="vm.businessOption2InfoSelector.FunctionsRequiredID"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 info">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Product Multiplier :</label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel" ng-bind="vm.businessOption2InfoSelector.ProductMultiplier">&nbsp;</label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-xs-6 info">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Overall Benefit Score :</label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel" ng-bind="vm.businessOption2InfoSelector.OverallBenefitScore">&nbsp;</label>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 info">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Cost / Benefit Ratio :</label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel" ng-bind="vm.businessOption2InfoSelector.CostBenefitRatio">&nbsp;</label>
+                        </div>
+                        <!--<span class="col-lg-8 col-md-8 col-sm-8 col-xs-8 horSpan"></span>-->
+                    </div>
+                    <!--<div class="col-xs-6 info">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">SVP Element :</label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel" ng-bind="vm.businessOption2InfoSelector.SVPElementBusinessCaseTOPS">&nbsp;</label>
+                        </div>
+
+                    </div>-->
+                </div>
+
+
+                <!-- -->
+                <div class="row">
+                    <div class="col-xs-12 gridColumn">
+                        <div class="row gridHeader">
+                            <div class="col-xs-3">
+                                <span>Category</span>
+                                <div class="display-ib w70 float-R p-scope">
+                                    <span class="tbHeadLabel wAuto">
+                                        Project Scope
+                                    </span>
+                                    <select id="ddl_ProjectScopeBC2" name="ddl_ProjectScopeBC2" class="w50 k-dropdown__inner" kendo-drop-down-list ng-disabled="!vm.isEditable"
+                                            k-data-text-field="'LookUpMemberName'"
+                                            k-data-value-field="'LookUpMemberID'"
+                                            k-data-source="vm.dsProjectScope"
+                                            k-ng-model="vm.businessOption2InfoSelector.ProjectScope"></select>
+                                    <button class="k-button float-R marg0 pad0" ng-click="vm.GetBCProjectScopeDialog()"><span class="k-icon k-i-hyperlink-open marg0"></span></button>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 align-right">
+                                <div class="col-xs-12"><span>Base Case</span></div>
+                            </div>
+                            <div class="col-xs-2 align-right">
+                                <div class="col-xs-12"><span>High Case</span></div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div><span>Description / Basis of Estimate</span></div>
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-3 category">
+                                <span>Duration (Months)</span>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.DurationBaseCase" class="form-control txt-float-R" placeholder="x-Months" /></div>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.DurationHighCase" class="form-control txt-float-R" placeholder="x-Months" /></div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div><input maxlength="4000" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.DurationBasisofEstimate" kendotextbox class="" /></div>
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-3 category">
+                                <span>People (FTE Months)</span>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.PeopleFTEMonthsRequiredBaseCase" class="form-control txt-float-R" placeholder="x-Months" /></div>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.options" maxlength="16" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.PeopleFTEMonthsRequiredHighCase" class="form-control txt-float-R" placeholder="x-Months" /></div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div><input maxlength="4000" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.PeopleFTEMonthsRequiredBasisofEstimate" kendotextbox class="" /></div>
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-3 category">
+                                <span>Total CAPEX <label ng-bind="vm.localCurrencyAbbre"></label></span>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalCapexBaseCase" class="form-control txt-float-R" /></div>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalCapexHighCase" class="form-control txt-float-R" /></div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div><input maxlength="4000" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.TotalCapExBasisofEstimate" kendotextbox class="" /></div>
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-3 category">
+                                <span>Total Non-FTE OPEX <label ng-bind="vm.localCurrencyAbbre"></label></span>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalNonFTEBaseCase" class="form-control txt-float-R" /></div>
+                            </div>
+                            <div class="col-xs-2 padR0">
+                                <div><input kendo-numeric-text-box options="vm.optionsCurrency" maxlength="12" ng-disabled="!vm.isEditable" k-ng-model="vm.businessOption2InfoSelector.TotalNonFTEHighCase" class="form-control txt-float-R" /></div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div><input maxlength="4000" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.TotalNonFTEBasisofEstimate" kendotextbox class="" /></div>
+                            </div>
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-3 category">
+                                <span>In-Line Product Strategy</span>
+                            </div>
+                            <div class="col-xs-4 padR0">
+                                <div>
+                                    <select kendo-combo-box id="InlineProductOpt2" ng-disabled="!vm.isEditable"
+                                            k-placeholder="'Select a value'"
+                                            k-data-text-field="'LookUpMemberName'"
+                                            k-data-value-field="'LookUpMemberID'"
+                                            k-data-source="vm.dsTopsInLineProductStrategy"
+                                            style="width: 100%"
+                                            k-ng-model="vm.businessOption2InfoSelector.InLineProductID"></select>
+                                </div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div><input maxlength="4000" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.InLineProductRationale" kendotextbox class="" /></div>
+                            </div>
+                            <!--<div class="col-xs-2">
+                                <div><span></span></div>
+                            </div>-->
+                        </div>
+                        <div class="row gridRow">
+                            <div class="col-xs-3 category">
+                                <span>Impact Multiplier</span>
+                            </div>
+                            <div class="col-xs-4 padR0">
+                                <div>
+                                    <select kendo-combo-box id="impactOpt2" ng-disabled="!vm.isEditable"
+                                            k-placeholder="'Select a value'"
+                                            k-data-text-field="'LookUpMemberName'"
+                                            k-data-value-field="'LookUpMemberID'"
+                                            k-data-source="vm.dsTopsImpactMultiplier"
+                                            style="width: 100%"
+                                            k-ng-model="vm.businessOption2InfoSelector.ImpactMultiplierID"></select>
+                                </div>
+                            </div>
+                            <div class="col-xs-5">
+                                <div><input maxlength="4000" ng-disabled="!vm.isEditable" ng-model="vm.businessOption2InfoSelector.ImpactMultiplierRationale" kendotextbox class="" /></div>
+                            </div>
+                            <!--<div class="col-xs-2">
+                                <div><span></span></div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <!--<div id="dialogBC2TopsProjectScope" kendo-window="dialogBC2TopsProjectScope" k-title="'Project Scope'" k-visible="false" k-modal="true">
+                        <div id="GridBC2TopsProjectScope" class="FxRate"></div>
+                    </div>-->
+                </div>
+                <!-- -->
+                <!-- -->
+                <div class="row">
+                    <label ng-show="vm.NoImpactSelected2" style="color:red" class="align-right w100">* All KPIs are currently selected as "No Impact". Please update</label>
+                </div>
+                <div class="row">
+
+                    <div id="gridOption2Tops"></div>
+                </div>
+                <!-- -->
+            </div>
+            <!-- Edit View -->
+        </div>
+        <!-- TOPS -->
+        <!--CAPS-->
+        <div>
+            <div class="row rowMarMin15">
+                <!-- -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">
+                                CAPS Project? <div class="ssk-tooltip" kendo-tooltip k-content="'{{vm.capsProjectTooltipBC}}'">
+                                    <span class="k-icon k-i-question"></span>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <input type="checkbox" id="capsProject2" ng-model="vm.SelectedProject.IsCapsProject" ng-disabled="vm.isCapsProjectChecked" style="margin-left:15px;" />
+
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Emissions Impact (tCO2e/Year)</label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <div>
+                                <input kendotextbox class="k-textbox k-state-disabled txt-float-R" ng-disabled="true" ng-model="vm.formattedCalculatedEmissionsImpact2" style="background-color:#eae8e8" />
+                                <!--<label class="horLabel" ng-bind="vm.formattedCalculatedEmissionsImpact2">&nbsp;</label>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row rowMarMin15">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">
+                                Environmental Portfolio <div class="ssk-tooltip" kendo-tooltip k-content="'{{vm.environmentalTootltipBC}}'">
+                                    <span class="k-icon k-i-question"></span>
+                                </div>
+                            </label>
+
+
+                        </div>
+                        <div class="col-xs-6 dropdown-v-midle">
+                            <!--<select id="ddl_EmissionPortfolioOpt2" name="ddl_EmissionPortfolioOpt2" kendo-drop-down-list ng-disabled="vm.isCapsProjectChecked"
+                                    k-placeholder="'Select and/or Type to Search'"
+                                    k-data-text-field="'LookUpMemberName'"
+                                    k-data-value-field="'LookUpMemberID'"
+                                    k-data-source="vm.dsEmissionPortfolio"
+                                    style="width: 100%"
+                                    k-ng-model="vm.SelectedCapsEmissionPortfolio2"></select>-->
+                            <input kendotextbox class="k-textbox k-state-disabled"
+                                   ng-disabled="vm.isCapsProjectChecked" ng-model="vm.SelectedProject.EmissionPortfolioName"
+                                   style="background-color:#eae8e8;width:100%;" />
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Energy Impact (per Year)</label>
+                        </div>
+                        <div class="col-xs-6 info">
+                            <div class="input-group">
+                                <input disabled="disabled" id="energyImpact" name="energyImpact"
+                                       kendo-numerictextbox class="txt-float-R" options="vm.optionsCostImpact"
+                                       ng-model="vm.businessOption2InfoSelector.EnergyImpact" />
+                                <label ng-bind="vm.businessOption2InfoSelector.AbbreviationEnergyImpact" class="charterUnitLabelBC"></label>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-1">
+                            
+                        </div>
+                     
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="row rowMarMin15">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Impact Realization Date</label>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-group">
+                                <input ng-disabled="!(vm.isEMPortfolio && vm.isEditable)"  id="realizationDate2" name="realizationDate2"
+                                       kendo-date-picker
+                                       ng-model="vm.businessOption2InfoSelector.EmissionsImpactRealizationDate" />
+                            </div>
+                            <span id="realizationDateMsg2" style="color:red" ng-show="vm.BCRealizationDate2">{{vm.dateErrorMsg}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Water Impact (per Year)</label>
+                        </div>
+                        <div class="col-xs-6 info ">
+                            <div class="input-group">
+                                <input kendo-numeric-text-box  maxlength="14" options="vm.optionsCostImpact" disabled="disabled" class="txt-float-R" ng-model="vm.businessOption2InfoSelector.EnergyWaterImpactPerYear" />
+                                <label ng-bind="vm.businessOption2InfoSelector.AbbreviationWaterImpact" class="charterUnitLabelBC"></label>
+                            </div>
+
+                        </div>
+                   
+                        <!--<div class="col-xs-3 info ">
+                            <div class="input-group">
+                                <input kendo-numeric-text-box options="vm.optionsCostImpact" maxlength="14" ng-disabled="(!(vm.isEMPortfolio && (vm.isUnitCostWW  == null || vm.isUnitCostWW ==false)) )" ng-model="vm.businessOption2InfoSelector.EnergyWaterImpactCostPerYear" ng-change="vm.onChangeWWCostImpact()" class="txt-float-R" />
+
+                            </div>
+
+                        </div>
+                        <div class="col-xs-1">
+                            <label ng-bind="vm.localCurrencyAbbre"></label>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="row rowMarMin15">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 noPad">
+                    <!--<div class="gridHeader2">-->
+
+                    <div class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="col-xs-6 info">
+                            <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12 horLabel">Waste Impact (per Year)</label>
+                        </div>
+                        <div class="col-xs-6 info ">
+                            <div class="input-group">
+                                <input kendo-numeric-text-box  maxlength="14" options="vm.optionsCostImpact" disabled="disabled" ng-model="vm.businessOption2InfoSelector.EnergyWasteImpactPerYear" class="txt-float-R" />
+                                <label ng-bind="vm.businessOption2InfoSelector.AbbreviationWasteImpact" class="charterUnitLabelBC"></label>
+                            </div>
+
+                        </div>
+                     
+                        <!--<div class="col-xs-3 info ">
+                            <div class="input-group">
+                                <input kendo-numeric-text-box options="vm.optionsCostImpact" maxlength="14" ng-disabled="(!(vm.isEMPortfolio && (vm.isUnitCostWW  == null || vm.isUnitCostWW ==false)) )" ng-model="vm.businessOption2InfoSelector.EnergyWasteImpactCostPerYear" ng-change="vm.onChangeWWCostImpact()" class="txt-float-R" />
+
+                            </div>
+
+                        </div>
+                        <div class="col-xs-1">
+                            <label ng-bind="vm.localCurrencyAbbre"></label>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="tableHeading">Carbon</label>
+            </div>
+            <div class="row">
+                <div id="gridCapsOpt2"></div>
+            </div>
+            <div class="row">
+                <div class="">
+                    <div class="col-xs-12 info">
+                        <div class="row">
+                            <div class="col-lg-3 p-0" style="padding-left: 9px;">
+                                <label class="horLabel" style="font-weight: 100;font-size: 13px;line-height: 20px;">No Carbon Impact</label>
+                            </div>
+                            <div class="col-lg-3">
+                                <input ng-disabled="!(vm.isEMPortfolio && vm.isEditable)"  type="checkbox" id="carbonImpact" ng-change="vm.onChangeCarbonImpact('Opt2',event)" ng-model="vm.businessOption2InfoSelector.NoCarbonImpact" class="ng-pristine ng-valid ng-empty ng-touched ng-untouched" style="margin: 0px;position: relative;top: 4px;margin-left: 12px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row margT20B0">
+                <label class="tableHeading">Water and Waste</label>
+                <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridCapsWaterWasteOpt2')" ng-show="vm.isEditable && vm.isEMPortfolio">
+                    <span class="k-icon k-i-plus"></span>Add New
+                </span>
+                <!--<a class="k-icon k-i-plus AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseFundingOption2')"></a>-->
+            </div>
+            <div class="row">
+                <div id="gridCapsWaterWasteOpt2"></div>
+                <!--<div style="padding-left: 9px;padding-bottom: 10px;" ng-show="vm.noEMSOurceVisible"><h3>{{vm.noEMSource}}</h3></div>-->
+            </div>
+           
+
+        </div>
+
+        <!--CAPS-->
+        <!-- Risks / Assumptions -->
+        <div>
+            <!-- Edit View -->
+            <div class="EditView">
+                <div>
+                    <div class="row">
+
+                        <label class="tableHeading">Risks</label>
+                        <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOptRiskOption2')" ng-show="vm.isEditable">
+                            <span class="k-icon k-i-plus"></span>Add New
+                        </span>
+                        <!--<a class="k-icon k-i-plus AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOptRiskOption2')"></a>-->
+                    </div>
+
+                    <div class="row">
+                        <!--<div id="riskGrid"></div>-->
+                        <div id="gridBusinessCaseOptRiskOption2"></div>
+                    </div>
+                    <div class="row">
+
+                        <label class="tableHeading">Key Assumptions</label>
+                        <span class="AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOptAssumptionOption2')" ng-show="vm.isEditable">
+                            <span class="k-icon k-i-plus"></span>Add New
+                        </span>
+                        <!--<a class="k-icon k-i-plus AddNewRowicon" ng-click="vm.AddNewRow('gridBusinessCaseOptAssumptionOption2')"></a>-->
+                    </div>
+
+                    <div class="row">
+                        <!--<div id="riskAssumptionGrid"></div>-->
+                        <div id="gridBusinessCaseOptAssumptionOption2"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit View -->
+            <!-- nonEdit View -->
+            <div class="nonEditView">
+            </div>
+            <!-- nonEdit View -->
+        </div>
+        <!-- Risks / Assumptions -->
+    </div>
+</div>

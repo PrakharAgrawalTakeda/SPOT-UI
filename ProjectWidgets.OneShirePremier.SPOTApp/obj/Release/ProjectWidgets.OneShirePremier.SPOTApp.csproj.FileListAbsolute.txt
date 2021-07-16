@@ -1,0 +1,108 @@
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ApplicationInsights.config
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ProjectWidgets.OneShirePremier.SPOTApp.dll.config
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ProjectWidgets.OneShirePremier.SPOTApp.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ProjectWidgets.OneShirePremier.SPOTApp.pdb
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Antlr3.Runtime.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\dotnet-bundle.exe
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.Agent.Intercept.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.DependencyCollector.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.Web.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.WindowsServer.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.ApplicationInsights.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AspNet.TelemetryCorrelation.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.Extensions.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.SharePoint.Client.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.SharePoint.Client.Runtime.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.SharePoint.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.Web.Infrastructure.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Newtonsoft.Json.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\NUglify.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Diagnostics.DiagnosticSource.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Net.Http.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Net.Http.Formatting.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Claims.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.Algorithms.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.Encoding.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.Primitives.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.X509Certificates.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Http.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Mvc.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Optimization.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\WebGrease.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.Web.Administration.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Antlr3.Runtime.pdb
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.DependencyCollector.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.Web.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.WindowsServer.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.ApplicationInsights.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AspNet.TelemetryCorrelation.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\NUglify.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Diagnostics.DiagnosticSource.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Net.Http.Formatting.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Http.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Optimization.xml
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.csprojAssemblyReference.cache
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.csproj.CoreCompileInputs.cache
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.csproj.CopyComplete
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.dll
+C:\ProjectWIdgets\SPOT Production\OneShireProjectOnline\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.pdb
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ApplicationInsights.config
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ProjectWidgets.OneShirePremier.SPOTApp.dll.config
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ProjectWidgets.OneShirePremier.SPOTApp.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\ProjectWidgets.OneShirePremier.SPOTApp.pdb
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Antlr3.Runtime.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\dotnet-bundle.exe
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.Web.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.ApplicationInsights.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AspNet.TelemetryCorrelation.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.Extensions.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.SharePoint.Client.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.SharePoint.Client.Runtime.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.SharePoint.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Newtonsoft.Json.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\NUglify.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Diagnostics.DiagnosticSource.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Net.Http.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Net.Http.Formatting.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Claims.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.Algorithms.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.Encoding.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.Primitives.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Security.Cryptography.X509Certificates.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Http.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Mvc.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Optimization.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\WebGrease.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.Web.Administration.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Antlr3.Runtime.pdb
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.Web.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.ApplicationInsights.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.AspNet.TelemetryCorrelation.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\NUglify.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Diagnostics.DiagnosticSource.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Net.Http.Formatting.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Http.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\bin\System.Web.Optimization.xml
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.csproj.AssemblyReference.cache
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.csproj.CoreCompileInputs.cache
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.csproj.CopyComplete
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.dll
+C:\Users\mel8878\OneDrive - Takeda\Documents\SPOT Source Code\ProjectWidgets.OneShirePremier.SPOT\ProjectWidgets.OneShirePremier.SPOTApp\obj\Release\ProjectWidgets.OneShirePremier.SPOTApp.pdb

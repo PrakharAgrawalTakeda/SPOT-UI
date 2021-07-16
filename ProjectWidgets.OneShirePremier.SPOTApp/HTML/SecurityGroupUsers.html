@@ -1,0 +1,143 @@
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="last-modified" content="Sun, 27 Jan 2012 11:52:12 GMT"/> 
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+  
+
+    <script src="../GlobalJS/jquery.min.js"></script>
+
+    <script src="../GlobalJS/angular.min.js"></script>
+    <script src="../GlobalJS/bootstrap.min.js"></script>
+    <script src="../GlobalJS/angular-route.min.js"></script>
+    <script src="../GlobalJS/kendo.all.min.js"></script>
+
+    <script src="../GlobalJS/Utility.min.js"></script>
+    <script src="../GlobalJS/Constants.js"></script>
+    <script src="../GlobalJS/SPOTApp.js"></script>
+    <script src="../Directive/Directive.js"></script>
+    <script src="../GlobalJS/GETPostService.js"></script>
+
+    <script src="../JS/GridColumn.js"></script>
+    <script src="../Controller/TopMenuCtrl.js"></script>
+    <script src="../Controller/SecurityGroupUsersCtrl.js"></script>
+
+
+    <!--<script src="../JS/GridColumn.min.js"></script>
+    <script src="../Controller/TopMenuCtrl.min.js"></script>
+    <script src="../Controller/SecurityGroupUsersCtrl.min.js"></script>-->
+    <!--<script src="../SiteAssets/KendoGrid1/SPOTBusiness/Controller/ProjectHubCtrl.js" type="text/javascript"></script>
+    <script src="../SiteAssets/KendoGrid1/SPOTBusiness/Controller/ProjectHubHeaderCtrl.js" type="text/javascript"></script>
+    <script src="../SiteAssets/KendoGrid1/SPOTBusiness/Controller/BusinessCaseCtrl.js"></script>
+    <script src="../SiteAssets/KendoGrid1/SPOTBusiness/Controller/ProjectCharterCtrl.js"></script>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../Styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="../Styles/kendo.common.min.css" type="text/css" />
+
+    <link rel="stylesheet" href="../Styles/kendo.default.min.css">
+    <!--<link rel="stylesheet" href="../SiteAssets/KendoGrid1/SPOTBusiness/Styles/kendo.default.mobile.min.css" />-->
+    <!--<link rel="stylesheet" href="../SiteAssets/KendoGrid1/SPOTBusiness/Styles/CustomStyle.css" type="text/css" />-->
+    <link rel="stylesheet" href="../Styles/site.css" type="text/css" />
+    <!--<link href="../Styles/header-qa.css" rel="stylesheet" type="text/css" />-->
+    <script>
+
+        // Get HTML head element
+        var head = document.getElementsByTagName('HEAD')[0];
+        // Create new link Element
+        var link = document.createElement('link');
+        // set the attributes for link element
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        switch (environment) {
+            case "qa": link.href = '../Styles/header-qa.css'; break;
+            case "training": link.href = '../Styles/header-training.css'; break;
+            default: link.href = '../Styles/header.css';
+        }
+
+        // Append link element to HTML head
+        head.appendChild(link);
+    </script>
+</head>
+<body>
+    <div ng-app="SPOTApp">
+        <div ng-controller="SecurityGroupUsersCtrl as vm" ng-init='vm.initSecurityGroup()'>
+            <div class="row row-offcanvas row-offcanvas-left">
+                <div>
+                    <directive-top-menu></directive-top-menu>
+                </div>
+                <!--open container-->
+                <div class="row" style="margin:20px 0px 20px 0px">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Members</label>
+                            <select id="securityMembers" name="securityMembers" style="width: 100%"></select>
+                            <!--<input id="securityMembers" style="width: 100%" />-->
+                            <!--<select kendo-drop-down-list
+                            k-filter="'contains'"
+                            k-options="vm.customOptions1"
+                            style="width: 100%"
+                            k-change="vm.MemberOnChange"
+                            k-ng-model="vm.securityGroupSelectorData.Members"></select>-->
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="securityMultiSelect">
+                        <div class="form-group">
+                            <label class="control-label">Group</label>
+                            <select class="securityMultiSelect" id="member" kendo-multi-select k-options="vm.multiSecurityGroup"
+                                    k-ng-model="vm.securityGroupSelectorData.GroupName"></select>
+                            <a class="k-button" ng-click="vm.UpdateSecurityGroup()" style="margin-top:15px;float:right;">Submit</a>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-4">
+                        <div class="form-group">
+                                <input type="checkbox" id="isActive" ng-model="vm.securityGroupSelectorData.isActive"/>
+                                <label for="isActive">Is Active</label>
+                        </div>
+                    </div>-->
+                    <!--<div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <a class="k-button" ng-click="vm.UpdateSecurityGroup()">Submit</a>
+                        </div>
+                    </div>-->
+                </div>
+
+                <!--<div class="row">
+                    <div class="">
+                        <div class="form-group">
+                            <div class="col-md-12 inputGroupContainer">
+                                <a style="margin-left: 639px" class="k-button" ng-click="vm.UpdateSecurityGroup()">Submit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="row">
+                    <div style="display:none" id="GridGroupDetail"></div>
+                </div>
+
+                <!--close main column-->
+                <!--close row-->
+
+            </div>
+
+
+            <!--<div id="wait" class="loaderDiv">
+                <div class="loader">
+                    <i class="fa fa-spinner fa-spin fa-3x fa-fw" id="spnOneList"></i>
+                </div>
+                <br>
+            </div>-->
+
+
+        </div>
+
+        <div id="preloader" style="display:none">
+            <div id="loaderLogo"><img src="../Images/spotlogo1.PNG" width="90" height="72" /></div>
+            <div id="loader"></div>
+        </div>
+    </div>
+</body>
+</html>
