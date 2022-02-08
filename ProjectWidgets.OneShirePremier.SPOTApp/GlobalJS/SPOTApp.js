@@ -1,1 +1,0 @@
-﻿angular.module('SPOTApp', ['ngRoute', "kendo.directives"]);

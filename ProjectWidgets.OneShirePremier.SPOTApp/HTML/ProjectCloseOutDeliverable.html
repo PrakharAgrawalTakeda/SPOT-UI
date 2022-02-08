@@ -1,8 +1,0 @@
-﻿<div ng-app="SPOTApp">
-    <div class="ng-cloak" ng-controller="ProjectCloseOutCtrl as vm" ng-init='vm.initProjectCloseOut()'>
-        <div class="col-xs-2">
-            <div class="k-button btnFixWidth" ng-click="vm.openProjectCloseOutInfo()"><span>Open</span></div>
-        </div>
-        <div id="dialogProjectCloseOut" kendo-window="dialogProjectCloseOut" k-title="'Project Close Out Wizard'" k-modal="true" k-visible="false" k-content="{ url: '{{vm.projectCloseOutPagepath}}'}"></div>
-    </div>
-</div>
