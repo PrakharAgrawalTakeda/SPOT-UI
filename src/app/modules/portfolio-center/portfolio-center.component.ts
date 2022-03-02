@@ -56,12 +56,12 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
           {
               "name": "Projects",
               "data": [
-                  1,
-                  0,
-                  1,
-                  2,
-                  0,
-                  0
+                  156,
+                  265,
+                  78,
+                  123,
+                  235,
+                  211
               ]
           }
       ]
@@ -80,7 +80,88 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
         "Priority 3",
         "Priority 4"
     ]
-}};
+},
+"milstoneTile":[
+  {
+    "title": "All Completed On-Time",
+    "value": 48
+  },
+  {
+    "title": "On-Time Last 30 Days",
+    "value" : 0  
+  },
+  {
+    "title": "Predicted On-Time Next 30 Days",
+    "value" : 48  
+  },
+  {
+    "title": "Curent Year Completion Rate",
+    "value" : 53  
+  },  
+],
+"nextThreeTile":[
+  {
+    "title": "Milestones Coming Due",
+    "value": 3329
+  },
+  {
+    "title": "Projects Completing",
+    "value" : 776  
+  },
+  {
+    "title": "Risk/Issues Due",
+    "value" : 215  
+  },
+  {
+    "title": "Ask/Need Due",
+    "value" : 189  
+  }
+],
+"budgetTile":[
+  {
+    "title": "Plan",
+    "value": 3329,
+    "value2": 315
+  },
+  {
+    "title": "Previous",
+    "value" : 7762,
+    "value2": 64  
+  },
+  {
+    "title": "Current",
+    "value" : 2151,
+    "value2": 515 
+  },
+  {
+    "title": "YTD",
+    "value" : 1891,
+    "value2": 121  
+  }
+],
+"lastThreeTile":[
+  {
+    "title": "Milestones Completed",
+    "value": 1250
+  },
+  {
+    "title": "Projects Finished Excecution",
+    "value" : 264  
+  },
+  {
+    "title": "Projects Initiated",
+    "value" : 2566  
+  },
+  {
+    "title": "Projects Completed",
+    "value" : 144  
+  },
+  {
+    "title": "Projects Onhold",
+    "value" : 456  
+  }
+]
+};
   console.log(this.data.newVsReturning)
   this._prepareChartData();
   window['Apex'] = {
@@ -180,7 +261,7 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
               show: false
           } 
       },
-      colors     : ['#818CF8'],
+      colors     : ['#ea5532','#da5283','#9b72b0','#4c9bcf','#51b1bf','#abb436'],
       grid: {
         show: false,      // you can either change hear to disable all grids
         xaxis: {
@@ -206,8 +287,9 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
               show : true,
               style: {
                   fontSize  : '10px',
-                  fontWeight: '500'
-              }
+                  fontWeight: '500',
+                  colors     : ['#ea5532','#da5283','#9b72b0','#4c9bcf','#51b1bf','#abb436']
+              },
           },
           categories: this.data.budgetDistribution.categories
       },
@@ -218,10 +300,14 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
       plotOptions: {
         bar: {
           horizontal: false,
+          distributed: true,
           dataLabels: {
             position: 'top'
           }
         }
+      },
+      legend:{
+        show: false
       },
       dataLabels: {
         enabled: true,

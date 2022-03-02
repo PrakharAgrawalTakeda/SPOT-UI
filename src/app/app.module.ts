@@ -16,6 +16,7 @@ import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { PortfolioCenterComponent } from './modules/portfolio-center/portfolio-center.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { ProjectHubComponent } from './modules/project-hub/project-hub.component';
 
 export function MsalInstanceFactory(): IPublicClientApplication{
     return new PublicClientApplication({
@@ -28,7 +29,8 @@ export function MsalInstanceFactory(): IPublicClientApplication{
 }
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
-    scrollPositionRestoration: 'enabled'
+    scrollPositionRestoration: 'enabled',
+    onSameUrlNavigation: 'reload'
 };
 
 @NgModule({

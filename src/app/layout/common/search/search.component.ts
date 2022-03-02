@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { debounceTime, filter, map, Subject, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations/public-api';
+import { Router } from '@angular/router';
 
 @Component({
     selector     : 'search',
@@ -29,7 +30,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     constructor(
         private _elementRef: ElementRef,
         private _httpClient: HttpClient,
-        private _renderer2: Renderer2
+        private _renderer2: Renderer2,
+        private routes: Router
     )
     {
     }
@@ -132,7 +134,17 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
                     });
             });
     }
-
+    routeProject(projectid):void{
+        this.close()
+        if (this.routes.url.includes('project-hub')){
+        this.routes.navigate(['project-hub/'+ projectid]).then(() => {
+            window.location.reload();
+          });
+        }
+        else{
+            this.routes.navigate(['project-hub/'+ projectid])
+        }
+    }
     /**
      * On destroy
      */
