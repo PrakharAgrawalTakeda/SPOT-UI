@@ -15,11 +15,14 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { CommonModule } from '@angular/common';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { FuseDrawerModule } from '@fuse/components/drawer';
 import { ProjectHubComponent } from './project-hub.component';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { ProjectTeamComponent } from './project-team/project-team.component';
 import { ProjectViewComponent } from './project-view/project-view.component';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+
 
 export const projectRoutes: Route[] = [
   {
@@ -40,6 +43,7 @@ export const projectRoutes: Route[] = [
         component: ProjectViewComponent,
         pathMatch: 'full'
       }
+      
       ]
   },
   
@@ -47,7 +51,7 @@ export const projectRoutes: Route[] = [
 @NgModule({
   declarations: [
     ProjectHubComponent,
-    ProjectHubComponent,
+    ProjectTeamComponent,
     ProjectViewComponent
   ],
   imports     : [
@@ -63,12 +67,13 @@ export const projectRoutes: Route[] = [
       MatSortModule,
       MatTableModule,
       MatTabsModule,
+      MatExpansionModule,
       NgApexchartsModule,
       TranslocoModule,
       SharedModule,
-      CommonModule,
       FuseDrawerModule,
-      FuseNavigationModule
+      FuseNavigationModule,
+      NgScrollbarModule
   ]
 })
 export class ProjectHubModule { }

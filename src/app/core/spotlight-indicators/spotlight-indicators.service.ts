@@ -23,7 +23,7 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = 'text-red-500'
       }
       else{
-        temp.icontype = 'heroicons_solid:dots-circle-horizontal'
+        temp.icontype = 'circle'
         temp.iconcolor = ''
       }
     }
@@ -45,7 +45,7 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = 'text-purple-500'
       }
       else{
-        temp.icontype = 'heroicons_solid:dots-circle-horizontal'
+        temp.icontype = 'circle'
         temp.iconcolor = ''
       }
     }

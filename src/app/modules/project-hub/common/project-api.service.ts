@@ -15,4 +15,22 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getprojectviewdata(projectid){
+    var url = "https://localhost:44304/api/ProjectHubData/ProjectView/"+ projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getmembersbyproject(projectid){
+    var url = "https://localhost:44304/api/ProjectHubData/ProjectTeam/"+ projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getportfolioData(projectid){
+    var url = "https://localhost:44304/api/PortfolioCenterData/"+ projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

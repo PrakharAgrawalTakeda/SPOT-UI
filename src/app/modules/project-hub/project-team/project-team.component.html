@@ -1,1 +1,58 @@
-<p>project-team works!</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0 team-pad flex flex-col flex-auto">
+    <div *ngFor="let member of data.teamMembers">
+        <div class="flex flex-col flex-auto items-center bg-card shadow rounded-2xl overflow-hidden h-full">
+            <!-- Avatar & Info -->
+            <div class="flex flex-col flex-auto w-full p-8 text-center">
+                <div class="w-32 h-32 mx-auto rounded-full overflow-hidden">
+                    <img
+                        class="w-full h-full object-cover"
+                        src ="assets/images/avatars/default.png">
+                </div>
+                <div class="mt-6 font-medium">{{member.userName}}</div>
+                <div class="text-secondary">{{member.roleName}}</div>
+            </div>
+            <!-- Email & Phone -->
+            <div class="flex items-center w-full border-t divide-x">
+                <a
+                    class="flex flex-auto items-center justify-center py-4 hover:bg-hover"
+                    [href]="'mailto:' + member.userEmail">
+                    <mat-icon
+                        class="icon-size-5 text-hint"
+                        [svgIcon]="'heroicons_solid:mail'"></mat-icon>
+                </a>
+                <a
+                    class="flex flex-auto items-center justify-center py-4 hover:bg-hover"
+                    [href]="'https://teams.microsoft.com/l/chat/0/0?users=' + member.userEmail" target="_blank">
+                    <mat-icon
+                        class="icon-size-5 text-hint"
+                        [svgIcon]="'heroicons_outline:chat'"></mat-icon>
+                    
+                </a>
+                <a
+                class="flex flex-auto items-center justify-center py-4 hover:bg-hover"
+                [href]="'mailto:' + member.userEmail">
+                <mat-icon
+                    class="icon-size-5 text-hint"
+                    [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                <span class="ml-2">Edit</span>
+            </a>
+            <a
+                class="flex flex-auto items-center justify-center py-4 hover:bg-warn-400 bg-warn text-on-warn"
+                [href]="'https://teams.microsoft.com/l/chat/0/0?users=' + member.userEmail" target="_blank">
+                <mat-icon
+                    class="icon-size-5 text-on-warn "
+                    [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                <span class="ml-2">Delete</span>
+            </a>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto items-center border-2 border-dashed border-gray-300 rounded-2xl justify-center">
+        <!-- Avatar & Info -->
+        <mat-icon
+        class="icon-size-20 text-hint"
+        [svgIcon]="'heroicons_outline:user-add'"></mat-icon>
+        <br>
+        ADD NEW
+    </div>
+</div>

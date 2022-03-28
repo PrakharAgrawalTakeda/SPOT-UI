@@ -4,6 +4,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ProjectApiService } from './common/project-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
+import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 
 @Component({
   selector: 'app-project-hub',
@@ -13,12 +14,14 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
 export class ProjectHubComponent implements OnInit {
   drawerMode: 'over' | 'side' = 'side';
   projectDetails: any = {}
+  portfolioDetails: any = {}
   id:string = ""
+  panelOpenState = true;
   selectedProject: string = 'ACME Corp. Backend App';
   menuData: FuseNavigationItem[] = [
     {
-        title   : 'Actions',
-        subtitle: 'Task, project & team',
+        title   : 'Information',
+        subtitle: 'Information subtitle',
         type    : 'group',
         children: [
             {
@@ -32,22 +35,6 @@ export class ProjectHubComponent implements OnInit {
                 type : 'basic',
                 icon : 'heroicons_outline:user-group',
                 link : 'project-team' 
-            },
-            {
-                title: 'Create project',
-                type : 'basic',
-                icon : 'heroicons_outline:briefcase'
-            },
-            {
-                title: 'Create user',
-                type : 'basic',
-                icon : 'heroicons_outline:user-add'
-            },
-            {
-                title   : 'Assign user or team',
-                subtitle: 'Assign to a task or a project',
-                type    : 'basic',
-                icon    : 'heroicons_outline:badge-check'
             }
         ]
     },
@@ -141,14 +128,19 @@ export class ProjectHubComponent implements OnInit {
 ];
   drawerOpened: boolean = true;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute) { }
+  constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute,public indicator: SpotlightIndicatorsService) { }
   
   ngOnInit(): void {
     this.id=this._Activatedroute.snapshot.paramMap.get("id");
     this.apiService.getproject(this.id).then((res) => {
       this.projectDetails = res
-      console.log(this.id)
+      console.log(res)
     })
+    this.apiService.getportfolioData(this.id).then((res) => {
+        this.portfolioDetails = res
+        console.log(res)
+      })
+    
     
   }
 
