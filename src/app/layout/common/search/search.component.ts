@@ -122,13 +122,13 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
             )
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
-                this._httpClient.post(`https://localhost:44304/api/Projects/Search?${params.toString()}`, {body:[]})
+                this._httpClient.post(`https://spot4api-dev.azurewebsites.net/api/Projects/Search?${params.toString()}`, {body:[]})
                     .subscribe((resultSets: any) => {
 
                         // Store the result sets
                         this.resultSets = resultSets;
                         console.log(this.resultSets)
-                        console.log(`https://localhost:44304/api/Projects/Search?${params.toString()}`)
+                        console.log(`https://spot4api-dev.azurewebsites.net/api/Projects/Search?${params.toString()}`)
                         // Execute the event
                         this.search.next(resultSets);
                     });
