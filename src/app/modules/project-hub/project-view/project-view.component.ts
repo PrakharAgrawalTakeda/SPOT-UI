@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'app/core/auth/auth.service';
+import { lookupMaster } from 'app/shared/lookup-global';
 import { ProjectApiService } from '../common/project-api.service';
 
 @Component({
@@ -21,9 +23,9 @@ export class ProjectViewComponent implements OnInit {
   showContent : boolean = false
   riskIssuesHeaders: string[] = [ 'logDate', 'dueDate', 'ifHappens', 'riskIssueTypeId'];
   askNeedHeaders: string[] = [ 'askNeed1', 'needFromName', 'needByDate'];
- 
+  lookupmaster = new Map();
   ScheduleHeaders: string[] = [ 'milestone', 'baselineFinish', 'plannedFinish', 'responsiblePersonName'];
-  constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute) { }
+  constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute, private auth: AuthService) { }
   
   ngOnInit(): void {
     this.id=this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -36,24 +38,26 @@ export class ProjectViewComponent implements OnInit {
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
-      
-      console.log(this.riskIssues)
     })
     
+    this.auth.lookupMaster().then((res:any)=>{
+      for( let i of res){
+          this.lookupmaster.set(i.lookUpId , i.lookUpName)
+      } 
+  })
   }
   trackByFnRI(index: number, item: any): any
   {
-      console.log(index)
-      return item.riskIssueUniqueId || index;
+       return item.riskIssueUniqueId || index;
   }
   trackByFnAN(index: number, item: any): any
   {
-      console.log(index)
       return item.askNeedUniqueId || index;
   }
   trackByFnS(index: number, item: any): any
-  {
-      console.log(index)
-      return item.scheduleUniqueId || index;
+  {   return item.scheduleUniqueId || index;
+  }
+  getlookup(key){
+     return this.lookupmaster.get(key)
   }
 }

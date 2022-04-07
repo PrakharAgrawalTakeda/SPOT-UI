@@ -3,6 +3,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
 import { MsalService } from '@azure/msal-angular';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
+import { lookupMaster } from 'app/shared/lookup-global';
 
 @Component({
     selector     : 'landing-home',
@@ -25,13 +26,22 @@ export class LandingHomeComponent implements OnInit
                     var temp = localStorage.getItem('spot-redirect')
                     console.log("hey"+temp)
                     localStorage.removeItem('spot-redirect')
+                    this.lookup()
                     this.router.navigateByUrl(temp)
                 }
                 else{
+                    this.lookup()
                     this.router.navigateByUrl('portfolio-center')
                 }
             }
         })
+    }
+    lookup(){
+    this.auth.lookupMaster().then((res:any)=>{
+        for( let i of res){
+            lookupMaster.lookup.set(i.lookUpId , i.lookUpName)
+        } 
+    })
     }
     login(){
          this.authService.loginRedirect()
