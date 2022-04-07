@@ -70,7 +70,7 @@
                         mat-cell
                         *matCellDef="let project">
                         <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            <a [routerLink]="['/project-hub',project.projectUid]"> {{project.logDate}}</a>
+                            <a [routerLink]="['/project-hub',project.projectUid]"> {{project.logDate | date:'dd/MM/yyyy'}}</a>
                         </span>
                     </td>
                 </ng-container>
@@ -87,7 +87,7 @@
                         mat-cell
                         *matCellDef="let project">
                         <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            {{project.dueDate}}
+                            {{project.dueDate| date:'dd/MM/yyyy'}}
                         </span>
                     </td>
                 </ng-container>
@@ -214,22 +214,12 @@
                         mat-cell
                         *matCellDef="let project">
                         <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            {{project.needByDate}}
+                            {{project.needByDate | date:'dd/MM/yyyy'}}
                         </span>
                     </td>
                 </ng-container>
               
                 <!-- Footer -->
-                <ng-container matColumnDef="recentOrdersTableFooter">
-                    <td
-                        class="py-6 px-0 border-0"
-                        mat-footer-cell
-                        *matFooterCellDef
-                        colspan="6">
-                        <button mat-stroked-button>See all Projects</button>
-                    </td>
-                </ng-container>
-
                 <tr
                     mat-header-row
                     *matHeaderRowDef="askNeedHeaders"></tr>
@@ -237,10 +227,6 @@
                     class="order-row h-16"
                     mat-row
                     *matRowDef="let row; columns: askNeedHeaders;"></tr>
-                <tr
-                    class="h-16 border-0"
-                    mat-footer-row
-                    *matFooterRowDef="['recentOrdersTableFooter']"></tr>
             </table>
         </div>
     </div>
@@ -303,7 +289,7 @@
                         mat-cell
                         *matCellDef="let project">
                         <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            {{project.baselineFinish}}
+                            {{project.baselineFinish | date:'dd/MM/yyyy'}}
                         </span>
                     </td>
                 </ng-container>
@@ -320,7 +306,7 @@
                         mat-cell
                         *matCellDef="let project">
                         <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            {{project.plannedFinish}}
+                            {{project.plannedFinish | date:'dd/MM/yyyy'}}
                         </span>
                     </td>
                 </ng-container>
@@ -343,16 +329,7 @@
                 </ng-container>
               
                 <!-- Footer -->
-                <ng-container matColumnDef="recentOrdersTableFooter">
-                    <td
-                        class="py-6 px-0 border-0"
-                        mat-footer-cell
-                        *matFooterCellDef
-                        colspan="6">
-                        <button mat-stroked-button>See all Projects</button>
-                    </td>
-                </ng-container>
-
+             
                 <tr
                     mat-header-row
                     *matHeaderRowDef="ScheduleHeaders"></tr>
@@ -360,10 +337,6 @@
                     class="order-row h-16"
                     mat-row
                     *matRowDef="let row; columns: ScheduleHeaders;"></tr>
-                <tr
-                    class="h-16 border-0"
-                    mat-footer-row
-                    *matFooterRowDef="['recentOrdersTableFooter']"></tr>
             </table>
         </div>
     </div>
