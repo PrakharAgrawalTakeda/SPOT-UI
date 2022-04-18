@@ -7,6 +7,7 @@ import { ApexOptions } from 'ng-apexcharts';
 import { fuseAnimations } from '@fuse/animations';
 import { Router } from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import { MsalService } from '@azure/msal-angular';
 
 @Component({
   selector: 'app-portfolio-center',
@@ -24,8 +25,30 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
   chartNewVsReturning: ApexOptions;
   showContent = false
   data: any
+  totalproject = 0;
+  defaultfilter: any = {
+    "portfolioOwner": [],
+    "phase": [],
+    "executionScope": [],
+    "people": [],
+    "products": [],
+    "state": [],
+    "totalCAPEX": [],
+    "gmsBudgetOwner": [],
+    "oeProjectType": [],
+    "projectType": [],
+    "fundingStatus": [],
+    "agileWorkstream": [],
+    "agileWave": [],
+    "primaryKPI": [],
+    "startegicYear": [],
+    "annualInitiatives": [],
+    "topsGroup": [],
+    "capsProject": [],
+    "projectName": []
+  }
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule','risk','ask','budget','capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService) { }
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService) { }
 
   ngOnInit(): void {
     this.apiService.getprojectNames().then((res:any)=>{
@@ -39,144 +62,158 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
           this.projects.data.find(ele => ele.projectUid==name.problemUniqueId).problemTitle = name.problemTitle
         }
         console.log(this.projects.data)
+        
       });
+      this.defaultfilter.people.push(this.msal.instance.getActiveAccount().localAccountId)
+      this.apiService.Filters(this.defaultfilter).then((resp)=>{
+        if(res != null){
+          this.apiService.getportfoliodata(resp).then((res:any)=>{
+            console.log(res)
+            this.totalproject = res.totalProjects
+            this.data= {"budgetDistribution" :{
+              "categories": [
+                  "Intitate",
+                  "Define",
+                  "Plan",
+                  "Excecute",
+                  "Close",
+                  "Track"
+              ],
+              "series": [
+                  {
+                      "name": "Projects",
+                      "data": [
+                          res.phaseTile.initiate,
+                          res.phaseTile.define,
+                          res.phaseTile.plan,
+                          res.phaseTile.excecute,
+                          res.phaseTile.close,
+                          res.phaseTile.track
+                      ]
+                  }
+              ]
+          },
+          "newVsReturning" :{
+            "uniqueVisitors": res.totalProjects,
+            "series": [
+                res.priorityTile.priority1,
+                res.priorityTile.priority2,
+                res.priorityTile.priority3,
+                res.priorityTile.priority4,
+                res.priorityTile.priorityundefined
+            ],
+            "labels": [
+                "Priority 1",
+                "Priority 2",
+                "Priority 3",
+                "Priority 4",
+                "Priotity Undefined"
+            ]
+        },
+        "milstoneTile":[
+          {
+            "title": "All Completed On-Time",
+            "value": 48
+          },
+          {
+            "title": "On-Time Last 30 Days",
+            "value" : 0  
+          },
+          {
+            "title": "Predicted On-Time Next 30 Days",
+            "value" : 48  
+          },
+          {
+            "title": "Curent Year Completion Rate",
+            "value" : 53  
+          },  
+        ],
+        "nextThreeTile":[
+          {
+            "title": "Milestones Coming Due",
+            "value": res.nextThreeMonths.milestoneDue
+          },
+          {
+            "title": "Projects Completing",
+            "value" : res.nextThreeMonths.projectsCompleting
+          },
+          {
+            "title": "Risk/Issues Due",
+            "value" : res.nextThreeMonths.riskIssueDue  
+          },
+          {
+            "title": "Ask/Need Due",
+            "value" : res.nextThreeMonths.askNeedDue  
+          }
+        ],
+        "budgetTile":[
+          {
+            "title": "Plan",
+            "value": 3329,
+            "value2": 315
+          },
+          {
+            "title": "Previous",
+            "value" : 7762,
+            "value2": 64  
+          },
+          {
+            "title": "Current",
+            "value" : 2151,
+            "value2": 515 
+          },
+          {
+            "title": "YTD",
+            "value" : 1891,
+            "value2": 121  
+          }
+        ],
+        "lastThreeTile":[
+          {
+            "title": "Milestones Completed",
+            "value": 1250
+          },
+          {
+            "title": "Projects Finished Excecution",
+            "value" : 264  
+          },
+          {
+            "title": "Projects Initiated",
+            "value" : 2566  
+          },
+          {
+            "title": "Projects Completed",
+            "value" : 144  
+          },
+          {
+            "title": "Projects Onhold",
+            "value" : 456  
+          }
+        ]
+        };
+          console.log(this.data.newVsReturning)
+          this._prepareChartData();
+          window['Apex'] = {
+            chart: {
+                events: {
+                    mounted: (chart: any, options?: any): void => {
+                        this._fixSvgFill(chart.el);
+                    },
+                    updated: (chart: any, options?: any): void => {
+                        this._fixSvgFill(chart.el);
+                    }
+                }
+            }
+        };
+        
+          })
+         
+        }
+      })
+     
       
     });
-    
-    this.data= {"budgetDistribution" :{
-      "categories": [
-          "Intitate",
-          "Define",
-          "Plan",
-          "Excecute",
-          "Close",
-          "Track"
-      ],
-      "series": [
-          {
-              "name": "Projects",
-              "data": [
-                  156,
-                  265,
-                  78,
-                  123,
-                  235,
-                  211
-              ]
-          }
-      ]
-  },
-  "newVsReturning" :{
-    "uniqueVisitors": 100,
-    "series": [
-        25,
-        15,
-        35,
-        15
-    ],
-    "labels": [
-        "Priority 1",
-        "Priority 2",
-        "Priority 3",
-        "Priority 4"
-    ]
-},
-"milstoneTile":[
-  {
-    "title": "All Completed On-Time",
-    "value": 48
-  },
-  {
-    "title": "On-Time Last 30 Days",
-    "value" : 0  
-  },
-  {
-    "title": "Predicted On-Time Next 30 Days",
-    "value" : 48  
-  },
-  {
-    "title": "Curent Year Completion Rate",
-    "value" : 53  
-  },  
-],
-"nextThreeTile":[
-  {
-    "title": "Milestones Coming Due",
-    "value": 3329
-  },
-  {
-    "title": "Projects Completing",
-    "value" : 776  
-  },
-  {
-    "title": "Risk/Issues Due",
-    "value" : 215  
-  },
-  {
-    "title": "Ask/Need Due",
-    "value" : 189  
-  }
-],
-"budgetTile":[
-  {
-    "title": "Plan",
-    "value": 3329,
-    "value2": 315
-  },
-  {
-    "title": "Previous",
-    "value" : 7762,
-    "value2": 64  
-  },
-  {
-    "title": "Current",
-    "value" : 2151,
-    "value2": 515 
-  },
-  {
-    "title": "YTD",
-    "value" : 1891,
-    "value2": 121  
-  }
-],
-"lastThreeTile":[
-  {
-    "title": "Milestones Completed",
-    "value": 1250
-  },
-  {
-    "title": "Projects Finished Excecution",
-    "value" : 264  
-  },
-  {
-    "title": "Projects Initiated",
-    "value" : 2566  
-  },
-  {
-    "title": "Projects Completed",
-    "value" : 144  
-  },
-  {
-    "title": "Projects Onhold",
-    "value" : 456  
-  }
-]
-};
-  console.log(this.data.newVsReturning)
-  this._prepareChartData();
-  window['Apex'] = {
-    chart: {
-        events: {
-            mounted: (chart: any, options?: any): void => {
-                this._fixSvgFill(chart.el);
-            },
-            updated: (chart: any, options?: any): void => {
-                this._fixSvgFill(chart.el);
-            }
-        }
-    }
-};
-  }
+      }
   ngAfterViewInit(): void
     {}
   trackByFn(index: number, item: any): any
@@ -220,7 +257,7 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
       legend:{
           show: false
       },
-      colors     : ['#4c9bcf', '#da5283','#abb436','#99d58f'],
+      colors     : ['#4c9bcf', '#da5283','#abb436','#99d58f','#808080'],
       labels     : this.data.newVsReturning.labels,
       plotOptions: {
         pie: {
@@ -231,7 +268,11 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
               total: {
                 show: true,
                 label: 'Total Projects',
-                formatter: () => '100'
+                formatter: function (w) {
+                  return w.globals.seriesTotals.reduce((a, b) => {
+                    return a + b
+                  }, 0)
+                }
               }
             }
           }
@@ -249,7 +290,8 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
                   type: 'none'
               }
           }
-      }
+      },
+
   };
     this.chartBudgetDistribution = {
       chart      : {

@@ -23,5 +23,16 @@ export class PortfolioApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-
+  async getportfoliodata(body){
+    var userid = "https://spot4api-dev.azurewebsites.net/api/PortfolioCenter"
+    const abc$ = this.http.post(userid,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async Filters(body){
+    var userid = "https://spot4api-dev.azurewebsites.net/api/FilterProjects/Filters"
+    const abc$ = this.http.post(userid,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
