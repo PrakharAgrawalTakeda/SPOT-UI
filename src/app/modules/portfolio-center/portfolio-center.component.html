@@ -4,12 +4,37 @@
 
         <!-- Drawer -->
         <mat-drawer
-            class="absolute inset-0 w-100 dark:bg-gray-900 overflow-hidden"
+            class="absolute inset-0 w-half dark:bg-gray-900 overflow-hidden"
             [autoFocus]="false"
             [mode]="'over'"
             #matDrawer>
             <div class="p-4">
-                Filters drawer<br>
+                <mat-form-field class="example-chip-list" appearance="fill">
+                    <mat-label>Priority</mat-label>
+                    <mat-chip-list #chipList aria-label="Fruit selection" class="chiplist">
+                      <mat-chip
+                        *ngFor="let fruit of fruits"
+                        (removed)="remove(fruit)">
+                        {{fruit}}
+                        <button matChipRemove>
+                          <mat-icon>cancel</mat-icon>
+                        </button>
+                      </mat-chip>
+                      <input
+                        placeholder="New fruit..."
+                        #fruitInput
+                        [formControl]="fruitCtrl"
+                        [matAutocomplete]="auto"
+                        [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                      <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+                        {{fruit}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
             </div>
         </mat-drawer>
 
@@ -23,7 +48,7 @@
                 mat-flat-button
                 [color]="'primary'"
                 (click)="matDrawer.toggle()">
-                Filters Hello
+                Filters
             </button>
                 <div *ngIf ='showContent' class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 mt-8 " @slideInRight>
                     <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" @slideInRight>

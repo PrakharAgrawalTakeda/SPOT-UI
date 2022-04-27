@@ -17,6 +17,9 @@ import { SharedModule } from 'app/shared/shared.module';
 import { PortfolioCenterComponent } from './portfolio-center.component';
 import { CommonModule } from '@angular/common';
 import { FuseDrawerModule } from '@fuse/components/drawer';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 export const projectRoutes: Route[] = [
   {
@@ -45,7 +48,11 @@ export const projectRoutes: Route[] = [
       TranslocoModule,
       SharedModule,
       CommonModule,
-      FuseDrawerModule
+      FuseDrawerModule,
+      MatChipsModule,
+      MatAutocompleteModule,
+      MatFormFieldModule
+      
   ]
 })
 export class PortfolioCenterModule { }

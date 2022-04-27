@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { PortfolioApiService } from './portfolio-api.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,7 +8,12 @@ import { fuseAnimations } from '@fuse/animations';
 import { Router } from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { MsalService } from '@azure/msal-angular';
-
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {FormControl} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 @Component({
   selector: 'app-portfolio-center',
   templateUrl: './portfolio-center.component.html',
@@ -47,28 +52,25 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
     "capsProject": [],
     "projectName": []
   }
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  fruitCtrl = new FormControl();
+  filteredFruits: Observable<string[]>;
+  fruits: string[] = ['Lemon'];
+  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule','risk','ask','budget','capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService) { }
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService) { 
+    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+      startWith(null),
+      map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
+    );
+  }
 
   ngOnInit(): void {
-    this.apiService.getprojectNames().then((res:any)=>{
-      this.projectNames = res
-      console.log(res)
-      this.apiService.getprojects().then((res:any)=>{
-        this.projects.data = res    
-        this.projects.sort = this.recentTransactionsTableMatSort;
-        this.showContent =true
-        for(var name of this.projectNames){
-          this.projects.data.find(ele => ele.projectUid==name.problemUniqueId).problemTitle = name.problemTitle
-        }
-        console.log(this.projects.data)
-        
-      });
       this.defaultfilter.people.push(this.msal.instance.getActiveAccount().localAccountId)
       this.apiService.Filters(this.defaultfilter).then((resp)=>{
-        if(res != null){
+        if(resp != null){
           this.apiService.getportfoliodata(resp).then((res:any)=>{
-            console.log(res)
             this.totalproject = res.totalProjects
             this.data= {"budgetDistribution" :{
               "categories": [
@@ -191,7 +193,13 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
           }
         ]
         };
-          console.log(this.data.newVsReturning)
+        this.projectNames = res.projectDetails;
+        this.projects.data = res.portfolioDetails;
+        this.projects.sort = this.recentTransactionsTableMatSort;
+        this.showContent = true
+        for(var name of this.projectNames){
+          this.projects.data.find(ele => ele.projectUid==name.problemUniqueId).problemTitle = name.problemTitle
+        }
           this._prepareChartData();
           window['Apex'] = {
             chart: {
@@ -210,12 +218,44 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
          
         }
       })
-     
-      
-    });
       }
   ngAfterViewInit(): void
     {}
+    add(event: MatChipInputEvent): void {
+      const value = (event.value || '').trim();
+  
+      // Add our fruit
+      if (value) {
+        this.fruits.push(value);
+      }
+  
+      // Clear the input value
+      event.chipInput!.clear();
+  
+      this.fruitCtrl.setValue(null);
+    }
+  
+    remove(fruit: string): void {
+      const index = this.fruits.indexOf(fruit);
+  
+      if (index >= 0) {
+        this.fruits.splice(index, 1);
+      }
+    }
+  
+    selected(event: MatAutocompleteSelectedEvent): void {
+      if (!this.fruits.includes(event.option.viewValue)) {
+        this.fruits.push(event.option.viewValue);
+      }
+      this.fruitInput.nativeElement.blur();
+      this.fruitCtrl.setValue(null);
+    }
+  
+    private _filter(value: string): string[] {
+      const filterValue = value.toLowerCase();
+  
+      return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
+    }  
   trackByFn(index: number, item: any): any
   {
       console.log(index)
