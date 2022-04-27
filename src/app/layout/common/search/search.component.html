@@ -24,7 +24,8 @@
         <mat-autocomplete
             class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
             [disableRipple]="true"
-            #matAutocomplete="matAutocomplete">
+            #matAutocomplete="matAutocomplete"
+            (optionSelected)="selectedOption($event)">
             <mat-option
                 class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
                 *ngIf="resultSets && !resultSets.length">
@@ -37,7 +38,8 @@
                 <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
                     <mat-option
                         class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
-                        (click)="routeProject(result.problemUniqueId)">
+                        (click)="routeProject(result.problemId)"
+                        [value]="result.problemUniqueId">
                         <!-- Contacts -->
                         {{result.problemId}} - {{result.problemTitle}}                        
                     

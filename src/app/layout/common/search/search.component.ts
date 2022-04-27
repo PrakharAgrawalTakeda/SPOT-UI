@@ -164,6 +164,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      *
      * @param event
      */
+     selectedOption(event: any): void{
+        this.routeProject(event.option.value)
+     }
     onKeydown(event: KeyboardEvent): void
     {
         // Listen for escape to close the search
