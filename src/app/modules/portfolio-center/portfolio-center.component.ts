@@ -255,6 +255,9 @@ export class PortfolioCenterComponent implements OnInit,AfterViewInit {
       const filterValue = value.toLowerCase();
   
       return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
+    }
+    openRightDrawer(){
+      console.log("WIP")
     }  
   trackByFn(index: number, item: any): any
   {

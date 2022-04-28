@@ -1,7 +1,6 @@
 <div class="flex flex-col min-w-0 overflow-hidden">
-
-    <mat-drawer-container class="flex-auto h-full">
-
+   
+    <mat-drawer-container class="flex-auto h-full" >
         <!-- Drawer -->
         <mat-drawer
             class="absolute inset-0 w-half dark:bg-gray-900 overflow-hidden"
@@ -37,7 +36,16 @@
                   </mat-form-field>
             </div>
         </mat-drawer>
-
+        <mat-drawer
+        class="w-half dark:bg-gray-900 overflow-hidden"
+        [autoFocus]="false"
+        [mode]="'over'"
+        [position]="'end'"
+        #matDrawerRight>
+        <div class="p-4">
+           Hello I am new
+        </div>
+    </mat-drawer>
         <!-- Drawer content -->
         <mat-drawer-content class="flex flex-col" style="width: 100vw;">
 
@@ -85,6 +93,15 @@
                                 </div>
                             </div>-->
                         </div>
+                        <div class="p-4 text-right">
+                            <button
+                            class="ml-4"
+                            mat-button
+                            [color]="'primary'"
+                            (click)="matDrawerRight.toggle()">
+                            View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
+                         </button>
+                        </div>
                     </div>
                     <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" @slideInLeft>
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col flex-auto p-6 overflow-hidden">
@@ -105,55 +122,44 @@
                                     ></apx-chart>
                             </div>
                         </div>
-                    </div>
-                    <div class="xl:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                        <div class="flex items-start justify-between">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate">Milestones</div>
-                            <div class="ml-2 -mt-2 -mr-3">
-                                <button
-                                    mat-icon-button
-                                    [matMenuTriggerFor]="summaryMenu">
-                                    <mat-icon
-                                        class="icon-size-5"
-                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                                </button>
-                                <mat-menu #summaryMenu="matMenu">
-                                    <button mat-menu-item>Yesterday</button>
-                                    <button mat-menu-item>2 days ago</button>
-                                    <button mat-menu-item>3 days ago</button>
-                                </mat-menu>
-                            </div>
+                        <div class="p-4 text-right">
+                            <button
+                            class="ml-4"
+                            mat-button
+                            [color]="'primary'"
+                            (click)="matDrawerRight.toggle()">
+                            View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
+                         </button>
                         </div>
-                        <div class="flex flex-col mt-2">
-                            <ng-container *ngFor="let dataset of data.milstoneTile">
-                                <div class="grid grid-cols-2 py-3">
-                                    <div class="flex items-center">
-                                        <div class="ml-3">{{dataset.title}}</div>
+                    </div>
+                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
+                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-8">Milestones</div>
+                       
+                                <ng-container *ngFor="let dataset of data.milstoneTile">
+                                    <div class="grid grid-cols-2 py-3">
+                                        <div class="flex items-center">
+                                            <div class="ml-3">{{dataset.title}}</div>
+                                        </div>
+                                        <div class="text-right text-secondary">{{dataset.value}}%</div>
                                     </div>
-                                    <div class="text-right text-secondary">{{dataset.value}}%</div>
-                                </div>
-                            </ng-container>
+                                </ng-container>
+                            </div>
+                        <div class="p-4 text-right">
+                            <button
+                            class="ml-4"
+                            mat-button
+                            [color]="'primary'"
+                            (click)="matDrawerRight.toggle()">
+                            View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
+                         </button>
                         </div>
                     </div>
                     <!-- Milestones -->
-                    <div class="xl:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                        <div class="flex items-start justify-between">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate">Budget</div>
-                            <div class="ml-2 -mt-2 -mr-3">
-                                <button
-                                    mat-icon-button
-                                    [matMenuTriggerFor]="issuesMenu">
-                                    <mat-icon
-                                        class="icon-size-5"
-                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                                </button>
-                                <mat-menu #issuesMenu="matMenu">
-                                    <button mat-menu-item>Yesterday</button>
-                                    <button mat-menu-item>2 days ago</button>
-                                    <button mat-menu-item>3 days ago</button>
-                                </mat-menu>
-                            </div>
-                        </div>
+                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
+                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-2">Budget</div>
+                       
                         <div class="flex flex-col mt-2">
                             <div class="grid grid-cols-3 py-3">
                                 <div class="flex items-center"></div>
@@ -169,27 +175,23 @@
                                     <div class="text-right text-secondary">{{dataset.value2}}</div>
                                 </div>
                             </ng-container>
+                            </div>
+                            
+                        </div>
+                        <div class="p-4 text-right">
+                            <button
+                            class="ml-4"
+                            mat-button
+                            [color]="'primary'"
+                            (click)="matDrawerRight.toggle()">
+                            View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
+                         </button>
                         </div>
                     </div>
                     <!-- Ask Needs -->
-                    <div class="xl:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                        <div class="flex items-start justify-between">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate">Next 3 Months</div>
-                            <div class="ml-2 -mt-2 -mr-3">
-                                <button
-                                    mat-icon-button
-                                    [matMenuTriggerFor]="featuresMenu">
-                                    <mat-icon
-                                        class="icon-size-5"
-                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                                </button>
-                                <mat-menu #featuresMenu="matMenu">
-                                    <button mat-menu-item>Yesterday</button>
-                                    <button mat-menu-item>2 days ago</button>
-                                    <button mat-menu-item>3 days ago</button>
-                                </mat-menu>
-                            </div>
-                        </div>
+                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
+                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-8">Next 3 Months</div>
                         <div class="flex flex-col mt-2">
                             <ng-container *ngFor="let dataset of data.nextThreeTile">
                                 <div class="grid grid-cols-2 py-3">
@@ -200,26 +202,22 @@
                                 </div>
                             </ng-container>
                         </div>
+                        </div>
+                        <div class="p-4 text-right">
+                            <button
+                            class="ml-4"
+                            mat-button
+                            [color]="'primary'"
+                            (click)="matDrawerRight.toggle()">
+                            View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
+                         </button>
+                        </div>
                     </div>
                     <!-- Risk/Issues -->
-                    <div class="xl:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                        <div class="flex items-start justify-between">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate">Last 3 Months</div>
-                            <div class="ml-2 -mt-2 -mr-3">
-                                <button
-                                    mat-icon-button
-                                    [matMenuTriggerFor]="overdueMenu">
-                                    <mat-icon
-                                        class="icon-size-5"
-                                        [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                                </button>
-                                <mat-menu #overdueMenu="matMenu">
-                                    <button mat-menu-item>Yesterday</button>
-                                    <button mat-menu-item>2 days ago</button>
-                                    <button mat-menu-item>3 days ago</button>
-                                </mat-menu>
-                            </div>
-                        </div>
+                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                        <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
+                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-2">Next 3 Months</div>
+                            
                         <div class="flex flex-col mt-2">
                             <ng-container *ngFor="let dataset of data.lastThreeTile">
                                 <div class="grid grid-cols-2 py-3">
@@ -231,6 +229,17 @@
                             </ng-container>
                         </div>
                     </div>
+                    <div class="p-4 text-right">
+                        <button
+                        class="ml-4"
+                        mat-button
+                        [color]="'primary'"
+                        (click)="matDrawerRight.toggle()">
+                        View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
+                     </button>
+                    </div>
+                    </div>
+                    
                 </div>
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full mt-8">
                     <!-- Recent transactions table -->
