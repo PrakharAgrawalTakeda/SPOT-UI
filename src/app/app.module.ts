@@ -14,17 +14,17 @@ import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
-export function MsalInstanceFactory(): IPublicClientApplication{
+export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {
-          authority : 'https://login.microsoftonline.com/57fdf63b-7e22-45a3-83dc-d37003163aae',
-          clientId: '1457c97b-39c4-4789-9ac6-1c7a39211d9a',
-          redirectUri: 'https://salmon-grass-03d30f90f.1.azurestaticapps.net/',
+            authority: 'https://login.microsoftonline.com/57fdf63b-7e22-45a3-83dc-d37003163aae',
+            clientId: '1457c97b-39c4-4789-9ac6-1c7a39211d9a',
+            redirectUri: 'https://salmon-grass-03d30f90f.1.azurestaticapps.net/',
         }
-      });
+    });
 }
 const routerConfig: ExtraOptions = {
-    preloadingStrategy       : PreloadAllModules,
+    preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled',
     onSameUrlNavigation: 'reload'
 };
@@ -33,7 +33,7 @@ const routerConfig: ExtraOptions = {
     declarations: [
         AppComponent
     ],
-    imports     : [
+    imports: [
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
@@ -54,10 +54,10 @@ const routerConfig: ExtraOptions = {
         MsalModule
 
     ],
-    bootstrap   : [
+    bootstrap: [
         AppComponent
     ],
-    providers :[
+    providers: [
         {
             provide: MSAL_INSTANCE,
             useFactory: MsalInstanceFactory
@@ -65,6 +65,5 @@ const routerConfig: ExtraOptions = {
         MsalService
     ]
 })
-export class AppModule
-{
+export class AppModule {
 }

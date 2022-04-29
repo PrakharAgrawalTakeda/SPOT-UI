@@ -23,36 +23,36 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 export const projectRoutes: Route[] = [
   {
-      path     : '',
-      component: PortfolioCenterComponent,
+    path: '',
+    component: PortfolioCenterComponent,
   }
 ];
 @NgModule({
   declarations: [
-      PortfolioCenterComponent
+    PortfolioCenterComponent
   ],
-  imports     : [
-      RouterModule.forChild(projectRoutes),
-      MatButtonModule,
-      MatButtonToggleModule,
-      MatDividerModule,
-      MatIconModule,
-      MatMenuModule,
-      MatProgressBarModule,
-      MatRippleModule,
-      MatSidenavModule,
-      MatSortModule,
-      MatTableModule,
-      MatTabsModule,
-      NgApexchartsModule,
-      TranslocoModule,
-      SharedModule,
-      CommonModule,
-      FuseDrawerModule,
-      MatChipsModule,
-      MatAutocompleteModule,
-      MatFormFieldModule
-      
+  imports: [
+    RouterModule.forChild(projectRoutes),
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatDividerModule,
+    MatIconModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    NgApexchartsModule,
+    TranslocoModule,
+    SharedModule,
+    CommonModule,
+    FuseDrawerModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule
+
   ]
 })
 export class PortfolioCenterModule { }
