@@ -14,12 +14,14 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { AuthService } from 'app/core/auth/auth.service';
+import { GlobalFiltersDropDown } from 'app/shared/global-filters';
+import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 @Component({
   selector: 'app-portfolio-center',
   templateUrl: './portfolio-center.component.html',
   styleUrls: ['./portfolio-center.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: fuseAnimations
 })
 export class PortfolioCenterComponent implements OnInit, AfterViewInit {
@@ -31,6 +33,27 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   showContent = false
   data: any
   totalproject = 0;
+  filters: any = {
+    "portfolioOwner": [],
+    "phase": [],
+    "executionScope": [],
+    "people": [],
+    "products": [],
+    "state": [],
+    "totalCAPEX": [],
+    "gmsBudgetOwner": [],
+    "oeProjectType": [],
+    "projectType": [],
+    "fundingStatus": [],
+    "agileWorkstream": [],
+    "agileWave": [],
+    "primaryKPI": [],
+    "startegicYear": [],
+    "annualInitiatives": [],
+    "topsGroup": [],
+    "capsProject": [],
+    "projectName": []
+  }
   defaultfilter: any = {
     "portfolioOwner": [],
     "phase": [],
@@ -52,20 +75,95 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     "capsProject": [],
     "projectName": []
   }
+  filterchiplist: any = {
+    "portfolioOwner": [],
+    "phase": [],
+    "executionScope": [],
+    "people": [],
+    "products": [],
+    "state": [],
+    "totalCAPEX": [],
+    "gmsBudgetOwner": [],
+    "oeProjectType": [],
+    "projectType": [],
+    "fundingStatus": [],
+    "agileWorkstream": [],
+    "agileWave": [],
+    "primaryKPI": [],
+    "startegicYear": [],
+    "annualInitiatives": [],
+    "topsGroup": [],
+    "capsProject": [],
+    "projectName": []
+  }
+  filterInputs: any = {
+    "portfolioOwner": [],
+    "phase": [],
+    "executionScope": [],
+    "products": [],
+    "state": [],
+    "totalCAPEX": [],
+    "gmsBudgetOwner": [],
+    "oeProjectType": [],
+    "projectType": [],
+    "fundingStatus": [],
+    "agileWorkstream": [],
+    "agileWave": [],
+    "primaryKPI": [],
+    "startegicYear": [],
+    "annualInitiatives": [],
+    "topsGroup": [],
+    "capsProject": [],
+    "projectName": []
+  }
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
+  phaseCtrl = new FormControl();
   filteredFruits: Observable<string[]>;
   fruits: string[] = [];
+  lookup: any = [];
   allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
+  @ViewChild('phaseInput') phaseInput: ElementRef<HTMLInputElement>;
+  @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService) {
   }
 
   ngOnInit(): void {
-    this.defaultfilter.people.push(this.msal.instance.getActiveAccount().localAccountId)
-    this.apiService.Filters(this.defaultfilter).then((resp) => {
+    this.showContent = false;
+    if (!this.defaultfilter.people.includes(this.msal.instance.getActiveAccount().localAccountId)) {
+      this.defaultfilter.people.push(this.msal.instance.getActiveAccount().localAccountId)
+    }
+    //checking if there are any preset filter
+    if (localStorage.getItem('spot-filters') == null) {
+      this.filters = this.defaultfilter
+
+    }
+    else {
+      this.filters = JSON.parse(localStorage.getItem('spot-filters'))
+
+    }
+    //Filtering Projects
+    this.apiService.Filters(this.filters).then((resp) => {
       if (resp != null) {
+
+        //Loading Lookup Values in Filters
+        this.auth.lookupMaster().then(data => {
+          this.lookup = data
+          this.filterInputs.phase = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["phase"])
+          for (var i of this.filters.phase) {
+            console.log(this.filters.phase)
+            const name = this.lookup.find(x => x.lookUpId == i).lookUpName
+            if (!this.filterchiplist.phase.includes(name)) {
+              this.filterchiplist.phase.push(name)
+              this.filterInputs.phase = this.filterInputs.phase.filter(x => x.lookUpId != i)
+            }
+
+          }
+        })
+        //end Loading
+        //Loading Portfiolio Data
         this.apiService.getportfoliodata(resp).then((res: any) => {
           this.totalproject = res.totalProjects
           this.data = {
@@ -210,24 +308,38 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
               }
             }
           };
-
-        })
-
+          console.log("is this working too?")
+        });
+        //End Loading
       }
     })
   }
   ngAfterViewInit(): void { }
 
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
+  remove(value: string, field: string): void {
+    if (field == "Phase") {
+      var look = this.lookup.find(x => x.lookUpName == value)
+      this.filterInputs.phase.push(look)
+      const index = this.filterchiplist.phase.indexOf(value)
+      this.filterchiplist.phase.splice(index, 1)
+      const indexfil = this.filters.phase.indexOf(look.lookUpId)
+      this.filters.phase.splice(indexfil, 1)
 
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-      this.allFruits.push(fruit)
     }
   }
-
   selected(event: MatAutocompleteSelectedEvent, field: string): void {
+
+    //entering values to start filtering
+    //Phase Selection
+    if (field == "Phase") {
+      if (!this.filters.phase.includes(event.option.value)) {
+        this.filters.phase.push(event.option.value);
+        this.filterchiplist.phase.push(event.option.viewValue);
+        this.filterInputs.phase = this.filterInputs.phase.filter(x => x.lookUpId != event.option.value)
+      }
+      this.phaseInput.nativeElement.blur();
+      this.phaseCtrl.setValue(null);
+    }
     if (field == "Priority") {
       if (!this.fruits.includes(event.option.viewValue)) {
         this.fruits.push(event.option.viewValue);
@@ -243,13 +355,12 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
 
     return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
   }
-  openRightDrawer() {
-    console.log("WIP")
-  }
+
   trackByFn(index: number, item: any): any {
-    console.log(index)
     return item.projectTeamUniqueId || index;
   }
+
+
   private _fixSvgFill(element: Element): void {
     // Current URL
     const currentURL = this.router.url;
@@ -386,5 +497,24 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     };
 
   }
+  openRightDrawer() {
+    console.log("WIP")
+  }
 
+  applyfilters() {
+    localStorage.setItem('spot-filters', JSON.stringify(this.filters))
+    console.log(this.filters)
+    this.filterDrawer.close()
+    this.resetpage()
+
+
+  }
+
+  resetpage() {
+    this.ngOnInit()
+  }
+  resetfilters() {
+    localStorage.removeItem('spot-filters')
+    this.resetpage()
+  }
 }

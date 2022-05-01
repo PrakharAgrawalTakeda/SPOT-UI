@@ -1,21 +1,22 @@
 <div class="flex flex-col min-w-0 overflow-hidden">
 
-    <mat-drawer-container class="flex-auto h-full" [ngStyle] = "{ 'position' : matDrawer.opened ? 'fixed' : 'relative'}">
+    <mat-drawer-container class="flex-auto h-full"
+        [ngStyle]="{ 'position' : filterDrawer.opened ? 'fixed' : 'relative'}">
         <!-- Drawer -->
         <mat-drawer class="absolute inset-0 w-1qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
-            #matDrawer>
+            #filterDrawer>
             <div class="p-4">
                 <!-- Portfolio Owner -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Portfolio Owner</mat-label>
                     <mat-chip-list #portownList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let owner of defaultfilter.portfolioOwner" (removed)="remove(fruit)">
+                            {{owner}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="New fruit..." #portownInput [formControl]="fruitCtrl"
+                        <input placeholder="Portfolio Owner" #portownInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="portownList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
@@ -29,15 +30,14 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>People</mat-label>
                     <mat-chip-list #peopleList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let person of defaultfilter.people" (removed)="remove(fruit)">
+                            {{person}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="New fruit..." #peopleInput [formControl]="fruitCtrl"
-                            [matAutocomplete]="auto" [matChipInputFor]="peopleList"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                        <input placeholder="People" #peopleInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+                            [matChipInputFor]="peopleList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
@@ -49,14 +49,15 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Excecution Scope</mat-label>
                     <mat-chip-list #exscList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let scope of defaultfilter.executionScope" (removed)="remove(fruit)">
+                            {{scope}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="New fruit..." #exscInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
-                            [matChipInputFor]="exscList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                        <input placeholder="Excecution Scope" #exscInput [formControl]="fruitCtrl"
+                            [matAutocomplete]="auto" [matChipInputFor]="exscList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
@@ -67,19 +68,19 @@
                 <!-- Phase -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Phase</mat-label>
-                    <mat-chip-list #phaseList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                    <mat-chip-list #phaseList class="chiplist">
+                        <mat-chip *ngFor="let ph of filterchiplist.phase" (removed)="remove(ph, 'Phase')">
+                            {{ph}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="New fruit..." #phaseInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+                        <input placeholder="Phase" #phaseInput [formControl]="phaseCtrl" [matAutocomplete]="phase"
                             [matChipInputFor]="phaseList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
-                        <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
-                            {{fruit}}
+                    <mat-autocomplete #phase="matAutocomplete" (optionSelected)="selected($event,'Phase')">
+                        <mat-option *ngFor="let pha of filterInputs.phase" [value]="pha.lookUpId">
+                            {{pha.lookUpName}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
@@ -87,15 +88,14 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Product(s)</mat-label>
                     <mat-chip-list #productList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let product of defaultfilter.products" (removed)="remove(fruit)">
+                            {{product}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="New fruit..." #productInput [formControl]="fruitCtrl"
-                            [matAutocomplete]="auto" [matChipInputFor]="productList"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                        <input placeholder="Product(s)" #productInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+                            [matChipInputFor]="productList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
@@ -107,13 +107,13 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project State</mat-label>
                     <mat-chip-list #projstateList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let stat of defaultfilter.state" (removed)="remove(fruit)">
+                            {{stat}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="New fruit..." #projstateInput [formControl]="fruitCtrl"
+                        <input placeholder="Project State" #projstateInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="projstateList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
@@ -127,28 +127,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Total CAPEX</mat-label>
                     <mat-chip-list #totcapList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
-                            <button matChipRemove>
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-                        </mat-chip>
-                        <input placeholder="New fruit..." #totcapInput [formControl]="fruitCtrl"
-                            [matAutocomplete]="auto" [matChipInputFor]="totcapList"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
-                        <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
-                            {{fruit}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                <!-- Total Capex -->
-                <mat-form-field class="example-chip-list" appearance="fill">
-                    <mat-label>Total CAPEX</mat-label>
-                    <mat-chip-list #totcapList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let cap of defaultfilter.totalCAPEX" (removed)="remove(fruit)">
+                            {{cap}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -167,8 +147,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>GMS Budget Owner</mat-label>
                     <mat-chip-list #gmsbowList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let bown of defaultfilter.gmsBudgetOwner" (removed)="remove(fruit)">
+                            {{bown}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -187,8 +167,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>OE Project Type</mat-label>
                     <mat-chip-list #oeptList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let oept of defaultfilter.oeProjectType" (removed)="remove(fruit)">
+                            {{oept}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -206,8 +186,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project Type</mat-label>
                     <mat-chip-list #projtypeList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let pt of defaultfilter.projectType" (removed)="remove(fruit)">
+                            {{pt}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -226,8 +206,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Funding Status</mat-label>
                     <mat-chip-list #fundstatList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let fstat of defaultfilter.fundingStatus" (removed)="remove(fruit)">
+                            {{fstat}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -247,8 +227,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>AGILE Workstream</mat-label>
                     <mat-chip-list #agileworkstList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let awork of defaultfilter.agileWorkstream" (removed)="remove(fruit)">
+                            {{awork}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -267,8 +247,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>AGILE Wave</mat-label>
                     <mat-chip-list #agilewaveList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let awave of defaultfilter.agileWave" (removed)="remove(fruit)">
+                            {{awave}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -288,8 +268,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Primary KPI</mat-label>
                     <mat-chip-list #primarykpiList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let kpi of defaultfilter.primaryKPI" (removed)="remove(fruit)">
+                            {{kpi}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -308,8 +288,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Strategic Year</mat-label>
                     <mat-chip-list #stratyrList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let year of defaultfilter.startegicYear" (removed)="remove(fruit)">
+                            {{year}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -328,8 +308,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Annual Initiatives</mat-label>
                     <mat-chip-list #annualinList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let initiative of defaultfilter.annualInitiatives" (removed)="remove(fruit)">
+                            {{initiative}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -348,8 +328,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>TOPS Group</mat-label>
                     <mat-chip-list #topsgpList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let group of defaultfilter.topsGroup" (removed)="remove(fruit)">
+                            {{group}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -368,8 +348,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>CAPS Project</mat-label>
                     <mat-chip-list #capsprojList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let cap of defaultfilter.capsProject" (removed)="remove(fruit)">
+                            {{cap}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -388,8 +368,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project / Program</mat-label>
                     <mat-chip-list #projprogList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                            {{fruit}}
+                        <mat-chip *ngFor="let name of defaultfilter.projectName" (removed)="remove(fruit)">
+                            {{name}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -404,7 +384,7 @@
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
-                <button class="apply-button" mat-flat-button [color]="'primary'" (click)="matDrawer.toggle()">
+                <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyfilters()">
                     Apply Filters
                 </button>
             </div>
@@ -420,8 +400,11 @@
 
             <!-- Header -->
             <div [hidden]='!showContent' class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
-                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="matDrawer.toggle()">
+                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="filterDrawer.toggle()">
                     Filters
+                </button>
+                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
+                    Reset Filters
                 </button>
                 <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)" class="dashboard-chip-list">
                     {{fruit}}
