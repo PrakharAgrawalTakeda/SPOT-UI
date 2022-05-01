@@ -151,6 +151,7 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
         //Loading Lookup Values in Filters
         this.auth.lookupMaster().then(data => {
           this.lookup = data
+          this.filterchiplist.phase=[]
           this.filterInputs.phase = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["phase"])
           for (var i of this.filters.phase) {
             console.log(this.filters.phase)
