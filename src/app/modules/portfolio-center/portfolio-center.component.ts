@@ -514,7 +514,7 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     this.ngOnInit()
   }
   resetfilters() {
-    localStorage.removeItem('spot-filters')
+    localStorage.setItem('spot-filters',JSON.stringify(this.defaultfilter))
     this.resetpage()
   }
 }
