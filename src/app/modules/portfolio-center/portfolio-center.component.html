@@ -106,20 +106,20 @@
                 <!-- Project State -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project State</mat-label>
-                    <mat-chip-list #projstateList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let stat of defaultfilter.state" (removed)="remove(fruit)">
+                    <mat-chip-list #stateList class="chiplist">
+                        <mat-chip *ngFor="let stat of filterchiplist.state" (removed)="remove(stat, 'State')">
                             {{stat}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="Project State" #projstateInput [formControl]="fruitCtrl"
-                            [matAutocomplete]="auto" [matChipInputFor]="projstateList"
+                        <input placeholder="Project State" #stateInput [formControl]="stateCtrl"
+                            [matAutocomplete]="state" [matChipInputFor]="stateList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
-                        <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
-                            {{fruit}}
+                    <mat-autocomplete #state="matAutocomplete" (optionSelected)="selected($event,'State')">
+                        <mat-option *ngFor="let sta of filterInputs.state" [value]="sta.lookUpId">
+                            {{sta.lookUpName}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
@@ -295,12 +295,12 @@
                             </button>
                         </mat-chip>
                         <input placeholder="New fruit..." #stratyrInput [formControl]="fruitCtrl"
-                            [matAutocomplete]="auto" [matChipInputFor]="stratyrList"
+                            [matAutocomplete]="stratyr" [matChipInputFor]="stratyrList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
-                        <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
-                            {{fruit}}
+                    <mat-autocomplete #stratyr="matAutocomplete" (optionSelected)="selected($event,'Strategic Year')">
+                        <mat-option *ngFor="let styr of filterInputs.startegicYear" [value]="styr.lookUpId">
+                            {{styr.lookUpName}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>

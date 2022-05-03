@@ -119,12 +119,14 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
   phaseCtrl = new FormControl();
+  stateCtrl = new FormControl();
   filteredFruits: Observable<string[]>;
   fruits: string[] = [];
   lookup: any = [];
   allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   @ViewChild('phaseInput') phaseInput: ElementRef<HTMLInputElement>;
+  @ViewChild('stateInput') stateInput: ElementRef<HTMLInputElement>;
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService) {
@@ -150,17 +152,27 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
 
         //Loading Lookup Values in Filters
         this.auth.lookupMaster().then(data => {
+          this.filterchiplist.phase = []
+          this.filterchiplist.state =[]
+          // Filters Inputs 
           this.lookup = data
-          this.filterchiplist.phase=[]
           this.filterInputs.phase = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["phase"])
+          this.filterInputs.state = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["state"])
+          this.filterInputs.startegicYear = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["stratyear"])
+          //Phase
           for (var i of this.filters.phase) {
-            console.log(this.filters.phase)
             const name = this.lookup.find(x => x.lookUpId == i).lookUpName
             if (!this.filterchiplist.phase.includes(name)) {
               this.filterchiplist.phase.push(name)
               this.filterInputs.phase = this.filterInputs.phase.filter(x => x.lookUpId != i)
             }
-
+          }
+          //State
+          for (var i of this.filters.state) {
+            if (!this.filterchiplist.state.includes(i)) {
+              this.filterchiplist.state.push(i)
+              this.filterInputs.state = this.filterInputs.state.filter(x => x.lookUpName != i)
+            }
           }
         })
         //end Loading
@@ -325,7 +337,14 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
       this.filterchiplist.phase.splice(index, 1)
       const indexfil = this.filters.phase.indexOf(look.lookUpId)
       this.filters.phase.splice(indexfil, 1)
-
+    }
+    else if (field == "State") {
+      var look = this.lookup.find(x => x.lookUpName == value)
+      this.filterInputs.state.push(look)
+      const index = this.filterchiplist.state.indexOf(value)
+      this.filterchiplist.state.splice(index, 1)
+      const indexfil = this.filters.state.indexOf(look.lookUpName)
+      this.filters.state.splice(indexfil, 1)
     }
   }
   selected(event: MatAutocompleteSelectedEvent, field: string): void {
@@ -340,6 +359,15 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
       }
       this.phaseInput.nativeElement.blur();
       this.phaseCtrl.setValue(null);
+    }
+    if (field == "State") {
+      if (!this.filters.state.includes(event.option.value)) {
+        this.filters.state.push(event.option.viewValue);
+        this.filterchiplist.state.push(event.option.viewValue);
+        this.filterInputs.state = this.filterInputs.state.filter(x => x.lookUpId != event.option.value)
+      }
+      this.stateInput.nativeElement.blur();
+      this.stateCtrl.setValue(null);
     }
     if (field == "Priority") {
       if (!this.fruits.includes(event.option.viewValue)) {
@@ -515,7 +543,7 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     this.ngOnInit()
   }
   resetfilters() {
-    localStorage.setItem('spot-filters',JSON.stringify(this.defaultfilter))
+    localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
     this.resetpage()
   }
 }
