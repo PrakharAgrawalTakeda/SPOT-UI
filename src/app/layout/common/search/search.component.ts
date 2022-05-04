@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { debounceTime, filter, map, Subject, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations/public-api';
 import { Router } from '@angular/router';
+import { GlobalVariables } from 'app/shared/global-variables';
 
 @Component({
     selector     : 'search',
@@ -122,13 +123,13 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
             )
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
-                this._httpClient.post(`https://spot4api-dev.azurewebsites.net/api/Projects/Search?${params.toString()}`, {body:[]})
+                this._httpClient.post(GlobalVariables.apiurl+`Projects/Search?${params.toString()}`, {body:[]})
                     .subscribe((resultSets: any) => {
 
                         // Store the result sets
                         this.resultSets = resultSets;
                         console.log(this.resultSets)
-                        console.log(`https://spot4api-dev.azurewebsites.net/api/Projects/Search?${params.toString()}`)
+                        console.log(GlobalVariables.apiurl+`Projects/Search?${params.toString()}`)
                         // Execute the event
                         this.search.next(resultSets);
                     });
