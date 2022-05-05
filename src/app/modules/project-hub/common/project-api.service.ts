@@ -10,27 +10,33 @@ import { lastValueFrom } from 'rxjs';
 })
 export class ProjectApiService {
 
-  constructor(private http:HttpClient, private authService: MsalService) {}
-  async getproject(projectid){
-    var url = GlobalVariables.apiurl+"Projects/"+ projectid
+  constructor(private http: HttpClient, private authService: MsalService) { }
+  async getproject(projectid) {
+    var url = GlobalVariables.apiurl + "Projects/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
   }
-  async getprojectviewdata(projectid){
-    var url = GlobalVariables.apiurl+"ProjectHubData/ProjectView/"+ projectid
+  async getprojectviewdata(projectid) {
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectView/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
   }
-  async getmembersbyproject(projectid){
-    var url = GlobalVariables.apiurl+"ProjectHubData/ProjectTeam/"+ projectid
+  async getmembersbyproject(projectid) {
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectTeam/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
   }
-  async getportfolioData(projectid){
-    var url = GlobalVariables.apiurl+"PortfolioCenterData/"+ projectid
+  async getportfolioData(projectid) {
+    var url = GlobalVariables.apiurl + "PortfolioCenterData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getGeneralInfoData(projectid) {
+    var url = GlobalVariables.apiurl + "ProjectHubData/GeneralInfo/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response

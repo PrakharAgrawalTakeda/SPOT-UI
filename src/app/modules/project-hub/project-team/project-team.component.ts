@@ -12,15 +12,14 @@ import { ProjectApiService } from '../common/project-api.service';
 export class ProjectTeamComponent implements OnInit {
   data: any = {}
   id: string = ''
-  constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute) { }
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log("project-team")
-    this.id=this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.apiService.getmembersbyproject(this.id).then((res)=>{
-        console.log(res)
-        this.data.teamMembers = res
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getmembersbyproject(this.id).then((res) => {
+      console.log(res)
+      this.data.teamMembers = res
     })
-      }
+  }
 
 }
