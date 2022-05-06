@@ -6,5 +6,7 @@ export class GlobalVariables {
 
     //SPOT API APPLICATION VARIABLES
     public static apiurl: string = 'https://spot4api-dev.azurewebsites.net/api/'
+    // Prakhar Local API
+    //public static apiurl: string = 'https://localhost:5001/api/'
 
 }
