@@ -33,6 +33,9 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   showContent = false
   data: any
   totalproject = 0;
+  filtersnew: any = {
+    "portfolioOwner": []
+  }
   filters: any = {
     "portfolioOwner": [],
     "phase": [],
@@ -116,6 +119,7 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     "capsProject": [],
     "projectName": []
   }
+  filterlist: any = {}
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fruitCtrl = new FormControl();
   phaseCtrl = new FormControl();
@@ -151,6 +155,10 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
       if (resp != null) {
 
         //Loading Lookup Values in Filters
+        this.apiService.getfilterlist().then(data=>{
+          this.filterlist = data
+        })
+
         this.auth.lookupMaster().then(data => {
           this.filterchiplist.phase = []
           this.filterchiplist.state =[]
@@ -175,9 +183,11 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
             }
           }
         })
+
         //end Loading
         //Loading Portfiolio Data
         this.apiService.getportfoliodata(resp).then((res: any) => {
+          console.log(res)
           this.totalproject = res.totalProjects
           this.data = {
             "budgetDistribution": {
@@ -281,23 +291,23 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
             "lastThreeTile": [
               {
                 "title": "Milestones Completed",
-                "value": 1250
+                "value": res.lastThreeMonths.milestoneCompleted
               },
               {
                 "title": "Projects Finished Excecution",
-                "value": 264
+                "value": res.lastThreeMonths.projectsExcecuted
               },
               {
                 "title": "Projects Initiated",
-                "value": 2566
+                "value": res.lastThreeMonths.projectsIntitated
               },
               {
                 "title": "Projects Completed",
-                "value": 144
+                "value": res.lastThreeMonths.projectsCompleted
               },
               {
                 "title": "Projects Onhold",
-                "value": 456
+                "value": res.lastThreeMonths.projectsOnHold
               }
             ]
           };
@@ -328,7 +338,21 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     })
   }
   ngAfterViewInit(): void { }
-
+  
+  selectoption(event: MatAutocompleteSelectedEvent, field: string): void {
+    if(field == "PortfolioOwner"){
+      console.log(event)
+      this.filtersnew.portfolioOwner.push(event.option.value)
+      this.filterlist.portfolioOwner =  this.filterlist.portfolioOwner.filter(x=> x.portfolioOwnerId != event.option.value.portfolioOwnerId)
+    }
+  }
+  removeoption(value :any,field :string){
+    if(field == "PortfolioOwner"){
+    this.filterlist.portfolioOwner.push(value)
+    this.filtersnew.portfolioOwner =  this.filtersnew.portfolioOwner.filter(x=> x.portfolioOwnerId != value.portfolioOwnerId)
+    console.log(value)
+    }
+  }
   remove(value: string, field: string): void {
     if (field == "Phase") {
       var look = this.lookup.find(x => x.lookUpName == value)

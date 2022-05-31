@@ -10,8 +10,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Portfolio Owner</mat-label>
                     <mat-chip-list #portownList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let owner of defaultfilter.portfolioOwner" (removed)="remove(fruit)">
-                            {{owner}}
+                        <mat-chip *ngFor="let owner of filtersnew.portfolioOwner" (removed)="removeoption(owner,'PortfolioOwner')">
+                            {{owner.portfolioOwner}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -20,9 +20,9 @@
                             [matAutocomplete]="auto" [matChipInputFor]="portownList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
-                        <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
-                            {{fruit}}
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectoption($event,'PortfolioOwner')">
+                        <mat-option *ngFor="let filteroption of filterlist.portfolioOwner" [value]="filteroption">
+                            {{filteroption.portfolioOwner}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
@@ -143,7 +143,7 @@
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
-                <!-- GMS Budget Owner -->
+                <!-- GMS Budget Owner 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>GMS Budget Owner</mat-label>
                     <mat-chip-list #gmsbowList aria-label="Fruit selection" class="chiplist">
@@ -162,8 +162,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- OE Project Type -->
+                </mat-form-field>-->
+                <!-- OE Project Type 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>OE Project Type</mat-label>
                     <mat-chip-list #oeptList aria-label="Fruit selection" class="chiplist">
@@ -181,8 +181,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- Project Type -->
+                </mat-form-field>-->
+                <!-- Project Type 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project Type</mat-label>
                     <mat-chip-list #projtypeList aria-label="Fruit selection" class="chiplist">
@@ -201,8 +201,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- Funding Status -->
+                </mat-form-field>-->
+                <!-- Funding Status 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Funding Status</mat-label>
                     <mat-chip-list #fundstatList aria-label="Fruit selection" class="chiplist">
@@ -221,9 +221,9 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
+                </mat-form-field>-->
                 <!-- AGILE -->
-                <!-- AGILE Workstream -->
+                <!-- AGILE Workstream 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>AGILE Workstream</mat-label>
                     <mat-chip-list #agileworkstList aria-label="Fruit selection" class="chiplist">
@@ -242,8 +242,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- AGILE Wave -->
+                </mat-form-field>-->
+                <!-- AGILE Wave 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>AGILE Wave</mat-label>
                     <mat-chip-list #agilewaveList aria-label="Fruit selection" class="chiplist">
@@ -262,9 +262,9 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
+                </mat-form-field>-->
                 <!--AGILE END-->
-                <!-- Primary KPI -->
+                <!-- Primary KPI 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Primary KPI</mat-label>
                     <mat-chip-list #primarykpiList aria-label="Fruit selection" class="chiplist">
@@ -283,8 +283,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- Strategic Year -->
+                </mat-form-field>-->
+                <!-- Strategic Year 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Strategic Year</mat-label>
                     <mat-chip-list #stratyrList aria-label="Fruit selection" class="chiplist">
@@ -303,8 +303,8 @@
                             {{styr.lookUpName}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- Annual Initiatives -->
+                </mat-form-field>-->
+                <!-- Annual Initiatives 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Annual Initiatives</mat-label>
                     <mat-chip-list #annualinList aria-label="Fruit selection" class="chiplist">
@@ -323,8 +323,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- TOPS Group -->
+                </mat-form-field>-->
+                <!-- TOPS Group 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>TOPS Group</mat-label>
                     <mat-chip-list #topsgpList aria-label="Fruit selection" class="chiplist">
@@ -343,8 +343,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- CAPS Project -->
+                </mat-form-field>-->
+                <!-- CAPS Project 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>CAPS Project</mat-label>
                     <mat-chip-list #capsprojList aria-label="Fruit selection" class="chiplist">
@@ -363,8 +363,8 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
-                <!-- Project / Program -->
+                </mat-form-field>-->
+                <!-- Project / Program 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project / Program</mat-label>
                     <mat-chip-list #projprogList aria-label="Fruit selection" class="chiplist">
@@ -383,7 +383,7 @@
                             {{fruit}}
                         </mat-option>
                     </mat-autocomplete>
-                </mat-form-field>
+                </mat-form-field>-->
                 <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyfilters()">
                     Apply Filters
                 </button>
