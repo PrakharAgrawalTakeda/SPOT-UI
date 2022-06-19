@@ -27,8 +27,8 @@
                     </mat-autocomplete>
                 </mat-form-field>
                 <!-- People -->
-                <mat-form-field class="example-chip-list" appearance="fill">
-                    <mat-label>People</mat-label>
+                <mat-form-field class="example-chip-list" appearance="fill" disabled>
+                    <mat-label>People (In Progress)</mat-label>
                     <mat-chip-list #peopleList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let person of defaultfilter.people" (removed)="remove(fruit)">
                             {{person}}
@@ -37,7 +37,7 @@
                             </button>
                         </mat-chip>
                         <input placeholder="People" #peopleInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
-                            [matChipInputFor]="peopleList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                            [matChipInputFor]="peopleList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" disabled>
                     </mat-chip-list>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
@@ -49,19 +49,19 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Excecution Scope</mat-label>
                     <mat-chip-list #exscList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let scope of defaultfilter.executionScope" (removed)="remove(fruit)">
-                            {{scope}}
+                        <mat-chip *ngFor="let scope of filtersnew.executionScope" (removed)="removeoption(scope, 'Excecution')">
+                            {{scope.portfolioOwner}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
                         <input placeholder="Excecution Scope" #exscInput [formControl]="fruitCtrl"
-                            [matAutocomplete]="auto" [matChipInputFor]="exscList"
+                            [matAutocomplete]="exec" [matChipInputFor]="exscList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
-                        <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
-                            {{fruit}}
+                    <mat-autocomplete #exec="matAutocomplete" (optionSelected)="selectoption($event,'Excecution')">
+                        <mat-option *ngFor="let execoption of filterlist.executionScope" [value]="execoption">
+                            {{execoption.portfolioOwner}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
@@ -69,8 +69,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Phase</mat-label>
                     <mat-chip-list #phaseList class="chiplist">
-                        <mat-chip *ngFor="let ph of filterchiplist.phase" (removed)="remove(ph, 'Phase')">
-                            {{ph}}
+                        <mat-chip *ngFor="let ph of filtersnew.phase" (removed)="removeoption(ph, 'Phase')">
+                            {{ph.lookUpName}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -78,8 +78,8 @@
                         <input placeholder="Phase" #phaseInput [formControl]="phaseCtrl" [matAutocomplete]="phase"
                             [matChipInputFor]="phaseList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #phase="matAutocomplete" (optionSelected)="selected($event,'Phase')">
-                        <mat-option *ngFor="let pha of filterInputs.phase" [value]="pha.lookUpId">
+                    <mat-autocomplete #phase="matAutocomplete" (optionSelected)="selectoption($event,'Phase')">
+                        <mat-option *ngFor="let pha of filterlist.phase" [value]="pha">
                             {{pha.lookUpName}}
                         </mat-option>
                     </mat-autocomplete>
@@ -88,18 +88,18 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Product(s)</mat-label>
                     <mat-chip-list #productList aria-label="Fruit selection" class="chiplist">
-                        <mat-chip *ngFor="let product of defaultfilter.products" (removed)="remove(fruit)">
-                            {{product}}
+                        <mat-chip *ngFor="let product of filtersnew.products" (removed)="removeoption(product ,'Product')">
+                            {{product.fullProductName}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
                         </mat-chip>
-                        <input placeholder="Product(s)" #productInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
+                        <input placeholder="Product(s)" #productInput [formControl]="fruitCtrl" [matAutocomplete]="prod"
                             [matChipInputFor]="productList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
-                        <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
-                            {{fruit}}
+                    <mat-autocomplete #prod="matAutocomplete" (optionSelected)="selectoption($event,'Product')">
+                        <mat-option *ngFor="let produ of filterlist.products" [value]="produ">
+                            {{produ.fullProductName}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
@@ -107,8 +107,8 @@
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project State</mat-label>
                     <mat-chip-list #stateList class="chiplist">
-                        <mat-chip *ngFor="let stat of filterchiplist.state" (removed)="remove(stat, 'State')">
-                            {{stat}}
+                        <mat-chip *ngFor="let stat of filtersnew.state" (removed)="removeoption(stat, 'State')">
+                            {{stat.lookUpName}}
                             <button matChipRemove>
                                 <mat-icon>cancel</mat-icon>
                             </button>
@@ -117,15 +117,15 @@
                             [matAutocomplete]="state" [matChipInputFor]="stateList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                     </mat-chip-list>
-                    <mat-autocomplete #state="matAutocomplete" (optionSelected)="selected($event,'State')">
-                        <mat-option *ngFor="let sta of filterInputs.state" [value]="sta.lookUpId">
+                    <mat-autocomplete #state="matAutocomplete" (optionSelected)="selectoption($event,'State')">
+                        <mat-option *ngFor="let sta of filterlist.state" [value]="sta">
                             {{sta.lookUpName}}
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
                 <!-- Total Capex -->
-                <mat-form-field class="example-chip-list" appearance="fill">
-                    <mat-label>Total CAPEX</mat-label>
+                <mat-form-field class="example-chip-list" appearance="fill" disabled>
+                    <mat-label>Total CAPEX (In Progress)</mat-label>
                     <mat-chip-list #totcapList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let cap of defaultfilter.totalCAPEX" (removed)="remove(fruit)">
                             {{cap}}
@@ -135,7 +135,7 @@
                         </mat-chip>
                         <input placeholder="New fruit..." #totcapInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="totcapList"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" disabled>
                     </mat-chip-list>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">

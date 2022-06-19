@@ -36,6 +36,12 @@ export class PortfolioApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async MainFilters(body){
+    var userid = GlobalVariables.apiurl+"FilterProjects/MainFilters"
+    const abc$ = this.http.post(userid,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   async getfilterlist(){
     var userid = GlobalVariables.apiurl+"FilterProjects/FilterCriteria"
     const abc$ = this.http.get(userid)

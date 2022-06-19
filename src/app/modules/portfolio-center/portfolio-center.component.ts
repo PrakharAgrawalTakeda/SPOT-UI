@@ -34,7 +34,13 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   data: any
   totalproject = 0;
   filtersnew: any = {
-    "portfolioOwner": []
+    "portfolioOwner": [],
+    "executionScope": [],
+    "people":[],
+    "phase": [],
+    "state":[],
+    "products" :[],
+    "totalCAPEX":[]
   }
   filters: any = {
     "portfolioOwner": [],
@@ -59,24 +65,12 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   }
   defaultfilter: any = {
     "portfolioOwner": [],
-    "phase": [],
     "executionScope": [],
-    "people": [],
-    "products": [],
-    "state": [],
-    "totalCAPEX": [],
-    "gmsBudgetOwner": [],
-    "oeProjectType": [],
-    "projectType": [],
-    "fundingStatus": [],
-    "agileWorkstream": [],
-    "agileWave": [],
-    "primaryKPI": [],
-    "startegicYear": [],
-    "annualInitiatives": [],
-    "topsGroup": [],
-    "capsProject": [],
-    "projectName": []
+    "people":[],
+    "phase": [],
+    "state":[],
+    "products" :[],
+    "totalCAPEX":[]
   }
   filterchiplist: any = {
     "portfolioOwner": [],
@@ -138,20 +132,18 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.showContent = false;
-    if (!this.defaultfilter.people.includes(this.msal.instance.getActiveAccount().localAccountId)) {
-      this.defaultfilter.people.push(this.msal.instance.getActiveAccount().localAccountId)
-    }
     //checking if there are any preset filter
     if (localStorage.getItem('spot-filters') == null) {
-      this.filters = this.defaultfilter
+      this.filtersnew = this.defaultfilter
 
     }
     else {
-      this.filters = JSON.parse(localStorage.getItem('spot-filters'))
+      this.filtersnew = JSON.parse(localStorage.getItem('spot-filters'))
 
     }
+    console.log(this.filtersnew)
     //Filtering Projects
-    this.apiService.Filters(this.filters).then((resp) => {
+    this.apiService.MainFilters(this.filtersnew).then((resp) => {
       if (resp != null) {
 
         //Loading Lookup Values in Filters
@@ -345,6 +337,26 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
       this.filtersnew.portfolioOwner.push(event.option.value)
       this.filterlist.portfolioOwner =  this.filterlist.portfolioOwner.filter(x=> x.portfolioOwnerId != event.option.value.portfolioOwnerId)
     }
+    if(field == "Excecution"){
+      this.filtersnew.executionScope.push(event.option.value)
+      this.filterlist.executionScope =  this.filterlist.executionScope.filter(x=> x.portfolioOwnerId != event.option.value.portfolioOwnerId)
+      console.log(this.filtersnew)
+    }
+    if(field == "Phase"){
+      this.filtersnew.phase.push(event.option.value)
+      this.filterlist.phase =  this.filterlist.phase.filter(x=> x.lookUpId != event.option.value.lookUpId)
+      console.log(this.filtersnew)
+    }
+    if(field == "State"){
+      this.filtersnew.state.push(event.option.value)
+      this.filterlist.state =  this.filterlist.state.filter(x=> x.lookUpId != event.option.value.lookUpId)
+      console.log(this.filtersnew)
+    }
+    if(field == "Product"){
+      this.filtersnew.products.push(event.option.value)
+      this.filterlist.products =  this.filterlist.products.filter(x=> x.id != event.option.value.id)
+      console.log(this.filtersnew)
+    }
   }
   removeoption(value :any,field :string){
     if(field == "PortfolioOwner"){
@@ -352,6 +364,26 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     this.filtersnew.portfolioOwner =  this.filtersnew.portfolioOwner.filter(x=> x.portfolioOwnerId != value.portfolioOwnerId)
     console.log(value)
     }
+    if(field == "Excecution"){
+      this.filterlist.executionScope.push(value)
+      this.filtersnew.executionScope =  this.filtersnew.executionScope.filter(x=> x.portfolioOwnerId != value.portfolioOwnerId)
+      console.log(value)
+      }
+      if(field == "Phase"){
+        this.filterlist.phase.push(value)
+        this.filtersnew.phase =  this.filtersnew.phase.filter(x=> x.lookUpId != value.lookUpId)
+        console.log(value)
+        }
+        if(field == "State"){
+          this.filterlist.state.push(value)
+          this.filtersnew.state =  this.filtersnew.state.filter(x=> x.lookUpId != value.lookUpId)
+          console.log(value)
+          }
+        if(field == "Product"){
+          this.filterlist.products.push(value)
+          this.filtersnew.products =  this.filtersnew.products.filter(x=> x.id != value.id)
+          console.log(value)
+          }
   }
   remove(value: string, field: string): void {
     if (field == "Phase") {
@@ -555,7 +587,7 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   }
 
   applyfilters() {
-    localStorage.setItem('spot-filters', JSON.stringify(this.filters))
+    localStorage.setItem('spot-filters', JSON.stringify(this.filtersnew))
     console.log(this.filters)
     this.filterDrawer.close()
     this.resetpage()
