@@ -8,6 +8,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
+    },
+    {
+        id   : 'spot-documents',
+        title: 'SPOT Documents',
+        type : 'basic',
+        icon : 'heroicons_outline:document-text',
+        link : '/spot-documents'
     }
 ];
 export const compactNavigation: FuseNavigationItem[] = [
@@ -17,6 +24,13 @@ export const compactNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
+    },
+    {
+        id   : 'spot-documents',
+        title: 'SPOT Documents',
+        type : 'basic',
+        icon : 'heroicons_outline:document-text',
+        link : '/spot-documents'
     }
 ];
 export const futuristicNavigation: FuseNavigationItem[] = [
@@ -26,6 +40,13 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
+    },
+    {
+        id   : 'spot-documents',
+        title: 'SPOT Documents',
+        type : 'basic',
+        icon : 'heroicons_outline:document-text',
+        link : '/spot-documents'
     }
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
@@ -35,5 +56,23 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
+    },
+    {
+        id   : 'spot-documents',
+        title: 'SPOT Documents',
+        type : 'basic',
+        icon : 'heroicons_outline:document-text',
+        link : '/spot-documents'
+    },
+    {
+        id   : 'report-navigator',
+        title: 'Report Navigator',
+        type : 'basic',
+        icon : 'heroicons_outline:document-report',
+        link : 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+        externalLink: true,
+        target: "_blank"
+
     }
+
 ];

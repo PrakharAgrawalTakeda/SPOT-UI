@@ -1,0 +1,5 @@
+.floating-button-right-bottom{
+    position: fixed !important;
+    bottom: 10vh !important;
+    right: 1vw !important;
+}
