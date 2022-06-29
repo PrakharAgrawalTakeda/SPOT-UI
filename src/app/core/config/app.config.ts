@@ -45,7 +45,7 @@ export const appConfig: AppConfig = {
     themes : [
         {
             id  : 'theme-brand',
-            name: 'Takeda'
+            name: 'SPOT'
         },
         {
             id  : 'theme-teal',

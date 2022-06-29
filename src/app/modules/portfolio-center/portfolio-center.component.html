@@ -418,7 +418,7 @@
                         @slideInRight>
                         <div class="flex flex-col flex-auto  overflow-hidden p-6">
                             <div class="flex items-start justify-between">
-                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Priority Distribution
+                                <div class="font-medium tracking-tight tile-title text-primary leading-6 truncate">Priority Distribution
                                 </div>
                             </div>
                             <div class="flex flex-col flex-auto mt-6 h-60">
@@ -455,7 +455,7 @@
                     <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
                         @slideInLeft>
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col flex-auto p-6 overflow-hidden">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-8">Phase Distribution
+                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-8">Phase Distribution
                             </div>
                             <div class="flex flex-col flex-auto h-60">
                                 <apx-chart class="flex-auto w-full h-50" [chart]="chartBudgetDistribution.chart"
@@ -475,7 +475,7 @@
                     </div>
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-8">Milestones</div>
+                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-8">Milestones</div>
 
                             <ng-container *ngFor="let dataset of data.milstoneTile">
                                 <div class="grid grid-cols-2 py-3">
@@ -495,7 +495,7 @@
                     <!-- Milestones -->
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-2">Budget</div>
+                            <div class="tile-title font-medium tracking-tight leading-6 text-primary truncate mb-2">Budget</div>
 
                             <div class="flex flex-col mt-2">
                                 <div class="grid grid-cols-3 py-3">
@@ -524,7 +524,7 @@
                     <!-- Ask Needs -->
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-8">Next 3 Months</div>
+                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-8">Next 3 Months</div>
                             <div class="flex flex-col mt-2">
                                 <ng-container *ngFor="let dataset of data.nextThreeTile">
                                     <div class="grid grid-cols-2 py-3">
@@ -545,7 +545,7 @@
                     <!-- Risk/Issues -->
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="text-lg font-medium tracking-tight leading-6 truncate mb-2">Last 3 Months</div>
+                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-2">Last 3 Months</div>
 
                             <div class="flex flex-col mt-2">
                                 <ng-container *ngFor="let dataset of data.lastThreeTile">
@@ -571,7 +571,7 @@
                     <div class="xl:col-span-3 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden"
                         @slideInLeft>
                         <div class="p-6">
-                            <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Your Projects</div>
+                            <div class="mr-4 tile-title font-medium tracking-tight text-primary leading-6 truncate">Your Projects</div>
                             <div class="text-secondary font-medium">1 initiated, 1 completed, 2 excecuting</div>
                         </div>
                         <div class="overflow-x-auto mx-6">
