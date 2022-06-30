@@ -3,6 +3,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
+import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { lookupMaster } from 'app/shared/lookup-global';
 import { ProjectApiService } from '../common/project-api.service';
 
@@ -22,10 +23,10 @@ export class ProjectViewComponent implements OnInit {
   id: string = ''
   showContent : boolean = false
   riskIssuesHeaders: string[] = [ 'logDate', 'dueDate', 'ifHappens', 'riskIssueTypeId'];
-  askNeedHeaders: string[] = [ 'askNeed1', 'needFromName', 'needByDate'];
+  askNeedHeaders: string[] = [ 'askNeedIndicator','askNeed1', 'needFromName', 'needByDate'];
   lookupmaster = new Map();
   ScheduleHeaders: string[] = [ 'milestone', 'baselineFinish', 'plannedFinish', 'responsiblePersonName'];
-  constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute, private auth: AuthService) { }
+  constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService) { }
   
   ngOnInit(): void {
     this.id=this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -35,6 +36,7 @@ export class ProjectViewComponent implements OnInit {
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
       this.askNeed.data = this.projectViewDetails.askNeedData
+      console.log(this.askNeed)
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
