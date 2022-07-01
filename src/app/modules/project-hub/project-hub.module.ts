@@ -31,6 +31,7 @@ import { CapsComponent } from './caps/caps.component';
 import { ReportsComponent } from './reports/reports.component';
 import { LocalAttributesComponent } from './local-attributes/local-attributes.component';
 import { HubSettingsComponent } from './hub-settings/hub-settings.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 export const projectRoutes: Route[] = [
@@ -136,7 +137,8 @@ export const projectRoutes: Route[] = [
       SharedModule,
       FuseDrawerModule,
       FuseNavigationModule,
-      NgScrollbarModule
+      NgScrollbarModule,
+      NgxDatatableModule
   ]
 })
 export class ProjectHubModule { }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,8 @@ import { ProjectApiService } from '../common/project-api.service';
 @Component({
   selector: 'app-project-view',
   templateUrl: './project-view.component.html',
-  styleUrls: ['./project-view.component.scss']
+  styleUrls: ['./project-view.component.scss'],
+  encapsulation : ViewEncapsulation.None
 })
 export class ProjectViewComponent implements OnInit {
   @ViewChild('riskIssuesTable', {read: MatSort}) riskIssuesMatSort: MatSort;
@@ -26,6 +27,14 @@ export class ProjectViewComponent implements OnInit {
   askNeedHeaders: string[] = [ 'askNeedIndicator','askNeed1', 'needFromName', 'needByDate'];
   lookupmaster = new Map();
   ScheduleHeaders: string[] = [ 'milestone', 'baselineFinish', 'plannedFinish', 'responsiblePersonName'];
+  askneedngxdata: any =[];
+  askneedngxcolumns: any = []
+  rows: any[] = [];
+  expanded: any = {};
+  timeout: any;
+
+  @ViewChild('myTable') table: any;
+
   constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService) { }
   
   ngOnInit(): void {
@@ -36,7 +45,9 @@ export class ProjectViewComponent implements OnInit {
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
       this.askNeed.data = this.projectViewDetails.askNeedData
-      console.log(this.askNeed)
+      this.askneedngxcolumns = [{name:'Status', prop:'indicator'},{name:'Ask Need Name', prop : 'askNeed1'}, {name:'Neeed From',prop:'needFromName'}]
+      this.askneedngxdata = this.projectViewDetails.askNeedData
+      console.log(this.askneedngxdata)
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
@@ -47,6 +58,15 @@ export class ProjectViewComponent implements OnInit {
           this.lookupmaster.set(i.lookUpId , i.lookUpName)
       } 
   })
+  }
+
+  toggleExpandRow(row) {
+    console.log('Toggled Expand Row!', row);
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+
+  onDetailToggle(event) {
+    console.log('Detail Toggled', event);
   }
   trackByFnRI(index: number, item: any): any
   {
