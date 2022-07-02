@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpotDocumentsComponent } from './spot-documents.component';
+import { AskNeedViewEditComponent } from './ask-need-view-edit.component';
 
-describe('SpotDocumentsComponent', () => {
-  let component: SpotDocumentsComponent;
-  let fixture: ComponentFixture<SpotDocumentsComponent>;
+describe('AskNeedViewEditComponent', () => {
+  let component: AskNeedViewEditComponent;
+  let fixture: ComponentFixture<AskNeedViewEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SpotDocumentsComponent ]
+      declarations: [ AskNeedViewEditComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpotDocumentsComponent);
+    fixture = TestBed.createComponent(AskNeedViewEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

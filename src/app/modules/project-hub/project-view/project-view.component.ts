@@ -6,6 +6,8 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { lookupMaster } from 'app/shared/lookup-global';
 import { ProjectApiService } from '../common/project-api.service';
+import { ProjectHubComponent } from '../project-hub.component';
+import { ProjectHubService } from '../project-hub.service';
 
 @Component({
   selector: 'app-project-view',
@@ -19,6 +21,7 @@ export class ProjectViewComponent implements OnInit {
   @ViewChild('askNeedTable', {read: MatSort}) askNeedMatSort: MatSort;
   askNeed: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild('ScheduleTable', {read: MatSort}) ScheduleMatSort: MatSort;
+  @ViewChild(ProjectHubComponent) parent;
   Schedule: MatTableDataSource<any> = new MatTableDataSource();
   projectViewDetails: any = {}
   id: string = ''
@@ -35,7 +38,7 @@ export class ProjectViewComponent implements OnInit {
 
   @ViewChild('myTable') table: any;
 
-  constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService) { }
+  constructor(private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService) { }
   
   ngOnInit(): void {
     this.id=this._Activatedroute.parent.snapshot.paramMap.get("id");

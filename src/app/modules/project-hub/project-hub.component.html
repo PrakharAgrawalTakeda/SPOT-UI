@@ -1,5 +1,16 @@
-<div class="flex flex-col flex-auto min-w-0">
-
+<div class="flex flex-col flex-auto min-w-0"
+[ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
+    <fuse-drawer
+    [name]="'rightDrawer'"
+    [opened]="projecthubservice.drawerOpenedright"
+    (openedChanged) = "projecthubservice.drawerOpenedChanged($event)"
+    [mode]="'over'"
+    #myDiv
+    [position]="'right'">
+    <div class="p-4">
+        <app-ask-need-view-edit></app-ask-need-view-edit>
+    </div>
+    </fuse-drawer>
     <!-- Header -->
     <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-12 sm:pb-28 sm:px-10 bg-default dark:bg-transparent">
         <div class="flex-1 min-w-0">

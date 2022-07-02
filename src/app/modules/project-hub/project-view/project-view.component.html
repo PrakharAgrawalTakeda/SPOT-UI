@@ -151,7 +151,9 @@
             class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" 
             [rows]="askneedngxdata"
             #myTable >
-            <ngx-datatable-column name="indicator">
+            <ngx-datatable-column name="indicator"
+            [width]="100"
+              [resizeable]="false">
                 <ng-template let-column="column" ngx-datatable-header-template>Status</ng-template>
                 <ng-template let-value="value" ngx-datatable-cell-template>
             <mat-icon
@@ -160,7 +162,7 @@
              </mat-icon>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="askNeed1">
+              <ngx-datatable-column name="askNeed1" [width]="750">
                 <ng-template let-column="column" ngx-datatable-header-template>Ask Or Need</ng-template>
                 <ng-template let-value="value" ngx-datatable-cell-template>
                     {{value}}
@@ -202,6 +204,7 @@
                 <a
                 href="javascript:void(0)"
                 title="Edit Single"
+                (click) = "projecthubservice.toggleDrawerOpen()"
               >
               <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 

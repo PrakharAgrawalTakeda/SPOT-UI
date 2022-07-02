@@ -32,6 +32,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { LocalAttributesComponent } from './local-attributes/local-attributes.component';
 import { HubSettingsComponent } from './hub-settings/hub-settings.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-need-view-edit.component';
 
 
 export const projectRoutes: Route[] = [
@@ -116,7 +117,8 @@ export const projectRoutes: Route[] = [
     CapsComponent,
     ReportsComponent,
     LocalAttributesComponent,
-    HubSettingsComponent
+    HubSettingsComponent,
+    AskNeedViewEditComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),
