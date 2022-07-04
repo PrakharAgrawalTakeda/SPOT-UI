@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProjectHubService } from '../../project-hub.service';
 
 @Component({
   selector: 'app-ask-need-view-edit',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ask-need-view-edit.component.scss']
 })
 export class AskNeedViewEditComponent implements OnInit {
-
-  constructor() { }
+  formFieldHelpers: string[] = [''];
+  constructor(public projecthubservice: ProjectHubService) {
+  }
 
   ngOnInit(): void {
+
   }
 
 }

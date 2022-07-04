@@ -38,7 +38,7 @@
                 <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
                     <mat-option
                         class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
-                        (click)="routeProject(result.problemId)"
+                        (click)="routeProject(result.problemUniqueId)"
                         [value]="result.problemUniqueId">
                         <!-- Contacts -->
                         {{result.problemId}} - {{result.problemTitle}}                        

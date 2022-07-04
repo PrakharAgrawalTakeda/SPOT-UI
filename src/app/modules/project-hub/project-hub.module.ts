@@ -33,6 +33,9 @@ import { LocalAttributesComponent } from './local-attributes/local-attributes.co
 import { HubSettingsComponent } from './hub-settings/hub-settings.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-need-view-edit.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 export const projectRoutes: Route[] = [
@@ -140,7 +143,10 @@ export const projectRoutes: Route[] = [
       FuseDrawerModule,
       FuseNavigationModule,
       NgScrollbarModule,
-      NgxDatatableModule
+      NgxDatatableModule,
+      MatSlideToggleModule,
+      MatFormFieldModule,
+      MatInputModule
   ]
 })
 export class ProjectHubModule { }

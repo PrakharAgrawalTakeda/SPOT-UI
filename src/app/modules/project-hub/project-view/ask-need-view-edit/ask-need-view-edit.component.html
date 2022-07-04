@@ -1,1 +1,12 @@
-<p>ask-need-view-edit works!</p>
+<form class="w-full">
+    <mat-form-field
+        [ngClass]="formFieldHelpers"
+        class="w-full"
+        [floatLabel]="'always'">
+        <mat-label>Ask/Need</mat-label>
+        <input
+            matInput
+            [placeholder]="'Ask/Need'"
+            value="{{projecthubservice.item.askNeed1}}">
+    </mat-form-field>
+</form>

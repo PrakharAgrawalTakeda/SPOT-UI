@@ -8,7 +8,7 @@
     #myDiv
     [position]="'right'">
     <div class="p-4">
-        <app-ask-need-view-edit></app-ask-need-view-edit>
+        <app-ask-need-view-edit *ngIf = "projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
     </div>
     </fuse-drawer>
     <!-- Header -->
