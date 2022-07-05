@@ -31,6 +31,11 @@ import { CapsComponent } from './caps/caps.component';
 import { ReportsComponent } from './reports/reports.component';
 import { LocalAttributesComponent } from './local-attributes/local-attributes.component';
 import { HubSettingsComponent } from './hub-settings/hub-settings.component';
+import { MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {MatSelectModule} from '@angular/material/select';
 
 
 export const projectRoutes: Route[] = [
@@ -134,9 +139,17 @@ export const projectRoutes: Route[] = [
       NgApexchartsModule,
       TranslocoModule,
       SharedModule,
+      CommonModule,
       FuseDrawerModule,
       FuseNavigationModule,
-      NgScrollbarModule
+      NgScrollbarModule,
+      MatChipsModule,
+      MatAutocompleteModule,
+      MatInputModule,
+      MatFormFieldModule,
+      MatSelectModule
+      
+     
   ]
 })
 export class ProjectHubModule { }
