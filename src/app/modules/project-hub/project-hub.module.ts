@@ -36,7 +36,8 @@ import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 export const projectRoutes: Route[] = [
   {
@@ -146,7 +147,9 @@ export const projectRoutes: Route[] = [
       NgxDatatableModule,
       MatSlideToggleModule,
       MatFormFieldModule,
-      MatInputModule
+      MatInputModule,
+      MatDatepickerModule,
+      MatMomentDateModule
   ]
 })
 export class ProjectHubModule { }

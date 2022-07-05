@@ -19,15 +19,17 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.apiService.askNeedSingle(this.projecthubservice.itemid).then((res: any)=>{
-      this.askneedform.setValue({
-        askNeed1: res.askNeed1,
-        comments: res.comments
+    if (this.projecthubservice.itemid != "new") {
+      this.apiService.askNeedSingle(this.projecthubservice.itemid).then((res: any) => {
+        this.askneedform.setValue({
+          askNeed1: res.askNeed1,
+          comments: res.comments
+        })
       })
-    })
+    }
   }
 
-  submitaskneed(){
+  submitaskneed() {
     console.log(this.askneedform.value)
   }
 
