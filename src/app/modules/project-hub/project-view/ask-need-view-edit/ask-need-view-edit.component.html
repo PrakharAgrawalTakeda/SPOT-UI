@@ -1,4 +1,4 @@
-<form class="w-full">
+<form class="w-full" [formGroup]="askneedform" (ngSubmit)="submitaskneed()">
     <mat-form-field
         [ngClass]="formFieldHelpers"
         class="w-full"
@@ -7,6 +7,22 @@
         <input
             matInput
             [placeholder]="'Ask/Need'"
-            value="{{projecthubservice.item.askNeed1}}">
+            formControlName="askNeed1" name="askNeed1"
+            >
     </mat-form-field>
+        <mat-form-field
+            [ngClass]="formFieldHelpers"
+            class="fuse-mat-textarea flex-auto w-full"
+            [floatLabel]="'always'">
+            <mat-label>Comments</mat-label>
+            <textarea
+                matInput
+                [rows]="5"
+                [placeholder]="'Comments'"
+                formControlName="comments" name="comments"
+                matTextareaAutosize></textarea>
+        </mat-form-field>
+        <button class="w-full" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
 </form>

@@ -64,7 +64,7 @@ export class ProjectViewComponent implements OnInit {
     this.askneedngxdata = this.projectViewDetails.askNeedData
   }
   onlyopenAskNeeds() {
-    this.askneedngxdata = this.projectViewDetails.askNeedData.filter(row => row.closeDate != null)
+    this.askneedngxdata = this.projectViewDetails.askNeedData.filter(row => row.closeDate == null)
   }
   changeaskneed(event: any) {
     if (event.checked == true) {
