@@ -13,7 +13,12 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
   item: any = {}
   askneedform = new FormGroup({
     askNeed1: new FormControl(''),
-    comments: new FormControl('')
+    comments: new FormControl(''),
+    logDate: new FormControl(''),
+    needByDate: new FormControl(''),
+    closeDate: new FormControl(''),
+    usersingle : new FormControl(''),
+    usersingleid: new FormControl('')
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) {
   }
@@ -21,15 +26,21 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.projecthubservice.itemid != "new") {
       this.apiService.askNeedSingle(this.projecthubservice.itemid).then((res: any) => {
-        this.askneedform.setValue({
+        this.askneedform.patchValue({
           askNeed1: res.askNeed1,
-          comments: res.comments
+          comments: res.comments,
+          logDate: res.logDate,
+          needByDate: res.needByDate,
+          closeDate: res.closeDate,
+          usersingle: res.needFromName
         })
+        console.log(this.askneedform)
       })
     }
   }
 
   submitaskneed() {
+    //.format('YYYY-MM-DD[T]HH-mm-ss.sss[Z]')
     console.log(this.askneedform.value)
   }
 

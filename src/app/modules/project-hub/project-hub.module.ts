@@ -38,6 +38,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-single-dropdown.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export const projectRoutes: Route[] = [
   {
@@ -122,7 +124,8 @@ export const projectRoutes: Route[] = [
     ReportsComponent,
     LocalAttributesComponent,
     HubSettingsComponent,
-    AskNeedViewEditComponent
+    AskNeedViewEditComponent,
+    UserSingleDropdownComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),
@@ -149,7 +152,8 @@ export const projectRoutes: Route[] = [
       MatFormFieldModule,
       MatInputModule,
       MatDatepickerModule,
-      MatMomentDateModule
+      MatMomentDateModule,
+      MatAutocompleteModule
   ]
 })
 export class ProjectHubModule { }
