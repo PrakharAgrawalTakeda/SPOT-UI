@@ -136,10 +136,13 @@
                 class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata" #myTable>
                 <ngx-datatable-column name="indicator" [width]="100" [resizeable]="false">
                     <ng-template let-column="column" ngx-datatable-header-template>Status</ng-template>
-                    <ng-template let-value="value" ngx-datatable-cell-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                             class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
                         </mat-icon>
+                        &nbsp;
+                        &nbsp;
+                        <mat-icon *ngIf="id != row.projectId " svgIcon="heroicons_outline:link"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="askNeed1" [width]="750">

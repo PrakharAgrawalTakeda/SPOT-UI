@@ -38,7 +38,13 @@ export class ProjectViewComponent implements OnInit {
 
   @ViewChild('myTable') table: any;
 
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService) { }
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService) {
+    this.projecthubservice.submitbutton.subscribe(res=>{
+      if(res == true){
+        this.ngOnInit()
+      }
+    })
+   }
 
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -48,7 +54,7 @@ export class ProjectViewComponent implements OnInit {
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
       this.onlyopenAskNeeds()
-      console.log(this.askneedngxdata)
+      console.log(this.projectViewDetails.askNeedData)
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
