@@ -27,6 +27,21 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = ''
       }
     }
+    else if(type == "circle") {
+      temp.icontype = 'mat_solid:circle'
+      if(indicator == 'Green'){
+        temp.iconcolor = 'text-green-500'
+      }
+      else if( indicator == 'Yellow'){
+        temp.iconcolor = 'text-amber-500'
+      }
+      else if( indicator == 'Red'){
+        temp.iconcolor = 'text-red-500'
+      }
+      else{
+        temp.iconcolor = ''
+      }
+    }
     else{
       if(indicator == 'GreenStop'){
         temp.icontype = 'heroicons_solid:arrow-circle-down'

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpotDocumentsComponent } from './spot-documents.component';
+import { UserSingleDropdownComponent } from './user-single-dropdown.component';
 
-describe('SpotDocumentsComponent', () => {
-  let component: SpotDocumentsComponent;
-  let fixture: ComponentFixture<SpotDocumentsComponent>;
+describe('UserSingleDropdownComponent', () => {
+  let component: UserSingleDropdownComponent;
+  let fixture: ComponentFixture<UserSingleDropdownComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SpotDocumentsComponent ]
+      declarations: [ UserSingleDropdownComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpotDocumentsComponent);
+    fixture = TestBed.createComponent(UserSingleDropdownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

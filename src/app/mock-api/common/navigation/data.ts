@@ -54,21 +54,20 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         id   : 'portfolio-center',
         title: 'Portfolio Center',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
     {
         id   : 'spot-documents',
-        title: 'SPOT Documents',
+        title: 'SPOT Resources',
         type : 'basic',
-        icon : 'heroicons_outline:document-text',
-        link : '/spot-documents'
+        externalLink : true,
+        link : 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+        target: '_blank'
     },
     {
         id   : 'report-navigator',
         title: 'Report Navigator',
         type : 'basic',
-        icon : 'heroicons_outline:document-report',
         link : 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
         externalLink: true,
         target: "_blank"

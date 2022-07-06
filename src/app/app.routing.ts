@@ -28,8 +28,7 @@ export const appRoutes: Route[] = [
             {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
             {path: 'dashboard', loadChildren: () => import('app/modules/dashboard/dashboard.module').then(m => m.DashboardModule)},
             {path: 'portfolio-center', loadChildren: () => import('app/modules/portfolio-center/portfolio-center.module').then(m => m.PortfolioCenterModule)},
-            {path: 'project-hub/:id', loadChildren: () => import('app/modules/project-hub/project-hub.module').then(m => m.ProjectHubModule)},
-            {path: 'spot-documents', loadChildren: () => import('app/modules/spot-documents/spot-documents.module').then(m => m.SpotDocumentsModule)}
+            {path: 'project-hub/:id', loadChildren: () => import('app/modules/project-hub/project-hub.module').then(m => m.ProjectHubModule)}
         ]
     }
 ];

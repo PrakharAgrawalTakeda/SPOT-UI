@@ -31,12 +31,17 @@ import { CapsComponent } from './caps/caps.component';
 import { ReportsComponent } from './reports/reports.component';
 import { LocalAttributesComponent } from './local-attributes/local-attributes.component';
 import { HubSettingsComponent } from './hub-settings/hub-settings.component';
-import { MatFormFieldModule} from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatSelectModule} from '@angular/material/select';
-
+//import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-need-view-edit.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-single-dropdown.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export const projectRoutes: Route[] = [
   {
@@ -120,7 +125,9 @@ export const projectRoutes: Route[] = [
     CapsComponent,
     ReportsComponent,
     LocalAttributesComponent,
-    HubSettingsComponent
+    HubSettingsComponent,
+    AskNeedViewEditComponent,
+    UserSingleDropdownComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),
@@ -147,9 +154,11 @@ export const projectRoutes: Route[] = [
       MatAutocompleteModule,
       MatInputModule,
       MatFormFieldModule,
-      MatSelectModule
-      
-     
+      MatSelectModule,
+      //NgxDatatableModule,
+      MatSlideToggleModule,
+      MatDatepickerModule,
+      MatMomentDateModule
   ]
 })
 export class ProjectHubModule { }

@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ProjectApiService } from './common/project-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
-
+import { ProjectHubService } from './project-hub.service';
 @Component({
   selector: 'app-project-hub',
   templateUrl: './project-hub.component.html',
   styleUrls: ['./project-hub.component.scss']
 })
 export class ProjectHubComponent implements OnInit {
+    @ViewChild('myDiv') myDiv: ElementRef;
   drawerMode: 'over' | 'side' = 'side';
   projectDetails: any = {}
   portfolioDetails: any = {}
@@ -106,7 +107,7 @@ export class ProjectHubComponent implements OnInit {
 ];
   drawerOpened: boolean = true;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute,public indicator: SpotlightIndicatorsService) { }
+  constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute,public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService) { }
   
   ngOnInit(): void {
     this.id=this._Activatedroute.snapshot.paramMap.get("id");
@@ -118,9 +119,6 @@ export class ProjectHubComponent implements OnInit {
         this.portfolioDetails = res
         console.log(res)
       })
-    
-    
   }
-
 
 }
