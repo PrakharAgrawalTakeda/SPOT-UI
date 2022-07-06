@@ -17,7 +17,7 @@
     </div>
 
     <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <!-- Name -->
+
       <div class="sm:col-span-4">
         <mat-form-field class="fuse-mat-no-subscript w-full">
           <mat-label>Project Name</mat-label>
@@ -29,30 +29,24 @@
       </div>
     </div>
 
-    <!-- <div class="sm:col-span-4">
-                <mat-form-field class="fuse-mat-no-subscript w-full">
-                    <mat-label>Parent Program</mat-label>
-                   
-                    <input *ngIf="this.projectdata.parentProgramId == projectdata.problemId"
-                        matInput>{{projectdata.problemTitle}}
-                </mat-form-field>
-            </div> -->
+
     <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
       <div class="sm:col-span-4">
-        <!-- <mat-form-field class="fuse-mat-no-subscript w-full"> -->
-        <label>Project Type</label>
-        <br>
-        <br>
-
-        <select>
-
-          <input matInput value="{{projectdata.projectData.problemType}">
-          <option value="standardprogram">Standard Project / Program</option>
-          <option value="simpleproject">Simple Project</option>
 
 
-        </select>
-        <!-- </mat-form-field> -->
+
+        <mat-form-field class="flex-auto gt-xs:pl-3 w-full">
+
+          <mat-label>Project Type</mat-label>
+          <mat-select value="{{projectdata.projectData.problemType}}" name="type">
+
+            <mat-option value="Standard Project / Program">Standard Project / Program</mat-option>
+            <mat-option value="Simple Project">Simple Project</mat-option>
+
+          </mat-select>
+
+        </mat-form-field>
+
       </div>
     </div>
 
@@ -110,32 +104,53 @@
 
     <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
       <div class="sm:col-span-4">
-        <!-- <mat-form-field class="fuse-mat-no-subscript w-full"> -->
-        <label>Portfolio Owner</label>
-        <br>
-        <br>
-
-        <select>
-
-          <input matInput value="{{projectdata.projectData.problemType}">
-          <option value="standardprogram">Standard Project / Program</option>
-          <option value="simpleproject">Simple Project</option>
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label>Portfolio Owner</mat-label>
 
 
-        </select>
-        <!-- </mat-form-field> -->
+          <!-- <select> -->
+
+          <input matInput disabled="disabled" value="{{projectdata.pm.portfolioOwner}}">
+
+          <!-- <option *ngFor="let filteroption of filterlist.portfolioOwner" [value]="filteroption">{{filteroption.portfolioOwner}}</option> -->
+
+
+          <!-- </select> -->
+        </mat-form-field>
       </div>
     </div>
-    <!-- <div class="sm:col-span-2">
-          <mat-form-field class="fuse-mat-no-subscript w-full">
-              <mat-label>Portfolio Owner</mat-label>
-              <mat-select>
-                <mat-option *ngFor="let projectData of projectdata" [value]="projectData.portfolioOwnerId">
-                  
-                </mat-option>
-              </mat-select>
-          </mat-form-field>
-      </div> -->
+
+    <!-- <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+      <div class="sm:col-span-4">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label>Primary Product</mat-label>
+          <input matInput value="'hello'">
+          <mat-autocomplete #prod="matAutocomplete" (optionSelected)="selectoption($event,'Product')">
+            <mat-option *ngFor="let produ of filterlist.products" [value]="produ">
+              {{produ.fullProductName}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div> -->
+
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Primary Product</mat-label>
+        <input type="text"
+               placeholder="Pick one"
+               aria-label="Number"
+               matInput
+               [formControl]="myControl"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+    
 
     <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
       <div class="sm:col-span-4">
@@ -178,18 +193,7 @@
 
       </div>
     </div>
-    <!-- <div class="sm:col-span-4">
-      
-  <label style="font-weight:500;">Quality Reference #??</label>
-  
-<div class="sm:col-span-4 flex items-center justify-between">
-<mat-button-toggle-group aria-label="OE Project" value="{{projectdata.projectData.isTechTransfer}}">
-<mat-button-toggle value="true">Yes</mat-button-toggle>
-<mat-button-toggle value="false">No</mat-button-toggle>
-</mat-button-toggle-group>
-</div>
 
-</div> -->
     <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
       <div class="sm:col-span-4">
 
