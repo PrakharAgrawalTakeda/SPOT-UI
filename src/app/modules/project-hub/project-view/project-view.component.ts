@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -35,12 +36,13 @@ export class ProjectViewComponent implements OnInit {
   rows: any[] = [];
   expanded: any = {};
   timeout: any;
-
+  checkedan: boolean = false
   @ViewChild('myTable') table: any;
 
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService) {
     this.projecthubservice.submitbutton.subscribe(res=>{
       if(res == true){
+        this.checkedan = false;
         this.ngOnInit()
       }
     })
@@ -54,7 +56,7 @@ export class ProjectViewComponent implements OnInit {
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
       this.onlyopenAskNeeds()
-      console.log(this.projectViewDetails.askNeedData)
+      console.log(this.projectViewDetails)
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
@@ -65,6 +67,15 @@ export class ProjectViewComponent implements OnInit {
         this.lookupmaster.set(i.lookUpId, i.lookUpName)
       }
     })
+  }
+  islink(uid:string): boolean{
+    return this.projectViewDetails.links.some(x=>x.linkItemId == uid)
+  }
+  getlinkname(uid:string):string{
+    let temp = this.projectViewDetails.links.find(x=>x.linkItemId == uid)
+    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
+    return "This ask/need is sourced (linked) from " + temp.problemId.toString() +" - "+temp.problemTitle
+    
   }
   allAskNeeds() {
     this.askneedngxdata = this.projectViewDetails.askNeedData
@@ -84,7 +95,9 @@ export class ProjectViewComponent implements OnInit {
     console.log('Toggled Expand Row!', row);
     this.table.rowDetail.toggleExpandRow(row);
   }
-
+  test():string{
+    return "hello"
+  }
   onDetailToggle(event) {
     console.log('Detail Toggled', event);
   }

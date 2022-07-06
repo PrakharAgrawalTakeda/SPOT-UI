@@ -18,7 +18,8 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
     needByDate: new FormControl(''),
     closeDate: new FormControl(''),
     usersingle: new FormControl(''),
-    usersingleid: new FormControl('')
+    usersingleid: new FormControl(''),
+    includeInReport: new FormControl('')
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) {
   }
@@ -32,7 +33,8 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           logDate: res.logDate,
           needByDate: res.needByDate,
           closeDate: res.closeDate,
-          usersingle: res.needFromName
+          usersingle: res.needFromName,
+          includeInReport: res.includeInReport
         })
 
         console.log(this.askneedform)

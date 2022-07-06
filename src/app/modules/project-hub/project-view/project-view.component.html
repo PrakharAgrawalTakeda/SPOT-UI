@@ -125,7 +125,7 @@
                         </button>
                     </div>
                     <div>
-                        <mat-slide-toggle class="primary slider-adjust" (change)="changeaskneed($event)">Include Closed
+                        <mat-slide-toggle class="primary slider-adjust" [checked]="checkedan" (change)="changeaskneed($event)">Include Closed
                             Items</mat-slide-toggle>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                         </mat-icon>
                         &nbsp;
                         &nbsp;
-                        <mat-icon *ngIf="id != row.projectId " svgIcon="heroicons_outline:link"></mat-icon>
+                        <mat-icon [matTooltip]="getlinkname(row.askNeedUniqueId)" *ngIf="islink(row.askNeedUniqueId)" svgIcon="heroicons_outline:link"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="askNeed1" [width]="750">
