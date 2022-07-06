@@ -10,6 +10,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { map, Observable, startWith } from 'rxjs';
+import { MatChipInputEvent } from '@angular/material/chips';
 //  interface Type {
 //    value: string;
 //   viewValue: string;
@@ -18,13 +19,18 @@ import { map, Observable, startWith } from 'rxjs';
 @Component({
   selector: 'app-general-info',
   templateUrl: './general-info.component.html',
-  styleUrls: ['./general-info.component.scss']
+  styleUrls: ['./general-info.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GeneralInfoComponent implements OnInit {
   //testing
   myControl = new FormControl('');
   options: any =  []
   filteredOptions: Observable<string[]>;
+  fruitCtrl = new FormControl('');
+  filteredFruits: Observable<string[]>;
+  fruits: string[] = [];
+  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   ///////
   projectid: string = ""
   projectdata: any = {}
@@ -74,10 +80,37 @@ export class GeneralInfoComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value || '')),
     );
+
+    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+      startWith(null),
+      map((fruit: string | null) => (fruit ? this._filterfruit(fruit) : this.options.slice())),
+    );
   }
 
 
+//Start
 
+remove(fruit: string): void {
+  const index = this.fruits.indexOf(fruit);
+
+  if (index >= 0) {
+    this.fruits.splice(index, 1);
+  }
+}
+
+selected(event: MatAutocompleteSelectedEvent): void {
+  this.fruits.push(event.option.viewValue);
+  this.fruitInput.nativeElement.value = '';
+  this.fruitCtrl.setValue(null);
+  console.log(this.fruits)
+}
+private _filterfruit(value: string): string[] {
+  const filterValue = value.toLowerCase();
+
+  return this.options.filter(fruit => fruit.toLowerCase().includes(filterValue));
+}
+
+// End
   ngOnInit(): void {
 
     // this.formGroup = this.fb.group({
@@ -91,7 +124,7 @@ export class GeneralInfoComponent implements OnInit {
       console.log(this.projectdata)
       this.selectedValue = this.projectdata.projectData.problemType;
       console.log(this.selectedValue)
-
+      //fruits =  string.maniputate.toArray
     })
 
     this.apiService.getfilterlist().then((data: any) => {
