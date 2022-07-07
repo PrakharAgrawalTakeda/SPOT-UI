@@ -11,12 +11,16 @@ export class ProjectHubService {
   itemid: string = "new"
   itemtype: string = ""
   item: any = {}
+  all:any = []
+  projectid: string = ""
   submitbutton = new BehaviorSubject<boolean>(false)
   constructor(private apiService: ProjectApiService) { }
 
-  toggleDrawerOpen(itemtype: string, itemid: string): void {
+  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid:string): void {
     this.itemid = itemid
     this.itemtype = itemtype
+    this.all = all
+    this.projectid = pid
     this.drawerOpenedright = !this.drawerOpenedright
 
   }

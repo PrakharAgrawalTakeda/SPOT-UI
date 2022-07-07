@@ -1,19 +1,24 @@
-<form class="w-full" [formGroup]="askneedform" (ngSubmit)="submitaskneed()">
-    <div class="flex items-start justify-between">
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-45" [floatLabel]="'always'">
-            <mat-label>Ask/Need</mat-label>
-            <input matInput [placeholder]="'Ask/Need'" formControlName="askNeed1" name="askNeed1">
-        </mat-form-field>
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-45" [floatLabel]="'always'">
-            <mat-label>Log Date</mat-label>
-            <input matInput [matDatepicker]="picker1" [placeholder]="'Choose a date'" formControlName="logDate"
-                name="logDate">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-        </mat-form-field>
-    </div>
-    <app-user-single-dropdown [formgroup]="askneedform" [label]="'Need By'"></app-user-single-dropdown>
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Ask/Needs</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')" href="javascript:void(0)"
+            title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a></div>
+</div>
+<form class="w-full form-ask-need" [formGroup]="askneedform" (ngSubmit)="submitaskneed()" style="overflow-y: scroll; height: 80vh;">
+    <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
+        <mat-label>Log Date</mat-label>
+        <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+            formControlName="logDate" name="logDate">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
     <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+        <mat-label>Ask/Need</mat-label>
+        <textarea matInput [rows]="5" [placeholder]="'Ask/Need'" formControlName="askNeed1" name="askNeed1"></textarea>
+    </mat-form-field>
+    <app-user-single-dropdown [formgroup]="askneedform" [label]="'Need By'"></app-user-single-dropdown>
+    <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
         <mat-label>Need By Date</mat-label>
         <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="needByDate"
             name="needByDate">
@@ -25,17 +30,20 @@
         <textarea matInput [rows]="5" [placeholder]="'Comments'" formControlName="comments" name="comments"
             matTextareaAutosize></textarea>
     </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+    <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
         <mat-label>Close Date</mat-label>
-        <input matInput [matDatepicker]="picker3" [placeholder]="'Choose a date'" formControlName="closeDate"
-            name="closeDate">
+        <input matInput [matDatepicker]="picker3" [max]="today" [placeholder]="'Choose a date'"
+            formControlName="closeDate" name="closeDate">
         <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
         <mat-datepicker #picker3></mat-datepicker>
     </mat-form-field>
     <div class="flex items-start justify-between incuded-in-dash">
-        <mat-slide-toggle formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
+        <mat-slide-toggle [matTooltip]="this.askneedform.controls['includeInReport'].disabled ? 'Only 1 can be selected at a time for dashboard report display' : null" formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
     </div>
-    <button class="w-full" mat-flat-button [color]="'primary'" type="submit">
-        Submit
-    </button>
+    <div class="flex items-start justify-between">
+        <div></div>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
 </form>
