@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { lookupMaster } from 'app/shared/lookup-global';
@@ -15,7 +16,7 @@ import { ProjectHubService } from '../project-hub.service';
   styleUrls: ['./project-view.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ProjectViewComponent implements OnInit {
+export class ProjectViewComponent implements OnInit, OnDestroy {
   @ViewChild('riskIssuesTable', { read: MatSort }) riskIssuesMatSort: MatSort;
   riskIssues: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild('askNeedTable', { read: MatSort }) askNeedMatSort: MatSort;
@@ -35,10 +36,17 @@ export class ProjectViewComponent implements OnInit {
   rows: any[] = [];
   expanded: any = {};
   timeout: any;
-
+  checkedan: boolean = false
   @ViewChild('myTable') table: any;
 
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService) { }
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router) {
+    this.projecthubservice.submitbutton.subscribe(res => {
+      if (res == true) {
+        this.checkedan = false;
+        window.location.reload();
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -48,7 +56,7 @@ export class ProjectViewComponent implements OnInit {
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
       this.onlyopenAskNeeds()
-      console.log(this.askneedngxdata)
+      console.log(this.projectViewDetails)
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
@@ -59,6 +67,15 @@ export class ProjectViewComponent implements OnInit {
         this.lookupmaster.set(i.lookUpId, i.lookUpName)
       }
     })
+  }
+  islink(uid: string): boolean {
+    return this.projectViewDetails.links.some(x => x.linkItemId == uid)
+  }
+  getlinkname(uid: string): string {
+    let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
+    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
+    return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+
   }
   allAskNeeds() {
     this.askneedngxdata = this.projectViewDetails.askNeedData
@@ -78,7 +95,9 @@ export class ProjectViewComponent implements OnInit {
     console.log('Toggled Expand Row!', row);
     this.table.rowDetail.toggleExpandRow(row);
   }
-
+  test(): string {
+    return "hello"
+  }
   onDetailToggle(event) {
     console.log('Detail Toggled', event);
   }
@@ -93,5 +112,11 @@ export class ProjectViewComponent implements OnInit {
   }
   getlookup(key) {
     return this.lookupmaster.get(key)
+  }
+
+  ngOnDestroy(): void {
+    if(this.projecthubservice.drawerOpenedright == true){
+      this.projecthubservice.toggleDrawerOpen('','',[],'')
+    }
   }
 }

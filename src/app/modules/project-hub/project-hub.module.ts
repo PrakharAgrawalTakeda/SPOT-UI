@@ -42,6 +42,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-single-dropdown.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export const projectRoutes: Route[] = [
   {
@@ -151,14 +152,15 @@ export const projectRoutes: Route[] = [
       FuseNavigationModule,
       NgScrollbarModule,
       MatChipsModule,
-      MatAutocompleteModule,
       MatInputModule,
       MatFormFieldModule,
       MatSelectModule,
       NgxDatatableModule,
       MatSlideToggleModule,
       MatDatepickerModule,
-      MatMomentDateModule
+      MatMomentDateModule,
+      MatAutocompleteModule,
+      MatTooltipModule
   ]
 })
 export class ProjectHubModule { }
