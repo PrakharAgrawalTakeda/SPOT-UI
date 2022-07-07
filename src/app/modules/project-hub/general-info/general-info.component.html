@@ -41,7 +41,7 @@
           <mat-select value="{{projectdata.projectData.problemType}}" name="type">
 
             <mat-option value="Standard Project / Program">Standard Project / Program</mat-option>
-            <mat-option value="Simple Project">Simple Project</mat-option>
+            <mat-option value="SimpleProject">Simple Project</mat-option>
 
           </mat-select>
 
@@ -135,22 +135,49 @@
     </div> -->
 
 
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Primary Product</mat-label>
-        <input type="text"
-               placeholder="Pick one"
-               aria-label="Number"
-               matInput
-               [formControl]="myControl"
-               [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+      <div class="sm:col-span-4">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label>Primary Product</mat-label>
+          <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
+            [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="value">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+          <button type="button" mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
 
-    
+
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+      <div class="sm:col-span-4">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label>Other Impacted Products</mat-label>
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let fruit of otherimpactedproducts" (removed)="remove(fruit)">
+              {{fruit}}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input placeholder="Select and/or type to search" #fruitInput [formControl]="fruitCtrl"
+              [matAutocomplete]="fruity" [matChipInputFor]="chipList">
+          </mat-chip-list>
+          <mat-autocomplete #fruity="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+              {{fruit}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+
+
 
     <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
       <div class="sm:col-span-4">
@@ -208,30 +235,32 @@
 
       </div>
     </div>
-    <mat-form-field class="example-chip-list" appearance="fill">
-      <mat-label>Favorite Fruits</mat-label>
-      <mat-chip-list #chipList aria-label="Fruit selection">
-        <mat-chip
-          *ngFor="let fruit of fruits"
-          (removed)="remove(fruit)">
-          {{fruit}}
-          <button matChipRemove>
-            <mat-icon>cancel</mat-icon>
+
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+      <div class="sm:col-span-4">
+        <mat-form-field class="fuse-mat-no-subscript w-full">
+          <mat-label>Environmental Portoflio</mat-label>
+          <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
+            [formControl]="emControl" [matAutocomplete]="autocom" [(ngModel)]="values">
+          <mat-autocomplete #autocom="matAutocomplete">
+            <mat-option *ngFor="let em of filteredEms | async" [value]="em">
+              {{em}}
+            </mat-option>
+          </mat-autocomplete>
+          <button type="button" mat-button *ngIf="values" matSuffix mat-icon-button aria-label="Clear" (click)="values = ''">
+            <mat-icon>close</mat-icon>
           </button>
-        </mat-chip>
-        <input
-          placeholder="New fruit..."
-          #fruitInput
-          [formControl]="fruitCtrl"
-          [matAutocomplete]="fruity"
-          [matChipInputFor]="chipList">
-      </mat-chip-list>
-      <mat-autocomplete #fruity="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-          {{fruit}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+      <div class="sm:col-span-4">
+    <button class="w-full" mat-flat-button [color]="'primary'" type="submit">
+      Save
+  </button>
+  </div>
+  </div>
     <!-- Content End-->
   </div>
 </div>

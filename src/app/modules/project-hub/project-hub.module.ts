@@ -33,7 +33,7 @@ import { LocalAttributesComponent } from './local-attributes/local-attributes.co
 import { HubSettingsComponent } from './hub-settings/hub-settings.component';
 import { MatChipsModule } from '@angular/material/chips';
 import {MatSelectModule} from '@angular/material/select';
-//import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-need-view-edit.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -155,7 +155,7 @@ export const projectRoutes: Route[] = [
       MatInputModule,
       MatFormFieldModule,
       MatSelectModule,
-      //NgxDatatableModule,
+      NgxDatatableModule,
       MatSlideToggleModule,
       MatDatepickerModule,
       MatMomentDateModule
