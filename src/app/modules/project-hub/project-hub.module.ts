@@ -43,6 +43,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-single-dropdown.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { OverallStatusEditComponent } from './project-view/overall-status-edit/overall-status-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -128,7 +129,8 @@ export const projectRoutes: Route[] = [
     LocalAttributesComponent,
     HubSettingsComponent,
     AskNeedViewEditComponent,
-    UserSingleDropdownComponent
+    UserSingleDropdownComponent,
+    OverallStatusEditComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),

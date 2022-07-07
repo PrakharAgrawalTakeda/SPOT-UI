@@ -52,6 +52,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
       this.projectViewDetails = res
+      console.log(this.projectViewDetails)
       this.showContent = true
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
