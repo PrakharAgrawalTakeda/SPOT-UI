@@ -4,6 +4,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import * as moment from 'moment';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -39,21 +40,49 @@ export class OverallStatusEditComponent implements OnInit {
   askneed: any = {}
   item: any = {}
   overallStatusform = new FormGroup({
-    askNeed1: new FormControl(''),
-    comments: new FormControl(''),
-    logDate: new FormControl(''),
-    needByDate: new FormControl(''),
-    closeDate: new FormControl(''),
-    usersingle: new FormControl(''),
-    usersingleid: new FormControl(''),
-    includeInReport: new FormControl('')
+    nextSteps: new FormControl(''),
+    overallStatusId: new FormControl(''),
+    overallStatusDescription: new FormControl(''),
+    recentAccomplishments: new FormControl(''),
+    statusLastUpdated: new FormControl(''),
+    statusThrough: new FormControl(''),
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) { }
 
   ngOnInit(): void {
-    this.apiService.overallStatusSingle(this.projecthubservice.itemid).then((res: any)=>{
+    this.apiService.overallStatusSingle(this.projecthubservice.itemid).then((res: any) => {
       console.log(res)
+      this.item = res
+      this.overallStatusform.patchValue({
+        nextSteps: res.nextSteps,
+        overallStatusId: res.overallStatusId,
+        overallStatusDescription: res.overallStatusDescription,
+        recentAccomplishments: res.recentAccomplishments,
+        statusLastUpdated: res.statusLastUpdated,
+        statusThrough: res.statusThrough,
+      })
+    })
+    this.overallStatusform.controls['statusLastUpdated'].disable()
+  }
+  submitoverall() {
+    
+    var overall = {
+      nextSteps: this.overallStatusform.value.nextSteps,
+      overallStatusDescription: this.overallStatusform.value.overallStatusDescription,
+      overallStatusId: this.overallStatusform.value.overallStatusId,
+      projectId: this.item.projectId,
+      recentAccomplishments: this.overallStatusform.value.recentAccomplishments,
+      statusUnquieId: this.item.statusUnquieId,
+      statusThrough: moment(this.overallStatusform.value.statusThrough).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+      statusLastUpdated: moment(this.item.statusLastUpdated).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+    }
+    if (this.overallStatusform.value.statusThrough == null) {
+      overall.statusThrough = this.item.statusThrough
+    }
+    console.log(overall)
+    this.apiService.editOverallStatus(overall).then(res => {
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      this.projecthubservice.submitbutton.next(true)
     })
   }
-
 }

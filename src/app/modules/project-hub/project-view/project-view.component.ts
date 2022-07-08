@@ -34,6 +34,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   askneedngxdata: any = [];
   askneedngxcolumns: any = []
   rows: any[] = [];
+  isclosedaskneedtoggle: boolean = false 
   expanded: any = {};
   timeout: any;
   checkedan: boolean = false
@@ -43,12 +44,16 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.checkedan = false;
-        window.location.reload();
+        this.dataloader()
       }
     })
   }
 
   ngOnInit(): void {
+    this.dataloader()
+  }
+
+  dataloader(){
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
       this.projectViewDetails = res
@@ -56,7 +61,12 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
       this.showContent = true
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
+      if(this.isclosedaskneedtoggle == false){
       this.onlyopenAskNeeds()
+      }
+      else{
+        this.allAskNeeds()
+      }
       console.log(this.projectViewDetails)
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
@@ -79,9 +89,11 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
 
   }
   allAskNeeds() {
+    this.isclosedaskneedtoggle = true
     this.askneedngxdata = this.projectViewDetails.askNeedData
   }
   onlyopenAskNeeds() {
+    this.isclosedaskneedtoggle = false
     this.askneedngxdata = this.projectViewDetails.askNeedData.filter(row => row.closeDate == null)
   }
   changeaskneed(event: any) {

@@ -72,7 +72,7 @@ export class ProjectApiService {
     return response
   }
   async editOverallStatus(body){
-    var link = GlobalVariables.apiurl+"OverAllStatus/" + body.askNeedUniqueId
+    var link = GlobalVariables.apiurl+"OverAllStatus/" + body.statusUnquieId
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response

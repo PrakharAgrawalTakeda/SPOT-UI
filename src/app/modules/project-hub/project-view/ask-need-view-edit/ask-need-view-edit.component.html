@@ -17,7 +17,7 @@
         <mat-label>Ask/Need</mat-label>
         <textarea matInput [rows]="5" [placeholder]="'Ask/Need'" formControlName="askNeed1" name="askNeed1"></textarea>
     </mat-form-field>
-    <app-user-single-dropdown [formgroup]="askneedform" [label]="'Need By'"></app-user-single-dropdown>
+    <app-user-single-dropdown [formgroup]="askneedform" [label]="'Need From'"></app-user-single-dropdown>
     <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
         <mat-label>Need By Date</mat-label>
         <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="needByDate"
@@ -41,7 +41,9 @@
         <mat-slide-toggle [matTooltip]="this.askneedform.controls['includeInReport'].disabled ? 'Only 1 can be selected at a time for dashboard report display' : null" formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
     </div>
     <div class="flex items-start justify-between">
-        <div></div>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="submit" (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </button>
         <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
             Submit
         </button>

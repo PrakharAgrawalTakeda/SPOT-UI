@@ -5,40 +5,50 @@
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
         </a></div>
 </div>
-<form class="w-full form-ask-need" [formGroup]="overallStatusform" style="overflow-y: scroll; height: 80vh;">
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
-        <mat-label>Status Through</mat-label>
-        <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
-            formControlName="logDate" name="logDate">
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto gt-xs:pl-3 w-full">
+<form class="w-full form-ask-need" [formGroup]="overallStatusform" (ngSubmit)="submitoverall()" style="overflow-y: scroll; height: 80vh;">
+    <div class="flex items-start justify-between">
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
+            <mat-label>Status Through</mat-label>
+            <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+                formControlName="statusThrough" name="statusThrough">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
+            <mat-label>Last Updated</mat-label>
+            <input matInput [matDatepicker]="picker2" [max]="today" [placeholder]="'Choose a date'"
+                formControlName="statusLastUpdated" name="statusLastUpdated">
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto gt-xs:pl-3 w-full" [floatLabel]="'always'">
         <mat-label>Status Indicator</mat-label>
-        <mat-select>
-            <mat-option value="select2-1">Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1
-            </mat-option>
-            <mat-option value="select2-2">Select 2-2</mat-option>
-            <mat-option value="select2-3">Select 2-3</mat-option>
+        <mat-select [placeholder]="'Status Indicator'" formControlName="overallStatusId" name="overallStatusId">
+            <mat-option value="">None</mat-option>
+            <mat-option value="fdac9aff-0e20-41ef-a851-5d259a4697cc">Green</mat-option>
+            <mat-option value="1AB9DC30-D39F-4673-9F11-1F3E7DE1C8D2">Yellow</mat-option>
+            <mat-option value="e8f4b0cd-813c-4f7c-a9b5-b955982985d9">Red</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
         <mat-label>Overall Status</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Overall Status'" formControlName="askNeed1"
-            name="askNeed1"></textarea>
+        <textarea matInput [rows]="5" [placeholder]="'Overall Status'" formControlName="overallStatusDescription"
+            name="overallStatusDescription"></textarea>
     </mat-form-field>
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
         <mat-label>Recent Accomplishments</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Recent Accomplishments'" formControlName="comments"
-            name="comments" matTextareaAutosize></textarea>
+        <textarea matInput [rows]="5" [placeholder]="'Recent Accomplishments'" formControlName="recentAccomplishments"
+            name="recentAccomplishments" matTextareaAutosize></textarea>
     </mat-form-field>
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
         <mat-label>Next Priorities</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Next Priorities'" formControlName="comments" name="comments"
+        <textarea matInput [rows]="5" [placeholder]="'Next Priorities'" formControlName="nextSteps" name="nextSteps"
             matTextareaAutosize></textarea>
     </mat-form-field>
-    <div class="flex items-start justify-between">
-        <div></div>
+    <div class="flex items-start justify-between pt-6">
+        <button class="w-25" mat-flat-button [color]="'primary'" type="submit" (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </button>
         <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
             Submit
         </button>
