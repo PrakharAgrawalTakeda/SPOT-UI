@@ -42,4 +42,4 @@ jobs:
         with:
           app-name: 'spot4ui-dev'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1FAF4781107B467BBB9E9C4A0D8132F5 }}
-          package: ./dist/fuse
+          package: .
