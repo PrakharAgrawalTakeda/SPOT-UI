@@ -10,21 +10,37 @@ export class SpotlightIndicatorsService {
   getIndicators(indicator :string, type: string): any{
     const temp: any = {}
     if( type == 'overall'){
-      if(indicator == 'GreenStop'){
-        temp.icontype = 'heroicons_solid:check-circle'
+      if(indicator == 'GreenUp'){
+        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-up'
         temp.iconcolor = 'text-green-500'
       }
-      else if( indicator == 'YellowStop'){
-        temp.icontype = 'heroicons_solid:exclamation-circle'
+      else if( indicator == 'YellowUp'){
+        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-up'
         temp.iconcolor = 'text-amber-500'
       }
-      else if( indicator == 'RedStop'){
-        temp.icontype = 'heroicons_solid:x-circle'
+      else if( indicator == 'YellowDown'){
+        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-down'
+        temp.iconcolor = 'text-amber-500'
+      }
+      else if( indicator == 'RedUp'){
+        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-up'
         temp.iconcolor = 'text-red-500'
       }
-      else{
+      else if(indicator == 'Grey'){
         temp.icontype = 'circle'
         temp.iconcolor = ''
+      }
+      else{
+        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-right'
+        if(indicator == 'Red'){
+          temp.iconcolor = 'text-red-500'
+        }
+        else if(indicator == 'Yellow'){
+          temp.iconcolor = 'text-amber-500'
+        }
+        else if(indicator == 'Green'){
+        }
+        temp.iconcolor = 'text-green-500'
       }
     }
     else if(type == "circle") {

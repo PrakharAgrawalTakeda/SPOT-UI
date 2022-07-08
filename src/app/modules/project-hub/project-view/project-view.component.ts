@@ -39,6 +39,12 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   timeout: any;
   checkedan: boolean = false
   @ViewChild('myTable') table: any;
+  indicatorlook = {
+    "fdac9aff-0e20-41ef-a851-5d259a4697cc":"Green",
+    "1AB9DC30-D39F-4673-9F11-1F3E7DE1C8D2":"Yellow",
+    "e8f4b0cd-813c-4f7c-a9b5-b955982985d9":"Red"
+  }
+
 
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -50,6 +56,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.indicatorlook['1AB9DC30-D39F-4673-9F11-1F3E7DE1C8D2'])
     this.dataloader()
   }
 
