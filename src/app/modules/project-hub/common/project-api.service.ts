@@ -65,4 +65,16 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async overallStatusSingle(itemid: string){
+    var userid = GlobalVariables.apiurl+"OverAllStatus/"+itemid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editOverallStatus(body){
+    var link = GlobalVariables.apiurl+"OverAllStatus/" + body.askNeedUniqueId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

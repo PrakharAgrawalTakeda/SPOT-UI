@@ -9,6 +9,7 @@
     [position]="'right'">
     <div>
         <app-ask-need-view-edit *ngIf = "projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
+        <app-overall-status-edit *ngIf = "projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
     </div>
     </fuse-drawer>
     <!-- Header -->
