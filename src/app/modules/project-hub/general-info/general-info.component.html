@@ -1,126 +1,131 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 p-4">
   <div class="xl:col-span-6 flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
     <!-- Enter Content here-->
-
-
-    <div class="sm:col-span-4">
-
-      <label style="font-weight:500;">Is Confidential?</label>
-
-      <div class="sm:col-span-4 flex items-center justify-between">
-        <mat-button-toggle-group aria-label="OE Project" value="{{projectdata.projectData.isConfidential}}">
-          <mat-button-toggle value="true">Yes</mat-button-toggle>
-          <mat-button-toggle value="false">No</mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-
-    </div>
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+    <form class="w-full form-general-info" [formGroup]="generalinfoform">
 
       <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Project Name</mat-label>
 
-          <input matInput value="{{projectdata.projectData.problemTitle}}">
+        <label style="font-weight:500;">Is Confidential?</label>
 
-
-        </mat-form-field>
-      </div>
-    </div>
-
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-
-
-
-        <mat-form-field class="flex-auto gt-xs:pl-3 w-full">
-
-          <mat-label>Project Type</mat-label>
-          <mat-select value="{{projectdata.projectData.problemType}}" name="type">
-
-            <mat-option value="Standard Project / Program">Standard Project / Program</mat-option>
-            <mat-option value="SimpleProject">Simple Project</mat-option>
-
-          </mat-select>
-
-        </mat-form-field>
+        <div class="sm:col-span-4 flex items-center justify-between">
+          <mat-button-toggle-group value="{{projectdata.projectData.isConfidential}}" formControlName="confidential"
+            name="confidential">
+            <mat-button-toggle value="true">Yes</mat-button-toggle>
+            <mat-button-toggle value="false">No</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
 
       </div>
-    </div>
 
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>TOPS Group</mat-label>
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
 
-          <input matInput disabled="disabled" value="{{projectdata.pm.tops}}">
-        </mat-form-field>
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Project Name</mat-label>
+
+            <input matInput value="{{projectdata.projectData.problemTitle}}" formControlName="title" name="title">
+
+
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Record Creation Date</mat-label>
 
-          <input matInput disabled="disabled" value="{{projectdata.projectData.createdDate| date:'dd/MM/yyyy'}}">
-        </mat-form-field>
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+
+
+
+          <mat-form-field class="flex-auto gt-xs:pl-3 w-full">
+
+            <mat-label>Project Type</mat-label>
+            <mat-select value="{{projectdata.projectData.problemType}}" name="type" formControlName="type">
+
+              <mat-option value="Standard Project / Program">Standard Project / Program</mat-option>
+              <mat-option value="SimpleProject">Simple Project</mat-option>
+
+            </mat-select>
+
+          </mat-form-field>
+
+        </div>
       </div>
-    </div>
 
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Submitted By</mat-label>
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>TOPS Group</mat-label>
 
-          <input matInput disabled="disabled" value="{{projectdata.projectData.problemOwnerName}}">
-        </mat-form-field>
+            <input matInput disabled="disabled" value="{{projectdata.pm.tops}}" formControlName="tops" name="tops">
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Record Creation Date</mat-label>
 
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Sponsor</mat-label>
-
-          <input matInput disabled="disabled" value="{{projectdata.sponsor.teamMemberName}}">
-        </mat-form-field>
+            <input matInput disabled="disabled" value="{{projectdata.projectData.createdDate| date:'dd/MM/yyyy'}}"
+              formControlName="createddate" name="createddate">
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Submitted By</mat-label>
 
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Project Manager</mat-label>
-
-          <input matInput disabled="disabled" value="{{projectdata.pm.pm}}">
-        </mat-form-field>
+            <input matInput disabled="disabled" value="{{projectdata.projectData.problemOwnerName}}"
+              formControlName="submittedby" name="submittedby">
+          </mat-form-field>
+        </div>
       </div>
-    </div>
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Portfolio Owner</mat-label>
 
 
-          <!-- <select> -->
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Sponsor</mat-label>
 
-          <input matInput disabled="disabled" value="{{projectdata.pm.portfolioOwner}}">
-
-          <!-- <option *ngFor="let filteroption of filterlist.portfolioOwner" [value]="filteroption">{{filteroption.portfolioOwner}}</option> -->
-
-
-          <!-- </select> -->
-        </mat-form-field>
+            <input matInput disabled="disabled" value="{{projectdata.sponsor.teamMemberName}}" formControlName="sponsor"
+              name="sponsor">
+          </mat-form-field>
+        </div>
       </div>
-    </div>
 
-    <!-- <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Project Manager</mat-label>
+
+            <input matInput disabled="disabled" value="{{projectdata.pm.pm}}" formControlName="pm" name="pm">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Portfolio Owner</mat-label>
+
+
+            <!-- <select> -->
+
+            <input matInput disabled="disabled" value="{{projectdata.pm.portfolioOwner}}"
+              formControlName="portfolioowner" name="portfolioowner">
+
+            <!-- <option *ngFor="let filteroption of filterlist.portfolioOwner" [value]="filteroption">{{filteroption.portfolioOwner}}</option> -->
+
+
+            <!-- </select> -->
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
       <div class="sm:col-span-4">
         <mat-form-field class="fuse-mat-no-subscript w-full">
           <mat-label>Primary Product</mat-label>
@@ -135,132 +140,139 @@
     </div> -->
 
 
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Primary Product</mat-label>
-          <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
-            [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="value">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-              {{option}}
-            </mat-option>
-          </mat-autocomplete>
-          <button type="button" mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value = ''">
-            <mat-icon>close</mat-icon>
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Primary Product</mat-label>
+            <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
+              [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="value" name="myControl">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-autocomplete>
+            <button type="button" mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear"
+              (click)="value = ''">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Other Impacted Products</mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+              <mat-chip *ngFor="let fruit of otherimpactedproducts" (removed)="remove(fruit)">
+                {{fruit}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input placeholder="Select and/or type to search" #fruitInput [formControl]="fruitCtrl"
+                [matAutocomplete]="fruity" [matChipInputFor]="chipList" name="fruitCtrl">
+            </mat-chip-list>
+            <mat-autocomplete #fruity="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+                {{fruit}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Problem Description / Present Situation / Submission Description</mat-label>
+
+            <input matInput value="{{projectdata.projectData.projectDescription}}" formControlName="projectdesc"
+              name="projectdesc">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+
+        <div class="sm:col-span-4">
+
+          <label style="font-weight:500;">OE Project?</label>
+
+          <div class="sm:col-span-4 flex items-center justify-between">
+            <mat-button-toggle-group aria-label="OE Project" value="{{projectdata.projectData.isOeproject}}"
+              formControlName="OE" name="OE">
+              <mat-button-toggle value="true">Yes</mat-button-toggle>
+              <mat-button-toggle value="false">No</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+
+        <div class="sm:col-span-4">
+
+          <label style="font-weight:500;">Tech Transfer?</label>
+
+          <div class="sm:col-span-4 flex items-center justify-between">
+            <mat-button-toggle-group value="{{projectdata.projectData.isTechTransfer}}" formControlName="techtransfer"
+              name="techtransfer">
+              <mat-button-toggle value="true">Yes</mat-button-toggle>
+              <mat-button-toggle value="false">No</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+
+          <label style="font-weight:500;">CAPS Project?</label>
+
+          <div class="sm:col-span-4 flex items-center justify-between">
+            <mat-button-toggle-group value="{{projectdata.projectData.isCapsProject}}" formControlName="caps"
+              name="caps">
+              <mat-button-toggle value="true">Yes</mat-button-toggle>
+              <mat-button-toggle value="false">No</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <mat-form-field class="fuse-mat-no-subscript w-full">
+            <mat-label>Environmental Portoflio</mat-label>
+            <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
+              [formControl]="emControl" [matAutocomplete]="autocom" name="emControl">
+            <mat-autocomplete #autocom="matAutocomplete" (optionSelected)="selectemPortfolio($event)">
+              <mat-option *ngFor="let em of filteredEms | async" [value]="em">
+                {{em}}
+              </mat-option>
+            </mat-autocomplete>
+            <button type="button" mat-button *ngIf="values" matSuffix mat-icon-button aria-label="Clear"
+              (click)="values = ''">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <div class="sm:col-span-4">
+          <button class="w-full" mat-flat-button [color]="'primary'" type="submit">
+            Save
           </button>
-        </mat-form-field>
-      </div>
-    </div>
-
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Other Impacted Products</mat-label>
-          <mat-chip-list #chipList aria-label="Fruit selection">
-            <mat-chip *ngFor="let fruit of otherimpactedproducts" (removed)="remove(fruit)">
-              {{fruit}}
-              <button matChipRemove>
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip>
-            <input placeholder="Select and/or type to search" #fruitInput [formControl]="fruitCtrl"
-              [matAutocomplete]="fruity" [matChipInputFor]="chipList">
-          </mat-chip-list>
-          <mat-autocomplete #fruity="matAutocomplete" (optionSelected)="selected($event)">
-            <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-              {{fruit}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
-    </div>
-
-
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Problem Description / Present Situation / Submission Description</mat-label>
-
-          <input matInput value="{{projectdata.projectData.projectDescription}}">
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-
-      <div class="sm:col-span-4">
-
-        <label style="font-weight:500;">OE Project?</label>
-
-        <div class="sm:col-span-4 flex items-center justify-between">
-          <mat-button-toggle-group aria-label="OE Project" value="{{projectdata.projectData.isOeproject}}">
-            <mat-button-toggle value="true">Yes</mat-button-toggle>
-            <mat-button-toggle value="false">No</mat-button-toggle>
-          </mat-button-toggle-group>
         </div>
-
       </div>
-    </div>
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-
-      <div class="sm:col-span-4">
-
-        <label style="font-weight:500;">Tech Transfer?</label>
-
-        <div class="sm:col-span-4 flex items-center justify-between">
-          <mat-button-toggle-group value="{{projectdata.projectData.isTechTransfer}}">
-            <mat-button-toggle value="true">Yes</mat-button-toggle>
-            <mat-button-toggle value="false">No</mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-
-        <label style="font-weight:500;">CAPS Project?</label>
-
-        <div class="sm:col-span-4 flex items-center justify-between">
-          <mat-button-toggle-group value="{{projectdata.projectData.isCapsProject}}">
-            <mat-button-toggle value="true">Yes</mat-button-toggle>
-            <mat-button-toggle value="false">No</mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-        <mat-form-field class="fuse-mat-no-subscript w-full">
-          <mat-label>Environmental Portoflio</mat-label>
-          <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
-            [formControl]="emControl" [matAutocomplete]="autocom" [(ngModel)]="values">
-          <mat-autocomplete #autocom="matAutocomplete">
-            <mat-option *ngFor="let em of filteredEms | async" [value]="em">
-              {{em}}
-            </mat-option>
-          </mat-autocomplete>
-          <button type="button" mat-button *ngIf="values" matSuffix mat-icon-button aria-label="Clear" (click)="values = ''">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-      <div class="sm:col-span-4">
-    <button class="w-full" mat-flat-button [color]="'primary'" type="submit">
-      Save
-  </button>
-  </div>
-  </div>
-    <!-- Content End-->
+      <!-- Content End-->
+    </form>
   </div>
 </div>
