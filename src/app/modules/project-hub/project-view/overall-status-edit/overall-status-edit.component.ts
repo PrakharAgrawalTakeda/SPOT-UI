@@ -61,11 +61,15 @@ export class OverallStatusEditComponent implements OnInit {
         statusLastUpdated: res.statusLastUpdated,
         statusThrough: res.statusThrough,
       })
+      this.projecthubservice.isFormChanged = false
     })
     this.overallStatusform.controls['statusLastUpdated'].disable()
+    this.overallStatusform.valueChanges.subscribe(res=>{
+      this.projecthubservice.isFormChanged = true
+    })    
   }
   submitoverall() {
-    
+    this.projecthubservice.isFormChanged = false
     var overall = {
       nextSteps: this.overallStatusform.value.nextSteps,
       overallStatusDescription: this.overallStatusform.value.overallStatusDescription,

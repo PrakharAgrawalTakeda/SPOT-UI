@@ -41,9 +41,9 @@
         <mat-slide-toggle [matTooltip]="this.askneedform.controls['includeInReport'].disabled ? 'Only 1 can be selected at a time for dashboard report display' : null" formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
     </div>
     <div class="flex items-start justify-between">
-        <button class="w-25" mat-flat-button [color]="'primary'" type="submit" (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+        <a class="w-25" mat-flat-button [color]="'primary'" (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
-        </button>
+        </a>
         <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
             Submit
         </button>

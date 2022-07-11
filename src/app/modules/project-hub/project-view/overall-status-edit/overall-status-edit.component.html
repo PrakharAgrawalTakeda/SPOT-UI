@@ -46,9 +46,9 @@
             matTextareaAutosize></textarea>
     </mat-form-field>
     <div class="flex items-start justify-between pt-6">
-        <button class="w-25" mat-flat-button [color]="'primary'" type="submit" (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+        <a class="w-25" mat-flat-button [color]="'primary'" (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
-        </button>
+        </a>
         <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
             Submit
         </button>
