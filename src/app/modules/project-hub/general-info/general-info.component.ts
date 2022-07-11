@@ -161,6 +161,7 @@ private _filterfruit(value: string): string[] {
       //   caps: res.caps
       // })
       this.emControl.patchValue(this.projectdata.enviornmentalPortfolio.portfolioOwner)
+      this.emPortfolioOwnerId = this.projectdata.enviornmentalPortfolio.portfolioOwner.portfolioOwnerId
       console.log(this.projectdata)
       this.otherimpactedproducts = this.projectdata.otherImpactedProducts.map(x=>x.fullProductName)
       this.value = this.projectdata.primaryProduct.fullProductName
@@ -205,7 +206,8 @@ private _filterfruit(value: string): string[] {
 
   selectemPortfolio(option: any)
   {
-    this.emPortfolioOwnerId = option;
+    this.emControl.patchValue(option.option.viewValue)
+    this.emPortfolioOwnerId = option.option.value;
   }
   // submitgeneralinfo() {
   //   if (this.generalinfoform.valid) {
