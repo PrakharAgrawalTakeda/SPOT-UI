@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { debounceTime, filter, map, Subject, takeUntil } from 'rxjs';
+import { debounceTime, filter, map, startWith, Subject, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations/public-api';
 import { Router } from '@angular/router';
 import { GlobalVariables } from 'app/shared/global-variables';
@@ -22,8 +22,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
 
     opened: boolean = false;
     resultSets: any[];
+    budget: any = [];
     searchControl: FormControl = new FormControl();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    temp: string = ""
 
     /**
      * Constructor
@@ -104,6 +106,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
             .pipe(
                 debounceTime(this.debounce),
                 takeUntil(this._unsubscribeAll),
+                startWith(''),
                 map((value) => {
 
                     // Set the resultSets to null if there is no value or
@@ -113,7 +116,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
                     {
                         this.resultSets = null;
                     }
-
+                    this.temp = value
                     // Continue
                     return value;
                 }),
@@ -127,8 +130,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
                     .subscribe((resultSets: any) => {
 
                         // Store the result sets
-                        this.resultSets = resultSets;
-                        console.log(this.resultSets)
+                        this.resultSets = resultSets.projectData;
+                        this.budget = resultSets.budget
+                        console.log(resultSets)
                         console.log(GlobalVariables.apiurl+`Projects/Search?${params.toString()}`)
                         // Execute the event
                         this.search.next(resultSets);
@@ -136,15 +140,27 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
             });
     }
     routeProject(projectid):void{
-        this.close()
-        if (this.routes.url.includes('project-hub')){
+        //this.close()
+        /*if (this.routes.url.includes('project-hub')){
         this.routes.navigate(['project-hub/'+ projectid]).then(() => {
             window.location.reload();
           });
         }
-        else{
-            this.routes.navigate(['project-hub/'+ projectid])
+        else{}*/
+            window.open('project-hub/'+ projectid, "_blank")
+        
+    }
+
+    budgetfind(projectid: string): string{
+        if(this.resultSets != []){
+            if(this.budget != []){
+                var temp = this.budget.find(x=>x.projectId == projectid)
+                if(temp != null){
+                    return temp.capitalBudgetId
+                }
+            }
         }
+        return ""
     }
     /**
      * On destroy
@@ -166,7 +182,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      * @param event
      */
      selectedOption(event: any): void{
+        this.searchControl.patchValue(this.temp)
         this.routeProject(event.option.value)
+        document.getElementById('myText').blur();
      }
     onKeydown(event: KeyboardEvent): void
     {
