@@ -1,5 +1,81 @@
+@import '~@swimlane/ngx-datatable/assets/icons.css';
+
 .floating-button-right-bottom{
     position: fixed !important;
     bottom: 10vh !important;
     right: 1vw !important;
+}
+.ngx-datatable .datatable-header {
+    display: block;
+    overflow: hidden;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-weight: bold !important;
+}
+.header{
+    font-weight: bold !important;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+.bls-5{
+    border-left: 5px solid;
+}
+.ngx-datatable .datatable-body .datatable-body-row>div {
+    padding-top: 24px;
+}
+
+.ngx-datatable.fixed-header .datatable-header .datatable-header-inner {
+    padding-top: 24px;
+}
+
+.ngx-datatable .datatable-body .datatable-row-wrapper {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+.slider-adjust{
+    padding-top: 7px;
+}
+
+.closed{
+    font-style: italic !important;
+}
+
+.customIconSize {
+    min-width: 0px;
+    min-height: 0px;
+    font-size: 15px !important;
+    height: 15px !important;
+    width: 15px !important;
+}
+
+.overall-brief{
+    min-height: 225px;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+}
+
+.w-45{
+    width: 45%;
+}
+
+.incuded-in-dash{
+    padding: 25px 0;
+}
+
+.form-ask-need{
+    padding: 20px 20px;
+}
+
+.sidepanel-header{
+    padding: 10px;
+}
+
+.w-25{
+    width: 25%;
+}
+.h-120{
+    height: 120% !important;
+}
+.team-pad {
+    padding: 0 20px 50px 20px;
 }
