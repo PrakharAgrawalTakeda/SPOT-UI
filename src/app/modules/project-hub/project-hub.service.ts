@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FuseAlertService } from '@fuse/components/alert';
+import { FuseNavigationItem } from '@fuse/components/navigation';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ProjectApiService } from './common/project-api.service';
@@ -16,6 +17,7 @@ export class ProjectHubService {
   all: any = []
   projectid: string = ""
   submitbutton = new BehaviorSubject<boolean>(false)
+  isNavChanged = new BehaviorSubject<boolean>(false)
   isFormChanged: boolean = false
   alert: FuseConfirmationConfig = {
     "title": "Are you sure you want to exit?",
@@ -38,6 +40,94 @@ export class ProjectHubService {
     },
     "dismissible": true
   }
+  menuData: FuseNavigationItem[] = [
+    {
+        id: 'project-info',
+        title   : 'Project Information',
+        subtitle: 'Information subtitle',
+        type    : 'group',
+        children: [
+            {
+                title: 'Project View',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-list',
+                link: 'project-view'
+            },
+            {
+                title: 'Assoiated Projects',
+                type : 'basic',
+                icon : 'heroicons_outline:link',
+                link : 'associated-projects' 
+            },
+            {
+                id: 'budget',
+                title: 'Budget',
+                type : 'basic',
+                icon : 'heroicons_outline:currency-dollar',
+                link : 'budget' 
+            },
+            {
+                title: 'Project Documents',
+                type : 'basic',
+                icon : 'heroicons_outline:document-text',
+                link : 'project-documents' 
+            },
+            {
+                title: 'Project team',
+                type : 'basic',
+                icon : 'heroicons_outline:user-group',
+                link : 'project-team' 
+            }
+        ]
+    },
+    {
+        title   : 'Project Details and Forms',
+        type    : 'group',
+        children: [
+            {
+                title: 'General Info',
+                type : 'basic',
+                icon : 'heroicons_outline:pencil-alt',
+                link : 'general-info'
+            },
+            {
+                title: 'TOPS',
+                type : 'basic',
+                icon : 'mat_outline:business_center',
+                link : 'tops'
+            },
+            {
+                title: 'CAPS',
+                type : 'basic',
+                icon : 'iconsmind:tree_4',
+                link : 'caps'
+            },
+            {
+                title: 'Reports',
+                type : 'basic',
+                icon : 'heroicons_outline:presentation-chart-bar',
+                link : 'reports'
+            },
+            {
+                title: 'Local Attributes',
+                type : 'basic',
+                icon : 'heroicons_outline:location-marker',
+                link : 'local-attributes'
+            },
+            {
+                title: 'Hub Settings',
+                type : 'basic',
+                icon : 'heroicons_outline:adjustments',
+                link : 'hub-settings'
+            }
+        ]
+    },
+    
+   
+    {
+        type: 'divider'
+    }
+];
   constructor(private fusealert: FuseConfirmationService) { }
 
   toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string): void {

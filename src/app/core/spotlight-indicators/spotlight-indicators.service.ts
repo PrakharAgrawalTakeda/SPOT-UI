@@ -76,7 +76,7 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = 'text-purple-500'
       }
       else{
-        temp.icontype = 'circle'
+        temp.icontype = 'mat_solid:circle'
         temp.iconcolor = ''
       }
     }
