@@ -25,39 +25,60 @@ import { id } from '@swimlane/ngx-datatable';
 export class GeneralInfoComponent implements OnInit {
 
   // putUrl = GlobalVariables.apiurl + "PortoflioCenterData/{id}"
-emPortfolioOwnerId : string = ''
-selectedValue: any = {};
+  productId: string = ''
+  emPortfolioOwnerId: string = ''
+  selectedValue: any = {};
+  isConfidential: string = ''
+  problemTitle: string = ''
+  problemType: string = ''
+  tops: string = ''
+  //createdDate = new Date()
+  problemOwnerName: string = ''
+  teamMemberName: string = ''
+  pm: string = ''
+  portfolioOwner: string = ''
+  projectDescription: string = ''
+  isOeproject: string = ''
+  isTechTransfer: string = ''
+  isCapsProject: string = ''
+
+  proControl = new FormControl('');
+  parentproj = ''
+  projects: any = []
+  filteredProjects: Observable<string[]>;
 
   myControl = new FormControl('');
   value = ''
-  options: any =  []
-  filteredOptions: Observable<string[]>;
+  options: any = []
+  filteredOptions: any;
 
   emControl = new FormControl('');
   values = ''
-  ems: any =  []
-  filteredEms: any;
+  ems: any = []
+  filteredEms: Observable<string[]>;
 
- 
+
   fruitCtrl = new FormControl('');
   filteredFruits: Observable<string[]>;
   otherimpactedproducts: string[] = [];
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
 
   generalinfoform = new FormGroup({
-   confidential: new FormControl(''),
-   title: new FormControl(''),
-  type: new FormControl(''),
-  tops: new FormControl(''),
-  createddate: new FormControl(''),
-  submittedby: new FormControl(''),
-  sponsor: new FormControl(''),
-   pm: new FormControl(''),
-   portfolioowner: new FormControl(''),
+    confidential: new FormControl(''),
+    title: new FormControl(''),
+    type: new FormControl(''),
+    tops: new FormControl(''),
+    createddate: new FormControl(''),
+    submittedby: new FormControl(''),
+    sponsor: new FormControl(''),
+    pm: new FormControl(''),
+    portfolioowner: new FormControl(''),
     projectdesc: new FormControl(''),
-   OE: new FormControl(''),
-   techtransfer: new FormControl(''),
-   caps: new FormControl('')
+    OE: new FormControl(''),
+    techtransfer: new FormControl(''),
+    caps: new FormControl(''),
+    projectsingle: new FormControl(''),
+    projectsingleid: new FormControl('')
   })
 
   projectid: string = ""
@@ -73,32 +94,13 @@ selectedValue: any = {};
     "products": [],
     "totalCAPEX": []
   }
-  // filters: any = {
-  //   "portfolioOwner": [],
-  //   "phase": [],
-  //   "executionScope": [],
-  //   "people": [],
-  //   "products": [],
-  //   "state": [],
-  //   "totalCAPEX": [],
-  //   "gmsBudgetOwner": [],
-  //   "oeProjectType": [],
-  //   "projectType": [],
-  //   "fundingStatus": [],
-  //   "agileWorkstream": [],
-  //   "agileWave": [],
-  //   "primaryKPI": [],
-  //   "startegicYear": [],
-  //   "annualInitiatives": [],
-  //   "topsGroup": [],
-  //   "capsProject": [],
-  //   "projectName": []
-  // }
 
 
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private fb: FormBuilder, private http: HttpClient) { 
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private fb: FormBuilder, private http: HttpClient) {
 
+    
 
+    
 
     this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
       startWith(null),
@@ -107,88 +109,115 @@ selectedValue: any = {};
   }
 
 
-remove(fruit: string): void {
-  const index = this.otherimpactedproducts.indexOf(fruit);
+  remove(fruit: string): void {
+    const index = this.otherimpactedproducts.indexOf(fruit);
 
-  if (index >= 0) {
-    this.otherimpactedproducts.splice(index, 1);
+    if (index >= 0) {
+      this.otherimpactedproducts.splice(index, 1);
+    }
   }
-}
 
-selected(event: MatAutocompleteSelectedEvent): void {
-  this.otherimpactedproducts.push(event.option.viewValue);
-  this.fruitInput.nativeElement.value = '';
-  this.fruitCtrl.setValue(null);
-  //console.log(this.otherimpactedproducts)
-}
-private _filterfruit(value: string): string[] {
-  const filterValue = value.toLowerCase();
 
-  return this.options.filter(fruit => fruit.toLowerCase().includes(filterValue));
-}
+  private _filterfruit(value: string): string[] {
+    const filterValue = value.toLowerCase();
 
-// End
+    return this.options.filter(fruit => fruit.toLowerCase().includes(filterValue));
+  }
+
+  // End
   ngOnInit(): void {
-
-
-
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-
-    this.filteredEms = this.emControl.valueChanges.pipe(
-      startWith(''),
-      map(values => this.filterlist.portfolioOwner.filter(x=>x.portfolioOwner.includes(values) && x.isPortfolioOwner == true)),
-    );
 
     this.projectid = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getGeneralInfoData(this.projectid).then((res: any) => {
       this.projectdata = res
-      // this.generalinfoform.patchValue({
-      //   confidential: res.confidential,
-      //   title: res.title,
-      //   type: res.type,
-      //   tops: res.tops,
-      //   createddate: res.createddate,
-      //   submittedby: res.submittedby,
-      //   sponsor: res.sponsor,
-      //   pm: res.pm,
-      //   portfolioowner: res.portfolioowner,
-      //   projectdesc: res.projectdesc,
-      //   OE: res.OE,
-      //   techtransfer: res.techtransfer,
-      //   caps: res.caps
-      // })
+      this.generalinfoform.patchValue({
+        title: res.projectData.problemTitle,
+        type: res.projectData.problemType,
+        tops: res.pm.tops,
+        createddate: res.projectData.createdDate,
+        submittedby: res.projectData.problemOwnerName,
+        sponsor: res.sponsor.teamMemberName,
+        pm: res.pm.pm,
+        portfolioowner: res.pm.portfolioowner,
+        projectdesc: res.projectData.projectDescription,
+        OE: res.projectData.isOeproject,
+        techtransfer: res.projectData.isTechTransfer,
+        caps: res.projectData.isCapsProject,
+        projectsingleid: res.projectData.parentProgramId
+      })
+
+      // if(this.projectdata.enviornmentalPortfolio.isPortfolioOwner){
+        this.isConfidential = this.projectdata.projectData.isConfidential.toString()
+        this.problemTitle = this.projectdata.projectData.problemTitle
+        this.problemType = this.projectdata.projectData.problemType
+        this.tops = this.projectdata.pm.tops
+        // this.createdDate =  moment(this.projectdata.projectData.createdDate).format('DD/MM/YYY')
+        this.problemOwnerName = this.projectdata.projectData.problemOwnerName
+        this.teamMemberName = this.projectdata.sponsor.teamMemberName
+        this.pm = this.projectdata.pm.pm
+        this.portfolioOwner = this.projectdata.pm.portfolioOwner
+        this.projectDescription = this.projectdata.projectData.projectDescription
+        this.isOeproject = this.projectdata.projectData.isOeproject.toString()
+        this.isTechTransfer = this.projectdata.projectData.isTechTransfer.toString()
+        this.isCapsProject = this.projectdata.projectData.isCapsProject.toString()
       this.emControl.patchValue(this.projectdata.enviornmentalPortfolio.portfolioOwner)
-      this.emPortfolioOwnerId = this.projectdata.enviornmentalPortfolio.portfolioOwner.portfolioOwnerId
+      this.emPortfolioOwnerId = this.projectdata.enviornmentalPortfolio.emissionPortfolioId
+
+      this.myControl.patchValue(this.projectdata.primaryProduct.fullProductName)
+      this.productId = this.projectdata.primaryProduct.productId
+            console.log(this.emPortfolioOwnerId)
+     // this.isConfidential = this.projectdata.projectData.isConfidential
+
+      // this.emPortfolioOwnerId = this.projectdata.enviornmentalPortfolio.portfolioOwnerId
+      // }
       console.log(this.projectdata)
-      this.otherimpactedproducts = this.projectdata.otherImpactedProducts.map(x=>x.fullProductName)
-      this.value = this.projectdata.primaryProduct.fullProductName
+      this.otherimpactedproducts = this.projectdata.otherImpactedProducts.map(x => x.fullProductName)
+      //this.value = this.projectdata.primaryProduct.fullProductName
       //this.myControl.setValue(this.projectdata.primaryProduct.fullProductName)
-      this.values = this.projectdata.enviornmentalPortfolio.portfolioOwner
+      //this.values = this.projectdata.enviornmentalPortfolio.portfolioOwner
+
+      //this.parentproj = this.projectdata.projectData.
       //this.myControl.setValue(this.projectdata.enviornmentalPortfolio.portfolioOwner)
-      
-      this.selectedValue = this.projectdata.projectData.problemType;
-      //console.log(this.selectedValue)
-      //console.log(this.myControl)
+
+      //this.selectedValue = this.projectdata.projectData.problemType;
+      //console.log(this.value)
+      // console.log(this.values)
     })
+
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._primaryProductFilter(value)),
+          );
+
+    this.filteredEms = this.emControl.valueChanges.pipe(
+      startWith(''),
+      map(values => this._filters(values || '')),
+      //portfolioOwner.includes(values) && x.isEmissionPortfolio == true)),
+     //map(values => this.filterlist.portfolioOwner.filter(x=>x.isEmissionPortfolio == true).map(x=>x.portoflioOwner)),
+
+    );
+
+
 
     this.apiService.getfilterlist().then((data: any) => {
       this.filterlist = data;
-      this.options = this.filterlist.products.map(t=>t.fullProductName)
-      this.filteredFruits = this.options
-      console.log(this.filterlist)
+      this.options = this.filterlist.products.map(t => t.fullProductName)
+
+      this.ems = this.filterlist.portfolioOwner.filter(x=>x.isEmissionPortfolio == true).map(x => x.portfolioOwner)
+     // this.filteredFruits = this.options
+console.log(this.filterlist)
+      console.log(this.filteredFruits)
     })
-    
+
   }
 
-   ngAfterViewInit(): void { }
+  ngAfterViewInit(): void { }
 
-   private _filter(value: string): string[] {
+  private _primaryProductFilter(value: string): any {
     const filterValue = value.toLowerCase();
-
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    console.log(this.filterlist.products[0].brandName);
+    return []
+    
   }
 
   private _filters(values: string): string[] {
@@ -196,39 +225,94 @@ private _filterfruit(value: string): string[] {
 
     return this.ems.filter(em => em.toLowerCase().includes(filterValues));
   }
-   selectoption(event: MatAutocompleteSelectedEvent, field: string): void {
-     if(field == "Product"){
-       this.filtersnew.products.push(event.option.value)
-       this.filterlist.products =  this.filterlist.products.filter(x=> x.id != event.option.value.id)
-       //console.log(this.filtersnew)
-     }
+
+  selectprimaryProduct(option: any) {
+    this.myControl.patchValue(option.option.viewValue)
+    this.productId = option.option.value
+    console.log('this')
+    console.log(this.productId)
   }
 
-  selectemPortfolio(option: any)
-  {
+  selectemPortfolio(option: any) {
     this.emControl.patchValue(option.option.viewValue)
-    this.emPortfolioOwnerId = option.option.value;
+    this.emPortfolioOwnerId = option.option.value
+    console.log('this')
+    console.log(this.emPortfolioOwnerId)
   }
-  // submitgeneralinfo() {
-  //   if (this.generalinfoform.valid) {
-  //     this.projectdata.projectData.problemTitle = this.generalinfoform.value.title
-  //     this.projectdata.projectData.isConfidential = this.generalinfoform.value.confidential
-  //     this.projectdata.projectData.problemType = this.generalinfoform.value.type
-  //     this.projectdata.pm.tops = this.generalinfoform.value.tops
-  //     this.projectdata.projectData.createdDate = moment(this.generalinfoform.value.createddate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-  //     this.projectdata.projectData.problemOwnerName = this.generalinfoform.value.submittedby
-  //     this.projectdata.sponsor.teamMemberName = this.generalinfoform.value.sponsor
-  //     this.projectdata.pm.pm = this.generalinfoform.value.pm
-  //     this.projectdata.pm.portfolioOwner = this.generalinfoform.value.portfolioowner
-  //     this.projectdata.projectData.projectDescription = this.generalinfoform.value.projectdesc
-  //     this.projectdata.projectData.isOeproject = this.generalinfoform.value.OE
-  //     this.projectdata.projectData.isTechTransfer = this.generalinfoform.value.techtransfer
-  //     this.projectdata.projectData.isCapsProject = this.generalinfoform.value.caps
-  //     // this.projectdata.enviornmentalPortfolio.portfolioOwner = this.emControl.value
 
-  //     // return this.http.put<any>(this.putUrl, id)
-  //     // // .subscribe(data => this.projectdata.projectData.problemUniqueId = data.id);
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.otherimpactedproducts.push(event.option.viewValue);
+    this.fruitInput.nativeElement.value = '';
+    this.fruitCtrl.setValue(null);
+    console.log(this.otherimpactedproducts)
+  }
 
-  //   }
-  // }
+  submitgeneralinfo() {
+
+const body = {
+  "problemUniqueId": this.projectdata.projectData.problemUniqueId,
+  "problemType": this.generalinfoform.controls['title'].value,
+  "problemTitle": this.problemTitle,
+  "problemId": this.projectdata.projectData.problemId,
+  "portfolioOwnerId": this.projectdata.pm.portfolioOwnerId,
+  "problemOwnerId": this.projectdata.projectData.problemOwnerId,
+  "problemOwnerName": this.projectdata.projectData.problemOwnerName,
+  "parentProgramId": this.generalinfoform.controls['projectsingleid'].value,
+  "primaryProductId": this.myControl.value,
+  "projectDescription": this.projectDescription,
+  "strategicRationale": this.projectdata.projectData.strategicRationale,
+  "projectClassificationId": this.projectdata.projectData.projectClassificationId,
+  "executionScope": this.projectdata.projectData.executionScope,
+ // "otherImpactedProducts": ,
+  "campaignTypeId": this.projectdata.projectData.campaignTypeId,
+  "campaignPhaseId": this.projectdata.projectData.campaignPhaseId,
+  "productionStepId": this.projectdata.projectData.productionStepId,
+  "isConfidential": this.isConfidential,
+  "createdDate": moment(this.projectdata.projectData.createdDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+  "isOeproject": this.isOeproject,
+  "oeprojectType": this.projectdata.projectData.oeprojectType,
+  "svpelementTypeId": this.projectdata.projectData.svpelementTypeId,
+  "createdById": this.projectdata.projectData.createdById,
+  "legacyPpmprojectId": this.projectdata.projectData.legacyPpmprojectId,
+  "legacyPpmsystem": this.projectdata.projectData.legacyPpmsystem,
+  "isTechTransfer": this.isTechTransfer,
+  "dataMigrationInfo": this.projectdata.projectData.dataMigrationInfo,
+  "projectSiteUrl": this.projectdata.projectData.projectSiteUrl,
+  "isManualArchive": this.projectdata.projectData.isManualArchive,
+  "archiveredBy": this.projectdata.projectData.archiveredBy,
+  "archiveredOn": this.projectdata.projectData.archiveredOn,
+  "isArchived": this.projectdata.projectData.isArchived,
+  "agilePrimaryWorkstream": this.projectdata.projectData.agilePrimaryWorkstream,
+  "agileSecondaryWorkstream": this.projectdata.projectData.agileSecondaryWorkstream,
+  "agileWave": this.projectdata.projectData.agileWave,
+  "targetEndState": this.projectdata.projectData.targetEndState,
+  "primaryKpi": this.projectdata.projectData.primaryKpi,
+  "benefitsRealizedOutcome": this.projectdata.projectData.benefitsRealizedOutcome,
+  "isCapsProject": this.projectdata.projectData.isCapsProject,
+  "calculatedEmissionsImpact": this.projectdata.projectData.calculatedEmissionsImpact,
+  "emissionsImpactRealizationDate": moment(this.projectdata.projectData.emissionsImpactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+ "emissionPortfolioId": this.emPortfolioOwnerId,
+  "noCarbonImpact": this.projectdata.projectData.noCarbonImpact,
+  "isGoodPractise": this.projectdata.projectData.isGoodPractise,
+  "energyCostImpactPerYear": this.projectdata.projectData.energyCostImpactPerYear,
+  "isPobos": this.projectdata.projectData.isPobos,
+  "isSiteAssessment": this.projectdata.projectData.isSiteAssessment,
+  "poboscategory": this.projectdata.projectData.poboscategory,
+  "siteAssessmentCategory": this.projectdata.projectData.siteAssessmentCategory,
+  "keyTakeaways": this.projectdata.projectData.keyTakeaways,
+  "waterImpactUnits": this.projectdata.projectData.waterImpactUnits,
+  "waterImpactCost": this.projectdata.projectData.waterImpactCost,
+  "wasteImpactUnits": this.projectdata.projectData.wasteImpactUnits,
+  "wasteImpactCost": this.projectdata.projectData.wasteImpactCost,
+  "energyImpact": this.projectdata.projectData.energyImpact,
+  "isGmsgqltannualMustWin": this.projectdata.projectData.isGmsgqltannualMustWin,
+  "strategicYearId": this.projectdata.projectData.strategicYearId,
+  "annualMustWinId": this.projectdata.projectData.annualMustWinId,
+  "wasteLandfillImpactUnits": this.projectdata.projectData.wasteLandfillImpactUnits,
+  "energyCostImpactPerYearFxconv": this.projectdata.projectData.energyCostImpactPerYearFxconv
+}
+
+this.apiService.putGeneralInfoData(this.projectdata.projectData.problemUniqueId,body).then()
+
+  }
 }

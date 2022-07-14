@@ -44,6 +44,7 @@ import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { OverallStatusEditComponent } from './project-view/overall-status-edit/overall-status-edit.component';
+import { ProjectSingleDropdownComponent } from './common/project-single-dropdown/project-single-dropdown.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -130,7 +131,8 @@ export const projectRoutes: Route[] = [
     HubSettingsComponent,
     AskNeedViewEditComponent,
     UserSingleDropdownComponent,
-    OverallStatusEditComponent
+    OverallStatusEditComponent,
+    ProjectSingleDropdownComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),

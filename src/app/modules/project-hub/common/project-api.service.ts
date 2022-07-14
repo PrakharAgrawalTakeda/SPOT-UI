@@ -77,4 +77,10 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async putGeneralInfoData(projectid, body) {
+    var url = GlobalVariables.apiurl + "Projects/" + projectid
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
