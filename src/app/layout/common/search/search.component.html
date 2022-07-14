@@ -20,7 +20,8 @@
             [matAutocomplete]="matAutocomplete"
             [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
             (keydown)="onKeydown($event)"
-            #barSearchInput>
+            #barSearchInput
+            id="myText">
         <mat-autocomplete
             class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
             [disableRipple]="true"
@@ -38,11 +39,9 @@
                 <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
                     <mat-option
                         class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
-                        (click)="routeProject(result.problemUniqueId)"
                         [value]="result.problemUniqueId">
                         <!-- Contacts -->
-                        {{result.problemId}} - {{result.problemTitle}}                        
-                    
+                        {{result.problemId}} {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
                     </mat-option>
                 </ng-container>
             </ng-container>

@@ -6,119 +6,54 @@ import { ActivatedRoute } from '@angular/router';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from './project-hub.service';
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 @Component({
-  selector: 'app-project-hub',
-  templateUrl: './project-hub.component.html',
-  styleUrls: ['./project-hub.component.scss']
+    selector: 'app-project-hub',
+    templateUrl: './project-hub.component.html',
+    styleUrls: ['./project-hub.component.scss']
 })
 export class ProjectHubComponent implements OnInit {
     @ViewChild('myDiv') myDiv: ElementRef;
-  drawerMode: 'over' | 'side' = 'side';
-  projectDetails: any = {}
-  portfolioDetails: any = {}
-  id:string = ""
-  panelOpenState = true;
-  selectedProject: string = 'ACME Corp. Backend App';
-  menuData: FuseNavigationItem[] = [
-    {
-        title   : 'Project Information',
-        subtitle: 'Information subtitle',
-        type    : 'group',
-        children: [
-            {
-                title: 'Project View',
-                type : 'basic',
-                icon : 'heroicons_outline:clipboard-list',
-                link: 'project-view'
-            },
-            {
-                title: 'Assoiated Projects',
-                type : 'basic',
-                icon : 'heroicons_outline:link',
-                link : 'associated-projects' 
-            },
-            {
-                title: 'Budget',
-                type : 'basic',
-                icon : 'heroicons_outline:currency-dollar',
-                link : 'budget' 
-            },
-            {
-                title: 'Project Documents',
-                type : 'basic',
-                icon : 'heroicons_outline:document-text',
-                link : 'project-documents' 
-            },
-            {
-                title: 'Project team',
-                type : 'basic',
-                icon : 'heroicons_outline:user-group',
-                link : 'project-team' 
+    drawerMode: 'over' | 'side' = 'side';
+    projectDetails: any = {}
+    portfolioDetails: any = {}
+    id: string = ""
+    panelOpenState = true;
+    selectedProject: string = 'ACME Corp. Backend App';
+    drawerOpened: boolean = true;
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, public _fuseNavigationService: FuseNavigationService) {
+        this.projecthubservice.isNavChanged.subscribe(res => {
+            if (res == true) {
+                this.getdata()
             }
-        ]
-    },
-    {
-        title   : 'Project Details and Forms',
-        type    : 'group',
-        children: [
-            {
-                title: 'General Info',
-                type : 'basic',
-                icon : 'heroicons_outline:pencil-alt',
-                link : 'general-info'
-            },
-            {
-                title: 'TOPS',
-                type : 'basic',
-                icon : 'mat_outline:business_center',
-                link : 'tops'
-            },
-            {
-                title: 'CAPS',
-                type : 'basic',
-                icon : 'iconsmind:tree_4',
-                link : 'caps'
-            },
-            {
-                title: 'Reports',
-                type : 'basic',
-                icon : 'heroicons_outline:presentation-chart-bar',
-                link : 'reports'
-            },
-            {
-                title: 'Local Attributes',
-                type : 'basic',
-                icon : 'heroicons_outline:location-marker',
-                link : 'local-attributes'
-            },
-            {
-                title: 'Hub Settings',
-                type : 'basic',
-                icon : 'heroicons_outline:adjustments',
-                link : 'hub-settings'
-            }
-        ]
-    },
-    
-   
-    {
-        type: 'divider'
+        })
     }
-];
-  drawerOpened: boolean = true;
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService,private _Activatedroute:ActivatedRoute,public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService) { }
-  
-  ngOnInit(): void {
-    this.id=this._Activatedroute.snapshot.paramMap.get("id");
-    this.apiService.getproject(this.id).then((res) => {
-      this.projectDetails = res
-      console.log(res)
-    })
-    this.apiService.getportfolioData(this.id).then((res) => {
-        this.portfolioDetails = res
-        console.log(res)
-      })
-  }
+
+    ngOnInit(): void {
+        this.id = this._Activatedroute.snapshot.paramMap.get("id");
+        this.getdata()
+    }
+
+    getdata(): void {
+        this.apiService.getproject(this.id).then((res) => {
+            this.projectDetails = res
+            this.apiService.getHubSettings(this.id).then((response: any) => {
+                this.projecthubservice.menuData[0].children[2].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                this.projecthubservice.menuData[0].children[3].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                this.projecthubservice.menuData[0].children[4].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                
+                
+                //nav refresh
+                const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
+                navComponent.refresh();
+            })
+            // 
+        })
+        this.apiService.getportfolioData(this.id).then((res) => {
+            this.portfolioDetails = res
+            console.log(res)
+        })
+    }
 
 }

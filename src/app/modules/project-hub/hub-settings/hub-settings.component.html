@@ -1,1 +1,61 @@
-<p>hub-settings works!</p>
+<div *ngIf="initialized == true" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 p-4">
+    <div class="xl:col-span-6 flex flex-col flex-auto pl-6 pr-6">
+        <div class="pb-6 font-medium tracking-tight leading-6 truncate ">
+            <h3 class="text-xl text-primary">Hub Settings</h3>
+            <p class="text-sm">Select what is viewable on your Project Hub:</p>
+        </div>
+        <form class="w-full form-hub-settings" [formGroup]="hubsettingsform">
+            <mat-accordion class="h-120" multi>
+                <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header class="pt-10 pb-10">
+                        <mat-panel-title>
+                            Project Board Section
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        Overall Status
+                        <mat-slide-toggle [labelPosition]="'before'" formControlName="overallStatus">
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        Milestones
+                        <mat-slide-toggle [labelPosition]="'before'" formControlName="milestones">
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        Risk,Issues & Safety
+                        <mat-slide-toggle [labelPosition]="'before'" formControlName="risks">
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        Ask & Needs
+                        <mat-slide-toggle [labelPosition]="'before'" formControlName="asks">
+                        </mat-slide-toggle>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header class="pt-10 pb-10">
+                        <mat-panel-title>
+                            Others
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        Budget Tracking
+                        <mat-slide-toggle [labelPosition]="'before'" formControlName="budgetTracking">
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        Project Documents
+                        <mat-slide-toggle [labelPosition]="'before'" formControlName="projectDocuments">
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        Project Teams
+                        <mat-slide-toggle [labelPosition]="'before'" formControlName="projectTeams">
+                        </mat-slide-toggle>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </form>
+    </div>
+</div>

@@ -1,61 +1,51 @@
 <div class="flex flex-col flex-auto min-w-0"
-[ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
-    <fuse-drawer
-    [name]="'rightDrawer'"
-    [opened]="projecthubservice.drawerOpenedright"
-    (openedChanged) = "projecthubservice.drawerOpenedChanged($event)"
-    [mode]="'over'"
-    #myDiv
-    [position]="'right'">
-    <div>
-        <app-ask-need-view-edit *ngIf = "projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
-        <app-overall-status-edit *ngIf = "projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
-    </div>
+    [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
+    <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
+        (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'">
+        <div>
+            <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
+            <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
+        </div>
     </fuse-drawer>
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-12 sm:pb-28 sm:px-10 bg-default dark:bg-transparent">
-        <div class="flex-1 min-w-0">
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-12 sm:pb-28 sm:px-10 bg-default dark:bg-transparent">
+        <div class="flex-1 min-w-0" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
             <!-- Breadcrumbs -->
-            <div>
-                <div class="hidden sm:flex flex-wrap items-center font-medium">
-                    <div>
-                        <a class="whitespace-nowrap text-primary-500">Project ID: {{projectDetails.problemId}}</a>
-                    </div>
+
+            <div class="hidden sm:flex flex-wrap items-center font-medium">
+                <div>
+                    <p class="whitespace-nowrap" [ngClass]="projectDetails.isArchived?'text-gray-400':'text-primary'">Project ID: {{projectDetails.problemId}}</p>
                 </div>
             </div>
+
             <!-- Title -->
             <div class="mt-2">
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    {{projectDetails.problemTitle}}
+                    <span *ngIf="projectDetails.isArchived">[ARCHIVED]&nbsp;</span><span
+                        *ngIf="projectDetails.isConfidential">[CONF]&nbsp;</span>{{projectDetails.problemTitle}}
                 </h2>
             </div>
         </div>
         <!-- Actions -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-            
-            <button
-                mat-icon-button
-                (click)="matDrawer.toggle()">
+
+            <button mat-icon-button (click)="matDrawer.toggle()">
                 <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
             </button>
-            
+
         </div>
-        
+
     </div>
-    
+
     <mat-drawer-container class="flex-auto -mt-16">
-        
+
         <!-- Drawer -->
-        <mat-drawer
-            class="w-72 "
-            [autoFocus]="false"
-            [mode]="drawerMode"
-            [opened]="drawerOpened"
-            #matDrawer>
+        <mat-drawer class="w-72 " [autoFocus]="false" [mode]="drawerMode" [opened]="drawerOpened" #matDrawer>
             <!-- Demo sidebar -->
             <ng-scrollbar>
-            <div>
-               <!-- <div class="mx-6 mt-10">
+                <div>
+                    <!-- <div class="mx-6 mt-10">
                     <mat-accordion>
                         <mat-expansion-panel [expanded]="panelOpenState === true" (opened)="panelOpenState = true"
                                              (closed)="panelOpenState = false">
@@ -76,16 +66,12 @@
                         </mat-expansion-panel>
                       </mat-accordion>
                 </div>-->
-                <fuse-vertical-navigation
-                    [appearance]="'default'"
-                    [navigation]="menuData"
-                    [inner]="true"
-                    [mode]="'side'"
-                    [name]="'demo-sidebar-navigation'"
-                    [opened]="true"></fuse-vertical-navigation>
-    
-                <!-- Storage -->
-               <!-- <div class="mx-6 mt-2">
+                    <fuse-vertical-navigation [appearance]="'default'" [navigation]="projecthubservice.menuData"
+                        [inner]="true" [mode]="'side'" [name]="'projecthub-navigation'" [opened]="true">
+                    </fuse-vertical-navigation>
+
+                    <!-- Storage -->
+                    <!-- <div class="mx-6 mt-2">
                     <div class="flex items-center">
                         <mat-icon
                             class="mr-2 icon-size-5"
@@ -100,20 +86,20 @@
                             [value]="19.9"></mat-progress-bar>
                     </div>
                 </div> -->
-    
-                <!-- Users -->
- 
 
-            </div>
-        </ng-scrollbar>
+                    <!-- Users -->
+
+
+                </div>
+            </ng-scrollbar>
         </mat-drawer>
 
         <!-- Drawer content -->
         <mat-drawer-content class="flex flex-col">
-            
+
             <!-- Main -->
             <div class="flex-auto">
-                
+
                 <router-outlet></router-outlet>
 
             </div>

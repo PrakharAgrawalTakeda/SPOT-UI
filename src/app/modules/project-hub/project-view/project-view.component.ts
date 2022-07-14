@@ -34,17 +34,19 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   askneedngxdata: any = [];
   askneedngxcolumns: any = []
   rows: any[] = [];
-  isclosedaskneedtoggle: boolean = false 
+  isclosedaskneedtoggle: boolean = false
   expanded: any = {};
   timeout: any;
   checkedan: boolean = false
   @ViewChild('myTable') table: any;
   indicatorlook = {
-    "fdac9aff-0e20-41ef-a851-5d259a4697cc":"Green",
-    "1AB9DC30-D39F-4673-9F11-1F3E7DE1C8D2":"Yellow",
-    "e8f4b0cd-813c-4f7c-a9b5-b955982985d9":"Red"
+    "fdac9aff-0e20-41ef-a851-5d259a4697cc": "Green",
+    "1AB9DC30-D39F-4673-9F11-1F3E7DE1C8D2": "Yellow",
+    "e8f4b0cd-813c-4f7c-a9b5-b955982985d9": "Red"
   }
 
+  //hubsettings
+  hubsetting: any = {}
 
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -56,22 +58,27 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(this.indicatorlook['1AB9DC30-D39F-4673-9F11-1F3E7DE1C8D2'])
     this.dataloader()
   }
 
-  dataloader(){
+  dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
       this.projectViewDetails = res
+      this.hubsetting = {
+        overallStatus: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1').hubValue : true,
+        risks: this.projectViewDetails.hubSettings.some(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1').hubValue : true,
+        asks: this.projectViewDetails.hubSettings.some(x => x.lookUpId == 'b4db29e9-d47a-4f4d-abbc-a5ed6cf0705d') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == 'b4db29e9-d47a-4f4d-abbc-a5ed6cf0705d').hubValue : true,
+        milestones: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '5259bc84-1485-4861-b73b-b83603b825b1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '5259bc84-1485-4861-b73b-b83603b825b1').hubValue : true,
+      }
       console.log(this.projectViewDetails)
       this.showContent = true
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
-      if(this.isclosedaskneedtoggle == false){
-      this.onlyopenAskNeeds()
+      if (this.isclosedaskneedtoggle == false) {
+        this.onlyopenAskNeeds()
       }
-      else{
+      else {
         this.allAskNeeds()
       }
       console.log(this.projectViewDetails)
@@ -135,8 +142,8 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.projecthubservice.drawerOpenedright == true){
-      this.projecthubservice.toggleDrawerOpen('','',[],'')
+    if (this.projecthubservice.drawerOpenedright == true) {
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
     }
   }
 }

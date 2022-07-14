@@ -83,4 +83,22 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getHubSettings(projectid: string){
+    var userid = GlobalVariables.apiurl+"HubSetting/"+projectid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async addHubSetting(body){
+    var link = GlobalVariables.apiurl+"HubSetting"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editHubSetting(body){
+    var link = GlobalVariables.apiurl+"HubSetting/" + body.hubSettingId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

@@ -11,19 +11,19 @@ export class SpotlightIndicatorsService {
     const temp: any = {}
     if( type == 'overall'){
       if(indicator == 'GreenUp'){
-        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-up'
+        temp.icontype = 'heroicons_solid:arrow-circle-up'
         temp.iconcolor = 'text-green-500'
       }
       else if( indicator == 'YellowUp'){
-        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-up'
+        temp.icontype = 'heroicons_solid:arrow-circle-up'
         temp.iconcolor = 'text-amber-500'
       }
       else if( indicator == 'YellowDown'){
-        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-down'
+        temp.icontype = 'heroicons_solid:arrow-circle-down'
         temp.iconcolor = 'text-amber-500'
       }
       else if( indicator == 'RedUp'){
-        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-up'
+        temp.icontype = 'heroicons_solid:arrow-circle-up'
         temp.iconcolor = 'text-red-500'
       }
       else if(indicator == 'Grey'){
@@ -31,7 +31,7 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = ''
       }
       else{
-        temp.icontype = 'heroicons_solid:heroicons_solid:arrow-circle-right'
+        temp.icontype = 'heroicons_solid:arrow-circle-right'
         if(indicator == 'Red'){
           temp.iconcolor = 'text-red-500'
         }
@@ -76,7 +76,7 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = 'text-purple-500'
       }
       else{
-        temp.icontype = 'circle'
+        temp.icontype = 'mat_solid:circle'
         temp.iconcolor = ''
       }
     }

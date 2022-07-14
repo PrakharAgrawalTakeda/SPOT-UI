@@ -75,6 +75,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           }
         }
         console.log(this.askneedform)
+        this.projecthubservice.isFormChanged = false
       })
     }
     else {
@@ -97,8 +98,11 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           this.askneedform.controls['includeInReport'].disable()
         }
       }
-
+      this.projecthubservice.isFormChanged = false
     }
+    this.askneedform.valueChanges.subscribe(res => {
+      this.projecthubservice.isFormChanged = true
+    })
   }
 
   submitaskneed() {
@@ -106,7 +110,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
     console.log(typeof this.askneedform.value.logDate)
     console.log(this.askneedform.value.needByDate)
     console.log(this.askneedform.errors)
-
+    this.projecthubservice.isFormChanged = false
 
     if (this.askneedform.valid) {
       if (this.projecthubservice.itemid == "new") {
@@ -177,7 +181,6 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
         this.apiService.editAskNeed(mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
-
         })
       }
     }
