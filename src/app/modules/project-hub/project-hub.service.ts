@@ -48,7 +48,7 @@ export class ProjectHubService {
         type    : 'group',
         children: [
             {
-                title: 'Project View',
+                title: 'Project Board',
                 type : 'basic',
                 icon : 'heroicons_outline:clipboard-list',
                 link: 'project-view'
