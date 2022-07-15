@@ -1,11 +1,11 @@
-<div *ngIf='showContent' class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 p-8 ">
-    <div *ngIf="hubsetting.overallStatus" class="xl:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-        <div class="p-6 flex items-start justify-between pt-2 pr-0">
+<div *ngIf='showContent' class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 p-8 pt-0 ">
+    <div *ngIf="hubsetting.overallStatus" class="xl:col-span-6 flex flex-col flex-auto pt-2 pb-2 pl-6 pr-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="pl-6 pb-0 flex items-start justify-between pt-2 pr-0">
             <div class="mr-4  font-medium tracking-tight leading-6 truncate " style="padding-top: 8px;">
                 <h3 class="text-xl text-primary">Overall Status</h3>
                 <p class="text-sm">Status Through: {{projectViewDetails.statusData.statusThrough | date:'dd-MMM-yyyy'}}
                 </p>
-                <div class="flex items-start justify-between pt-6">
+                <div class="flex items-start justify-between pt-2">
                     <p> Overall Status</p>&nbsp;
                     <mat-icon
                         svgIcon="{{(indicator.getIndicators(indicatorlook[projectViewDetails.statusData.overallStatusId], 'circle')).icontype}}"
@@ -55,7 +55,7 @@
         <!-- Summary -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 p-6">
             <div
-                class="xl:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
+                class="xl:col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between">
                     <div class="text-lg font-medium tracking-tight leading-6 truncate">Current Status</div>
                 </div>
@@ -65,7 +65,7 @@
             </div>
             <!-- Overdue -->
             <div
-                class="xl:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
+                class="xl:col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between">
                     <div class="text-lg font-medium tracking-tight leading-6 truncate">Recent Accomplishment</div>
                 </div>
@@ -75,7 +75,7 @@
             </div>
             <!-- Issues -->
             <div
-                class="xl:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
+                class="xl:col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between">
                     <div class="text-lg font-medium tracking-tight leading-6 truncate">Next Priorities</div>
                 </div>
