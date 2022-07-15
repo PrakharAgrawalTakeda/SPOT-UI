@@ -46,6 +46,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OverallStatusEditComponent } from './project-view/overall-status-edit/overall-status-edit.component';
 import { ProjectSingleDropdownComponent } from './common/project-single-dropdown/project-single-dropdown.component';
 import { FuseAlertModule } from '@fuse/components/alert';
+import { CloseOutComponent } from './close-out/close-out.component';
+import { ProjectCharterComponent } from './project-charter/project-charter.component';
+import { BusinessCaseComponent } from './business-case/business-case.component';
+import { ProjectProposalComponent } from './project-proposal/project-proposal.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -110,6 +114,26 @@ export const projectRoutes: Route[] = [
         path: 'hub-settings',
         component: HubSettingsComponent,
         pathMatch: 'full'
+      },
+      {
+        path: 'project-proposal',
+        component: ProjectProposalComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'business-case',
+        component: BusinessCaseComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'project-charter',
+        component: ProjectCharterComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'close-out',
+        component: CloseOutComponent,
+        pathMatch: 'full'
       }
       
       ]
@@ -133,7 +157,11 @@ export const projectRoutes: Route[] = [
     AskNeedViewEditComponent,
     UserSingleDropdownComponent,
     OverallStatusEditComponent,
-    ProjectSingleDropdownComponent
+    ProjectSingleDropdownComponent,
+    CloseOutComponent,
+    ProjectCharterComponent,
+    BusinessCaseComponent,
+    ProjectProposalComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),

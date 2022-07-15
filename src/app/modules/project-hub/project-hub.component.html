@@ -22,8 +22,10 @@
             <!-- Title -->
             <div class="mt-2">
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    <span *ngIf="projectDetails.isArchived">[ARCHIVED]&nbsp;</span><span
-                        *ngIf="projectDetails.isConfidential">[CONF]&nbsp;</span>{{projectDetails.problemTitle}}
+                    <span *ngIf="projectDetails.isArchived && !projectDetails.isConfidential" >[ARCHIVED]&nbsp;</span>
+                    <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>
+                    <span *ngIf="projectDetails.isConfidential && projectDetails.isArchived">[ARCHIVED CONF]&nbsp;</span>
+                    {{projectDetails.problemTitle}}
                 </h2>
             </div>
         </div>
