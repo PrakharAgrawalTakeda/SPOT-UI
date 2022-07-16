@@ -52,7 +52,7 @@ export class ProjectHubComponent implements OnInit {
         })
         this.apiService.getportfolioData(this.id).then((res) => {
             this.portfolioDetails = res
-            console.log(res)
+            console.log(this.portfolioDetails.phase)
         })
     }
 
