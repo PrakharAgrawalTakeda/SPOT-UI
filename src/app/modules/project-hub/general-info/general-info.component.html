@@ -9,7 +9,9 @@
           <label style="font-weight:500;">Is Confidential?</label>
 
           <div class="sm:col-span-4 flex items-center justify-between">
-            <mat-button-toggle-group formControlName="confidential" name="confidential">
+            <mat-button-toggle-group value="{{projectdata.projectData.isConfidential}}" [(ngModel)]="isConfidential">
+              <!-- formControlName="confidential"
+              name="confidential" -->
               <mat-button-toggle value="true">Yes</mat-button-toggle>
               <mat-button-toggle value="false">No</mat-button-toggle>
             </mat-button-toggle-group>
@@ -75,7 +77,7 @@
           <mat-form-field class="fuse-mat-no-subscript w-full">
             <mat-label>Record Creation Date</mat-label>
 
-            <input matInput disabled="disabled" formControlName="createddate" name="createddate">
+            <input matInput disabled="disabled" value = "{{projectdata.projectData.createdDate| date:'dd/MM/yyyy'}}" formControlName="createddate" name="createddate">
           </mat-form-field>
         </div>
       </div>
@@ -136,7 +138,7 @@
           <mat-form-field class="fuse-mat-no-subscript w-full">
             <mat-label>Primary Product</mat-label>
             <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
-              [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="value">
+              [formControl]="myControl" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectprimaryProduct($event)">
               <mat-option *ngFor="let option of filteredOptions | async" [value]="option.productId">
                 {{option.fullProductName}}
@@ -163,7 +165,8 @@
                 </button>
               </mat-chip>
               <input placeholder="Select and/or type to search" #fruitInput [formControl]="fruitCtrl"
-                [matAutocomplete]="fruity" [matChipInputFor]="chipList">
+                [matAutocomplete]="fruity" [matChipInputFor]="chipList" name="fruitCtrl"
+                (matChipInputTokenEnd)="add($event)">
             </mat-chip-list>
             <mat-autocomplete #fruity="matAutocomplete" (optionSelected)="selected($event)">
               <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
@@ -193,7 +196,8 @@
           <label style="font-weight:500;">OE Project?</label>
 
           <div class="sm:col-span-4 flex items-center justify-between">
-            <mat-button-toggle-group aria-label="OE Project" formControlName="OE" name="OE">
+            <mat-button-toggle-group aria-label="OE Project" value="{{projectdata.projectData.isOeproject}}" [(ngModel)]="isOeproject">
+              <!-- formControlName="OE" name="OE" -->
               <mat-button-toggle value="true">Yes</mat-button-toggle>
               <mat-button-toggle value="false">No</mat-button-toggle>
             </mat-button-toggle-group>
@@ -209,7 +213,9 @@
           <label style="font-weight:500;">Tech Transfer?</label>
 
           <div class="sm:col-span-4 flex items-center justify-between">
-            <mat-button-toggle-group formControlName="techtransfer" name="techtransfer">
+            <mat-button-toggle-group value="{{projectdata.projectData.isTechTransfer}}" [(ngModel)]="isTechTransfer">
+              <!-- formControlName="techtransfer"
+            name="techtransfer" -->
               <mat-button-toggle value="true">Yes</mat-button-toggle>
               <mat-button-toggle value="false">No</mat-button-toggle>
             </mat-button-toggle-group>
@@ -224,7 +230,9 @@
           <label style="font-weight:500;">CAPS Project?</label>
 
           <div class="sm:col-span-4 flex items-center justify-between">
-            <mat-button-toggle-group formControlName="caps" name="caps">
+            <mat-button-toggle-group value="{{projectdata.projectData.isCapsProject}}" [(ngModel)]="isCapsProject">
+              <!-- formControlName="caps"
+            name="caps" -->
               <mat-button-toggle value="true">Yes</mat-button-toggle>
               <mat-button-toggle value="false">No</mat-button-toggle>
             </mat-button-toggle-group>
@@ -238,7 +246,7 @@
           <mat-form-field class="fuse-mat-no-subscript w-full">
             <mat-label>Environmental Portoflio</mat-label>
             <input type="text" placeholder="Select and/or type to search" aria-label="Number" matInput
-              [formControl]="emControl" [matAutocomplete]="autocom" [(ngModel)]="values">
+              [formControl]="emControl" [matAutocomplete]="autocom">
             <mat-autocomplete #autocom="matAutocomplete" (optionSelected)="selectemPortfolio($event)">
               <mat-option *ngFor="let em of filteredEms | async" [value]="em.portfolioOwnerId">
                 {{em.portfolioOwner}}
