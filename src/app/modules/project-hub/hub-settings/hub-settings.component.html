@@ -1,4 +1,4 @@
-<div *ngIf="initialized == true" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 p-4">
+<div *ngIf="initialized == true" class="grid grid-cols-1 gap-6 w-full min-w-0 p-4">
     <div class="xl:col-span-6 flex flex-col flex-auto pl-6 pr-6">
         <div class="pb-6 font-medium tracking-tight leading-6 truncate ">
             <h3 class="text-xl text-primary">Hub Settings</h3>
@@ -8,7 +8,7 @@
             <mat-accordion class="h-120" multi>
                 <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header class="pt-10 pb-10">
-                        <mat-panel-title>
+                        <mat-panel-title class="font-bold">
                             Project Board Section
                         </mat-panel-title>
                     </mat-expansion-panel-header>
@@ -23,7 +23,7 @@
                         </mat-slide-toggle>
                     </div>
                     <div class="flex items-start justify-between incuded-in-dash">
-                        Risk,Issues & Safety
+                        Risk & Issues
                         <mat-slide-toggle [labelPosition]="'before'" formControlName="risks">
                         </mat-slide-toggle>
                     </div>
@@ -35,7 +35,7 @@
                 </mat-expansion-panel>
                 <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header class="pt-10 pb-10">
-                        <mat-panel-title>
+                        <mat-panel-title class="font-bold">
                             Others
                         </mat-panel-title>
                     </mat-expansion-panel-header>

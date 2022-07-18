@@ -39,9 +39,9 @@ export class ProjectHubComponent implements OnInit {
         this.apiService.getproject(this.id).then((res) => {
             this.projectDetails = res
             this.apiService.getHubSettings(this.id).then((response: any) => {
-                this.projecthubservice.menuData[0].children[2].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
-                this.projecthubservice.menuData[0].children[3].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
-                this.projecthubservice.menuData[0].children[4].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                this.projecthubservice.menuData[0].children[5].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                this.projecthubservice.menuData[0].children[8].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                this.projecthubservice.menuData[0].children[6].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
                 
                 
                 //nav refresh
@@ -52,7 +52,7 @@ export class ProjectHubComponent implements OnInit {
         })
         this.apiService.getportfolioData(this.id).then((res) => {
             this.portfolioDetails = res
-            console.log(res)
+            console.log(this.portfolioDetails.phase)
         })
     }
 

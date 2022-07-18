@@ -58,18 +58,19 @@
         </ng-container>
         <!-- Components -->
         <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
-            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
             <search [appearance]="'bar'"></search>
+            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
             <shortcuts></shortcuts>
-            <messages></messages>
+            <!--<messages></messages>-->
             <notifications></notifications>
+            <user class="bg-primary text-on-primary p-3"></user>
             <!--<button
                 class="lg:hidden"
                 mat-icon-button
                 (click)="quickChat.toggle()">
                 <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'"></mat-icon>
             </button>-->
-            <user></user>
+            
         </div>
     </div>
 

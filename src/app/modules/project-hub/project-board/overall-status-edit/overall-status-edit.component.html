@@ -16,7 +16,7 @@
         </mat-form-field>
         <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
             <mat-label>Last Updated</mat-label>
-            <input matInput [matDatepicker]="picker2" [max]="today" [placeholder]="'Choose a date'"
+            <input matInput [matDatepicker]="picker2" [max]="today" [placeholder]="'Last Updated'"
                 formControlName="statusLastUpdated" name="statusLastUpdated">
             <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
@@ -31,18 +31,21 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>Overall Status</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Overall Status'" formControlName="overallStatusDescription"
+        <mat-label>Overall Status<mat-icon class="pe" matTooltip="Provide an explanation/justification for any red stop light status indicator." >help</mat-icon></mat-label>
+        <mat-hint>Provide an explanation/justification for any red stop light status indicator.</mat-hint>
+        <textarea matInput [rows]="5" [placeholder]="'Provide an explanation/justification for any red stop light status indicator.'" formControlName="overallStatusDescription"
             name="overallStatusDescription"></textarea>
     </mat-form-field>
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label>Recent Accomplishments</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Recent Accomplishments'" formControlName="recentAccomplishments"
+        <mat-label>Recent Accomplishments<mat-icon class="pe" matTooltip="Provide a summary/list of major accomplishments since last reporting cycle." >help</mat-icon></mat-label>
+        <mat-hint>Provide a summary/list of major accomplishments since last reporting cycle.</mat-hint>
+        <textarea matInput [rows]="5" [placeholder]="'Provide a summary/list of major accomplishments since last reporting cycle.'" formControlName="recentAccomplishments"
             name="recentAccomplishments" matTextareaAutosize></textarea>
     </mat-form-field>
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label>Next Priorities</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Next Priorities'" formControlName="nextSteps" name="nextSteps"
+        <mat-label>Next Priorities<mat-icon class="pe" matTooltip="Provide a summary for what items/actions the project team will be focusing on in the immediate short term." >help</mat-icon></mat-label>
+        <mat-hint>Provide a summary for what items/actions the project team will be focusing on in the immediate short term.</mat-hint>
+        <textarea matInput [rows]="5" [placeholder]="'Provide a summary for what items/actions the project team will be focusing on in the immediate short term.'" formControlName="nextSteps" name="nextSteps"
             matTextareaAutosize></textarea>
     </mat-form-field>
     <div class="flex items-start justify-between pt-6">

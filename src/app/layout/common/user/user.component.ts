@@ -21,7 +21,7 @@ export class UserComponent implements OnInit, OnDestroy
 
     @Input() showAvatar: boolean = true;
     user :any
-
+    isMenuOpen: boolean = false
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -81,7 +81,12 @@ export class UserComponent implements OnInit, OnDestroy
             status
         }).subscribe();
     }
-
+    menuOpen(){
+        this.isMenuOpen = true
+    }
+    menuClose(){
+        this.isMenuOpen = false
+    }
     /**
      * Sign out
      */

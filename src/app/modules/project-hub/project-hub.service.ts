@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FuseAlertService } from '@fuse/components/alert';
 import { FuseNavigationItem } from '@fuse/components/navigation';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ProjectApiService } from './common/project-api.service';
-import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-need-view-edit.component';
 
 @Injectable({
   providedIn: 'root'
@@ -42,92 +39,124 @@ export class ProjectHubService {
   }
   menuData: FuseNavigationItem[] = [
     {
-        id: 'project-info',
-        title   : 'Project Information',
-        subtitle: 'Information subtitle',
-        type    : 'group',
-        children: [
-            {
-                title: 'Project View',
-                type : 'basic',
-                icon : 'heroicons_outline:clipboard-list',
-                link: 'project-view'
-            },
-            {
-                title: 'Assoiated Projects',
-                type : 'basic',
-                icon : 'heroicons_outline:link',
-                link : 'associated-projects' 
-            },
-            {
-                id: 'budget',
-                title: 'Budget',
-                type : 'basic',
-                icon : 'heroicons_outline:currency-dollar',
-                link : 'budget' 
-            },
-            {
-                title: 'Project Documents',
-                type : 'basic',
-                icon : 'heroicons_outline:document-text',
-                link : 'project-documents' 
-            },
-            {
-                title: 'Project team',
-                type : 'basic',
-                icon : 'heroicons_outline:user-group',
-                link : 'project-team' 
-            }
-        ]
+      id: 'project-info',
+      title: 'Project Hub Menu',
+      type: 'group',
+      children: [
+        {
+          title: 'Project Board',
+          type: 'basic',
+          icon: 'heroicons_outline:clipboard-list',
+          link: 'project-board'
+        },
+        {
+          title: 'Assoiated Projects',
+          type: 'basic',
+          icon: 'heroicons_outline:link',
+          link: 'associated-projects'
+        },
+        {
+          title: 'General Info',
+          type: 'basic',
+          icon: 'heroicons_outline:pencil-alt',
+          link: 'general-info'
+        },
+        {
+          title: 'Project Proposal',
+          type: 'basic',
+          icon: 'mat_outline:insert_chart',
+          link: 'project-proposal'
+        },
+        {
+          title: 'Business Cases',
+          type: 'basic',
+          icon: 'heroicons_outline:presentation-chart-line',
+          link: 'business-case'
+        },
+        {
+          title: 'Budget',
+          type: 'basic',
+          icon: 'heroicons_outline:currency-dollar',
+          link: 'budget'
+        },
+        {
+          title: 'Project Team',
+          type: 'basic',
+          icon: 'heroicons_outline:user-group',
+          link: 'project-team'
+        },
+        {
+          title: 'CAPS',
+          type: 'basic',
+          icon: 'iconsmind:tree_4',
+          link: 'caps'
+        },
+        {
+          title: 'Documents',
+          type: 'basic',
+          icon: 'heroicons_outline:document-text',
+          link: 'project-documents'
+        },
+        {
+          type: 'spacer'
+        },
+        {
+          type: 'spacer'
+        },
+        {
+          type: 'spacer'
+        },
+        {
+          title: 'Local Attributes',
+          type: 'basic',
+          icon: 'heroicons_outline:document-text',
+          link: 'local-attributes'
+        },
+        {
+          title: 'Reports',
+          type: 'basic',
+          icon: 'heroicons_outline:presentation-chart-bar',
+          link: 'reports'
+        },
+        {
+          title: 'Hub Settings',
+          type: 'basic',
+          icon: 'heroicons_outline:adjustments',
+          link: 'hub-settings'
+        }
+      ]
     },
     {
-        title   : 'Project Details and Forms',
-        type    : 'group',
-        children: [
-            {
-                title: 'General Info',
-                type : 'basic',
-                icon : 'heroicons_outline:pencil-alt',
-                link : 'general-info'
-            },
-            {
-                title: 'TOPS',
-                type : 'basic',
-                icon : 'mat_outline:business_center',
-                link : 'tops'
-            },
-            {
-                title: 'CAPS',
-                type : 'basic',
-                icon : 'iconsmind:tree_4',
-                link : 'caps'
-            },
-            {
-                title: 'Reports',
-                type : 'basic',
-                icon : 'heroicons_outline:presentation-chart-bar',
-                link : 'reports'
-            },
-            {
-                title: 'Local Attributes',
-                type : 'basic',
-                icon : 'heroicons_outline:location-marker',
-                link : 'local-attributes'
-            },
-            {
-                title: 'Hub Settings',
-                type : 'basic',
-                icon : 'heroicons_outline:adjustments',
-                link : 'hub-settings'
-            }
-        ]
+      title: 'Wizards',
+      type: 'group',
+      children: [
+        {
+          title: 'Business Case',
+          type: 'basic',
+          icon: 'mat_outline:business_center',
+          link: 'business-case'
+        },
+        {
+          title: 'Project Charter',
+          type: 'basic',
+          icon: 'heroicons_outline:location-marker',
+          link: 'project-charter'
+        },
+
+        {
+          title: 'Close Out',
+          type: 'basic',
+          icon: 'heroicons_outline:location-marker',
+          link: 'close-out'
+        },
+      ]
     },
-    
-   
+
+
     {
-        type: 'divider'
+      type: 'divider'
     }
-];
+  ];
   constructor(private fusealert: FuseConfirmationService) { }
 
   toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string): void {
