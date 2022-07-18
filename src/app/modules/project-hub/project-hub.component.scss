@@ -129,3 +129,55 @@ fuse-drawer .fuse-drawer-content {
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
+//END NORMAL POINTER
+
+//START LAST POINTER
+.pointer-last {
+    margin-right: 5px;
+    position: relative;
+    background-color: var(--fuse-primary);
+    color: var(--fuse-on-primary);
+    padding-left: 30px !important;
+    //padding-right: 30px !important;
+    border-radius: 0px 10px 10px 0;
+}
+
+.pointer-last:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 23px solid var(--fuse-bg-default);
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+}
+
+
+
+.pointer-last-unselect {
+    margin-right: 5px;
+    position: relative;
+    background-color: var(--fuse-primary-200);
+    color: var(--fuse-on-primary);
+    border-color: #4c9bcf;
+    padding-left: 30px !important;
+    //padding-right: 30px !important;
+    border-radius: 0px 10px 10px 0;
+}
+
+.pointer-last-unselect:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 23px solid var(--fuse-bg-default);
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+}
+
+
+// END LAST POINTER
