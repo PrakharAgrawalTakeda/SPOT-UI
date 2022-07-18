@@ -1,7 +1,7 @@
 <div [formGroup]="formgroup">
     <mat-form-field class="w-full" [floatLabel]="'always'">
         <mat-label>{{label}}</mat-label>
-        <input matInput [placeholder]="label" formControlName="projectsingle" name="projectsingle" [matAutocomplete]="auto">
+        <input matInput placeholder="Select and/or type to search" formControlName="projectsingle" name="projectsingle" [matAutocomplete]="auto">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onProjectSelectenter($event)">
             <mat-option *ngFor="let option of resultSets" [value]="option">
                 {{option.problemTitle}}
