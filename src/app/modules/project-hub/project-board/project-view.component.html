@@ -1,11 +1,12 @@
-<div *ngIf='showContent' class="grid grid-cols-1 gap-6 w-full min-w-0 p-8 pt-0 ">
-    <div class="col-span-6 flex items-start justify-between">
+<div *ngIf='showContent' class="gap-6 w-full min-w-0 p-8 pt-0 ">
+    <div class="col-span-6 mb-6 flex items-start justify-between">
         <div></div>
         <button mat-flat-button [color]="'primary'">
             Generate Dashboard
         </button>
     </div>
-    <div *ngIf="hubsetting.overallStatus" class="xl:col-span-6 flex flex-col flex-auto pt-2 pb-2 pl-6 pr-6 bg-card shadow rounded-2xl overflow-hidden">
+    <div *ngIf="hubsetting.overallStatus"
+        class="xl:col-span-6 flex flex-col flex-auto pt-2 pb-2 mb-6 pl-6 pr-6 bg-card shadow rounded-2xl overflow-hidden">
         <div class="pl-6 pb-0 flex items-start justify-between pt-2 pr-0">
             <div class="mr-4  font-medium tracking-tight leading-6 truncate " style="padding-top: 8px;">
                 <h3 class="text-xl text-primary">Overall Status</h3>
@@ -59,7 +60,7 @@
             </div>
         </div>
         <!-- Summary -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 p-6">
+        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 p-6">
             <div
                 class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between">
@@ -92,8 +93,93 @@
         </div>
     </div>
 
+    <!-- Performance -->
+    <div *ngIf="hubsetting.overallStatus"
+        class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="p-6 flex items-start justify-between">
+            <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Performance</div>
+
+            <div class="text-primary">
+                <div class="flex items-start justify-between">
+                    <div style="padding-right: 5px;">
+                        <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                            (click)="projecthubservice.toggleDrawerOpen('AskNeed', 'new', [], id)">
+                            <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                        </button>
+                    </div>
+                    <div>
+                        <mat-slide-toggle class="primary slider-adjust" [checked]="checkedan"
+                            (change)="changeaskneed($event)">Include Closed
+                            Items</mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-x-auto mx-6">
+            <ngx-datatable [headerHeight]="64" [rowHeight]="64" [scrollbarV]="false" columnMode="force"
+                class="pr-6 font-medium text-sm text-secondary whitespace-nowrap"
+                [rows]="projectViewDetails.overallPerformace"  #overallPerformance>
+                <ngx-datatable-column 
+                [minWidth]="50" [maxWidth]="50" [width]="50" name="metric">
+                    <ng-template let-column="column" ngx-datatable-header-template>Metric</ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p style="overflow-wrap: break-worc;">{{value}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="currentState">
+                    <ng-template let-column="column" ngx-datatable-header-template>Baseline</ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="targetPerformance">
+                    <ng-template let-column="column" ngx-datatable-header-template>Target Performance</ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="actualPerformance">
+                    <ng-template let-column="column" ngx-datatable-header-template>Actual Performance</ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [width]="100" [resizeable]="false" [sortable]="false" [draggable]="false"
+                    [canAutoResize]="false">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                        <div>
+                            <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                                <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
+
+                            </a>
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            <a href="javascript:void(0)" title="Edit Single"
+                                (click)="projecthubservice.toggleDrawerOpen('AskNeed', row.askNeedUniqueId, projectViewDetails.askNeedData)">
+                                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div style="padding-top:35px;">
+                            <div [ngClass]="{'closed': row.closeDate != null}"><strong>Comments:</strong>
+                                {{row.comments}}</div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+            </ngx-datatable>
+        </div>
+    </div>
+
     <!-- Risk Issues -->
-    <div *ngIf="hubsetting.risks" class="xl:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+    <div *ngIf="hubsetting.risks"
+        class="xl:col-span-6 flex flex-col flex-auto mb-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
         <div class="p-6">
             <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Risk/Issues</div>
         </div>
@@ -175,9 +261,10 @@
             </table>
         </div>
     </div>
-    
+
     <!-- Ask Needs -->
-    <div *ngIf="hubsetting.asks" class="xl:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+    <div *ngIf="hubsetting.asks"
+        class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
         <div class="p-6 flex items-start justify-between">
             <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Ask/Needs</div>
 
@@ -264,7 +351,8 @@
         </div>
     </div>
     <!-- Milestones -->
-    <div *ngIf="hubsetting.milestones" class="xl:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+    <div *ngIf="hubsetting.milestones"
+        class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
         <div class="p-6">
             <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Schedule</div>
         </div>

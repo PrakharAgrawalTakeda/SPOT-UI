@@ -1,3 +1,4 @@
+<!--absolute inset-0 flex flex-col min-w-0 overflow-hidden-->
 <div class="flex flex-col flex-auto min-w-0"
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
@@ -115,7 +116,7 @@
         <mat-drawer-content class="flex flex-col">
 
             <!-- Main -->
-            <div class="flex-auto">
+            <div class="flex-auto overflow-y-auto">
 
                 <router-outlet></router-outlet>
 
