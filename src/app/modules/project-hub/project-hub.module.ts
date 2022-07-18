@@ -20,7 +20,7 @@ import { FuseDrawerModule } from '@fuse/components/drawer';
 import { ProjectHubComponent } from './project-hub.component';
 import { FuseNavigationModule } from '@fuse/components/navigation';
 import { ProjectTeamComponent } from './project-team/project-team.component';
-import { ProjectViewComponent } from './project-view/project-view.component';
+import { ProjectViewComponent } from './project-board/project-view.component';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AssociatedProjectsComponent } from './associated-projects/associated-projects.component';
 import { BudgetComponent } from './budget/budget.component';
@@ -34,7 +34,7 @@ import { HubSettingsComponent } from './hub-settings/hub-settings.component';
 import { MatChipsModule } from '@angular/material/chips';
 import {MatSelectModule} from '@angular/material/select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-need-view-edit.component';
+import { AskNeedViewEditComponent } from './project-board/ask-need-view-edit/ask-need-view-edit.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -43,7 +43,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-single-dropdown.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { OverallStatusEditComponent } from './project-view/overall-status-edit/overall-status-edit.component';
+import { OverallStatusEditComponent } from './project-board/overall-status-edit/overall-status-edit.component';
 import { ProjectSingleDropdownComponent } from './common/project-single-dropdown/project-single-dropdown.component';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { CloseOutComponent } from './close-out/close-out.component';
@@ -58,7 +58,7 @@ export const projectRoutes: Route[] = [
       children:[{
         path: '',
         pathMatch: 'full',
-        redirectTo: 'project-view'
+        redirectTo: 'project-board'
       },
       {
         path: 'project-team',
@@ -66,7 +66,7 @@ export const projectRoutes: Route[] = [
         pathMatch: 'full'
       },
       {
-        path: 'project-view',
+        path: 'project-board',
         component: ProjectViewComponent,
         pathMatch: 'full'
       },

@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FuseAlertService } from '@fuse/components/alert';
 import { FuseNavigationItem } from '@fuse/components/navigation';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ProjectApiService } from './common/project-api.service';
-import { AskNeedViewEditComponent } from './project-view/ask-need-view-edit/ask-need-view-edit.component';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +47,7 @@ export class ProjectHubService {
           title: 'Project Board',
           type: 'basic',
           icon: 'heroicons_outline:clipboard-list',
-          link: 'project-view'
+          link: 'project-board'
         },
         {
           title: 'Assoiated Projects',
