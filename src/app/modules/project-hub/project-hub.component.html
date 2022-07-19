@@ -11,16 +11,16 @@
     </fuse-drawer>
     <!-- Header -->
     <div
-        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between pb-24 pl-3 pr-3 pt-6 dark:bg-transparent">
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between pb-24 pl-3 pr-3 pt-3 dark:bg-transparent">
         <div class="flex-1 min-w-0" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
             <!-- Breadcrumbs -->
 
-            <div class="hidden sm:flex flex-wrap items-center font-medium">
+            <!--<div class="hidden sm:flex flex-wrap items-center font-medium">
                 <div>
                     <p class="whitespace-nowrap" [ngClass]="projectDetails.isArchived?'text-gray-400':'text-primary'">
                         Project ID: {{projectDetails.problemId}}</p>
                 </div>
-            </div>
+            </div>-->
 
             <!-- Title -->
             <div class="mt-2">
@@ -29,33 +29,43 @@
                     <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>
                     <span *ngIf="projectDetails.isConfidential && projectDetails.isArchived">[ARCHIVED
                         CONF]&nbsp;</span>
-                    {{projectDetails.problemTitle}}
+                    {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
                 </h2>
             </div>
+                <!-- Actions -->
+    <div class="flex shrink-0 items-center justify-between mt-6 sm:mt-0 ">
+        <div class="flex">
+            <button mat-icon-button (click)="matDrawer.toggle()">
+                <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+            </button>
+            <button mat-flat-button [color]="'primary'" class="ml-3">
+                Generate Dashboard
+            </button>
         </div>
-        <!-- Actions -->
-        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
-            <div class=" flex items-center">
-                <div class="p-3 text-right">
-                    Project State<br>
-                    <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
-                </div>
-                <div class="p-3" [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'" style="z-index: 10;">Initiate</div>
-                <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"  style="z-index: 9;">Define</div>
-                <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'" style="z-index: 8;">Plan</div>
-                <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'" style="z-index: 7;">Execute</div>
-                <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"  style="z-index: 6;">Close</div>
-                <div class="p-3" [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'" style="z-index: 5;">Track</div>
+        <div class=" flex items-center">
+            <div class="p-3 text-right">
+                Project State<br>
+                <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
+            </div>
+            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
+                style="z-index: 10;">Initiate</div>
+            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
+                style="z-index: 9;">Define</div>
+            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
+                style="z-index: 8;">Plan</div>
+            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
+                style="z-index: 7;">Execute</div>
+            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
+                style="z-index: 6;">Close</div>
+            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
+                style="z-index: 5;">Track</div>
 
-            </div>
-            <div class="pl-3">
-                <button mat-icon-button (click)="matDrawer.toggle()">
-                    <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
-                </button>
-            </div>
         </div>
-
+        
     </div>
+        </div>
+    </div>
+
 
     <mat-drawer-container class="flex-auto -mt-16">
 

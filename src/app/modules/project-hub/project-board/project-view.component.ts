@@ -23,7 +23,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   askNeed: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild('ScheduleTable', { read: MatSort }) ScheduleMatSort: MatSort;
   @ViewChild(ProjectHubComponent) parent;
-  
+
   Schedule: MatTableDataSource<any> = new MatTableDataSource();
   projectViewDetails: any = {}
   id: string = ''
@@ -74,6 +74,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
       }
       console.log(this.projectViewDetails)
       this.showContent = true
+      
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
       if (this.isclosedaskneedtoggle == false) {
@@ -82,10 +83,14 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
       else {
         this.allAskNeeds()
       }
+      
       console.log(this.projectViewDetails)
+      console.log(document.getElementById('cs'))
+      console.log(document.getElementById('cs'))
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
+
     })
     this.auth.lookupMaster().then((res: any) => {
       for (let i of res) {
@@ -104,7 +109,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   }
   allAskNeeds() {
     this.isclosedaskneedtoggle = true
-    console.log(document.getElementById('cs').scrollHeight)
     this.askneedngxdata = this.projectViewDetails.askNeedData
   }
   onlyopenAskNeeds() {

@@ -3,8 +3,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import {AuthService} from '../../../../core/auth/auth.service'
+import { AuthService } from '../../../../core/auth/auth.service'
 import * as moment from 'moment';
+import { startWith, map } from 'rxjs';
+import { ProjectApiService } from '../../common/project-api.service';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -36,10 +38,20 @@ export const MY_FORMATS = {
 export class RiskIssueViewEditComponent implements OnInit {
   formFieldHelpers: string[] = [''];
   lookupdata: any = []
-  askneed: any = {} 
+  askneed: any = {}
   today = new Date();
   item: any = {}
-  constructor(public projecthubservice: ProjectHubService, public auth: AuthService) { }
+  functionSets: any = []
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService) {
+
+    this.functionSets = this.riskIssueForm.controls['function'].valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        var filterValue = value.toString().toLowerCase()
+        return this.lookupdata.filter(x => x.lookUpName.toLowerCase().includes(filterValue) && x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
+      })
+    )
+  }
   riskIssueForm = new FormGroup({
     logDate: new FormControl(''),
     type: new FormControl(''),
@@ -50,34 +62,70 @@ export class RiskIssueViewEditComponent implements OnInit {
     mitigation: new FormControl(''),
     dueDate: new FormControl(''),
     closeDate: new FormControl(''),
+    usersingle: new FormControl(''),
+    usersingleid: new FormControl(''),
+    function: new FormControl(''),
+    functionid: new FormControl('')
   })
   ngOnInit(): void {
     this.getllookup()
   }
-  getllookup(){
-    this.auth.lookupMaster().then((resp: any)=>{
-      this.lookupdata = resp
+
+  dataloader() {
+    this.apiService.riskIssueSingle(this.projecthubservice.itemid).then((res: any) => {
+      console.log(res)
+      this.riskIssueForm.patchValue({
+        logDate: res.logDate,
+        type: res.riskIssueTypeId,
+        ifThisHappens: res.ifHappens,
+        probability: res.probabilityId,
+        thisIsTheResult: res.riskIssueResult,
+        impact: res.impactId,
+        mitigation: res.mitigation,
+        dueDate: res.dueDate,
+        closeDate: res.closeDate,
+        usersingle: res.ownerName,
+        usersingleid: res.ownerId,
+        functionid: res.functionGroupId
+      })
+      if(res.functionGroupId != null){
+        this.riskIssueForm.controls.function.patchValue(this.lookupdata.find(x=>x.lookUpId == res.functionGroupId).lookUpName)
+      }
     })
   }
-  getissuetype():any{
-    return this.lookupdata.filter(x=>x.lookUpParentId=='6b4487a4-097d-43ee-890d-172c601cd09b').sort((a, b) => {
+  getllookup() {
+    this.auth.lookupMaster().then((resp: any) => {
+      this.lookupdata = resp
+      this.dataloader()
+      this.riskIssueForm.controls.function.patchValue('')
+    })
+  }
+  getissuetype(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == '6b4487a4-097d-43ee-890d-172c601cd09b').sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
-  })
+    })
   }
 
-  getprobability():any{
-    return this.lookupdata.filter(x=>x.lookUpParentId=='56b86714-15d8-45ef-ab5f-f50063254ceb').sort((a, b) => {
+  getprobability(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == '56b86714-15d8-45ef-ab5f-f50063254ceb').sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
-  })
+    })
   }
 
-  getimpact():any{
-    return this.lookupdata.filter(x=>x.lookUpParentId=='08434f33-9e4d-482c-b776-efe1c3cae12e').sort((a, b) => {
+  getimpact(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == '08434f33-9e4d-482c-b776-efe1c3cae12e').sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
-  })
+    })
   }
 
-  submitriskissue(){
+  onFunctionSelect(event: any) {
+    this.riskIssueForm.patchValue({
+      function: event.option.value.lookUpName,
+      functionid: event.option.value.lookUpId
+    })
+    console.log(this.riskIssueForm.controls.functionid.value)
+  }
+  submitriskissue() {
 
   }
 }

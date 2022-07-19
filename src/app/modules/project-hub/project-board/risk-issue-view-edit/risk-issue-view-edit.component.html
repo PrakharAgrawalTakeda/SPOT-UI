@@ -14,7 +14,7 @@
                 <mat-label>Type</mat-label>
                 <mat-select [placeholder]="'Type'" formControlName="type" name="type">
                     <mat-option value="">None</mat-option>
-                    <mat-option *ngFor="let option of getissuetype()" value="option.lookUpId">{{option.lookUpName}}</mat-option>
+                    <mat-option *ngFor="let option of getissuetype()" value="{{option.lookUpId}}">{{option.lookUpName}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -38,7 +38,7 @@
         <mat-label>Probability</mat-label>
         <mat-select [placeholder]="'Probability'" formControlName="probability" name="probability">
             <mat-option value="">None</mat-option>
-            <mat-option *ngFor="let option of getprobability()" value="option.lookUpId">{{option.lookUpName}}</mat-option>
+            <mat-option *ngFor="let option of getprobability()" value="{{option.lookUpId}}">{{option.lookUpName}}</mat-option>
         </mat-select>
     </mat-form-field>
 
@@ -52,7 +52,7 @@
         <mat-label>Impact</mat-label>
         <mat-select [placeholder]="'Impact'" formControlName="impact" name="impact">
             <mat-option value="">None</mat-option>
-            <mat-option *ngFor="let option of getimpact()" value="option.lookUpId">{{option.lookUpName}}</mat-option>
+            <mat-option *ngFor="let option of getimpact()" value="{{option.lookUpId}}">{{option.lookUpName}}</mat-option>
         </mat-select>
     </mat-form-field>
 
@@ -62,6 +62,19 @@
             name="mitigation"></textarea>
     </mat-form-field>
 
+    <app-user-single-dropdown [formgroup]="riskIssueForm" [label]="'Owner'"></app-user-single-dropdown>
+    
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+        <mat-label>Function</mat-label>
+        <input matInput [placeholder]="'Function'" formControlName="function" name="function" [matAutocomplete]="function">
+        <mat-autocomplete autoActiveFirstOption #function="matAutocomplete" (optionSelected)="onFunctionSelect($event)">
+            <mat-option *ngFor="let function of functionSets | async" [value]="function">
+                {{function.lookUpName}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    
+    
     <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
         <mat-label>Due Date</mat-label>
         <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'"

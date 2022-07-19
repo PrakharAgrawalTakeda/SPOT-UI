@@ -101,4 +101,10 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async riskIssueSingle(itemid: string){
+    var userid = GlobalVariables.apiurl+"RiskIssue/"+itemid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
