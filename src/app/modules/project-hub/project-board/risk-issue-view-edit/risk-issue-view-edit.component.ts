@@ -43,7 +43,13 @@ export class RiskIssueViewEditComponent implements OnInit {
   riskIssueForm = new FormGroup({
     logDate: new FormControl(''),
     type: new FormControl(''),
-    ifThisHappens: new FormControl('')
+    ifThisHappens: new FormControl(''),
+    probability: new FormControl(''),
+    thisIsTheResult: new FormControl(''),
+    impact: new FormControl(''),
+    mitigation: new FormControl(''),
+    dueDate: new FormControl(''),
+    closeDate: new FormControl(''),
   })
   ngOnInit(): void {
     this.getllookup()
@@ -58,6 +64,19 @@ export class RiskIssueViewEditComponent implements OnInit {
       return a.lookUpOrder - b.lookUpOrder;
   })
   }
+
+  getprobability():any{
+    return this.lookupdata.filter(x=>x.lookUpParentId=='56b86714-15d8-45ef-ab5f-f50063254ceb').sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+  })
+  }
+
+  getimpact():any{
+    return this.lookupdata.filter(x=>x.lookUpParentId=='08434f33-9e4d-482c-b776-efe1c3cae12e').sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+  })
+  }
+
   submitriskissue(){
 
   }
