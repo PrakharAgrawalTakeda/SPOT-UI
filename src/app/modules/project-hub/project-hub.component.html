@@ -1,5 +1,5 @@
 <!--absolute inset-0 flex flex-col min-w-0 overflow-hidden-->
-<div class="flex flex-col flex-auto min-w-0"
+<div class="inset-x-0 flex flex-col flex-auto min-w-0"
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
         (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'">
