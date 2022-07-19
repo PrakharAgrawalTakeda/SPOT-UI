@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -23,6 +23,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   askNeed: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild('ScheduleTable', { read: MatSort }) ScheduleMatSort: MatSort;
   @ViewChild(ProjectHubComponent) parent;
+  
   Schedule: MatTableDataSource<any> = new MatTableDataSource();
   projectViewDetails: any = {}
   id: string = ''
@@ -86,7 +87,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
     })
-
     this.auth.lookupMaster().then((res: any) => {
       for (let i of res) {
         this.lookupmaster.set(i.lookUpId, i.lookUpName)
@@ -104,6 +104,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   }
   allAskNeeds() {
     this.isclosedaskneedtoggle = true
+    console.log(document.getElementById('cs').scrollHeight)
     this.askneedngxdata = this.projectViewDetails.askNeedData
   }
   onlyopenAskNeeds() {
@@ -119,7 +120,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     }
   }
   toggleExpandRow(row) {
-    console.log('Toggled Expand Row!', row);
+    console.log('Toggled Expand Row!', this.table);
     this.table.rowDetail.toggleExpandRow(row);
   }
   test(): string {

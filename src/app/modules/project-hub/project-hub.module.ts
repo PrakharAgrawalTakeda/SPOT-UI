@@ -50,6 +50,8 @@ import { CloseOutComponent } from './close-out/close-out.component';
 import { ProjectCharterComponent } from './project-charter/project-charter.component';
 import { BusinessCaseComponent } from './business-case/business-case.component';
 import { ProjectProposalComponent } from './project-proposal/project-proposal.component';
+import { RiskIssuesTableComponent } from './common/risk-issues-table/risk-issues-table.component';
+import { RiskIssueViewEditComponent } from './project-board/risk-issue-view-edit/risk-issue-view-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -161,7 +163,9 @@ export const projectRoutes: Route[] = [
     CloseOutComponent,
     ProjectCharterComponent,
     BusinessCaseComponent,
-    ProjectProposalComponent
+    ProjectProposalComponent,
+    RiskIssuesTableComponent,
+    RiskIssueViewEditComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),

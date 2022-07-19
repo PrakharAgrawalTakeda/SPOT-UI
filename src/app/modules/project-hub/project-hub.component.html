@@ -6,6 +6,7 @@
         <div>
             <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
             <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
+            <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
         </div>
     </fuse-drawer>
     <!-- Header -->

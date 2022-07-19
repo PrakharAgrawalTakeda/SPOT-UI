@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RiskIssueViewEditComponent } from './risk-issue-view-edit.component';
+import { RiskIssuesTableComponent } from './risk-issues-table.component';
 
-describe('RiskIssueViewEditComponent', () => {
-  let component: RiskIssueViewEditComponent;
-  let fixture: ComponentFixture<RiskIssueViewEditComponent>;
+describe('RiskIssuesTableComponent', () => {
+  let component: RiskIssuesTableComponent;
+  let fixture: ComponentFixture<RiskIssuesTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RiskIssueViewEditComponent ]
+      declarations: [ RiskIssuesTableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RiskIssueViewEditComponent);
+    fixture = TestBed.createComponent(RiskIssuesTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
