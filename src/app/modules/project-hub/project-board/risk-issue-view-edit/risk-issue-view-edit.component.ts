@@ -214,7 +214,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           logDate: moment(this.riskIssueForm.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: "Grey",
-          //includeInCharter: this.riskIssueForm.value.,
+          includeInCharter: this.riskissue.includeInCharter,
           postMitigationProbability: this.riskIssueForm.value.riskIssueTypeId,
           postMitigationImpact: this.riskIssueForm.value.riskIssueTypeId,
           postMitigationComments: this.riskIssueForm.value.riskIssueTypeId
@@ -256,7 +256,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           logDate: moment(this.riskIssueForm.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: this.riskissue.indicator,
-          //includeInCharter: this.riskIssueForm.value.,
+          includeInCharter: this.riskissue.includeInCharter,
           postMitigationProbability: this.riskIssueForm.value.riskIssueTypeId,
           postMitigationImpact: this.riskIssueForm.value.riskIssueTypeId,
           postMitigationComments: this.riskIssueForm.value.riskIssueTypeId
