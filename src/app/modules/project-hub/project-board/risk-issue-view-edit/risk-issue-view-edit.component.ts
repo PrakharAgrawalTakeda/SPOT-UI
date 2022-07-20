@@ -65,7 +65,11 @@ export class RiskIssueViewEditComponent implements OnInit {
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
     function: new FormControl(''),
-    functionid: new FormControl('')
+    functionid: new FormControl(''),
+    includeInReport: new FormControl(''),
+    postMitigationProbability: new FormControl(''),
+    postMitigationImpact: new FormControl(''),
+    postMitigationComments: new FormControl('')
   })
   ngOnInit(): void {
     this.getllookup()
@@ -86,11 +90,24 @@ export class RiskIssueViewEditComponent implements OnInit {
         closeDate: res.closeDate,
         usersingle: res.ownerName,
         usersingleid: res.ownerId,
-        functionid: res.functionGroupId
+        functionid: res.functionGroupId,
+        includeInReport: res.includeInReport,
+        postMitigationProbability: res.postMitigationProbability,
+        postMitigationImpact: res.postMitigationImpact,
+        postMitigationComments: res.postMitigationComments
       })
-      if(res.functionGroupId != null){
-        this.riskIssueForm.controls.function.patchValue(this.lookupdata.find(x=>x.lookUpId == res.functionGroupId).lookUpName)
+      if (res.functionGroupId != null) {
+        this.riskIssueForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId).lookUpName)
       }
+
+      if (this.projecthubservice.all != []) {
+        if (this.projecthubservice.all.some(x => x.includeInReport == 3)) {
+          if (this.riskIssueForm.value.includeInReport != true) {
+            this.riskIssueForm.controls['includeInReport'].disable()
+          }
+        }
+      }
+
     })
   }
   getllookup() {
@@ -114,6 +131,18 @@ export class RiskIssueViewEditComponent implements OnInit {
 
   getimpact(): any {
     return this.lookupdata.filter(x => x.lookUpParentId == '08434f33-9e4d-482c-b776-efe1c3cae12e').sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+    })
+  }
+
+  getpostMitigationProbability(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == '3263E6FE-9C4E-4365-82CD-491113736EFA').sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+    })
+  }
+
+  getpostMitigationImpact(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == 'D4FF10E4-B354-4296-B780-1C1A9A379E70').sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
     })
   }
