@@ -182,7 +182,6 @@ export class ProjectHubService {
       const alertopener = this.fusealert.open(this.alert)
       alertopener.afterClosed().subscribe(res => {
         if (res == 'confirmed') {
-          console.log("hello idiot")
           this.item = {}
           this.itemtype = ""
           this.itemid = ""
@@ -194,7 +193,6 @@ export class ProjectHubService {
       })
     }
     else {
-      console.log("this is shady")
       this.itemid = itemid
       this.itemtype = itemtype
       this.all = all
