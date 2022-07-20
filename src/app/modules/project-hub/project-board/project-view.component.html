@@ -176,7 +176,7 @@
     <!-- Risk Issues -->
     <div *ngIf="hubsetting.risks"
         class="xl:col-span-6 flex flex-col flex-auto mb-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
-        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails] = "projectViewDetails"></app-risk-issues-table>
+        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails] = "projectViewDetails" [projectid]="id"></app-risk-issues-table>
     </div>
 
     <!-- Ask Needs -->
