@@ -330,7 +330,17 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     })
   }
   ngAfterViewInit(): void { }
-  
+  routeProject(projectid):void{
+    //this.close()
+    /*if (this.routes.url.includes('project-hub')){
+    this.routes.navigate(['project-hub/'+ projectid]).then(() => {
+        window.location.reload();
+      });
+    }
+    else{}*/
+        window.open('project-hub/'+ projectid, "_blank")
+    
+}
   selectoption(event: MatAutocompleteSelectedEvent, field: string): void {
     if(field == "PortfolioOwner"){
       console.log(event)
