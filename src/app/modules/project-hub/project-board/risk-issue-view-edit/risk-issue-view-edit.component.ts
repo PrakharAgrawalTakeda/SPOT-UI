@@ -106,7 +106,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         }
 
         if (this.projecthubservice.all != []) {
-          if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
+          if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 3) {
             if (this.riskIssueForm.value.includeInReport != true) {
               this.riskIssueForm.controls['includeInReport'].disable()
             }
@@ -136,10 +136,9 @@ export class RiskIssueViewEditComponent implements OnInit {
       })
       if (this.projecthubservice.all.length == 0) {
         console.log(this.projecthubservice.all)
-        this.riskIssueForm.controls['includeInReport'].disable()
       }
       else {
-        if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
+        if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 3) {
           this.riskIssueForm.controls['includeInReport'].disable()
         }
       }
