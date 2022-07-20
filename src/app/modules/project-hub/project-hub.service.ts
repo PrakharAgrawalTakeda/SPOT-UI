@@ -69,9 +69,23 @@ export class ProjectHubService {
         },
         {
           title: 'Business Cases',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:presentation-chart-line',
-          link: 'business-case'
+          children: [
+            {
+              title: 'Recommended Option',
+              type: 'basic',
+              
+            },
+            {
+              title: 'Option 2',
+              type: 'basic',
+            },
+            {
+              title: 'Option 3',
+              type: 'basic',
+            }
+          ]
         },
         {
           title: 'Budget',
