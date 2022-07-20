@@ -17,11 +17,17 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges{
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
 
   riskIssuesngxdata: any = []
+  isclosed: boolean = false
   constructor(public projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService) { }
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
+    if(this.isclosed == false){
     this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
+    }
+    else{
+      this.riskIssuesngxdata = this.riskIssuesData
+    }
     
   }
   ngOnInit(): void {
@@ -33,6 +39,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges{
     console.log(event)
     if(event.checked == true){
       this.riskIssuesngxdata = this.riskIssuesData
+      this.isclosed = true
     }
     else{
       this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
