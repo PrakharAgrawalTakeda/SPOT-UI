@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,7 +16,7 @@ import { ProjectHubService } from '../project-hub.service';
   styleUrls: ['./project-view.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ProjectViewComponent implements OnInit, OnDestroy {
+export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('riskIssuesTable', { read: MatSort }) riskIssuesMatSort: MatSort;
   riskIssues: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild('askNeedTable', { read: MatSort }) askNeedMatSort: MatSort;
@@ -34,8 +34,14 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   ScheduleHeaders: string[] = ['milestone', 'baselineFinish', 'plannedFinish', 'responsiblePersonName'];
   askneedngxdata: any = [];
   askneedngxcolumns: any = []
+  isEverythingLoaded: boolean = false
   rows: any[] = [];
   isclosedaskneedtoggle: boolean = false
+
+  overallCollapse: boolean = false
+  overallCollapseControll: boolean = false
+
+  overallCollapseClass: string = 'overall-shrink'
   expanded: any = {};
   timeout: any;
   checkedan: boolean = false
@@ -49,7 +55,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   //hubsettings
   hubsetting: any = {}
 
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, private indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router) {
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router, private changeDetector: ChangeDetectorRef) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.checkedan = false;
@@ -61,7 +67,41 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dataloader()
   }
+  ngAfterViewChecked(): void{
+    if(this.isEverythingLoaded == false){
+    if(document.getElementById('overall-status') != null){
+      this.collapseLogic();
+      this.changeDetector.detectChanges()
+      
+    }
+  }
+  }
 
+  collapseLogic(){
+    this.isEverythingLoaded = true
+    console.log(document.getElementById('ra').scrollHeight)
+    console.log(document.getElementById('ra').clientHeight)
+    if(
+      document.getElementById('sd').scrollHeight > document.getElementById('sd').clientHeight ||
+      document.getElementById('ra').scrollHeight > document.getElementById('ra').clientHeight ||
+      document.getElementById('ns').scrollHeight > document.getElementById('ns').clientHeight 
+    )
+    {
+      this.overallCollapse = true
+      this.overallCollapseControll = false
+    }
+  }
+  collapseToggle(){
+    if(this.overallCollapseControll == false){
+      this.overallCollapseClass = 'overall-expand'
+    }
+    else{
+    this.overallCollapseClass='overall-shrink'  
+    }
+    this.overallCollapseControll = !this.overallCollapseControll
+    
+
+  }
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
@@ -85,8 +125,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
       }
       
       console.log(this.projectViewDetails)
-      console.log(document.getElementById('cs'))
-      console.log(document.getElementById('cs'))
+      
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
