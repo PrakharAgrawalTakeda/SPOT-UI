@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
 
@@ -6,9 +6,10 @@ import { ProjectHubService } from '../../project-hub.service';
   selector: 'app-risk-issues-table',
   templateUrl: './risk-issues-table.component.html',
   styleUrls: ['./risk-issues-table.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RiskIssuesTableComponent implements OnInit {
+export class RiskIssuesTableComponent implements OnInit, OnChanges{
   @Input() riskIssuesData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
@@ -17,7 +18,12 @@ export class RiskIssuesTableComponent implements OnInit {
 
   riskIssuesngxdata: any = []
   constructor(public projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService) { }
-
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
+    this.riskIssuesData = this.projectViewDetails.riskIssuesData
+    this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
+    
+  }
   ngOnInit(): void {
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
     this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
