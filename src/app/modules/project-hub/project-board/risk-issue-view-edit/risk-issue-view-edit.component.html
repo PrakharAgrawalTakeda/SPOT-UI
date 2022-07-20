@@ -108,8 +108,9 @@
                     Post Mitigation
                 </mat-panel-title>
             </mat-expansion-panel-header>
+            <div class="padding">
             <div class="flex items-start justify-between incuded-in-dash">
-                <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3"
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full"
                     [floatLabel]="'always'">
                     <mat-label>Post-Mitigation Probability</mat-label>
                     <mat-select [placeholder]="'Post-Mitigation Probability'"
@@ -121,9 +122,11 @@
                     </mat-select>
                 </mat-form-field>
             </div>
+        </div>
 
+        <div class="padding">
             <div class="flex items-start justify-between incuded-in-dash">
-                <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3"
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full"
                     [floatLabel]="'always'">
                     <mat-label>Post-Mitigation Impact</mat-label>
                     <mat-select [placeholder]="'Post-Mitigation Impact'" formControlName="postMitigationImpact"
@@ -135,7 +138,8 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-
+        </div>
+            <div class="padding">
             <div class="flex items-start justify-between incuded-in-dash">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Post-Mitigation Comments</mat-label>
@@ -143,12 +147,12 @@
                         formControlName="postMitigationComments" name="postMitigationComments"></textarea>
                 </mat-form-field>
             </div>
-
+        </div>
 
         </mat-expansion-panel>
     </mat-accordion>
 
-
+<br>
     <div class="flex items-start justify-between">
         <a class="w-25" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">

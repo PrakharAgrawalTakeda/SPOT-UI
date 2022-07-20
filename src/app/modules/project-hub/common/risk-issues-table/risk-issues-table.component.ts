@@ -38,7 +38,7 @@ export class RiskIssuesTableComponent implements OnInit {
   getlinkname(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    return "This risk/issue is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
 
   }
   onDetailToggle(event: any){

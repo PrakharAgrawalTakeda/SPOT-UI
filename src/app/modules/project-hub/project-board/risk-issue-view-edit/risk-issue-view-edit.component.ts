@@ -73,12 +73,14 @@ export class RiskIssueViewEditComponent implements OnInit {
   })
   ngOnInit(): void {
     this.getllookup()
+    //this.dataloader()
   }
 
   dataloader() {
     if (this.projecthubservice.itemid != "new") {
       this.apiService.riskIssueSingle(this.projecthubservice.itemid).then((res: any) => {
         this.riskissue = res
+        console.log(this.projecthubservice)
         console.log(res)
         this.riskIssueForm.patchValue({
           logDate: res.logDate,
@@ -136,7 +138,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         this.riskIssueForm.controls['includeInReport'].disable()
       }
       else {
-        if (this.projecthubservice.all.some(x => x.includeInReport)) {
+        if (this.projecthubservice.all.some(x => x.includeInReport == 3)) {
           this.riskIssueForm.controls['includeInReport'].disable()
         }
       }
@@ -197,6 +199,7 @@ export class RiskIssueViewEditComponent implements OnInit {
 
     if (this.riskIssueForm.valid) {
       if (this.projecthubservice.itemid == "new") {
+        console.log(this.projecthubservice)
         var mainObjnew = {
           riskIssueUniqueId: "new",
           projectId: this.projecthubservice.projectid,
@@ -215,9 +218,9 @@ export class RiskIssueViewEditComponent implements OnInit {
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: "Grey",
           includeInCharter: this.riskissue.includeInCharter,
-          postMitigationProbability: this.riskIssueForm.value.riskIssueTypeId,
-          postMitigationImpact: this.riskIssueForm.value.riskIssueTypeId,
-          postMitigationComments: this.riskIssueForm.value.riskIssueTypeId
+          postMitigationProbability: this.riskIssueForm.value.postMitigationProbability,
+          postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
+          postMitigationComments: this.riskIssueForm.value.postMitigationComments
         }
         if (this.riskIssueForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
@@ -257,9 +260,9 @@ export class RiskIssueViewEditComponent implements OnInit {
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: this.riskissue.indicator,
           includeInCharter: this.riskissue.includeInCharter,
-          postMitigationProbability: this.riskIssueForm.value.riskIssueTypeId,
-          postMitigationImpact: this.riskIssueForm.value.riskIssueTypeId,
-          postMitigationComments: this.riskIssueForm.value.riskIssueTypeId
+          postMitigationProbability: this.riskIssueForm.value.postMitigationProbability,
+          postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
+          postMitigationComments: this.riskIssueForm.value.postMitigationComments
         }
         //Log Date
         console.log(this.riskIssueForm.value.logDate)
