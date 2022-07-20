@@ -11,7 +11,7 @@
     </fuse-drawer>
     <!-- Header -->
     <div
-        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between pb-24 pl-3 pr-3 pt-3 dark:bg-transparent">
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between pb-5rem pl-3 pr-3 pt-3 dark:bg-transparent">
         <div class="flex-1 min-w-0" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
             <!-- Breadcrumbs -->
 
@@ -96,7 +96,7 @@
                       </mat-accordion>
                 </div>-->
                     <fuse-vertical-navigation [appearance]="'default'" [navigation]="projecthubservice.menuData"
-                        [inner]="true" [mode]="'side'" [name]="'projecthub-navigation'" [opened]="true">
+                        [inner]="true" [mode]="'side'" [name]="'projecthub-navigation'" [opened]="true" class="mt-0">
                     </fuse-vertical-navigation>
 
                     <!-- Storage -->

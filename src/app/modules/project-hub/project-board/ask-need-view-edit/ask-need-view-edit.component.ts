@@ -67,7 +67,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           includeInReport: res.includeInReport
         })
         if (this.projecthubservice.all != []) {
-          if (this.projecthubservice.all.some(x => x.includeInReport)) {
+          if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
             if (this.askneedform.value.includeInReport != true) {
               this.askneedform.controls['includeInReport'].disable()
               //  this.askneedform.controls['includeInReport'].disabled
@@ -91,10 +91,10 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
       })
       if (this.projecthubservice.all.length == 0) {
         console.log(this.projecthubservice.all)
-        this.askneedform.controls['includeInReport'].disable()
       }
       else {
-        if (this.projecthubservice.all.some(x => x.includeInReport)) {
+        console.log(this.projecthubservice.all)
+        if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
           this.askneedform.controls['includeInReport'].disable()
         }
       }

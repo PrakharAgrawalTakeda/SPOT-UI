@@ -1,1 +1,10 @@
 @import '~@swimlane/ngx-datatable/assets/icons.css';
+.overall-shrink{
+    max-height: 250px;
+    transition-timing-function: ease-in-out;
+}
+.overall-expand{
+    max-height: 100%;
+    transition-timing-function: ease-in-out;
+
+}
