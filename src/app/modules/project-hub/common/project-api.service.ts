@@ -107,4 +107,16 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async editRiskIssue(body){
+    var link = GlobalVariables.apiurl+"RiskIssue/" + body.riskIssueUniqueId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async addRiskIssue(body){
+    var link = GlobalVariables.apiurl+"RiskIssue"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
