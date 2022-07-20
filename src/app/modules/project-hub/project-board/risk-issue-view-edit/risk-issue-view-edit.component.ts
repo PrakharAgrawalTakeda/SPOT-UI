@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -38,7 +38,7 @@ export const MY_FORMATS = {
 export class RiskIssueViewEditComponent implements OnInit {
   formFieldHelpers: string[] = [''];
   lookupdata: any = []
-  askneed: any = {}
+  riskissue: any = {}
   today = new Date();
   item: any = {}
   functionSets: any = []
@@ -65,34 +65,90 @@ export class RiskIssueViewEditComponent implements OnInit {
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
     function: new FormControl(''),
-    functionid: new FormControl('')
+    functionid: new FormControl(''),
+    includeInReport: new FormControl(''),
+    postMitigationProbability: new FormControl(''),
+    postMitigationImpact: new FormControl(''),
+    postMitigationComments: new FormControl('')
   })
   ngOnInit(): void {
     this.getllookup()
+    //this.dataloader()
   }
 
   dataloader() {
-    this.apiService.riskIssueSingle(this.projecthubservice.itemid).then((res: any) => {
-      console.log(res)
-      this.riskIssueForm.patchValue({
-        logDate: res.logDate,
-        type: res.riskIssueTypeId,
-        ifThisHappens: res.ifHappens,
-        probability: res.probabilityId,
-        thisIsTheResult: res.riskIssueResult,
-        impact: res.impactId,
-        mitigation: res.mitigation,
-        dueDate: res.dueDate,
-        closeDate: res.closeDate,
-        usersingle: res.ownerName,
-        usersingleid: res.ownerId,
-        functionid: res.functionGroupId
+    if (this.projecthubservice.itemid != "new") {
+      this.apiService.riskIssueSingle(this.projecthubservice.itemid).then((res: any) => {
+        this.riskissue = res
+        console.log(this.projecthubservice)
+        console.log(res)
+        this.riskIssueForm.patchValue({
+          logDate: res.logDate,
+          type: res.riskIssueTypeId,
+          ifThisHappens: res.ifHappens,
+          probability: res.probabilityId,
+          thisIsTheResult: res.riskIssueResult,
+          impact: res.impactId,
+          mitigation: res.mitigation,
+          dueDate: res.dueDate,
+          closeDate: res.closeDate,
+          usersingle: res.ownerName,
+          usersingleid: res.ownerId,
+          functionid: res.functionGroupId,
+          includeInReport: res.includeInReport,
+          postMitigationProbability: res.postMitigationProbability,
+          postMitigationImpact: res.postMitigationImpact,
+          postMitigationComments: res.postMitigationComments
+        })
+        if (res.functionGroupId != null) {
+          this.riskIssueForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId).lookUpName)
+        }
+
+        if (this.projecthubservice.all != []) {
+          if (this.projecthubservice.all.some(x => x.includeInReport == 3)) {
+            if (this.riskIssueForm.value.includeInReport != true) {
+              this.riskIssueForm.controls['includeInReport'].disable()
+            }
+          }
+        }
+        this.projecthubservice.isFormChanged = false
       })
-      if(res.functionGroupId != null){
-        this.riskIssueForm.controls.function.patchValue(this.lookupdata.find(x=>x.lookUpId == res.functionGroupId).lookUpName)
+    }
+    else {
+      this.riskIssueForm.patchValue({
+        logDate: this.today,
+        type: "",
+        ifThisHappens: "",
+        probability: "",
+        thisIsTheResult: "",
+        impact: "",
+        mitigation: "",
+        dueDate: null,
+        closeDate: null,
+        usersingle: "",
+        usersingleid: "",
+        functionid: "",
+        includeInReport: false,
+        postMitigationProbability: "",
+        postMitigationImpact: "",
+        postMitigationComments: ""
+      })
+      if (this.projecthubservice.all.length == 0) {
+        console.log(this.projecthubservice.all)
+        this.riskIssueForm.controls['includeInReport'].disable()
       }
+      else {
+        if (this.projecthubservice.all.some(x => x.includeInReport == 3)) {
+          this.riskIssueForm.controls['includeInReport'].disable()
+        }
+      }
+      this.projecthubservice.isFormChanged = false
+    }
+    this.riskIssueForm.valueChanges.subscribe(res => {
+      this.projecthubservice.isFormChanged = true
     })
   }
+
   getllookup() {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
@@ -118,6 +174,18 @@ export class RiskIssueViewEditComponent implements OnInit {
     })
   }
 
+  getpostMitigationProbability(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == '3263E6FE-9C4E-4365-82CD-491113736EFA').sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+    })
+  }
+
+  getpostMitigationImpact(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == 'D4FF10E4-B354-4296-B780-1C1A9A379E70').sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+    })
+  }
+
   onFunctionSelect(event: any) {
     this.riskIssueForm.patchValue({
       function: event.option.value.lookUpName,
@@ -126,6 +194,103 @@ export class RiskIssueViewEditComponent implements OnInit {
     console.log(this.riskIssueForm.controls.functionid.value)
   }
   submitriskissue() {
+    console.log(this.riskIssueForm.errors)
+    this.projecthubservice.isFormChanged = false
 
+    if (this.riskIssueForm.valid) {
+      if (this.projecthubservice.itemid == "new") {
+        console.log(this.projecthubservice)
+        var mainObjnew = {
+          riskIssueUniqueId: "new",
+          projectId: this.projecthubservice.projectid,
+          riskIssueTypeId: this.riskIssueForm.value.type,
+          ifHappens: this.riskIssueForm.value.ifThisHappens,
+          riskIssueResult: this.riskIssueForm.value.thisIsTheResult,
+          probabilityId: this.riskIssueForm.value.probability,
+          impactId: this.riskIssueForm.value.impact,
+          mitigation: this.riskIssueForm.value.mitigation,
+          ownerId: this.riskIssueForm.value.usersingleid,
+          ownerName: this.riskIssueForm.value.usersingle,
+          functionGroupId: this.riskIssueForm.value.functionid,
+          dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          logDate: moment(this.riskIssueForm.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          includeInReport: this.riskIssueForm.value.includeInReport,
+          indicator: "Grey",
+          includeInCharter: this.riskissue.includeInCharter,
+          postMitigationProbability: this.riskIssueForm.value.postMitigationProbability,
+          postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
+          postMitigationComments: this.riskIssueForm.value.postMitigationComments
+        }
+        if (this.riskIssueForm.controls['includeInReport'].disabled) {
+          mainObjnew.includeInReport = false
+        }
+        if (mainObjnew.logDate == "Invalid date") {
+          mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+        }
+        if (mainObjnew.dueDate == "Invalid date") {
+          mainObjnew.dueDate = null
+        }
+        if (mainObjnew.closeDate == "Invalid date") {
+          mainObjnew.closeDate = null
+        }
+        console.log("final object")
+        console.log(mainObjnew)
+        this.apiService.addRiskIssue(mainObjnew).then(() => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+      else {
+        var mainObj = {
+          riskIssueUniqueId: this.riskissue.riskIssueUniqueId,
+          projectId: this.riskissue.projectId,
+          riskIssueTypeId: this.riskIssueForm.value.type,
+          ifHappens: this.riskIssueForm.value.ifThisHappens,
+          riskIssueResult: this.riskIssueForm.value.thisIsTheResult,
+          probabilityId: this.riskIssueForm.value.probability,
+          impactId: this.riskIssueForm.value.impact,
+          mitigation: this.riskIssueForm.value.mitigation,
+          ownerId: this.riskIssueForm.value.usersingleid,
+          ownerName: this.riskIssueForm.value.usersingle,
+          functionGroupId: this.riskIssueForm.value.functionid,
+          dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          logDate: moment(this.riskIssueForm.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          includeInReport: this.riskIssueForm.value.includeInReport,
+          indicator: this.riskissue.indicator,
+          includeInCharter: this.riskissue.includeInCharter,
+          postMitigationProbability: this.riskIssueForm.value.postMitigationProbability,
+          postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
+          postMitigationComments: this.riskIssueForm.value.postMitigationComments
+        }
+        //Log Date
+        console.log(this.riskIssueForm.value.logDate)
+        if (mainObj.logDate == "Invalid date") {
+          mainObj.logDate = this.riskissue.logDate + ".000Z"
+        }
+
+        //Need By Date
+        if (mainObj.dueDate == "Invalid date") {
+          mainObj.dueDate = null
+        }
+
+        //Close Date
+        if (mainObj.closeDate == "Invalid date") {
+          mainObj.closeDate = null
+        }
+
+        console.log("final object")
+        console.log(mainObj)
+        this.apiService.editRiskIssue(mainObj).then(res => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    }
+  }
+
+  @HostListener('unloaded')
+  ngOnDestroy(): void {
   }
 }
