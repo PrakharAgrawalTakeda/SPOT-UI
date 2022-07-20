@@ -137,7 +137,10 @@ export class ProjectHubService {
           type: 'basic',
           icon: 'heroicons_outline:adjustments',
           link: 'hub-settings'
-        }
+        },
+        {
+          type: 'spacer'
+        },
       ]
     },
     {
