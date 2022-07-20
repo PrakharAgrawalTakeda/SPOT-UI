@@ -81,6 +81,7 @@ export class RiskIssueViewEditComponent implements OnInit {
       this.apiService.riskIssueSingle(this.projecthubservice.itemid).then((res: any) => {
         this.riskissue = res
         console.log(this.projecthubservice)
+        console.log('res')
         console.log(res)
         this.riskIssueForm.patchValue({
           logDate: res.logDate,
@@ -105,7 +106,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         }
 
         if (this.projecthubservice.all != []) {
-          if (this.projecthubservice.all.some(x => x.includeInReport == 3)) {
+          if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
             if (this.riskIssueForm.value.includeInReport != true) {
               this.riskIssueForm.controls['includeInReport'].disable()
             }
@@ -138,7 +139,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         this.riskIssueForm.controls['includeInReport'].disable()
       }
       else {
-        if (this.projecthubservice.all.some(x => x.includeInReport == 3)) {
+        if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
           this.riskIssueForm.controls['includeInReport'].disable()
         }
       }
