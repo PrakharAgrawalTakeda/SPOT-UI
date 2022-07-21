@@ -1,4 +1,4 @@
-<div class="p-6 flex items-start justify-between">
+<div class="p-6 flex items-center justify-between">
     <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Risk Issues</div>
 
     <div class="text-primary">
@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="overflow-x-auto mx-6">
-    <ngx-datatable [headerHeight]="64" [rowHeight]="64" [scrollbarV]="false" columnMode="force"
+    <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
         class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="riskIssuesngxdata"
         [sorts]="[{ prop: 'needByDate', dir: 'desc' }]" #riskIssuesTable>
         <ngx-datatable-column name="indicator" [width]="100" [resizeable]="false">

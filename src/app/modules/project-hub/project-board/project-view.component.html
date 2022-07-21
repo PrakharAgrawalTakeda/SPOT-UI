@@ -112,7 +112,7 @@
             </div>
         </div>
         <div class="overflow-x-auto mx-6">
-            <ngx-datatable [headerHeight]="64" [rowHeight]="64" [scrollbarV]="false" columnMode="force"
+            <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
                 class="pr-6 font-medium text-sm text-secondary whitespace-nowrap"
                 [rows]="projectViewDetails.overallPerformace"  #overallPerformance>
                 <ngx-datatable-column 
@@ -182,7 +182,7 @@
     <!-- Ask Needs -->
     <div *ngIf="hubsetting.asks"
         class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
-        <div class="p-6 flex items-start justify-between">
+        <div class="p-6 flex items-center justify-between">
             <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Ask/Needs</div>
 
             <div class="text-primary">
@@ -202,7 +202,7 @@
             </div>
         </div>
         <div class="overflow-x-auto mx-6">
-            <ngx-datatable [headerHeight]="64" [rowHeight]="64" [scrollbarV]="false" columnMode="force"
+            <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
                 class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata"
                 [sorts]="[{ prop: 'needByDate', dir: 'desc' }]" #myTable>
                 <ngx-datatable-column name="indicator" [width]="100" [resizeable]="false">
@@ -255,9 +255,9 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
+                <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-                        <div style="padding-top:35px;">
+                        <div class="pb-6 pt-6">
                             <div [ngClass]="{'closed': row.closeDate != null}"><strong>Comments:</strong>
                                 {{row.comments}}</div>
                         </div>

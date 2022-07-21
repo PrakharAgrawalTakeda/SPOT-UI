@@ -9,6 +9,10 @@
     border-bottom-width: 1px;
     border-bottom-style: solid;
     font-weight: bold !important;
+    font-size: 0.875rem;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    align-items: center;
 }
 .header{
     font-weight: bold !important;
@@ -20,7 +24,11 @@
 }
 .ngx-datatable .datatable-body .datatable-body-row>div {
     padding-top: 24px;
+    padding-bottom: 24px;
     font-size: 0.875rem;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    align-items: center;
 }
 
 .ngx-datatable.fixed-header .datatable-header .datatable-header-inner {
@@ -33,6 +41,8 @@
 }
 .ngx-datatable .datatable-body .datatable-row-detail {
     font-size: 0.875rem;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 .slider-adjust{
     padding-top: 7px;
