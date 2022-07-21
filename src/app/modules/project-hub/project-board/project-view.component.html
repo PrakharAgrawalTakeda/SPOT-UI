@@ -207,7 +207,7 @@
         <div class="overflow-x-auto mx-6">
             <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata"
-                [sorts]="[{ prop: 'needByDate', dir: 'desc' }]" #myTable>
+                [sorts]="[{ prop: 'needByDate', dir: 'asc' }]" #myTable>
                 <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="1" [resizeable]="false">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
