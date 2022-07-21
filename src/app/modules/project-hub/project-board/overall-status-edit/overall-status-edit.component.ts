@@ -61,6 +61,12 @@ export class OverallStatusEditComponent implements OnInit {
         statusLastUpdated: res.statusLastUpdated,
         statusThrough: res.statusThrough,
       })
+      if(res.statusLastUpdated == null){
+        this.overallStatusform.patchValue({
+          statusLastUpdated: this.today
+        })
+        console.log(this.overallStatusform.controls.statusLastUpdated.value)
+      }
       this.projecthubservice.isFormChanged = false
     })
     this.overallStatusform.controls['statusLastUpdated'].disable()
@@ -78,7 +84,7 @@ export class OverallStatusEditComponent implements OnInit {
       recentAccomplishments: this.overallStatusform.value.recentAccomplishments,
       statusUnquieId: this.item.statusUnquieId,
       statusThrough: moment(this.overallStatusform.value.statusThrough).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-      statusLastUpdated: moment(this.item.statusLastUpdated).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+      statusLastUpdated: moment(this.overallStatusform.value.statusLastUpdated).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
     }
     if (this.overallStatusform.value.statusThrough == null) {
       overall.statusThrough = this.item.statusThrough
