@@ -54,9 +54,9 @@
             </div>
         </div>
         <!-- Summary -->
-        <div id="overall-status"  class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 p-6" >
-            <div 
-                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief" >
+        <div id="overall-status" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 p-6">
+            <div
+                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between overflow-hidden">
                     <div class="text-lg font-medium tracking-tight leading-6 truncate">Current Status</div>
                 </div>
@@ -65,8 +65,8 @@
                 </div>
             </div>
             <!-- Overdue -->
-            <div 
-                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief" >
+            <div
+                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between">
                     <div class="text-lg font-medium tracking-tight leading-6 truncate">Recent Accomplishment</div>
                 </div>
@@ -85,8 +85,10 @@
                 </div>
             </div>
         </div>
-        <button *ngIf="overallCollapse && !overallCollapseControll" (click)="collapseToggle()" mat-button>Show More <mat-icon>keyboard_arrow_down</mat-icon></button>
-        <button *ngIf="overallCollapse && overallCollapseControll" (click)="collapseToggle()" mat-button>Show Less <mat-icon>keyboard_arrow_up</mat-icon></button>
+        <button *ngIf="overallCollapse && !overallCollapseControll" (click)="collapseToggle()" mat-button>Show More
+            <mat-icon>keyboard_arrow_down</mat-icon></button>
+        <button *ngIf="overallCollapse && overallCollapseControll" (click)="collapseToggle()" mat-button>Show Less
+            <mat-icon>keyboard_arrow_up</mat-icon></button>
     </div>
 
     <!-- Performance 
@@ -176,7 +178,8 @@
     <!-- Risk Issues -->
     <div *ngIf="hubsetting.risks"
         class="xl:col-span-6 flex flex-col flex-auto mb-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
-        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails] = "projectViewDetails" [projectid]="id"></app-risk-issues-table>
+        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id">
+        </app-risk-issues-table>
     </div>
 
     <!-- Ask Needs -->
@@ -202,11 +205,10 @@
             </div>
         </div>
         <div class="overflow-x-auto mx-6">
-            <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
-                class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata"
+            <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata"
                 [sorts]="[{ prop: 'needByDate', dir: 'desc' }]" #myTable>
-                <ngx-datatable-column name="indicator" [width]="100" [resizeable]="false">
-                    <ng-template let-column="column" ngx-datatable-header-template>Status</ng-template>
+                <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="1" [resizeable]="false">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                             class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -217,28 +219,24 @@
                             svgIcon="heroicons_outline:link"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="askNeed1" [width]="600">
-                    <ng-template let-column="column" ngx-datatable-header-template>Ask Or Need</ng-template>
+                <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="6">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="needFromName">
-                    <ng-template let-column="column" ngx-datatable-header-template>Need From</ng-template>
+                <ngx-datatable-column name="Need From" prop="needFromName" [flexGrow]="2">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="needByDate">
-                    <ng-template let-column="column" ngx-datatable-header-template>Need Date</ng-template>
+                <ngx-datatable-column name="Need Date" prop="needByDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [width]="100" [resizeable]="false" [sortable]="false" [draggable]="false"
-                    [canAutoResize]="false">
+                <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                        <div>
+                        <div class="flex items-center ">
                             <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
                                 <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                                 <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
