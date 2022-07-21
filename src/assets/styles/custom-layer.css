@@ -20,6 +20,7 @@
 }
 .ngx-datatable .datatable-body .datatable-body-row>div {
     padding-top: 24px;
+    font-size: 0.875rem;
 }
 
 .ngx-datatable.fixed-header .datatable-header .datatable-header-inner {
@@ -29,6 +30,9 @@
 .ngx-datatable .datatable-body .datatable-row-wrapper {
     border-bottom-width: 1px;
     border-bottom-style: solid;
+}
+.ngx-datatable .datatable-body .datatable-row-detail {
+    font-size: 0.875rem;
 }
 .slider-adjust{
     padding-top: 7px;
