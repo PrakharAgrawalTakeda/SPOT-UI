@@ -32,37 +32,36 @@
                     {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
                 </h2>
             </div>
-                <!-- Actions -->
-    <div class="flex shrink-0 items-center justify-between mt-6 sm:mt-0 ">
-        <div class="flex">
-            <button mat-icon-button (click)="matDrawer.toggle()">
-                <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
-            </button>
-            <button mat-flat-button [color]="'primary'" class="ml-3">
-                Generate Dashboard
-            </button>
-        </div>
-        <div class=" flex items-center">
-            <div class="p-3 text-right">
-                Project State<br>
-                <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
-            </div>
-            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
-                style="z-index: 10;">Initiate</div>
-            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
-                style="z-index: 9;">Define</div>
-            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
-                style="z-index: 8;">Plan</div>
-            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
-                style="z-index: 7;">Execute</div>
-            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
-                style="z-index: 6;">Close</div>
-            <div class="p-3" [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
-                style="z-index: 5;">Track</div>
+            <!-- Actions -->
+            <div class="flex shrink-0 items-center justify-between mt-6 sm:mt-0 ">
+                <div class="flex">
+                    <button mat-icon-button (click)="matDrawer.toggle()">
+                        <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+                    </button>
+                </div>
+                <div class=" flex items-center">
+                    <div class="p-3 text-right">
+                        Project State<br>
+                        <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
+                    </div>
+                    <div class="p-3"
+                        [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
+                        style="z-index: 10;">Initiate</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
+                        style="z-index: 9;">Define</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
+                        style="z-index: 8;">Plan</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
+                        style="z-index: 7;">Execute</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
+                        style="z-index: 6;">Close</div>
+                    <div class="p-3"
+                        [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
+                        style="z-index: 5;">Track</div>
 
-        </div>
-        
-    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -74,27 +73,55 @@
             <!-- Demo sidebar -->
             <ng-scrollbar>
                 <div>
-                    <div class="mx-6 mt-10">
-                    <mat-accordion>
-                        <mat-expansion-panel [expanded]="panelOpenState === true" (opened)="panelOpenState = true"
-                                             (closed)="panelOpenState = false">
-                          <mat-expansion-panel-header>
-                            <mat-panel-title>
-                              Overall Status
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}" class = "{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}}"></mat-icon>
-                            </mat-panel-description>
-                          </mat-expansion-panel-header>
-                        <div class="text-default">
-                            <p> Budget  <span style="margin-left: 36%;"><mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}" class = "{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}}"></mat-icon></span></p>
-                            <p> Schedule  <span style="margin-left: 29%;"><mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}" class = "{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}}"></mat-icon></span></p>
-                            <p> Risk/Issues  <span style="margin-left: 22%;"><mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}" class = "{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}}"></mat-icon></span></p>
-                            <p> Ask/Needs  <span style="margin-left: 23%;"><mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}" class = "{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}}"></mat-icon></span></p>
-                        </div>
-                        </mat-expansion-panel>
-                      </mat-accordion>
-                </div>
+                    <div class="mx-6 mt-6 mb-6">
+                        <button mat-flat-button [color]="'primary'" class="w-full">
+                            Generate Dashboard
+                        </button>
+                    </div>
+                    <!--
+                        <mat-accordion>
+                            <mat-expansion-panel [expanded]="panelOpenState === true" (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Overall Status
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        <mat-icon
+                                            svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
+                                            class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}}">
+                                        </mat-icon>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <div class="text-default">
+                                    <p> Budget <span style="margin-left: 36%;">
+                                            <mat-icon
+                                                svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
+                                                class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}}">
+                                            </mat-icon>
+                                        </span></p>
+                                    <p> Schedule <span style="margin-left: 29%;">
+                                            <mat-icon
+                                                svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
+                                                class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}}">
+                                            </mat-icon>
+                                        </span></p>
+                                    <p> Risk/Issues <span style="margin-left: 22%;">
+                                            <mat-icon
+                                                svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
+                                                class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}}">
+                                            </mat-icon>
+                                        </span></p>
+                                    <p> Ask/Needs <span style="margin-left: 23%;">
+                                            <mat-icon
+                                                svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
+                                                class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}}">
+                                            </mat-icon>
+                                        </span></p>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>-->
                     <fuse-vertical-navigation [appearance]="'default'" [navigation]="projecthubservice.menuData"
                         [inner]="true" [mode]="'side'" [name]="'projecthub-navigation'" [opened]="true" class="mt-0">
                     </fuse-vertical-navigation>
