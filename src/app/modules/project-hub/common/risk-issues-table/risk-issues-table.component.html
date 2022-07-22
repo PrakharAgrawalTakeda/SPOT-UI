@@ -56,13 +56,14 @@
                 <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
                     [ngClass]="{'closed': row.closeDate != null}">Risk</p>
                 <p *ngIf="value == '2d9dbd40-14ec-47b3-badd-c5a63eb3dbd5'"
-                    [ngClass]="{'closed': row.closeDate != null}">Issues</p>
+                    [ngClass]="{'closed': row.closeDate != null}">Issue</p>
             </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                <div class="flex items-center">
+               
+                <div class="flex items-left">
                     <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
                         <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                         <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
@@ -81,7 +82,8 @@
         </ngx-datatable-column>
         <ngx-datatable-row-detail [rowHeight]="200" #riskIssueRowDetail (toggle)="onDetailToggle($event)">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-                <div style="padding: 35px 20vw 0 20vw;">
+               
+                <div style="padding: 35px 0 0 0;">
                     <div class="flex text-center justify-between">
                         <div [ngClass]="{'closed': row.closeDate != null}">
                             <strong class="strong">This Is The Result</strong><br>
@@ -93,7 +95,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="padding: 40px 5vw 0 5vw;">
+                <div style="padding: 35px 0 0 0;">
                     <div class="flex items-start justify-between">
                         <div [ngClass]="{'closed': row.closeDate != null}">
                             <strong class="strong">Owner:</strong>
