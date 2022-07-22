@@ -81,7 +81,6 @@ export class ProjectHubComponent implements OnInit {
                 const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
                 mainNavComponent.navigation = this.newmainnav
                 mainNavComponent.refresh()
-                console.log(mainNavComponent)
 
             })
             // 
