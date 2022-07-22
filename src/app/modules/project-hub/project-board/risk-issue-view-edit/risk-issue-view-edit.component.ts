@@ -48,7 +48,9 @@ export class RiskIssueViewEditComponent implements OnInit {
       startWith(''),
       map(value => {
         var filterValue = value.toString().toLowerCase()
-        return this.lookupdata.filter(x => x.lookUpName.toLowerCase().includes(filterValue) && x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
+        return this.lookupdata.filter(x => x.lookUpName.toLowerCase().includes(filterValue) && x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
+          return a.lookUpOrder - b.lookUpOrder;
+        })
       })
     )
   }
@@ -148,6 +150,20 @@ export class RiskIssueViewEditComponent implements OnInit {
       this.projecthubservice.isFormChanged = true
     })
   }
+
+  // sortAlphabetically(a, b) {
+  //   var nameA = a.issuerName.toUpperCase(); // ignore upper and lowercase
+  //   var nameB = b.issuerName.toUpperCase(); // ignore upper and lowercase
+  //   if (nameA < nameB) {
+  //     return -1;
+  //   }
+  //   if (nameA > nameB) {
+  //     return 1;
+  //   }
+
+  //   // names must be equal
+  //   return 0;
+  // }
 
   getllookup() {
     this.auth.lookupMaster().then((resp: any) => {
