@@ -207,12 +207,13 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      */
     open(): void
     {
+
         // Return if it's already opened
         if ( this.opened )
         {
             return;
         }
-
+        window.scroll(0,0);
         // Open the search
         this.opened = true;
     }
