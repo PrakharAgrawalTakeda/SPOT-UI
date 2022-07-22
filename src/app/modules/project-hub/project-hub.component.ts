@@ -21,6 +21,37 @@ export class ProjectHubComponent implements OnInit {
     panelOpenState = true;
     selectedProject: string = 'ACME Corp. Backend App';
     drawerOpened: boolean = true;
+    newmainnav:any = [
+        {
+            id: 'portfolio-center',
+            title: 'Portfolio Center',
+            type: 'basic',
+            link: '/portfolio-center'
+        },
+        {
+            id: 'project-hub',
+            title: 'Project Hub',
+            type: 'basic',
+            link: '/project-hub'
+        },
+        {
+            id: 'spot-documents',
+            title: 'SPOT Resources',
+            type: 'basic',
+            externalLink: true,
+            link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+            target: '_blank'
+        },
+        {
+            id: 'report-navigator',
+            title: 'Report Navigator',
+            type: 'basic',
+            link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+            externalLink: true,
+            target: "_blank"
+
+        }
+    ]
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, public _fuseNavigationService: FuseNavigationService) {
         this.projecthubservice.isNavChanged.subscribe(res => {
@@ -42,11 +73,16 @@ export class ProjectHubComponent implements OnInit {
                 this.projecthubservice.menuData[0].children[5].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
                 this.projecthubservice.menuData[0].children[8].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
                 this.projecthubservice.menuData[0].children[6].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
-                
-                
+
+
                 //nav refresh
                 const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
                 navComponent.refresh();
+                const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+                mainNavComponent.navigation = this.newmainnav
+                mainNavComponent.refresh()
+                console.log(mainNavComponent)
+
             })
             // 
         })

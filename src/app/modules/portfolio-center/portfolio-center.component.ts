@@ -17,6 +17,7 @@ import { map, startWith } from 'rxjs/operators';
 import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 @Component({
   selector: 'app-portfolio-center',
   templateUrl: './portfolio-center.component.html',
@@ -122,16 +123,44 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   fruits: string[] = [];
   lookup: any = [];
   allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  newmainnav:any = [
+    {
+        id: 'portfolio-center',
+        title: 'Portfolio Center',
+        type: 'basic',
+        link: '/portfolio-center'
+    },
+    {
+        id: 'spot-documents',
+        title: 'SPOT Resources',
+        type: 'basic',
+        externalLink: true,
+        link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+        target: '_blank'
+    },
+    {
+        id: 'report-navigator',
+        title: 'Report Navigator',
+        type: 'basic',
+        link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+        externalLink: true,
+        target: "_blank"
+
+    }
+]
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   @ViewChild('phaseInput') phaseInput: ElementRef<HTMLInputElement>;
   @ViewChild('stateInput') stateInput: ElementRef<HTMLInputElement>;
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService,public _fuseNavigationService: FuseNavigationService) {
   }
 
   ngOnInit(): void {
     this.showContent = false;
+    const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+                mainNavComponent.navigation = this.newmainnav
+                mainNavComponent.refresh()
     //checking if there are any preset filter
     if (localStorage.getItem('spot-filters') == null) {
       this.filtersnew = this.defaultfilter
