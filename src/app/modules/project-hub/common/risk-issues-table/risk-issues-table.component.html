@@ -1,4 +1,4 @@
-<div class="p-6 flex items-start justify-between">
+<div class="p-6 flex items-center justify-between">
     <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Risk Issues</div>
 
     <div class="text-primary">
@@ -18,11 +18,10 @@
     </div>
 </div>
 <div class="overflow-x-auto mx-6">
-    <ngx-datatable [headerHeight]="64" [rowHeight]="64" [scrollbarV]="false" columnMode="force"
-        class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="riskIssuesngxdata"
+    <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="riskIssuesngxdata"
         [sorts]="[{ prop: 'needByDate', dir: 'desc' }]" #riskIssuesTable>
-        <ngx-datatable-column name="indicator" [width]="100" [resizeable]="false">
-            <ng-template let-column="column" ngx-datatable-header-template>Status</ng-template>
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                     class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -34,29 +33,25 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="logDate">
-            <ng-template let-column="column" ngx-datatable-header-template>Date Initiated</ng-template>
+        <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="dueDate">
-            <ng-template let-column="column" ngx-datatable-header-template>Due Date</ng-template>
+        <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="ifHappens" [width]="600">
-            <ng-template let-column="column" ngx-datatable-header-template>If This Happens</ng-template>
+        <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="riskIssueTypeId">
-            <ng-template let-column="column" ngx-datatable-header-template>Type</ng-template>
+        <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
                     [ngClass]="{'closed': row.closeDate != null}">Risk</p>
@@ -65,10 +60,9 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" [resizeable]="false" [sortable]="false" [draggable]="false"
-            [canAutoResize]="false">
+        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                <div>
+                <div class="flex items-center">
                     <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
                         <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                         <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>

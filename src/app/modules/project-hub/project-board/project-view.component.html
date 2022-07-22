@@ -54,9 +54,9 @@
             </div>
         </div>
         <!-- Summary -->
-        <div id="overall-status"  class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 p-6" >
-            <div 
-                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief" >
+        <div id="overall-status" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 p-6">
+            <div
+                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between overflow-hidden">
                     <div class="text-lg font-medium tracking-tight leading-6 truncate">Current Status</div>
                 </div>
@@ -65,8 +65,8 @@
                 </div>
             </div>
             <!-- Overdue -->
-            <div 
-                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief" >
+            <div
+                class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between">
                     <div class="text-lg font-medium tracking-tight leading-6 truncate">Recent Accomplishment</div>
                 </div>
@@ -85,8 +85,10 @@
                 </div>
             </div>
         </div>
-        <button *ngIf="overallCollapse && !overallCollapseControll" (click)="collapseToggle()" mat-button>Show More <mat-icon>keyboard_arrow_down</mat-icon></button>
-        <button *ngIf="overallCollapse && overallCollapseControll" (click)="collapseToggle()" mat-button>Show Less <mat-icon>keyboard_arrow_up</mat-icon></button>
+        <button *ngIf="overallCollapse && !overallCollapseControll" (click)="collapseToggle()" mat-button>Show More
+            <mat-icon>keyboard_arrow_down</mat-icon></button>
+        <button *ngIf="overallCollapse && overallCollapseControll" (click)="collapseToggle()" mat-button>Show Less
+            <mat-icon>keyboard_arrow_up</mat-icon></button>
     </div>
 
     <!-- Performance 
@@ -112,7 +114,7 @@
             </div>
         </div>
         <div class="overflow-x-auto mx-6">
-            <ngx-datatable [headerHeight]="64" [rowHeight]="64" [scrollbarV]="false" columnMode="force"
+            <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
                 class="pr-6 font-medium text-sm text-secondary whitespace-nowrap"
                 [rows]="projectViewDetails.overallPerformace"  #overallPerformance>
                 <ngx-datatable-column 
@@ -176,13 +178,14 @@
     <!-- Risk Issues -->
     <div *ngIf="hubsetting.risks"
         class="xl:col-span-6 flex flex-col flex-auto mb-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
-        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails] = "projectViewDetails" [projectid]="id"></app-risk-issues-table>
+        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id">
+        </app-risk-issues-table>
     </div>
 
     <!-- Ask Needs -->
     <div *ngIf="hubsetting.asks"
         class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
-        <div class="p-6 flex items-start justify-between">
+        <div class="p-6 flex items-center justify-between">
             <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Ask/Needs</div>
 
             <div class="text-primary">
@@ -202,11 +205,10 @@
             </div>
         </div>
         <div class="overflow-x-auto mx-6">
-            <ngx-datatable [headerHeight]="64" [rowHeight]="64" [scrollbarV]="false" columnMode="force"
-                class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata"
+            <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata"
                 [sorts]="[{ prop: 'needByDate', dir: 'desc' }]" #myTable>
-                <ngx-datatable-column name="indicator" [width]="100" [resizeable]="false">
-                    <ng-template let-column="column" ngx-datatable-header-template>Status</ng-template>
+                <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="1" [resizeable]="false">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                             class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -217,28 +219,24 @@
                             svgIcon="heroicons_outline:link"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="askNeed1" [width]="600">
-                    <ng-template let-column="column" ngx-datatable-header-template>Ask Or Need</ng-template>
+                <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="6">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="needFromName">
-                    <ng-template let-column="column" ngx-datatable-header-template>Need From</ng-template>
+                <ngx-datatable-column name="Need From" prop="needFromName" [flexGrow]="2">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="needByDate">
-                    <ng-template let-column="column" ngx-datatable-header-template>Need Date</ng-template>
+                <ngx-datatable-column name="Need Date" prop="needByDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [width]="100" [resizeable]="false" [sortable]="false" [draggable]="false"
-                    [canAutoResize]="false">
+                <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                        <div>
+                        <div class="flex items-center ">
                             <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
                                 <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                                 <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
@@ -255,9 +253,9 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow (toggle)="onDetailToggle($event)">
+                <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-                        <div style="padding-top:35px;">
+                        <div class="pb-6 pt-6">
                             <div [ngClass]="{'closed': row.closeDate != null}"><strong>Comments:</strong>
                                 {{row.comments}}</div>
                         </div>
@@ -271,82 +269,10 @@
     <div *ngIf="hubsetting.milestones"
         class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
         <div class="p-6">
-            <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Schedule</div>
+            <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Schedule<br>
+                <span class="text-xl">NEW SCHEDULE TABLE WILL BE HERE</span>
+            </div>
         </div>
-        <div class="overflow-x-auto mx-6">
-            <table class="w-full bg-transparent" mat-table matSort [dataSource]="Schedule" [trackBy]="trackByFnS"
-                #riskIssuesTable>
-
-                <!-- Transaction ID -->
-                <!-- <ng-container matColumnDef="overallStatus">
-                    <th
-                        mat-header-cell
-                        mat-sort-header
-                        *matHeaderCellDef>
-                        Overall<br>Status
-                    </th>
-                    <td
-                        mat-cell
-                        *matCellDef="let project">
-                        <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            <mat-icon svgIcon="{{(indicator.getIndicators(project.overallStatus, 'overall')).icontype}}" class = "{{(indicator.getIndicators(project.overallStatus, 'overall')).iconcolor}}"></mat-icon>
-                        </span>
-                    </td>
-                </ng-container>-->
-
-                <!-- Date -->
-                <ng-container matColumnDef="milestone">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                        Milestone
-                    </th>
-                    <td mat-cell *matCellDef="let project">
-                        <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            <a [routerLink]="['/project-hub',project.projectUid]"> {{project.milestone}}</a>
-                        </span>
-                    </td>
-                </ng-container>
-
-                <!-- Name -->
-                <ng-container matColumnDef="baselineFinish">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                        Baseline Finish Date
-                    </th>
-                    <td mat-cell *matCellDef="let project">
-                        <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            {{project.baselineFinish | date:'dd/MM/yyyy'}}
-                        </span>
-                    </td>
-                </ng-container>
-
-                <!-- Amount -->
-                <ng-container matColumnDef="plannedFinish">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                        Finish Date
-                    </th>
-                    <td mat-cell *matCellDef="let project">
-                        <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            {{project.plannedFinish | date:'dd/MM/yyyy'}}
-                        </span>
-                    </td>
-                </ng-container>
-
-                <!-- Status -->
-                <ng-container matColumnDef="responsiblePersonName">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef>
-                        Responsible
-                    </th>
-                    <td mat-cell *matCellDef="let project">
-                        <span class="pr-6 font-medium text-sm text-secondary whitespace-nowrap">
-                            {{project.responsiblePersonName}}
-                        </span>
-                    </td>
-                </ng-container>
-
-                <!-- Footer -->
-
-                <tr mat-header-row *matHeaderRowDef="ScheduleHeaders"></tr>
-                <tr class="order-row h-16" mat-row *matRowDef="let row; columns: ScheduleHeaders;"></tr>
-            </table>
-        </div>
+       
     </div>
 </div>
