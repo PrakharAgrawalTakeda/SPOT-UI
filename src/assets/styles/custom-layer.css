@@ -31,8 +31,8 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 }
 
 .ngx-datatable .datatable-body .datatable-body-row>div {
-    padding-top: 24px;
-    padding-bottom: 24px;
+    padding-top: 6px;
+    padding-bottom: 6px;
     font-size: 0.875rem;
     overflow-wrap: break-word;
     white-space: pre-wrap;
@@ -40,7 +40,6 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 }
 
 .ngx-datatable.fixed-header .datatable-header .datatable-header-inner {
-    padding-top: 24px;
     overflow-wrap: break-word;
     white-space: pre-wrap;
     align-items: center;
@@ -74,7 +73,7 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 }
 
 .overall-brief {
-    min-height: 225px;
+    min-height: 150px;
     white-space: pre-line;
     overflow-wrap: break-word;
 }

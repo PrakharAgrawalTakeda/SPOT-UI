@@ -1,12 +1,12 @@
 <div class="gap-6 w-full min-w-0 p-8 pt-0 ">
     <div *ngIf="hubsetting.overallStatus"
-        class="xl:col-span-6 flex flex-col flex-auto pt-2 pb-2 mb-6 pl-6 pr-6 bg-card shadow rounded-2xl overflow-hidden">
-        <div class="pl-6 pb-0 flex items-start justify-between pt-2 pr-0">
-            <div class="mr-4  font-medium tracking-tight leading-6 truncate " style="padding-top: 8px;">
+        class="xl:col-span-6 flex flex-col flex-auto  mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="p-3 pt-0 pb-0 flex items-center justify-between">
+            <div class="font-medium tracking-tight leading-6 truncate ">
                 <h3 class="text-xl text-primary">Overall Status</h3>
                 <p class="text-sm">Status Through: {{projectViewDetails.statusData.statusThrough | date:'dd-MMM-yyyy'}}
                 </p>
-                <div class="flex items-start justify-between pt-2">
+             <!--   <div class="flex items-start justify-between pt-2">
                     <p> Overall Status</p>&nbsp;
                     <mat-icon
                         svgIcon="{{(indicator.getIndicators(indicatorlook[projectViewDetails.statusData.overallStatusId], 'circle')).icontype}}"
@@ -37,24 +37,24 @@
                         class="{{(indicator.getIndicators(projectViewDetails.portfolioCeterData.askNeedIndicator, '')).iconcolor}}">
                     </mat-icon>
 
-                </div>
+                </div>-->
             </div>
 
             <div>
-                <div class="flex items-start justify-between">
+                <div class="flex items-center justify-between">
                     <div></div>
-                    <button class="ml-4 text-primary text-md" mat-flat-button [color]="'primary-200'"
+                    <button class="text-primary text-md" mat-flat-button [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('Overall',projectViewDetails.statusData.statusUnquieId, [], id)">
                         <mat-icon class="customIconSize" svgIcon="heroicons_outline:pencil"></mat-icon>&nbsp; Edit
                     </button>
                 </div>
-                <p class="text-sm">Last Updated: {{projectViewDetails.statusData.statusLastUpdated |
+                <p class="font-medium tracking-tight leading-6 truncate  text-sm">Last Updated: {{projectViewDetails.statusData.statusLastUpdated |
                     date:'dd-MMM-yyyy'}}
 
             </div>
         </div>
         <!-- Summary -->
-        <div id="overall-status" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 p-6">
+        <div id="overall-status" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 pl-3 pr-3">
             <div
                 class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between overflow-hidden">
@@ -177,16 +177,16 @@
 
     <!-- Risk Issues -->
     <div *ngIf="hubsetting.risks"
-        class="xl:col-span-6 flex flex-col flex-auto mb-6 p-6 bg-card shadow rounded-2xl overflow-hidden">
+        class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
         <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id">
         </app-risk-issues-table>
     </div>
 
     <!-- Ask Needs -->
     <div *ngIf="hubsetting.asks"
-        class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
-        <div class="p-6 flex items-center justify-between">
-            <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Ask/Needs</div>
+        class="xl:col-span-6 flex flex-col flex-auto p-3 mb-6 bg-card shadow rounded-2xl overflow-hidden">
+        <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Ask/Needs</div>
 
             <div class="text-primary">
                 <div class="flex items-start justify-between">
@@ -205,10 +205,10 @@
             </div>
         </div>
         <div class="overflow-x-auto mx-6">
-            <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="askneedngxdata"
                 [sorts]="[{ prop: 'needByDate', dir: 'asc' }]" #myTable>
-                <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="1" [resizeable]="false">
+                <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [flexGrow]="0.5">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                             class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -219,7 +219,7 @@
                             svgIcon="heroicons_outline:link"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="6">
+                <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="5">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
                     </ng-template>
@@ -255,7 +255,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-                        <div class="pb-6 pt-6">
+                        <div class="pb-3 pt-3">
                             <div [ngClass]="{'closed': row.closeDate != null}"><strong>Comments:</strong>
                                 {{row.comments}}</div>
                         </div>

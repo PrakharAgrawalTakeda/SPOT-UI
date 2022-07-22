@@ -1,4 +1,4 @@
-<div class="p-6 flex items-center justify-between">
+<div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate text-primary">Risk Issues</div>
 
     <div class="text-primary">
@@ -18,10 +18,10 @@
     </div>
 </div>
 <div class="overflow-x-auto mx-6">
-    <ngx-datatable [headerHeight]="64" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="riskIssuesngxdata"
         [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #riskIssuesTable>
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="1">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                     class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -33,6 +33,15 @@
             </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="0.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
+                    [ngClass]="{'closed': row.closeDate != null}">Risk</p>
+                <p *ngIf="value == '2d9dbd40-14ec-47b3-badd-c5a63eb3dbd5'"
+                    [ngClass]="{'closed': row.closeDate != null}">Issue</p>
+            </ng-template>
+        </ngx-datatable-column>
+        
         <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
@@ -45,20 +54,13 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="5">
+        <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="6">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="1">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
-                    [ngClass]="{'closed': row.closeDate != null}">Risk</p>
-                <p *ngIf="value == '2d9dbd40-14ec-47b3-badd-c5a63eb3dbd5'"
-                    [ngClass]="{'closed': row.closeDate != null}">Issue</p>
-            </ng-template>
-        </ngx-datatable-column>
+
 
         <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
