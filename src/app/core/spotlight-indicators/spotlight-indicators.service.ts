@@ -31,16 +31,8 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = ''
       }
       else{
-        temp.icontype = 'heroicons_solid:arrow-circle-right'
-        if(indicator == 'Red'){
-          temp.iconcolor = 'text-red-500'
-        }
-        else if(indicator == 'Yellow'){
-          temp.iconcolor = 'text-amber-500'
-        }
-        else if(indicator == 'Green'){
-        }
-        temp.iconcolor = 'text-green-500'
+        temp.icontype = 'mat_solid:circle'
+        temp.iconcolor = ''
       }
     }
     else if(type == "circle") {
