@@ -21,7 +21,7 @@ export class ProjectHubComponent implements OnInit {
     panelOpenState = true;
     selectedProject: string = 'ACME Corp. Backend App';
     drawerOpened: boolean = true;
-    newmainnav:any = [
+    newmainnav: any = [
         {
             id: 'portfolio-center',
             title: 'Portfolio Center',
@@ -67,9 +67,7 @@ export class ProjectHubComponent implements OnInit {
     }
 
     getdata(): void {
-        const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
-        mainNavComponent.navigation = this.newmainnav
-        mainNavComponent.refresh()
+
         this.apiService.getproject(this.id).then((res) => {
             this.projectDetails = res
             this.apiService.getHubSettings(this.id).then((response: any) => {
@@ -84,6 +82,10 @@ export class ProjectHubComponent implements OnInit {
                 //nav refresh
                 const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
                 navComponent.refresh();
+
+                const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+                mainNavComponent.navigation = this.newmainnav
+                mainNavComponent.refresh()
 
             })
             // 
