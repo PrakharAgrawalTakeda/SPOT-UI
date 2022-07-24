@@ -62,32 +62,6 @@ export class ProjectHubService {
           link: 'general-info'
         },
         {
-          title: 'Project Proposal',
-          type: 'basic',
-          icon: 'mat_outline:insert_chart',
-          link: 'project-proposal'
-        },
-        {
-          title: 'Business Cases',
-          type: 'collapsable',
-          icon: 'heroicons_outline:presentation-chart-line',
-          children: [
-            {
-              title: 'Recommended Option',
-              type: 'basic',
-              
-            },
-            {
-              title: 'Option 2',
-              type: 'basic',
-            },
-            {
-              title: 'Option 3',
-              type: 'basic',
-            }
-          ]
-        },
-        {
           title: 'Budget',
           type: 'basic',
           icon: 'heroicons_outline:currency-dollar',
@@ -127,12 +101,6 @@ export class ProjectHubService {
           link: 'local-attributes'
         },
         {
-          title: 'Reports',
-          type: 'basic',
-          icon: 'heroicons_outline:presentation-chart-bar',
-          link: 'reports'
-        },
-        {
           title: 'Hub Settings',
           type: 'basic',
           icon: 'heroicons_outline:adjustments',
@@ -148,6 +116,12 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
+          title: 'Project Proposal',
+          type: 'basic',
+          icon: 'mat_outline:business_center',
+          link: 'project-proposal'
+        },
+        {
           title: 'Business Case',
           type: 'basic',
           icon: 'mat_outline:business_center',
@@ -159,9 +133,28 @@ export class ProjectHubService {
           icon: 'heroicons_outline:location-marker',
           link: 'project-charter'
         },
-
         {
-          title: 'Close Out',
+          title: 'Project Dashboards',
+          type: 'collapsable',
+          icon: 'heroicons_outline:presentation-chart-line',
+          children: [
+            {
+              title: 'Recommended Option',
+              type: 'basic',
+              
+            },
+            {
+              title: 'Option 2',
+              type: 'basic',
+            },
+            {
+              title: 'Option 3',
+              type: 'basic',
+            }
+          ]
+        },
+        {
+          title: 'Close Out Report',
           type: 'basic',
           icon: 'heroicons_outline:location-marker',
           link: 'close-out'
