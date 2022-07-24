@@ -34,10 +34,39 @@
             </div>
             <!-- Actions -->
             <div class="flex shrink-0 items-center justify-between mt-6 sm:mt-0 ">
-                <div class="flex">
+                <div class="flex lg:gap-2">
                     <button mat-icon-button (click)="matDrawer.toggle()">
                         <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
                     </button>
+                    <div class="flex items-center gap-2 text-lg">
+                        <p>Overall Status</p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}}">
+                        </mat-icon>
+                        <p> Budget</p>
+                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                        <p> Schedule</p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                        <p> Risk/Issues</p>
+                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                        <p> Ask/Needs </p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                    </div>
                 </div>
                 <div class=" flex items-center">
                     <div class="p-3 text-right">
