@@ -50,7 +50,7 @@ export class ProjectHubService {
           link: 'project-board'
         },
         {
-          title: 'Assoiated Projects',
+          title: 'Associated Project',
           type: 'basic',
           icon: 'heroicons_outline:link',
           link: 'associated-projects'
@@ -123,9 +123,23 @@ export class ProjectHubService {
         },
         {
           title: 'Business Case',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'mat_outline:business_center',
-          link: 'business-case'
+          children: [
+            {
+              title: 'Recommended Option',
+              type: 'basic',
+              link: 'business-case'    
+            },
+            {
+              title: 'Option 2',
+              type: 'basic',
+            },
+            {
+              title: 'Option 3',
+              type: 'basic',
+            }
+          ]
         },
         {
           title: 'Project Charter',
@@ -139,16 +153,16 @@ export class ProjectHubService {
           icon: 'heroicons_outline:presentation-chart-line',
           children: [
             {
-              title: 'Recommended Option',
+              title: 'Performance',
               type: 'basic',
               
             },
             {
-              title: 'Option 2',
+              title: 'Budget',
               type: 'basic',
             },
             {
-              title: 'Option 3',
+              title: 'GMSGQ Product Team',
               type: 'basic',
             }
           ]
