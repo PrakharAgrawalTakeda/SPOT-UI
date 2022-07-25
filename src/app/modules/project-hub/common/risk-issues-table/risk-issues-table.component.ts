@@ -9,7 +9,7 @@ import { ProjectHubService } from '../../project-hub.service';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RiskIssuesTableComponent implements OnInit, OnChanges{
+export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @Input() riskIssuesData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
@@ -22,30 +22,31 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges{
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
-    if(this.isclosed == false){
-    this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
+    if (this.isclosed == false) {
+      this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
     }
-    else{
+    else {
       this.riskIssuesngxdata = this.riskIssuesData
     }
-    
+
   }
   ngOnInit(): void {
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
-    this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
-    
+    this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+
   }
-  changeriskissues(event: any){
+  changeriskissues(event: any) {
     console.log(event)
-    if(event.checked == true){
+    if (event.checked == true) {
       this.riskIssuesngxdata = this.riskIssuesData
       this.isclosed = true
     }
-    else{
-      this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
+    else {
+      this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+      this.isclosed = false
     }
   }
- islink(uid: string): boolean {
+  islink(uid: string): boolean {
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
   getlinkname(uid: string): string {
@@ -54,7 +55,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges{
     return "This risk/issue is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
 
   }
-  onDetailToggle(event: any){
+  onDetailToggle(event: any) {
     console.log(event)
   }
   toggleExpandRow(row) {
