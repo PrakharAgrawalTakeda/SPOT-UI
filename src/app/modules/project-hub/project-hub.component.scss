@@ -6,6 +6,10 @@
     padding-bottom: 5rem;
 }
 
+.pl-19rem{
+ padding-left: 19rem !important;
+}
+
 fuse-drawer {
     min-width: 50vw;
     max-width: 50vw
@@ -15,7 +19,10 @@ fuse-drawer .fuse-drawer-content {
     display: block !important;
 
 }
-
+.overall-indicator{
+    width: 35px !important;
+    height: 35px !important;
+}
 .apply-button {
     margin: 20px 0px 175px 0px !important;
     width: 100%;

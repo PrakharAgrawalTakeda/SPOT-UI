@@ -97,5 +97,7 @@ export class ProjectHubComponent implements OnInit {
             console.log(this.portfolioDetails.phase)
         })
     }
-
+    toggleSideNav(){
+        this.drawerOpened = !this.drawerOpened
+    }
 }
