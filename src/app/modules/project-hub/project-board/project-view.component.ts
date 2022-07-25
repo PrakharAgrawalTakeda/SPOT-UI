@@ -67,43 +67,46 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   ngOnInit(): void {
     this.dataloader()
   }
-  ngAfterViewChecked(): void{
-    if(this.isEverythingLoaded == false){
-    if(document.getElementById('overall-status') != null){
-      this.collapseLogic();
-      this.changeDetector.detectChanges()
-      
+  ngAfterViewChecked(): void {
+      if (document.getElementById('overall-status') != null) {
+        this.collapseLogic();
+        this.changeDetector.detectChanges()
     }
   }
-  }
 
-  collapseLogic(){
+  collapseLogic() {
     this.isEverythingLoaded = true
     console.log(document.getElementById('ra').scrollHeight)
     console.log(document.getElementById('ra').clientHeight)
-    if(
-      document.getElementById('sd').scrollHeight > document.getElementById('sd').clientHeight ||
+    if (
+      (document.getElementById('sd').scrollHeight > document.getElementById('sd').clientHeight ||
       document.getElementById('ra').scrollHeight > document.getElementById('ra').clientHeight ||
-      document.getElementById('ns').scrollHeight > document.getElementById('ns').clientHeight 
-    )
-    {
+      document.getElementById('ns').scrollHeight > document.getElementById('ns').clientHeight || this.overallCollapseControll == true)
+    ) {
+      console.log("if")
       this.overallCollapse = true
-      this.overallCollapseControll = false
-    }
-  }
-  collapseToggle(){
-    if(this.overallCollapseControll == false){
-      this.overallCollapseClass = 'overall-expand'
     }
     else{
-    this.overallCollapseClass='overall-shrink'  
+      console.log("else")
+      this.overallCollapse = false
+    }
+  }
+  collapseToggle() {
+    if (this.overallCollapseControll == false) {
+      this.overallCollapseClass = 'overall-expand'
+    }
+    else {
+      this.overallCollapseClass = 'overall-shrink'
     }
     this.overallCollapseControll = !this.overallCollapseControll
-    
+    console.log(this.overallCollapseControll)
 
   }
   dataloader() {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    if(this.overallCollapseControll == true){
+      this.collapseToggle()
+    }
+   this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
       this.projectViewDetails = res
       this.hubsetting = {
@@ -114,7 +117,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
       }
       console.log(this.projectViewDetails)
       this.showContent = true
-      
+
       this.riskIssues.data = this.projectViewDetails.riskIssuesData
       this.riskIssues.sort = this.riskIssuesMatSort
       if (this.isclosedaskneedtoggle == false) {
@@ -123,9 +126,9 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
       else {
         this.allAskNeeds()
       }
-      
+
       console.log(this.projectViewDetails)
-      
+
       this.askNeed.sort = this.askNeedMatSort
       this.Schedule.data = this.projectViewDetails.scheduleData
       this.Schedule.sort = this.ScheduleMatSort
