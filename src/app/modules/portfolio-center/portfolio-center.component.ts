@@ -18,6 +18,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-portfolio-center',
   templateUrl: './portfolio-center.component.html',
@@ -153,11 +154,12 @@ export class PortfolioCenterComponent implements OnInit {
   @ViewChild('stateInput') stateInput: ElementRef<HTMLInputElement>;
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title) {
   }
 
   ngOnInit(): void {
     this.showContent = false;
+    this.titleService.setTitle("Portfolio Center")
     //checking if there are any preset filter
     if (localStorage.getItem('spot-filters') == null) {
       this.filtersnew = this.defaultfilter

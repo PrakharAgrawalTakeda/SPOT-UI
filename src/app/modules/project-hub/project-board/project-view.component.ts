@@ -76,18 +76,18 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
 
   collapseLogic() {
     this.isEverythingLoaded = true
-    console.log(document.getElementById('ra').scrollHeight)
-    console.log(document.getElementById('ra').clientHeight)
+   // console.log(document.getElementById('ra').scrollHeight)
+   // console.log(document.getElementById('ra').clientHeight)
     if (
       (document.getElementById('sd').scrollHeight > document.getElementById('sd').clientHeight ||
       document.getElementById('ra').scrollHeight > document.getElementById('ra').clientHeight ||
       document.getElementById('ns').scrollHeight > document.getElementById('ns').clientHeight || this.overallCollapseControll == true)
     ) {
-      console.log("if")
+     // console.log("if")
       this.overallCollapse = true
     }
     else{
-      console.log("else")
+     // console.log("else")
       this.overallCollapse = false
     }
   }

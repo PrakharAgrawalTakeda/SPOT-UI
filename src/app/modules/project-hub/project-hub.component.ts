@@ -7,6 +7,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from './project-hub.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { Title } from '@angular/platform-browser';
 @Component({
     selector: 'app-project-hub',
     templateUrl: './project-hub.component.html',
@@ -53,7 +54,7 @@ export class ProjectHubComponent implements OnInit {
         }
     ]
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, public _fuseNavigationService: FuseNavigationService) {
+    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, public _fuseNavigationService: FuseNavigationService, private titleService: Title) {
         this.projecthubservice.isNavChanged.subscribe(res => {
             if (res == true) {
                 this.getdata()
@@ -70,6 +71,7 @@ export class ProjectHubComponent implements OnInit {
 
         this.apiService.getproject(this.id).then((res) => {
             this.projectDetails = res
+            this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
             this.apiService.getHubSettings(this.id).then((response: any) => {
                 //Budget
                 this.projecthubservice.menuData[0].children[3].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
