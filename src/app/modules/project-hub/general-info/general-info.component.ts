@@ -23,9 +23,38 @@ import { id } from '@swimlane/ngx-datatable';
   encapsulation: ViewEncapsulation.None
 })
 export class GeneralInfoComponent implements OnInit {
-
-  constructor(private apiService: ProjectApiService) {}
+  id: string = ""
+  generalInfoData: any = {}
+  generalInfoForm = new FormGroup({
+    problemTitle: new FormControl(''),
+    projectsingle: new FormControl(''),
+    projectsingleid: new FormControl(''),
+    problemType: new FormControl('Standard Project / Program'),
+  })
+  formFieldHelpers: any
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) { }
   ngOnInit(): void {
-    
+    this.dataloader()
+  }
+  dataloader(): void {
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getGeneralInfoData(this.id).then((res: any) => {
+      console.log(res)
+      this.generalInfoData = res
+      this.generalInfoForm.patchValue({
+        problemTitle: res.projectData.problemTitle,
+        problemType: res.projectData.problemType
+      })
+      if (res.parentProject != null) {
+        this.generalInfoForm.patchValue({
+          projectsingle: res.parentProject.problemTitle,
+          projectsingleid: res.parentProject.problemUniqueId
+        })
+      }
+    })
+  }
+
+  submitGeneralInfo() {
+
   }
 }
