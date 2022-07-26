@@ -23,7 +23,11 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   askNeed: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild('ScheduleTable', { read: MatSort }) ScheduleMatSort: MatSort;
   @ViewChild(ProjectHubComponent) parent;
-
+  getRowClass = (row) => {
+    return {
+      'row-color1': row.indicator == 'Grey',
+    };
+  };
   Schedule: MatTableDataSource<any> = new MatTableDataSource();
   projectViewDetails: any = {}
   id: string = ''

@@ -15,7 +15,11 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges{
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
-
+  getRowClass = (row) => {
+    return {
+      'row-color1': row.indicator == 'Grey',
+    };
+  };
   riskIssuesngxdata: any = []
   isclosed: boolean = false
   constructor(public projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService) { }
@@ -27,6 +31,8 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges{
     }
     else{
       this.riskIssuesngxdata = this.riskIssuesData
+
+      
     }
     
   }
@@ -40,9 +46,12 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges{
     if(event.checked == true){
       this.riskIssuesngxdata = this.riskIssuesData
       this.isclosed = true
+      console.log(this.riskIssuesngxdata)
+
     }
     else{
       this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
+      console.log(this.riskIssuesngxdata)
     }
   }
  islink(uid: string): boolean {
