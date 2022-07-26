@@ -97,8 +97,10 @@ export class ProjectHubComponent implements OnInit {
             console.log(this.portfolioDetails.phase)
         })
     }
-    toggleSideNav(){
-        this.drawerOpened = !this.drawerOpened
-        this.projecthubservice.submitbutton.next(true)
+    toggleSideNav() {
+       this.drawerOpened = !this.drawerOpened
+        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board') {
+            this.projecthubservice.submitbutton.next(true)
+        }
     }
 }
