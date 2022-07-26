@@ -99,5 +99,6 @@ export class ProjectHubComponent implements OnInit {
     }
     toggleSideNav(){
         this.drawerOpened = !this.drawerOpened
+        this.projecthubservice.submitbutton.next(true)
     }
 }
