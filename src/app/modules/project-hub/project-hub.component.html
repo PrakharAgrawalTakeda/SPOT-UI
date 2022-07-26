@@ -10,8 +10,8 @@
         </div>
     </fuse-drawer>
     <!-- Header -->
-    <div
-        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between pb-5rem pl-3 pr-3 pt-3 dark:bg-transparent">
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between pb-5rem pl-3 pr-3 pt-3 dark:bg-transparent"
+        [ngClass]="{'pl-19rem': drawerOpened == true}">
         <div class="flex-1 min-w-0" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
             <!-- Breadcrumbs -->
 
@@ -34,11 +34,41 @@
             </div>
             <!-- Actions -->
             <div class="flex shrink-0 items-center justify-between mt-6 sm:mt-0 ">
-                <div class="flex">
-                    <button mat-icon-button (click)="matDrawer.toggle()">
-                        <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+                <div class="flex lg:gap-2">
+                    <button class="text-primary text-md" mat-flat-button [color]="'primary-200'" (click)="[matDrawer.toggle(),toggleSideNav()]">
+                        <mat-icon *ngIf="!drawerOpened" svgIcon="heroicons_outline:arrow-narrow-right"></mat-icon>&nbsp; Menu &nbsp;<mat-icon *ngIf="drawerOpened" svgIcon="heroicons_outline:arrow-narrow-left"></mat-icon>
                     </button>
+                    <!--<div class="flex items-center gap-2 text-lg">
+                        <p>Overall Status</p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}}">
+                        </mat-icon>
+                        <p> Budget</p>
+                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                        <p> Schedule</p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                        <p> Risk/Issues</p>
+                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                        <p> Ask/Needs </p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}}">
+                        </mat-icon>
+
+                    </div>-->
                 </div>
+
                 <div class=" flex items-center">
                     <div class="p-3 text-right">
                         Project State<br>
@@ -58,9 +88,45 @@
                     <div class="p-3"
                         [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
                         style="z-index: 5;">Track</div>
-
                 </div>
-
+            </div>
+            <div class="flex items-start">
+                <div class="flex items-center gap-12 text-xl pl-6">
+                    <div class="flex items-center gap-2">
+                        <p>Overall Status</p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}} overall-indicator">
+                        </mat-icon>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <p> Budget</p>
+                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}} overall-indicator">
+                        </mat-icon>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <p> Schedule</p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}} overall-indicator">
+                        </mat-icon>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <p> Risk/Issues</p>
+                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}} overall-indicator">
+                        </mat-icon>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <p> Ask/Needs </p>
+                        <mat-icon
+                            svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
+                            class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}} overall-indicator">
+                        </mat-icon>
+                    </div>
+                </div>
+                <div></div>
             </div>
         </div>
     </div>
@@ -69,11 +135,11 @@
     <mat-drawer-container class="flex-auto -mt-16">
 
         <!-- Drawer -->
-        <mat-drawer class="w-72 " [autoFocus]="false" [mode]="drawerMode" [opened]="drawerOpened" #matDrawer>
+        <mat-drawer class="w-72 fixed" [autoFocus]="false" [mode]="drawerMode" [opened]="drawerOpened" #matDrawer>
             <!-- Demo sidebar -->
             <ng-scrollbar>
                 <div>
-                    <div class="mx-6 mt-6 mb-6">
+                    <div class="mx-6 mt-6 mb-6" style="padding-top: 50px;">
                         <button mat-flat-button [color]="'primary'" class="w-full">
                             Generate Dashboard
                         </button>
@@ -123,7 +189,7 @@
                         </mat-accordion>
                     </div>-->
                     <fuse-vertical-navigation [appearance]="'default'" [navigation]="projecthubservice.menuData"
-                        [inner]="true" [mode]="'side'" [name]="'projecthub-navigation'" [opened]="true" class="mt-0">
+                        [inner]="true" [mode]="'side'" [name]="'projecthub-navigation'" [opened]="true" class="mt-0" style="padding-bottom: 4rem ;">
                     </fuse-vertical-navigation>
 
                     <!-- Storage -->

@@ -18,6 +18,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-portfolio-center',
   templateUrl: './portfolio-center.component.html',
@@ -25,7 +26,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations
 })
-export class PortfolioCenterComponent implements OnInit, AfterViewInit {
+export class PortfolioCenterComponent implements OnInit {
   @ViewChild('recentTransactionsTable', { read: MatSort }) recentTransactionsTableMatSort: MatSort;
   projects: MatTableDataSource<any> = new MatTableDataSource();
   projectNames: any = []
@@ -37,11 +38,11 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   filtersnew: any = {
     "portfolioOwner": [],
     "executionScope": [],
-    "people":[],
+    "people": [],
     "phase": [],
-    "state":[],
-    "products" :[],
-    "totalCAPEX":[]
+    "state": [],
+    "products": [],
+    "totalCAPEX": []
   }
   filters: any = {
     "portfolioOwner": [],
@@ -67,11 +68,11 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   defaultfilter: any = {
     "portfolioOwner": [],
     "executionScope": [],
-    "people":[],
+    "people": [],
     "phase": [],
-    "state":[],
-    "products" :[],
-    "totalCAPEX":[]
+    "state": [],
+    "products": [],
+    "totalCAPEX": []
   }
   filterchiplist: any = {
     "portfolioOwner": [],
@@ -123,44 +124,42 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
   fruits: string[] = [];
   lookup: any = [];
   allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
-  newmainnav:any = [
+  newmainnav: any = [
     {
-        id: 'portfolio-center',
-        title: 'Portfolio Center',
-        type: 'basic',
-        link: '/portfolio-center'
+      id: 'portfolio-center',
+      title: 'Portfolio Center',
+      type: 'basic',
+      link: '/portfolio-center'
     },
     {
-        id: 'spot-documents',
-        title: 'SPOT Resources',
-        type: 'basic',
-        externalLink: true,
-        link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-        target: '_blank'
+      id: 'spot-documents',
+      title: 'SPOT Resources',
+      type: 'basic',
+      externalLink: true,
+      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+      target: '_blank'
     },
     {
-        id: 'report-navigator',
-        title: 'Report Navigator',
-        type: 'basic',
-        link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-        externalLink: true,
-        target: "_blank"
+      id: 'report-navigator',
+      title: 'Report Navigator',
+      type: 'basic',
+      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+      externalLink: true,
+      target: "_blank"
 
     }
-]
+  ]
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   @ViewChild('phaseInput') phaseInput: ElementRef<HTMLInputElement>;
   @ViewChild('stateInput') stateInput: ElementRef<HTMLInputElement>;
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService,public _fuseNavigationService: FuseNavigationService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title) {
   }
 
   ngOnInit(): void {
     this.showContent = false;
-    const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
-                mainNavComponent.navigation = this.newmainnav
-                mainNavComponent.refresh()
+    this.titleService.setTitle("Portfolio Center")
     //checking if there are any preset filter
     if (localStorage.getItem('spot-filters') == null) {
       this.filtersnew = this.defaultfilter
@@ -173,16 +172,19 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
     console.log(this.filtersnew)
     //Filtering Projects
     this.apiService.MainFilters(this.filtersnew).then((resp) => {
+      const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+      mainNavComponent.navigation = this.newmainnav
+      mainNavComponent.refresh()
       if (resp != null) {
 
         //Loading Lookup Values in Filters
-        this.apiService.getfilterlist().then(data=>{
+        this.apiService.getfilterlist().then(data => {
           this.filterlist = data
         })
 
         this.auth.lookupMaster().then(data => {
           this.filterchiplist.phase = []
-          this.filterchiplist.state =[]
+          this.filterchiplist.state = []
           // Filters Inputs 
           this.lookup = data
           this.filterInputs.phase = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["phase"])
@@ -358,8 +360,7 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
       }
     })
   }
-  ngAfterViewInit(): void { }
-  routeProject(projectid):void{
+  routeProject(projectid): void {
     //this.close()
     /*if (this.routes.url.includes('project-hub')){
     this.routes.navigate(['project-hub/'+ projectid]).then(() => {
@@ -367,62 +368,62 @@ export class PortfolioCenterComponent implements OnInit, AfterViewInit {
       });
     }
     else{}*/
-        window.open('project-hub/'+ projectid, "_blank")
-    
-}
+    window.open('project-hub/' + projectid, "_blank")
+
+  }
   selectoption(event: MatAutocompleteSelectedEvent, field: string): void {
-    if(field == "PortfolioOwner"){
+    if (field == "PortfolioOwner") {
       console.log(event)
       this.filtersnew.portfolioOwner.push(event.option.value)
-      this.filterlist.portfolioOwner =  this.filterlist.portfolioOwner.filter(x=> x.portfolioOwnerId != event.option.value.portfolioOwnerId)
+      this.filterlist.portfolioOwner = this.filterlist.portfolioOwner.filter(x => x.portfolioOwnerId != event.option.value.portfolioOwnerId)
     }
-    if(field == "Excecution"){
+    if (field == "Excecution") {
       this.filtersnew.executionScope.push(event.option.value)
-      this.filterlist.executionScope =  this.filterlist.executionScope.filter(x=> x.portfolioOwnerId != event.option.value.portfolioOwnerId)
+      this.filterlist.executionScope = this.filterlist.executionScope.filter(x => x.portfolioOwnerId != event.option.value.portfolioOwnerId)
       console.log(this.filtersnew)
     }
-    if(field == "Phase"){
+    if (field == "Phase") {
       this.filtersnew.phase.push(event.option.value)
-      this.filterlist.phase =  this.filterlist.phase.filter(x=> x.lookUpId != event.option.value.lookUpId)
+      this.filterlist.phase = this.filterlist.phase.filter(x => x.lookUpId != event.option.value.lookUpId)
       console.log(this.filtersnew)
     }
-    if(field == "State"){
+    if (field == "State") {
       this.filtersnew.state.push(event.option.value)
-      this.filterlist.state =  this.filterlist.state.filter(x=> x.lookUpId != event.option.value.lookUpId)
+      this.filterlist.state = this.filterlist.state.filter(x => x.lookUpId != event.option.value.lookUpId)
       console.log(this.filtersnew)
     }
-    if(field == "Product"){
+    if (field == "Product") {
       this.filtersnew.products.push(event.option.value)
-      this.filterlist.products =  this.filterlist.products.filter(x=> x.id != event.option.value.id)
+      this.filterlist.products = this.filterlist.products.filter(x => x.id != event.option.value.id)
       console.log(this.filtersnew)
     }
   }
-  removeoption(value :any,field :string){
-    if(field == "PortfolioOwner"){
-    this.filterlist.portfolioOwner.push(value)
-    this.filtersnew.portfolioOwner =  this.filtersnew.portfolioOwner.filter(x=> x.portfolioOwnerId != value.portfolioOwnerId)
-    console.log(value)
-    }
-    if(field == "Excecution"){
-      this.filterlist.executionScope.push(value)
-      this.filtersnew.executionScope =  this.filtersnew.executionScope.filter(x=> x.portfolioOwnerId != value.portfolioOwnerId)
+  removeoption(value: any, field: string) {
+    if (field == "PortfolioOwner") {
+      this.filterlist.portfolioOwner.push(value)
+      this.filtersnew.portfolioOwner = this.filtersnew.portfolioOwner.filter(x => x.portfolioOwnerId != value.portfolioOwnerId)
       console.log(value)
-      }
-      if(field == "Phase"){
-        this.filterlist.phase.push(value)
-        this.filtersnew.phase =  this.filtersnew.phase.filter(x=> x.lookUpId != value.lookUpId)
-        console.log(value)
-        }
-        if(field == "State"){
-          this.filterlist.state.push(value)
-          this.filtersnew.state =  this.filtersnew.state.filter(x=> x.lookUpId != value.lookUpId)
-          console.log(value)
-          }
-        if(field == "Product"){
-          this.filterlist.products.push(value)
-          this.filtersnew.products =  this.filtersnew.products.filter(x=> x.id != value.id)
-          console.log(value)
-          }
+    }
+    if (field == "Excecution") {
+      this.filterlist.executionScope.push(value)
+      this.filtersnew.executionScope = this.filtersnew.executionScope.filter(x => x.portfolioOwnerId != value.portfolioOwnerId)
+      console.log(value)
+    }
+    if (field == "Phase") {
+      this.filterlist.phase.push(value)
+      this.filtersnew.phase = this.filtersnew.phase.filter(x => x.lookUpId != value.lookUpId)
+      console.log(value)
+    }
+    if (field == "State") {
+      this.filterlist.state.push(value)
+      this.filtersnew.state = this.filtersnew.state.filter(x => x.lookUpId != value.lookUpId)
+      console.log(value)
+    }
+    if (field == "Product") {
+      this.filterlist.products.push(value)
+      this.filtersnew.products = this.filtersnew.products.filter(x => x.id != value.id)
+      console.log(value)
+    }
   }
   remove(value: string, field: string): void {
     if (field == "Phase") {

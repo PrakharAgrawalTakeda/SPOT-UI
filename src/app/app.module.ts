@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExtraOptions, PreloadAllModules, RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
@@ -64,7 +64,8 @@ const routerConfig: ExtraOptions = {
             provide: MSAL_INSTANCE,
             useFactory: MsalInstanceFactory
         },
-        MsalService
+        MsalService,
+        Title
     ]
 })
 export class AppModule {

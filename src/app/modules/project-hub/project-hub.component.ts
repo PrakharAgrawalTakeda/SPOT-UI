@@ -7,6 +7,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from './project-hub.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { Title } from '@angular/platform-browser';
 @Component({
     selector: 'app-project-hub',
     templateUrl: './project-hub.component.html',
@@ -21,7 +22,7 @@ export class ProjectHubComponent implements OnInit {
     panelOpenState = true;
     selectedProject: string = 'ACME Corp. Backend App';
     drawerOpened: boolean = true;
-    newmainnav:any = [
+    newmainnav: any = [
         {
             id: 'portfolio-center',
             title: 'Portfolio Center',
@@ -53,7 +54,7 @@ export class ProjectHubComponent implements OnInit {
         }
     ]
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, public _fuseNavigationService: FuseNavigationService) {
+    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, public _fuseNavigationService: FuseNavigationService, private titleService: Title) {
         this.projecthubservice.isNavChanged.subscribe(res => {
             if (res == true) {
                 this.getdata()
@@ -67,20 +68,26 @@ export class ProjectHubComponent implements OnInit {
     }
 
     getdata(): void {
-        const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
-        mainNavComponent.navigation = this.newmainnav
-        mainNavComponent.refresh()
+
         this.apiService.getproject(this.id).then((res) => {
             this.projectDetails = res
+            this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
             this.apiService.getHubSettings(this.id).then((response: any) => {
-                this.projecthubservice.menuData[0].children[5].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
-                this.projecthubservice.menuData[0].children[8].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
-                this.projecthubservice.menuData[0].children[6].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                //Budget
+                this.projecthubservice.menuData[0].children[3].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                //Documents
+                this.projecthubservice.menuData[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                //Teams
+                this.projecthubservice.menuData[0].children[4].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
 
 
                 //nav refresh
                 const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
                 navComponent.refresh();
+
+                const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+                mainNavComponent.navigation = this.newmainnav
+                mainNavComponent.refresh()
 
             })
             // 
@@ -90,5 +97,10 @@ export class ProjectHubComponent implements OnInit {
             console.log(this.portfolioDetails.phase)
         })
     }
-
+    toggleSideNav() {
+       this.drawerOpened = !this.drawerOpened
+        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board') {
+            this.projecthubservice.submitbutton.next(true)
+        }
+    }
 }

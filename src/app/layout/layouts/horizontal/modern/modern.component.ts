@@ -86,7 +86,7 @@ export class ModernLayoutComponent implements OnInit, OnDestroy
 
     /**
      * Toggle navigation
-     *
+     *h
      * @param name
      */
     toggleNavigation(name: string): void

@@ -37,6 +37,8 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
     overflow-wrap: break-word;
     white-space: pre-wrap;
     align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 
 .ngx-datatable.fixed-header .datatable-header .datatable-header-inner {
@@ -45,10 +47,7 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
     align-items: center;
 }
 
-.ngx-datatable .datatable-body .datatable-row-wrapper {
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-}
+
 
 .ngx-datatable .datatable-body .datatable-row-detail {
     font-size: 0.875rem;

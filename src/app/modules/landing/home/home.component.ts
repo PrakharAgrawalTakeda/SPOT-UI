@@ -4,6 +4,7 @@ import { MsalService } from '@azure/msal-angular';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { lookupMaster } from 'app/shared/lookup-global';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector     : 'landing-home',
@@ -15,8 +16,9 @@ export class LandingHomeComponent implements OnInit
     /**
      * Constructor
      */
-     constructor(private authService: MsalService, private router:Router, private auth:AuthService) { }
+     constructor(private authService: MsalService, private router:Router, private auth:AuthService,private titleService: Title) { }
     ngOnInit(): void {
+        this.titleService.setTitle("SPOT")
         this.authService.instance.handleRedirectPromise().then(res =>{
             if(res != null && res.account != null){
                 console.log(res.account)

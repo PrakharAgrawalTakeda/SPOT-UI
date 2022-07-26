@@ -50,7 +50,7 @@ export class ProjectHubService {
           link: 'project-board'
         },
         {
-          title: 'Assoiated Projects',
+          title: 'Associated Project',
           type: 'basic',
           icon: 'heroicons_outline:link',
           link: 'associated-projects'
@@ -60,32 +60,6 @@ export class ProjectHubService {
           type: 'basic',
           icon: 'heroicons_outline:pencil-alt',
           link: 'general-info'
-        },
-        {
-          title: 'Project Proposal',
-          type: 'basic',
-          icon: 'mat_outline:insert_chart',
-          link: 'project-proposal'
-        },
-        {
-          title: 'Business Cases',
-          type: 'collapsable',
-          icon: 'heroicons_outline:presentation-chart-line',
-          children: [
-            {
-              title: 'Recommended Option',
-              type: 'basic',
-              
-            },
-            {
-              title: 'Option 2',
-              type: 'basic',
-            },
-            {
-              title: 'Option 3',
-              type: 'basic',
-            }
-          ]
         },
         {
           title: 'Budget',
@@ -127,12 +101,6 @@ export class ProjectHubService {
           link: 'local-attributes'
         },
         {
-          title: 'Reports',
-          type: 'basic',
-          icon: 'heroicons_outline:presentation-chart-bar',
-          link: 'reports'
-        },
-        {
           title: 'Hub Settings',
           type: 'basic',
           icon: 'heroicons_outline:adjustments',
@@ -148,10 +116,30 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
-          title: 'Business Case',
+          title: 'Project Proposal',
           type: 'basic',
           icon: 'mat_outline:business_center',
-          link: 'business-case'
+          link: 'project-proposal'
+        },
+        {
+          title: 'Business Case',
+          type: 'collapsable',
+          icon: 'mat_outline:business_center',
+          children: [
+            {
+              title: 'Recommended Option',
+              type: 'basic',
+              link: 'business-case'    
+            },
+            {
+              title: 'Option 2',
+              type: 'basic',
+            },
+            {
+              title: 'Option 3',
+              type: 'basic',
+            }
+          ]
         },
         {
           title: 'Project Charter',
@@ -159,9 +147,28 @@ export class ProjectHubService {
           icon: 'heroicons_outline:location-marker',
           link: 'project-charter'
         },
-
         {
-          title: 'Close Out',
+          title: 'Project Dashboards',
+          type: 'collapsable',
+          icon: 'heroicons_outline:presentation-chart-line',
+          children: [
+            {
+              title: 'Performance',
+              type: 'basic',
+              
+            },
+            {
+              title: 'Budget',
+              type: 'basic',
+            },
+            {
+              title: 'GMSGQ Product Team',
+              type: 'basic',
+            }
+          ]
+        },
+        {
+          title: 'Close Out Report',
           type: 'basic',
           icon: 'heroicons_outline:location-marker',
           link: 'close-out'
