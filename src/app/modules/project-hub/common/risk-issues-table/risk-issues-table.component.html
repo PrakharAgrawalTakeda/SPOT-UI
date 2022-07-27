@@ -20,7 +20,7 @@
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="riskIssuesngxdata"
-        [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #riskIssuesTable>
+        [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #riskIssuesTable [rowClass]="getRowClass">
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
@@ -85,45 +85,44 @@
         <ngx-datatable-row-detail [rowHeight]="'auto'" #riskIssueRowDetail (toggle)="onDetailToggle($event)">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
 
-                <div class="pb-3 pt-3">
+                <div style="padding: 10px 0 0 0;">
                     <div class="flex items-start justify-between">
                         <div [ngClass]="{'closed': row.closeDate != null}">
                             <strong class="strong">This Is The Result:</strong>
                             {{row.riskIssueResult}}
                         </div>
                     </div>
+                </div>
+                <div style="padding: 10px 0 0 0;">
+                    <div class="flex items-start justify-between">
+                        <div [ngClass]="{'closed': row.closeDate != null}">
+                            <strong>Mitigation:</strong>
+                            {{row.mitigation}}
+                        </div>
+                    </div>
+                </div>
+                <div style="padding: 10px 0 0 0;">
+                    <div class="flex items-start justify-between">
+                        <div [ngClass]="{'closed': row.closeDate != null}">
+                            <strong class="strong">Owner:</strong>
+                            {{row.ownerName}}
+                        </div>
+                    </div>
+                </div>
+                <div style="padding: 10px 0 0 0;">
+                    <div class="flex items-start justify-between">
+                        <div [ngClass]="{'closed': row.closeDate != null}">
+                            <strong class="strong">Function:</strong>
+                            {{lookup.get(row.functionGroupId)}}
+                        </div>
+                    </div>
+                </div>
 
-                    <div style="padding: 10px 0 0 0;">
-                        <div class="flex items-start justify-between">
-                            <div [ngClass]="{'closed': row.closeDate != null}">
-                                <strong>Mitigation:</strong>
-                                {{row.mitigation}}
-                            </div>
-                        </div>
-                    </div>
-                    <div style="padding: 10px 0 0 0;">
-                        <div class="flex items-start justify-between">
-                            <div [ngClass]="{'closed': row.closeDate != null}">
-                                <strong class="strong">Owner:</strong>
-                                {{row.ownerName}}
-                            </div>
-                        </div>
-                    </div>
-                    <div style="padding: 10px 0 0 0;">
-                        <div class="flex items-start justify-between">
-                            <div [ngClass]="{'closed': row.closeDate != null}">
-                                <strong class="strong">Function:</strong>
-                                {{lookup.get(row.functionGroupId)}}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="padding: 10px 0 0 0;">
-                        <div class="flex items-start justify-between">
-                            <div [ngClass]="{'closed': row.closeDate != null}">
-                                <strong>Due Date:</strong>
-                                {{row.dueDate | date:'dd-MMM-yyyy'}}
-                            </div>
+                <div style="padding: 10px 0 0 0;">
+                    <div class="flex items-start justify-between">
+                        <div [ngClass]="{'closed': row.closeDate != null}">
+                            <strong>Due Date:</strong>
+                            {{row.dueDate | date:'dd-MMM-yyyy'}}
                         </div>
                     </div>
                 </div>
