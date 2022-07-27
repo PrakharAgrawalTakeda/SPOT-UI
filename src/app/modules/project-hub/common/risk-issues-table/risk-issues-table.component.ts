@@ -17,7 +17,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
   getRowClass = (row) => {
     return {
-      'row-color1': row.indicator == 'Grey',
+      'row-color1': row.closeDate != null,
     };
   };
   riskIssuesngxdata: any = []

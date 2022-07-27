@@ -25,7 +25,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   @ViewChild(ProjectHubComponent) parent;
   getRowClass = (row) => {
     return {
-      'row-color1': row.indicator == 'Grey',
+      'row-color1': row.closeDate != null,
     };
   };
   Schedule: MatTableDataSource<any> = new MatTableDataSource();
