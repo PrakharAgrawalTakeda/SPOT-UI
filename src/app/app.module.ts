@@ -15,6 +15,7 @@ import { appRoutes } from 'app/app.routing';
 import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { GlobalVariables } from './shared/global-variables';
+import { MyPreferenceComponent } from './modules/my-preference/my-preference.component';
 export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {

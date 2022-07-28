@@ -47,7 +47,6 @@ export class UserComponent implements OnInit, OnDestroy
     {
           this.user = this.authService.instance.getActiveAccount()
     }
-
     /**
      * On destroy
      */
@@ -87,6 +86,11 @@ export class UserComponent implements OnInit, OnDestroy
     menuClose(){
         this.isMenuOpen = false
     }
+    routeMyPreference():void{
+        window.open('my-preference', "_blank")
+        
+    }
+
     /**
      * Sign out
      */

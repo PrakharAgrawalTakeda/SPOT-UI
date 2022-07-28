@@ -1,0 +1,13 @@
+<div class="flex min-w-0 overflow-hidden p-6 pt-20 w-full">
+    <div class="p-6 bg-card rounded-2xl shadow w-full">
+        <form class="w-full" [formGroup]="preferenceForm">
+            <mat-form-field class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
+                <mat-label>Role</mat-label>
+                <mat-select [placeholder]="'Role'" formControlName="role" name="role" (selectionChange)="updateRole($event)">
+                    <mat-option *ngFor="let option of getRoles()" value="{{option.lookUpId}}">{{option.lookUpName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </div>
+</div>
