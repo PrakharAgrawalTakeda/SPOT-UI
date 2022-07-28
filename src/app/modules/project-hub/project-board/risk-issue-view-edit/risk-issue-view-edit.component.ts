@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ElementRef,ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -35,6 +35,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
+
 export class RiskIssueViewEditComponent implements OnInit {
   formFieldHelpers: string[] = [''];
   lookupdata: any = []
@@ -42,18 +43,32 @@ export class RiskIssueViewEditComponent implements OnInit {
   today = new Date();
   item: any = {}
   functionSets: any = []
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService) {
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService,private _elementRef: ElementRef) {
 
     this.functionSets = this.riskIssueForm.controls['function'].valueChanges.pipe(
       startWith(''),
       map(value => {
         var filterValue = value.toString().toLowerCase()
-        return this.lookupdata.filter(x => x.lookUpName.toLowerCase().includes(filterValue) && x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
-          return a.lookUpOrder - b.lookUpOrder;
-        })
+        if (this.lookupdata.find(x => x.lookUpId == this.riskIssueForm.controls.functionid.value)) {
+          if (this.lookupdata.find(x => x.lookUpName == value)) {
+
+            return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
+              return a.lookUpOrder - b.lookUpOrder;
+            })
+          }
+
+          else {
+            return this.lookupdata.filter(x => x.lookUpName.toLowerCase().includes(filterValue) && x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
+              return a.lookUpOrder - b.lookUpOrder;
+            })
+          }
+        }
       })
+
     )
   }
+
+
   riskIssueForm = new FormGroup({
     logDate: new FormControl(''),
     type: new FormControl(''),
@@ -151,20 +166,6 @@ export class RiskIssueViewEditComponent implements OnInit {
     })
   }
 
-  // sortAlphabetically(a, b) {
-  //   var nameA = a.issuerName.toUpperCase(); // ignore upper and lowercase
-  //   var nameB = b.issuerName.toUpperCase(); // ignore upper and lowercase
-  //   if (nameA < nameB) {
-  //     return -1;
-  //   }
-  //   if (nameA > nameB) {
-  //     return 1;
-  //   }
-
-  //   // names must be equal
-  //   return 0;
-  // }
-
   getllookup() {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
@@ -208,6 +209,7 @@ export class RiskIssueViewEditComponent implements OnInit {
       functionid: event.option.value.lookUpId
     })
     console.log(this.riskIssueForm.controls.functionid.value)
+
   }
   submitriskissue() {
     console.log(this.riskIssueForm.errors)
