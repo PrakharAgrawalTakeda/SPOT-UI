@@ -4,8 +4,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
+import { RoleService } from 'app/core/auth/role.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { lookupMaster } from 'app/shared/lookup-global';
+import { RoleController } from 'app/shared/role-controller';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubComponent } from '../project-hub.component';
 import { ProjectHubService } from '../project-hub.service';
@@ -59,7 +61,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   //hubsettings
   hubsetting: any = {}
 
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private auth: AuthService, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router, private changeDetector: ChangeDetectorRef) {
+  constructor(private apiService: ProjectApiService,private roleController: RoleService,private _Activatedroute: ActivatedRoute, private auth: AuthService, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router, private changeDetector: ChangeDetectorRef) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.checkedan = false;
@@ -69,6 +71,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   ngOnInit(): void {
+    console.log("Project Board Started")
     this.dataloader()
   }
   ngAfterViewChecked(): void {

@@ -14,6 +14,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
+  @Input() editable: boolean
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
   getRowClass = (row) => {
     return {
@@ -31,8 +32,6 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     }
     else {
       this.riskIssuesngxdata = this.riskIssuesData
-
-      
     }
 
   }
@@ -49,8 +48,8 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
       console.log(this.riskIssuesngxdata)
 
     }
-    else{
-      this.riskIssuesngxdata = this.riskIssuesData.filter(x=>x.closeDate == null)
+    else {
+      this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
       console.log(this.riskIssuesngxdata)
     }
   }

@@ -63,7 +63,10 @@ export class ProjectHubComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        console.log("Project Hub Started")
         this.id = this._Activatedroute.snapshot.paramMap.get("id");
+        this.projecthubservice.projectidInjector(this.id)
+        console.log(this.projecthubservice.roleControllerControl)
         this.getdata()
     }
 

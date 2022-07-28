@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { MsalService } from '@azure/msal-angular';
 import { FuseNavigationItem } from '@fuse/components/navigation';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { RoleService } from 'app/core/auth/role.service';
+import { RoleController } from 'app/shared/role-controller';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -16,6 +19,10 @@ export class ProjectHubService {
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
   isFormChanged: boolean = false
+
+  roleControllerControl: RoleController = new RoleController
+
+
   alert: FuseConfirmationConfig = {
     "title": "Are you sure you want to exit?",
     "message": "All unsaved data will be lost.",
@@ -129,7 +136,7 @@ export class ProjectHubService {
             {
               title: 'Recommended Option',
               type: 'basic',
-              link: 'business-case'    
+              link: 'business-case'
             },
             {
               title: 'Option 2',
@@ -155,7 +162,7 @@ export class ProjectHubService {
             {
               title: 'Performance',
               type: 'basic',
-              
+
             },
             {
               title: 'Budget',
@@ -181,8 +188,16 @@ export class ProjectHubService {
       type: 'divider'
     }
   ];
-  constructor(private fusealert: FuseConfirmationService) { }
-
+  constructor(private fusealert: FuseConfirmationService, private roleController: RoleService, private msalService: MsalService) {
+    console.log("Project Service Started")
+  }
+  projectidInjector(projectid:string){
+    this.projectid = projectid
+    this.getroles()
+  }
+  getroles(){
+    this.roleControllerControl = this.roleController.getRolesbyProjectData(this.projectid)
+  }
   toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string): void {
     console.log(this.isFormChanged)
     if (this.drawerOpenedright == true && this.isFormChanged == true) {

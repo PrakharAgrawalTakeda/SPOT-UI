@@ -43,7 +43,7 @@
             <div>
                 <div class="flex items-center justify-between">
                     <div></div>
-                    <button class="text-primary text-md" mat-flat-button [color]="'primary-200'"
+                    <button class="text-primary text-md" mat-flat-button [color]="'primary-200'" *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit"
                         (click)="projecthubservice.toggleDrawerOpen('Overall',projectViewDetails.statusData.statusUnquieId, [], id)">
                         <mat-icon class="customIconSize" svgIcon="heroicons_outline:pencil"></mat-icon>&nbsp; Edit
                     </button>
@@ -178,7 +178,7 @@
     <!-- Risk Issues -->
     <div *ngIf="hubsetting.risks"
         class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
-        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id">
+        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id" [editable]="projecthubservice.roleControllerControl.projectHub.projectBoard.riskIssuesEdit">
         </app-risk-issues-table>
     </div>
 
@@ -191,7 +191,7 @@
             <div class="text-primary">
                 <div class="flex items-start justify-between">
                     <div style="padding-right: 5px;">
-                        <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                        <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'" *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                             (click)="projecthubservice.toggleDrawerOpen('AskNeed', 'new', projectViewDetails.askNeedData, id)">
                             <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                         </button>
@@ -236,16 +236,13 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                        <div class="flex items-center ">
+                        <div class="flex justify-between items-center gap-6">
                             <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
                                 <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                                 <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
 
                             </a>
-                            &nbsp;
-                            &nbsp;
-                            &nbsp;
-                            <a href="javascript:void(0)" title="Edit Single"
+                            <a href="javascript:void(0)" title="Edit Single" *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                                 (click)="projecthubservice.toggleDrawerOpen('AskNeed', row.askNeedUniqueId, projectViewDetails.askNeedData)">
                                 <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
