@@ -75,6 +75,9 @@ export class ProjectHubComponent implements OnInit {
         this.apiService.getproject(this.id).then((res) => {
             this.projectDetails = res
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
+            const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+                mainNavComponent.navigation = this.newmainnav
+                mainNavComponent.refresh()
             this.apiService.getHubSettings(this.id).then((response: any) => {
                 //Budget
                 this.projecthubservice.menuData[0].children[3].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
@@ -82,16 +85,13 @@ export class ProjectHubComponent implements OnInit {
                 this.projecthubservice.menuData[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
                 //Teams
                 this.projecthubservice.menuData[0].children[4].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
-
+                if(this.projecthubservice.roleControllerControl.projectHub.hubSettings == false){
+                    this.projecthubservice.menuData[0].children[11].disabled = true
+                }
 
                 //nav refresh
                 const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
                 navComponent.refresh();
-
-                const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
-                mainNavComponent.navigation = this.newmainnav
-                mainNavComponent.refresh()
-
             })
             // 
         })

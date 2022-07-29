@@ -43,6 +43,7 @@ export class RoleService {
         riskIssuesEdit: false,
         overallStatusEdit: false
       }
+      localroleController.projectHub.hubSettings = false
     }
     console.log("hello")
     return localroleController
