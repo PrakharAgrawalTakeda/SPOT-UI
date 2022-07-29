@@ -14,6 +14,16 @@
             <mat-option value="Simple Project">Simple Project</mat-option>
         </mat-select>
     </mat-form-field>
+    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+      <mat-label>TOPS Group</mat-label>
+      <input matInput [placeholder]="'TOPS Group'" formControlName="topsGroup" name="topsGroup">
+    </mat-form-field>
+    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+      <mat-label>Record Creation Date</mat-label>
+      <input matInput [placeholder]="'Record Creation Date'" formControlName="recordCreationDate" name="recordCreationDate" [matDatepicker]="picker1">
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    <!--<chip-autocomplete></chip-autocomplete>-->
     </form>
   </div>
 </div>
