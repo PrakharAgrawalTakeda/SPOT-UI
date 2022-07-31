@@ -55,7 +55,12 @@ export class GeneralInfoComponent implements OnInit {
     projectsingleid: new FormControl(''),
     problemType: new FormControl('Standard Project / Program'),
     topsGroup: new FormControl(''),
-    recordCreationDate: new FormControl('')
+    recordCreationDate: new FormControl(''),
+    submittedBy: new FormControl(''),
+    sponsor: new FormControl(''),
+    projectManager: new FormControl(''),
+    projectDescription: new FormControl('')
+
   })
   formFieldHelpers: any
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) { }
@@ -70,23 +75,26 @@ export class GeneralInfoComponent implements OnInit {
       this.generalInfoForm.patchValue({
         problemTitle: res.projectData.problemTitle,
         problemType: res.projectData.problemType,
-        topsGroup: res.topsData.topsgroup,
-        recordCreationDate: res.projectData.createdDate
+        topsGroup: res.topsData ? res.topsData.topsgroup : '',
+        recordCreationDate: res.projectData.createdDate,
+        projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+        projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+        submittedBy: res.projectData.problemOwnerName,
+        projectManager: res.pm.pm,
+        sponsor: res.pm.sponsor,
+        projectDescription: res.projectData.projectDescription,
       })
-      if (res.parentProject != null) {
-        this.generalInfoForm.patchValue({
-          projectsingle: res.parentProject.problemTitle,
-          projectsingleid: res.parentProject.problemUniqueId
-        })
-      }
     })
     this.disabler()
   }
 
 
-  disabler(){
+  disabler() {
     this.generalInfoForm.controls.topsGroup.disable()
     this.generalInfoForm.controls.recordCreationDate.disable()
+    this.generalInfoForm.controls.submittedBy.disable()
+    this.generalInfoForm.controls.projectManager.disable()
+    this.generalInfoForm.controls.sponsor.disable()
   }
 
   submitGeneralInfo() {

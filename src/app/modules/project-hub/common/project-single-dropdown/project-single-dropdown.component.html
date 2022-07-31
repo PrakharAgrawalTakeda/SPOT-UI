@@ -4,7 +4,7 @@
         <input matInput placeholder="Select and/or type to search" formControlName="projectsingle" name="projectsingle" [matAutocomplete]="auto">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onProjectSelectenter($event)">
             <mat-option *ngFor="let option of resultSets" [value]="option">
-                {{option.problemTitle}}
+                {{option.problemId}} - {{option.problemTitle}}
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>

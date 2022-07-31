@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 gap-6 w-full min-w-0 p-4 pt-0">
+<div class="gap-6 w-full min-w-0 p-6 pt-0">
   <div class="xl:col-span-6 flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
     <!-- Enter Content here-->
     <form class="w-full" [formGroup]="generalInfoForm" (ngSubmit)="submitGeneralInfo()">
@@ -22,6 +22,23 @@
       <mat-label>Record Creation Date</mat-label>
       <input matInput [placeholder]="'Record Creation Date'" formControlName="recordCreationDate" name="recordCreationDate" [matDatepicker]="picker1">
       <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+      <mat-label>Submitted by</mat-label>
+      <input matInput [placeholder]="'Submitted by'" formControlName="submittedBy" name="submittedBy">
+    </mat-form-field>
+    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+      <mat-label>Sponsor</mat-label>
+      <input matInput [placeholder]="'Sponsor'" formControlName="sponsor" name="sponsor">
+    </mat-form-field>
+    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+      <mat-label>Project Manager</mat-label>
+      <input matInput [placeholder]="'Project Manager'" formControlName="projectManager" name="projectManager">
+    </mat-form-field>
+    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+      <mat-label>Problem Description / Present Situation / Submission Description</mat-label>
+      <textarea matInput [rows]="5" [placeholder]="'Problem Description / Present Situation / Submission Description'" formControlName="projectDescription" name="projectDescription"
+            matTextareaAutosize></textarea>
     </mat-form-field>
     <!--<chip-autocomplete></chip-autocomplete>-->
     </form>

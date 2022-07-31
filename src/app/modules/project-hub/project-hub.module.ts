@@ -53,6 +53,7 @@ import { ProjectProposalComponent } from './project-proposal/project-proposal.co
 import { RiskIssuesTableComponent } from './common/risk-issues-table/risk-issues-table.component';
 import { RiskIssueViewEditComponent } from './project-board/risk-issue-view-edit/risk-issue-view-edit.component';
 import { ChipAutocompleteComponent } from 'app/shared/chip-autocomplete/chip-autocomplete.component';
+import { ProductSingleDropdownComponent } from './common/product-single-dropdown/product-single-dropdown.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -167,7 +168,8 @@ export const projectRoutes: Route[] = [
     ProjectProposalComponent,
     RiskIssuesTableComponent,
     RiskIssueViewEditComponent,
-    ChipAutocompleteComponent
+    ChipAutocompleteComponent,
+    ProductSingleDropdownComponent
   ],
   imports     : [
       RouterModule.forChild(projectRoutes),
