@@ -4,21 +4,21 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, Subject, timer } from 'rxjs';
 import { distinctUntilChanged, debounce } from 'rxjs/operators';
-
 @Component({
-  selector: 'chip-autocomplete',
-  templateUrl: './chip-autocomplete.component.html',
-  styleUrls: ['./chip-autocomplete.component.scss'],
+  selector: 'spot-multiselect-autocomplete',
+  templateUrl: './spot-multiselect-autocomplete.component.html',
+  styleUrls: ['./spot-multiselect-autocomplete.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ChipAutocompleteComponent),
+      useExisting: forwardRef(() => SpotMultiselectAutocompleteComponent),
       multi: true
     }
   ]
 })
-export class ChipAutocompleteComponent implements OnInit, ControlValueAccessor {
+export class SpotMultiselectAutocompleteComponent implements OnInit {
+
   @Input() placeholder = 'Select';
   @Input() clientSideFilter = true;
   @Input() options: any[];

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SingleAutocompleteComponent } from './single-autocomplete.component';
+import { SpotSelectComponent } from './spot-select.component';
 
-describe('SingleAutocompleteComponent', () => {
-  let component: SingleAutocompleteComponent;
-  let fixture: ComponentFixture<SingleAutocompleteComponent>;
+describe('SpotSelectComponent', () => {
+  let component: SpotSelectComponent;
+  let fixture: ComponentFixture<SpotSelectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SingleAutocompleteComponent ]
+      declarations: [ SpotSelectComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SingleAutocompleteComponent);
+    fixture = TestBed.createComponent(SpotSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

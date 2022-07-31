@@ -52,8 +52,8 @@ import { BusinessCaseComponent } from './business-case/business-case.component';
 import { ProjectProposalComponent } from './project-proposal/project-proposal.component';
 import { RiskIssuesTableComponent } from './common/risk-issues-table/risk-issues-table.component';
 import { RiskIssueViewEditComponent } from './project-board/risk-issue-view-edit/risk-issue-view-edit.component';
-import { ChipAutocompleteComponent } from 'app/shared/chip-autocomplete/chip-autocomplete.component';
 import { ProductSingleDropdownComponent } from './common/product-single-dropdown/product-single-dropdown.component';
+import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 
 export const projectRoutes: Route[] = [
   {
@@ -168,7 +168,6 @@ export const projectRoutes: Route[] = [
     ProjectProposalComponent,
     RiskIssuesTableComponent,
     RiskIssueViewEditComponent,
-    ChipAutocompleteComponent,
     ProductSingleDropdownComponent
   ],
   imports     : [
@@ -202,7 +201,8 @@ export const projectRoutes: Route[] = [
       MatMomentDateModule,
       MatAutocompleteModule,
       MatTooltipModule,
-      FuseAlertModule
+      FuseAlertModule,
+      SpotFormsModule
   ]
 })
 export class ProjectHubModule { }
