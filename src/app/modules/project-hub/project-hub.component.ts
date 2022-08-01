@@ -20,6 +20,7 @@ export class ProjectHubComponent implements OnInit {
     portfolioDetails: any = {}
     id: string = ""
     panelOpenState = true;
+    navigationAppearance: 'default' | 'dense' = 'default';
     selectedProject: string = 'ACME Corp. Backend App';
     drawerOpened: boolean = true;
     newmainnav: any = [
@@ -105,5 +106,9 @@ export class ProjectHubComponent implements OnInit {
         if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board') {
             this.projecthubservice.submitbutton.next(true)
         }
+    }
+    toggleNavigationAppearance(): void
+    {
+        this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
     }
 }
