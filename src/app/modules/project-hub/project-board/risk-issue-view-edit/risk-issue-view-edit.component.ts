@@ -63,6 +63,12 @@ export class RiskIssueViewEditComponent implements OnInit {
             })
           }
         }
+        else if(this.riskIssueForm.controls.functionid.value == "")
+        {
+          return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+          })
+        }
       })
 
     )
@@ -240,6 +246,10 @@ export class RiskIssueViewEditComponent implements OnInit {
           postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
           postMitigationComments: this.riskIssueForm.value.postMitigationComments
         }
+        console.log(this.riskIssueForm.controls['function'].value)
+        if (this.riskIssueForm.controls['function'].value == "") {
+          mainObjnew.functionGroupId = ""
+        } 
         if (this.riskIssueForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
         }
@@ -282,6 +292,11 @@ export class RiskIssueViewEditComponent implements OnInit {
           postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
           postMitigationComments: this.riskIssueForm.value.postMitigationComments
         }
+        console.log(this.riskIssueForm.controls['function'].value)
+        if (this.riskIssueForm.controls['function'].value == "") {
+          console.log('nothing')
+          mainObj.functionGroupId = ""
+        } 
         //Log Date
         console.log(this.riskIssueForm.value.logDate)
         if (mainObj.logDate == "Invalid date") {
