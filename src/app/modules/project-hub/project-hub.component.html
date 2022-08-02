@@ -29,14 +29,34 @@
     <div class="w-full bg-card shadow rounded-2xl">
         <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
             <!-- Title -->
-            <div class="mt-2">
-                <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+            <div class="flex justify-between gap-8 mt-2">
+                <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10">
                     <span *ngIf="projectDetails.isArchived && !projectDetails.isConfidential">[ARCHIVED]&nbsp;</span>
                     <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>
                     <span *ngIf="projectDetails.isConfidential && projectDetails.isArchived">[ARCHIVED
                         CONF]&nbsp;</span>
                     {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
                 </h2>
+                <div class=" flex items-center">
+                    <div class="w-full pr-3 text-right whitespace-pre">
+                        <p>Project State</p>
+                        <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
+                    </div>
+                    <div class="p-3"
+                        [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
+                        style="z-index: 10;">Initiate</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
+                        style="z-index: 9;">Define</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
+                        style="z-index: 8;">Plan</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
+                        style="z-index: 7;">Execute</div>
+                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
+                        style="z-index: 6;">Close</div>
+                    <div class="p-3"
+                        [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
+                        style="z-index: 5;">Track</div>
+                </div>
             </div>
             <!-- Actions -->
             <div class="flex items-start justify-between py-4">
@@ -84,26 +104,7 @@
                 <div></div>
             </div>
             <div class="flex shrink-0 items-center justify-between sm:mt-0">
-                <div class=" flex items-center">
-                    <div class="pr-3 text-right">
-                        Project State<br>
-                        <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
-                    </div>
-                    <div class="p-3"
-                        [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
-                        style="z-index: 10;">Initiate</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
-                        style="z-index: 9;">Define</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
-                        style="z-index: 8;">Plan</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
-                        style="z-index: 7;">Execute</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
-                        style="z-index: 6;">Close</div>
-                    <div class="p-3"
-                        [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
-                        style="z-index: 5;">Track</div>
-                </div>
+              
             </div>
            
         </div>
