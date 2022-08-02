@@ -66,6 +66,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           usersingleid: res.needFromId,
           includeInReport: res.includeInReport
         })
+        this.askneedform.controls['logDate'].disable()
         if (this.projecthubservice.all != []) {
           if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
             if (this.askneedform.value.includeInReport != true) {
@@ -89,6 +90,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
         usersingleid: "",
         includeInReport: false
       })
+      this.askneedform.controls['logDate'].disable()
       if (this.projecthubservice.all.length == 0) {
         console.log(this.projecthubservice.all)
       }
@@ -117,7 +119,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
         var mainObjnew = {
           askNeed1: this.askneedform.value.askNeed1,
           comments: this.askneedform.value.comments,
-          logDate: moment(this.askneedform.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          logDate: moment(this.askneed.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           needByDate: moment(this.askneedform.value.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.askneedform.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           needFromId: this.askneedform.value.usersingleid,
@@ -137,9 +139,9 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           mainObjnew.logDate = this.askneed.logDate + ".000Z"
         }
 
-        if (this.askneedform.controls['logDate'].value == null) {
-          mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-        }
+        // if (this.askneedform.controls['logDate'].value == null) {
+        //   mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+        // }
         if (this.askneedform.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
         }
@@ -160,7 +162,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
         var mainObj = {
           askNeed1: this.askneedform.value.askNeed1,
           comments: this.askneedform.value.comments,
-          logDate: moment(this.askneedform.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          logDate: moment(this.askneed.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           needByDate: moment(this.askneedform.value.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.askneedform.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           needFromId: this.askneedform.value.usersingleid,
@@ -180,9 +182,9 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           mainObj.logDate = this.askneed.logDate + ".000Z"
         }
 
-        if (this.askneedform.controls['logDate'].value == null) {
-          mainObj.logDate = this.askneed.logDate
-        }
+        // if (this.askneedform.controls['logDate'].value == null) {
+        //   mainObj.logDate = this.askneed.logDate
+        // }
 
         //Need By Date
         if (mainObj.needByDate == "Invalid date") {

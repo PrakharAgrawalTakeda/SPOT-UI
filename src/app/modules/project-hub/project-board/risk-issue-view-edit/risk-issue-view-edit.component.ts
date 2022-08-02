@@ -107,7 +107,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         console.log('res')
         console.log(res)
         this.riskIssueForm.patchValue({
-          logDate: res.logDate,
+          logDate: res.logDate ? res.logDate : this.today,
           type: res.riskIssueTypeId,
           ifThisHappens: res.ifHappens,
           probability: res.probabilityId,
@@ -124,6 +124,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           postMitigationImpact: res.postMitigationImpact,
           postMitigationComments: res.postMitigationComments
         })
+        this.riskIssueForm.controls['logDate'].disable()
         if (res.functionGroupId != null) {
           this.riskIssueForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId).lookUpName)
         }
@@ -157,6 +158,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         postMitigationImpact: "",
         postMitigationComments: ""
       })
+      this.riskIssueForm.controls['logDate'].disable()
       if (this.projecthubservice.all.length == 0) {
         console.log(this.projecthubservice.all)
       }
@@ -238,7 +240,8 @@ export class RiskIssueViewEditComponent implements OnInit {
           functionGroupId: this.riskIssueForm.value.functionid,
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          logDate: moment(this.riskIssueForm.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          //logDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: "Grey",
           includeInCharter: this.riskissue.includeInCharter,
@@ -258,9 +261,9 @@ export class RiskIssueViewEditComponent implements OnInit {
           mainObjnew.logDate = this.riskissue.logDate + ".000Z"
         }
 
-        if (this.riskIssueForm.controls['logDate'].value == null) {
-          mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-        }
+        // if (this.riskIssueForm.controls['logDate'].value == null) {
+        //   mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+        // }
 
         if (mainObjnew.dueDate == "Invalid date") {
           mainObjnew.dueDate = null
@@ -290,7 +293,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           functionGroupId: this.riskIssueForm.value.functionid,
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          logDate: moment(this.riskIssueForm.value.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: this.riskissue.indicator,
           includeInCharter: this.riskissue.includeInCharter,
@@ -305,13 +308,14 @@ export class RiskIssueViewEditComponent implements OnInit {
         } 
         //Log Date
         console.log(this.riskIssueForm.value.logDate)
+        console.log(this.riskissue.logDate)
         if (mainObj.logDate == "Invalid date") {
           mainObj.logDate = this.riskissue.logDate + ".000Z"
         }
 
-        if (this.riskIssueForm.controls['logDate'].value == null) {
-          mainObj.logDate = this.riskissue.logDate
-        }
+        // if (this.riskIssueForm.controls['logDate'].value == null) {
+        //   mainObj.logDate = this.riskissue.logDate
+        // }
 
         //Need By Date
         if (mainObj.dueDate == "Invalid date") {
