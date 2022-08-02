@@ -246,16 +246,22 @@ export class RiskIssueViewEditComponent implements OnInit {
           postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
           postMitigationComments: this.riskIssueForm.value.postMitigationComments
         }
-        console.log(this.riskIssueForm.controls['function'].value)
+        //Function when null
         if (this.riskIssueForm.controls['function'].value == "") {
           mainObjnew.functionGroupId = ""
         } 
         if (this.riskIssueForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
         }
+        //Log Date
         if (mainObjnew.logDate == "Invalid date") {
+          mainObjnew.logDate = this.riskissue.logDate + ".000Z"
+        }
+
+        if (this.riskIssueForm.controls['logDate'].value == null) {
           mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
         }
+
         if (mainObjnew.dueDate == "Invalid date") {
           mainObjnew.dueDate = null
         }
@@ -292,15 +298,19 @@ export class RiskIssueViewEditComponent implements OnInit {
           postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
           postMitigationComments: this.riskIssueForm.value.postMitigationComments
         }
+        //Function when null
         console.log(this.riskIssueForm.controls['function'].value)
         if (this.riskIssueForm.controls['function'].value == "") {
-          console.log('nothing')
           mainObj.functionGroupId = ""
         } 
         //Log Date
         console.log(this.riskIssueForm.value.logDate)
         if (mainObj.logDate == "Invalid date") {
           mainObj.logDate = this.riskissue.logDate + ".000Z"
+        }
+
+        if (this.riskIssueForm.controls['logDate'].value == null) {
+          mainObj.logDate = this.riskissue.logDate
         }
 
         //Need By Date

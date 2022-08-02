@@ -127,11 +127,21 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           projectId: this.projecthubservice.projectid,
           askNeedUniqueId: "new"
         }
+
+         //NeedFrom when null
+         if (this.askneedform.controls['usersingle'].value == "") {
+          mainObjnew.needFromName = ""
+        }
+        //Log Date
+        if (mainObjnew.logDate == "Invalid date") {
+          mainObjnew.logDate = this.askneed.logDate + ".000Z"
+        }
+
+        if (this.askneedform.controls['logDate'].value == null) {
+          mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+        }
         if (this.askneedform.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
-        }
-        if (mainObjnew.logDate == "Invalid date") {
-          mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
         }
         if (mainObjnew.needByDate == "Invalid date") {
           mainObjnew.needByDate = null
@@ -160,10 +170,18 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           projectId: this.askneed.projectId,
           askNeedUniqueId: this.askneed.askNeedUniqueId
         }
+
+        //NeedFrom when null
+        if (this.askneedform.controls['usersingle'].value == "") {
+          mainObj.needFromName = ""
+        }
         //Log Date
-        console.log(this.askneedform.value.logDate)
         if (mainObj.logDate == "Invalid date") {
           mainObj.logDate = this.askneed.logDate + ".000Z"
+        }
+
+        if (this.askneedform.controls['logDate'].value == null) {
+          mainObj.logDate = this.askneed.logDate
         }
 
         //Need By Date
