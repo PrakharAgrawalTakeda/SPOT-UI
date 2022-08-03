@@ -31,7 +31,7 @@ export class MyPreferenceComponent implements OnInit {
     
   }
   getRoles(): any{
-    return this.lookupdata.filter(x => x.lookUpParentId == '3FF934A4-D5FC-4F92-AE75-78A5EBC64A1B').sort((a, b) => {
+    return this.lookupdata.filter(x => x.lookUpParentId == '3FF934A4-D5FC-4F92-AE75-78A5EBC64A1B' &&   !['C005FB71-C1FF-44D3-8779-5CA37643D794','BDC4DF5A-14D6-4468-9238-B933CA6C1B46','500ee862-3878-43d9-9378-53feb1832cef'].includes(x.lookUpId)  ).sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
     })
   }
