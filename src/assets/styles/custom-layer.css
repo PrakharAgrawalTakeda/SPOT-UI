@@ -61,6 +61,8 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 
 .closed {
     font-style: italic !important;
+    --tw-text-opacity: 0.5 !important;
+    color: rgba(var(--fuse-text-secondary-rgb),var(--tw-text-opacity))!important;
 }
 
 .customIconSize {
