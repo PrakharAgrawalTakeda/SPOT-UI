@@ -104,7 +104,7 @@ export class ProjectHubService {
         {
           title: 'Local Attributes',
           type: 'basic',
-          icon: 'heroicons_outline:document-text',
+          icon: 'mat_outline:edit_attributes',
           link: 'local-attributes'
         },
         {
@@ -125,13 +125,13 @@ export class ProjectHubService {
         {
           title: 'Project Proposal',
           type: 'basic',
-          icon: 'mat_outline:business_center',
+          icon: 'heroicons_outline:light-bulb',
           link: 'project-proposal'
         },
         {
           title: 'Business Case',
           type: 'collapsable',
-          icon: 'mat_outline:business_center',
+          icon: 'heroicons_outline:briefcase',
           children: [
             {
               title: 'Recommended Option',
@@ -151,7 +151,7 @@ export class ProjectHubService {
         {
           title: 'Project Charter',
           type: 'basic',
-          icon: 'heroicons_outline:location-marker',
+          icon: 'heroicons_outline:clipboard-check',
           link: 'project-charter'
         },
         {
@@ -177,7 +177,7 @@ export class ProjectHubService {
         {
           title: 'Close Out Report',
           type: 'basic',
-          icon: 'heroicons_outline:location-marker',
+          icon: 'heroicons_outline:flag',
           link: 'close-out'
         },
       ]

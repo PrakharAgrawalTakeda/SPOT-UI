@@ -6,109 +6,119 @@
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
     </div>
 </fuse-drawer>
-<fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData"
-    [mode]="'side'" [name]="'projecthub-navigation'" [opened]="true" class=" fixed mt-0 bg-card print:hidden"
+<fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
+    [name]="'projecthub-navigation'" [opened]="true" class=" fixed mt-0 bg-card print:hidden"
     style="margin-top: 4rem !important; z-index: 48;">
     <ng-container fuseVerticalNavigationContentHeader>
         <!-- Logo -->
         <div class="flex items-center justify-end mt-3 mr-5" #container>
-            
+
             <button class="text-primary text-md" mat-icon-button [color]="'primary-200'"
-            (click)="[toggleNavigationAppearance(),toggleSideNav()]">
-            <!--<mat-icon *ngIf="!drawerOpened" svgIcon="heroicons_outline:arrow-narrow-right"></mat-icon>
+                (click)="[toggleNavigationAppearance(),toggleSideNav()]">
+                <!--<mat-icon *ngIf="!drawerOpened" svgIcon="heroicons_outline:arrow-narrow-right"></mat-icon>
             &nbsp; Menu &nbsp;<mat-icon *ngIf="drawerOpened"
                 svgIcon="heroicons_outline:arrow-narrow-left"></mat-icon>-->
-                <mat-icon svgIcon="heroicons_outline:switch-horizontal" class="icon-size-8"></mat-icon>
-        </button>
+                <mat-icon svgIcon="heroicons_outline:lock-open" class="icon-size-8" *ngIf="navigationAppearance==='dense'">
+                </mat-icon>
+                <mat-icon svgIcon="heroicons_solid:lock-closed" class="text-primary icon-size-8" *ngIf="navigationAppearance==='default'"></mat-icon>
+            </button>
         </div>
     </ng-container>
+    <ng-container fuseVerticalNavigationContentFooter>
+        <div style="padding-bottom: 6rem !important;"></div>
+    </ng-container>
 </fuse-vertical-navigation>
-<div class="flex flex-col flex-auto w-full min-w-0" [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'" 
-[ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
+<div class="flex flex-col flex-auto w-full min-w-0"
+    [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
+    [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <div class="p-8 pb-6 pt-2">
-    <div class="w-full bg-card shadow rounded-2xl">
-        <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
-            <!-- Title -->
-            <div class="flex justify-between gap-8 mt-2">
-                <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10">
-                    <span *ngIf="projectDetails.isArchived && !projectDetails.isConfidential">[ARCHIVED]&nbsp;</span>
-                    <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>
-                    <span *ngIf="projectDetails.isConfidential && projectDetails.isArchived">[ARCHIVED
-                        CONF]&nbsp;</span>
-                    {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
-                </h2>
-                <div class=" flex items-center">
-                    <div class="w-full pr-3 text-right whitespace-pre">
-                        <p>Project State</p>
-                        <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
-                    </div>
-                    <div class="p-3"
-                        [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
-                        style="z-index: 10;">Initiate</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
-                        style="z-index: 9;">Define</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
-                        style="z-index: 8;">Plan</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
-                        style="z-index: 7;">Execute</div>
-                    <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
-                        style="z-index: 6;">Close</div>
-                    <div class="p-3"
-                        [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
-                        style="z-index: 5;">Track</div>
-                </div>
-            </div>
-            <!-- Actions -->
-            <div class="flex items-start justify-between py-4">
-                <div class="flex justify-between items-center gap-12 text-xl">
-                    <div class="flex items-center gap-4">
-                        <p>Overall Status</p>
-                        <mat-icon
-                            svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
-                            class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}} icon-size-12">
-                        </mat-icon>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <p> Budget</p>
-                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
-                            class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}} icon-size-12">
-                        </mat-icon>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <p> Spend </p>
-                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).icontype}}"
-                            class="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).iconcolor}} icon-size-12">
-                        </mat-icon>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <p> Schedule</p>
-                        <mat-icon
-                            svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
-                            class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}} icon-size-12">
-                        </mat-icon>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <p> Risk/Issues</p>
-                        <mat-icon svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
-                            class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}} icon-size-12">
-                        </mat-icon>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <p> Ask/Needs </p>
-                        <mat-icon
-                            svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
-                            class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}} icon-size-12">
-                        </mat-icon>
+        <div class="w-full bg-card shadow rounded-2xl">
+            <div class="flex-1 min-w-0 p-6 pt-1" [ngClass]="{'text-gray-400': projectDetails.isArchived}">
+                <!-- Title -->
+                <div class="flex justify-between gap-8 mt-2">
+                    <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10">
+                        <span
+                            *ngIf="projectDetails.isArchived && !projectDetails.isConfidential">[ARCHIVED]&nbsp;</span>
+                        <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>
+                        <span *ngIf="projectDetails.isConfidential && projectDetails.isArchived">[ARCHIVED
+                            CONF]&nbsp;</span>
+                        {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
+                    </h2>
+                    <div class=" flex items-center">
+                        <div class="w-full pr-3 text-right whitespace-pre">
+                            <p>Project State</p>
+                            <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
+                        </div>
+                        <div class="p-3"
+                            [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
+                            style="z-index: 10;">Initiate</div>
+                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
+                            style="z-index: 9;">Define</div>
+                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
+                            style="z-index: 8;">Plan</div>
+                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
+                            style="z-index: 7;">Execute</div>
+                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
+                            style="z-index: 6;">Close</div>
+                        <div class="p-3"
+                            [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
+                            style="z-index: 5;">Track</div>
                     </div>
                 </div>
-                <div></div>
+                <!-- Actions -->
+                <div class="flex items-start justify-between py-4">
+                    <div class="flex justify-between items-center gap-12 text-xl">
+                        <div class="flex items-center gap-4">
+                            <p>Overall Status</p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p> Budget</p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
+                                class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p> Spend </p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).icontype}}"
+                                class="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p> Schedule</p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
+                                class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p> Risk/Issues</p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
+                                class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p> Ask/Needs </p>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
+                                class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}} icon-size-12">
+                            </mat-icon>
+                        </div>
+                    </div>
+                    <div></div>
+                </div>
+                <div class="flex shrink-0 items-center justify-between sm:mt-0">
+
+                </div>
+
             </div>
-            <div class="flex shrink-0 items-center justify-between sm:mt-0">
-              
-            </div>
-           
         </div>
-    </div>
     </div>
     <router-outlet></router-outlet>
 </div>
