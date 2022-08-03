@@ -20,7 +20,7 @@ export class ProjectHubComponent implements OnInit {
     portfolioDetails: any = {}
     id: string = ""
     panelOpenState = true;
-    navigationAppearance: 'default' | 'dense' = 'default';
+    navigationAppearance: 'default' | 'dense' = 'dense';
     selectedProject: string = 'ACME Corp. Backend App';
     drawerOpened: boolean = true;
     newmainnav: any = [
