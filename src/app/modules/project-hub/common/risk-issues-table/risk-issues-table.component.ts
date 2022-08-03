@@ -50,6 +50,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     }
     else {
       this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+      this.isclosed = false
       console.log(this.riskIssuesngxdata)
     }
   }
