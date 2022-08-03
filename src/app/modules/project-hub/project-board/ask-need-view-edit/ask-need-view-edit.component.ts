@@ -66,6 +66,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
           usersingleid: res.needFromId,
           includeInReport: res.includeInReport
         })
+        console.log(this.askneed.needFromName)
         this.askneedform.controls['logDate'].disable()
         if (this.projecthubservice.all != []) {
           if (this.projecthubservice.all.some(x => x.includeInReport == true)) {
@@ -131,8 +132,10 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
         }
 
          //NeedFrom when null
+         console.log(this.askneedform.controls['usersingle'].value)
          if (this.askneedform.controls['usersingle'].value == "") {
-          mainObjnew.needFromName = ""
+          mainObjnew.needFromName = null
+          mainObjnew.needFromId = null
         }
         //Log Date
         if (mainObjnew.logDate == "Invalid date") {
@@ -174,8 +177,10 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
         }
 
         //NeedFrom when null
+        console.log(this.askneedform.controls['usersingle'].value)
         if (this.askneedform.controls['usersingle'].value == "") {
-          mainObj.needFromName = ""
+          mainObj.needFromName = null
+          mainObj.needFromId = null
         }
         //Log Date
         if (mainObj.logDate == "Invalid date") {
