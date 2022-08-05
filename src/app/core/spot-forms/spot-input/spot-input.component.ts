@@ -1,9 +1,5 @@
-import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, forwardRef, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { MatAutocomplete } from '@angular/material/autocomplete';
-import { Observable, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, debounce } from 'rxjs/operators';
 @Component({
   selector: 'spot-input',
   templateUrl: './spot-input.component.html',
@@ -28,13 +24,10 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   
 
   formFieldHelpers: any
-  separatorKeysCodes: number[] = [13, 9]
   onTouch: any = () => { };
   onChange: any = () => { };
   form: FormGroup;
-  filteredOptions: any;
   disabled = false;
-  debounceHelper = new Subject();
 
   constructor(private fb: FormBuilder) { }
 

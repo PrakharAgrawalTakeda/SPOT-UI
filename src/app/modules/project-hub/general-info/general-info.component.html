@@ -23,8 +23,6 @@
           name="recordCreationDate" [matDatepicker]="picker1">
         <mat-datepicker #picker1></mat-datepicker>
       </mat-form-field>
-
-
       <spot-input formControlName="submittedBy" name="submittedBy" [label]="'Submitted By'"
         [placeholder]="'Submitted by'">
       </spot-input>
@@ -33,11 +31,10 @@
       <spot-input formControlName="projectManager" name="projectManager" [label]="'Project Manager'"
         [placeholder]="'Project Manager'">
       </spot-input>
-      <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label>Problem Description / Present Situation / Submission Description</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Problem Description / Present Situation / Submission Description'"
-          formControlName="projectDescription" name="projectDescription" matTextareaAutosize></textarea>
-      </mat-form-field>
+      <spot-textarea formControlName="projectDescription" name="projectDescription"
+        [label]="'Problem Description / Present Situation / Submission Description'"
+        [placeholder]="'Problem Description / Present Situation / Submission Description'">
+      </spot-textarea>
     </form>
   </div>
 </div>
