@@ -1276,15 +1276,15 @@
 /*  @ Slide Toggle
 /* ----------------------------------------------------------------------------------------------------- */
 .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-    background-color: rgba(var(--fuse-accent-500-rgb), 0.54) !important;
+    background-color: rgba(var(--fuse-accent-500-rgb), 0.54) ;
 }
 
 .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
-    background-color: rgba(var(--fuse-primary-500-rgb), 0.54) !important;
+    background-color: rgba(var(--fuse-primary-500-rgb), 0.54) ;
 }
 
 .mat-slide-toggle.mat-warn.mat-checked .mat-slide-toggle-bar {
-    background-color: rgba(var(--fuse-warn-500-rgb), 0.54) !important;
+    background-color: rgba(var(--fuse-warn-500-rgb), 0.54) ;
 }
 
 /* ----------------------------------------------------------------------------------------------------- */

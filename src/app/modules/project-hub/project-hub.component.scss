@@ -2,23 +2,24 @@
     width: 75vw;
 }
 
-.pb-4rem{
+.pb-4rem {
     padding-bottom: 4rem;
 }
 
-.pl-19rem{
- padding-left: 19rem !important;
+.pl-19rem {
+    padding-left: 19rem !important;
 }
 
-.project-hub-dense{
+.project-hub-dense {
     padding: 4rem 0 0 4rem;
 }
 
-.scroll-fixed{
+.scroll-fixed {
     overflow-y: scroll;
     height: 100vh;
 }
-.project-hub-default{
+
+.project-hub-default {
     padding: 4rem 0 0 17rem;
 }
 
@@ -31,10 +32,12 @@ fuse-drawer .fuse-drawer-content {
     display: block !important;
 
 }
-.overall-indicator{
+
+.overall-indicator {
     width: 35px !important;
     height: 35px !important;
 }
+
 .apply-button {
     margin: 20px 0px 175px 0px !important;
     width: 100%;
@@ -45,6 +48,7 @@ fuse-drawer .fuse-drawer-content {
     clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 51%, 0% 0%);
 
 }
+
 // START POINTER
 .pointer-start {
     margin-right: 5px;
@@ -66,6 +70,7 @@ fuse-drawer .fuse-drawer-content {
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
+
 .pointer-start-unselect {
     margin-right: 5px;
     position: relative;
@@ -86,6 +91,7 @@ fuse-drawer .fuse-drawer-content {
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
+
 //END START POINTER
 
 //START NORMAL POINTER
@@ -154,6 +160,7 @@ fuse-drawer .fuse-drawer-content {
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
+
 //END NORMAL POINTER
 
 //START LAST POINTER

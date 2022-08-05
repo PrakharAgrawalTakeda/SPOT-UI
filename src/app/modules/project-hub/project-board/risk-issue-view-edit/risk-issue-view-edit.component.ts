@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef,ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ElementRef,ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -22,6 +22,7 @@ export const MY_FORMATS = {
   selector: 'app-risk-issue-view-edit',
   templateUrl: './risk-issue-view-edit.component.html',
   styleUrls: ['./risk-issue-view-edit.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   providers: [
     // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
     // application's root module. We provide it at the component level here, due to limitations of
