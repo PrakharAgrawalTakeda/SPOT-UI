@@ -63,7 +63,10 @@ export class GeneralInfoComponent implements OnInit {
 
   })
   formFieldHelpers: any
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) { }
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
+    
+   
+   }
   ngOnInit(): void {
     this.dataloader()
   }

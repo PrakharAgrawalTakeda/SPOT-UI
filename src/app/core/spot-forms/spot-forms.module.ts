@@ -13,6 +13,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -35,6 +37,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatIconModule,
     MatSelectModule,
+    MatInputModule,
+    MatTooltipModule
   ],
   exports: [
     SpotInputComponent,
