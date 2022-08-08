@@ -23,6 +23,8 @@
           name="recordCreationDate" [matDatepicker]="picker1">
         <mat-datepicker #picker1></mat-datepicker>
       </mat-form-field>
+      <spot-input-date formControlName="recordCreationDate" name="recordCreationDate" [label]="'Record Creation Date'"
+        [placeholder]="'Record Creation Date'"></spot-input-date>
       <spot-input formControlName="submittedBy" name="submittedBy" [label]="'Submitted By'"
         [placeholder]="'Submitted by'">
       </spot-input>

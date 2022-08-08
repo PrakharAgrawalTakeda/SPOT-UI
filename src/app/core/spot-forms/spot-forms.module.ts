@@ -15,6 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 
 
@@ -38,7 +40,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatSelectModule,
     MatInputModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   exports: [
     SpotInputComponent,
