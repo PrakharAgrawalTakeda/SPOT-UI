@@ -2,7 +2,6 @@
   <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
     <!-- Enter Content here-->
     <form class="w-full" [formGroup]="generalInfoForm" (ngSubmit)="submitGeneralInfo()">
-
       <spot-input formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
         [placeholder]="'Project Name'">
       </spot-input>
@@ -17,12 +16,6 @@
       </mat-form-field>
       <spot-input formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'" [placeholder]="'TOPS Group'">
       </spot-input>
-      <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label>Record Creation Date</mat-label>
-        <input matInput [placeholder]="'Record Creation Date'" formControlName="recordCreationDate"
-          name="recordCreationDate" [matDatepicker]="picker1">
-        <mat-datepicker #picker1></mat-datepicker>
-      </mat-form-field>
       <spot-input-date formControlName="recordCreationDate" name="recordCreationDate" [label]="'Record Creation Date'"
         [placeholder]="'Record Creation Date'"></spot-input-date>
       <spot-input formControlName="submittedBy" name="submittedBy" [label]="'Submitted By'"
