@@ -41,7 +41,8 @@ export class RoleService {
       localroleController.projectHub.projectBoard = {
         askNeedEdit: false,
         riskIssuesEdit: false,
-        overallStatusEdit: false
+        overallStatusEdit: false,
+        scheduleEdit: false
       }
       localroleController.projectHub.hubSettings = false
     }

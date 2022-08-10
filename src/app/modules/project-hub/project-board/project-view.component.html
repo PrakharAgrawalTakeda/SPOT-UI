@@ -6,7 +6,7 @@
                 <h3 class="text-xl text-primary">Overall Status</h3>
                 <p class="text-sm">Status Through: {{projectViewDetails.statusData.statusThrough | date:'dd-MMM-yyyy'}}
                 </p>
-             <!--   <div class="flex items-start justify-between pt-2">
+                <!--   <div class="flex items-start justify-between pt-2">
                     <p> Overall Status</p>&nbsp;
                     <mat-icon
                         svgIcon="{{(indicator.getIndicators(indicatorlook[projectViewDetails.statusData.overallStatusId], 'circle')).icontype}}"
@@ -43,18 +43,21 @@
             <div>
                 <div class="flex items-center justify-between">
                     <div></div>
-                    <button class="text-primary text-md" mat-flat-button [color]="'primary-200'" *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit"
+                    <button class="text-primary text-md" mat-flat-button [color]="'primary-200'"
+                        *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit"
                         (click)="projecthubservice.toggleDrawerOpen('Overall',projectViewDetails.statusData.statusUnquieId, [], id)">
                         <mat-icon class="customIconSize" svgIcon="heroicons_outline:pencil"></mat-icon>&nbsp; Edit
                     </button>
                 </div>
-                <p class="font-medium tracking-tight leading-6 truncate  text-sm">Last Updated: {{projectViewDetails.statusData.statusLastUpdated |
+                <p class="font-medium tracking-tight leading-6 truncate  text-sm">Last Updated:
+                    {{projectViewDetails.statusData.statusLastUpdated |
                     date:'dd-MMM-yyyy'}}
 
             </div>
         </div>
         <!-- Summary -->
-        <div id="overall-status" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 pl-6 pr-6 pb-3">
+        <div id="overall-status"
+            class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-6 gap-6 w-full min-w-0 pl-6 pr-6 pb-3">
             <div
                 class="col-span-2 flex flex-col flex-auto p-6 pt-2 pl-3 bg-card shadow rounded-2xl overflow-hidden bg-primary-100 text-on-primary-100 bls-5 overall-brief">
                 <div class="flex items-start justify-between overflow-hidden">
@@ -86,9 +89,11 @@
             </div>
         </div>
         <button *ngIf="overallCollapse && !overallCollapseControll" (click)="collapseToggle()" mat-button>Show More
-            <mat-icon>keyboard_arrow_down</mat-icon></button>
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
         <button *ngIf="overallCollapse && overallCollapseControll" (click)="collapseToggle()" mat-button>Show Less
-            <mat-icon>keyboard_arrow_up</mat-icon></button>
+            <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
     </div>
 
     <!-- Performance 
@@ -178,7 +183,8 @@
     <!-- Risk Issues -->
     <div *ngIf="hubsetting.risks"
         class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
-        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id" [editable]="projecthubservice.roleControllerControl.projectHub.projectBoard.riskIssuesEdit">
+        <app-risk-issues-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id"
+            [editable]="projecthubservice.roleControllerControl.projectHub.projectBoard.riskIssuesEdit">
         </app-risk-issues-table>
     </div>
 
@@ -191,7 +197,8 @@
             <div class="text-primary">
                 <div class="flex items-start justify-between">
                     <div style="padding-right: 5px;">
-                        <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'" *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
+                        <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                            *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                             (click)="projecthubservice.toggleDrawerOpen('AskNeed', 'new', projectViewDetails.askNeedData, id)">
                             <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                         </button>
@@ -241,7 +248,8 @@
                                 <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                                 <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
                             </a>
-                            <a href="javascript:void(0)" title="Edit Single" *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
+                            <a href="javascript:void(0)" title="Edit Single"
+                                *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                                 (click)="projecthubservice.toggleDrawerOpen('AskNeed', row.askNeedUniqueId, projectViewDetails.askNeedData)">
                                 <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
                             </a>
@@ -262,6 +270,14 @@
     </div>
     <!-- Milestones -->
     <div *ngIf="hubsetting.milestones"
+        class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
+        <app-schedule-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id"
+            [editable]="projecthubservice.roleControllerControl.projectHub.projectBoard.scheduleEdit">
+        </app-schedule-table>
+    </div>
+
+
+    <!-- <div *ngIf="hubsetting.milestones"
         class="xl:col-span-6 flex flex-col flex-auto p-6 mb-6 bg-card shadow rounded-2xl overflow-hidden">
         <div class="p-6">
             <div class="mr-4 text-lg font-medium tracking-tight leading-6 truncate">Schedule<br>
@@ -269,5 +285,5 @@
             </div>
         </div>
        
-    </div>
+    </div> -->
 </div>

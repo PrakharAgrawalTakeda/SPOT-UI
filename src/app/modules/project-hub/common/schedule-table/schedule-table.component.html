@@ -1,0 +1,104 @@
+<div class="p-6 pb-3 pt-0 flex items-center justify-between">
+    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Schedule</div>
+
+    <div class="text-primary">
+        <div class="flex items-start justify-between">
+            <div style="padding-right: 5px;">
+                <button class="ml-4 text-primary" *ngIf="editable" mat-flat-button [color]="'primary-200'"
+                    (click)="projecthubservice.toggleDrawerOpen('Schedule', 'new', [], projectid)">
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                </button>
+            </div>
+            <div>
+                <mat-slide-toggle class="primary slider-adjust" (change)="changeschedule($event)">
+                    Include Completed
+                    Milestones</mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="overflow-x-auto mx-6">
+    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="schedulengxdata"
+        [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #scheduleTable [rowClass]="getRowClass">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                    class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+                </mat-icon>
+                &nbsp;
+                &nbsp;
+                <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                    svgIcon="heroicons_outline:link"></mat-icon>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="4">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+       
+
+        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column name="Variance" prop="dueDate" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+            </ng-template>
+        </ngx-datatable-column> -->
+
+        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+
+                <div class="flex items-center justify-start gap-6">
+                    <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                        <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                        <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
+
+                    </a>
+                    <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
+                        (click)="projecthubservice.toggleDrawerOpen('Schedule', row.scheduleUniqueId, projectViewDetails.scheduleData)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+
+                    </a>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-row-detail [rowHeight]="'auto'" #scheduleRowDetail (toggle)="onDetailToggle($event)">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+
+                <div style="padding: 10px 0 0 0;">
+                    <div class="flex items-start justify-between">
+                        <div [ngClass]="{'closed': row.completionDate != null}">
+                            <strong class="strong">Comment:</strong>
+                            {{row.comments}}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 10px 0 0 0;">
+                    <div class="flex items-start justify-between">
+                        <div [ngClass]="{'closed': row.completionDate != null}">
+                            <strong class="strong">Function Owner:</strong>
+                            {{lookup.get(row.functionGroupId)}}
+                        </div>
+                    </div>
+                </div>
+
+            </ng-template>
+        </ngx-datatable-row-detail>
+
+    </ngx-datatable>
+</div>

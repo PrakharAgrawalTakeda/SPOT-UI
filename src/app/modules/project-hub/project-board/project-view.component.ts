@@ -23,7 +23,8 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   riskIssues: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild('askNeedTable', { read: MatSort }) askNeedMatSort: MatSort;
   askNeed: MatTableDataSource<any> = new MatTableDataSource();
-  @ViewChild('ScheduleTable', { read: MatSort }) ScheduleMatSort: MatSort;
+  @ViewChild('scheduleTable', { read: MatSort }) scheduleMatSort: MatSort;
+  schedule: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild(ProjectHubComponent) parent;
   getRowClass = (row) => {
     return {
@@ -37,7 +38,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   riskIssuesHeaders: string[] = ['logDate', 'dueDate', 'ifHappens', 'riskIssueTypeId'];
   askNeedHeaders: string[] = ['askNeedIndicator', 'askNeed1', 'needFromName', 'needByDate'];
   lookupmaster = new Map();
-  ScheduleHeaders: string[] = ['milestone', 'baselineFinish', 'plannedFinish', 'responsiblePersonName'];
+  ScheduleHeaders: string[] = ['milestone', 'baselineFinish', 'plannedFinish', 'variance'];
   askneedngxdata: any = [];
   askneedngxcolumns: any = []
   isEverythingLoaded: boolean = false
@@ -137,8 +138,8 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
       console.log(this.projectViewDetails)
 
       this.askNeed.sort = this.askNeedMatSort
-      this.Schedule.data = this.projectViewDetails.scheduleData
-      this.Schedule.sort = this.ScheduleMatSort
+      this.schedule.data = this.projectViewDetails.scheduleData
+      this.schedule.sort = this.scheduleMatSort
 
     })
     this.auth.lookupMaster().then((res: any) => {

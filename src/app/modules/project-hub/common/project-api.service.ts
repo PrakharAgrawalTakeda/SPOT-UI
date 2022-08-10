@@ -119,4 +119,23 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+
+  async scheduleSingle(itemid: string){
+    var userid = GlobalVariables.apiurl+"Schedule/"+itemid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editSchedule(body){
+    var link = GlobalVariables.apiurl+"Schedule/" + body.scheduleUniqueId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async addSchedule(body){
+    var link = GlobalVariables.apiurl+"Schedule"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

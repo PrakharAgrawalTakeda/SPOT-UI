@@ -11,5 +11,6 @@ export class ProjectBoard{
     public overallStatusEdit: boolean = true
     public askNeedEdit: boolean = true
     public riskIssuesEdit: boolean = true
+    public scheduleEdit: boolean = true
 }
 

@@ -52,6 +52,8 @@ import { BusinessCaseComponent } from './business-case/business-case.component';
 import { ProjectProposalComponent } from './project-proposal/project-proposal.component';
 import { RiskIssuesTableComponent } from './common/risk-issues-table/risk-issues-table.component';
 import { RiskIssueViewEditComponent } from './project-board/risk-issue-view-edit/risk-issue-view-edit.component';
+import { ScheduleTableComponent } from './common/schedule-table/schedule-table.component';
+import { ScheduleViewEditComponent } from './project-board/schedule-view-edit/schedule-view-edit.component';
 import { ProductSingleDropdownComponent } from './common/product-single-dropdown/product-single-dropdown.component';
 import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 
@@ -168,6 +170,8 @@ export const projectRoutes: Route[] = [
     ProjectProposalComponent,
     RiskIssuesTableComponent,
     RiskIssueViewEditComponent,
+    ScheduleTableComponent,
+    ScheduleViewEditComponent,
     ProductSingleDropdownComponent
   ],
   imports     : [
