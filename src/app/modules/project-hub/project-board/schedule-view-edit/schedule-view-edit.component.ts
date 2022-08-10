@@ -219,7 +219,7 @@ export class ScheduleViewEditComponent implements OnInit {
       else {
         var mainObj = {
           scheduleUniqueId: this.schedule.scheduleUniqueId,
-          projectId: this.schedule.projectid,
+          projectId: this.schedule.projectId,
           milestone: this.scheduleForm.value.milestone,
           plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),

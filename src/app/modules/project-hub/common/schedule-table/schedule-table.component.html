@@ -33,7 +33,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="4">
+        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
             </ng-template>
@@ -53,11 +53,11 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <!-- <ngx-datatable-column name="Variance" prop="dueDate" [flexGrow]="1">
+        <ngx-datatable-column name="Variance" prop="dueDate" [flexGrow]="0.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+                <p [ngClass]="{'closed': row.completionDate != null}">{{calculateVariance(row)}}</p>
             </ng-template>
-        </ngx-datatable-column> -->
+        </ngx-datatable-column>
 
         <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
