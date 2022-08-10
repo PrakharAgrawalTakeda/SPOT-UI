@@ -13,12 +13,12 @@
                 <textarea matInput [rows]="5" [placeholder]="'Milestone'" formControlName="milestone"
                     name="milestone"></textarea>
             </mat-form-field>
-            <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+            <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
                 <mat-label>Planned Finish</mat-label>
-                <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="plannedFinish"
+                <input matInput [matDatepicker]="picker1" [placeholder]="'Choose a date'" formControlName="plannedFinish"
                     name="plannedFinish">
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
             <app-user-single-dropdown [formgroup]="scheduleForm" [label]="'Responsible Person'"></app-user-single-dropdown>
             <mat-form-field class="w-full" [floatLabel]="'always'">
@@ -36,9 +36,9 @@
                 <textarea matInput [rows]="5" [placeholder]="'Comments'" formControlName="comments"
                     name="comments"></textarea>
             </mat-form-field>
-            <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+            <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
                 <mat-label>Completion Date</mat-label>
-                <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="completionDate"
+                <input matInput [matDatepicker]="picker2" [max]="today" [placeholder]="'Choose a date'" formControlName="completionDate"
                     name="completionDate">
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
@@ -46,7 +46,7 @@
 
     <div class="flex items-start justify-between incuded-in-dash">
         <mat-slide-toggle
-            [matTooltip]="this.scheduleForm.controls['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
+            [matTooltip]="this.scheduleForm.controls['includeInReport'].disabled ? 'Only 8 can be selected at a time for dashboard report display' : null"
             formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
     </div>
 

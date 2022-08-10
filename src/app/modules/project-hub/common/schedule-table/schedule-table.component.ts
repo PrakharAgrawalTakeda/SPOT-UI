@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
+import {formatDate} from '@angular/common';
+import { values } from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-schedule-table',
@@ -23,10 +26,13 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   };
   schedulengxdata: any = []
   isclosed: boolean = false
+  today = new Date()
+  variance: any;
   constructor(public projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService) { }
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.scheduleData = this.projectViewDetails.scheduleData
+    console.log(this.scheduleData)
     if (this.isclosed == false) {
       this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
     }
@@ -38,8 +44,35 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.scheduleData = this.projectViewDetails.scheduleData
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-
   }
+
+  calculateVariance(row: any): string{
+    if(row.completionDate == null && row.baselineFinish != null && row.plannedFinish !=null)
+    {
+    if(moment(this.today) > moment(row.plannedFinish))
+    {
+      console.log("hey")
+      var variance = moment(this.today).diff(moment(row.baselineFinish),'days')
+      return variance.toString()
+    }
+    else if(moment(this.today) < moment(row.plannedFinish))
+    {
+      console.log("hi")
+      var variance = moment(row.plannedFinish).diff(moment(row.baselineFinish),'days')
+      return variance.toString()
+    }
+  }
+  else if(row.completionDate != null && row.baselineFinish != null && row.plannedFinish !=null)
+  {
+    var variance = moment(row.completionDate).diff(moment(row.baselineFinish),'days')
+      return variance.toString()
+  }
+    else
+    {
+      return "N/A"
+    }
+  }
+
   changeschedule(event: any) {
     console.log(event)
     if (event.checked == true) {
