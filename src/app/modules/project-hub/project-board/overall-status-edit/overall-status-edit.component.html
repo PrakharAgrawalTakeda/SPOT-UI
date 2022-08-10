@@ -5,7 +5,8 @@
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
         </a></div>
 </div>
-<form class="w-full form-ask-need" [formGroup]="overallStatusform" (ngSubmit)="submitoverall()" style="overflow-y: scroll; height: 87vh;">
+<form class="w-full form-ask-need" [formGroup]="overallStatusform" (ngSubmit)="submitoverall()"
+    style="overflow-y: scroll; height: 95vh;">
     <div class="flex items-start justify-between">
         <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
             <mat-label>Status Through</mat-label>
@@ -30,23 +31,23 @@
             <mat-option value="e8f4b0cd-813c-4f7c-a9b5-b955982985d9">Red</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>Overall Status<mat-icon class="pe" matTooltip="Provide an explanation/justification for any red stop light status indicator." >help</mat-icon></mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Provide an explanation/justification for any red stop light status indicator.'" formControlName="overallStatusDescription"
-            name="overallStatusDescription"></textarea>
-    </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label>Recent Accomplishments<mat-icon class="pe" matTooltip="Provide a summary/list of major accomplishments since last reporting cycle." >help</mat-icon></mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Provide a summary/list of major accomplishments since last reporting cycle.'" formControlName="recentAccomplishments"
-            name="recentAccomplishments" matTextareaAutosize></textarea>
-    </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label>Next Priorities<mat-icon class="pe" matTooltip="Provide a summary for what items/actions the project team will be focusing on in the immediate short term." >help</mat-icon></mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Provide a summary for what items/actions the project team will be focusing on in the immediate short term.'" formControlName="nextSteps" name="nextSteps"
-            matTextareaAutosize></textarea>
-    </mat-form-field>
+    <spot-textarea formControlName="overallStatusDescription" name="overallStatusDescription" [label]="'Overall Status'"
+        [placeholder]="'Provide an explanation/justification for any red stop light status indicator.'"
+        [showHint]="true" [hint]="'Provide an explanation/justification for any red stop light status indicator.'">
+    </spot-textarea>
+    <spot-textarea formControlName="recentAccomplishments" name="recentAccomplishments"
+        [label]="'Recent Accomplishments'"
+        [placeholder]="'Provide a summary/list of major accomplishments since last reporting cycle.'" [showHint]="true"
+        [hint]="'Provide a summary/list of major accomplishments since last reporting cycle.'">
+    </spot-textarea>
+    <spot-textarea formControlName="nextSteps" name="nextSteps" [label]="'Next Priorities'"
+        [placeholder]="'Provide a summary for what items/actions the project team will be focusing on in the immediate short term.'"
+        [showHint]="true"
+        [hint]="'Provide a summary for what items/actions the project team will be focusing on in the immediate short term.'">
+    </spot-textarea>
     <div class="flex items-start justify-between pt-6">
-        <a class="w-25" mat-flat-button [color]="'primary'" (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+        <a class="w-25" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
         <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
