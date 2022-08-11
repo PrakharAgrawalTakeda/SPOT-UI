@@ -28,13 +28,15 @@ export class GeneralInfoComponent implements OnInit {
     sponsor: new FormControl(''),
     projectManager: new FormControl(''),
     projectDescription: new FormControl('')
-
   })
+  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   formFieldHelpers: any
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
-    
-   
-   }
+
+    this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
+      console.log(res)
+    })
+  }
   ngOnInit(): void {
     this.dataloader()
   }

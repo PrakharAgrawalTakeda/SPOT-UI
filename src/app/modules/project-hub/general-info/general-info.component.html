@@ -7,13 +7,10 @@
       </spot-input>
       <app-project-single-dropdown [formgroup]="generalInfoForm" [label]="'Parent Program'">
       </app-project-single-dropdown>
-      <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
-        <mat-label>Project Type</mat-label>
-        <mat-select [placeholder]="'Project Type'" formControlName="problemType" name="problemType">
-          <mat-option value="Standard Project / Program">Standard Project / Program</mat-option>
-          <mat-option value="Simple Project">Simple Project</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <spot-select formControlName="problemType" name="problemType" [label]="'Project Type'"
+        [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+        [dropDownArray]="projectTypeDropDrownValues">
+      </spot-select>
       <spot-input formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'" [placeholder]="'TOPS Group'">
       </spot-input>
       <spot-input-date formControlName="recordCreationDate" name="recordCreationDate" [label]="'Record Creation Date'"
