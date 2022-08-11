@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
-import {formatDate} from '@angular/common';
-import { values } from 'lodash';
 import * as moment from 'moment';
 
 @Component({

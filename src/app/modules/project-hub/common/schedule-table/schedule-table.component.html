@@ -20,7 +20,7 @@
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="schedulengxdata"
-        [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #scheduleTable [rowClass]="getRowClass">
+        [sorts]="[{ prop: 'variance', dir: 'asc' }]" #scheduleTable [rowClass]="getRowClass">
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
@@ -53,7 +53,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Variance" prop="dueDate" [flexGrow]="0.5">
+        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.completionDate != null}">{{calculateVariance(row)}}</p>
             </ng-template>
