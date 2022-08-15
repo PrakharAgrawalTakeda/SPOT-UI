@@ -49,13 +49,11 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     {
     if(moment(this.today) > moment(row.plannedFinish))
     {
-      console.log("hey")
       var variance = moment(this.today).diff(moment(row.baselineFinish),'days')
       return variance.toString()
     }
     else if(moment(this.today) < moment(row.plannedFinish))
     {
-      console.log("hi")
       var variance = moment(row.plannedFinish).diff(moment(row.baselineFinish),'days')
       return variance.toString()
     }
