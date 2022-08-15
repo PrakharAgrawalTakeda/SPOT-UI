@@ -19,7 +19,7 @@ export class ProjectHubService {
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
   isFormChanged: boolean = false
-
+  isBulkEdit: boolean = false
   roleControllerControl: RoleController = new RoleController
 
 
@@ -198,7 +198,7 @@ export class ProjectHubService {
   getroles(){
     this.roleControllerControl = this.roleController.getRolesbyProjectData(this.projectid)
   }
-  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string): void {
+  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit:boolean = false): void {
     console.log(this.isFormChanged)
     if (this.drawerOpenedright == true && this.isFormChanged == true) {
       const alertopener = this.fusealert.open(this.alert)
@@ -221,7 +221,7 @@ export class ProjectHubService {
       this.projectid = pid
       this.drawerOpenedright = !this.drawerOpenedright
     }
-
+    this.isBulkEdit = isBulkEdit
   }
   drawerOpenedChanged(event: any): void {
 
@@ -239,6 +239,7 @@ export class ProjectHubService {
           this.all = []
           this.projectid = ""
           this.isFormChanged = false
+          this.isBulkEdit = false
         }
 
       }

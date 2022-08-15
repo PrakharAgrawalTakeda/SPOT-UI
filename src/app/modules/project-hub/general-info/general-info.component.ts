@@ -6,6 +6,7 @@ import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 
 @Component({
   selector: 'app-general-info',
@@ -17,6 +18,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulat
 export class GeneralInfoComponent implements OnInit {
   id: string = ""
   generalInfoData: any = {}
+  filterCriteria: any = {}
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -27,13 +29,14 @@ export class GeneralInfoComponent implements OnInit {
     submittedBy: new FormControl(''),
     sponsor: new FormControl(''),
     projectManager: new FormControl(''),
-    projectDescription: new FormControl('')
+    projectDescription: new FormControl(''),
+    primaryProduct: new FormControl({})
   })
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   formFieldHelpers: any
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
+  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private portApiService: PortfolioApiService) {
 
-    this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
+    this.generalInfoForm.controls.primaryProduct.valueChanges.subscribe(res => {
       console.log(res)
     })
   }
@@ -43,19 +46,24 @@ export class GeneralInfoComponent implements OnInit {
   dataloader(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getGeneralInfoData(this.id).then((res: any) => {
-      console.log("General Info: ", res)
-      this.generalInfoData = res
-      this.generalInfoForm.patchValue({
-        problemTitle: res.projectData.problemTitle,
-        problemType: res.projectData.problemType,
-        topsGroup: res.topsData ? res.topsData.topsgroup : '',
-        recordCreationDate: res.projectData.createdDate,
-        projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-        projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-        submittedBy: res.projectData.problemOwnerName,
-        projectManager: res.pm.pm,
-        sponsor: res.pm.sponsor,
-        projectDescription: res.projectData.projectDescription,
+      this.portApiService.getfilterlist().then(filterres => {
+        console.log('Filter Criteria:', filterres)
+        this.filterCriteria = filterres
+        console.log("General Info: ", res)
+        this.generalInfoData = res
+        this.generalInfoForm.patchValue({
+          problemTitle: res.projectData.problemTitle,
+          problemType: res.projectData.problemType,
+          topsGroup: res.topsData ? res.topsData.topsgroup : '',
+          recordCreationDate: res.projectData.createdDate,
+          projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+          projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+          submittedBy: res.projectData.problemOwnerName,
+          projectManager: res.pm.pm,
+          sponsor: res.pm.sponsor,
+          projectDescription: res.projectData.projectDescription,
+          primaryProduct: res.primaryProduct
+        })
       })
     })
     this.disabler()
