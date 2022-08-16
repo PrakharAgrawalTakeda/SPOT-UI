@@ -28,7 +28,7 @@
         [placeholder]="'Problem Description / Present Situation / Submission Description'">
       </spot-textarea>
       <spot-singleselect-autocomplete formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
-        [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'">
+        [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'" [dropDownArray]="filterCriteria.products">
       </spot-singleselect-autocomplete>
     </form>
   </div>

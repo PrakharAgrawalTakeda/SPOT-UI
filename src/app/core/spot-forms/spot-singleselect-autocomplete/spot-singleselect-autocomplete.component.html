@@ -1,11 +1,15 @@
 <form [formGroup]="form" class="form w-full">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe" *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}" >help</mat-icon></mat-label>
-        <input matInput formControlName="control"
-        [placeholder]="placeholder"
-        (input)="onChange($event.target.value)"
-        (blur)="onTouch()"
-        >
+        <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
+                *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
+        </mat-label>
+        <input matInput (focus)="changeInput()" formControlName="control" [placeholder]="placeholder" [matAutocomplete]="singleSelect">
+        <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
+            (optionSelected)="onFunctionSelect($event)">
+            <mat-option *ngFor="let function of filteredDropDownValues | async" [value]="function">
+                {{function[valuePointer]}}
+            </mat-option>
+        </mat-autocomplete>
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
     </mat-form-field>
 </form>

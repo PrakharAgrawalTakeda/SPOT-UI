@@ -1,5 +1,6 @@
 import { Component, OnInit, forwardRef, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { map, Observable, startWith, timeout } from 'rxjs';
 @Component({
   selector: 'spot-singleselect-autocomplete',
   templateUrl: './spot-singleselect-autocomplete.component.html',
@@ -14,35 +15,73 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from 
 })
 export class SpotSingleselectAutocompleteComponent implements OnInit, ControlValueAccessor {
 
-  @Input() showLabel: boolean = true 
-  @Input() label: string = '' 
+  @Input() showLabel: boolean = true
+  @Input() label: string = ''
   @Input() placeholder: string = ''
-  @Input() showHint: boolean = false 
+  @Input() showHint: boolean = false
   @Input() hint: string = ''
-  @Input() hintPostion: 'tooltip'|'mat-hint' = 'tooltip'
+  @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
   @Input() dropDownArrayType: 'string' | 'object'
-  @Input() dropDownArray: any
+  @Input() dropDownArray: any = []
   @Input() valuePointer: string
   @Input() idPointer: string
-  
 
+  filteredDropDownValues: Observable<any>
   formFieldHelpers: any
+  selectedOption: any = {}
   onTouch: any = () => { };
   onChange: any = () => { };
-  form: FormGroup;
+  form = new FormGroup({
+    control: new FormControl('')
+  });
   disabled = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+    this.form.controls.control.valueChanges.subscribe((res: any) => {
+      if (this.form.controls.control.value == "") {
+        this.onChange({})
+        this.selectedOption = {}
+      }
 
-  ngOnInit() {
-    this.form = this.fb.group({
-      control: '',
     })
+    this.filteredDropDownValues = this.form.controls.control.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        var filterValue = value ? value.toString().toLowerCase() : ''
+        if (this.dropDownArray != null) {
+          if (filterValue == "") {
+            return this.dropDownArray
+          }
+          else {
+            if (Object.keys(this.selectedOption).length != 0 ) {
+              if (filterValue == this.selectedOption[this.valuePointer].toLowerCase()) {
+                return this.dropDownArray
+              }
+            }
+            return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue))
+          }
+        }
+        else {
+          return []
+        }
+      })
+    )
+  }
+  changeInput() {
+    if (this.selectedOption != {}) {
+      this.form.controls.control.patchValue(this.selectedOption[this.valuePointer])
+    }
+  }
+  ngOnInit() {
   }
   get control() {
     return this.form.get('control');
   }
-
+  onFunctionSelect(event: any) {
+    this.onChange(event.option.value)
+    this.form.controls.control.patchValue(event.option.value[this.valuePointer])
+    this.selectedOption = event.option.value
+  }
 
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
@@ -53,11 +92,12 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
   }
 
   writeValue(val: any) {
-    this.control.setValue(val[this.valuePointer]);
+    this.form.controls.control.patchValue(val[this.valuePointer]);
+    this.selectedOption = val
   }
 
   setDisabledState(isDisabled: boolean) {
-    if(isDisabled == true){
+    if (isDisabled == true) {
       this.control.disable()
     }
   }
