@@ -191,15 +191,15 @@ export class ProjectHubService {
   constructor(private fusealert: FuseConfirmationService, private roleController: RoleService, private msalService: MsalService) {
     console.log("Project Service Started")
   }
-  projectidInjector(projectid:string){
+  projectidInjector(projectid: string) {
     this.projectid = projectid
     this.getroles()
   }
-  getroles(){
+  getroles() {
     this.roleControllerControl = this.roleController.getRolesbyProjectData(this.projectid)
   }
-  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit:boolean = false): void {
-    console.log(this.isFormChanged)
+  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false): void {
+    console.log(itemtype)
     if (this.drawerOpenedright == true && this.isFormChanged == true) {
       const alertopener = this.fusealert.open(this.alert)
       alertopener.afterClosed().subscribe(res => {

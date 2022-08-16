@@ -1,10 +1,13 @@
 <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
-    (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'" [ngClass]="projecthubservice.isBulkEdit?'bulkEdit':''">
+    (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'"
+    [ngClass]="projecthubservice.isBulkEdit?'bulkEdit':''">
     <div>
         <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'">
+        </app-schedule-view-bulk-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
@@ -19,9 +22,11 @@
                 <!--<mat-icon *ngIf="!drawerOpened" svgIcon="heroicons_outline:arrow-narrow-right"></mat-icon>
             &nbsp; Menu &nbsp;<mat-icon *ngIf="drawerOpened"
                 svgIcon="heroicons_outline:arrow-narrow-left"></mat-icon>-->
-                <mat-icon svgIcon="heroicons_outline:lock-open" class="icon-size-8" *ngIf="navigationAppearance==='dense'">
+                <mat-icon svgIcon="heroicons_outline:lock-open" class="icon-size-8"
+                    *ngIf="navigationAppearance==='dense'">
                 </mat-icon>
-                <mat-icon svgIcon="heroicons_solid:lock-closed" class="text-primary icon-size-8" *ngIf="navigationAppearance==='default'"></mat-icon>
+                <mat-icon svgIcon="heroicons_solid:lock-closed" class="text-primary icon-size-8"
+                    *ngIf="navigationAppearance==='default'"></mat-icon>
             </button>
         </div>
     </ng-container>

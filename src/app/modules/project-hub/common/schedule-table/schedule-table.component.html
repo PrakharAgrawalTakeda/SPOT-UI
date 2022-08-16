@@ -4,16 +4,24 @@
     <div class="text-primary">
         <div class="flex items-start justify-between">
             <div style="padding-right: 5px;">
+                <a href="javascript:void(0)" *ngIf="editable" title="Edit Bulk"
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', [], '', true)">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon> Bulk Edit
+
+                </a>
+            </div>
+            <div style="padding-right: 5px;">
                 <button class="ml-4 text-primary" *ngIf="editable" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('Schedule', 'new', [], projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
-            <div>
+            <div style="padding-right: 5px;">
                 <mat-slide-toggle class="primary slider-adjust" (change)="changeschedule($event)">
                     Include Completed
                     Milestones</mat-slide-toggle>
             </div>
+
         </div>
     </div>
 </div>
@@ -39,15 +47,23 @@
             </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-       
 
-        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="1">
+
+
+
+        <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
@@ -82,8 +98,8 @@
                 <div style="padding: 10px 0 0 0;">
                     <div class="flex items-start justify-between">
                         <div [ngClass]="{'closed': row.completionDate != null}">
-                            <strong class="strong">Comment:</strong>
-                            {{row.comments}}
+                            <strong class="strong">Responsible Person:</strong>
+                            {{row.responsiblePersonName}}
                         </div>
                     </div>
                 </div>
@@ -96,6 +112,16 @@
                         </div>
                     </div>
                 </div>
+
+                <div style="padding: 10px 0 0 0;">
+                    <div class="flex items-start justify-between">
+                        <div [ngClass]="{'closed': row.completionDate != null}">
+                            <strong class="strong">Comment:</strong>
+                            {{row.comments}}
+                        </div>
+                    </div>
+                </div>
+
 
             </ng-template>
         </ngx-datatable-row-detail>

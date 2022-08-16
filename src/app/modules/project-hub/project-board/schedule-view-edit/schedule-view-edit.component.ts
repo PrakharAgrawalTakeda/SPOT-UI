@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef,ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -45,7 +45,7 @@ export class ScheduleViewEditComponent implements OnInit {
   today = new Date();
   item: any = {}
   functionSets: any = []
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService,private _elementRef: ElementRef) {
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _elementRef: ElementRef) {
 
     this.functionSets = this.scheduleForm.controls['function'].valueChanges.pipe(
       startWith(''),
@@ -65,8 +65,7 @@ export class ScheduleViewEditComponent implements OnInit {
             })
           }
         }
-        else if(this.scheduleForm.controls.functionid.value == "")
-        {
+        else if (this.scheduleForm.controls.functionid.value == "") {
           return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
             return a.lookUpOrder - b.lookUpOrder;
           })
@@ -80,6 +79,7 @@ export class ScheduleViewEditComponent implements OnInit {
   scheduleForm = new FormGroup({
     milestone: new FormControl(''),
     plannedFinish: new FormControl(''),
+    baselineFinish: new FormControl(''),
     comments: new FormControl(''),
     completionDate: new FormControl(''),
     usersingle: new FormControl(''),
@@ -103,6 +103,7 @@ export class ScheduleViewEditComponent implements OnInit {
         this.scheduleForm.patchValue({
           milestone: res.milestone,
           plannedFinish: res.plannedFinish,
+          baselineFinish: res.baselineFinish,
           comments: res.comments,
           completionDate: res.completionDate,
           usersingle: res.ownerName,
@@ -110,7 +111,7 @@ export class ScheduleViewEditComponent implements OnInit {
           functionid: res.functionGroupId,
           includeInReport: res.includeInReport
         })
-
+        this.scheduleForm.controls['baselineFinish'].disable()
         if (res.functionGroupId != null) {
           this.scheduleForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId).lookUpName)
         }
@@ -128,15 +129,16 @@ export class ScheduleViewEditComponent implements OnInit {
     else {
       this.scheduleForm.patchValue({
         milestone: "",
-          plannedFinish: null,
-          comments: "",
-          completionDate: null,
-          usersingle: "",
-          usersingleid: "",
-          functionid: "",
-          includeInReport: false
+        plannedFinish: null,
+        baselineFinish: null,
+        comments: "",
+        completionDate: null,
+        usersingle: "",
+        usersingleid: "",
+        functionid: "",
+        includeInReport: false
       })
-
+      this.scheduleForm.controls['baselineFinish'].disable()
       if (this.projecthubservice.all.length == 0) {
         console.log(this.projecthubservice.all)
       }
@@ -196,7 +198,7 @@ export class ScheduleViewEditComponent implements OnInit {
         //Function when null
         if (this.scheduleForm.controls['function'].value == "") {
           mainObjnew.functionGroupId = null
-        } 
+        }
         if (this.scheduleForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
         }
@@ -239,7 +241,7 @@ export class ScheduleViewEditComponent implements OnInit {
         console.log(this.scheduleForm.controls['function'].value)
         if (this.scheduleForm.controls['function'].value == "") {
           mainObj.functionGroupId = null
-        } 
+        }
 
         //Planned Finish
         if (mainObj.plannedFinish == "Invalid date") {
