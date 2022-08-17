@@ -33,12 +33,13 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   filteredDropDownValues: Observable<any>
   formFieldHelpers: any
   selectedOption: any = []
+  isDisabled: boolean = false
   onTouch: any = () => { };
   onChange: any = () => { };
   form = new FormGroup({
-    control: new FormControl('')
+    control: new FormControl(''),
+    chipList: new FormControl([])
   });
-  disabled = false;
 
   constructor(private fb: FormBuilder) {
     this.form.controls.control.valueChanges.subscribe((res: any) => {
@@ -67,8 +68,8 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     )
   }
   changeInput() {
-      this.form.controls.control.patchValue('')
-      this.input.nativeElement.value = ''
+    this.form.controls.control.patchValue('')
+    this.input.nativeElement.value = ''
   }
   ngOnInit() {
   }
@@ -82,12 +83,12 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.form.controls.control.patchValue('')
     this.input.nativeElement.value = ''
   }
-  removeOption(item: any){
-    this.selectedOption = this.selectedOption.filter(x=>x[this.idPointer] != item[this.idPointer])
+  removeOption(item: any) {
+    this.selectedOption = this.selectedOption.filter(x => x[this.idPointer] != item[this.idPointer])
     this.onChange(this.selectedOption)
   }
-  isOptionSelected(option: any):boolean{
-    if(this.selectedOption.some(x=>x[this.idPointer] == option[this.idPointer])){
+  isOptionSelected(option: any): boolean {
+    if (this.selectedOption.some(x => x[this.idPointer] == option[this.idPointer])) {
       return false
     }
     return true
@@ -106,7 +107,8 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
 
   setDisabledState(isDisabled: boolean) {
     if (isDisabled == true) {
-      this.control.disable()
+      this.isDisabled = true
+      this.form.controls.chipList.disable()
     }
   }
 }
