@@ -1,34 +1,26 @@
 <form [formGroup]="form" class="form w-full">
-    <mat-form-field class="form-element">
-        <mat-chip-list #chipList formControlName="control" [required]="required">
-            <mat-chip *ngFor="let ctr of control.value" [removable]="true" (removed)="remove(ctr)">
-                {{ isOptionString ? ctr : ctr[displayWith] }}
-                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+        <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
+                *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
+        </mat-label>
+        <mat-chip-list #chipList class="chiplist">
+            <mat-chip *ngFor="let item of selectedOption" (removed)="removeOption(item)">
+                {{item[valuePointer]}}
+                <button matChipRemove>
+                    <mat-icon inline=true>cancel</mat-icon>
+                </button>
             </mat-chip>
-            <input #input matInput [placeholder]="placeholder" (input)="changeInput($event.target.value)"
-                [matChipInputFor]="chipList" [matAutocomplete]="ref" (matChipInputTokenEnd)="add($event)"
-                [disabled]="disabled" (keyup.enter)="chooseFirstOption('enter')" (keyup.tab)="chooseFirstOption('tab')"
-                (blur)="onBlur()" (focus)="changeInput()" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-            <mat-autocomplete #ref="matAutocomplete" (optionSelected)="onSelect($event.option.value)">
-                <ng-container *ngIf="!isOptionCheckable">
-                    <mat-option *ngFor="let ctr of (clientSideFilter? filteredOptions : (filteredOptions$ | async))"
-                        [value]="ctr" [disabled]="disabledSelected && isSelected(ctr)">
-                        {{ isOptionString ? ctr : ctr[displayWith] }}
-                    </mat-option>
-                </ng-container>
-                <ng-container *ngIf="isOptionCheckable">
-                    <mat-option class="option-checkbox-wrap" *ngFor="let ctr of (clientSideFilter? filteredOptions : (filteredOptions$ | async))"
-                        [value]="ctr">
-                        <div (click)="clickCheckboxWrap($event, ctr)">
-                            <mat-checkbox [checked]="isSelected(ctr)"
-                                [disabled]="!isSelected(ctr) && control.value && maxItems && control.value.length >= maxItems"
-                                (change)="toggleSelection(ctr)" (click)="$event.stopPropagation()">
-                                {{ isOptionString ? ctr : ctr[displayWith] }}
-                            </mat-checkbox>
-                        </div>
-                    </mat-option>
-                </ng-container>
-            </mat-autocomplete>
+            <input #input matInput (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
+                [matAutocomplete]="singleSelect" [matChipInputFor]="chipList">
         </mat-chip-list>
+        <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
+            (optionSelected)="onFunctionSelect($event)">
+            <ng-container *ngFor="let function of filteredDropDownValues | async">
+                <mat-option [value]="function" *ngIf="isOptionSelected(function)">
+                    {{function[valuePointer]}}
+                </mat-option>
+            </ng-container>
+        </mat-autocomplete>
+        <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
     </mat-form-field>
 </form>

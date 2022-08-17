@@ -30,13 +30,14 @@ export class GeneralInfoComponent implements OnInit {
     sponsor: new FormControl(''),
     projectManager: new FormControl(''),
     projectDescription: new FormControl(''),
-    primaryProduct: new FormControl({})
+    primaryProduct: new FormControl({}),
+    otherImpactedProducts: new FormControl([])
   })
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   formFieldHelpers: any
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private portApiService: PortfolioApiService) {
 
-    this.generalInfoForm.controls.primaryProduct.valueChanges.subscribe(res => {
+    this.generalInfoForm.controls.otherImpactedProducts.valueChanges.subscribe(res => {
       console.log(res)
     })
   }
@@ -62,7 +63,8 @@ export class GeneralInfoComponent implements OnInit {
           projectManager: res.pm.pm,
           sponsor: res.pm.sponsor,
           projectDescription: res.projectData.projectDescription,
-          primaryProduct: res.primaryProduct
+          primaryProduct: res.primaryProduct,
+          otherImpactedProducts: res.otherImpactedProducts
         })
       })
     })

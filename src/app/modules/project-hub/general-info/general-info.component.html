@@ -30,6 +30,9 @@
       <spot-singleselect-autocomplete formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
         [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'" [dropDownArray]="filterCriteria.products">
       </spot-singleselect-autocomplete>
+      <spot-multiselect-autocomplete formControlName="otherImpactedProducts" name="otherImpactedProducts" [label]="'Other Impacted Products'"
+      [placeholder]="'Other Impacted Products'" [valuePointer]="'fullProductName'"[idPointer]="'productId'" [dropDownArray]="filterCriteria.products">
+    </spot-multiselect-autocomplete>
     </form>
   </div>
 </div>

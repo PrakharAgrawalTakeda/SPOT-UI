@@ -28,7 +28,9 @@
 .pe {
     pointer-events: auto;
 }
-
+.mat-standard-chip .mat-chip-remove, .mat-standard-chip .mat-chip-trailing-icon {
+margin-bottom: 5px ;
+}
 ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-datatable .datatable-row-left, .ngx-datatable .datatable-row-right {
     gap: 15px;
 }

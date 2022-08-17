@@ -1,14 +1,10 @@
-import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { MatAutocomplete } from '@angular/material/autocomplete';
-import { Observable, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, debounce } from 'rxjs/operators';
+import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { map, Observable, startWith, timeout } from 'rxjs';
 @Component({
   selector: 'spot-multiselect-autocomplete',
   templateUrl: './spot-multiselect-autocomplete.component.html',
   styleUrls: ['./spot-multiselect-autocomplete.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -17,154 +13,85 @@ import { distinctUntilChanged, debounce } from 'rxjs/operators';
     }
   ]
 })
-export class SpotMultiselectAutocompleteComponent implements OnInit {
+export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValueAccessor {
 
-  @Input() placeholder = 'Select';
-  @Input() clientSideFilter = true;
-  @Input() options: any[];
-  @Input() maxItems = null;
-  @Input() removable = true;
-  @Input() required = true;
-  @Input() isOptionString = true;
-  @Input() displayWith = 'value';
-  @Input() itemId = 'key';
-  @Input() disabledSelected = true;
-  @Input() filteredOptions$: Observable<any>;
-  @Input() debounceTime = 500;
-  @Input() isChipAddFromInput = false;
-  @Input() isOptionCheckable = false;
-  @Output() changeSearchkey = new EventEmitter<string>();
+  @Input() showLabel: boolean = true
+  @Input() label: string = ''
+  @Input() placeholder: string = ''
+  @Input() showHint: boolean = false
+  @Input() hint: string = ''
+  @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
+  @Input() dropDownArrayType: 'string' | 'object'
+  @Input() dropDownArray: any = []
+  @Input() valuePointer: string
+  @Input() idPointer: string = ''
+  @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
+  @Input() customSortPointer: string = ''
+
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
-  @ViewChild(MatAutocomplete, { static: true }) matAutocomplete: MatAutocomplete;
 
-  separatorKeysCodes: number[] = [13, 9]
+  filteredDropDownValues: Observable<any>
+  formFieldHelpers: any
+  selectedOption: any = []
   onTouch: any = () => { };
   onChange: any = () => { };
-  form: FormGroup;
-  filteredOptions: any;
+  form = new FormGroup({
+    control: new FormControl('')
+  });
   disabled = false;
-  debounceHelper = new Subject();
 
-  constructor(private fb: FormBuilder) { }
-
-  ngOnInit() {
-    this.changeInput('');
-    this.form = this.fb.group({
-      control: [''],
-    })
-    this.form.valueChanges.subscribe(form => {
-      setTimeout(() => this.onChange(form.control), 0);
-    })
-    this.debounceHelper.pipe(
-      debounce(() => timer(this.debounceTime)),
-      distinctUntilChanged()
-    ).subscribe((res: string) => this.changeSearchkey.emit(res));
-    if (this.clientSideFilter) {
-      if (this.options.some(option => typeof(option) === 'string')) {
-        this.isOptionString = true;
-      } else {
-        this.isOptionString = false;
+  constructor(private fb: FormBuilder) {
+    this.form.controls.control.valueChanges.subscribe((res: any) => {
+      if (this.form.controls.control.value == "") {
+        //this.onChange({})
+        //this.selectedOption = {}
       }
-    }
+
+    })
+    this.filteredDropDownValues = this.form.controls.control.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        var filterValue = value ? value.toString().toLowerCase() : ''
+        if (this.dropDownArray != null) {
+          if (filterValue == "") {
+            return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
+          }
+          else {
+            return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue)).sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
+          }
+        }
+        else {
+          return []
+        }
+      })
+    )
+  }
+  changeInput() {
+      this.form.controls.control.patchValue('')
+      this.input.nativeElement.value = ''
+  }
+  ngOnInit() {
   }
   get control() {
     return this.form.get('control');
   }
-
-  add(event: MatChipInputEvent): void {
-    if (this.isChipAddFromInput && !this.matAutocomplete.showPanel) {
-      const input = event.input;
-      const value = event.value;
-      if (this.isOptionString) {
-        if ((value || '').trim()) {
-          this.control.setValue([...this.control.value || [], value.trim()]);
-        }
-      } else {
-        const obj = {};
-        obj[this.itemId] = value;
-        obj[this.displayWith] = value;
-        this.control.setValue([...this.control.value || [], obj]);
-      }
-      // Reset the input value
-      if (input) {
-        input.value = '';
-      }
+  onFunctionSelect(event: any) {
+    this.selectedOption.push(event.option.value)
+    this.onChange(this.selectedOption)
+    this.input.nativeElement.blur()
+    this.form.controls.control.patchValue('')
+    this.input.nativeElement.value = ''
+  }
+  removeOption(item: any){
+    this.selectedOption = this.selectedOption.filter(x=>x[this.idPointer] != item[this.idPointer])
+    this.onChange(this.selectedOption)
+  }
+  isOptionSelected(option: any):boolean{
+    if(this.selectedOption.some(x=>x[this.idPointer] == option[this.idPointer])){
+      return false
     }
+    return true
   }
-
-  remove(chip): void {
-    const index = this.control.value.findIndex((ctr) =>
-      this.isOptionString ? ctr === chip : ctr[this.itemId] === chip[this.itemId]);
-    if (index >= 0) {
-      this.changeInput();
-      this.control.value.splice(index, 1);
-      if (this.control.value.length === 0) {
-        this.control.setValue(null);
-      } else {
-        this.control.updateValueAndValidity();
-      }
-      this.disabled = false;
-    }
-  }
-
-  changeInput(key: string = '') {
-    this.clientSideFilter ? this.filteredOptions = this.filterOption(key) : this.debounceHelper.next(key);
-  }
-
-  filterOption(key: string) {
-    return (key === '') ? this.options : this.options.filter(f =>
-      this.isOptionString ? f.toLowerCase().includes(key.toLowerCase()) :
-        (f[this.displayWith]).toLowerCase().includes(key.toLowerCase()));
-  }
-
-  onSelect(value) {
-    this.control.setValue([...this.control.value || [], value]);
-    this.afterSelect();
-  }
-
-  afterSelect() {
-    this.input.nativeElement.value = '';
-    if (this.maxItems && this.control.value.length === this.maxItems) {
-      this.disabled = true;
-    }
-    this.changeInput();
-  }
-
-  isSelected = (option) => {
-    return this.control.value && this.control.value.some(ctr =>
-      this.isOptionString ? ctr === option : ctr[this.itemId] === option[this.itemId]);
-  }
-  chooseFirstOption(keyCode) {
-    if (this.matAutocomplete.options.first && (!this.control.value || (this.control.value && !this.control.value.some(ctr =>
-      this.isOptionString ? ctr === this.matAutocomplete.options.first.value :
-        ctr[this.itemId] === this.matAutocomplete.options.first.value[this.itemId])))) {
-      if (keyCode === 'enter') {
-        this.matAutocomplete.options.first.select();
-      } else if (keyCode === 'tab') {
-        this.control.setValue([...this.control.value || [], this.matAutocomplete.options.first.value]);
-        this.afterSelect();
-      }
-    }
-  }
-  clickCheckboxWrap($event, option) {
-    $event.stopPropagation();
-    this.toggleSelection(option);
-  }
-  toggleSelection(option) {
-    if (this.isSelected(option)) {
-      this.remove(option);
-    } else {
-      if (!this.control.value || !this.maxItems ||this.control.value.length < this.maxItems) {
-        this.onSelect(option)
-      }
-    }
-  }
-
-  onBlur() {
-    this.input.nativeElement.value = '';
-    this.changeInput();
-  }
-
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
@@ -173,11 +100,13 @@ export class SpotMultiselectAutocompleteComponent implements OnInit {
     this.onChange = fn;
   }
 
-  writeValue(val: string) {
-    this.control.setValue(val);
+  writeValue(val: any) {
+    this.selectedOption = val
   }
 
   setDisabledState(isDisabled: boolean) {
-    this.disabled = isDisabled;
+    if (isDisabled == true) {
+      this.control.disable()
+    }
   }
 }
