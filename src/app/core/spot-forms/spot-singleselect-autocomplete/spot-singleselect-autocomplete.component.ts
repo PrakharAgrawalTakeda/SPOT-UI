@@ -1,4 +1,4 @@
-import { Component, OnInit, forwardRef, Input } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { map, Observable, startWith, timeout } from 'rxjs';
 @Component({
@@ -24,7 +24,11 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
   @Input() dropDownArrayType: 'string' | 'object'
   @Input() dropDownArray: any = []
   @Input() valuePointer: string
-  @Input() idPointer: string
+  //@Input() idPointer: string = ''
+  @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
+  @Input() customSortPointer: string = ''
+
+  @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
   filteredDropDownValues: Observable<any>
   formFieldHelpers: any
@@ -50,15 +54,15 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
         var filterValue = value ? value.toString().toLowerCase() : ''
         if (this.dropDownArray != null) {
           if (filterValue == "") {
-            return this.dropDownArray
+            return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
           }
           else {
-            if (Object.keys(this.selectedOption).length != 0 ) {
+            if (Object.keys(this.selectedOption).length != 0) {
               if (filterValue == this.selectedOption[this.valuePointer].toLowerCase()) {
-                return this.dropDownArray
+                return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
               }
             }
-            return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue))
+            return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue)).sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
           }
         }
         else {
@@ -81,6 +85,7 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
     this.onChange(event.option.value)
     this.form.controls.control.patchValue(event.option.value[this.valuePointer])
     this.selectedOption = event.option.value
+    this.input.nativeElement.blur()
   }
 
   registerOnTouched(fn: any): void {
