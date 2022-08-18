@@ -97,8 +97,11 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
   }
 
   writeValue(val: any) {
-    this.form.controls.control.patchValue(val[this.valuePointer]);
-    this.selectedOption = val
+    if(val != null){
+      this.form.controls.control.patchValue(val[this.valuePointer]);
+      this.selectedOption = val
+    }
+   
   }
 
   setDisabledState(isDisabled: boolean) {

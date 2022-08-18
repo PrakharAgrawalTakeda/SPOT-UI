@@ -46,33 +46,7 @@ export class ScheduleViewEditComponent implements OnInit {
   item: any = {}
   functionSets: any = []
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _elementRef: ElementRef) {
-
-    this.functionSets = this.scheduleForm.controls['function'].valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        var filterValue = value.toString().toLowerCase()
-        if (this.lookupdata.find(x => x.lookUpId == this.scheduleForm.controls.functionid.value)) {
-          if (this.lookupdata.find(x => x.lookUpName == value)) {
-
-            return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
-              return a.lookUpOrder - b.lookUpOrder;
-            })
-          }
-
-          else {
-            return this.lookupdata.filter(x => x.lookUpName.toLowerCase().includes(filterValue) && x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
-              return a.lookUpOrder - b.lookUpOrder;
-            })
-          }
-        }
-        else if (this.scheduleForm.controls.functionid.value == "") {
-          return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
-            return a.lookUpOrder - b.lookUpOrder;
-          })
-        }
-      })
-
-    )
+    //this.scheduleForm.controls.function.valueChanges.subscribe(res => (console.log(res)))
   }
 
 
@@ -84,13 +58,12 @@ export class ScheduleViewEditComponent implements OnInit {
     completionDate: new FormControl(''),
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
-    function: new FormControl(''),
-    functionid: new FormControl(''),
+    function: new FormControl({}),
+    //functionid: new FormControl(''),
     includeInReport: new FormControl('')
   })
   ngOnInit(): void {
     this.getllookup()
-    //this.dataloader()
   }
 
   dataloader() {
@@ -106,14 +79,16 @@ export class ScheduleViewEditComponent implements OnInit {
           baselineFinish: res.baselineFinish,
           comments: res.comments,
           completionDate: res.completionDate,
-          usersingle: res.ownerName,
-          usersingleid: res.ownerId,
-          functionid: res.functionGroupId,
+          usersingle: res.responsiblePersonName,
+          usersingleid: res.responsiblePersonId,
+          //functionid: res.functionGroupId,
           includeInReport: res.includeInReport
         })
         this.scheduleForm.controls['baselineFinish'].disable()
-        if (res.functionGroupId != null) {
-          this.scheduleForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId).lookUpName)
+
+        if(this.schedule.functionGroupId != "")
+        {
+          this.scheduleForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId))
         }
 
         if (this.projecthubservice.all != []) {
@@ -135,7 +110,7 @@ export class ScheduleViewEditComponent implements OnInit {
         completionDate: null,
         usersingle: "",
         usersingleid: "",
-        functionid: "",
+        //functionid: "",
         includeInReport: false
       })
       this.scheduleForm.controls['baselineFinish'].disable()
@@ -157,19 +132,12 @@ export class ScheduleViewEditComponent implements OnInit {
   getllookup() {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
+      this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
       this.dataloader()
       this.scheduleForm.controls.function.patchValue('')
     })
   }
 
-  onFunctionSelect(event: any) {
-    this.scheduleForm.patchValue({
-      function: event.option.value.lookUpName,
-      functionid: event.option.value.lookUpId
-    })
-    console.log(this.scheduleForm.controls.functionid.value)
-
-  }
   submitschedule() {
     console.log(this.scheduleForm.errors)
     this.projecthubservice.isFormChanged = false
@@ -183,7 +151,7 @@ export class ScheduleViewEditComponent implements OnInit {
           milestone: this.scheduleForm.value.milestone,
           plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          functionGroupId: this.scheduleForm.value.functionid,
+          functionGroupId: this.scheduleForm.value.function.lookUpId,
           comments: this.scheduleForm.value.comments,
           completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.scheduleForm.value.includeInReport,
@@ -225,7 +193,7 @@ export class ScheduleViewEditComponent implements OnInit {
           milestone: this.scheduleForm.value.milestone,
           plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          functionGroupId: this.scheduleForm.value.functionid,
+          functionGroupId: this.scheduleForm.value.function.lookUpId,
           comments: this.scheduleForm.value.comments,
           completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.scheduleForm.value.includeInReport,

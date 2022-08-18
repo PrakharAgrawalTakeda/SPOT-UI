@@ -8,49 +8,36 @@
 </div>
 <form class="w-full form-ask-need" [formGroup]="scheduleForm" (ngSubmit)="submitschedule()"
     style="overflow-y: scroll; height: 87vh;">
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>Milestone</mat-label>
-        <textarea matInput [rows]="1" [placeholder]="'Milestone'" formControlName="milestone"
-            name="milestone"></textarea>
-    </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
-        <mat-label>Planned Finish</mat-label>
-        <input matInput [matDatepicker]="picker1" [placeholder]="'Choose a date'" formControlName="plannedFinish"
-            name="plannedFinish">
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-    </mat-form-field>
-    <br>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
-        <mat-label>Baseline Finish</mat-label>
-        <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="baselineFinish"
-            name="baselineFinish">
-        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2></mat-datepicker>
-    </mat-form-field>
+    <spot-textarea formControlName="milestone" name="milestone" [label]="'Milestone'" [placeholder]="'Milestone'"
+        [rows]="1">
+    </spot-textarea>
+
+    <div class="w-25">
+        <spot-input-date formControlName="plannedFinish" name="plannedFinish" [label]="'Planned Finish'"
+            [placeholder]="'Choose a date'">
+        </spot-input-date>
+    </div>
+    <div class="w-25">
+        <spot-input-date formControlName="baselineFinish" name="baselineFinish" [label]="'Baseline Finish'"
+            [placeholder]="'Choose a date'" [showHint]="true" [hint]="'Baseline Finish Date can be edited in Bulk Edit'">
+        </spot-input-date>
+    </div>
 
     <app-user-single-dropdown [formgroup]="scheduleForm" [label]="'Responsible Person'"></app-user-single-dropdown>
-    <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>Function Owner</mat-label>
-        <input matInput [placeholder]="'Function'" formControlName="function" name="function"
-            [matAutocomplete]="function">
-        <mat-autocomplete autoActiveFirstOption #function="matAutocomplete" (optionSelected)="onFunctionSelect($event)">
-            <mat-option *ngFor="let function of functionSets | async" [value]="function">
-                {{function.lookUpName}}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>Comments</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Comments'" formControlName="comments" name="comments"></textarea>
-    </mat-form-field>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-25" [floatLabel]="'always'">
-        <mat-label>Completion Date</mat-label>
-        <input matInput [matDatepicker]="picker3" [max]="today" [placeholder]="'Choose a date'"
-            formControlName="completionDate" name="completionDate">
-        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-        <mat-datepicker #picker3></mat-datepicker>
-    </mat-form-field>
+
+
+    <spot-singleselect-autocomplete formControlName="function" name="function" [label]="'Function Owner'"
+        [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'" [dropDownArray]="functionSets" [sortByType] = "'custom'" [customSortPointer]="'lookUpOrder'">
+      </spot-singleselect-autocomplete>
+
+    <spot-textarea formControlName="comments" name="comments" [label]="'Comments'" [placeholder]="'Comments'">
+    </spot-textarea>
+
+    <div class="w-25">
+        <spot-input-date formControlName="completionDate" name="completionDate" [label]="'Completion Date'"
+            [placeholder]="'Choose a date'" [max]="'today'">
+        </spot-input-date>
+    </div>
 
     <div class="flex items-start justify-between incuded-in-dash">
         <mat-slide-toggle

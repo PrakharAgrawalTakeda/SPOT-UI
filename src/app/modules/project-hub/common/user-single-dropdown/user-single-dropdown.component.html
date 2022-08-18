@@ -1,7 +1,7 @@
 <div [formGroup]="formgroup">
     <mat-form-field class="w-full" [floatLabel]="'always'">
         <mat-label>{{label}}</mat-label>
-        <input matInput [placeholder]="label" formControlName="usersingle" name="usersingle" [matAutocomplete]="auto">
+        <input matInput [placeholder]="label" formControlName="usersingle" name="usersingle" [matAutocomplete]="auto" [placeholder]="'Last Name, First Name'">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onUserSelectenter($event)">
             <mat-option *ngFor="let option of resultSets" [value]="option">
                 {{option.userDisplayName}}
