@@ -77,6 +77,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     return this.form.get('control');
   }
   onFunctionSelect(event: any) {
+    console.log(this.selectedOption)
     this.selectedOption.push(event.option.value)
     this.onChange(this.selectedOption)
     this.input.nativeElement.blur()
@@ -88,8 +89,10 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.onChange(this.selectedOption)
   }
   isOptionSelected(option: any): boolean {
-    if (this.selectedOption.some(x => x[this.idPointer] == option[this.idPointer])) {
-      return false
+    if (this.selectedOption) {
+      if (this.selectedOption.some(x => x[this.idPointer] == option[this.idPointer])) {
+        return false
+      }
     }
     return true
   }
@@ -102,7 +105,9 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   }
 
   writeValue(val: any) {
-    this.selectedOption = val
+    if (val) {
+      this.selectedOption = val
+    }
   }
 
   setDisabledState(isDisabled: boolean) {
