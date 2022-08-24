@@ -1,40 +1,159 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
   <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Milestones</div>
-  <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '', true)"
+  <div style="padding-top: 2px">
+    <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',false)"
       href="javascript:void(0)" title="Close">
       <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
     </a>
   </div>
 </div>
-<!-- <div class="overflow-x-auto mx-6">
-<ngx-datatable
-        #mydatatable
-        class="material"
-        [headerHeight]="50"
-        [limit]="5"
+
+<div class="flex items-start justify-between">
+
+  <div style="padding-left: 1%;padding-top: 10px;padding-bottom: 10px;">
+    <button class="w-20" mat-flat-button [color]="'primary'" type="submit" (ngSubmit)="submitschedule()">
+        Submit
+    </button>
+  </div>
+  <div style="padding-right: 90%;padding-top: 10px;padding-bottom: 10px;">
+  <a class="w-20" mat-flat-button [color]="'primary'"
+      (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',false)">
+      Cancel
+  </a>
+</div>
+
+</div>
+ <!-- <div class="overflow-x-auto mx-6">
+    </div>  -->
+    <div class="overflow-x-auto mx-6">
+    <ngx-datatable
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
+        [rows]="schedulengxdata"
+        #scheduleTable
         [columnMode]="ColumnMode.force"
-        [footerHeight]="50"
-        rowHeight="auto"
-        [rows]="rows"
-      >
-        <ngx-datatable-column name="Name">
+        [headerHeight]="'auto'"
+        [footerHeight]="'auto'"
+        [rowHeight]="'auto'">
+        
+        
+          <ngx-datatable-column name="Milestone" prop="milestone">
           <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
             <span
               title="Double click to edit"
-              (dblclick)="editing[rowIndex + '-name'] = true"
-              *ngIf="!editing[rowIndex + '-name']"
-            >
-              {{ value }}
+              (click)="editing[rowIndex] = true"
+              *ngIf="!editing[rowIndex]">
+              {{value}}
+            </span>
+            <input
+              (blur)="updateValue($event, 'milestone', rowIndex)"
+              *ngIf="editing[rowIndex]"
+              type="text"
+              [value]="value"
+            />
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Planned Finish" prop="plannedFinish">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+            <span
+              title="Double click to edit"
+              (click)="editing[rowIndex] = true"
+              *ngIf="!editing[rowIndex]">
+              {{value | date:'dd-MMM-yyyy'}}
+            </span>
+            <mat-form-field *ngIf="editing[rowIndex]">
+              <input matInput [value]="value" [matDatepicker]="picker" placeholder="Choose a date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker (selectedChanged)="updateValue($event, 'plannedFinish', rowIndex)"   #picker  ></mat-datepicker>
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+            <span
+              title="Double click to edit"
+              (click)="editing[rowIndex] = true"
+              *ngIf="!editing[rowIndex]">
+              {{value | date:'dd-MMM-yyyy'}}
+            </span>
+            <mat-form-field *ngIf="editing[rowIndex]">
+              <input matInput [value]="value" [matDatepicker]="picker1" placeholder="Choose a date">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker (selectedChanged1)="updateValue($event, 'baselineFinish', rowIndex)"   #picker1  ></mat-datepicker>
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Variance" prop="variance">
+          <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+            
+              {{calculateVariance(row)}}
+          
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+            <span
+              title="Double click to edit"
+              (click)="editing[rowIndex] = true"
+              *ngIf="!editing[rowIndex]">
+              {{row.responsiblePersonName}}
+            </span>
+            <input
+              
+              (blur)="updateValue($event, 'responsiblePersonName', rowIndex)"
+              *ngIf="editing[rowIndex]"
+              type="text"
+              [value]="value"
+            />
+          </ng-template>
+        </ngx-datatable-column>
+        <!-- <ngx-datatable-column name="Function Owner" prop="functionGroupId">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+            <span
+              title="Double click to edit"
+              (click)="editing[rowIndex + '-name'] = true"
+              *ngIf="!editing[rowIndex+ '-name']">
+              {{lookup.get(row.functionGroupId)}}
             </span>
             <input
               autofocus
               (blur)="updateValue($event, 'name', rowIndex)"
-              *ngIf="editing[rowIndex + '-name']"
+              *ngIf="editing[rowIndex+ '-name']"
+              type="text"
+              [value]="value"
+            />
+          </ng-template>
+        </ngx-datatable-column> -->
+        <ngx-datatable-column name="Completion Date" prop="completionDate">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+            <span
+              title="Double click to edit"
+              (click)="editing[rowIndex] = true"
+              *ngIf="!editing[rowIndex]">
+              {{value | date:'dd-MMM-yyyy'}}
+            </span>
+            <mat-form-field *ngIf="editing[rowIndex]">
+              <input matInput [value]="value" [matDatepicker]="picker2" placeholder="Choose a date">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker (selectedChanged2)="updateValue($event, 'completionDate', rowIndex)"   #picker2  ></mat-datepicker>
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Comments" prop="comments">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+            <span
+              title="Double click to edit"
+              (click)="editing[rowIndex] = true"
+              *ngIf="!editing[rowIndex]">
+              {{row.comments}}
+            </span>
+            <input
+              
+              (blur)="updateValue($event, 'comments', rowIndex)"
+              *ngIf="editing[rowIndex]"
               type="text"
               [value]="value"
             />
           </ng-template>
         </ngx-datatable-column>
         </ngx-datatable>
-    </div> -->
-This is Bulk edit
+      </div>
