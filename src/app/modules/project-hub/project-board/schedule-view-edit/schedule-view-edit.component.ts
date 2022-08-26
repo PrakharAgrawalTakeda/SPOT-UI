@@ -114,6 +114,8 @@ export class ScheduleViewEditComponent implements OnInit {
         includeInReport: false
       })
       this.scheduleForm.controls['baselineFinish'].disable()
+
+     
       if (this.projecthubservice.all.length == 0) {
         console.log(this.projecthubservice.all)
       }
@@ -132,26 +134,24 @@ export class ScheduleViewEditComponent implements OnInit {
   getllookup() {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
-      this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
+        this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')      
       this.dataloader()
       this.scheduleForm.controls.function.patchValue('')
     })
   }
 
   submitschedule() {
-    console.log(this.scheduleForm.errors)
     this.projecthubservice.isFormChanged = false
 
     if (this.scheduleForm.valid) {
       if (this.projecthubservice.itemid == "new") {
-        console.log(this.projecthubservice)
         var mainObjnew = {
           scheduleUniqueId: "new",
           projectId: this.projecthubservice.projectid,
           milestone: this.scheduleForm.value.milestone,
           plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          functionGroupId: this.scheduleForm.value.function.lookUpId,
+          baselineFinish: this.scheduleForm.controls.baselineFinish.value?moment(this.scheduleForm.value.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'): null, 
+          functionGroupId: this.scheduleForm.value.function?this.scheduleForm.value.function.lookUpId: null,
           comments: this.scheduleForm.value.comments,
           completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.scheduleForm.value.includeInReport,
@@ -171,13 +171,18 @@ export class ScheduleViewEditComponent implements OnInit {
           mainObjnew.includeInReport = false
         }
 
-        //Planned Finish
+        // //Planned Finish
         if (mainObjnew.plannedFinish == "Invalid date") {
           mainObjnew.plannedFinish = null
         }
         //Completion
         if (mainObjnew.completionDate == "Invalid date") {
           mainObjnew.completionDate = null
+        }
+
+        //Baseline
+        if (mainObjnew.baselineFinish == "Invalid date") {
+          mainObjnew.baselineFinish = null
         }
         console.log("final object")
         console.log(mainObjnew)
@@ -192,8 +197,8 @@ export class ScheduleViewEditComponent implements OnInit {
           projectId: this.schedule.projectId,
           milestone: this.scheduleForm.value.milestone,
           plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          functionGroupId: this.scheduleForm.value.function.lookUpId,
+          baselineFinish: this.scheduleForm.controls.baselineFinish.value?moment(this.scheduleForm.value.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'): null,
+          functionGroupId: this.scheduleForm.value.function?this.scheduleForm.value.function.lookUpId: null,
           comments: this.scheduleForm.value.comments,
           completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.scheduleForm.value.includeInReport,
@@ -206,7 +211,7 @@ export class ScheduleViewEditComponent implements OnInit {
           responsiblePersonName: this.scheduleForm.value.usersingle
         }
         //Function when null
-        console.log(this.scheduleForm.controls['function'].value)
+
         if (this.scheduleForm.controls['function'].value == "") {
           mainObj.functionGroupId = null
         }
@@ -219,6 +224,14 @@ export class ScheduleViewEditComponent implements OnInit {
         //Completion
         if (mainObj.completionDate == "Invalid date") {
           mainObj.completionDate = null
+        }
+        console.log(this.schedule.baselineFinish)
+         //Baseline
+         if (mainObj.baselineFinish == "Invalid date") {
+          mainObj.baselineFinish = null
+        }
+        if (mainObj.baselineFinish == moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')) {
+          mainObj.baselineFinish = null
         }
 
         console.log("final object")
