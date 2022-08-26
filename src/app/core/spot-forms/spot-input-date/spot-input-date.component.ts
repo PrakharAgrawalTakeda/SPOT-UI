@@ -5,7 +5,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'LL',
+    dateInput: 'DD-MMM-yyyy',
   },
   display: {
     dateInput: 'DD-MMM-yyyy',
@@ -66,7 +66,9 @@ export class SpotInputDateComponent implements OnInit, ControlValueAccessor {
     return this.form.get('control');
   }
 
-
+  addEvent(event: any){
+    this.onChange(event)
+  }
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }

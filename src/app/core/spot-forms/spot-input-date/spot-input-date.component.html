@@ -3,9 +3,8 @@
         <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe" *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}" >help</mat-icon></mat-label>
         <input matInput formControlName="control"
         [placeholder]="placeholder"
-        (input)="onChange($event.target.value)"
-        (blur)="onTouch()"
         [matDatepicker]="picker3" [max]="getMax()"
+        (dateChange)="addEvent($event.value)"
         >
         <mat-datepicker-toggle *ngIf="!form.controls.control.disabled" matSuffix [for]="picker3"></mat-datepicker-toggle>
         <mat-datepicker #picker3></mat-datepicker>
