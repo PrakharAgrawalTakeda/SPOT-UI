@@ -7,14 +7,14 @@
     </div>
 </div>
 <form class="w-full form-ask-need" [formGroup]="scheduleForm" (ngSubmit)="submitschedule()"
-    style="overflow-y: scroll; height: 87vh;">
+    style="overflow-y: scroll; height: 95vh;">
     <spot-textarea formControlName="milestone" name="milestone" [label]="'Milestone'" [placeholder]="'Milestone'"
         [rows]="1">
     </spot-textarea>
 
     <div class="w-25">
         <spot-input-date formControlName="plannedFinish" name="plannedFinish" [label]="'Planned Finish'"
-            [placeholder]="'Choose a date'">
+            [placeholder]="'Choose a date'" [showHint]="true" [hint]="'The date which indicates when the milestone is planned to be completed'">
         </spot-input-date>
     </div>
     <div class="w-25">
