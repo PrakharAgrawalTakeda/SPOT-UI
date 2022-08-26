@@ -105,8 +105,6 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
   }
 
   setDisabledState(isDisabled: boolean) {
-    if (isDisabled == true) {
-      this.control.disable()
-    }
+    isDisabled == true ? this.control.disable() : this.control.enable()
   }
 }

@@ -88,8 +88,6 @@ export class SpotInputDateComponent implements OnInit, ControlValueAccessor {
     return
   }
   setDisabledState(isDisabled: boolean) {
-    if (isDisabled == true) {
-      this.control.disable()
-    }
+    isDisabled == true ? this.control.disable() : this.control.enable()
   }
 }

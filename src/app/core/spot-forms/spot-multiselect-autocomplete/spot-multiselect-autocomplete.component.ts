@@ -115,5 +115,9 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
       this.isDisabled = true
       this.form.controls.chipList.disable()
     }
+    else{
+      this.isDisabled = false
+      this.form.controls.chipList.enable()
+    }
   }
 }
