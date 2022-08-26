@@ -57,6 +57,7 @@ import { ScheduleViewEditComponent } from './project-board/schedule-view-edit/sc
 import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { ProductSingleDropdownComponent } from './common/product-single-dropdown/product-single-dropdown.component';
 import { ScheduleViewBulkEditComponent } from './project-board/schedule-view-bulk-edit/schedule-view-bulk-edit.component';
+import { ProjectTeamAddSingleComponent } from './project-team/project-team-add-single/project-team-add-single.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -174,7 +175,8 @@ export const projectRoutes: Route[] = [
     ScheduleTableComponent,
     ScheduleViewEditComponent,
     ProductSingleDropdownComponent,
-    ScheduleViewBulkEditComponent
+    ScheduleViewBulkEditComponent,
+    ProjectTeamAddSingleComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
