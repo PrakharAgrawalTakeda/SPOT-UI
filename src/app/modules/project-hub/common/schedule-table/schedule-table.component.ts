@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
 import * as moment from 'moment';
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-schedule-table',
@@ -52,18 +53,23 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     {
     if(moment(this.today) > moment(row.plannedFinish))
     {
-      var variance = 1 +  moment(this.today).diff(moment(row.baselineFinish),'days')
+      var variance = 1+ moment(this.today).diff(moment(row.baselineFinish),'days')
       return variance.toString()
     }
     else if(moment(this.today) < moment(row.plannedFinish))
     {
-      var variance = 1 + moment(row.plannedFinish).diff(moment(row.baselineFinish),'days')
+      var variance = 1+ moment(row.plannedFinish).diff(moment(row.baselineFinish),'days')
+      return variance.toString()
+    }
+    else if(moment(this.today) == moment(row.baselineFinish))
+    {
+      var variance = 0
       return variance.toString()
     }
   }
   else if(row.completionDate != null && row.baselineFinish != null && row.plannedFinish !=null)
   {
-    var variance = 1 + moment(row.completionDate).diff(moment(row.baselineFinish),'days')
+    var variance = moment(row.completionDate).diff(moment(row.baselineFinish),'days')
       return variance.toString()
   }
     else
