@@ -84,7 +84,7 @@ export class ScheduleViewEditComponent implements OnInit {
           //functionid: res.functionGroupId,
           includeInReport: res.includeInReport
         })
-        this.scheduleForm.controls['baselineFinish'].disable()
+        //this.scheduleForm.controls['baselineFinish'].disable()
 
         if(this.schedule.functionGroupId != "")
         {
@@ -113,7 +113,7 @@ export class ScheduleViewEditComponent implements OnInit {
         //functionid: "",
         includeInReport: false
       })
-      this.scheduleForm.controls['baselineFinish'].disable()
+      //this.scheduleForm.controls['baselineFinish'].disable()
 
      
       if (this.projecthubservice.all.length == 0) {

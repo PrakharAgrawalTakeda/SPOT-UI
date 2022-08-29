@@ -10,6 +10,8 @@ import { startWith, map } from 'rxjs';
 import { FuseAlertService } from '@fuse/components/alert';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import { ProjectApiService } from '../../common/project-api.service';
+import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
   selector: 'app-schedule-view-bulk-edit',
@@ -32,40 +34,27 @@ schedulengxdata: any = []
 //isclosed: boolean = false
 today = new Date()
 variance: any;
-   
-  // rows = [
-  //   {
-  //     "name":"Annappa",
-  //     "gender":"Male",
-  //     "joindate":"2017-03-20T09:17:39.118Z"
-      
-  //   },
-  //   {
-  //     "name":"Pavan",
-  //     "gender":"Male",
-  //     "joindate":"2017-03-15T23:47:18.465Z"
-      
-  //   },
-  //   {
-  //     "name":"Madhu",
-  //     "gender":"Female",
-  //     "joindate":"2017-03-15T23:44:08.283Z"
-      
-  //   },
-  //   {
-  //     "name":"Rajnish",
-  //     "gender":"Male",
-  //     "joindate":"2017-03-15T18:51:29.101Z"
-  //   },
-  //   {
-  //     "name":"Manish",
-  //     "gender":"Female",
-  //     "joindate":"2017-03-15T18:51:29.101Z"
-  //   }
-  // ];
-  constructor(public projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService) {
+formFieldHelpers: string[] = [''];
+  lookupdata: any = []
+  schedule: any = {}
+  item: any = {}
+  functionSets: any = []
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService) {
 
   }
+
+  schedulebulkeditForm = new FormGroup({
+    milestone: new FormControl(''),
+    plannedFinish: new FormControl(''),
+    baselineFinish: new FormControl(''),
+    comments: new FormControl(''),
+    completionDate: new FormControl(''),
+    usersingle: new FormControl(''),
+    usersingleid: new FormControl(''),
+    function: new FormControl({}),
+    //functionid: new FormControl(''),
+    includeInReport: new FormControl('')
+  }) 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.scheduleData = this.projecthubservice.all
@@ -83,6 +72,81 @@ variance: any;
     this.schedulengxdata = this.scheduleData
     //.filter(x => x.completionDate == null)
     console.log(this.scheduleData)
+    this.getllookup()
+  }
+
+  getllookup() {
+    this.auth.lookupMaster().then((resp: any) => {
+      this.lookupdata = resp
+        this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')      
+      //this.dataloader()
+      this.schedulebulkeditForm.controls.function.patchValue('')
+    })
+  }
+
+  dataloader() {
+    if (this.projecthubservice.itemid != "new") {
+      this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
+        this.schedule = res
+        console.log(this.projecthubservice)
+        console.log('res')
+        console.log(res)
+        this.schedulebulkeditForm.patchValue({
+          milestone: res.milestone,
+          plannedFinish: res.plannedFinish,
+          baselineFinish: res.baselineFinish,
+          comments: res.comments,
+          completionDate: res.completionDate,
+          usersingle: res.responsiblePersonName,
+          usersingleid: res.responsiblePersonId,
+          //functionid: res.functionGroupId,
+          includeInReport: res.includeInReport
+        })
+        this.schedulebulkeditForm.controls['baselineFinish'].disable()
+
+        if(this.schedule.functionGroupId != "")
+        {
+          this.schedulebulkeditForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId))
+        }
+
+        if (this.projecthubservice.all != []) {
+          if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
+            if (this.schedulebulkeditForm.value.includeInReport != true) {
+              this.schedulebulkeditForm.controls['includeInReport'].disable()
+            }
+          }
+        }
+        this.projecthubservice.isFormChanged = false
+      })
+    }
+    else {
+      this.schedulebulkeditForm.patchValue({
+        milestone: "",
+        plannedFinish: null,
+        baselineFinish: null,
+        comments: "",
+        completionDate: null,
+        usersingle: "",
+        usersingleid: "",
+        //functionid: "",
+        includeInReport: false
+      })
+      this.schedulebulkeditForm.controls['baselineFinish'].disable()
+
+     
+      if (this.projecthubservice.all.length == 0) {
+        console.log(this.projecthubservice.all)
+      }
+      else {
+        if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
+          this.schedulebulkeditForm.controls['includeInReport'].disable()
+        }
+      }
+      this.projecthubservice.isFormChanged = false
+    }
+    this.schedulebulkeditForm.valueChanges.subscribe(res => {
+      this.projecthubservice.isFormChanged = true
+    })
   }
 
   calculateVariance(row: any): string{
@@ -110,36 +174,6 @@ variance: any;
     }
   }
 
-  // changeschedule(event: any) {
-  //   console.log(event)
-  //   if (event.checked == true) {
-  //     this.schedulengxdata = this.scheduleData
-  //     this.isclosed = true
-  //     console.log(this.schedulengxdata)
-
-  //   }
-  //   else {
-  //     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-  //     this.isclosed = false
-  //     console.log(this.schedulengxdata)
-  //   }
-  // }
-  // islink(uid: string): boolean {
-  //   return this.projectViewDetails.links.some(x => x.linkItemId == uid)
-  // }
-  // getlinkname(uid: string): string {
-  //   let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
-  //   temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-  //   return "This milestone is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
-
-  // }
-  // onDetailToggle(event: any) {
-  //   console.log(event)
-  // }
-  // toggleExpandRow(row) {
-  //   console.log('Toggled Expand Row!', this.scheduleTable);
-  //   this.scheduleTable.rowDetail.toggleExpandRow(row);
-  // }
   updateValue(event, cell, rowIndex) {
     
     var val = event instanceof Date ? event :event.target.value;

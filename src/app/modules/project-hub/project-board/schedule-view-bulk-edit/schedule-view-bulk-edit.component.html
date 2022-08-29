@@ -7,13 +7,15 @@
     </a>
   </div>
 </div>
+<form class="w-full form-ask-need" [formGroup]="schedulebulkeditForm" (ngSubmit)="submitschedule()"
+    style="overflow-y: scroll; height: 95vh;">
 
 <div class="flex items-start justify-between">
 
   <div style="padding-left: 1%;padding-top: 10px;padding-bottom: 10px;">
-    <button class="w-20" mat-flat-button [color]="'primary'" type="submit" (ngSubmit)="submitschedule()">
-        Submit
-    </button>
+    <button class="w-20" mat-flat-button [color]="'primary'" type="submit">
+      Submit
+  </button>
   </div>
   <div style="padding-right: 90%;padding-top: 10px;padding-bottom: 10px;">
   <a class="w-20" mat-flat-button [color]="'primary'"
@@ -157,3 +159,4 @@
         </ngx-datatable-column>
         </ngx-datatable>
       </div>
+      </form>
