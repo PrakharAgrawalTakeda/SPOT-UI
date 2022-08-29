@@ -30,6 +30,9 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.scheduleData = this.projectViewDetails.scheduleData
+    for( var i of this.scheduleData){
+      i.variance = this.calculateVariance(i)
+    }
     console.log(this.scheduleData)
     if (this.isclosed == false) {
       this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
