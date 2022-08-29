@@ -49,18 +49,18 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     {
     if(moment(this.today) > moment(row.plannedFinish))
     {
-      var variance = moment(this.today).diff(moment(row.baselineFinish),'days')
+      var variance = 1 +  moment(this.today).diff(moment(row.baselineFinish),'days')
       return variance.toString()
     }
     else if(moment(this.today) < moment(row.plannedFinish))
     {
-      var variance = moment(row.plannedFinish).diff(moment(row.baselineFinish),'days')
+      var variance = 1 + moment(row.plannedFinish).diff(moment(row.baselineFinish),'days')
       return variance.toString()
     }
   }
   else if(row.completionDate != null && row.baselineFinish != null && row.plannedFinish !=null)
   {
-    var variance = moment(row.completionDate).diff(moment(row.baselineFinish),'days')
+    var variance = 1 + moment(row.completionDate).diff(moment(row.baselineFinish),'days')
       return variance.toString()
   }
     else
