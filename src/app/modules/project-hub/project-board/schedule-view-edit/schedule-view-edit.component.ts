@@ -85,6 +85,7 @@ export class ScheduleViewEditComponent implements OnInit {
           includeInReport: res.includeInReport
         })
         //this.scheduleForm.controls['baselineFinish'].disable()
+        //this.scheduleForm.controls['plannedFinish'].disable()
 
         if(this.schedule.functionGroupId != "")
         {
@@ -114,6 +115,7 @@ export class ScheduleViewEditComponent implements OnInit {
         includeInReport: false
       })
       //this.scheduleForm.controls['baselineFinish'].disable()
+      //this.scheduleForm.controls['plannedFinish'].disable()
 
      
       if (this.projecthubservice.all.length == 0) {
@@ -230,9 +232,9 @@ export class ScheduleViewEditComponent implements OnInit {
          if (mainObj.baselineFinish == "Invalid date") {
           mainObj.baselineFinish = null
         }
-        if (mainObj.baselineFinish == moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')) {
-          mainObj.baselineFinish = null
-        }
+        // if (mainObj.baselineFinish == moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')) {
+        //   mainObj.baselineFinish = null
+        // }
 
         console.log("final object")
         console.log(mainObj)
