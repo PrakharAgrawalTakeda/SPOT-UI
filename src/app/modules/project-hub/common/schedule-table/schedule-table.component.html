@@ -73,7 +73,7 @@
 
         <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p [ngClass]="{'closed': row.completionDate != null}">{{calculateVariance(row)}}</p>
+                <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
 
