@@ -77,8 +77,9 @@ export class SpotInputDateComponent implements OnInit, ControlValueAccessor {
     this.onChange = fn;
   }
 
-  writeValue(val: string) {
+  writeValue(val: any) {
     this.control.setValue(val);
+    this.onChange(val)
   }
   getMax(): Date{
     if(this.max == 'today'){

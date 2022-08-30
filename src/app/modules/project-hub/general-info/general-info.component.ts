@@ -40,6 +40,9 @@ export class GeneralInfoComponent implements OnInit {
     this.generalInfoForm.controls.otherImpactedProducts.valueChanges.subscribe(res => {
       console.log(res)
     })
+    this.generalInfoForm.valueChanges.subscribe(res=>{
+      console.log('Form Vlaue',this.generalInfoForm.getRawValue()['recordCreationDate'])
+    })
   }
   ngOnInit(): void {
     this.dataloader()
