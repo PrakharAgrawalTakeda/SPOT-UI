@@ -31,7 +31,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.scheduleData = this.projectViewDetails.scheduleData
-    for( var i of this.scheduleData){
+    for (var i of this.scheduleData) {
       i.variance = this.calculateVariance(i)
     }
     console.log(this.scheduleData)
@@ -48,29 +48,40 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
   }
 
-  calculateVariance(row: any): string{
-    if(row.completionDate == null && row.baselineFinish != null && row.plannedFinish !=null)
-    {
-    if(moment(this.today) > moment(row.plannedFinish))
-    {
-      var variance =  moment(this.today).diff(moment(row.baselineFinish),'days')
-      console.log(this.today.getDate())
-      console.log(moment(row.baselineFinish).date())
+  calculateVariance(row: any): string {
+    console.log(moment(this.today).format('L'))
+    console.log('baseline', row.baselineFinish)
+    var datetoday = new Date(moment(this.today).format('L'))
+    var datebaseline = new Date(moment(row.baselineFinish).format('L'))
+    var dateplanned = new Date(moment(row.plannedFinish).format('L'))
+    var datecompletion = new Date(moment(row.completionDate).format('L'))
+
+
+
+    if (row.completionDate == null && row.baselineFinish != null && row.plannedFinish != null) {
+      if (moment(this.today) > moment(row.plannedFinish)) {
+        var Time1 = datetoday.getTime() - datebaseline.getTime();
+        var Days1 = Time1 / (1000 * 3600 * 24)
+
+        var variance = Math.round(Days1)
+        return variance.toString()
+
+
+      }
+      else if (moment(this.today) < moment(row.plannedFinish)) {
+        var Time2 = dateplanned.getTime() - datebaseline.getTime();
+        var Days2 = Time2 / (1000 * 3600 * 24)
+        var variance = Math.round(Days2)
+        return variance.toString()
+      }
+    }
+    else if (row.completionDate != null && row.baselineFinish != null && row.plannedFinish != null) {
+      var Time3 = datecompletion.getTime() - datebaseline.getTime();
+      var Days3 = Time3 / (1000 * 3600 * 24)
+      var variance = Math.round(Days3)
       return variance.toString()
     }
-    else if(moment(this.today) < moment(row.plannedFinish))
-    {
-      var variance =  moment(row.plannedFinish).diff(moment(row.baselineFinish),'days')
-      return variance.toString()
-    }
-  }
-  else if(row.completionDate != null && row.baselineFinish != null && row.plannedFinish !=null)
-  {
-    var variance = moment(row.completionDate).diff(moment(row.baselineFinish),'days')
-      return variance.toString()
-  }
-    else
-    {
+    else {
       return "N/A"
     }
   }
