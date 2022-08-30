@@ -31,7 +31,10 @@ export class GeneralInfoComponent implements OnInit {
     projectManager: new FormControl(''),
     projectDescription: new FormControl(''),
     primaryProduct: new FormControl({}),
-    otherImpactedProducts: new FormControl([])
+    otherImpactedProducts: new FormControl([]),
+    portfolioOwner: new FormControl({}),
+    excecutionScope: new FormControl([]),
+    enviornmentalPortfolio: new FormControl({}),
   })
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   formFieldHelpers: any
@@ -60,11 +63,12 @@ export class GeneralInfoComponent implements OnInit {
           projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
           projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
           submittedBy: res.projectData.problemOwnerName,
-          projectManager: res.pm.pm,
-          sponsor: res.pm.sponsor,
+          projectManager: res.portfolioCenterData.pm,
+          sponsor: res.portfolioCenterData.sponsor,
           projectDescription: res.projectData.projectDescription,
           primaryProduct: res.primaryProduct,
-          otherImpactedProducts: res.otherImpactedProducts
+          otherImpactedProducts: res.otherImpactedProducts,
+          enviornmentalPortfolio: res.enviornmentalPortfolio
         })
       })
     })
@@ -79,6 +83,17 @@ export class GeneralInfoComponent implements OnInit {
     this.generalInfoForm.controls.projectManager.disable()
     this.generalInfoForm.controls.sponsor.disable()
   }
+
+  getPortfolioOwner(): any {
+    return this.filterCriteria.portfolioOwner
+  }
+  getExcecutionScope(): any {
+    return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
+  }
+  getEnviornmentPortfolio(): any {
+    return this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
+  }
+
 
   submitGeneralInfo() {
 
