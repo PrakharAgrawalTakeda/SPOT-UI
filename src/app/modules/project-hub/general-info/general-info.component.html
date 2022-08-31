@@ -1,4 +1,4 @@
-<div class="w-full min-w-0 p-8 pt-0" *ngIf="viewContent">
+<div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
   <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate ">
     <h3 class="text-xl text-primary">General Info</h3>
   </div>
@@ -113,7 +113,7 @@
       </div>
     </div>
     <div class="mt-6 flex justify-between items-center">
-      <button class="w-25" mat-flat-button [color]="'primary'" (click)="reset()">
+      <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="reset()">
         Cancel
       </button>
       <button class="w-25" mat-flat-button [color]="'primary'" type="submit">

@@ -146,7 +146,7 @@ export class GeneralInfoComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "b137412d-8008-4446-8fe6-c56a06b83174")
   }
   reset() {
-    this.dataloader()
+    this.router.navigate(['project-hub/'+this.id+'/project-board'])
   }
   submitGeneralInfo() {
     var formValue = this.generalInfoForm.getRawValue()
