@@ -1,5 +1,5 @@
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectApiService } from '../common/project-api.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
+import { ProjectHubService } from '../project-hub.service';
 
 @Component({
   selector: 'app-general-info',
@@ -49,10 +50,23 @@ export class GeneralInfoComponent implements OnInit {
   })
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   formFieldHelpers: any
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private portApiService: PortfolioApiService, private authService: AuthService) {
+  constructor(private apiService: ProjectApiService, 
+    private _Activatedroute: ActivatedRoute, 
+    private portApiService: PortfolioApiService, 
+    private authService: AuthService, 
+    private projectHubService: ProjectHubService,
+    private router:Router) {
 
     this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
-      console.log(res)
+      if (this.viewContent == true) {
+        if (res == false) {
+          this.generalInfoForm.controls.oeprojectType.patchValue({})
+        }
+        else {
+          this.generalInfoForm.controls.oeprojectType.patchValue(this.generalInfoData.projectData.oeprojectType == '' ? {} : this.lookUpData.find(x => x.lookUpId == this.generalInfoData.projectData.oeprojectType))
+        }
+      }
+
     })
   }
   ngOnInit(): void {
@@ -131,8 +145,33 @@ export class GeneralInfoComponent implements OnInit {
   getProductionStep(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "b137412d-8008-4446-8fe6-c56a06b83174")
   }
-
+  reset() {
+    this.dataloader()
+  }
   submitGeneralInfo() {
-
+    var formValue = this.generalInfoForm.getRawValue()
+    var submitObj = this.generalInfoData.projectData
+    submitObj.problemTitle = formValue.problemTitle
+    submitObj.parentProgramId = formValue.projectsingleid
+    submitObj.problemType = formValue.problemType
+    submitObj.projectDescription = formValue.projectDescription
+    submitObj.primaryProductId = formValue.primaryProduct.productId
+    submitObj.otherImpactedProducts =  formValue.otherImpactedProducts.length>0?formValue.otherImpactedProducts.map(x=>x.productId).join():''
+    submitObj.portfolioOwnerId = formValue.portfolioOwner.portfolioOwnerId
+    submitObj.executionScope=  formValue.excecutionScope.length>0?formValue.excecutionScope.map(x=>x.portfolioOwnerId).join():''
+    submitObj.emissionPortfolioId = formValue.enviornmentalPortfolio.portfolioOwnerId
+    submitObj.isOeproject = formValue.isOeproject
+    submitObj.oeprojectType = formValue.oeprojectType.lookUpId
+    submitObj.isCapsProject = formValue.isCapsProject
+    submitObj.isTechTransfer = formValue.isTechTransfer
+    submitObj.productionStepId = formValue.productionStepId
+    submitObj.campaignPhaseId = formValue.campaignPhaseId
+    submitObj.campaignTypeId = formValue.campaignTypeId
+    console.log('Final Object',submitObj)
+    this.apiService.editGeneralInfo(this.id,submitObj).then(res=>{
+      console.log("Success",res)
+      this.projectHubService.isNavChanged.next(true)
+      this.router.navigate(['project-hub/'+this.id+'/project-board'])
+    })
   }
 }
