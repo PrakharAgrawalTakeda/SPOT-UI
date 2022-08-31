@@ -171,6 +171,7 @@ export class GeneralInfoComponent implements OnInit {
     this.apiService.editGeneralInfo(this.id,submitObj).then(res=>{
       console.log("Success",res)
       this.projectHubService.isNavChanged.next(true)
+      this.projectHubService.successSave.next(true)
       this.router.navigate(['project-hub/'+this.id+'/project-board'])
     })
   }

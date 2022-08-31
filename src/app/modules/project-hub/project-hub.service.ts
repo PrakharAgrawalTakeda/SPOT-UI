@@ -19,6 +19,7 @@ export class ProjectHubService {
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
   isFormChanged: boolean = false
+  successSave = new BehaviorSubject<boolean>(false)
   isBulkEdit: boolean = false
   roleControllerControl: RoleController = new RoleController
 

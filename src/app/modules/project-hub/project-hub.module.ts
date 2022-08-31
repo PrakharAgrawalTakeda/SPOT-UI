@@ -40,6 +40,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-single-dropdown.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -209,6 +210,7 @@ export const projectRoutes: Route[] = [
     MatMomentDateModule,
     MatAutocompleteModule,
     MatTooltipModule,
+    MatSnackBarModule,
     FuseAlertModule,
     SpotFormsModule
   ]

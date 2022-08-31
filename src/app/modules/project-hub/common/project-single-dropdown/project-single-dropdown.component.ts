@@ -13,6 +13,9 @@ export class ProjectSingleDropdownComponent implements OnInit {
 
   @Input() formgroup: FormGroup;
   @Input() label: string;
+  @Input() showHint: boolean = false
+  @Input() hint: string = ''
+  
   options: string[] = ['One', 'Two', 'Three'];
   resultSets: any[];
   minLength = 4

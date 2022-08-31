@@ -8,6 +8,7 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import { ProjectHubService } from './project-hub.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Title } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
     selector: 'app-project-hub',
     templateUrl: './project-hub.component.html',
@@ -55,10 +56,24 @@ export class ProjectHubComponent implements OnInit {
         }
     ]
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, public _fuseNavigationService: FuseNavigationService, private titleService: Title) {
+    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, 
+        private apiService: ProjectApiService, 
+        private _Activatedroute: ActivatedRoute, 
+        public indicator: SpotlightIndicatorsService, 
+        public projecthubservice: ProjectHubService, 
+        public _fuseNavigationService: FuseNavigationService, 
+        private titleService: Title,
+        private snack: MatSnackBar) {
         this.projecthubservice.isNavChanged.subscribe(res => {
             if (res == true) {
                 this.getdata()
+            }
+        })
+        this.projecthubservice.successSave.subscribe(res => {
+            if (res == true) {
+                this.snack.open("The information has been saved successfully","",{
+                    duration: 2000,
+                    panelClass:["bg-primary","text-on-primary"]})
             }
         })
     }
