@@ -118,6 +118,7 @@ export class GeneralInfoComponent implements OnInit {
 
   disabler() {
     this.generalInfoForm.controls.topsGroup.disable()
+    this.generalInfoForm.controls.problemType.disable()
     this.generalInfoForm.controls.recordCreationDate.disable()
     this.generalInfoForm.controls.submittedBy.disable()
     this.generalInfoForm.controls.projectManager.disable()
