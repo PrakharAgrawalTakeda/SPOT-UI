@@ -3,6 +3,8 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import { ProjectHubService } from '../../project-hub.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common'
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { ProjectApiService } from '../project-api.service';
 
 @Component({
   selector: 'app-schedule-table',
@@ -27,7 +29,13 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   isclosed: boolean = false
   today = new Date()
   variance: any;
-  constructor(public projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService) { }
+  constructor(public projecthubservice: ProjectHubService, 
+    private indicator: SpotlightIndicatorsService,
+    private apiService: ProjectApiService,
+    public fuseAlert: FuseConfirmationService) { }
+
+
+
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.scheduleData = this.projectViewDetails.scheduleData
@@ -85,7 +93,39 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       return "N/A"
     }
   }
+  deleteSchedule(id: string) {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Milestone?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const scheduleAlert = this.fuseAlert.open(comfirmConfig)
 
+    scheduleAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.deleteSchedule(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
+
+  }
   changeschedule(event: any) {
     console.log(event)
     if (event.checked == true) {

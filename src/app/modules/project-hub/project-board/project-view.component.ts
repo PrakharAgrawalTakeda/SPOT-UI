@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
@@ -62,7 +63,15 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   //hubsettings
   hubsetting: any = {}
 
-  constructor(private apiService: ProjectApiService,private roleController: RoleService,private _Activatedroute: ActivatedRoute, private auth: AuthService, public indicator: SpotlightIndicatorsService, public projecthubservice: ProjectHubService, private _router: Router, private changeDetector: ChangeDetectorRef) {
+  constructor(private apiService: ProjectApiService,
+    private roleController: RoleService,
+    private _Activatedroute: ActivatedRoute,
+    private auth: AuthService,
+    public indicator: SpotlightIndicatorsService,
+    public projecthubservice: ProjectHubService,
+    private _router: Router,
+    private changeDetector: ChangeDetectorRef,
+    public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.checkedan = false;
@@ -76,26 +85,26 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
     this.dataloader()
   }
   ngAfterViewChecked(): void {
-      if (document.getElementById('overall-status') != null) {
-        this.collapseLogic();
-        this.changeDetector.detectChanges()
+    if (document.getElementById('overall-status') != null) {
+      this.collapseLogic();
+      this.changeDetector.detectChanges()
     }
   }
 
   collapseLogic() {
     this.isEverythingLoaded = true
-   // console.log(document.getElementById('ra').scrollHeight)
-   // console.log(document.getElementById('ra').clientHeight)
+    // console.log(document.getElementById('ra').scrollHeight)
+    // console.log(document.getElementById('ra').clientHeight)
     if (
       (document.getElementById('sd').scrollHeight > document.getElementById('sd').clientHeight ||
-      document.getElementById('ra').scrollHeight > document.getElementById('ra').clientHeight ||
-      document.getElementById('ns').scrollHeight > document.getElementById('ns').clientHeight || this.overallCollapseControll == true)
+        document.getElementById('ra').scrollHeight > document.getElementById('ra').clientHeight ||
+        document.getElementById('ns').scrollHeight > document.getElementById('ns').clientHeight || this.overallCollapseControll == true)
     ) {
-     // console.log("if")
+      // console.log("if")
       this.overallCollapse = true
     }
-    else{
-     // console.log("else")
+    else {
+      // console.log("else")
       this.overallCollapse = false
     }
   }
@@ -111,10 +120,10 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
 
   }
   dataloader() {
-    if(this.overallCollapseControll == true){
+    if (this.overallCollapseControll == true) {
       this.collapseToggle()
     }
-   this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
       this.projectViewDetails = res
       this.hubsetting = {
@@ -194,6 +203,40 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   }
   getlookup(key) {
     return this.lookupmaster.get(key)
+  }
+
+  deleteAskNeed(id: string) {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Ask Need?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+
+    askNeedAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.deleteAskNeed(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
+
   }
 
   ngOnDestroy(): void {

@@ -253,6 +253,11 @@
                                 (click)="projecthubservice.toggleDrawerOpen('AskNeed', row.askNeedUniqueId, projectViewDetails.askNeedData)">
                                 <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
                             </a>
+                            <a href="javascript:void(0)" title="Delete Single"
+                                *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
+                                (click)="deleteAskNeed(row.askNeedUniqueId)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
                         </div>
                     </ng-template>
                 </ngx-datatable-column>

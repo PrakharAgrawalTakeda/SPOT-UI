@@ -4,10 +4,9 @@
     <div class="text-primary">
         <div class="flex items-start justify-between">
             <div style="padding-right: 0px">
-                <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
-                            *ngIf="editable"
-                            (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)">
-                <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
+                <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'" *ngIf="editable"
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)">
+                    <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
@@ -29,8 +28,8 @@
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="schedulengxdata"
-         #scheduleTable [rowClass]="getRowClass">
-         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
+        #scheduleTable [rowClass]="getRowClass">
+        <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
@@ -90,6 +89,10 @@
                         (click)="projecthubservice.toggleDrawerOpen('Schedule', row.scheduleUniqueId, projectViewDetails.scheduleData)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
+                    </a>
+                    <a href="javascript:void(0)" title="Delete Single" *ngIf="editable"
+                        (click)="deleteSchedule(row.scheduleUniqueId)">
+                        <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                     </a>
                 </div>
             </ng-template>

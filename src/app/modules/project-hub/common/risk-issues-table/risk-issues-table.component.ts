@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { ProjectApiService } from '../project-api.service';
 
 @Component({
   selector: 'app-risk-issues-table',
@@ -23,7 +25,10 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   };
   riskIssuesngxdata: any = []
   isclosed: boolean = false
-  constructor(public projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService) { }
+  constructor(public projecthubservice: ProjectHubService, 
+    private indicator: SpotlightIndicatorsService,
+    public fuseAlert: FuseConfirmationService,
+    private apiService: ProjectApiService) { }
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
@@ -61,6 +66,40 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
     return "This risk/issue is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+
+  }
+
+  deleteRiskIssue(id: string) {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Risk/Issue?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
+
+    riskIssueAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.deleteRiskIssue(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
 
   }
   onDetailToggle(event: any) {
