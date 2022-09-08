@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectApiService } from '../common/project-api.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as moment from 'moment';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
@@ -48,14 +48,16 @@ export class GeneralInfoComponent implements OnInit {
     campaignTypeId: new FormControl(''),
     isQualityRef: new FormControl(false),
   })
+  qrTableEditStack: any = []
+  qualityRefForm = new FormArray([])
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   formFieldHelpers: any
-  constructor(private apiService: ProjectApiService, 
-    private _Activatedroute: ActivatedRoute, 
-    private portApiService: PortfolioApiService, 
-    private authService: AuthService, 
+  constructor(private apiService: ProjectApiService,
+    private _Activatedroute: ActivatedRoute,
+    private portApiService: PortfolioApiService,
+    private authService: AuthService,
     private projectHubService: ProjectHubService,
-    private router:Router) {
+    private router: Router) {
 
     this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
@@ -66,7 +68,10 @@ export class GeneralInfoComponent implements OnInit {
           this.generalInfoForm.controls.oeprojectType.patchValue(this.generalInfoData.projectData.oeprojectType == '' ? {} : this.lookUpData.find(x => x.lookUpId == this.generalInfoData.projectData.oeprojectType))
         }
       }
+    })
 
+    this.qualityRefForm.valueChanges.subscribe(res => {
+      console.log("QR form Value", this.qualityRefForm.getRawValue())
     })
   }
   ngOnInit(): void {
@@ -106,8 +111,18 @@ export class GeneralInfoComponent implements OnInit {
             productionStepId: res.projectData.productionStepId,
             campaignPhaseId: res.projectData.campaignPhaseId,
             campaignTypeId: res.projectData.campaignTypeId,
-            isQualityRef: false,
+            isQualityRef: res.qualityReferences.length != 0,
           })
+          if (res.qualityReferences.length != 0) {
+            for (var i of res.qualityReferences) {
+              this.qualityRefForm.push(new FormGroup({
+                qualityUniqueId: new FormControl(i.qualityUniqueId),
+                qualityReferenceType: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
+                qualityReference: new FormControl(i.qualityReference1)
+              }))
+            }
+          }
+          console.log(this.qualityRefForm.getRawValue())
           this.viewContent = true
         })
       })
@@ -123,7 +138,13 @@ export class GeneralInfoComponent implements OnInit {
     this.generalInfoForm.controls.projectManager.disable()
     this.generalInfoForm.controls.sponsor.disable()
   }
-
+  addQrRecord() {
+    this.qualityRefForm.push(new FormGroup({
+      qualityUniqueId: new FormControl(''),
+      qualityReferenceType: new FormControl({}),
+      qualityReference: new FormControl('')
+    }))
+  }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner
   }
@@ -145,8 +166,16 @@ export class GeneralInfoComponent implements OnInit {
   getProductionStep(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "b137412d-8008-4446-8fe6-c56a06b83174")
   }
+  getQRType(): any {
+    return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
+  }
+  qrTableEditRow(row: number) {
+    if (!this.qrTableEditStack.includes(row)) {
+      this.qrTableEditStack.push(row)
+    }
+  }
   reset() {
-    this.router.navigate(['project-hub/'+this.id+'/project-board'])
+    this.router.navigate(['project-hub/' + this.id + '/project-board'])
   }
   submitGeneralInfo() {
     var formValue = this.generalInfoForm.getRawValue()
@@ -156,9 +185,9 @@ export class GeneralInfoComponent implements OnInit {
     submitObj.problemType = formValue.problemType
     submitObj.projectDescription = formValue.projectDescription
     submitObj.primaryProductId = formValue.primaryProduct.productId
-    submitObj.otherImpactedProducts =  formValue.otherImpactedProducts.length>0?formValue.otherImpactedProducts.map(x=>x.productId).join():''
+    submitObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
     submitObj.portfolioOwnerId = formValue.portfolioOwner.portfolioOwnerId
-    submitObj.executionScope=  formValue.excecutionScope.length>0?formValue.excecutionScope.map(x=>x.portfolioOwnerId).join():''
+    submitObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     submitObj.emissionPortfolioId = formValue.enviornmentalPortfolio.portfolioOwnerId
     submitObj.isOeproject = formValue.isOeproject
     submitObj.oeprojectType = formValue.oeprojectType.lookUpId
@@ -167,12 +196,12 @@ export class GeneralInfoComponent implements OnInit {
     submitObj.productionStepId = formValue.productionStepId
     submitObj.campaignPhaseId = formValue.campaignPhaseId
     submitObj.campaignTypeId = formValue.campaignTypeId
-    console.log('Final Object',submitObj)
-    this.apiService.editGeneralInfo(this.id,submitObj).then(res=>{
-      console.log("Success",res)
+    console.log('Final Object', submitObj)
+    this.apiService.editGeneralInfo(this.id, submitObj).then(res => {
+      console.log("Success", res)
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.successSave.next(true)
-      this.router.navigate(['project-hub/'+this.id+'/project-board'])
+      this.router.navigate(['project-hub/' + this.id + '/project-board'])
     })
   }
 }
