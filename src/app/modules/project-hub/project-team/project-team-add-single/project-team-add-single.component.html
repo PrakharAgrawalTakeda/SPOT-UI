@@ -9,7 +9,8 @@
 <form class="w-full form-ask-need" [formGroup]="projectTeamAddForm" (ngSubmit)="submitProjectTeam()"
     style="overflow-y: scroll; height: 95vh;">
     
-    <app-user-single-dropdown [formgroup]="projectTeamAddForm" [label]="'Need From'"></app-user-single-dropdown>
+    <spot-singleselect-user-autocomplete formControlName="usersingle" name="usersingle" [label]="'Team Member(s)'" [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+    </spot-singleselect-user-autocomplete>
     <spot-singleselect-autocomplete formControlName="role" name="role" [label]="'Role'" [placeholder]="'Role'"
         [valuePointer]="'lookUpName'" [dropDownArray]="getRoles()">
     </spot-singleselect-autocomplete>

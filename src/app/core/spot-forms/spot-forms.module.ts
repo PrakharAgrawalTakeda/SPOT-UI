@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { SpotSingleselectUserAutocompleteComponent } from './spot-singleselect-user-autocomplete/spot-singleselect-user-autocomplete.component';
 
 
 
@@ -27,7 +28,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     SpotInputDateComponent,
     SpotMultiselectAutocompleteComponent,
     SpotSingleselectAutocompleteComponent,
-    SpotTextareaComponent
+    SpotTextareaComponent,
+    SpotSingleselectUserAutocompleteComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     SpotInputDateComponent,
     SpotMultiselectAutocompleteComponent,
     SpotSingleselectAutocompleteComponent,
-    SpotTextareaComponent
+    SpotTextareaComponent,
+    SpotSingleselectUserAutocompleteComponent,
   ]
 })
 export class SpotFormsModule { }
