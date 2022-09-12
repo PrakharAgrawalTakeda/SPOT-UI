@@ -72,9 +72,7 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
     )
   }
   changeInput() {
-    if (this.selectedOption != {}) {
-      this.form.controls.control.patchValue(this.selectedOption[this.valuePointer])
-    }
+    this.form.controls.control.patchValue(this.selectedOption[this.valuePointer])
   }
   ngOnInit() {
   }
@@ -97,11 +95,11 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
   }
 
   writeValue(val: any) {
-    if(val != null){
+    if (val != null) {
       this.form.controls.control.patchValue(val[this.valuePointer]);
       this.selectedOption = val
     }
-   
+
   }
 
   setDisabledState(isDisabled: boolean) {

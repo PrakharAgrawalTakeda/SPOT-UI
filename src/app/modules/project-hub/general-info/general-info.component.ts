@@ -184,13 +184,13 @@ export class GeneralInfoComponent implements OnInit {
     submitObj.parentProgramId = formValue.projectsingleid
     submitObj.problemType = formValue.problemType
     submitObj.projectDescription = formValue.projectDescription
-    submitObj.primaryProductId = formValue.primaryProduct.productId
+    submitObj.primaryProductId = formValue.primaryProduct?formValue.primaryProduct.productId:''
     submitObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
     submitObj.portfolioOwnerId = formValue.portfolioOwner.portfolioOwnerId
     submitObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     submitObj.emissionPortfolioId = formValue.enviornmentalPortfolio.portfolioOwnerId
     submitObj.isOeproject = formValue.isOeproject
-    submitObj.oeprojectType = formValue.oeprojectType.lookUpId
+    submitObj.oeprojectType =formValue.oeprojectType?formValue.oeprojectType.lookUpId:''
     submitObj.isCapsProject = formValue.isCapsProject
     submitObj.isTechTransfer = formValue.isTechTransfer
     submitObj.productionStepId = formValue.productionStepId

@@ -45,7 +45,7 @@ export class OverallStatusEditComponent implements OnInit {
     overallStatusDescription: new FormControl(''),
     recentAccomplishments: new FormControl(''),
     statusLastUpdated: new FormControl(''),
-    statusThrough: new FormControl(''),
+    statusThrough: new FormControl(this.today),
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) { }
 
@@ -59,7 +59,7 @@ export class OverallStatusEditComponent implements OnInit {
         overallStatusDescription: res.overallStatusDescription,
         recentAccomplishments: res.recentAccomplishments,
         statusLastUpdated: res.statusLastUpdated,
-        statusThrough: res.statusThrough,
+        //statusThrough: res.statusThrough,
       })
       if(res.statusLastUpdated == null){
         this.overallStatusform.patchValue({
