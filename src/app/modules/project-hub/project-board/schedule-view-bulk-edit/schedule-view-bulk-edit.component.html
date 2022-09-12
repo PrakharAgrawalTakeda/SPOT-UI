@@ -7,10 +7,22 @@
     </a>
   </div>
 </div>
-<form class="w-full form-ask-need" [formGroup]="schedulebulkeditForm" (ngSubmit)="submitschedule()"
-    style="overflow-y: scroll; height: 95vh;">
+<!-- <form class="w-full form-ask-need" [formGroup]="schedulebulkeditForm" (ngSubmit)="submitschedule()"
+    style="overflow-y: scroll; height: 95vh;"> -->
 
-<div class="flex items-start justify-between">
+    <div class="mt-6 flex justify-between items-center">
+      <button class="w-15" mat-flat-button [color]="'primary'" type="button" (click)="addMilestoneRecord()">
+        Add New
+      </button>
+      <button class="w-15" mat-flat-button [color]="'primary'" type="button" (click)="reset()">
+        Cancel
+      </button>
+      <button class="w-15" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
+        Submit
+      </button>
+    </div>
+
+<!-- <div class="flex items-start justify-between">
 
   <div style="padding-left: 1%;padding-top: 10px;padding-bottom: 10px;">
     <button class="w-20" mat-flat-button [color]="'primary'" type="submit">
@@ -24,10 +36,116 @@
   </a>
 </div>
 
-</div>
+</div> -->
  <!-- <div class="overflow-x-auto mx-6">
     </div>  -->
-    <div class="overflow-x-auto mx-6">
+    <div class="mt-3">
+      <ngx-datatable
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
+        [rows]="scheduleData.scheduleData"
+        #scheduleTable
+        columnMode="flex"
+        [headerHeight]="'auto'"
+        [rowHeight]="'auto'"
+        [scrollbarV]="false">
+        <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false"
+          [flexGrow]="1">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{value}}</a>
+            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+              <spot-input formControlName="milestone" name="milestone" [showLabel]="false"
+                [placeholder]="'Milestone Name'">
+              </spot-input>
+            </form>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [flexGrow]="1">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{value | date:'dd-MMM-yyyy'}}</a>
+            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+              <spot-input-date formControlName="plannedFinish" name="plannedFinish" [showLabel]="false"
+        [placeholder]="'Planned Finish Date'"></spot-input-date>
+            </form>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [flexGrow]="1">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{value | date:'dd-MMM-yyyy'}}</a>
+            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+              <spot-input-date formControlName="baselineFinish" name="baselineFinish" [showLabel]="false"
+        [placeholder]="'Baseline Finish Date'"></spot-input-date>
+            </form>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [flexGrow]="1">
+          <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+            
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{calculateVariance(row)}}</a>
+          
+          </ng-template>
+        </ngx-datatable-column>
+        <!-- <ngx-datatable-column name="Responsible Person" prop="functionGroupId" [resizeable]="false"
+            [flexGrow]="1">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{value}}</a>
+              <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                <spot-singleselect-autocomplete formControlName="function"
+                [showLabel]="false" [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'"
+                  [dropDownArray]="getFunctionOwner()">
+                </spot-singleselect-autocomplete>
+              </form>
+            </ng-template>
+          </ngx-datatable-column> -->
+        <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false"
+            [flexGrow]="1">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{value}}</a>
+              <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                <spot-singleselect-autocomplete formControlName="function"
+                [showLabel]="false" [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'"
+                  [dropDownArray]="getFunctionOwner()">
+                </spot-singleselect-autocomplete>
+              </form>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false" [flexGrow]="1">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{value | date:'dd-MMM-yyyy'}}</a>
+              <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                <spot-input-date formControlName="completionDate" name="completionDate" [showLabel]="false"
+          [placeholder]="'Completion Date'"></spot-input-date>
+              </form>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false"
+          [flexGrow]="1">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">{{value}}</a>
+            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+              <spot-input formControlName="comments" name="comments" [showLabel]="false"
+                [placeholder]="'Comments'">
+              </spot-input>
+            </form>
+          </ng-template>
+        </ngx-datatable-column>
+        <!-- <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false"
+        [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+        <mat-slide-toggle
+            [matTooltip]="this.scheduleForm.controls['includeInReport'].disabled ? 'Only 8 can be selected at a time for dashboard report display' : null"
+            formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
+            
+          </ng-template>
+        </ngx-datatable-column> -->
+      </ngx-datatable>
+    </div>
+
+
+
+
+
+
+    <!-- <div class="overflow-x-auto mx-6">
     <ngx-datatable
         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
         [rows]="schedulengxdata"
@@ -107,7 +225,7 @@
               [value]="value"
             />
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
         <!-- <ngx-datatable-column name="Function Owner" prop="functionGroupId">
           <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
             <span
@@ -125,7 +243,7 @@
             />
           </ng-template>
         </ngx-datatable-column> -->
-        <ngx-datatable-column name="Completion Date" prop="completionDate">
+        <!-- <ngx-datatable-column name="Completion Date" prop="completionDate">
           <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
             <span
               title="Double click to edit"
@@ -158,5 +276,5 @@
           </ng-template>
         </ngx-datatable-column>
         </ngx-datatable>
-      </div>
-      </form>
+      </div> -->
+      <!-- </form> -->

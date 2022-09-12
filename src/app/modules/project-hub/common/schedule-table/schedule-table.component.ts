@@ -57,8 +57,6 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   }
 
   calculateVariance(row: any): string {
-    console.log(moment(this.today).format('L'))
-    console.log('baseline', row.baselineFinish)
     var datetoday = new Date(moment(this.today).format('L'))
     var datebaseline = new Date(moment(row.baselineFinish).format('L'))
     var dateplanned = new Date(moment(row.plannedFinish).format('L'))
