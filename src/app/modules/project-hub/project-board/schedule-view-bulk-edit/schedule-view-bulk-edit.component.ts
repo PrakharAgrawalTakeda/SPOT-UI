@@ -22,8 +22,7 @@ import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.
   selector: 'app-schedule-view-bulk-edit',
   templateUrl: './schedule-view-bulk-edit.component.html',
   styleUrls: ['./schedule-view-bulk-edit.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ScheduleViewBulkEditComponent implements OnInit {
@@ -50,6 +49,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   filterCriteria: any = {}
   scheduleObj: any = []
   addObj: any = []
+  viewContent: boolean = false
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
     private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService, private router: Router, private _Activatedroute: ActivatedRoute) {
@@ -108,6 +108,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
             }
           }
           console.log('MilestoneForm:', this.milestoneForm.getRawValue())
+          this.viewContent =true
         })
       })
     })
@@ -136,25 +137,26 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       responsiblePersonId: new FormControl('')
     }))
 
-    this.scheduleData.scheduleData.push({
-    baselineFinish: null,
-    comments: null,
-    completionDate: null,
-    functionGroupId: null,
-    includeInCharter: null,
-    includeInCloseout: null,
-    includeInReport: null,
-    indicator: null,
-    milestone: 'hello',
-    milestoneType: null,
-    plannedFinish: null,
-    projectId: this.id,
-    responsiblePersonId: null,
-    responsiblePersonName: null,
-    scheduleUniqueId: null,
-    templateMilestoneId: null
-    })
-
+  var j = [{
+      baselineFinish: null,
+      comments: null,
+      completionDate: null,
+      functionGroupId: null,
+      includeInCharter: null,
+      includeInCloseout: null,
+      includeInReport: null,
+      indicator: null,
+      milestone: '',
+      milestoneType: null,
+      plannedFinish: null,
+      projectId: this.id,
+      responsiblePersonId: null,
+      responsiblePersonName: null,
+      scheduleUniqueId: null,
+      templateMilestoneId: null
+    }]
+    this.scheduleData.scheduleData = [...this.scheduleData.scheduleData,...j] 
+    this.milestoneTableEditRow(this.scheduleData.scheduleData.length - 1)
     // this.apiService.bulkeditSchedule(this.addObj).then(res => {
     //   this.projecthubservice.isNavChanged.next(true)
     //   this.projecthubservice.successSave.next(true)
