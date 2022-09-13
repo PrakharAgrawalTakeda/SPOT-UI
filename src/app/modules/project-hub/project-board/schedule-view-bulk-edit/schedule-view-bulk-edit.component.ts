@@ -36,7 +36,6 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   editing = {};
   ColumnMode = ColumnMode;
   schedulengxdata: any = []
-  //isclosed: boolean = false
   today = new Date()
   variance: any;
   formFieldHelpers: string[] = [''];
@@ -49,59 +48,29 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   id: string = ""
   lookUpData: any = []
   filterCriteria: any = {}
+  scheduleObj: any = []
+  addObj: any = []
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
     private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService, private router: Router, private _Activatedroute: ActivatedRoute) {
     this.milestoneForm.valueChanges.subscribe(res => {
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
+      console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
     })
   }
 
-  schedulebulkeditForm = new FormGroup({
-    milestone: new FormControl(''),
-    plannedFinish: new FormControl(''),
-    baselineFinish: new FormControl(''),
-    comments: new FormControl(''),
-    completionDate: new FormControl(''),
-    usersingle: new FormControl(''),
-    usersingleid: new FormControl(''),
-    function: new FormControl({}),
-    //functionid: new FormControl(''),
-    includeInReport: new FormControl('')
-  })
-  // ngOnChanges(changes: SimpleChanges): void {
-  //  // console.log(changes)
-  //   //this.scheduleData = this.projecthubservice.all
-  //   //console.log(this.scheduleData)
-  //   //if (this.isclosed == false) {
-  //    // this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-  //   //}
-  //   //else {
-  //     //this.schedulengxdata = this.scheduleData
-  //   //}
 
-  // }
   ngOnInit(): void {
     this.dataloader()
-    // this.scheduleData = this.projecthubservice.all
-    // this.schedulengxdata = this.scheduleData
-    // //.filter(x => x.completionDate == null)
-    // console.log(this.scheduleData)
-    // this.getllookup()
+
   }
 
-  // getllookup() {
-  //   this.auth.lookupMaster().then((resp: any) => {
-  //     this.lookupdata = resp
-  //       this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')      
-  //     this.dataloader()
-  //     this.schedulebulkeditForm.controls.function.patchValue('')
-  //   })
-  // }
+
 
   getFunctionOwner(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
+
 
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -114,38 +83,31 @@ export class ScheduleViewBulkEditComponent implements OnInit {
           this.filterCriteria = filterres
           console.log("Milestone info:", res)
           this.scheduleData = res
-          // if (this.projecthubservice.itemid != "new") {
-          //   this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
-          //     this.schedule = res
-          //     console.log(this.projecthubservice)
-          //     console.log('res')
-          //     console.log(res)
-          // this.schedulebulkeditForm.patchValue({
-          //   milestone: res.milestone,
-          //   plannedFinish: res.plannedFinish,
-          //   baselineFinish: res.baselineFinish,
-          //   comments: res.comments,
-          //   completionDate: res.completionDate,
-          //   usersingle: res.responsiblePersonName,
-          //   usersingleid: res.responsiblePersonId,
-          //   //functionid: res.functionGroupId,
-          //   includeInReport: res.includeInReport
-          // })
-
+          console.log(this.id)
           if (res.scheduleData.length != 0) {
             for (var i of res.scheduleData) {
+              console.log(res.scheduleData)
               this.milestoneForm.push(new FormGroup({
+                scheduleUniqueId: new FormControl(i.scheduleUniqueId),
+                projectId: new FormControl(i.projectId),
                 milestone: new FormControl(i.milestone),
-                // qualityReferenceType: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
                 plannedFinish: new FormControl(i.plannedFinish),
                 baselineFinish: new FormControl(i.baselineFinish),
+                responsiblePersonName: new FormControl(i.responsiblePersonName),
+                functionGroupId: new FormControl(i.functionGroupId),
                 function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
                 completionDate: new FormControl(i.completionDate),
-                comments: new FormControl(i.comments)
+                comments: new FormControl(i.comments),
+                includeInReport: new FormControl(i.includeInReport),
+                includeInCharter: new FormControl(i.includeInCharter),
+                milestoneType: new FormControl(i.milestoneType),
+                templateMilestoneId: new FormControl(i.templateMilestoneId),
+                includeInCloseout: new FormControl(i.includeInCloseout),
+                responsiblePersonId: new FormControl(i.responsiblePersonId)
               }))
             }
           }
-          console.log(this.milestoneForm.getRawValue())
+          console.log('MilestoneForm:', this.milestoneForm.getRawValue())
         })
       })
     })
@@ -154,15 +116,50 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   }
 
   addMilestoneRecord() {
+
     this.milestoneForm.push(new FormGroup({
+      scheduleUniqueId: new FormControl(''),
+      projectId: new FormControl(this.id),
       milestone: new FormControl(''),
-      //qualityReferenceType: new FormControl({}),
       plannedFinish: new FormControl(''),
       baselineFinish: new FormControl(''),
+      responsiblePersonName: new FormControl({}),
       function: new FormControl({}),
+      functionGroupId: new FormControl({}),
       completionDate: new FormControl({}),
-      comments: new FormControl('')
+      comments: new FormControl(''),
+      includeInReport: new FormControl(''),
+      includeInCharter: new FormControl(''),
+      milestoneType: new FormControl(''),
+      templateMilestoneId: new FormControl(''),
+      includeInCloseout: new FormControl(''),
+      responsiblePersonId: new FormControl('')
     }))
+
+    this.scheduleData.scheduleData.push({
+    baselineFinish: null,
+    comments: null,
+    completionDate: null,
+    functionGroupId: null,
+    includeInCharter: null,
+    includeInCloseout: null,
+    includeInReport: null,
+    indicator: null,
+    milestone: 'hello',
+    milestoneType: null,
+    plannedFinish: null,
+    projectId: this.id,
+    responsiblePersonId: null,
+    responsiblePersonName: null,
+    scheduleUniqueId: null,
+    templateMilestoneId: null
+    })
+
+    // this.apiService.bulkeditSchedule(this.addObj).then(res => {
+    //   this.projecthubservice.isNavChanged.next(true)
+    //   this.projecthubservice.successSave.next(true)
+    //   //this.router.navigate(['project-hub/' + this.id + '/project-board'])
+    // })
   }
 
   milestoneTableEditRow(row: number) {
@@ -207,36 +204,37 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     }
   }
 
-  // updateValue(event, cell, rowIndex) {
-
-  //   var val = event instanceof Date ? event :event.target.value;
-  //   //this.schedulengxdata = this.scheduleData
-  //   this.editing[rowIndex] = false;
-  //   this.schedulengxdata[rowIndex][cell] = val;
-  //   this.schedulengxdata = [...this.schedulengxdata];
-  // }
-
   submitschedule() {
-    //var formValue = this.milestoneForm.getRawValue()
-    var mainObj = {
-      scheduleUniqueId: this.scheduleData.scheduleData.scheduleUniqueId,
-      projectId: this.scheduleData.scheduleData.projectId,
-      milestone: this.milestoneForm.value.milestone,
-      plannedFinish: moment(this.milestoneForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-      baselineFinish: moment(this.milestoneForm.value.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-      functionGroupId: this.milestoneForm.value.function ? this.milestoneForm.value.function.lookUpId : null,
-      comments: this.milestoneForm.value.comments,
-      completionDate: moment(this.milestoneForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-      includeInReport: this.milestoneForm.value.includeInReport,
-      indicator: this.scheduleData.scheduleData.indicator,
-      includeInCharter: this.scheduleData.scheduleData.includeInCharter,
-      milestoneType: this.scheduleData.scheduleData.milestoneType,
-      templateMilestoneId: this.scheduleData.scheduleData.templateMilestoneId,
-      includeInCloseout: this.scheduleData.scheduleData.includeInCloseout,
-      responsiblePersonId: this.milestoneForm.value.usersingleid,
-      responsiblePersonName: this.milestoneForm.value.usersingle
+    var formValue = this.milestoneForm.getRawValue()
+    console.log(formValue)
+    for (var i of formValue) {
+      console.log(i)
+      this.scheduleObj.push({
+        scheduleUniqueId: i.scheduleUniqueId,
+        milestone: (i.milestone),
+        plannedFinish: (i.plannedFinish),
+        baselineFinish: (i.baselineFinish),
+        responsiblePersonName: (i.responsiblePersonName),
+        function: (i.function.lookUpName),
+        completionDate: (i.completionDate),
+        comments: (i.comments),
+        includeInReport: i.includeInReport,
+        functionGroupId: i.function.lookUpId,
+        includeInCharter: i.includeInCharter,
+        milestoneType: i.milestoneType,
+        templateMilestoneId: i.templateMilestoneId,
+        includeInCloseout: i.includeInCloseout,
+        responsiblePersonId: i.responsiblePersonId
+      })
     }
-    console.log(mainObj)
+
+    console.log(this.scheduleObj)
+    this.apiService.bulkeditSchedule(this.scheduleObj).then(res => {
+      this.projecthubservice.submitbutton.next(true)
+      //this.projecthubservice.isNavChanged.next(true)
+      //this.projecthubservice.successSave.next(true)
+      this.router.navigate(['project-hub/' + this.id + '/project-board'])
+    })
   }
 
   reset() {
