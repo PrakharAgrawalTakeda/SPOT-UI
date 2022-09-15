@@ -46,7 +46,10 @@ export class LandingHomeComponent implements OnInit
     })
     }
     login(){
-         this.authService.loginRedirect()
+        var scopes = {
+            scopes:["api://1457c97b-39c4-4789-9ac6-1c7a39211d9a/Api.Read"]
+        }
+         this.authService.loginRedirect(scopes)
      }
      
 }

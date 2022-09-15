@@ -20,4 +20,10 @@ export class AuthService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async KPIMaster(){
+    var userid = GlobalVariables.apiurl+"Kpimasters"
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
