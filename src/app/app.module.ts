@@ -16,6 +16,8 @@ import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { GlobalVariables } from './shared/global-variables';
 import { MyPreferenceComponent } from './modules/my-preference/my-preference.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/auth/auth.interceptor';
 export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {
@@ -66,7 +68,12 @@ const routerConfig: ExtraOptions = {
             useFactory: MsalInstanceFactory
         },
         MsalService,
-        Title
+        Title,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        }
     ]
 })
 export class AppModule {
