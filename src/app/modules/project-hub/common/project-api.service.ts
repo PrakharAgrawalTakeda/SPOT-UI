@@ -132,8 +132,8 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async bulkeditSchedule(body){
-    var link = GlobalVariables.apiurl+"Schedule/BulkEdit/" + body.projectId
+  async bulkeditSchedule(body,projectId){
+    var link = GlobalVariables.apiurl+"Schedule/BulkEdit/" + projectId
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response

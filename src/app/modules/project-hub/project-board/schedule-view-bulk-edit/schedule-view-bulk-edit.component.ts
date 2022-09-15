@@ -57,6 +57,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
       console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
     })
+    
   }
 
 
@@ -93,7 +94,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                 milestone: new FormControl(i.milestone),
                 plannedFinish: new FormControl(i.plannedFinish),
                 baselineFinish: new FormControl(i.baselineFinish),
-                responsiblePersonName: new FormControl(i.responsiblePersonName),
+                responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == ''?{}:{userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName} ),
                 functionGroupId: new FormControl(i.functionGroupId),
                 function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
                 completionDate: new FormControl(i.completionDate),
@@ -103,7 +104,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                 milestoneType: new FormControl(i.milestoneType),
                 templateMilestoneId: new FormControl(i.templateMilestoneId),
                 includeInCloseout: new FormControl(i.includeInCloseout),
-                responsiblePersonId: new FormControl(i.responsiblePersonId)
+                responsiblePersonId: new FormControl(i.responsiblePersonId),
+                indicator: new FormControl(i.indicator)
               }))
             }
           }
@@ -134,34 +136,30 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       milestoneType: new FormControl(''),
       templateMilestoneId: new FormControl(''),
       includeInCloseout: new FormControl(''),
-      responsiblePersonId: new FormControl('')
+      responsiblePersonId: new FormControl(''),
+      indicator: new FormControl('')
     }))
 
   var j = [{
-      baselineFinish: null,
+    scheduleUniqueId: "new",
+      baselineFinish: '',
       comments: null,
       completionDate: null,
       functionGroupId: null,
-      includeInCharter: null,
-      includeInCloseout: null,
-      includeInReport: null,
-      indicator: null,
+      includeInCharter: false,
+      includeInCloseout: false,
+      includeInReport: false,
+      indicator: "Grey",
       milestone: '',
       milestoneType: null,
       plannedFinish: null,
       projectId: this.id,
       responsiblePersonId: null,
       responsiblePersonName: null,
-      scheduleUniqueId: null,
       templateMilestoneId: null
     }]
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData,...j] 
     this.milestoneTableEditRow(this.scheduleData.scheduleData.length - 1)
-    // this.apiService.bulkeditSchedule(this.addObj).then(res => {
-    //   this.projecthubservice.isNavChanged.next(true)
-    //   this.projecthubservice.successSave.next(true)
-    //   //this.router.navigate(['project-hub/' + this.id + '/project-board'])
-    // })
   }
 
   milestoneTableEditRow(row: number) {
@@ -206,6 +204,16 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     }
   }
 
+  islink(uid: string): boolean {
+    return this.scheduleData.links.some(x => x.linkItemId == uid)
+  }
+  getlinkname(uid: string): string {
+    let temp = this.scheduleData.links.find(x => x.linkItemId == uid)
+    temp = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
+    return "This milestone is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+
+  }
+
   submitschedule() {
     var formValue = this.milestoneForm.getRawValue()
     console.log(formValue)
@@ -213,34 +221,29 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       console.log(i)
       this.scheduleObj.push({
         scheduleUniqueId: i.scheduleUniqueId,
-        milestone: (i.milestone),
-        plannedFinish: (i.plannedFinish),
-        baselineFinish: (i.baselineFinish),
-        responsiblePersonName: (i.responsiblePersonName),
-        function: (i.function.lookUpName),
-        completionDate: (i.completionDate),
-        comments: (i.comments),
+        projectId: i.projectId,
+        milestone: i.milestone,
+        plannedFinish: i.plannedFinish?moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'): null,
+        baselineFinish: i.baselineFinish?moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'): null,
+        responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
+        completionDate: i.completionDate?moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'): null,
+        comments: i.comments,
         includeInReport: i.includeInReport,
-        functionGroupId: i.function.lookUpId,
+        functionGroupId: i.function == null ? null : i.function.lookUpId,
         includeInCharter: i.includeInCharter,
         milestoneType: i.milestoneType,
         templateMilestoneId: i.templateMilestoneId,
         includeInCloseout: i.includeInCloseout,
-        responsiblePersonId: i.responsiblePersonId
+        responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
+        indicator: i.indicator
       })
     }
 
     console.log(this.scheduleObj)
-    this.apiService.bulkeditSchedule(this.scheduleObj).then(res => {
+    this.apiService.bulkeditSchedule(this.scheduleObj, this.id).then(res => {
       this.projecthubservice.submitbutton.next(true)
-      //this.projecthubservice.isNavChanged.next(true)
-      //this.projecthubservice.successSave.next(true)
-      this.router.navigate(['project-hub/' + this.id + '/project-board'])
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
     })
-  }
-
-  reset() {
-    this.router.navigate(['project-hub/' + this.id + '/project-board'])
   }
 
 }
