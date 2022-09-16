@@ -21,7 +21,7 @@ export class LandingHomeComponent implements OnInit
         this.titleService.setTitle("SPOT")
         this.authService.instance.handleRedirectPromise().then(res =>{
             if(res != null && res.account != null){
-                console.log(res.account)
+                console.log(res.account)            
                 this.authService.instance.setActiveAccount(res.account)
                 console.log("hello" + localStorage.getItem('spot-redirect'))
                 if(localStorage.getItem('spot-redirect') != null){
