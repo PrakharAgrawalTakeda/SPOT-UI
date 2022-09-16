@@ -1,162 +1,149 @@
-<div class="flex items-start justify-between bg-primary sidepanel-header">
-  <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Milestones</div>
-  <div style="padding-top: 2px">
-    <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',false)"
-      href="javascript:void(0)" title="Close">
-      <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-    </a>
+<div *ngIf="viewContent">
+  <div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Milestones</div>
+    <div style="padding-top: 2px">
+      <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',false)" href="javascript:void(0)" title="Close">
+        <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+      </a>
+    </div>
   </div>
-</div>
-<form class="w-full form-ask-need" [formGroup]="schedulebulkeditForm" (ngSubmit)="submitschedule()"
-    style="overflow-y: scroll; height: 95vh;">
 
-<div class="flex items-start justify-between">
+  <div class="mt-6 flex justify-end items-left w-full" style="margin-right: 1.5rem;">
+    <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="addMilestoneRecord()">
+      Add New
+    </button>
+    &nbsp;
+  </div>
 
-  <div style="padding-left: 1%;padding-top: 10px;padding-bottom: 10px;">
-    <button class="w-20" mat-flat-button [color]="'primary'" type="submit">
-      Submit
+  <div class="mt-3 p-3 h-[80vh] overflow-y-scroll">
+    <ngx-datatable class="pr-6 pl-2 material font-medium text-sm text-secondary whitespace-nowrap"
+      [rows]="scheduleData.scheduleData" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
+      [scrollbarV]="false">
+      <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+            </mat-icon>
+            &nbsp;
+            &nbsp;
+            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                svgIcon="heroicons_outline:link"></mat-icon>
+        </ng-template>
+    </ngx-datatable-column>
+
+
+      <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <spot-input formControlName="milestone" name="milestone" [showLabel]="false"
+              [placeholder]="'Milestone Name'">
+            </spot-input>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <spot-input-date formControlName="plannedFinish" name="plannedFinish" [showLabel]="false"
+              [placeholder]="'Planned Finish Date'"></spot-input-date>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <spot-input-date formControlName="baselineFinish" name="baselineFinish" [showLabel]="false"
+              [placeholder]="'Baseline Finish Date'"></spot-input-date>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [flexGrow]="1">
+        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+
+          {{calculateVariance(row)}}
+
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false" [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <spot-singleselect-user-autocomplete formControlName="responsiblePersonName" name="responsiblePersonName"
+              [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'" [showLabel]="false">
+            </spot-singleselect-user-autocomplete>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
+              [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
+            </spot-singleselect-autocomplete>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false" [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <spot-input-date formControlName="completionDate" name="completionDate" [showLabel]="false"
+              [placeholder]="'Completion Date'"></spot-input-date>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <spot-input formControlName="comments" name="comments" [showLabel]="false" [placeholder]="'Comments'">
+            </spot-input>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Include in Project Dashboard" prop="includeInReport" [resizeable]="false"
+        [flexGrow]="1">
+        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+          <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+          </a>
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+            <div class="flex items-center justify-between">
+              <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
+              </mat-slide-toggle>
+            </div>
+          </form>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+  <div class="mt-6 flex justify-between items-center w-full">
+    
+  <button class="w-25" mat-flat-button [color]="'primary'"(click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+    Cancel
   </button>
+ 
+  <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
+    Submit
+  </button>
+  
   </div>
-  <div style="padding-right: 90%;padding-top: 10px;padding-bottom: 10px;">
-  <a class="w-20" mat-flat-button [color]="'primary'"
-      (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',false)">
-      Cancel
-  </a>
 </div>
-
-</div>
- <!-- <div class="overflow-x-auto mx-6">
-    </div>  -->
-    <div class="overflow-x-auto mx-6">
-    <ngx-datatable
-        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
-        [rows]="schedulengxdata"
-        #scheduleTable
-        [columnMode]="ColumnMode.force"
-        [headerHeight]="'auto'"
-        [footerHeight]="'auto'"
-        [rowHeight]="'auto'">
-        
-        
-          <ngx-datatable-column name="Milestone" prop="milestone">
-          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
-            <span
-              title="Double click to edit"
-              (click)="editing[rowIndex] = true"
-              *ngIf="!editing[rowIndex]">
-              {{value}}
-            </span>
-            <input
-              (blur)="updateValue($event, 'milestone', rowIndex)"
-              *ngIf="editing[rowIndex]"
-              type="text"
-              [value]="value"
-            />
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Planned Finish" prop="plannedFinish">
-          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
-            <span
-              title="Double click to edit"
-              (click)="editing[rowIndex] = true"
-              *ngIf="!editing[rowIndex]">
-              {{value | date:'dd-MMM-yyyy'}}
-            </span>
-            <mat-form-field *ngIf="editing[rowIndex]">
-              <input matInput [value]="value" [matDatepicker]="picker" placeholder="Choose a date">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker (selectedChanged)="updateValue($event, 'plannedFinish', rowIndex)"   #picker  ></mat-datepicker>
-            </mat-form-field>
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish">
-          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
-            <span
-              title="Double click to edit"
-              (click)="editing[rowIndex] = true"
-              *ngIf="!editing[rowIndex]">
-              {{value | date:'dd-MMM-yyyy'}}
-            </span>
-            <mat-form-field *ngIf="editing[rowIndex]">
-              <input matInput [value]="value" [matDatepicker]="picker1" placeholder="Choose a date">
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker (selectedChanged1)="updateValue($event, 'baselineFinish', rowIndex)"   #picker1  ></mat-datepicker>
-            </mat-form-field>
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Variance" prop="variance">
-          <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-            
-              {{calculateVariance(row)}}
-          
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName">
-          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
-            <span
-              title="Double click to edit"
-              (click)="editing[rowIndex] = true"
-              *ngIf="!editing[rowIndex]">
-              {{row.responsiblePersonName}}
-            </span>
-            <input
-              
-              (blur)="updateValue($event, 'responsiblePersonName', rowIndex)"
-              *ngIf="editing[rowIndex]"
-              type="text"
-              [value]="value"
-            />
-          </ng-template>
-        </ngx-datatable-column>
-        <!-- <ngx-datatable-column name="Function Owner" prop="functionGroupId">
-          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
-            <span
-              title="Double click to edit"
-              (click)="editing[rowIndex + '-name'] = true"
-              *ngIf="!editing[rowIndex+ '-name']">
-              {{lookup.get(row.functionGroupId)}}
-            </span>
-            <input
-              autofocus
-              (blur)="updateValue($event, 'name', rowIndex)"
-              *ngIf="editing[rowIndex+ '-name']"
-              type="text"
-              [value]="value"
-            />
-          </ng-template>
-        </ngx-datatable-column> -->
-        <ngx-datatable-column name="Completion Date" prop="completionDate">
-          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
-            <span
-              title="Double click to edit"
-              (click)="editing[rowIndex] = true"
-              *ngIf="!editing[rowIndex]">
-              {{value | date:'dd-MMM-yyyy'}}
-            </span>
-            <mat-form-field *ngIf="editing[rowIndex]">
-              <input matInput [value]="value" [matDatepicker]="picker2" placeholder="Choose a date">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker (selectedChanged2)="updateValue($event, 'completionDate', rowIndex)"   #picker2  ></mat-datepicker>
-            </mat-form-field>
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Comments" prop="comments">
-          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
-            <span
-              title="Double click to edit"
-              (click)="editing[rowIndex] = true"
-              *ngIf="!editing[rowIndex]">
-              {{row.comments}}
-            </span>
-            <input
-              
-              (blur)="updateValue($event, 'comments', rowIndex)"
-              *ngIf="editing[rowIndex]"
-              type="text"
-              [value]="value"
-            />
-          </ng-template>
-        </ngx-datatable-column>
-        </ngx-datatable>
-      </div>
-      </form>

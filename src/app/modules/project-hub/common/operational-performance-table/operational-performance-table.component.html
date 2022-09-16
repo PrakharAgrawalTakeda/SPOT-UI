@@ -1,0 +1,75 @@
+<div class="p-6 pb-3 pt-0 flex items-center justify-between">
+    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Performace</div>
+
+    <div class="text-primary">
+        <div class="flex items-start justify-between">
+            <div style="padding-right: 5px;">
+                <button class="ml-4 text-primary" *ngIf="editable" mat-flat-button [color]="'primary-200'"
+                    (click)="projecthubservice.toggleDrawerOpen('OperationalPerformance', 'new', projectViewDetails.overallPerformace , projectid)">
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="overflow-x-auto mx-6">
+    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #operationalPerformanceTable>
+        <!--<ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                    class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+                </mat-icon>
+            </ng-template>
+        </ngx-datatable-column>-->
+
+        <ngx-datatable-column name="Status" prop="status" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ getLookUpName(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="KPI" prop="kpiid" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{getKPIName(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Metric" prop="metric" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Target Performance" prop="targetPerformance" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Actual Performance" prop="actualPerformance" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [flexGrow]="0.5" [resizeable]="false" [sortable]="false" [draggable]="false">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+
+                <div class="flex items-center justify-start gap-6">
+                    <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
+                        (click)="projecthubservice.toggleDrawerOpen('RiskIssue', row.riskIssueUniqueId, projectViewDetails.riskIssuesData)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+
+                    </a>
+                    <a href="javascript:void(0)" title="Delete Single" *ngIf="editable"
+                        (click)="deleteRiskIssue(row.riskIssueUniqueId)">
+                        <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                    </a>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>

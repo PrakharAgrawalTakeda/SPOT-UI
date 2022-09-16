@@ -7,46 +7,56 @@ import { lookupMaster } from 'app/shared/lookup-global';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-    selector     : 'landing-home',
-    templateUrl  : './home.component.html',
+    selector: 'landing-home',
+    templateUrl: './home.component.html',
     encapsulation: ViewEncapsulation.None
 })
-export class LandingHomeComponent implements OnInit
-{
+export class LandingHomeComponent implements OnInit {
     /**
      * Constructor
      */
-     constructor(private authService: MsalService, private router:Router, private auth:AuthService,private titleService: Title) { }
+    constructor(private authService: MsalService, private router: Router, private auth: AuthService, private titleService: Title) { }
     ngOnInit(): void {
         this.titleService.setTitle("SPOT")
-        this.authService.instance.handleRedirectPromise().then(res =>{
-            if(res != null && res.account != null){
-                console.log(res.account)            
+        this.authService.instance.handleRedirectPromise().then(res => {
+            if (res != null && res.account != null) {
+                console.log(res.account)
+
                 this.authService.instance.setActiveAccount(res.account)
-                console.log("hello" + localStorage.getItem('spot-redirect'))
-                if(localStorage.getItem('spot-redirect') != null){
-                    var temp = localStorage.getItem('spot-redirect')
-                    console.log("hey"+temp)
-                    localStorage.removeItem('spot-redirect')
-                    this.lookup()
-                    this.router.navigateByUrl(temp)
+                var scopes = {
+                    scopes: ["api://1457c97b-39c4-4789-9ac6-1c7a39211d9a/Api.Read"]
                 }
-                else{
-                    this.lookup()
-                    this.router.navigateByUrl('portfolio-center')
-                }
+                this.authService.instance.acquireTokenSilent(scopes).then(response => {
+                    this.auth.accessToken = response.accessToken
+                    console.log("hello" + localStorage.getItem('spot-redirect'))
+                    if (localStorage.getItem('spot-redirect') != null) {
+                        var temp = localStorage.getItem('spot-redirect')
+                        console.log("hey" + temp)
+                        localStorage.removeItem('spot-redirect')
+                        this.lookup()
+                        this.router.navigateByUrl(temp)
+                    }
+                    else {
+                        this.lookup()
+                        this.router.navigateByUrl('portfolio-center')
+                    }
+                })
+
             }
         })
     }
-    lookup(){
-    this.auth.lookupMaster().then((res:any)=>{
-        for( let i of res){
-            lookupMaster.lookup.set(i.lookUpId , i.lookUpName)
-        } 
-    })
+    lookup() {
+        this.auth.lookupMaster().then((res: any) => {
+            for (let i of res) {
+                lookupMaster.lookup.set(i.lookUpId, i.lookUpName)
+            }
+        })
     }
-    login(){
-         this.authService.loginRedirect()
-     }
-     
+    login() {
+        var scopes = {
+            scopes: ["api://1457c97b-39c4-4789-9ac6-1c7a39211d9a/Api.Read"]
+        }
+        this.authService.loginRedirect(scopes)
+    }
+
 }

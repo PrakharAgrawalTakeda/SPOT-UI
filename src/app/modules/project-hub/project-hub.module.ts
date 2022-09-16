@@ -59,6 +59,8 @@ import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { ProductSingleDropdownComponent } from './common/product-single-dropdown/product-single-dropdown.component';
 import { ScheduleViewBulkEditComponent } from './project-board/schedule-view-bulk-edit/schedule-view-bulk-edit.component';
 import { ProjectTeamAddSingleComponent } from './project-team/project-team-add-single/project-team-add-single.component';
+import { OperationalPerformanceTableComponent } from './common/operational-performance-table/operational-performance-table.component';
+import { OperationalPerformanceEditComponent } from './project-board/operational-performance-edit/operational-performance-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -177,7 +179,9 @@ export const projectRoutes: Route[] = [
     ScheduleViewEditComponent,
     ProductSingleDropdownComponent,
     ScheduleViewBulkEditComponent,
-    ProjectTeamAddSingleComponent
+    ProjectTeamAddSingleComponent,
+    OperationalPerformanceTableComponent,
+    OperationalPerformanceEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

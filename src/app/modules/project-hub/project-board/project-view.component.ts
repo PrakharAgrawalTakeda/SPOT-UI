@@ -45,7 +45,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   isEverythingLoaded: boolean = false
   rows: any[] = [];
   isclosedaskneedtoggle: boolean = false
-
+  kpiMaster: any = []
   overallCollapse: boolean = false
   overallCollapseControll: boolean = false
 
@@ -125,31 +125,33 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
     }
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
-      this.projectViewDetails = res
-      this.hubsetting = {
-        overallStatus: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1').hubValue : true,
-        risks: this.projectViewDetails.hubSettings.some(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1').hubValue : true,
-        asks: this.projectViewDetails.hubSettings.some(x => x.lookUpId == 'b4db29e9-d47a-4f4d-abbc-a5ed6cf0705d') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == 'b4db29e9-d47a-4f4d-abbc-a5ed6cf0705d').hubValue : true,
-        milestones: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '5259bc84-1485-4861-b73b-b83603b825b1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '5259bc84-1485-4861-b73b-b83603b825b1').hubValue : true,
-      }
-      console.log(this.projectViewDetails)
-      this.showContent = true
-
-      this.riskIssues.data = this.projectViewDetails.riskIssuesData
-      this.riskIssues.sort = this.riskIssuesMatSort
-      if (this.isclosedaskneedtoggle == false) {
-        this.onlyopenAskNeeds()
-      }
-      else {
-        this.allAskNeeds()
-      }
-
-      console.log(this.projectViewDetails)
-
-      this.askNeed.sort = this.askNeedMatSort
-      this.schedule.data = this.projectViewDetails.scheduleData
-      this.schedule.sort = this.scheduleMatSort
-
+      this.auth.KPIMaster().then(kpis => {
+        this.kpiMaster = kpis
+        this.projectViewDetails = res
+        this.hubsetting = {
+          overallStatus: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1').hubValue : true,
+          risks: this.projectViewDetails.hubSettings.some(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1').hubValue : true,
+          asks: this.projectViewDetails.hubSettings.some(x => x.lookUpId == 'b4db29e9-d47a-4f4d-abbc-a5ed6cf0705d') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == 'b4db29e9-d47a-4f4d-abbc-a5ed6cf0705d').hubValue : true,
+          milestones: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '5259bc84-1485-4861-b73b-b83603b825b1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '5259bc84-1485-4861-b73b-b83603b825b1').hubValue : true,
+        }
+        console.log(this.projectViewDetails)
+        this.showContent = true
+  
+        this.riskIssues.data = this.projectViewDetails.riskIssuesData
+        this.riskIssues.sort = this.riskIssuesMatSort
+        if (this.isclosedaskneedtoggle == false) {
+          this.onlyopenAskNeeds()
+        }
+        else {
+          this.allAskNeeds()
+        }
+  
+        console.log(this.projectViewDetails)
+  
+        this.askNeed.sort = this.askNeedMatSort
+        this.schedule.data = this.projectViewDetails.scheduleData
+        this.schedule.sort = this.scheduleMatSort
+      })
     })
     this.auth.lookupMaster().then((res: any) => {
       for (let i of res) {

@@ -113,8 +113,16 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
 
   writeValue(val: any) {
     if (val != null) {
+      if(typeof val != 'string')
+      {
       this.form.controls.control.patchValue(val[this.valuePointer]);
       this.selectedOption = val
+      }
+      else
+      {
+        this.form.controls.control.patchValue(val);
+        this.selectedOption = val
+      }
     }
 
   }
