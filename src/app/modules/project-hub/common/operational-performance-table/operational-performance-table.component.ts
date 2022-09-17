@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation,OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
@@ -12,18 +12,27 @@ import { ProjectApiService } from '../project-api.service';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OperationalPerformanceTableComponent implements OnInit {
+export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() kpi: any
   @Input() editable: boolean = true
-
+  primaryKPIForm= new FormGroup({
+    primaryKpi: new FormControl({})
+  })
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService) { }
 
   ngOnInit(): void {
+   this.dataloader()
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.dataloader()
+  }
+  dataloader(){
+    this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi?this.kpi.find(x=>x.kpiid == this.projectViewDetails.projectData.primaryKpi):{})
   }
   getLookUpName(lookUpId: string): string {
     return this.lookup.get(lookUpId)

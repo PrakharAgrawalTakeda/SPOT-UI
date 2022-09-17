@@ -145,7 +145,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
         else {
           this.allAskNeeds()
         }
-  
+        
         console.log(this.projectViewDetails)
   
         this.askNeed.sort = this.askNeedMatSort
