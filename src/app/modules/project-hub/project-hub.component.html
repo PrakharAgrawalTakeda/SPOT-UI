@@ -9,6 +9,7 @@
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'">
         </app-schedule-view-bulk-edit>
         <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
+        <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

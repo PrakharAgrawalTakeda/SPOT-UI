@@ -162,4 +162,16 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async deleteOperationalPerformance(id: string){
+    var link = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+id
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getOperationalPerformanceSingle(itemid: string){
+    var userid = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+itemid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
