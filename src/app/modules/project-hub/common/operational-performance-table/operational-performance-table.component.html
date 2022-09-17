@@ -21,7 +21,7 @@
 </form>
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
         [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]"
         #operationalPerformanceTable>
         <ngx-datatable-column name="Status" prop="status" [flexGrow]="1">

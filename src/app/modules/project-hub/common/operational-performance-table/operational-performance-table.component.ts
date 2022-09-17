@@ -50,7 +50,7 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     return this.lookup.get(lookUpId)
   }
   getKPIName(kpiid: string): string {
-    return this.kpi.find(x => x.kpiid == kpiid).kpiname
+    return this.kpi.find(x => x.kpiid == kpiid)?this.kpi.find(x => x.kpiid == kpiid).kpiname:''
   }
 
   getIndicator(status: string): string {
