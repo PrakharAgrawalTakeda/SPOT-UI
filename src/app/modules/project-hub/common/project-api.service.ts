@@ -174,4 +174,10 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async updatePrimayKPI(projectid:string ,itemid: string){
+    var userid = GlobalVariables.apiurl+"Projects/UpdatePrimaryKPI/"+projectid+'/'+itemid
+    const abc$ = this.http.patch(userid,{})
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

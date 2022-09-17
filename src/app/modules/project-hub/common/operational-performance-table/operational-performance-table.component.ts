@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation,OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
@@ -18,21 +18,33 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   @Input() lookup: any
   @Input() kpi: any
   @Input() editable: boolean = true
-  primaryKPIForm= new FormGroup({
+  initializationComplete: boolean = false
+  primaryKPIForm = new FormGroup({
     primaryKpi: new FormControl({})
   })
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
-    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService) { }
+    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService) {
+
+    this.primaryKPIForm.controls.primaryKpi.valueChanges.subscribe(res => {
+      if (this.initializationComplete == true) {
+        this.apiService.updatePrimayKPI(this.projectid, res.kpiid).then(x=>{
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
+  }
 
   ngOnInit(): void {
-   this.dataloader()
+    this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.dataloader()
   }
-  dataloader(){
-    this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi?this.kpi.find(x=>x.kpiid == this.projectViewDetails.projectData.primaryKpi):{})
+  dataloader() {
+    this.initializationComplete = false
+    this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? this.kpi.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
+    this.initializationComplete = true
   }
   getLookUpName(lookUpId: string): string {
     return this.lookup.get(lookUpId)
