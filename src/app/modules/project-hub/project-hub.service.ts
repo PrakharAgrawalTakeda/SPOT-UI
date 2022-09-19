@@ -15,6 +15,8 @@ export class ProjectHubService {
   itemtype: string = ""
   item: any = {}
   all: any = []
+  lookUpMaster: any = []
+  kpiMasters: any = []
   projectid: string = ""
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)

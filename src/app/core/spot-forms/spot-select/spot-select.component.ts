@@ -26,6 +26,8 @@ export class SpotSelectComponent implements OnInit, ControlValueAccessor {
   @Input() dropDownArray: any
   @Input() valuePointer: string
   @Input() idPointer: string
+  @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
+  @Input() customSortPointer: string = ''
   formFieldHelpers: any
   onTouch: any = () => { };
   onChange: any = () => { };
@@ -42,7 +44,9 @@ export class SpotSelectComponent implements OnInit, ControlValueAccessor {
   get control() {
     return this.form.get('control');
   }
-
+  getDropDown(): any{
+    return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
+  }
 
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
