@@ -72,6 +72,12 @@ export class ProjectHubService {
           link: 'general-info'
         },
         {
+          title: 'Project Benefits',
+          type: 'basic',
+          icon: 'heroicons_outline:pencil-alt',
+          link: 'project-benefits'
+        },
+        {
           title: 'Budget',
           type: 'basic',
           icon: 'heroicons_outline:currency-dollar',

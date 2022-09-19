@@ -61,6 +61,7 @@ import { ScheduleViewBulkEditComponent } from './project-board/schedule-view-bul
 import { ProjectTeamAddSingleComponent } from './project-team/project-team-add-single/project-team-add-single.component';
 import { OperationalPerformanceTableComponent } from './common/operational-performance-table/operational-performance-table.component';
 import { OperationalPerformanceEditComponent } from './project-board/operational-performance-edit/operational-performance-edit.component';
+import { ProjectBenefitsComponent } from './project-benefits/project-benefits.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -99,6 +100,11 @@ export const projectRoutes: Route[] = [
     {
       path: 'general-info',
       component: GeneralInfoComponent,
+      pathMatch: 'full'
+    },
+    {
+      path: 'project-benefits',
+      component: ProjectBenefitsComponent,
       pathMatch: 'full'
     },
     {
@@ -181,7 +187,8 @@ export const projectRoutes: Route[] = [
     ScheduleViewBulkEditComponent,
     ProjectTeamAddSingleComponent,
     OperationalPerformanceTableComponent,
-    OperationalPerformanceEditComponent
+    OperationalPerformanceEditComponent,
+    ProjectBenefitsComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
