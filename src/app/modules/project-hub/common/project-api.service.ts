@@ -192,4 +192,10 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async addProjectTeam(body){
+    var link = GlobalVariables.apiurl+"ProjectTeams"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
