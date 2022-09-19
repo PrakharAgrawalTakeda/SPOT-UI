@@ -190,36 +190,12 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   
       console.log(this.scheduleData)
 
-    var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Milestone?",
-      "message": "Are you sure you want to remove this record permanently? ",
-      "icon": {
-        "show": true,
-        "name": "heroicons_outline:exclamation",
-        "color": "warn"
-      },
-      "actions": {
-        "confirm": {
-          "show": true,
-          "label": "Remove",
-          "color": "warn"
-        },
-        "cancel": {
-          "show": true,
-          "label": "Cancel"
-        }
-      },
-      "dismissible": true
-    }
-    const scheduleAlert = this.fuseAlert.open(comfirmConfig)
 
-    scheduleAlert.afterClosed().subscribe(close => {
-      if (close == 'confirmed') {
         this.milestoneForm.removeAt(rowIndex)
         this.scheduleData.scheduleData.splice(rowIndex, 1)
          this.scheduleData.scheduleData = [...this.scheduleData.scheduleData];     
-      }
-    })
+      
+    
 
   }
 
@@ -276,6 +252,31 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   }
 
   submitschedule() {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Save Changes?",
+      "message": "Are you sure you want to save the changes permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Save",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+
+    scheduleAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
     var formValue = this.milestoneForm.getRawValue()
     console.log(formValue)
     for (var i of formValue) {
@@ -299,12 +300,14 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         indicator: i.indicator
       })
     }
-
     console.log(this.scheduleObj)
     this.apiService.bulkeditSchedule(this.scheduleObj, this.id).then(res => {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
     })
+  }
+})
+    
   }
 
 }

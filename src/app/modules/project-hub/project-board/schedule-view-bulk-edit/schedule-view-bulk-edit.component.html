@@ -139,7 +139,7 @@
 
           <div class="flex items-center justify-start gap-6">
             <a href="javascript:void(0)" title="Delete"
-              (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)">
+              (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)" *ngIf="row.milestoneType?!row.milestoneType >=1:true">
               <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
             </a>
           </div>
@@ -149,12 +149,12 @@
   </div>
   <div class="mt-6 flex justify-between items-center w-full">
 
-    <button class="w-25" mat-flat-button [color]="'primary'"
+    <button style="margin-left: 2rem;" class="w-25" mat-flat-button [color]="'primary'"
       (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
       Cancel
     </button>
 
-    <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
+    <button style="margin-right: 2rem;" class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
       Submit
     </button>
 
