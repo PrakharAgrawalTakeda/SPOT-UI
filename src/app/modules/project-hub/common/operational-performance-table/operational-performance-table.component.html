@@ -5,28 +5,33 @@
         <div class="flex items-start justify-between">
             <div style="padding-right: 5px;">
                 <button class="ml-4 text-primary" *ngIf="editable" mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen('OperationalPerformance', 'new', projectViewDetails.overallPerformace , projectid)">
+                    (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceSingleEdit', 'new', projectViewDetails.overallPerformace , projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
         </div>
     </div>
 </div>
+<form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
+    <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
+        [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'" [dropDownArray]="kpi"
+        [showHint]="true" [hintPostion]="'mat-hint'"
+        [hint]="'This change would be saved on edit ~~TO BE DISCUSSED IN NEXT TEAM MEETING'">
+    </spot-singleselect-autocomplete>
+</form>
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
-        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #operationalPerformanceTable>
-        <!--<ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
-                    class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
-                </mat-icon>
-            </ng-template>
-        </ngx-datatable-column>-->
-
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]"
+        #operationalPerformanceTable>
         <ngx-datatable-column name="Status" prop="status" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{ getLookUpName(value)}}
+                <div class="flex items-center justify-start gap-6">
+                    <mat-icon svgIcon="{{(indicator.getIndicators(getIndicator(value), 'circle')).icontype}}"
+                        class="{{(indicator.getIndicators(getIndicator(value), 'circle')).iconcolor}}">
+                    </mat-icon>
+                    {{ getLookUpName(value)}}
+                </div>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="KPI" prop="kpiid" [flexGrow]="1">
@@ -55,17 +60,17 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [flexGrow]="0.5" [resizeable]="false" [sortable]="false" [draggable]="false">
+        <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                 <div class="flex items-center justify-start gap-6">
                     <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
-                        (click)="projecthubservice.toggleDrawerOpen('RiskIssue', row.riskIssueUniqueId, projectViewDetails.riskIssuesData)">
+                        (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceSingleEdit', row.keySuccessUniqueId, projectViewDetails.overallPerformace)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
                     </a>
                     <a href="javascript:void(0)" title="Delete Single" *ngIf="editable"
-                        (click)="deleteRiskIssue(row.riskIssueUniqueId)">
+                        (click)="deleteOperationPerformance(row.keySuccessUniqueId)">
                         <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                     </a>
                 </div>

@@ -162,4 +162,40 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async deleteOperationalPerformance(id: string){
+    var link = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+id
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getOperationalPerformanceSingle(itemid: string){
+    var userid = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+itemid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editOperationalPerformanceSingle(body){
+    var link = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/" + body.keySuccessUniqueId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async addOperationalPerformanceSingle(body){
+    var link = GlobalVariables.apiurl+"ProjectCharterKeySuccesses"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async updatePrimayKPI(projectid:string ,itemid: string){
+    var userid = GlobalVariables.apiurl+"Projects/UpdatePrimaryKPI/"+projectid+'/'+itemid
+    const abc$ = this.http.patch(userid,{})
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async addProjectTeam(body){
+    var link = GlobalVariables.apiurl+"ProjectTeams"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }
