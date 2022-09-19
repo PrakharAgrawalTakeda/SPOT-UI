@@ -74,7 +74,7 @@ export class ProjectHubService {
         {
           title: 'Project Benefits',
           type: 'basic',
-          icon: 'heroicons_outline:pencil-alt',
+          icon: 'feather:target',
           link: 'project-benefits'
         },
         {
