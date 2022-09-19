@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation, Input, ChangeDetectionStrategy, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation, Input, ChangeDetectionStrategy, SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-schedule-view-bulk-edit',
@@ -52,7 +53,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   viewContent: boolean = false
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
-    private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService, private router: Router, private _Activatedroute: ActivatedRoute) {
+    private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService, 
+    private router: Router, private _Activatedroute: ActivatedRoute, public fuseAlert: FuseConfirmationService, private changeDetectorRef: ChangeDetectorRef) {
     this.milestoneForm.valueChanges.subscribe(res => {
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
       console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
@@ -72,6 +74,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
 
+ 
 
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -118,6 +121,14 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   }
 
+  getLookupName(lookUpId: string): string {
+
+    var lookup =  this.lookUpData.find(x => x.lookUpId == lookUpId)
+
+    return  lookup? lookup.lookUpName : ""
+
+  }
+
   addMilestoneRecord() {
 
     this.milestoneForm.push(new FormGroup({
@@ -129,13 +140,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       responsiblePersonName: new FormControl({}),
       function: new FormControl({}),
       functionGroupId: new FormControl({}),
-      completionDate: new FormControl({}),
+      completionDate: new FormControl(''),
       comments: new FormControl(''),
-      includeInReport: new FormControl(''),
-      includeInCharter: new FormControl(''),
-      milestoneType: new FormControl(''),
+      includeInReport: new FormControl(false),
+      includeInCharter: new FormControl(false),
+      milestoneType: new FormControl(null),
       templateMilestoneId: new FormControl(''),
-      includeInCloseout: new FormControl(''),
+      includeInCloseout: new FormControl(false),
       responsiblePersonId: new FormControl(''),
       indicator: new FormControl('')
     }))
@@ -159,7 +170,57 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       templateMilestoneId: null
     }]
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData,...j] 
+    console.log(this.scheduleData.scheduleData)
+    console.log(this.milestoneTableEditStack)
     this.milestoneTableEditRow(this.scheduleData.scheduleData.length - 1)
+  }
+
+  //let index = this.datarows.indexOf(this.selected[0])
+  
+
+  deleteSchedule(id: string,row: any, rowIndex: number) {
+    console.log(row)
+    console.log(rowIndex)
+    console.log(this.scheduleData)
+    console.log(this.milestoneForm)
+    console.log(this.milestoneTableEditStack)
+
+                          
+                 
+  
+      console.log(this.scheduleData)
+
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Milestone?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+
+    scheduleAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.milestoneForm.removeAt(rowIndex)
+        this.scheduleData.scheduleData.splice(rowIndex, 1)
+         this.scheduleData.scheduleData = [...this.scheduleData.scheduleData];     
+      }
+    })
+
   }
 
   milestoneTableEditRow(row: number) {

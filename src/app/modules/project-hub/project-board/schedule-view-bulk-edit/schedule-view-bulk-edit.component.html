@@ -19,20 +19,20 @@
     <ngx-datatable class="pr-6 pl-2 material font-medium text-sm text-secondary whitespace-nowrap"
       [rows]="scheduleData.scheduleData" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
       [scrollbarV]="false">
-      <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
+      <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.5">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
-                class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
-            </mat-icon>
-            &nbsp;
-            &nbsp;
-            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
-                svgIcon="heroicons_outline:link"></mat-icon>
+          <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+            class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+          </mat-icon>
+          &nbsp;
+          &nbsp;
+          <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+            svgIcon="heroicons_outline:link"></mat-icon>
         </ng-template>
-    </ngx-datatable-column>
+      </ngx-datatable-column>
 
 
-      <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [flexGrow]="1">
+      <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false" [flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
             <p *ngIf="value == ''">&nbsp;</p>{{value}}
@@ -44,7 +44,7 @@
           </form>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [flexGrow]="1">
+      <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false"  [sortable]="false"[flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
             <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -55,7 +55,7 @@
           </form>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [flexGrow]="1">
+      <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [sortable]="false" [flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
             <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -73,7 +73,7 @@
 
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false" [flexGrow]="1">
+      <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false" [sortable]="false" [flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
             <p *ngIf="value == ''">&nbsp;</p>{{value}}
@@ -85,10 +85,10 @@
           </form>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [flexGrow]="1">
+      <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false" [flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+            <p *ngIf="value == ''">&nbsp;</p>{{getLookupName(value)}}
           </a>
           <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
             <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
@@ -97,7 +97,7 @@
           </form>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false" [flexGrow]="1">
+      <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false" [sortable]="false" [flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
             <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -108,7 +108,7 @@
           </form>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [flexGrow]="1">
+      <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
             <p *ngIf="value == ''">&nbsp;</p>{{value}}
@@ -119,13 +119,14 @@
           </form>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Include in Project Dashboard" prop="includeInReport" [resizeable]="false"
+      <ngx-datatable-column name="Include in Project Dashboard" prop="includeInReport" [sortable]="false" [resizeable]="false"
         [flexGrow]="1">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+            <p *ngIf="!value">&nbsp;</p>
+            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
           </a>
-          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)" class="p-2 overflow-hidden">
             <div class="flex items-center justify-between">
               <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
               </mat-slide-toggle>
@@ -133,17 +134,29 @@
           </form>
         </ng-template>
       </ngx-datatable-column>
+      <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
+        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+
+          <div class="flex items-center justify-start gap-6">
+            <a href="javascript:void(0)" title="Delete"
+              (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)">
+              <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+            </a>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
     </ngx-datatable>
   </div>
   <div class="mt-6 flex justify-between items-center w-full">
-    
-  <button class="w-25" mat-flat-button [color]="'primary'"(click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
-    Cancel
-  </button>
- 
-  <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
-    Submit
-  </button>
-  
+
+    <button class="w-25" mat-flat-button [color]="'primary'"
+      (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+      Cancel
+    </button>
+
+    <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
+      Submit
+    </button>
+
   </div>
 </div>
