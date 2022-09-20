@@ -198,4 +198,11 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getProjectBaseline(projectId){
+    var userid = GlobalVariables.apiurl+"ProjectBaselines/" + projectId
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
 }
