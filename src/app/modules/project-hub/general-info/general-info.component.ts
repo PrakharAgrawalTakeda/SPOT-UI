@@ -9,6 +9,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulat
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-general-info',
@@ -57,31 +58,47 @@ export class GeneralInfoComponent implements OnInit {
     private portApiService: PortfolioApiService,
     private authService: AuthService,
     private projectHubService: ProjectHubService,
-    private router: Router) {
+    private router: Router,
+    public fuseAlert: FuseConfirmationService) {
     this.projectHubService.submitbutton.subscribe(res => {
       if (this.viewContent == true) {
-        
-        if (this.generalInfoData.qualityReferences.length > 0) {
-          this.generalInfoData.qualityReferences = []
-          var qr = []
-          var genQRFORM = this.qualityRefForm.getRawValue()
-          for (var quality of genQRFORM) {
-            qr.push({
-              qualityUniqueId: quality.qualityUniqueId,
-              qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-              qualityReference1: quality.qualityReference1,
-              problemUniqueId: quality.problemUniqueId
-            })
-          }
-          this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...qr]
-        }
+        this.tableAlter()
       }
     })
 
     this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
         if (res == false) {
-          this.generalInfoForm.controls.oeprojectType.patchValue({})
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the OE Project Type Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.generalInfoForm.controls.oeprojectType.patchValue({})
+            }
+            else {
+              this.generalInfoForm.controls.isOeproject.patchValue(true)
+            }
+          })
         }
         else {
           this.generalInfoForm.controls.oeprojectType.patchValue(this.generalInfoData.projectData.oeprojectType == '' ? {} : this.lookUpData.find(x => x.lookUpId == this.generalInfoData.projectData.oeprojectType))
@@ -92,12 +109,59 @@ export class GeneralInfoComponent implements OnInit {
     this.generalInfoForm.controls.isQualityRef.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
         if (res == false) {
-          this.qrTableEditStack = []
-          this.qualityRefForm = new FormArray([])
-          this.generalInfoData.qualityReferences = []
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the OE Project Type Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.qrTableEditStack = []
+              this.qualityRefForm = new FormArray([])
+              this.generalInfoData.qualityReferences = []
+            }
+            else{
+              this.generalInfoForm.controls.isQualityRef.patchValue(true)
+              this.tableAlter()
+            }
+          })
         }
       }
     })
+  }
+
+  tableAlter(){
+    if (this.generalInfoData.qualityReferences.length > 0) {
+      this.generalInfoData.qualityReferences = []
+      var qr = []
+      var genQRFORM = this.qualityRefForm.getRawValue()
+      for (var quality of genQRFORM) {
+        qr.push({
+          qualityUniqueId: quality.qualityUniqueId,
+          qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+          qualityReference1: quality.qualityReference1,
+          problemUniqueId: quality.problemUniqueId
+        })
+      }
+      this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...qr]
+    }
   }
   ngOnInit(): void {
     this.dataloader()
