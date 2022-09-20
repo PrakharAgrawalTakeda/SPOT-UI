@@ -52,6 +52,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   addObj: any = []
   viewContent: boolean = false
   roleMaster: any = {}
+  baselineCount: any = {}
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
     private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService, 
@@ -79,6 +80,10 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+this.apiService.getProjectBaseline(this.id).then((count:any) => {
+this.baselineCount = count
+console.log(this.baselineCount)
+})
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
       this.portApiService.getfilterlist().then(filterres => {
         this.authService.lookupMaster().then((lookup: any) => {
@@ -333,5 +338,36 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 })
     
   }
+  cancelschedule(){
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Discard Changes?",
+      "message": "Are you sure you want to discard your changes? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Yes",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "No"
+        }
+      },
+      "dismissible": true
+    }
+    const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+
+    scheduleAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+    this.projecthubservice.toggleDrawerOpen('', '',[],'')
+      }
+  })
+  }
+  
 
 }

@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { DatePipe } from '@angular/common'
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../project-api.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-schedule-table',
@@ -29,15 +30,23 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   isclosed: boolean = false
   today = new Date()
   variance: any;
+  baselineCount: any = {}
+  id: string = ""
   constructor(public projecthubservice: ProjectHubService, 
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
-    public fuseAlert: FuseConfirmationService) { }
+    public fuseAlert: FuseConfirmationService,
+    private _Activatedroute: ActivatedRoute) { }
 
 
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getProjectBaseline(this.id).then((count:any) => {
+      this.baselineCount = count
+      console.log(this.baselineCount)
+      })
     this.scheduleData = this.projectViewDetails.scheduleData
     for (var i of this.scheduleData) {
       i.variance = this.calculateVariance(i)
@@ -54,6 +63,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.scheduleData = this.projectViewDetails.scheduleData
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+    
   }
 
   calculateVariance(row: any): string {

@@ -8,8 +8,14 @@
     </div>
   </div>
 
-  <div class="mt-6 flex justify-end items-left w-full" style="margin-right: 1.5rem;">
-    <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="addMilestoneRecord()">
+  <!-- <div class="mt-6 flex justify-start items-left w-full">
+    <h6 class="font-medium text-secondary text-lg italic pb-0 pt-8 pl-10" style="padding:10px 30px; margin:-19px!important;">
+        Baseline : {{baselineCount.baselineCount}}
+    </h6>
+    </div> -->
+
+  <div class="mt-6 flex justify-end items-left w-full">
+    <button class="w-auto" style="margin-right: 1.5rem; padding:0px 140px!important" mat-flat-button [color]="'primary'" type="button" (click)="addMilestoneRecord()">
       Add New
     </button>
     &nbsp;
@@ -149,12 +155,12 @@
   </div>
   <div class="mt-6 flex justify-between items-center w-full">
 
-    <button style="margin-left: 2rem;" class="w-25" mat-flat-button [color]="'primary'"
-      (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+    <button style="margin-left: 2rem; padding:0px 150px!important" class="w-auto" mat-flat-button [color]="'primary'"
+      (click)="cancelschedule()">
       Cancel
     </button>
 
-    <button style="margin-right: 2rem;" class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
+    <button style="margin-right: 2rem; padding:0px 150px!important" class="w-auto" mat-flat-button [color]="'primary'" type="button" (click)="submitschedule()">
       Submit
     </button>
 
