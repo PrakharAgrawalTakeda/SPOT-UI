@@ -118,7 +118,8 @@ export class GeneralInfoComponent implements OnInit {
               this.qualityRefForm.push(new FormGroup({
                 qualityUniqueId: new FormControl(i.qualityUniqueId),
                 qualityReferenceType: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
-                qualityReference: new FormControl(i.qualityReference1)
+                qualityReference: new FormControl(i.qualityReference1),
+                problemUniqueId: new FormControl(this.id)
               }))
             }
           }
@@ -174,6 +175,27 @@ export class GeneralInfoComponent implements OnInit {
       this.qrTableEditStack.push(row)
     }
   }
+  deleteQR(rowIndex: number) {
+    this.generalInfoData.qualityReferences.splice(rowIndex, 1)
+    this.qualityRefForm.removeAt(rowIndex)
+  }
+  addQR() {
+    this.qualityRefForm.push(new FormGroup({
+      qualityUniqueId: new FormControl(''),
+      qualityReferenceType: new FormControl({}),
+      qualityReference: new FormControl(''),
+      problemUniqueId: new FormControl(this.id)
+    }))
+    var j = [{
+      qualityUniqueId: '',
+      qualityReferenceType: '',
+      qualityReference: '',
+      problemUniqueId: ''
+    }]
+    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...j]
+    this.qrTableEditStack.push(this.generalInfoData.qualityReferences.length - 1)
+
+  }
   reset() {
     this.router.navigate(['project-hub/' + this.id + '/project-board'])
   }
@@ -184,13 +206,13 @@ export class GeneralInfoComponent implements OnInit {
     submitObj.parentProgramId = formValue.projectsingleid
     submitObj.problemType = formValue.problemType
     submitObj.projectDescription = formValue.projectDescription
-    submitObj.primaryProductId = formValue.primaryProduct?formValue.primaryProduct.productId:''
+    submitObj.primaryProductId = formValue.primaryProduct ? formValue.primaryProduct.productId : ''
     submitObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
     submitObj.portfolioOwnerId = formValue.portfolioOwner.portfolioOwnerId
     submitObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     submitObj.emissionPortfolioId = formValue.enviornmentalPortfolio.portfolioOwnerId
     submitObj.isOeproject = formValue.isOeproject
-    submitObj.oeprojectType =formValue.oeprojectType?formValue.oeprojectType.lookUpId:''
+    submitObj.oeprojectType = formValue.oeprojectType ? formValue.oeprojectType.lookUpId : ''
     submitObj.isCapsProject = formValue.isCapsProject
     submitObj.isTechTransfer = formValue.isTechTransfer
     submitObj.productionStepId = formValue.productionStepId
