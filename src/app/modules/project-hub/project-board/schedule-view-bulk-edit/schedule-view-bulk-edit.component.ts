@@ -51,6 +51,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   scheduleObj: any = []
   addObj: any = []
   viewContent: boolean = false
+  roleMaster: any = {}
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
     private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService, 
@@ -110,8 +111,26 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                 responsiblePersonId: new FormControl(i.responsiblePersonId),
                 indicator: new FormControl(i.indicator)
               }))
+              
             }
+            if(this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit)
+            {
+              if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203')
+              {
+               
+                this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
+              }
+            }
+            for(let control of this.milestoneForm.controls )
+            {
+              if(!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit)
+              {
+                control['controls']['baselineFinish'].disable()
+              }
+            }
+            
           }
+          
           console.log('MilestoneForm:', this.milestoneForm.getRawValue())
           this.viewContent =true
         })
@@ -150,6 +169,10 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       responsiblePersonId: new FormControl(''),
       indicator: new FormControl('')
     }))
+    if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203' && this.scheduleData.projectData.problemType == 'Standard Project / Program')
+    {
+      this.milestoneForm.controls['baselineFinish'].disable()
+    }
 
   var j = [{
     scheduleUniqueId: "new",
@@ -169,6 +192,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       responsiblePersonName: null,
       templateMilestoneId: null
     }]
+   
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData,...j] 
     console.log(this.scheduleData.scheduleData)
     console.log(this.milestoneTableEditStack)

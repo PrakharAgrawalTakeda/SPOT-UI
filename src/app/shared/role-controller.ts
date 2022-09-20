@@ -1,5 +1,6 @@
 export class RoleController{
      public projectHub: ProjectHub = new ProjectHub
+     public roleId: string = ''
 }
 
 export class ProjectHub{
@@ -12,5 +13,6 @@ export class ProjectBoard{
     public askNeedEdit: boolean = true
     public riskIssuesEdit: boolean = true
     public scheduleEdit: boolean = true
+    public baselineedit: boolean = true
 }
 
