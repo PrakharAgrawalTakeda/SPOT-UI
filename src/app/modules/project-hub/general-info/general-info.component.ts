@@ -58,6 +58,25 @@ export class GeneralInfoComponent implements OnInit {
     private authService: AuthService,
     private projectHubService: ProjectHubService,
     private router: Router) {
+    this.projectHubService.submitbutton.subscribe(res => {
+      if (this.viewContent == true) {
+        
+        if (this.generalInfoData.qualityReferences.length > 0) {
+          this.generalInfoData.qualityReferences = []
+          var qr = []
+          var genQRFORM = this.qualityRefForm.getRawValue()
+          for (var quality of genQRFORM) {
+            qr.push({
+              qualityUniqueId: quality.qualityUniqueId,
+              qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+              qualityReference1: quality.qualityReference1,
+              problemUniqueId: quality.problemUniqueId
+            })
+          }
+          this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...qr]
+        }
+      }
+    })
 
     this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
@@ -70,8 +89,14 @@ export class GeneralInfoComponent implements OnInit {
       }
     })
 
-    this.qualityRefForm.valueChanges.subscribe(res => {
-      console.log("QR form Value", this.qualityRefForm.getRawValue())
+    this.generalInfoForm.controls.isQualityRef.valueChanges.subscribe(res => {
+      if (this.viewContent == true) {
+        if (res == false) {
+          this.qrTableEditStack = []
+          this.qualityRefForm = new FormArray([])
+          this.generalInfoData.qualityReferences = []
+        }
+      }
     })
   }
   ngOnInit(): void {
@@ -117,8 +142,8 @@ export class GeneralInfoComponent implements OnInit {
             for (var i of res.qualityReferences) {
               this.qualityRefForm.push(new FormGroup({
                 qualityUniqueId: new FormControl(i.qualityUniqueId),
-                qualityReferenceType: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
-                qualityReference: new FormControl(i.qualityReference1),
+                qualityReferenceTypeId: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
+                qualityReference1: new FormControl(i.qualityReference1),
                 problemUniqueId: new FormControl(this.id)
               }))
             }
@@ -138,13 +163,6 @@ export class GeneralInfoComponent implements OnInit {
     this.generalInfoForm.controls.submittedBy.disable()
     this.generalInfoForm.controls.projectManager.disable()
     this.generalInfoForm.controls.sponsor.disable()
-  }
-  addQrRecord() {
-    this.qualityRefForm.push(new FormGroup({
-      qualityUniqueId: new FormControl(''),
-      qualityReferenceType: new FormControl({}),
-      qualityReference: new FormControl('')
-    }))
   }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner
@@ -170,6 +188,9 @@ export class GeneralInfoComponent implements OnInit {
   getQRType(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
   }
+  getLookUpName(id: string): string {
+    return this.lookUpData.find(x => x.lookUpId == id).lookUpName
+  }
   qrTableEditRow(row: number) {
     if (!this.qrTableEditStack.includes(row)) {
       this.qrTableEditStack.push(row)
@@ -182,14 +203,14 @@ export class GeneralInfoComponent implements OnInit {
   addQR() {
     this.qualityRefForm.push(new FormGroup({
       qualityUniqueId: new FormControl(''),
-      qualityReferenceType: new FormControl({}),
-      qualityReference: new FormControl(''),
+      qualityReferenceTypeId: new FormControl({}),
+      qualityReference1: new FormControl(''),
       problemUniqueId: new FormControl(this.id)
     }))
     var j = [{
       qualityUniqueId: '',
-      qualityReferenceType: '',
-      qualityReference: '',
+      qualityReferenceTypeId: '',
+      qualityReference1: '',
       problemUniqueId: ''
     }]
     this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...j]
@@ -200,6 +221,18 @@ export class GeneralInfoComponent implements OnInit {
     this.router.navigate(['project-hub/' + this.id + '/project-board'])
   }
   submitGeneralInfo() {
+    var qr = []
+    if (this.generalInfoData.qualityReferences.length > 0) {
+      var genQRFORM = this.qualityRefForm.getRawValue()
+      for (var quality of genQRFORM) {
+        qr.push({
+          qualityUniqueId: quality.qualityUniqueId,
+          qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+          qualityReference1: quality.qualityReference1,
+          problemUniqueId: quality.problemUniqueId
+        })
+      }
+    }
     var formValue = this.generalInfoForm.getRawValue()
     var submitObj = this.generalInfoData.projectData
     submitObj.problemTitle = formValue.problemTitle
@@ -219,11 +252,15 @@ export class GeneralInfoComponent implements OnInit {
     submitObj.campaignPhaseId = formValue.campaignPhaseId
     submitObj.campaignTypeId = formValue.campaignTypeId
     console.log('Final Object', submitObj)
-    this.apiService.editGeneralInfo(this.id, submitObj).then(res => {
-      console.log("Success", res)
-      this.projectHubService.isNavChanged.next(true)
-      this.projectHubService.successSave.next(true)
-      this.router.navigate(['project-hub/' + this.id + '/project-board'])
+    console.log('Final Object', qr)
+    this.apiService.bulkeditQualityReference(qr, this.id).then(resp => {
+      this.apiService.editGeneralInfo(this.id, submitObj).then(res => {
+        console.log("Success", res)
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.successSave.next(true)
+        this.router.navigate(['project-hub/' + this.id + '/project-board'])
+      })
     })
+
   }
 }
