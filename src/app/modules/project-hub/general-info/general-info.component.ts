@@ -48,6 +48,7 @@ export class GeneralInfoComponent implements OnInit {
     campaignPhaseId: new FormControl(''),
     campaignTypeId: new FormControl(''),
     isQualityRef: new FormControl(false),
+    isArchived: new FormControl(false)
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -201,6 +202,7 @@ export class GeneralInfoComponent implements OnInit {
             campaignPhaseId: res.projectData.campaignPhaseId,
             campaignTypeId: res.projectData.campaignTypeId,
             isQualityRef: res.qualityReferences.length != 0,
+            isArchived: res.projectData.isArchived
           })
           if (res.qualityReferences.length != 0) {
             for (var i of res.qualityReferences) {
@@ -222,6 +224,13 @@ export class GeneralInfoComponent implements OnInit {
 
 
   disabler() {
+    if(!this.projectHubService.roleControllerControl.generalInfo.basicFields){
+      this.generalInfoForm.disable()
+    }
+    if(!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner){
+      console.log('hit')
+      this.generalInfoForm.controls.portfolioOwner.disable()
+    }
     this.generalInfoForm.controls.topsGroup.disable()
     this.generalInfoForm.controls.recordCreationDate.disable()
     this.generalInfoForm.controls.submittedBy.disable()
@@ -315,6 +324,7 @@ export class GeneralInfoComponent implements OnInit {
     submitObj.productionStepId = formValue.productionStepId
     submitObj.campaignPhaseId = formValue.campaignPhaseId
     submitObj.campaignTypeId = formValue.campaignTypeId
+    submitObj.isArchived = formValue.isArchived
     console.log('Final Object', submitObj)
     console.log('Final Object', qr)
     this.apiService.bulkeditQualityReference(qr, this.id).then(resp => {

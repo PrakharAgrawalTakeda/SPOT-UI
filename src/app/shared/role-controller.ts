@@ -1,5 +1,6 @@
 export class RoleController{
      public projectHub: ProjectHub = new ProjectHub
+     public generalInfo: GeneralInfo = new GeneralInfo
      public roleId: string = ''
 }
 
@@ -16,3 +17,7 @@ export class ProjectBoard{
     public baselineedit: boolean = true
 }
 
+export class GeneralInfo{
+   public basicFields: boolean = true
+   public porfolioOwner: boolean = true
+}

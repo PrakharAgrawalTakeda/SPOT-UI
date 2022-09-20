@@ -4,7 +4,16 @@
   </div>
   <!-- Enter Content here-->
   <form class="w-full" [formGroup]="generalInfoForm" (ngSubmit)="submitGeneralInfo()">
-    <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+    <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner" class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+      <div class="flex justify-between items-center">
+        <div class="flex justify-start gap-1 items-center">Is Archived?
+        </div>
+        <div>
+          <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden" [ngClass]="{'mt-6': projectHubService.roleControllerControl.generalInfo.porfolioOwner}">
       <div class="flex justify-between items-center gap-6">
         <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
           [placeholder]="'Project Name'">
