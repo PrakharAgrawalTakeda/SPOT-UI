@@ -118,7 +118,9 @@ export class ProjectHubComponent implements OnInit {
     }
     toggleSideNav() {
         this.drawerOpened = !this.drawerOpened
-        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' || this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team') {
+        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' || 
+        this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team'||
+        this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info') {
             this.projecthubservice.submitbutton.next(true)
         }
     }

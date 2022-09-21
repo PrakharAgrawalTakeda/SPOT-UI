@@ -38,15 +38,27 @@ export class RoleService {
   getRolesbyProjectData(projectid): RoleController {
     var localroleController = this.roleController
     localroleController.roleId = this.roleMaster.securityGroupId
-    if (this.roleMaster.securityGroupId == 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F' && !this.roleMaster.readWriteProjects.some(x => x == projectid)) {
-      localroleController.projectHub.projectBoard = {
-        askNeedEdit: false,
-        riskIssuesEdit: false,
-        overallStatusEdit: false,
-        scheduleEdit: false,
-        baselineedit: false
+    if (this.roleMaster.securityGroupId == 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F') {
+      if (!this.roleMaster.readWriteProjects.some(x => x == projectid)) {
+        localroleController.projectHub.projectBoard = {
+          askNeedEdit: false,
+          riskIssuesEdit: false,
+          overallStatusEdit: false,
+          scheduleEdit: false,
+          baselineedit: false
+        }
+        localroleController.projectHub.hubSettings = false
+        localroleController.generalInfo = {
+          basicFields: false,
+          porfolioOwner: false
+        }
       }
-      localroleController.projectHub.hubSettings = false
+      else{
+        localroleController.generalInfo.porfolioOwner = false
+      }
+    }
+    else if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
+      localroleController.generalInfo.porfolioOwner = false
     }
     console.log("hello")
     return localroleController
