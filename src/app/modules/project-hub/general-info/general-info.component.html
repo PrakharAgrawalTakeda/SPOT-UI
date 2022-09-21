@@ -173,8 +173,8 @@
                   <p *ngIf="!value">&nbsp;</p>{{value}}
                 </a>
                 <form [formGroup]="qualityRefForm.controls[rowIndex]" *ngIf="qrTableEditStack.includes(rowIndex)">
-                  <spot-input formControlName="qualityReference1" [showLabel]="false" [label]="'Project Name'"
-                    [placeholder]="'Project Name'">
+                  <spot-input formControlName="qualityReference1" [showLabel]="false" [label]="'Quality Reference #'"
+                    [placeholder]="'Quality Reference #'">
                   </spot-input>
                 </form>
               </ng-template>
