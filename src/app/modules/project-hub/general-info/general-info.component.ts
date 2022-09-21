@@ -67,8 +67,8 @@ export class GeneralInfoComponent implements OnInit {
       }
     })
 
-    this.generalInfoForm.controls.isTechTransfer.valueChanges.subscribe(res=>{
-      if(this.viewContent == true){
+    this.generalInfoForm.controls.isTechTransfer.valueChanges.subscribe(res => {
+      if (this.viewContent == true) {
         if (res == false) {
           var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
@@ -232,7 +232,7 @@ export class GeneralInfoComponent implements OnInit {
             excecutionScope: res.excecutionScope ? res.excecutionScope : [],
             enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
             isOeproject: res.projectData.isOeproject,
-            oeprojectType: res.projectData.oeprojectType? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
+            oeprojectType: res.projectData.oeprojectType ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
             isCapsProject: res.projectData.isCapsProject,
             isTechTransfer: res.projectData.isTechTransfer,
             productionStepId: res.projectData.productionStepId,
@@ -275,7 +275,7 @@ export class GeneralInfoComponent implements OnInit {
     this.generalInfoForm.controls.sponsor.disable()
   }
   getPortfolioOwner(): any {
-    return this.filterCriteria.portfolioOwner.filter(x=> x.isPortfolioOwner == true)
+    return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
@@ -299,7 +299,7 @@ export class GeneralInfoComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
   }
   getLookUpName(id: string): string {
-    return this.lookUpData.find(x => x.lookUpId == id).lookUpName
+    return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
   }
   qrTableEditRow(row: number) {
     if (!this.qrTableEditStack.includes(row)) {
@@ -309,6 +309,14 @@ export class GeneralInfoComponent implements OnInit {
   deleteQR(rowIndex: number) {
     this.generalInfoData.qualityReferences.splice(rowIndex, 1)
     this.qualityRefForm.removeAt(rowIndex)
+    if (this.qrTableEditStack.includes(rowIndex)) {
+      this.qrTableEditStack.splice(this.qrTableEditStack.indexOf(rowIndex), 1)
+    }
+    this.qrTableEditStack = this.qrTableEditStack.map(function (value) {
+      return value > rowIndex ? value - 1 : value;
+    })
+    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences]
+    
   }
   addQR() {
     this.qualityRefForm.push(new FormGroup({
