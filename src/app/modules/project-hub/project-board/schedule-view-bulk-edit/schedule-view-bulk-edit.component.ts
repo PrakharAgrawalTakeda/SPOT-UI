@@ -118,6 +118,15 @@ console.log(this.baselineCount)
               }))
               
             }
+            for(let control of this.milestoneForm.controls )
+            {
+              console.log(this.projecthubservice)
+            if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
+              if (this.milestoneForm.value.includeInReport != true) {
+                control['controls']['includeInReport'].disable()
+              }
+            }
+          }
             if(this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit)
             {
               if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203')
@@ -140,11 +149,7 @@ console.log(this.baselineCount)
           this.viewContent =true
         })
       })
-     // this.projecthubservice.isFormChanged = false
     })
-    // this.milestoneForm.valueChanges.subscribe(res => {
-    //   this.projecthubservice.isFormChanged = true
-    // })
 
 
   }
@@ -181,6 +186,9 @@ console.log(this.baselineCount)
     if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203' && this.scheduleData.projectData.problemType == 'Standard Project / Program')
     {
       this.milestoneForm.controls['baselineFinish'].disable()
+    }
+    if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
+      this.milestoneForm.controls['includeInReport'].disable()
     }
 
   var j = [{
@@ -335,14 +343,15 @@ console.log(this.baselineCount)
     }
     console.log(this.scheduleObj)
     this.apiService.bulkeditSchedule(this.scheduleObj, this.id).then(res => {
-      this.projecthubservice.toggleDrawerOpen('', '', [], '', false)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
       this.projecthubservice.submitbutton.next(true)
     })
   }
 })
-
     
   }
+
+
   cancelschedule(){
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure you want to exit? ",
