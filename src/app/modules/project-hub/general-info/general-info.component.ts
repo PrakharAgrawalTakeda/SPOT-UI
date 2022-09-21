@@ -149,7 +149,7 @@ export class GeneralInfoComponent implements OnInit {
         if (res == false) {
           var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
-            "message": "Are you sure you want to remove the OE Project Type Information?",
+            "message": "Are you sure you want to remove the Quality Reference Information?",
             "icon": {
               "show": true,
               "name": "heroicons_outline:exclamation",
