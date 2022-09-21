@@ -126,7 +126,7 @@
           </a>
           <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
             <spot-input-date formControlName="completionDate" name="completionDate" [showLabel]="false"
-              [placeholder]="'Completion Date'"></spot-input-date>
+              [placeholder]="'Completion Date'" [max]="'today'"></spot-input-date>
           </form>
         </ng-template>
       </ngx-datatable-column>
