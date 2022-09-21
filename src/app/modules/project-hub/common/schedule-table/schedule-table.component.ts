@@ -42,12 +42,12 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.apiService.getProjectBaseline(this.id).then((count:any) => {
-      this.baselineCount = count
-      console.log(this.baselineCount)
-      })
     this.scheduleData = this.projectViewDetails.scheduleData
+    // this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    // this.apiService.getProjectBaseline(this.id).then((count:any) => {
+    //   this.baselineCount = count
+    //   console.log(this.baselineCount)
+    //   })
     for (var i of this.scheduleData) {
       i.variance = this.calculateVariance(i)
     }
@@ -60,10 +60,21 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     }
 
   }
+
   ngOnInit(): void {
+    this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
     
+  }
+
+  getCount() {
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getProjectBaseline(this.id).then((count:any) => {
+    this.baselineCount = count
+    console.log(this.baselineCount)
+    })
+    return this.baselineCount.baselineCount
   }
 
   calculateVariance(row: any): string {

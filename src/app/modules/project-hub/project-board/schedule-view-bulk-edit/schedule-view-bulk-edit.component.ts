@@ -140,7 +140,11 @@ console.log(this.baselineCount)
           this.viewContent =true
         })
       })
+     // this.projecthubservice.isFormChanged = false
     })
+    // this.milestoneForm.valueChanges.subscribe(res => {
+    //   this.projecthubservice.isFormChanged = true
+    // })
 
 
   }
@@ -331,17 +335,18 @@ console.log(this.baselineCount)
     }
     console.log(this.scheduleObj)
     this.apiService.bulkeditSchedule(this.scheduleObj, this.id).then(res => {
+      this.projecthubservice.toggleDrawerOpen('', '', [], '', false)
       this.projecthubservice.submitbutton.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '', [], '')
     })
   }
 })
+
     
   }
   cancelschedule(){
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Discard Changes?",
-      "message": "Are you sure you want to discard your changes? ",
+      "title": "Are you sure you want to exit? ",
+  "message": "All unsaved data will be lost.",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
@@ -369,5 +374,7 @@ console.log(this.baselineCount)
   })
   }
   
-
+  @HostListener('unloaded')
+  ngOnDestroy(): void {
+  }
 }

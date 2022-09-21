@@ -7,19 +7,35 @@
       </a>
     </div>
   </div>
+<div>
 
-  <!-- <div class="mt-6 flex justify-start items-left w-full">
-    <h6 class="font-medium text-secondary text-lg italic pb-0 pt-8 pl-10" style="padding:10px 30px; margin:-19px!important;">
-        Baseline : {{baselineCount.baselineCount}}
-    </h6>
-    </div> -->
+  <div class="flex justify-between gap-8 mt-2">
+    <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+      Baseline : {{baselineCount.baselineCount}}
+  </h6>
+    <div class="flex items-center">
+        <div class="w-full pr-3 text-right whitespace-pre">
+          <button class="w-auto" style="margin-right: 1.5rem; padding:0px 140px!important;" mat-flat-button [color]="'primary'" type="button" (click)="addMilestoneRecord()">
+            Add New
+          </button>
+    </div>
+</div>
+</div>
 
-  <div class="mt-6 flex justify-end items-left w-full">
-    <button class="w-auto" style="margin-right: 1.5rem; padding:0px 140px!important" mat-flat-button [color]="'primary'" type="button" (click)="addMilestoneRecord()">
-      Add New
-    </button>
+
+
+
+
+
+  <!-- <div class="mt-4 flex justify-end items-center w-full">
+   
+    </div>
+
+  <div class="mt-4 flex justify-end items-center w-full">
+    
     &nbsp;
   </div>
+</div> -->
 
   <div class="mt-3 p-3 h-[80vh] overflow-y-scroll">
     <ngx-datatable class="pr-6 pl-2 material font-medium text-sm text-secondary whitespace-nowrap"
@@ -28,7 +44,7 @@
       <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.5">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
           <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
-            class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+            class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}" *ngIf="row.scheduleUniqueId != 'new'">
           </mat-icon>
           &nbsp;
           &nbsp;
