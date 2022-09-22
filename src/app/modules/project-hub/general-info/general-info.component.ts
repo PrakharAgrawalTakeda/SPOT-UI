@@ -67,6 +67,46 @@ export class GeneralInfoComponent implements OnInit {
       }
     })
 
+    this.generalInfoForm.controls.isTechTransfer.valueChanges.subscribe(res => {
+      if (this.viewContent == true) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the Tech Transfer Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.generalInfoForm.controls.campaignTypeId.patchValue('')
+              this.generalInfoForm.controls.campaignPhaseId.patchValue('')
+              this.generalInfoForm.controls.productionStepId.patchValue('')
+            }
+            else {
+              this.generalInfoForm.controls.isTechTransfer.patchValue(true)
+            }
+          })
+        }
+      }
+    })
+
+
     this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
         if (res == false) {
@@ -101,9 +141,6 @@ export class GeneralInfoComponent implements OnInit {
             }
           })
         }
-        else {
-          this.generalInfoForm.controls.oeprojectType.patchValue(this.generalInfoData.projectData.oeprojectType == '' ? {} : this.lookUpData.find(x => x.lookUpId == this.generalInfoData.projectData.oeprojectType))
-        }
       }
     })
 
@@ -112,7 +149,7 @@ export class GeneralInfoComponent implements OnInit {
         if (res == false) {
           var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
-            "message": "Are you sure you want to remove the OE Project Type Information?",
+            "message": "Are you sure you want to remove the Quality Reference Information?",
             "icon": {
               "show": true,
               "name": "heroicons_outline:exclamation",
@@ -138,7 +175,7 @@ export class GeneralInfoComponent implements OnInit {
               this.qualityRefForm = new FormArray([])
               this.generalInfoData.qualityReferences = []
             }
-            else{
+            else {
               this.generalInfoForm.controls.isQualityRef.patchValue(true)
               this.tableAlter()
             }
@@ -148,7 +185,7 @@ export class GeneralInfoComponent implements OnInit {
     })
   }
 
-  tableAlter(){
+  tableAlter() {
     if (this.generalInfoData.qualityReferences.length > 0) {
       this.generalInfoData.qualityReferences = []
       var qr = []
@@ -190,12 +227,12 @@ export class GeneralInfoComponent implements OnInit {
             sponsor: res.portfolioCenterData.sponsor,
             projectDescription: res.projectData.projectDescription,
             primaryProduct: res.primaryProduct,
-            otherImpactedProducts: res.otherImpactedProducts,
-            portfolioOwner: res.portfolioOwner,
-            excecutionScope: res.excecutionScope,
-            enviornmentalPortfolio: res.enviornmentalPortfolio,
+            otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+            portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+            excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+            enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
             isOeproject: res.projectData.isOeproject,
-            oeprojectType: res.projectData.oeprojectType == '' ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
+            oeprojectType: res.projectData.oeprojectType ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
             isCapsProject: res.projectData.isCapsProject,
             isTechTransfer: res.projectData.isTechTransfer,
             productionStepId: res.projectData.productionStepId,
@@ -224,10 +261,10 @@ export class GeneralInfoComponent implements OnInit {
 
 
   disabler() {
-    if(!this.projectHubService.roleControllerControl.generalInfo.basicFields){
+    if (!this.projectHubService.roleControllerControl.generalInfo.basicFields) {
       this.generalInfoForm.disable()
     }
-    if(!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner){
+    if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       console.log('hit')
       this.generalInfoForm.controls.portfolioOwner.disable()
     }
@@ -238,7 +275,7 @@ export class GeneralInfoComponent implements OnInit {
     this.generalInfoForm.controls.sponsor.disable()
   }
   getPortfolioOwner(): any {
-    return this.filterCriteria.portfolioOwner
+    return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
@@ -262,7 +299,7 @@ export class GeneralInfoComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
   }
   getLookUpName(id: string): string {
-    return this.lookUpData.find(x => x.lookUpId == id).lookUpName
+    return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
   }
   qrTableEditRow(row: number) {
     if (!this.qrTableEditStack.includes(row)) {
@@ -272,6 +309,14 @@ export class GeneralInfoComponent implements OnInit {
   deleteQR(rowIndex: number) {
     this.generalInfoData.qualityReferences.splice(rowIndex, 1)
     this.qualityRefForm.removeAt(rowIndex)
+    if (this.qrTableEditStack.includes(rowIndex)) {
+      this.qrTableEditStack.splice(this.qrTableEditStack.indexOf(rowIndex), 1)
+    }
+    this.qrTableEditStack = this.qrTableEditStack.map(function (value) {
+      return value > rowIndex ? value - 1 : value;
+    })
+    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences]
+    
   }
   addQR() {
     this.qualityRefForm.push(new FormGroup({
@@ -307,6 +352,7 @@ export class GeneralInfoComponent implements OnInit {
       }
     }
     var formValue = this.generalInfoForm.getRawValue()
+    console.log(formValue)
     var submitObj = this.generalInfoData.projectData
     submitObj.problemTitle = formValue.problemTitle
     submitObj.parentProgramId = formValue.projectsingleid
@@ -314,9 +360,9 @@ export class GeneralInfoComponent implements OnInit {
     submitObj.projectDescription = formValue.projectDescription
     submitObj.primaryProductId = formValue.primaryProduct ? formValue.primaryProduct.productId : ''
     submitObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
-    submitObj.portfolioOwnerId = formValue.portfolioOwner.portfolioOwnerId
+    submitObj.portfolioOwnerId = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
     submitObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
-    submitObj.emissionPortfolioId = formValue.enviornmentalPortfolio.portfolioOwnerId
+    submitObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
     submitObj.isOeproject = formValue.isOeproject
     submitObj.oeprojectType = formValue.oeprojectType ? formValue.oeprojectType.lookUpId : ''
     submitObj.isCapsProject = formValue.isCapsProject
