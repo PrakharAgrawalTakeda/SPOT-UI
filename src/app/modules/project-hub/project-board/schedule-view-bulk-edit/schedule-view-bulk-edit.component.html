@@ -1,4 +1,4 @@
-<div *ngIf="viewContent && !viewBaseline">
+<div *ngIf="viewContent" [hidden]="viewBaseline">
   <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Milestones</div>
     <div style="padding-top: 2px">
@@ -24,20 +24,19 @@
 
       <div class="flex items-start justify-between">
         <div style="padding-right: 5px;">
-          <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" 
-          style="margin-left: 2rem; padding:0px 28px!important" class="ml-4" mat-flat-button [color]="'primary'"
-          (click)="baselineProject()">
-          Baseline Project
-        </button>
-      </div>
+          <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
+            style="margin-left: 2rem; padding:0px 28px!important" class="ml-4" mat-flat-button [color]="'primary'"
+            (click)="baselineProject()">
+            Baseline Project
+          </button>
+        </div>
         <div style="padding-right: 2px;">
-            <button class="ml-4" mat-flat-button [color]="'primary'"
-                (click)="addMilestoneRecord()">
-                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-            </button>
+          <button class="ml-4" mat-flat-button [color]="'primary'" (click)="addMilestoneRecord()">
+            <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+          </button>
         </div>
 
-    </div>
+      </div>
     </div>
 
 
@@ -59,7 +58,7 @@
       <ngx-datatable class="pr-6 pl-2 material font-medium text-sm text-secondary whitespace-nowrap"
         [rows]="scheduleData.scheduleData" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
         [scrollbarV]="false">
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.5">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
               class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}" *ngIf="row.scheduleUniqueId != 'new'">
@@ -108,7 +107,7 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [flexGrow]="1">
+        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false" [flexGrow]="0.35">
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
 
             {{calculateVariance(row)}}
@@ -159,13 +158,13 @@
               <p *ngIf="value == ''">&nbsp;</p>{{value}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-input formControlName="comments" name="comments" [showLabel]="false" [placeholder]="'Comments'">
-              </spot-input>
+              <spot-textarea [rows]="3" formControlName="comments" name="comments" [showLabel]="false" [placeholder]="'Comments'">
+              </spot-textarea>
             </form>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Include in Project Dashboard" prop="includeInReport" [sortable]="false"
-          [resizeable]="false" [flexGrow]="1">
+          [resizeable]="false" [flexGrow]="0.65">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="!value">&nbsp;</p>
@@ -180,7 +179,7 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
+        <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false">
           <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
 
             <div class="flex items-center justify-start gap-6">
@@ -193,7 +192,7 @@
         </ngx-datatable-column>
       </ngx-datatable>
     </div>
-    <div class="mt-6 flex justify-between items-center w-full"> 
+    <div class="mt-6 flex justify-between items-center w-full">
 
       <button style="margin-left: 2rem; padding:0px 50px!important" class="w-auto" mat-flat-button [color]="'primary'"
         (click)="cancelschedule()">
@@ -209,7 +208,7 @@
   </div>
 </div>
 
-<div *ngIf="viewContent && viewBaseline">
+<div *ngIf="viewContent" [hidden]="!viewBaseline">
   <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Baseline Count Justification</div>
     <div style="padding-top: 2px">
@@ -218,31 +217,29 @@
       </a>
     </div>
   </div>
-  <form class="w-full form-ask-need" [formGroup]="baselineForm"
-    style="overflow-y: scroll; height: 95vh;">
+  <form class="w-full form-ask-need" [formGroup]="baselineForm" style="overflow-y: scroll; height: 95vh;">
 
     <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
       <mat-label>Justification for Re-Baselining</mat-label>
-      <textarea matInput [rows]="5" [placeholder]="'Provide an explanation/justification for re-baselining'" formControlName="baselineComment"
-          name="baselineComment"></textarea>
-  </mat-form-field>
-  <div class="flex justify-between items-center">
-    <div class="flex justify-start gap-1 items-center">Do you want to increment the baseline counter?
+      <textarea matInput [rows]="5" [placeholder]="'Provide an explanation/justification for re-baselining'"
+        formControlName="baselineComment" name="baselineComment"></textarea>
+    </mat-form-field>
+    <div class="flex justify-between items-center">
+      <div class="flex justify-start gap-1 items-center">Do you want to increment the baseline counter?
+      </div>
+      <div>
+        <mat-slide-toggle formControlName="counter"></mat-slide-toggle>
+      </div>
     </div>
-    <div>
-      <mat-slide-toggle formControlName="counter"></mat-slide-toggle>
-    </div>
-  </div>
-&nbsp;
-&nbsp;
+    &nbsp;
+    &nbsp;
     <div class="flex items-start justify-between">
-      <a class="w-25" mat-flat-button [color]="'primary'"
-          (click)="cancelJustification()">
-          Cancel
+      <a class="w-25" mat-flat-button [color]="'primary'" (click)="cancelJustification()">
+        Cancel
       </a>
-      <button class="w-25" mat-flat-button [color]="'primary'"type="button" (click)="submitjustification()">
-          Submit
+      <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitjustification()">
+        Submit
       </button>
-  </div>
-</form>
+    </div>
+  </form>
 </div>
