@@ -15,6 +15,7 @@ export class ProjectBoard{
     public riskIssuesEdit: boolean = true
     public scheduleEdit: boolean = true
     public baselineedit: boolean = true
+    public baselineproject: boolean = false
 }
 
 export class GeneralInfo{

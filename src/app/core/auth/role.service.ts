@@ -45,7 +45,8 @@ export class RoleService {
           riskIssuesEdit: false,
           overallStatusEdit: false,
           scheduleEdit: false,
-          baselineedit: false
+          baselineedit: false,
+          baselineproject: true
         }
         localroleController.projectHub.hubSettings = false
         localroleController.generalInfo = {

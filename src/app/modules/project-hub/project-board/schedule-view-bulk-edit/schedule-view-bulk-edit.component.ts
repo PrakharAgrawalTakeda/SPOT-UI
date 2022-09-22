@@ -134,6 +134,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                 }
               }
             }
+            if(!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject)
+            {
+            if(this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program')
+            {
+              this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
+            }
+          }
             if (this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
               if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
 
@@ -469,6 +476,34 @@ if(this.baselineForm.value.counter == false)
         })
       }
     })
+  }
+
+  baselineProject()
+  {
+    for (var i of this.milestoneForm.value) 
+    {
+    this.milestoneForm.patchValue([{
+      scheduleUniqueId: i.scheduleUniqueId,
+      projectId: i.projectId,
+      milestone: i.milestone,
+      plannedFinish: i.plannedFinish,
+      baselineFinish: i.plannedFinish,
+      responsiblePersonName: (i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
+      function: this.lookUpData.find(x => x.lookUpId == i.functionGroupId),
+      functionGroupId: i.functionGroupId,
+      completionDate: i.completionDate,
+      comments: i.comments,
+      includeInReport: i.includeInReport,
+      includeInCharter: i.includeInCharter,
+      milestoneType: i.milestoneType,
+      templateMilestoneId: i.templateMilestoneId,
+      includeInCloseout: i.includeInCloseout,
+      responsiblePersonId: i.responsiblePersonId,
+      indicator: i.indicator
+     }])
+    }
+    console.log(this.milestoneForm)
+    this.submitschedule()
   }
 
   submitschedule() {
