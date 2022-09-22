@@ -32,7 +32,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         this.lookupdata = lookup
         //Initializing Bulk Edit
         if (this.teamMembers.length > 0) {
-          for (var i of this.teamMembers){
+          for (var i of this.teamMembers) {
             this.projectTeamForm.push(new FormGroup({
               projectTeamUniqueId: new FormControl(i.projectTeamUniqueId),
               user: i.userId || i.userId != "" ? new FormControl({
@@ -43,13 +43,23 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               role: new FormControl(i.roleId || i.roleId != "" ? lookup.find(x => x.lookUpId == i.roleId) : {}),
             }))
           }
-          
+
         }
         console.log(this.projectTeamForm.value)
         //enable Table
         this.viewContent = true
       })
     })
+  }
+
+  valueChanges(event: any, rowIndex: number) {
+    console.log('Form Value', event)
+    if (Object.keys(event).length > 0) {
+      this.findRoles(event.userAdid, rowIndex)
+    }
+    else {
+      this.projectTeamForm.controls[rowIndex].get('teamPermissionId').enable()
+    }
   }
   getPermissions(): any {
     return this.lookupdata.filter(x => x.lookUpParentId == "474EE4AC-7A6C-4D30-B6EA-12A0D0F4BC2C" && x.lookUpId != "87DA989B-0BBA-406F-99C1-99E1E80EE9FE")
@@ -62,7 +72,18 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     return id && id != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
   }
 
- 
+  findRoles(adid: string, index: number) {
+    this.role.getCurrentRoleRequest(adid).subscribe((response: any) => {
+      console.log(response)
+      if (response.securityGroupId != "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
+        this.projectTeamForm.controls[index].get('teamPermissionId').patchValue("3448BD5C-38F4-4B3C-BA4C-C99E659DC0B0")
+        this.projectTeamForm.controls[index].get('teamPermissionId').disable()
+      }
+      else {
+        this.projectTeamForm.controls[index].get('teamPermissionId').enable()
+      }
+    })
+  }
   //Table Controls
   addPT() {
     var j = [{
@@ -97,7 +118,10 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   ptTableEditRow(row: number) {
     if (!this.ptTableEditStack.includes(row)) {
-      this.ptTableEditStack.push(row)
+      if (Object.keys(this.projectTeamForm.at(row).value.user).length > 0){
+        this.findRoles(this.projectTeamForm.at(row).value.user.userAdid, row)
+      }
+        this.ptTableEditStack.push(row)
     }
   }
 

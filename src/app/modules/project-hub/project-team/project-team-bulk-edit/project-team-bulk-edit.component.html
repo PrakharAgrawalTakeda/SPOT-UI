@@ -43,7 +43,8 @@
                     <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)">
                         <spot-singleselect-user-autocomplete formControlName="user" [showLabel]="false"
                             [label]="'Team Member(s)'"
-                            [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+                            [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'"
+                            (valueChange)='valueChanges($event, rowIndex)'>
                         </spot-singleselect-user-autocomplete>
                     </form>
                 </ng-template>
