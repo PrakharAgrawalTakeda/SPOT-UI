@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
@@ -12,11 +13,24 @@ import { ProjectHubService } from '../../project-hub.service';
 })
 export class ProjectTeamBulkEditComponent implements OnInit {
 
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService) {
-
-
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService, public fuseAlert: FuseConfirmationService) {
+    this.projectTeamForm.valueChanges.subscribe(res => {
+      if (this.viewContent == true) {
+        this.formValue()
+        console.log("DB", this.teamMembersDb)
+        console.log("SUB", this.teamMembersSubmit)
+        if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
+          this.projecthubservice.isFormChanged = true
+        }
+        else {
+          this.projecthubservice.isFormChanged = false
+        }
+      }
+    })
   }
-  teamMembers: any = []
+  teamMembers = []
+  teamMembersDb = []
+  teamMembersSubmit = []
   viewContent: boolean = false
   lookupdata: any[]
   ptTableEditStack = []
@@ -32,6 +46,20 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         this.lookupdata = lookup
         //Initializing Bulk Edit
         if (this.teamMembers.length > 0) {
+          this.teamMembersDb = this.teamMembers.map(x => {
+            return {
+              "projectTeamUniqueId": x.projectTeamUniqueId,
+              "problemUniqueId": x.problemUniqueId,
+              "roleId": x.roleId,
+              "teamMemberAdId": x.userId,
+              "teamMemberName": x.userName,
+              "teamPermissionId": x.teamPermissionId,
+              "percentTime": x.percentTime,
+              "duration": x.duration,
+              "includeInCharter": x.includeInCharter,
+              "includeInProposal": x.includeInProposal
+            }
+          })
           for (var i of this.teamMembers) {
             this.projectTeamForm.push(new FormGroup({
               projectTeamUniqueId: new FormControl(i.projectTeamUniqueId),
@@ -41,6 +69,11 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               }) : new FormControl({}),
               teamPermissionId: new FormControl(i.teamPermissionId),
               role: new FormControl(i.roleId || i.roleId != "" ? lookup.find(x => x.lookUpId == i.roleId) : {}),
+              percentTime: new FormControl(i.percentTime),
+              duration: new FormControl(i.duration),
+              includeInCharter: new FormControl(i.includeInCharter),
+              includeInProposal: new FormControl(i.includeInProposal),
+              problemUniqueId: new FormControl(i.problemUniqueId),
             }))
           }
 
@@ -72,6 +105,31 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     return id && id != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
   }
 
+  formValue() {
+    var form = this.projectTeamForm.getRawValue()
+    if (form.length > 0) {
+      this.teamMembersSubmit = []
+      for (var i of form) {
+        this.teamMembersSubmit.push({
+          "projectTeamUniqueId": i.projectTeamUniqueId,
+          "problemUniqueId": i.problemUniqueId,
+          "roleId": Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
+          "teamMemberAdId": Object.keys(i.user).length > 0 ? i.user.userAdid : '',
+          "teamMemberName": Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
+          "teamPermissionId": i.teamPermissionId,
+          "percentTime": i.percentTime,
+          "duration": i.duration,
+          "includeInCharter": i.includeInCharter,
+          "includeInProposal": i.includeInProposal
+        })
+      }
+    }
+    else {
+      this.teamMembersSubmit = []
+    }
+  }
+
+
   findRoles(adid: string, index: number) {
     this.role.getCurrentRoleRequest(adid).subscribe((response: any) => {
       console.log(response)
@@ -83,6 +141,49 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         this.projectTeamForm.controls[index].get('teamPermissionId').enable()
       }
     })
+  }
+
+  submitProjectTeams() {
+    this.formValue()
+    if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
+      console.log('hit')
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Are you sure?",
+        "message": "Are you sure you want save these Changes?",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Save",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+      alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          this.projecthubservice.isFormChanged = false
+          this.formValue()
+          this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          })
+        }
+      })
+    }
+    else {
+      this.projecthubservice.submitbutton.next(true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+    }
   }
   //Table Controls
   addPT() {
@@ -101,6 +202,11 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       user: new FormControl({}),
       teamPermissionId: new FormControl(''),
       role: new FormControl({}),
+      percentTime: new FormControl(0),
+      duration: new FormControl(0),
+      includeInCharter: new FormControl(false),
+      includeInProposal: new FormControl(false),
+      problemUniqueId: new FormControl(this.projecthubservice.projectid),
     }))
     this.teamMembers = [...this.teamMembers, ...j]
     this.ptTableEditStack.push(this.teamMembers.length - 1)
@@ -118,10 +224,10 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   ptTableEditRow(row: number) {
     if (!this.ptTableEditStack.includes(row)) {
-      if (Object.keys(this.projectTeamForm.at(row).value.user).length > 0){
+      if (Object.keys(this.projectTeamForm.at(row).value.user).length > 0) {
         this.findRoles(this.projectTeamForm.at(row).value.user.userAdid, row)
       }
-        this.ptTableEditStack.push(row)
+      this.ptTableEditStack.push(row)
     }
   }
 
