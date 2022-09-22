@@ -210,5 +210,23 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async addProjectBaselineLog(body){
+    var link = GlobalVariables.apiurl+"ProjectBaselineLogs"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getProjectBaselineLog(projectId){
+    var userid = GlobalVariables.apiurl+"ProjectBaselineLogs/" + projectId
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editProjectBaseline(body){
+    var link = GlobalVariables.apiurl+"ProjectBaselines/" + body.projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 
 }

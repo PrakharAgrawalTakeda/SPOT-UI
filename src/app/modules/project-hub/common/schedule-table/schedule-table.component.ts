@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() scheduleData: any;
