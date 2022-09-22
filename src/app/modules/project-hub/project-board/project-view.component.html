@@ -179,13 +179,6 @@
             </ngx-datatable>
         </div>
     </div>-->
-    <div *ngIf="hubsetting.overallStatus && projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit"
-        class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
-        <app-operational-performance-table [lookup]="lookupmaster" [kpi]="kpiMaster"
-            [projectViewDetails]="projectViewDetails" [projectid]="id"
-            [editable]="projecthubservice.roleControllerControl.projectHub.projectBoard.riskIssuesEdit">
-        </app-operational-performance-table>
-    </div>
     <!-- Risk Issues -->
     <div *ngIf="hubsetting.risks"
         class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
