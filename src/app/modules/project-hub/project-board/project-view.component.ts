@@ -45,7 +45,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   isEverythingLoaded: boolean = false
   rows: any[] = [];
   isclosedaskneedtoggle: boolean = false
-  kpiMaster: any = []
   overallCollapse: boolean = false
   overallCollapseControll: boolean = false
 
@@ -125,10 +124,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
     }
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res) => {
-      this.auth.KPIMaster().then(kpis => {
-        this.kpiMaster = kpis
         this.projectViewDetails = res
-        this.projecthubservice.kpiMasters = kpis
         this.hubsetting = {
           overallStatus: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1').hubValue : true,
           risks: this.projectViewDetails.hubSettings.some(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == 'f84a8e82-de59-46d5-8b84-f4c32a1018e1').hubValue : true,
@@ -152,7 +148,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
         this.askNeed.sort = this.askNeedMatSort
         this.schedule.data = this.projectViewDetails.scheduleData
         this.schedule.sort = this.scheduleMatSort
-      })
+      
     })
     this.auth.lookupMaster().then((res: any) => {
       this.projecthubservice.lookUpMaster = res

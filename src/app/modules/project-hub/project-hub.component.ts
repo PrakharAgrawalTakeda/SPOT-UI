@@ -102,7 +102,7 @@ export class ProjectHubComponent implements OnInit {
                 //Teams
                 this.projecthubservice.menuData[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
                 if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
-                    this.projecthubservice.menuData[0].children[11].disabled = true
+                    this.projecthubservice.menuData[0].children[12].disabled = true
                 }
 
                 //nav refresh

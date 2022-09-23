@@ -28,7 +28,7 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
 
     this.primaryKPIForm.controls.primaryKpi.valueChanges.subscribe(res => {
       if (this.initializationComplete == true) {
-        this.apiService.updatePrimayKPI(this.projectid, res.kpiid).then(x=>{
+        this.apiService.updatePrimayKPI(this.projectid, res.kpiid).then(x => {
           this.projecthubservice.submitbutton.next(true)
         })
       }
@@ -47,10 +47,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     this.initializationComplete = true
   }
   getLookUpName(lookUpId: string): string {
-    return this.lookup.get(lookUpId)
+    return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId = lookUpId).lookUpName : ''
   }
   getKPIName(kpiid: string): string {
-    return this.kpi.find(x => x.kpiid == kpiid)?this.kpi.find(x => x.kpiid == kpiid).kpiname:''
+    return this.kpi.find(x => x.kpiid == kpiid) ? this.kpi.find(x => x.kpiid == kpiid).kpiname : ''
   }
 
   getIndicator(status: string): string {

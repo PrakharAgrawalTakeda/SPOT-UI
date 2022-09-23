@@ -1,6 +1,8 @@
 export class RoleController{
      public projectHub: ProjectHub = new ProjectHub
      public generalInfo: GeneralInfo = new GeneralInfo
+     public projectTeam: boolean = true
+     public projectBenefits: boolean = true
      public roleId: string = ''
 }
 

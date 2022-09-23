@@ -48,6 +48,8 @@ export class RoleService {
           baselineedit: false,
           baselineproject: true
         }
+        localroleController.projectTeam = false
+        localroleController.projectBenefits = false
         localroleController.projectHub.hubSettings = false
         localroleController.generalInfo = {
           basicFields: false,

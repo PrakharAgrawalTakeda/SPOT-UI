@@ -1,1 +1,170 @@
-<p>project-benefits works!</p>
+<div class="flex flex-col flex-auto w-full px-8"
+    *ngIf="viewContent">
+    <div class="w-full bg-card rounded-2xl p-3">
+        <form class="w-full p-6 pb-3 pt-0" *ngIf="projecthubservice.roleControllerControl.projectBenefits" [formGroup]="primaryKPIForm">
+            <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
+                [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
+                [dropDownArray]="kpiMaster">
+            </spot-singleselect-autocomplete>
+        </form>
+        <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Performance
+            </div>
+            <button class="ml-4 text-primary" *ngIf="projecthubservice.roleControllerControl.projectBenefits" mat-flat-button [color]="'primary-200'"
+                (click)="addOP()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+        </div>
+        <div class="overflow-x-auto mx-6">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                [rows]="projectViewDetails.overallPerformace" #operationalPerformanceTable>
+                <ngx-datatable-column name="Status" [resizeable]="false" [sortable]="false" prop="status"
+                    [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <div class="flex items-center justify-start gap-6">
+                                <mat-icon
+                                    svgIcon="{{(indicator.getIndicators(getIndicator(value), 'circle')).icontype}}"
+                                    class="{{(indicator.getIndicators(getIndicator(value), 'circle')).iconcolor}}">
+                                </mat-icon>
+                                {{ getLookUpName(value)}}
+                            </div>
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <div class="flex justify-start items-center gap-6">
+                                <mat-icon
+                                    svgIcon="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).icontype}}"
+                                    class="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).iconcolor}}">
+                                </mat-icon>
+                                <spot-select class="w-full" formControlName="status" [showLabel]="false"
+                                    [label]="'Status'" [placeholder]="'Status'" [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'" [dropDownArrayType]="'object'"
+                                    [dropDownArray]="getStatus()" [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'">
+                                </spot-select>
+                            </div>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="KPI" prop="kpiid" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{getKPIName(value)}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-singleselect-autocomplete formControlName="kpiid" [showLabel]="false" [label]="'KPI'"
+                                [placeholder]="'KPI'" [valuePointer]="'kpiname'" [dropDownArray]="kpiMaster">
+                            </spot-singleselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Metric" prop="metric"
+                    [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="metric" [showLabel]="false" [label]="'Metric'"
+                                [placeholder]="'Metric'">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Baseline" prop="currentState"
+                    [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="currentState" [showLabel]="false" [label]="'Baseline'"
+                                [placeholder]="'Baseline'">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Target Performance"
+                    prop="targetPerformance" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="targetPerformance" [showLabel]="false"
+                                [label]="'Target Performance'" [placeholder]="'Target Performance'">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Actual Performance"
+                    prop="actualPerformance" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="actualPerformance" [showLabel]="false"
+                                [label]="'Actual Performance'" [placeholder]="'Actual Performance'">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false"
+                    name="Include In Project Dashboard Report (Max 3)" prop="includeInProjectDashboard"
+                    [flexGrow]="0.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)" class="w-full">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)" class="h-[45px]">
+                            <mat-slide-toggle (change)="disabler()" class="h-full overflow-visible"
+                                formControlName="includeInProjectDashboard">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.1" [resizeable]="false"
+                    [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+
+                        <div class="flex items-center justify-start">
+                            <a href="javascript:void(0)" title="Delete Single" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
+                                (click)="deleteOP(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="mt-6 flex justify-between items-center" *ngIf="projecthubservice.roleControllerControl.projectBenefits">
+        <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="cancel()">
+            Cancel
+        </button>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitOP()">
+            Submit
+        </button>
+    </div>
+
+
+</div>

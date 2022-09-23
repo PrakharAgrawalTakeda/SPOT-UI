@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, Output, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { GlobalVariables } from 'app/shared/global-variables';
 import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil, timeout } from 'rxjs';
@@ -29,7 +29,7 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
   //@Input() idPointer: string = ''
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
-
+  @Output() valueChange = new EventEmitter();
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
   filteredDropDownValues: any
@@ -52,6 +52,7 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {
         this.onChange({})
+        this.valueChange.emit({})
         this.selectedOption = {}
       }
     })
@@ -98,6 +99,7 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
   }
   onFunctionSelect(event: any) {
     this.onChange(event.option.value)
+    this.valueChange.emit(event.option.value)
     this.form.controls.control.patchValue(event.option.value[this.valuePointer])
     this.selectedOption = event.option.value
     this.input.nativeElement.blur()
