@@ -115,66 +115,38 @@ export class ProjectBenefitsComponent implements OnInit {
     //OP
     var formValue = this.operationalPerformanceForm.getRawValue()
     var submitObj = []
-    if (formValue.length > 0) {
-      submitObj = formValue.map(x => {
-        return {
-          keySuccessUniqueId: x.keySuccessUniqueId,
-          projectId: x.projectId,
-          metric: x.metric,
-          currentState: x.currentState,
-          targetPerformance: x.targetPerformance,
-          includeInCharter: x.includeInCharter,
-          kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
-          actualPerformance: x.actualPerformance,
-          includeInProjectDashboard: x.includeInProjectDashboard,
-          status: x.status,
-          includeInCloseOut: x.includeInCloseOut,
-          ptrbid: x.ptrbid,
-          benefitDescriptionJustification: x.benefitDescriptionJustification,
-          includeinProposal: x.includeinProposal
-        }
-      })
-      if (JSON.stringify(submitObj) == JSON.stringify(this.opDb) && Object.keys(this.primaryKPIForm.controls.primaryKpi.value).length > 0 ? this.primaryKPIForm.controls.primaryKpi.value.kpiid == this.projectViewDetails.projectData.primaryKpi : this.projectViewDetails.projectData.primaryKpi == '') {
-        this.projecthubservice.isNavChanged.next(true)
-        this.projecthubservice.successSave.next(true)
-        this.router.navigate(['project-hub/' + this.id + '/project-board'])
+    formValue.length > 0 ? submitObj = formValue.map(x => {
+      return {
+        keySuccessUniqueId: x.keySuccessUniqueId,
+        projectId: x.projectId,
+        metric: x.metric,
+        currentState: x.currentState,
+        targetPerformance: x.targetPerformance,
+        includeInCharter: x.includeInCharter,
+        kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
+        actualPerformance: x.actualPerformance,
+        includeInProjectDashboard: x.includeInProjectDashboard,
+        status: x.status,
+        includeInCloseOut: x.includeInCloseOut,
+        ptrbid: x.ptrbid,
+        benefitDescriptionJustification: x.benefitDescriptionJustification,
+        includeinProposal: x.includeinProposal
       }
-      else {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "Are you Sure?",
-          "message": "Are you sure you want to Save this Information? ",
-          "icon": {
-            "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warn"
-          },
-          "actions": {
-            "confirm": {
-              "show": true,
-              "label": "Save",
-              "color": "warn"
-            },
-            "cancel": {
-              "show": true,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
-        }
-        const operationalPerformanceAlert = this.fuseAlert.open(comfirmConfig)
-        operationalPerformanceAlert.afterClosed().subscribe(close => {
-          if (close == 'confirmed') {
-            this.projectViewDetails.projectData.primaryKpi = Object.keys(this.primaryKPIForm.controls.primaryKpi.value).length > 0 ? this.primaryKPIForm.controls.primaryKpi.value.kpiid : ''
-            this.apiService.editGeneralInfo(this.id, this.projectViewDetails.projectData).then(res => {
-              this.apiService.bulkeditKeySuccess(submitObj, this.id).then(resp => {
-                this.projecthubservice.isNavChanged.next(true)
-                this.projecthubservice.successSave.next(true)
-                this.router.navigate(['project-hub/' + this.id + '/project-board'])
-              })
-            })
-          }
+    }) : ''
+    if (JSON.stringify(submitObj) == JSON.stringify(this.opDb) && Object.keys(this.primaryKPIForm.controls.primaryKpi.value).length > 0 ? this.primaryKPIForm.controls.primaryKpi.value.kpiid == this.projectViewDetails.projectData.primaryKpi : this.projectViewDetails.projectData.primaryKpi == '') {
+      this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.successSave.next(true)
+      this.router.navigate(['project-hub/' + this.id + '/project-board'])
+    }
+    else {
+      this.projectViewDetails.projectData.primaryKpi = Object.keys(this.primaryKPIForm.controls.primaryKpi.value).length > 0 ? this.primaryKPIForm.controls.primaryKpi.value.kpiid : ''
+      this.apiService.editGeneralInfo(this.id, this.projectViewDetails.projectData).then(res => {
+        this.apiService.bulkeditKeySuccess(submitObj, this.id).then(resp => {
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.successSave.next(true)
+          this.router.navigate(['project-hub/' + this.id + '/project-board'])
         })
-      }
+      })
     }
   }
   cancel() {
@@ -242,16 +214,42 @@ export class ProjectBenefitsComponent implements OnInit {
     }
   }
   deleteOP(rowIndex: number) {
-    this.projectViewDetails.overallPerformace.splice(rowIndex, 1)
-    this.operationalPerformanceForm.removeAt(rowIndex)
-    if (this.operationalPerformanceEditStack.includes(rowIndex)) {
-      this.operationalPerformanceEditStack.splice(this.operationalPerformanceEditStack.indexOf(rowIndex), 1)
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you Sure?",
+      "message": "Are you sure you want to Delete this Record? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
     }
-    this.operationalPerformanceEditStack = this.operationalPerformanceEditStack.map(function (value) {
-      return value > rowIndex ? value - 1 : value;
+    const operationalPerformanceAlert = this.fuseAlert.open(comfirmConfig)
+    operationalPerformanceAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.projectViewDetails.overallPerformace.splice(rowIndex, 1)
+        this.operationalPerformanceForm.removeAt(rowIndex)
+        if (this.operationalPerformanceEditStack.includes(rowIndex)) {
+          this.operationalPerformanceEditStack.splice(this.operationalPerformanceEditStack.indexOf(rowIndex), 1)
+        }
+        this.operationalPerformanceEditStack = this.operationalPerformanceEditStack.map(function (value) {
+          return value > rowIndex ? value - 1 : value;
+        })
+        this.disabler()
+        this.projectViewDetails.overallPerformace = [...this.projectViewDetails.overallPerformace]
+      }
     })
-    this.disabler()
-    this.projectViewDetails.overallPerformace = [...this.projectViewDetails.overallPerformace]
   }
   addOP() {
     {
