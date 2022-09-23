@@ -4,8 +4,7 @@
         <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
             <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
                 [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
-                [dropDownArray]="kpiMaster" [showHint]="true" [hintPostion]="'mat-hint'"
-                [hint]="'This change would be saved on edit ~~TO BE DISCUSSED IN NEXT TEAM MEETING'">
+                [dropDownArray]="kpiMaster">
             </spot-singleselect-autocomplete>
         </form>
         <div class="p-6 pb-3 pt-0 flex items-center justify-between">
@@ -43,7 +42,7 @@
                                 </mat-icon>
                                 <spot-select class="w-full" formControlName="status" [showLabel]="false"
                                     [label]="'Status'" [placeholder]="'Status'" [valuePointer]="'lookUpName'"
-                                    [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
+                                    [idPointer]="'lookUpId'" [dropDownArrayType]="'object'"
                                     [dropDownArray]="getStatus()" [sortByType]="'custom'"
                                     [customSortPointer]="'lookUpOrder'">
                                 </spot-select>
