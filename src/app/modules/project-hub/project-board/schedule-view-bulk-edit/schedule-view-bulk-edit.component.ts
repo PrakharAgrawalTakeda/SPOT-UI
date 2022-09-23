@@ -123,7 +123,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                   responsiblePersonId: new FormControl(i.responsiblePersonId),
                   indicator: new FormControl(i.indicator)
                 }))
-
+               
+                for (let control of this.milestoneForm.controls) {
+                if(this.milestoneForm.value.completionDate != null)
+                {
+                  control['controls']['baselineFinish'].disable()
+                }
+              }
               }
               for (let control of this.milestoneForm.controls) {
                 console.log("Project Hub", this.projecthubservice)
@@ -236,7 +242,31 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
 
     console.log(this.scheduleData)
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Save Changes?",
+      "message": "Are you sure you want to save the changes permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Save",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const scheduleAlert = this.fuseAlert.open(comfirmConfig)
 
+    scheduleAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
 
     this.milestoneForm.removeAt(rowIndex)
     this.scheduleData.scheduleData.splice(rowIndex, 1)
@@ -254,7 +284,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData];
 
 
-
+  }
+})
   }
 
   milestoneTableEditRow(row: number) {
@@ -413,33 +444,31 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   }
 
   saveScheduleBulkEdit() {
-    //this.projecthubservice.isBulkEdit = true
-    var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Save Changes?",
-      "message": "Are you sure you want to save the changes permanently? ",
-      "icon": {
-        "show": true,
-        "name": "heroicons_outline:exclamation",
-        "color": "warn"
-      },
-      "actions": {
-        "confirm": {
-          "show": true,
-          "label": "Save",
-          "color": "warn"
-        },
-        "cancel": {
-          "show": true,
-          "label": "Cancel"
-        }
-      },
-      "dismissible": true
-    }
-    const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+    // var comfirmConfig: FuseConfirmationConfig = {
+    //   "title": "Save Changes?",
+    //   "message": "Are you sure you want to save the changes permanently? ",
+    //   "icon": {
+    //     "show": true,
+    //     "name": "heroicons_outline:exclamation",
+    //     "color": "warn"
+    //   },
+    //   "actions": {
+    //     "confirm": {
+    //       "show": true,
+    //       "label": "Save",
+    //       "color": "warn"
+    //     },
+    //     "cancel": {
+    //       "show": true,
+    //       "label": "Cancel"
+    //     }
+    //   },
+    //   "dismissible": true
+    // }
+    // const scheduleAlert = this.fuseAlert.open(comfirmConfig)
 
-    scheduleAlert.afterClosed().subscribe(close => {
-      if (close == 'confirmed') {
-        //this.projecthubservice.isBulkEdit = false
+    // scheduleAlert.afterClosed().subscribe(close => {
+    //   if (close == 'confirmed') {
         var formValue = this.milestoneForm.getRawValue()
         console.log(formValue)
 
@@ -471,15 +500,25 @@ export class ScheduleViewBulkEditComponent implements OnInit {
           this.projecthubservice.submitbutton.next(true)
         })
       }
-    })
-  }
+  //   })
+  // }
 
   baselineProject() {
     for (var i of this.milestoneForm.controls) {
-      i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
+      console.log(i['controls']['completionDate'].value)
+      if(i['controls']['completionDate'].value == null || i['controls']['completionDate'].value == '')
+      {
+        i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
+      }
+      
     }
     for (var j of this.scheduleData.scheduleData) {
-      j.baselineFinish = j.plannedFinish
+      console.log(j.completionDate)
+      if(j.completionDate == null || j.completionDate == '')
+      {
+        j.baselineFinish = j.plannedFinish
+      }
+
     }
     this.flag = true
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData]
