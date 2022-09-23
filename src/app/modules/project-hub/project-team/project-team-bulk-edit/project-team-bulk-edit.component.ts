@@ -156,13 +156,39 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   submitProjectTeams() {
     this.formValue()
     if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
-      console.log('hit')
+      console.log(this.teamMembersSubmit)
       this.projecthubservice.isFormChanged = false
       this.formValue()
-      this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      })
+      if (this.teamMembersSubmit.some(x => x.teamMemberAdId == "")) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "No User Selected",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+      else {
+        this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        })
+      }
     }
     else {
       this.projecthubservice.submitbutton.next(true)
@@ -193,7 +219,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     this.projectTeamForm.push(new FormGroup({
       projectTeamUniqueId: new FormControl(''),
       user: new FormControl({}),
-      teamPermissionId: new FormControl(''),
+      teamPermissionId: new FormControl("BCEBDFAC-DB73-40D3-8EF0-166411B5322C"),
       role: new FormControl({}),
       percentTime: new FormControl(0),
       duration: new FormControl(0),
