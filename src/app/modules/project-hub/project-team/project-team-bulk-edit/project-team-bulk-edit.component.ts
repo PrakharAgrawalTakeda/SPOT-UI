@@ -99,14 +99,14 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   getRoles(): any {
     var j = this.projectTeamForm.getRawValue()
-    if(j.some(x=>x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' && x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')){
-      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc','e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
+    if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' && x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc', 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
     }
-    else if(j.some(x=>x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc')){
-      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" &&  x.lookUpId != '17d65016-0541-4fcc-8a9c-1db0597817cc')
+    else if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc')) {
+      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != '17d65016-0541-4fcc-8a9c-1db0597817cc')
     }
-    else if(j.some(x=>x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')){
-      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" &&  x.lookUpId != 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')
+    else if (j.some(x => x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')
     }
     return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
@@ -157,37 +157,11 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     this.formValue()
     if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
       console.log('hit')
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Are you sure?",
-        "message": "Are you sure you want save these Changes?",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warn"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Save",
-            "color": "warn"
-          },
-          "cancel": {
-            "show": true,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-      alert.afterClosed().subscribe(close => {
-        if (close == 'confirmed') {
-          this.projecthubservice.isFormChanged = false
-          this.formValue()
-          this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          })
-        }
+      this.projecthubservice.isFormChanged = false
+      this.formValue()
+      this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
       })
     }
     else {
@@ -195,10 +169,10 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
     }
   }
-  deleteShowLogic(rowIndex: number): boolean{
+  deleteShowLogic(rowIndex: number): boolean {
     var j = this.projectTeamForm.controls[rowIndex]['controls']['role'].value
-    if(Object.keys(j).length>0){
-      if(j.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' || j.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'){
+    if (Object.keys(j).length > 0) {
+      if (j.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' || j.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8') {
         return false
       }
     }
@@ -231,15 +205,41 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     this.ptTableEditStack.push(this.teamMembers.length - 1)
   }
   deletePT(rowIndex: number) {
-    this.teamMembers.splice(rowIndex, 1)
-    this.projectTeamForm.removeAt(rowIndex)
-    if (this.ptTableEditStack.includes(rowIndex)) {
-      this.ptTableEditStack.splice(this.ptTableEditStack.indexOf(rowIndex), 1)
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": "Are you sure you want delete this record?",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
     }
-    this.ptTableEditStack = this.ptTableEditStack.map(function (value) {
-      return value > rowIndex ? value - 1 : value;
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.teamMembers.splice(rowIndex, 1)
+        this.projectTeamForm.removeAt(rowIndex)
+        if (this.ptTableEditStack.includes(rowIndex)) {
+          this.ptTableEditStack.splice(this.ptTableEditStack.indexOf(rowIndex), 1)
+        }
+        this.ptTableEditStack = this.ptTableEditStack.map(function (value) {
+          return value > rowIndex ? value - 1 : value;
+        })
+        this.teamMembers = [...this.teamMembers]
+      }
     })
-    this.teamMembers = [...this.teamMembers]
   }
   ptTableEditRow(row: number) {
     if (!this.ptTableEditStack.includes(row)) {
