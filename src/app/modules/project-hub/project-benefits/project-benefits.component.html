@@ -1,6 +1,6 @@
-<div class="flex w-full px-8" *ngIf="viewContent">
-    <div *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit"
-        class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
+<div class="flex flex-col flex-auto w-full px-8"
+    *ngIf="viewContent && projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit">
+    <div class="w-full bg-card rounded-2xl p-3">
         <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
             <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
                 [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
@@ -44,7 +44,8 @@
                                 <spot-select class="w-full" formControlName="status" [showLabel]="false"
                                     [label]="'Status'" [placeholder]="'Status'" [valuePointer]="'lookUpName'"
                                     [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
-                                    [dropDownArray]="getStatus()">
+                                    [dropDownArray]="getStatus()" [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'">
                                 </spot-select>
                             </div>
                         </form>
@@ -124,8 +125,9 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Include In Project Dashboard Report (Max 3)"
-                    prop="includeInProjectDashboard" [flexGrow]="0.5">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false"
+                    name="Include In Project Dashboard Report (Max 3)" prop="includeInProjectDashboard"
+                    [flexGrow]="0.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)" class="w-full">
@@ -134,7 +136,8 @@
                         </a>
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
                             *ngIf="operationalPerformanceEditStack.includes(rowIndex)" class="h-[45px]">
-                            <mat-slide-toggle (change)="disabler()" class="h-full overflow-visible" formControlName="includeInProjectDashboard">
+                            <mat-slide-toggle (change)="disabler()" class="h-full overflow-visible"
+                                formControlName="includeInProjectDashboard">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
@@ -155,4 +158,14 @@
             </ngx-datatable>
         </div>
     </div>
+    <div class="mt-6 flex justify-between items-center">
+        <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="cancel()">
+            Cancel
+        </button>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="submitOP()">
+            Submit
+        </button>
+    </div>
+
+
 </div>

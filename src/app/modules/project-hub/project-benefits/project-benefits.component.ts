@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from '../common/project-api.service';
@@ -17,6 +17,7 @@ export class ProjectBenefitsComponent implements OnInit {
   kpiMaster = []
   lookUpMaster = []
   projectViewDetails: any = {}
+  opDb = []
   viewContent: boolean = false
   primaryKPIForm = new FormGroup({
     primaryKpi: new FormControl({})
@@ -25,7 +26,7 @@ export class ProjectBenefitsComponent implements OnInit {
   operationalPerformanceEditStack = []
   editable: boolean = false
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService,
-    public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService) { }
+    public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, private router: Router) { }
 
   ngOnInit(): void {
     this.dataloader()
@@ -36,12 +37,14 @@ export class ProjectBenefitsComponent implements OnInit {
       this.auth.KPIMaster().then((kpis: any) => {
         this.auth.lookupMaster().then((lookup: any) => {
           this.projectViewDetails = res
+
           console.log("OVERALL DATA", this.projectViewDetails.overallPerformace)
           this.kpiMaster = kpis
           this.lookUpMaster = lookup
           this.editable = this.projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit
           this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? this.kpiMaster.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
           for (var i of this.projectViewDetails.overallPerformace) {
+            this.opDb.push(i)
             this.operationalPerformanceForm.push(new FormGroup({
               keySuccessUniqueId: new FormControl(i.keySuccessUniqueId),
               projectId: new FormControl(this.id),
@@ -105,6 +108,131 @@ export class ProjectBenefitsComponent implements OnInit {
       }
     }
   }
+  submitOP() {
+    //PKPI
+
+
+    //OP
+    var formValue = this.operationalPerformanceForm.getRawValue()
+    var submitObj = []
+    if (formValue.length > 0) {
+      submitObj = formValue.map(x => {
+        return {
+          keySuccessUniqueId: x.keySuccessUniqueId,
+          projectId: x.projectId,
+          metric: x.metric,
+          currentState: x.currentState,
+          targetPerformance: x.targetPerformance,
+          includeInCharter: x.includeInCharter,
+          kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
+          actualPerformance: x.actualPerformance,
+          includeInProjectDashboard: x.includeInProjectDashboard,
+          status: x.status,
+          includeInCloseOut: x.includeInCloseOut,
+          ptrbid: x.ptrbid,
+          benefitDescriptionJustification: x.benefitDescriptionJustification,
+          includeinProposal: x.includeinProposal
+        }
+      })
+      if (JSON.stringify(submitObj) == JSON.stringify(this.opDb) && Object.keys(this.primaryKPIForm.controls.primaryKpi.value).length > 0 ? this.primaryKPIForm.controls.primaryKpi.value.kpiid == this.projectViewDetails.projectData.primaryKpi : this.projectViewDetails.projectData.primaryKpi == '') {
+        this.projecthubservice.isNavChanged.next(true)
+        this.projecthubservice.successSave.next(true)
+        this.router.navigate(['project-hub/' + this.id + '/project-board'])
+      }
+      else {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you Sure?",
+          "message": "Are you sure you want to Save this Information? ",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Save",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const operationalPerformanceAlert = this.fuseAlert.open(comfirmConfig)
+        operationalPerformanceAlert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.projectViewDetails.projectData.primaryKpi = Object.keys(this.primaryKPIForm.controls.primaryKpi.value).length > 0 ? this.primaryKPIForm.controls.primaryKpi.value.kpiid : ''
+            this.apiService.editGeneralInfo(this.id, this.projectViewDetails.projectData).then(res => {
+              this.apiService.bulkeditKeySuccess(submitObj, this.id).then(resp => {
+                this.projecthubservice.isNavChanged.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.router.navigate(['project-hub/' + this.id + '/project-board'])
+              })
+            })
+          }
+        })
+      }
+    }
+  }
+  cancel() {
+    var formValue = this.operationalPerformanceForm.getRawValue()
+    var submitObj = []
+    if (formValue.length > 0) {
+      submitObj = formValue.map(x => {
+        return {
+          keySuccessUniqueId: x.keySuccessUniqueId,
+          projectId: x.projectId,
+          metric: x.metric,
+          currentState: x.currentState,
+          targetPerformance: x.targetPerformance,
+          includeInCharter: x.includeInCharter,
+          kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
+          actualPerformance: x.actualPerformance,
+          includeInProjectDashboard: x.includeInProjectDashboard,
+          status: x.status,
+          includeInCloseOut: x.includeInCloseOut,
+          ptrbid: x.ptrbid,
+          benefitDescriptionJustification: x.benefitDescriptionJustification,
+          includeinProposal: x.includeinProposal
+        }
+      })
+      if (JSON.stringify(submitObj) == JSON.stringify(this.opDb) && Object.keys(this.primaryKPIForm.controls.primaryKpi.value).length > 0 ? this.primaryKPIForm.controls.primaryKpi.value.kpiid == this.projectViewDetails.projectData.primaryKpi : this.projectViewDetails.projectData.primaryKpi == '') {
+        this.router.navigate(['project-hub/' + this.id + '/project-board'])
+      }
+      else {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you Sure?",
+          "message": "Are you sure you want to Cancel? ",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Ok",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const operationalPerformanceAlert = this.fuseAlert.open(comfirmConfig)
+        operationalPerformanceAlert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.router.navigate(['project-hub/' + this.id + '/project-board'])
+          }
+        })
+      }
+    }
+  }
   //Table Edit
   operationalPerformanceTableEditRow(row: number) {
     if (!this.operationalPerformanceEditStack.includes(row)) {
@@ -143,19 +271,19 @@ export class ProjectBenefitsComponent implements OnInit {
       }]
       this.operationalPerformanceForm.push(new FormGroup({
         keySuccessUniqueId: new FormControl(''),
-        projectId: new FormControl(''),
+        projectId: new FormControl(this.id),
         metric: new FormControl(''),
         currentState: new FormControl(''),
         targetPerformance: new FormControl(''),
-        includeInCharter: new FormControl(''),
+        includeInCharter: new FormControl(false),
         kpiid: new FormControl({}),
         actualPerformance: new FormControl(''),
-        includeInProjectDashboard: new FormControl(''),
+        includeInProjectDashboard: new FormControl(false),
         status: new FormControl(''),
-        includeInCloseOut: new FormControl(''),
+        includeInCloseOut: new FormControl(false),
         ptrbid: new FormControl(''),
         benefitDescriptionJustification: new FormControl(''),
-        includeinProposal: new FormControl('')
+        includeinProposal: new FormControl(false)
       }))
       this.projectViewDetails.overallPerformace = [...this.projectViewDetails.overallPerformace, ...j]
       this.disabler()
