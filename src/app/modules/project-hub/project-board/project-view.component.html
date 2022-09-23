@@ -276,7 +276,7 @@
     <!-- Milestones -->
     <div *ngIf="hubsetting.milestones"
         class="xl:col-span-6 flex flex-col flex-auto mb-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
-        <app-schedule-table [lookup]="lookupmaster" [projectViewDetails]="projectViewDetails" [projectid]="id"
+        <app-schedule-table [lookup]="lookupmaster" [baselineLog]="baselineLog" [projectViewDetails]="projectViewDetails" [projectid]="id"
             [editable]="projecthubservice.roleControllerControl.projectHub.projectBoard.scheduleEdit">
         </app-schedule-table>
     </div>

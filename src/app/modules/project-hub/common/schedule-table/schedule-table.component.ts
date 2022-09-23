@@ -18,6 +18,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() scheduleData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
+  @Input() baselineLog: any = {}
   @Input() lookup: any
   @Input() editable: boolean
   @ViewChild('scheduleTable') scheduleTable: any;
@@ -32,7 +33,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   variance: any;
   baselineCount: any = {}
   id: string = ""
-  constructor(public projecthubservice: ProjectHubService, 
+  constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
     public fuseAlert: FuseConfirmationService,
@@ -62,14 +63,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
     console.log(this.schedulengxdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.apiService.getProjectBaseline(this.id).then((count:any) => {
-    this.baselineCount = count
-    console.log(this.baselineCount)
-    })
   }
 
   // getCount() {
-  
+
   //   return this.baselineCount.baselineCount
   // }
 

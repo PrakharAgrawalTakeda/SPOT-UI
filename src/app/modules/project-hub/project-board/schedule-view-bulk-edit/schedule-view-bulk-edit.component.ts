@@ -425,7 +425,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
             this.apiService.addProjectBaselineLog(justificationObj).then(res => {
               this.viewContent = true
-              this.viewBaseline = false
+              //this.viewBaseline = false
 
               this.projecthubservice.submitbutton.next(true)
               this.saveScheduleBulkEdit()
