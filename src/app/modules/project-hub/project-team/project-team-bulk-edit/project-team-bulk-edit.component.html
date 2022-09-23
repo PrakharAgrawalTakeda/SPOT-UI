@@ -73,7 +73,7 @@
                 <ngx-datatable-column [flexGrow]="0.05" [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                         ngx-datatable-cell-template>
-                        <a href="javascript:void(0)" title="Delete Single" (click)="deletePT(rowIndex)">
+                        <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single" (click)="deletePT(rowIndex)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                     </ng-template>

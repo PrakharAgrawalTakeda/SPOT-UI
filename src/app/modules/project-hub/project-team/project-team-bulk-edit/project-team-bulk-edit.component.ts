@@ -98,6 +98,16 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     return this.lookupdata.filter(x => x.lookUpParentId == "474EE4AC-7A6C-4D30-B6EA-12A0D0F4BC2C" && x.lookUpId != "87DA989B-0BBA-406F-99C1-99E1E80EE9FE")
   }
   getRoles(): any {
+    var j = this.projectTeamForm.getRawValue()
+    if(j.some(x=>x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' && x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')){
+      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc','e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
+    }
+    else if(j.some(x=>x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc')){
+      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" &&  x.lookUpId != '17d65016-0541-4fcc-8a9c-1db0597817cc')
+    }
+    else if(j.some(x=>x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')){
+      return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" &&  x.lookUpId != 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')
+    }
     return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
 
@@ -184,6 +194,15 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
     }
+  }
+  deleteShowLogic(rowIndex: number): boolean{
+    var j = this.projectTeamForm.controls[rowIndex]['controls']['role'].value
+    if(Object.keys(j).length>0){
+      if(j.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' || j.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'){
+        return false
+      }
+    }
+    return true
   }
   //Table Controls
   addPT() {
