@@ -1,7 +1,7 @@
 <div class="flex flex-col flex-auto w-full px-8"
-    *ngIf="viewContent && projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit">
+    *ngIf="viewContent">
     <div class="w-full bg-card rounded-2xl p-3">
-        <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
+        <form class="w-full p-6 pb-3 pt-0" *ngIf="projecthubservice.roleControllerControl.projectBenefits" [formGroup]="primaryKPIForm">
             <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
                 [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
                 [dropDownArray]="kpiMaster">
@@ -10,7 +10,7 @@
         <div class="p-6 pb-3 pt-0 flex items-center justify-between">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Performance
             </div>
-            <button class="ml-4 text-primary" *ngIf="editable" mat-flat-button [color]="'primary-200'"
+            <button class="ml-4 text-primary" *ngIf="projecthubservice.roleControllerControl.projectBenefits" mat-flat-button [color]="'primary-200'"
                 (click)="addOP()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
@@ -147,7 +147,7 @@
                         ngx-datatable-cell-template>
 
                         <div class="flex items-center justify-start">
-                            <a href="javascript:void(0)" title="Delete Single" *ngIf="editable"
+                            <a href="javascript:void(0)" title="Delete Single" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
                                 (click)="deleteOP(rowIndex)">
                                 <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                             </a>
@@ -157,7 +157,7 @@
             </ngx-datatable>
         </div>
     </div>
-    <div class="mt-6 flex justify-between items-center">
+    <div class="mt-6 flex justify-between items-center" *ngIf="projecthubservice.roleControllerControl.projectBenefits">
         <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="cancel()">
             Cancel
         </button>

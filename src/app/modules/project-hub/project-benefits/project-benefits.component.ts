@@ -235,8 +235,10 @@ export class ProjectBenefitsComponent implements OnInit {
   }
   //Table Edit
   operationalPerformanceTableEditRow(row: number) {
-    if (!this.operationalPerformanceEditStack.includes(row)) {
-      this.operationalPerformanceEditStack.push(row)
+    if (this.projecthubservice.roleControllerControl.projectBenefits) {
+      if (!this.operationalPerformanceEditStack.includes(row)) {
+        this.operationalPerformanceEditStack.push(row)
+      }
     }
   }
   deleteOP(rowIndex: number) {
