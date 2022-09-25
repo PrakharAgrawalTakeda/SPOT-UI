@@ -123,21 +123,17 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                   responsiblePersonId: new FormControl(i.responsiblePersonId),
                   indicator: new FormControl(i.indicator)
                 }))
-               
-                for (let control of this.milestoneForm.controls) {
-                if(this.milestoneForm.value.completionDate != null)
-                {
-                  control['controls']['baselineFinish'].disable()
-                }
-              }
-              }
-              for (let control of this.milestoneForm.controls) {
-                console.log("Project Hub", this.projecthubservice)
-                if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
-                  if (this.milestoneForm.value.includeInReport != true) {
-                    control['controls']['includeInReport'].disable()
+                console.log(this.milestoneForm.controls.filter(x=> x.value.completionDate != null))
+                  if(this.milestoneForm.controls.filter(x=> x.value.completionDate != null))
+                  {
+                    for(let control of this.milestoneForm.controls.filter(x=> x.value.completionDate != null))
+                    {
+                      console.log(control)
+                      console.log(control['controls']['baselineFinish'])
+                      control['controls']['baselineFinish'].disable()
+                    }
                   }
-                }
+
               }
               if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
                 if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
@@ -196,12 +192,17 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       responsiblePersonId: new FormControl(''),
       indicator: new FormControl('')
     }))
-    if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
-      this.milestoneForm.controls['baselineFinish'].disable()
+    for (let control of this.milestoneForm.controls) {
+      if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+        control['controls']['baselineFinish'].disable()
+      }
     }
-    if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
-      this.milestoneForm.controls['includeInReport'].disable()
-    }
+    // if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
+    //   this.milestoneForm.controls['baselineFinish'].disable()
+    // }
+    // if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
+    //   this.milestoneForm.controls['includeInReport'].disable()
+    // }
 
     var j = [{
       scheduleUniqueId: "new",
@@ -506,49 +507,129 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   baselineProject() {
     for (var i of this.milestoneForm.controls) {
       console.log(i['controls']['completionDate'].value)
-      if(i['controls']['completionDate'].value == null || i['controls']['completionDate'].value == '')
-      {
-        i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
-      }
+     // i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
+       if(i['controls']['completionDate'].value == null || i['controls']['completionDate'].value == '')
+       {
+         i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
+       }
       
     }
     for (var j of this.scheduleData.scheduleData) {
       console.log(j.completionDate)
-      if(j.completionDate == null || j.completionDate == '')
-      {
-        j.baselineFinish = j.plannedFinish
-      }
+      //j.baselineFinish = j.plannedFinish
+       if(j.completionDate == null || j.completionDate == '')
+       {
+         j.baselineFinish = j.plannedFinish
+       }
 
     }
     this.flag = true
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData]
     console.log(this.milestoneForm)
   }
-
+  debugger
   submitschedule() {
   
     var baselineFormValue = this.milestoneForm.getRawValue()
-    var baselinedates = this.scheduleData.scheduleData.map(x => {
-      return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-    })
-    var baselinedates2 = baselineFormValue.map(x => {
-      return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-    })
+    // if (baselineFormValue.filter(x => x.includeInReport == true).length > 8)
+    //  {
+    //   var comfirmConfig: FuseConfirmationConfig = {
+    //     "title": "Only 8 milestones can be included in project dashboard",
+    //     "message": "",
+    //     "icon": {
+    //       "show": true,
+    //       "name": "heroicons_outline:exclamation",
+    //       "color": "warning"
+    //     },
+    //     "actions": {
+    //       "confirm": {
+    //         "show": true,
+    //         "label": "Okay",
+    //         "color": "primary"
+    //       },
+    //       "cancel": {
+    //         "show": false,
+    //         "label": "Cancel"
+    //       }
+    //     },
+    //     "dismissible": true
+    //   }
+    //   const alert = this.fuseAlert.open(comfirmConfig)
+    //   this.projecthubservice.isBulkEdit = true
+    // }
+    // else
+    // {
+      var baselinedates = this.scheduleData.scheduleData.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+      })
+      var baselinedates2 = baselineFormValue.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+      })
+  
+      if (!this.flag && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
+        this.flag = true
+      }
+    //}
 
-    if (!this.flag && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
-      this.flag = true
-    }
     console.log(baselinedates)
     console.log(baselinedates2)
-    if (this.flag) {
+    console.log(this.flag)
+    if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length < 8) {
       this.viewBaseline = true
       this.projecthubservice.isBulkEdit = false
     }
 
+else if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length > 8) {
+  var comfirmConfig: FuseConfirmationConfig = {
+    "title": "Only 8 milestones can be included in project dashboard",
+    "message": "",
+    "icon": {
+      "show": true,
+      "name": "heroicons_outline:exclamation",
+      "color": "warning"
+    },
+    "actions": {
+      "confirm": {
+        "show": true,
+        "label": "Okay",
+        "color": "primary"
+      },
+      "cancel": {
+        "show": false,
+        "label": "Cancel"
+      }
+    },
+    "dismissible": true
+  }
+  const alert = this.fuseAlert.open(comfirmConfig)
+  this.projecthubservice.isBulkEdit = true
+}
 
-
-
-
+else if (!this.flag && baselineFormValue.filter(x => x.includeInReport == true).length > 8) {
+  var comfirmConfig: FuseConfirmationConfig = {
+    "title": "Only 8 milestones can be included in project dashboard",
+    "message": "",
+    "icon": {
+      "show": true,
+      "name": "heroicons_outline:exclamation",
+      "color": "warning"
+    },
+    "actions": {
+      "confirm": {
+        "show": true,
+        "label": "Okay",
+        "color": "primary"
+      },
+      "cancel": {
+        "show": false,
+        "label": "Cancel"
+      }
+    },
+    "dismissible": true
+  }
+  const alert = this.fuseAlert.open(comfirmConfig)
+  this.projecthubservice.isBulkEdit = true
+}
     else {
 
       this.saveScheduleBulkEdit()
