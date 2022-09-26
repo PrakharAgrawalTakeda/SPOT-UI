@@ -43,6 +43,9 @@ export class ProjectBenefitsComponent implements OnInit {
           this.lookUpMaster = lookup
           this.editable = this.projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit
           this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? this.kpiMaster.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
+          if(!this.projecthubservice.roleControllerControl.projectBenefits){
+            this.primaryKPIForm.controls.primaryKpi.disable()
+          }
           for (var i of this.projectViewDetails.overallPerformace) {
             this.opDb.push(i)
             this.operationalPerformanceForm.push(new FormGroup({
