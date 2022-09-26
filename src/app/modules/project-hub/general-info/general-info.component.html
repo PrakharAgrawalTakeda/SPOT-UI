@@ -26,18 +26,18 @@
       <div class="flex justify-between items-center gap-6">
         <spot-singleselect-autocomplete formControlName="portfolioOwner" class="w-full" name="portfolioOwner"
           [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
-          [dropDownArray]="getPortfolioOwner()" [showHint]="true"
+          [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
           [hint]="'The group which is responsible for the oversight and process adherence of the record'">
         </spot-singleselect-autocomplete>
         <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full" name="excecutionScope"
           [label]="'Execution Scope'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
-          [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
+          [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
           [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
         </spot-multiselect-autocomplete>
       </div>
       <spot-singleselect-autocomplete class="w-full" formControlName="enviornmentalPortfolio"
         name="enviornmentalPortfolio" [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'"
-        [valuePointer]="'portfolioOwner'" [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true"
+        [valuePointer]="'portfolioOwner'" [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
         [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
       </spot-singleselect-autocomplete>
       <div class="flex justify-between items-center gap-6">
