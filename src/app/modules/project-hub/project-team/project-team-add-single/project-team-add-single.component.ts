@@ -31,14 +31,18 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         this.role.getCurrentRoleRequest(res.userAdid).subscribe((response: any) => {
           console.log(response)
           if (response.securityGroupId != "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
-            this.projectTeamAddForm.controls.permission.patchValue("BCEBDFAC-DB73-40D3-8EF0-166411B5322C")
+            this.projectTeamAddForm.controls.permission.patchValue("3448BD5C-38F4-4B3C-BA4C-C99E659DC0B0")
             this.projectTeamAddForm.controls.permission.disable()
           }
           else {
-            this.projectTeamAddForm.controls.permission.patchValue("")
+            this.projectTeamAddForm.controls.permission.patchValue("BCEBDFAC-DB73-40D3-8EF0-166411B5322C")
             this.projectTeamAddForm.controls.permission.enable()
           }
         })
+      }
+      else{
+        this.projectTeamAddForm.controls.permission.patchValue("BCEBDFAC-DB73-40D3-8EF0-166411B5322C")
+        this.projectTeamAddForm.controls.permission.enable()
       }
     })
   }
