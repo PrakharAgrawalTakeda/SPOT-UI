@@ -77,14 +77,14 @@
               <p *ngIf="value == ''">&nbsp;</p>{{value}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-input formControlName="milestone" name="milestone" [showLabel]="false"
+              <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false"
                 [placeholder]="'Milestone Name'">
-              </spot-input>
+              </spot-textarea>
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
-          [flexGrow]="1">
+        <ngx-datatable-column name="Planned Finish (mm/dd/yyyy)" prop="plannedFinish" [resizeable]="false" [sortable]="false"
+          [flexGrow]="0.8">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -95,8 +95,8 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [sortable]="false"
-          [flexGrow]="1">
+        <ngx-datatable-column name="Baseline Finish (mm/dd/yyyy)" prop="baselineFinish" [resizeable]="false" [sortable]="false"
+          [flexGrow]="0.8">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -140,8 +140,8 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false" [sortable]="false"
-          [flexGrow]="1">
+        <ngx-datatable-column name="Completion Date (mm/dd/yyyy)" prop="completionDate" [resizeable]="false" [sortable]="false"
+          [flexGrow]="0.8">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -163,8 +163,8 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Include in Project Dashboard" prop="includeInReport" [sortable]="false"
-          [resizeable]="false" [flexGrow]="0.65">
+        <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
+          [resizeable]="false" [flexGrow]="0.55">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="!value">&nbsp;</p>
