@@ -25,13 +25,13 @@
       <div class="flex items-start justify-between">
         <div style="padding-right: 5px;">
           <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
-            style="margin-left: 2rem; padding:0px 28px!important" class="ml-4" mat-flat-button [color]="'primary'"
+            style="margin-left: 2rem; padding:0px 28px!important" class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
             (click)="baselineProject()">
             Baseline Project
           </button>
         </div>
-        <div style="padding-right: 2px;">
-          <button class="ml-4" mat-flat-button [color]="'primary'" (click)="addMilestoneRecord()">
+        <div style="margin-right:22px">
+          <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'" (click)="addMilestoneRecord()">
             <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
           </button>
         </div>
@@ -194,12 +194,12 @@
     </div>
     <div class="mt-6 flex justify-between items-center w-full">
 
-      <button style="margin-left: 2rem; padding:0px 50px!important" class="w-auto" mat-flat-button [color]="'primary'"
+      <button style="margin-left: 2rem; padding:0px 60px!important" class="w-auto" mat-flat-button [color]="'primary'"
         (click)="cancelschedule()">
         Cancel
       </button>
 
-      <button style="margin-right: 2rem; padding:0px 50px!important" class="w-auto" mat-flat-button [color]="'primary'"
+      <button style="margin-right: 2rem; padding:0px 60px!important" class="w-auto" mat-flat-button [color]="'primary'"
         type="button" (click)="submitschedule()">
         Submit
       </button>
