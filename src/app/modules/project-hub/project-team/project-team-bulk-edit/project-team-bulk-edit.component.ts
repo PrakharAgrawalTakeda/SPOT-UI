@@ -99,7 +99,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   getRoles(): any {
     var j = this.projectTeamForm.getRawValue()
-    if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' && x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+    if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x=> x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
       return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc', 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
     }
     else if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc')) {

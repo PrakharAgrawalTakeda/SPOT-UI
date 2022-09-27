@@ -31,14 +31,18 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         this.role.getCurrentRoleRequest(res.userAdid).subscribe((response: any) => {
           console.log(response)
           if (response.securityGroupId != "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
-            this.projectTeamAddForm.controls.permission.patchValue("BCEBDFAC-DB73-40D3-8EF0-166411B5322C")
+            this.projectTeamAddForm.controls.permission.patchValue("3448BD5C-38F4-4B3C-BA4C-C99E659DC0B0")
             this.projectTeamAddForm.controls.permission.disable()
           }
           else {
-            this.projectTeamAddForm.controls.permission.patchValue("")
+            this.projectTeamAddForm.controls.permission.patchValue("BCEBDFAC-DB73-40D3-8EF0-166411B5322C")
             this.projectTeamAddForm.controls.permission.enable()
           }
         })
+      }
+      else{
+        this.projectTeamAddForm.controls.permission.patchValue("BCEBDFAC-DB73-40D3-8EF0-166411B5322C")
+        this.projectTeamAddForm.controls.permission.enable()
       }
     })
   }
@@ -50,6 +54,16 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     })
   }
   getRoles(): any {
+    var j = this.projecthubservice.all
+    if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x=> x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+      return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc', 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
+    }
+    else if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc')) {
+      return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != '17d65016-0541-4fcc-8a9c-1db0597817cc')
+    }
+    else if (j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+      return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')
+    }
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
   getPermissions(): any {
