@@ -195,7 +195,7 @@
     <div class="mt-6 flex justify-between items-center w-full">
 
       <button style="margin-left: 2rem; padding:0px 60px!important" class="w-auto" mat-flat-button [color]="'primary'"
-        (click)="cancelschedule()">
+        (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
         Cancel
       </button>
 
