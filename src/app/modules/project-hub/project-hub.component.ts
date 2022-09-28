@@ -56,12 +56,12 @@ export class ProjectHubComponent implements OnInit {
         }
     ]
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, 
-        private apiService: ProjectApiService, 
-        private _Activatedroute: ActivatedRoute, 
-        public indicator: SpotlightIndicatorsService, 
-        public projecthubservice: ProjectHubService, 
-        public _fuseNavigationService: FuseNavigationService, 
+    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private apiService: ProjectApiService,
+        private _Activatedroute: ActivatedRoute,
+        public indicator: SpotlightIndicatorsService,
+        public projecthubservice: ProjectHubService,
+        public _fuseNavigationService: FuseNavigationService,
         private titleService: Title,
         private snack: MatSnackBar) {
         this.projecthubservice.isNavChanged.subscribe(res => {
@@ -71,9 +71,10 @@ export class ProjectHubComponent implements OnInit {
         })
         this.projecthubservice.successSave.subscribe(res => {
             if (res == true) {
-                this.snack.open("The information has been saved successfully","",{
+                this.snack.open("The information has been saved successfully", "", {
                     duration: 2000,
-                    panelClass:["bg-primary","text-on-primary"]})
+                    panelClass: ["bg-primary", "text-on-primary"]
+                })
             }
         })
     }
@@ -118,9 +119,10 @@ export class ProjectHubComponent implements OnInit {
     }
     toggleSideNav() {
         this.drawerOpened = !this.drawerOpened
-        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' || 
-        this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team'||
-        this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info') {
+        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits') {
             this.projecthubservice.submitbutton.next(true)
         }
     }

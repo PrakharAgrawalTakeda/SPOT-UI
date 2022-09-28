@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
-import { ProjectApiService } from '../../common/project-api.service';
-import { ProjectHubService } from '../../project-hub.service';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { ProjectApiService } from '../../project-api.service';
 
 @Component({
   selector: 'app-operational-performance-edit',

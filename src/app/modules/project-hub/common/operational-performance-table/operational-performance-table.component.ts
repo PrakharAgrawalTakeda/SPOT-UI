@@ -15,24 +15,11 @@ import { ProjectApiService } from '../project-api.service';
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   @Input() projectid: any;
   @Input() projectViewDetails: any;
-  @Input() lookup: any
-  @Input() kpi: any
   @Input() editable: boolean = true
   initializationComplete: boolean = false
-  primaryKPIForm = new FormGroup({
-    primaryKpi: new FormControl({})
-  })
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService) {
-
-    this.primaryKPIForm.controls.primaryKpi.valueChanges.subscribe(res => {
-      if (this.initializationComplete == true) {
-        this.apiService.updatePrimayKPI(this.projectid, res.kpiid).then(x => {
-          this.projecthubservice.submitbutton.next(true)
-        })
-      }
-    })
   }
 
   ngOnInit(): void {
@@ -43,14 +30,13 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   }
   dataloader() {
     this.initializationComplete = false
-    this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? this.kpi.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
     this.initializationComplete = true
   }
   getLookUpName(lookUpId: string): string {
-    return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId = lookUpId).lookUpName : ''
+    return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
   getKPIName(kpiid: string): string {
-    return this.kpi.find(x => x.kpiid == kpiid) ? this.kpi.find(x => x.kpiid == kpiid).kpiname : ''
+    return this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid).kpiname : ''
   }
 
   getIndicator(status: string): string {

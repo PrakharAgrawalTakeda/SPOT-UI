@@ -60,9 +60,10 @@ import { ProductSingleDropdownComponent } from './common/product-single-dropdown
 import { ScheduleViewBulkEditComponent } from './project-board/schedule-view-bulk-edit/schedule-view-bulk-edit.component';
 import { ProjectTeamAddSingleComponent } from './project-team/project-team-add-single/project-team-add-single.component';
 import { OperationalPerformanceTableComponent } from './common/operational-performance-table/operational-performance-table.component';
-import { OperationalPerformanceEditComponent } from './project-board/operational-performance-edit/operational-performance-edit.component';
+import { OperationalPerformanceEditComponent } from './common/operational-performance-table/operational-performance-edit/operational-performance-edit.component';
 import { ProjectBenefitsComponent } from './project-benefits/project-benefits.component';
 import { ProjectTeamBulkEditComponent } from './project-team/project-team-bulk-edit/project-team-bulk-edit.component';
+import { OperationalPerformanceBulkEditComponent } from './common/operational-performance-table/operational-performance-bulk-edit/operational-performance-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -190,7 +191,8 @@ export const projectRoutes: Route[] = [
     OperationalPerformanceTableComponent,
     OperationalPerformanceEditComponent,
     ProjectBenefitsComponent,
-    ProjectTeamBulkEditComponent
+    ProjectTeamBulkEditComponent,
+    OperationalPerformanceBulkEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
