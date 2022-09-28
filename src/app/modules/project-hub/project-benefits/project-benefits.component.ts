@@ -16,6 +16,8 @@ export class ProjectBenefitsComponent implements OnInit {
   id: string = ''
  projectViewDetails: any = {}
   viewContent: boolean = false
+  lookupMasters = []
+  kpiMasters = [] 
   primaryKPIForm = new FormGroup({
     primaryKpi: new FormControl({})
   })
@@ -42,7 +44,8 @@ export class ProjectBenefitsComponent implements OnInit {
       this.auth.KPIMaster().then((kpis: any) => {
         this.auth.lookupMaster().then((lookup: any) => {
           this.projectViewDetails = res
-
+          this.lookupMasters = lookup
+          this.kpiMasters = kpis
           console.log("OVERALL DATA", this.projectViewDetails.overallPerformace)
           this.projecthubservice.lookUpMaster = lookup
           this.projecthubservice.kpiMasters = kpis

@@ -15,6 +15,8 @@ import { ProjectApiService } from '../project-api.service';
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   @Input() projectid: any;
   @Input() projectViewDetails: any;
+  @Input() lookup: any
+  @Input() kpi: any
   @Input() editable: boolean = true
   initializationComplete: boolean = false
 
@@ -33,10 +35,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     this.initializationComplete = true
   }
   getLookUpName(lookUpId: string): string {
-    return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
+    return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
   getKPIName(kpiid: string): string {
-    return this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid).kpiname : ''
+    return this.kpi.find(x => x.kpiid == kpiid) ? this.kpi.find(x => x.kpiid == kpiid).kpiname : ''
   }
 
   getIndicator(status: string): string {

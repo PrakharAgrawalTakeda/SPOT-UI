@@ -10,7 +10,7 @@
     </div>
     <div
         class="xl:col-span-6 flex flex-col mt-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
-        <app-operational-performance-table [projectViewDetails]="projectViewDetails" [projectid]="id"
+        <app-operational-performance-table [kpi]="kpiMasters" [lookup]="lookupMasters" [projectViewDetails]="projectViewDetails" [projectid]="id"
             [editable]="projecthubservice.roleControllerControl.projectBenefits">
         </app-operational-performance-table>
     </div>
