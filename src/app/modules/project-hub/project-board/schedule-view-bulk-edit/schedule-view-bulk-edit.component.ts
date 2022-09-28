@@ -467,8 +467,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         
       
         this.apiService.addProjectBaselineLog(justificationObjNew).then(res => {
-          this.viewContent = true
-          this.viewBaseline = false
+          //this.viewContent = true
+          //this.viewBaseline = false
 
           this.projecthubservice.submitbutton.next(true)
           this.saveScheduleBulkEdit()
@@ -478,7 +478,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       }
 
       else {
-        if (this.baselineForm.value.counter == false) {
+        //console.log(this.baselineForm.value.counter)
+        if (this.baselineForm.value.counter == null) {
           var justificationObj = {
             baselineLogId: "new",
             projectId: this.baselineLogObj.projectId,
@@ -491,8 +492,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
           }
           console.log(justificationObj)
           this.apiService.addProjectBaselineLog(justificationObj).then(res => {
-            this.viewContent = true
-            this.viewBaseline = false
+            //this.viewContent = true
+           // this.viewBaseline = false
 
             this.projecthubservice.submitbutton.next(true)
             this.saveScheduleBulkEdit()
@@ -521,7 +522,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
             //this.viewContent = true
 
             this.apiService.addProjectBaselineLog(justificationObj).then(res => {
-              this.viewContent = true
+              //this.viewContent = true
               //this.viewBaseline = false
 
               this.projecthubservice.submitbutton.next(true)
