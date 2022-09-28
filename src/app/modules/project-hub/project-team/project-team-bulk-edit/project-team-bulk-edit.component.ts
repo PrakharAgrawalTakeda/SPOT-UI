@@ -161,7 +161,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.formValue()
       if (this.teamMembersSubmit.some(x => x.teamMemberAdId == "")) {
         var comfirmConfig: FuseConfirmationConfig = {
-          "title": "No User Selected",
+          "title": "Please select a Team Member Name",
           "message": "",
           "icon": {
             "show": true,

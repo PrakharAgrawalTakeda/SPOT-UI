@@ -92,7 +92,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     }
     else{
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "No User Selected",
+        "title": "Please select a Team Member Name",
         "message": "",
         "icon": {
           "show": true,
