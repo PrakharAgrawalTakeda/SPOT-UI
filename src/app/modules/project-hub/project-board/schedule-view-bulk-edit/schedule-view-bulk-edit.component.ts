@@ -409,7 +409,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   baselineForm = new FormGroup({
     baselineComment: new FormControl(''),
-    counter: new FormControl()
+    counter: new FormControl(true)
   })
 
 
@@ -678,7 +678,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(baselinedates)
     console.log(baselinedates2)
     console.log(this.flag)
-    if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length < 8) {
+    if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length <= 8) {
       this.viewBaseline = true
       this.projecthubservice.isBulkEdit = false
     }
