@@ -28,7 +28,7 @@ export class LandingHomeComponent implements OnInit {
                 }
                 this.authService.instance.acquireTokenSilent(scopes).then(response => {
                     this.auth.accessToken = response.accessToken
-                    console.log("hello" + localStorage.getItem('spot-redirect'))
+                    localStorage.setItem('token', response.accessToken)
                     if (localStorage.getItem('spot-redirect') != null) {
                         var temp = localStorage.getItem('spot-redirect')
                         console.log("hey" + temp)
