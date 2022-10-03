@@ -64,6 +64,7 @@ import { OperationalPerformanceEditComponent } from './common/operational-perfor
 import { ProjectBenefitsComponent } from './project-benefits/project-benefits.component';
 import { ProjectTeamBulkEditComponent } from './project-team/project-team-bulk-edit/project-team-bulk-edit.component';
 import { OperationalPerformanceBulkEditComponent } from './common/operational-performance-table/operational-performance-bulk-edit/operational-performance-bulk-edit.component';
+import { PrimaryKpiSingleEditComponent } from './project-benefits/primary-kpi-single-edit/primary-kpi-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -192,7 +193,8 @@ export const projectRoutes: Route[] = [
     OperationalPerformanceEditComponent,
     ProjectBenefitsComponent,
     ProjectTeamBulkEditComponent,
-    OperationalPerformanceBulkEditComponent
+    OperationalPerformanceBulkEditComponent,
+    PrimaryKpiSingleEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
