@@ -13,6 +13,8 @@
         <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
         <app-operational-performance-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
+
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

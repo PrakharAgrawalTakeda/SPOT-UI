@@ -1,1 +1,50 @@
-<p>general-info-single-edit works!</p>
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">General Info Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <form class="w-full p-[20px] overflow-y-scroll h-[95vh]" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
+        <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
+            [placeholder]="'Project Name'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="parentProgram" name="problemTitle" [label]="'Parent Program'"
+            [showHint]="true"
+            [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'"
+            [placeholder]="'Parent Program'">
+        </spot-input>
+        <spot-input formControlName="portfolioOwner" class="w-full" name="portfolioOwner" [label]="'Portfolio Owner'"
+            [placeholder]="'Portfolio Owner'" [showHint]="true"
+            [hint]="'The group which is responsible for the oversight and process adherence of the record'">
+        </spot-input>
+        <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full" name="excecutionScope"
+            [label]="'Execution Scope'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
+            [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
+            [sortByType]="'custom'" [customSortPointer]="'pfid'"
+            [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+        </spot-multiselect-autocomplete>
+        <spot-input class="w-full" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+            [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'" [showHint]="true"
+            [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
+            [placeholder]="'Primary Product'" [showHint]="true"
+            [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
+        </spot-input>
+        <spot-multiselect-autocomplete class="w-full" formControlName="otherImpactedProducts"
+            name="otherImpactedProducts" [label]="'Other Impacted Products'" [placeholder]="'Other Impacted Products'"
+            [valuePointer]="'fullProductName'" [idPointer]="'productId'" [dropDownArray]="filterCriteria.products"
+            [showHint]="true" [hint]="'Any additional products which are impacted by the project execution'">
+        </spot-multiselect-autocomplete>
+        <spot-input class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
+            [placeholder]="'Project Type'">
+        </spot-input>
+        <spot-textarea formControlName="projectDescription" name="projectDescription"
+            [label]="'Problem Description / Present Situation / Submission Description'"
+            [placeholder]="'Problem Description / Present Situation / Submission Description'">
+        </spot-textarea>
+    </form>
+</div>

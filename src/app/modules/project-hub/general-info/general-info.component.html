@@ -14,8 +14,17 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden"
+    <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden"
       [ngClass]="{'mt-6': projectHubService.roleControllerControl.generalInfo.porfolioOwner}">
+      <div class="flex justify-end items-end">
+        <div></div>
+        <div>
+          <button class="ml-4 text-primary" *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button [color]="'primary-200'"
+          (click)="projectHubService.toggleDrawerOpen('GeneralInfoSingleEdit', '', filterCriteria , id)">
+          <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+      </button>
+        </div>
+      </div>
       <div class="flex justify-between items-center gap-6">
         <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
           [placeholder]="'Project Name'">
