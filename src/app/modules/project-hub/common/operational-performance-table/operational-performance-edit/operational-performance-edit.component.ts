@@ -41,7 +41,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
         this.OperationalPerformance = op
         this.OperationalPerformanceForm.patchValue({
           status: op.status,
-          kpiid: this.projecthubservice.kpiMasters.any(x => x.kpiid == op.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == op.kpiid) : {},
+          kpiid: this.projecthubservice.kpiMasters.some(x => x.kpiid == op.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == op.kpiid) : {},
           metric: op.metric,
           currentState: op.currentState,
           targetPerformance: op.targetPerformance,
@@ -115,12 +115,14 @@ export class OperationalPerformanceEditComponent implements OnInit {
 
       this.apiService.editOperationalPerformanceSingle(mainObj).then(res => {
         this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.successSave.next(true)
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
       })
     }
     else {
       this.apiService.addOperationalPerformanceSingle(mainObj).then(res => {
         this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.successSave.next(true)
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
       })
     }
