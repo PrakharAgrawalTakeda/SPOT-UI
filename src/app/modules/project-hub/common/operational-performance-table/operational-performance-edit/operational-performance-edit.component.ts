@@ -24,12 +24,12 @@ export class OperationalPerformanceEditComponent implements OnInit {
 
 
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public indicator: SpotlightIndicatorsService) {
-    this.OperationalPerformanceForm.valueChanges.subscribe(res=>{
-        if(this.formIntialized == true){
-          this.projecthubservice.isFormChanged = true
-        }
+    this.OperationalPerformanceForm.valueChanges.subscribe(res => {
+      if (this.formIntialized == true) {
+        this.projecthubservice.isFormChanged = true
+      }
     })
-   }
+  }
 
   ngOnInit(): void {
     this.dataloader()
@@ -41,7 +41,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
         this.OperationalPerformance = op
         this.OperationalPerformanceForm.patchValue({
           status: op.status,
-          kpiid: this.projecthubservice.kpiMasters.find(x => x.kpiid == op.kpiid),
+          kpiid: this.projecthubservice.kpiMasters.any(x => x.kpiid == op.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == op.kpiid) : {},
           metric: op.metric,
           currentState: op.currentState,
           targetPerformance: op.targetPerformance,
@@ -58,7 +58,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
         this.formIntialized = true
       })
     }
-    else{
+    else {
       if (this.projecthubservice.all.length >= 3) {
         console.log('hit 1')
         if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
@@ -68,7 +68,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
       }
       this.formIntialized = true
     }
-   
+
   }
   getStatus(): any {
     return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == "2A4E375B-B9F8-4647-B4CB-71268B52A938")
@@ -118,7 +118,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
       })
     }
-    else{
+    else {
       this.apiService.addOperationalPerformanceSingle(mainObj).then(res => {
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
