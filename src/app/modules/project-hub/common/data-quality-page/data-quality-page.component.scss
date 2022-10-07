@@ -1,0 +1,11 @@
+@import '~@swimlane/ngx-datatable/themes/material.scss';
+
+.datatable-body-row,
+.datatable-scroll{
+    max-width: 100%;
+    min-width: 100%;
+}
+.datatable-header-cell-template-wrap{
+    color:black;
+    font-weight: bold;
+}

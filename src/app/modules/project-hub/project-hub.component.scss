@@ -18,6 +18,10 @@
     min-width: 95vw !important;
     max-width: 95vw !important;
 }
+.dataQuality{
+    min-width: 95vw !important;
+    max-width: 95vw !important;
+}
 
 .scroll-fixed {
     overflow-y: scroll;
@@ -30,12 +34,11 @@
 
 fuse-drawer {
     min-width: 50vw;
-    max-width: 50vw
+    max-width: 50vw;
 }
 
 fuse-drawer .fuse-drawer-content {
     display: block !important;
-
 }
 
 .overall-indicator {

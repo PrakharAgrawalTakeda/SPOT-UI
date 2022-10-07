@@ -77,6 +77,7 @@ export class ProjectHubComponent implements OnInit {
             }
         })
     }
+    dataQualityPercentage: number;
 
     ngOnInit(): void {
         console.log("Project Hub Started")
@@ -115,6 +116,9 @@ export class ProjectHubComponent implements OnInit {
             this.portfolioDetails = res
             console.log(this.portfolioDetails.phase)
         })
+        this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
+                this.dataQualityPercentage = res*100;
+          })
     }
     toggleSideNav() {
         this.drawerOpened = !this.drawerOpened

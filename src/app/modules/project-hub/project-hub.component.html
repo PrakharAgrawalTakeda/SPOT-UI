@@ -1,6 +1,6 @@
 <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
     (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'"
-    [ngClass]="projecthubservice.isBulkEdit?'bulkEdit':''">
+    [ngClass]="{'bulkEdit':projecthubservice.isBulkEdit , 'dataQuality':projecthubservice.dataQuality}">
     <div>
         <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
@@ -10,6 +10,7 @@
         </app-schedule-view-bulk-edit>
         <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
         <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+        <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
@@ -119,7 +120,10 @@
                             </mat-icon>
                         </div>
                     </div>
-                    <div></div>
+                    <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                    (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '1',false,true)">
+                    <b>Data quality:&nbsp;</b>{{dataQualityPercentage}}%
+                </button>
                 </div>
                 <div class="flex shrink-0 items-center justify-between sm:mt-0">
 

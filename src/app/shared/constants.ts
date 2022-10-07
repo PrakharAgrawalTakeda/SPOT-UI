@@ -1,0 +1,2 @@
+
+export const QUALITY_TARGET_PERCENTAGE = 85;

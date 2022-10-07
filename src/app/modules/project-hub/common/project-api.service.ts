@@ -192,4 +192,16 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  getDataCompleteness(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompleteness/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
+  getDataCompletenessPercent(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompletenessPercent/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
 }
