@@ -19,10 +19,11 @@
       <div class="flex justify-end items-end">
         <div></div>
         <div>
-          <button class="ml-4 text-primary" *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button [color]="'primary-200'"
-          (click)="projectHubService.toggleDrawerOpen('GeneralInfoSingleEdit', '', filterCriteria , id)">
-          <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-      </button>
+          <button class="ml-4 text-primary" *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
+            mat-flat-button [color]="'primary-200'"
+            (click)="projectHubService.toggleDrawerOpen('GeneralInfoSingleEdit', '', filterCriteria , id)">
+            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+          </button>
         </div>
       </div>
       <div class="flex justify-between items-center gap-6">
@@ -60,8 +61,8 @@
         </spot-input>
       </div>
       <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full" formControlName="primaryProduct" name="primaryProduct"
-          [label]="'Primary Product'" [placeholder]="'Primary Product'" [showHint]="true"
+        <spot-input class="w-full" formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
+          [placeholder]="'Primary Product'" [showHint]="true"
           [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
         </spot-input>
         <spot-multiselect-autocomplete class="w-full" formControlName="otherImpactedProducts"
@@ -148,13 +149,11 @@
         <div class="flex justify-between items-center">
           <div>Quality Reference #</div>
           <div class="flex justify-between items-center gap-3">
-            <div *ngIf="generalInfoForm.controls['isQualityRef'].value">
-              <button class="ml-4 text-primary" type="button" mat-flat-button [color]="'primary-200'" (click)="addQR()">
-                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-              </button>
-            </div>
             <mat-slide-toggle formControlName="isQualityRef"></mat-slide-toggle>
-
+            <button class="text-primary" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
+              (click)="projectHubService.toggleDrawerOpen('QualityRefBulkEdit', 'new', [], id)">
+              <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+            </button>
           </div>
         </div>
         <div *ngIf="generalInfoForm.controls['isQualityRef'].value" class="mt-3">
@@ -164,34 +163,13 @@
             <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
               [sortable]="false" [flexGrow]="1">
               <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!qrTableEditStack.includes(rowIndex)"
-                  (click)="qrTableEditRow(rowIndex)">{{getLookUpName(value)}}</a>
-                <form [formGroup]="qualityRefForm.controls[rowIndex]" *ngIf="qrTableEditStack.includes(rowIndex)">
-                  <spot-singleselect-autocomplete formControlName="qualityReferenceTypeId" [showLabel]="false"
-                    [placeholder]="'Quality Reference Type'" [valuePointer]="'lookUpName'"
-                    [dropDownArray]="getQRType()">
-                  </spot-singleselect-autocomplete>
-                </form>
+                <p>{{getLookUpName(value)}}</p>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
               [sortable]="false" [flexGrow]="1">
               <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">
-                  <p *ngIf="!value">&nbsp;</p>{{value}}
-                </a>
-                <form [formGroup]="qualityRefForm.controls[rowIndex]" *ngIf="qrTableEditStack.includes(rowIndex)">
-                  <spot-input formControlName="qualityReference1" [showLabel]="false" [label]="'Quality Reference #'"
-                    [placeholder]="'Quality Reference #'">
-                  </spot-input>
-                </form>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.1">
-              <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                <a href="javascript:void(0)" title="Delete Single" (click)="deleteQR(rowIndex)">
-                  <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                </a>
+                  <p *ngIf="!value">&nbsp;</p><p>{{value}}</p>
               </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>

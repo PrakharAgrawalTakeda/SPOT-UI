@@ -64,144 +64,9 @@ export class GeneralInfoComponent implements OnInit {
 
     this.projectHubService.submitbutton.subscribe(res => {
       if (this.viewContent == true) {
-        this.tableAlter()
         this.dataloader()
       }
     })
-
-    this.generalInfoForm.controls.isTechTransfer.valueChanges.subscribe(res => {
-      if (this.viewContent == true) {
-        if (res == false) {
-          var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Are you sure?",
-            "message": "Are you sure you want to remove the Tech Transfer Information?",
-            "icon": {
-              "show": true,
-              "name": "heroicons_outline:exclamation",
-              "color": "warn"
-            },
-            "actions": {
-              "confirm": {
-                "show": true,
-                "label": "Remove",
-                "color": "warn"
-              },
-              "cancel": {
-                "show": true,
-                "label": "Cancel"
-              }
-            },
-            "dismissible": true
-          }
-          const alert = this.fuseAlert.open(comfirmConfig)
-          alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-              this.generalInfoForm.controls.campaignTypeId.patchValue('')
-              this.generalInfoForm.controls.campaignPhaseId.patchValue('')
-              this.generalInfoForm.controls.productionStepId.patchValue('')
-            }
-            else {
-              this.generalInfoForm.controls.isTechTransfer.patchValue(true)
-            }
-          })
-        }
-      }
-    })
-
-
-    this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
-      if (this.viewContent == true) {
-        if (res == false) {
-          var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Are you sure?",
-            "message": "Are you sure you want to remove the OE Project Type Information?",
-            "icon": {
-              "show": true,
-              "name": "heroicons_outline:exclamation",
-              "color": "warn"
-            },
-            "actions": {
-              "confirm": {
-                "show": true,
-                "label": "Remove",
-                "color": "warn"
-              },
-              "cancel": {
-                "show": true,
-                "label": "Cancel"
-              }
-            },
-            "dismissible": true
-          }
-          const alert = this.fuseAlert.open(comfirmConfig)
-          alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-              this.generalInfoForm.controls.oeprojectType.patchValue({})
-            }
-            else {
-              this.generalInfoForm.controls.isOeproject.patchValue(true)
-            }
-          })
-        }
-      }
-    })
-
-    this.generalInfoForm.controls.isQualityRef.valueChanges.subscribe(res => {
-      if (this.viewContent == true) {
-        if (res == false) {
-          var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Are you sure?",
-            "message": "Are you sure you want to remove the Quality Reference Information?",
-            "icon": {
-              "show": true,
-              "name": "heroicons_outline:exclamation",
-              "color": "warn"
-            },
-            "actions": {
-              "confirm": {
-                "show": true,
-                "label": "Remove",
-                "color": "warn"
-              },
-              "cancel": {
-                "show": true,
-                "label": "Cancel"
-              }
-            },
-            "dismissible": true
-          }
-          const alert = this.fuseAlert.open(comfirmConfig)
-          alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-              this.qrTableEditStack = []
-              this.qualityRefForm = new FormArray([])
-              this.generalInfoData.qualityReferences = []
-            }
-            else {
-              this.generalInfoForm.controls.isQualityRef.patchValue(true)
-              this.tableAlter()
-            }
-          })
-        }
-      }
-    })
-  }
-
-  tableAlter() {
-    if (this.generalInfoData.qualityReferences.length > 0) {
-      this.generalInfoData.qualityReferences = []
-      var qr = []
-      var genQRFORM = this.qualityRefForm.getRawValue()
-      for (var quality of genQRFORM) {
-        qr.push({
-          qualityUniqueId: quality.qualityUniqueId,
-          qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-          qualityReference1: quality.qualityReference1,
-          problemUniqueId: quality.problemUniqueId
-        })
-      }
-      this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...qr]
-    }
   }
   ngOnInit(): void {
     this.dataloader()
@@ -213,6 +78,7 @@ export class GeneralInfoComponent implements OnInit {
         this.authService.lookupMaster().then((lookup: any) => {
           console.log('LookUp Data', lookup)
           this.lookUpData = lookup
+          this.projectHubService.lookUpMaster = lookup
           console.log('Filter Criteria:', filterres)
           this.filterCriteria = filterres
           console.log("General Info:", res)
