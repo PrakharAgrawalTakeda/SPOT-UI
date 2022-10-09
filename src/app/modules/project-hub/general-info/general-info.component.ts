@@ -60,9 +60,12 @@ export class GeneralInfoComponent implements OnInit {
     private projectHubService: ProjectHubService,
     private router: Router,
     public fuseAlert: FuseConfirmationService) {
+
+
     this.projectHubService.submitbutton.subscribe(res => {
       if (this.viewContent == true) {
         this.tableAlter()
+        this.dataloader()
       }
     })
 
