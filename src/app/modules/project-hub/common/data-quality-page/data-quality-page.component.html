@@ -10,8 +10,10 @@
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">SPOT ID: {{spotId}}</div>
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">{{projectName}}</div>
-    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Data Quality: {{dataQualityPercentage}}% (Target {{targetPercentage}}%)</div>
+    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Data Quality: <a [ngStyle]="{'color':getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}%</a> (Target {{targetPercentage}}%)</div>
 </div>
+
+
 <div >
         <div class="overflow-x-auto mx-6">
             <ngx-datatable
@@ -21,7 +23,7 @@
             [columnMode]="ColumnMode.force"
             [rowClass]="rowClass"
             headerHeight="auto"
-            rowHeight="auto"
+            rowHeight="50"
         >
         </ngx-datatable>
             

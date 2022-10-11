@@ -9,6 +9,7 @@ import { ProjectHubService } from './project-hub.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Constants } from 'app/shared/constants';
 @Component({
     selector: 'app-project-hub',
     templateUrl: './project-hub.component.html',
@@ -24,6 +25,11 @@ export class ProjectHubComponent implements OnInit {
     navigationAppearance: 'default' | 'dense' = 'dense';
     selectedProject: string = 'ACME Corp. Backend App';
     drawerOpened: boolean = true;
+    dataQualityPercentage: number;
+    projectType: string = '';
+    dataQualityPercentageString: string = '';
+    targetPercentage = Constants.QUALITY_TARGET_PERCENTAGE;
+    lowerTargetPercentage = Constants.QUALITY_LOWER_TARGET_PERCENTAGE;
     newmainnav: any = [
         {
             id: 'portfolio-center',
@@ -77,7 +83,7 @@ export class ProjectHubComponent implements OnInit {
             }
         })
     }
-    dataQualityPercentage: number;
+
 
     ngOnInit(): void {
         console.log("Project Hub Started")
@@ -91,6 +97,7 @@ export class ProjectHubComponent implements OnInit {
 
         this.apiService.getproject(this.id).then((res) => {
             this.projectDetails = res
+            this.projectType = this.projectDetails.problemType;
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
@@ -114,10 +121,14 @@ export class ProjectHubComponent implements OnInit {
         })
         this.apiService.getportfolioData(this.id).then((res) => {
             this.portfolioDetails = res
-            console.log(this.portfolioDetails.phase)
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
                 this.dataQualityPercentage = res*100;
+                if(this.portfolioDetails.phase == "Initiate"){
+                    this.dataQualityPercentageString = "N/A";
+                  }else{
+                    this.dataQualityPercentageString = this.dataQualityPercentage.toString();
+                  }
           })
     }
     toggleSideNav() {
@@ -129,4 +140,22 @@ export class ProjectHubComponent implements OnInit {
     toggleNavigationAppearance(): void {
         this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
     }
+    getColor(percentage: number) {
+        if(this.projectType=="Simple Project"){
+          return '#4c9bcf';
+        }else{
+          if(percentage<this.lowerTargetPercentage)
+          {
+            return "red";
+          }
+          if(this.targetPercentage>percentage && percentage>this.lowerTargetPercentage)
+          {
+            return "orange";
+          }
+          if(this.targetPercentage<percentage)
+          {
+            return "green";
+          }
+        }
+      }
 }
