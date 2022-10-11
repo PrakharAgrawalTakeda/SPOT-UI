@@ -99,8 +99,9 @@
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
                     </a>
-                    <a href="javascript:void(0)" title="Delete Single" *ngIf="editable && row.milestoneType?!row.milestoneType >=1:true"
+                    <a href="javascript:void(0)" title="Delete Single" *ngIf="row.milestoneType == null && editable"                  
                         (click)="deleteSchedule(row.scheduleUniqueId)">
+                        <!-- && " -->
                         <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                     </a>
                 </div>
