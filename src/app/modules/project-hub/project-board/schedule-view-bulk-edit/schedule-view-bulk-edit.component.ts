@@ -423,33 +423,33 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
 
   submitjustification() {
-    if(this.baselineForm.value.baselineComment.length <= 0)
-    {
-    var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Please add a justification",
-      "message": "",
-      "icon": {
-        "show": true,
-        "name": "heroicons_outline:exclamation",
-        "color": "warning"
-      },
-      "actions": {
-        "confirm": {
-          "show": true,
-          "label": "Okay",
-          "color": "primary"
-        },
-        "cancel": {
-          "show": false,
-          "label": "Cancel"
-        }
-      },
-      "dismissible": true
-    }
-    const alert = this.fuseAlert.open(comfirmConfig)
-    this.viewBaseline = true
-  }
-  else{
+  //   if(this.baselineForm.value.baselineComment.length <= 0)
+  //   {
+  //   var comfirmConfig: FuseConfirmationConfig = {
+  //     "title": "Please add a justification",
+  //     "message": "",
+  //     "icon": {
+  //       "show": true,
+  //       "name": "heroicons_outline:exclamation",
+  //       "color": "warning"
+  //     },
+  //     "actions": {
+  //       "confirm": {
+  //         "show": true,
+  //         "label": "Okay",
+  //         "color": "primary"
+  //       },
+  //       "cancel": {
+  //         "show": false,
+  //         "label": "Cancel"
+  //       }
+  //     },
+  //     "dismissible": true
+  //   }
+  //   const alert = this.fuseAlert.open(comfirmConfig)
+  //   this.viewBaseline = true
+  // }
+  // else{
     console.log(this.projecthubservice)
     this.teamMemberAdId = this.msalService.instance.getActiveAccount().localAccountId
     //if (this.projecthubservice.itemid != "new") {
@@ -541,7 +541,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       }
     })
 
-  }
+  //}
 }
 
   cancelJustification() {
