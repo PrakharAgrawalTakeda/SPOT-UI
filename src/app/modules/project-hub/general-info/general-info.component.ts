@@ -26,8 +26,7 @@ export class GeneralInfoComponent implements OnInit {
   filterCriteria: any = {}
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
-    projectsingle: new FormControl(''),
-    projectsingleid: new FormControl(''),
+    parentProgram: new FormControl(''),
     problemType: new FormControl('Standard Project / Program'),
     topsGroup: new FormControl(''),
     recordCreationDate: new FormControl(''),
@@ -220,17 +219,16 @@ export class GeneralInfoComponent implements OnInit {
             problemType: res.projectData.problemType,
             topsGroup: res.topsData ? res.topsData.topsgroup : '',
             recordCreationDate: res.projectData.createdDate,
-            projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-            projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+            parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
             submittedBy: res.projectData.problemOwnerName,
             projectManager: res.portfolioCenterData.pm,
             sponsor: res.portfolioCenterData.sponsor,
             projectDescription: res.projectData.projectDescription,
-            primaryProduct: res.primaryProduct,
+            primaryProduct: res.primaryProduct?res.primaryProduct.fullProductName:'',
             otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-            portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+            portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
             excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-            enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+            enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
             isOeproject: res.projectData.isOeproject,
             oeprojectType: res.projectData.oeprojectType ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
             isCapsProject: res.projectData.isCapsProject,
@@ -261,27 +259,10 @@ export class GeneralInfoComponent implements OnInit {
 
 
   disabler() {
-    if (!this.projectHubService.roleControllerControl.generalInfo.basicFields) {
-      this.generalInfoForm.disable()
-    }
-    if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
-      console.log('hit')
-      this.generalInfoForm.controls.portfolioOwner.disable()
-    }
-    this.generalInfoForm.controls.topsGroup.disable()
-    this.generalInfoForm.controls.recordCreationDate.disable()
-    this.generalInfoForm.controls.submittedBy.disable()
-    this.generalInfoForm.controls.projectManager.disable()
-    this.generalInfoForm.controls.sponsor.disable()
-  }
-  getPortfolioOwner(): any {
-    return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
+    this.generalInfoForm.disable()
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
-  }
-  getEnviornmentPortfolio(): any {
-    return this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
   }
   getoeprojectType(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
@@ -333,54 +314,6 @@ export class GeneralInfoComponent implements OnInit {
     }]
     this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...j]
     this.qrTableEditStack.push(this.generalInfoData.qualityReferences.length - 1)
-
-  }
-  reset() {
-    this.router.navigate(['project-hub/' + this.id + '/project-board'])
-  }
-  submitGeneralInfo() {
-    var qr = []
-    if (this.generalInfoData.qualityReferences.length > 0) {
-      var genQRFORM = this.qualityRefForm.getRawValue()
-      for (var quality of genQRFORM) {
-        qr.push({
-          qualityUniqueId: quality.qualityUniqueId,
-          qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-          qualityReference1: quality.qualityReference1,
-          problemUniqueId: quality.problemUniqueId
-        })
-      }
-    }
-    var formValue = this.generalInfoForm.getRawValue()
-    console.log(formValue)
-    var submitObj = this.generalInfoData.projectData
-    submitObj.problemTitle = formValue.problemTitle
-    submitObj.parentProgramId = formValue.projectsingleid
-    submitObj.problemType = formValue.problemType
-    submitObj.projectDescription = formValue.projectDescription
-    submitObj.primaryProductId = formValue.primaryProduct ? formValue.primaryProduct.productId : ''
-    submitObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
-    submitObj.portfolioOwnerId = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
-    submitObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
-    submitObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    submitObj.isOeproject = formValue.isOeproject
-    submitObj.oeprojectType = formValue.oeprojectType ? formValue.oeprojectType.lookUpId : ''
-    submitObj.isCapsProject = formValue.isCapsProject
-    submitObj.isTechTransfer = formValue.isTechTransfer
-    submitObj.productionStepId = formValue.productionStepId
-    submitObj.campaignPhaseId = formValue.campaignPhaseId
-    submitObj.campaignTypeId = formValue.campaignTypeId
-    submitObj.isArchived = formValue.isArchived
-    console.log('Final Object', submitObj)
-    console.log('Final Object', qr)
-    this.apiService.bulkeditQualityReference(qr, this.id).then(resp => {
-      this.apiService.editGeneralInfo(this.id, submitObj).then(res => {
-        console.log("Success", res)
-        this.projectHubService.isNavChanged.next(true)
-        this.projectHubService.successSave.next(true)
-        this.router.navigate(['project-hub/' + this.id + '/project-board'])
-      })
-    })
 
   }
 }

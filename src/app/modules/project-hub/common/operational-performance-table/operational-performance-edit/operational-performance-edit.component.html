@@ -14,7 +14,7 @@
             class="{{(indicator.getIndicators(getIndicator(OperationalPerformanceForm.controls.status.value), 'circle')).iconcolor}}">
         </mat-icon>
         <spot-select class="w-full" formControlName="status" name="status" [label]="'Status'" [placeholder]="'Status'"
-            [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [showNoneOption]="false"
+            [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
             [dropDownArrayType]="'object'" [dropDownArray]="getStatus()" [sortByType]="'custom'"
             [customSortPointer]="'lookUpOrder'">
         </spot-select>

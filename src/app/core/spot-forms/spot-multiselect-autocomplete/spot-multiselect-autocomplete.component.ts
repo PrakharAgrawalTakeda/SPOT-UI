@@ -80,12 +80,14 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     console.log(this.selectedOption)
     this.selectedOption.push(event.option.value)
     this.onChange(this.selectedOption)
+    this.form.controls.chipList.markAsDirty()
     this.input.nativeElement.blur()
     this.form.controls.control.patchValue('')
     this.input.nativeElement.value = ''
   }
   removeOption(item: any) {
     this.selectedOption = this.selectedOption.filter(x => x[this.idPointer] != item[this.idPointer])
+    this.form.controls.chipList.markAsDirty()
     this.onChange(this.selectedOption)
   }
   isOptionSelected(option: any): boolean {
