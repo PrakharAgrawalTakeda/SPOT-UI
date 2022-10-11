@@ -99,7 +99,7 @@
         </ngx-datatable-column>
 
 
-        <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false" [flexGrow]="1">
+        <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false" [flexGrow]="0.9">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value}}
@@ -112,7 +112,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.8">
+          [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -123,7 +123,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.8">
+          [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -133,16 +133,15 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false" [flexGrow]="0.5">
+        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false" [flexGrow]="0.45">
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
             <div class="variance">
-
             {{calculateVariance(row)}}
           </div>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
-          [sortable]="false" [flexGrow]="0.9">
+          [sortable]="false" [flexGrow]="0.8">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value}}
@@ -154,7 +153,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
-          [flexGrow]="1">
+          [flexGrow]="0.8">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{getLookupName(value)}}
@@ -166,7 +165,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.8">
+          [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
@@ -176,7 +175,7 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.8">
+        <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value}}
@@ -188,7 +187,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
-          [resizeable]="false" [flexGrow]="0.50">
+          [resizeable]="false" [flexGrow]="0.40">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="!value">&nbsp;</p>

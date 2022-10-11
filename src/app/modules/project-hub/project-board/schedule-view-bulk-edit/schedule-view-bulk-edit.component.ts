@@ -681,6 +681,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData]
     console.log(this.milestoneForm)
+    console.log(this.scheduleData.scheduleData)
   }
   debugger
   submitschedule() {
