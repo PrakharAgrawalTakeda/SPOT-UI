@@ -487,7 +487,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
       else {
         //console.log(this.baselineForm.value.counter)
-        if (this.baselineForm.value.counter == null) {
+        if (this.baselineForm.value.counter == false) {
           var justificationObj = {
             baselineLogId: "new",
             projectId: this.baselineLogObj.projectId,
