@@ -10,9 +10,16 @@
   <div>
 
     <div class="flex justify-between gap-8 mt-2">
+      <div *ngIf="baselineCount.baselineCount > 0; else zero">
       <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
         Baseline : {{baselineCount.baselineCount}}
       </h6>
+    </div>
+    <ng-template #zero>
+      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+      Baseline : 0
+    </h6>
+    </ng-template>
       <!-- <div class="flex items-center">
         <div class="w-full pr-3 text-right whitespace-pre">
           <button class="w-auto" style="margin-right: 1.5rem; padding:0px 140px!important;" mat-flat-button

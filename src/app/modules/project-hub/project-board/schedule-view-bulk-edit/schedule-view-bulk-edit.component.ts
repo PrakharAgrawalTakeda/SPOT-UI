@@ -110,7 +110,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
           this.authService.lookupMaster().then((lookup: any) => {
          
             this.baselineCount = count
-            console.log(this.baselineCount)
+            console.log("Baseline Count",this.baselineCount)
             console.log('LookUp Data', lookup)
             this.lookUpData = lookup
             console.log('Filter Criteria:', filterres)
