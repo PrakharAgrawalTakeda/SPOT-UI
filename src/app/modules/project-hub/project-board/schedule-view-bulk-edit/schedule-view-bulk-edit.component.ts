@@ -29,6 +29,7 @@ import { MsalService } from '@azure/msal-angular';
 
 export class ScheduleViewBulkEditComponent implements OnInit {
   @Input() scheduleData: any;
+  @Input() baselineLogData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -54,6 +55,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   addObj: any = []
   viewContent: boolean = false
   viewBaseline: boolean = false
+  viewBaselineLogs: boolean = false
   roleMaster: any = {}
   baselineCount: any = {}
   baselineLog: any = {}
@@ -62,6 +64,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   scheduledataDb = []
   milestonesSubmit = []
   flag: boolean = false
+  baselineLogForm = new FormArray([])
+  
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
     private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService,
@@ -104,6 +108,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       this.apiService.getprojectviewdata(this.id).then((res: any) => {
         this.portApiService.getfilterlist().then(filterres => {
           this.authService.lookupMaster().then((lookup: any) => {
+         
             this.baselineCount = count
             console.log(this.baselineCount)
             console.log('LookUp Data', lookup)
@@ -131,6 +136,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                   "includeInCharter": x.includeInCharter,
                   "milestoneType": x.milestoneType,
                   "templateMilestoneId": x.templateMilestoneId,
+
                   "includeInCloseout": x.includeInCloseout,
                   "responsiblePersonId": x.responsiblePersonId,
                   "indicator": x.indicator
@@ -360,6 +366,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       this.milestoneTableEditStack.push(row)
     }
   }
+
+
 
   calculateVariance(row: any): string {
     var datetoday = new Date(moment(this.today).format('L'))
@@ -608,6 +616,41 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   //   })
   // }
 
+  baselineLogs()
+  {
+    this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+      this.baselineLogData = logs.sort((a, b) => {
+        return a.baselineCount - b.baselineCount;
+    console.log("Baseline Logs",logs)
+    //this.baselineLogData = logs
+  })
+  console.log("Baseline Logs",logs)
+    for (var i of logs) {
+      this.baselineLogForm.push(new FormGroup({
+        includeSlipChart: new FormControl(i.includeSlipChart)
+      }))
+  }
+  
+  this.viewContent = false
+  this.viewBaseline = false
+  this.viewBaselineLogs = true
+
+    })
+
+  }
+
+  submitslipchart()
+  {
+    var logformValue = this.baselineLogForm.getRawValue()
+    console.log(logformValue)
+
+    for (var i of logformValue) {
+      console.log(i)
+      this.baselineLogObj.push({
+      })
+    }
+  }
+
   baselineProject() {
     for (var i of this.milestoneForm.controls) {
       console.log(i['controls']['completionDate'].value)
@@ -615,6 +658,10 @@ export class ScheduleViewBulkEditComponent implements OnInit {
        if(i['controls']['completionDate'].value == null || i['controls']['completionDate'].value == '')
        {
          i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
+         this.flag = true
+       }
+       else{
+         this.flag = false
        }
       
     }
@@ -624,10 +671,14 @@ export class ScheduleViewBulkEditComponent implements OnInit {
        if(j.completionDate == null || j.completionDate == '')
        {
          j.baselineFinish = j.plannedFinish
+         this.flag = true
        }
+       else{
+        this.flag = false
+      }
 
     }
-    this.flag = true
+    
     this.scheduleData.scheduleData = [...this.scheduleData.scheduleData]
     console.log(this.milestoneForm)
   }
@@ -669,7 +720,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       var baselinedates2 = baselineFormValue.map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
       })
-  
+      console.log(this.flag)
       if (!this.flag && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
         this.flag = true
       }
@@ -680,7 +731,11 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(this.flag)
     if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length <= 8) {
       this.viewBaseline = true
+      this.viewBaselineLogs = true
       this.projecthubservice.isBulkEdit = false
+
+      console.log("hello")
+      //this.saveScheduleBulkEdit()
     }
 
 else if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length > 8) {
