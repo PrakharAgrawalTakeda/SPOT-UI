@@ -192,6 +192,18 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  getDataCompleteness(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompleteness/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
+  getDataCompletenessPercent(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompletenessPercent/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
   async addProjectTeam(body){
     var link = GlobalVariables.apiurl+"ProjectTeams"
     const abc$ = this.http.post(link,body)
@@ -241,16 +253,4 @@ export class ProjectApiService {
     return response
   }
 
-  getDataCompleteness(projectId){
-    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompleteness/"+ projectId
-    const abc$ = this.http.get(url)
-    const response =  lastValueFrom(abc$)
-    return response
-  }
-  getDataCompletenessPercent(projectId){
-    var url = GlobalVariables.apiurl + "ProjectHubData/DataCompletenessPercent/"+ projectId
-    const abc$ = this.http.get(url)
-    const response =  lastValueFrom(abc$)
-    return response
-  }
 }

@@ -60,7 +60,6 @@ import { ProductSingleDropdownComponent } from './common/product-single-dropdown
 import { ScheduleViewBulkEditComponent } from './project-board/schedule-view-bulk-edit/schedule-view-bulk-edit.component';
 import { ProjectTeamAddSingleComponent } from './project-team/project-team-add-single/project-team-add-single.component';
 import { OperationalPerformanceTableComponent } from './common/operational-performance-table/operational-performance-table.component';
-import { OperationalPerformanceEditComponent } from './project-board/operational-performance-edit/operational-performance-edit.component';
 import { DataQualityPageComponent } from './common/data-quality-page/data-quality-page.component';
 import { OperationalPerformanceEditComponent } from './common/operational-performance-table/operational-performance-edit/operational-performance-edit.component';
 import { ProjectBenefitsComponent } from './project-benefits/project-benefits.component';
