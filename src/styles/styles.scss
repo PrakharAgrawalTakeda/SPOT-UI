@@ -14,7 +14,7 @@ $circle-size: 15px;
     color: #000000 
 }
 .hit-miss {
-    span::before{ 
+    div::before{ 
         content: '';
         display: inline-block;
         width: $circle-size;
@@ -25,11 +25,11 @@ $circle-size: 15px;
         margin-right: 5px;
         vertical-align: text-top
     }
-    &.complete span::before{ 
+    &.complete div::before{ 
         background-color: #008000; 
         
     }
-    &.incomplete span::before{ 
+    &.incomplete div::before{ 
         background-color: #ff0000;
     
     }
