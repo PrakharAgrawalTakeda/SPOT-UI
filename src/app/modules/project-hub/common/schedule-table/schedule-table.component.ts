@@ -61,6 +61,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     //this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+    console.log(this.scheduleData)
     console.log(this.schedulengxdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
   }

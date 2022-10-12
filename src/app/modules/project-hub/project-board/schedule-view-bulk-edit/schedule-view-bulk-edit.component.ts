@@ -35,9 +35,9 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   @Input() lookup: any
   @Input() editable: boolean
   @ViewChild('scheduleTable') scheduleTable: any;
+  @ViewChild('target') private myScrollContainer: ElementRef;
   editing = {};
   ColumnMode = ColumnMode;
-  schedulengxdata: any = []
   today = new Date()
   variance: any;
   formFieldHelpers: string[] = [''];
@@ -65,6 +65,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   milestonesSubmit = []
   flag: boolean = false
   baselineLogForm = new FormArray([])
+  isclosed: boolean = false
+  schedulengxdata: any = []
+  getRowClass = (row) => {
+    return {
+      'row-color1': row.completionDate != null,
+    };
+  };
 
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
@@ -94,7 +101,17 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.isclosed)
+    console.log(this.scheduleData.scheduleData)
+    if (this.isclosed == false) {
+      this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+    }
+    else {
+      this.schedulengxdata = this.scheduleData.scheduleData
+    }
 
+  }
 
   getFunctionOwner(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
@@ -117,6 +134,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
             this.filterCriteria = filterres
             console.log("Milestone info:", res)
             this.scheduleData = res
+            this.schedulengxdata = res.scheduleData.filter(x => x.completionDate == null)
             this.scheduledataDB = res.scheduleData
             console.log(this.id)
             if (res.scheduleData.length != 0) {
@@ -201,6 +219,21 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   }
 
+
+  changeschedule(event: any) {
+    console.log(event)
+    console.log(this.scheduleData.scheduleData)
+    if (event.checked == true) {
+      this.schedulengxdata = this.scheduleData.scheduleData
+      this.isclosed = true
+
+    }
+    else {
+      this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+      this.isclosed = false
+    }
+  }
+
   getLookupName(lookUpId: string): string {
 
     var lookup = this.lookUpData.find(x => x.lookUpId == lookUpId)
@@ -241,7 +274,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   //   }
   // }
 
-  addMilestoneRecord() {
+  addMilestoneRecord(el) : void {
 
     this.milestoneForm.push(new FormGroup({
       scheduleUniqueId: new FormControl(''),
@@ -297,6 +330,11 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(this.scheduleData.scheduleData)
     console.log(this.milestoneTableEditStack)
     this.milestoneTableEditRow(this.scheduleData.scheduleData.length - 1)
+    this.myScrollContainer.nativeElement.scroll({
+      top: this.myScrollContainer.nativeElement.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   //let index = this.datarows.indexOf(this.selected[0])
