@@ -15,14 +15,15 @@ export class ProjectSingleDropdownComponent implements OnInit {
   @Input() label: string;
   @Input() showHint: boolean = false
   @Input() hint: string = ''
-  
+
   options: string[] = ['One', 'Two', 'Three'];
   resultSets: any[];
   minLength = 4
   debounce = 400
   filteredOptions: any
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private _httpClient: HttpClient) { }
+  constructor(private _httpClient: HttpClient) {
+  }
 
   ngOnInit(): void {
     this.filteredOptions = this.formgroup.controls.projectsingle.valueChanges.pipe(
@@ -35,6 +36,12 @@ export class ProjectSingleDropdownComponent implements OnInit {
         // so the autocomplete panel can be closed
         if (!value || value.length < this.minLength) {
           this.resultSets = null;
+          if (value == ''){
+            this.formgroup.patchValue({
+              projectsingle: '',
+              projectsingleid: ''
+            })
+          }
         }
 
         // Continue
@@ -59,7 +66,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
       });
   }
 
-  onProjectSelectenter(option: any){
+  onProjectSelectenter(option: any) {
     console.log(option.option.value)
     this.formgroup.patchValue({
       projectsingle: option.option.value.problemTitle,

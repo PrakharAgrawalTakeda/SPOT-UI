@@ -73,6 +73,12 @@ export class ProjectHubService {
           link: 'general-info'
         },
         {
+          title: 'Project Benefits',
+          type: 'basic',
+          icon: 'feather:target',
+          link: 'project-benefits'
+        },
+        {
           title: 'Budget',
           type: 'basic',
           icon: 'heroicons_outline:currency-dollar',
@@ -256,7 +262,7 @@ export class ProjectHubService {
     this.isFormChanged = false
     alertopener.afterClosed().subscribe(res => {
       if (res != 'confirmed') {
-        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid)
+        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid,this.isBulkEdit)
         this.isFormChanged = true
       }
       else {

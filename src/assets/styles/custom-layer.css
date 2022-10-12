@@ -111,3 +111,6 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 .team-pad {
     padding: 0 20px 50px 20px;
 }
+.ngx-datatable .datatable-body-row, .ngx-datatable .datatable-header-inner, .ngx-datatable .datatable-row-center {
+align-items: flex-end;
+}

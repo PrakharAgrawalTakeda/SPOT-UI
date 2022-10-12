@@ -62,6 +62,16 @@ import { ProjectTeamAddSingleComponent } from './project-team/project-team-add-s
 import { OperationalPerformanceTableComponent } from './common/operational-performance-table/operational-performance-table.component';
 import { OperationalPerformanceEditComponent } from './project-board/operational-performance-edit/operational-performance-edit.component';
 import { DataQualityPageComponent } from './common/data-quality-page/data-quality-page.component';
+import { OperationalPerformanceEditComponent } from './common/operational-performance-table/operational-performance-edit/operational-performance-edit.component';
+import { ProjectBenefitsComponent } from './project-benefits/project-benefits.component';
+import { ProjectTeamBulkEditComponent } from './project-team/project-team-bulk-edit/project-team-bulk-edit.component';
+import { OperationalPerformanceBulkEditComponent } from './common/operational-performance-table/operational-performance-bulk-edit/operational-performance-bulk-edit.component';
+import { PrimaryKpiSingleEditComponent } from './project-benefits/primary-kpi-single-edit/primary-kpi-single-edit.component';
+import { GeneralInfoSingleEditComponent } from './general-info/general-info-single-edit/general-info-single-edit.component';
+import { OeProjectSingleEditComponent } from './general-info/oe-project-single-edit/oe-project-single-edit.component';
+import { CapsProjectSingleEditComponent } from './general-info/caps-project-single-edit/caps-project-single-edit.component';
+import { TechTransferSingleEditComponent } from './general-info/tech-transfer-single-edit/tech-transfer-single-edit.component';
+import { QualityRefBulkEditComponent } from './general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -100,6 +110,11 @@ export const projectRoutes: Route[] = [
     {
       path: 'general-info',
       component: GeneralInfoComponent,
+      pathMatch: 'full'
+    },
+    {
+      path: 'project-benefits',
+      component: ProjectBenefitsComponent,
       pathMatch: 'full'
     },
     {
@@ -184,6 +199,15 @@ export const projectRoutes: Route[] = [
     OperationalPerformanceTableComponent,
     OperationalPerformanceEditComponent,
     DataQualityPageComponent,
+    ProjectBenefitsComponent,
+    ProjectTeamBulkEditComponent,
+    OperationalPerformanceBulkEditComponent,
+    PrimaryKpiSingleEditComponent,
+    GeneralInfoSingleEditComponent,
+    OeProjectSingleEditComponent,
+    CapsProjectSingleEditComponent,
+    TechTransferSingleEditComponent,
+    QualityRefBulkEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

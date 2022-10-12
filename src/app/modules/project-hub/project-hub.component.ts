@@ -62,12 +62,12 @@ export class ProjectHubComponent implements OnInit {
         }
     ]
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService, 
-        private apiService: ProjectApiService, 
-        private _Activatedroute: ActivatedRoute, 
-        public indicator: SpotlightIndicatorsService, 
-        public projecthubservice: ProjectHubService, 
-        public _fuseNavigationService: FuseNavigationService, 
+    constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private apiService: ProjectApiService,
+        private _Activatedroute: ActivatedRoute,
+        public indicator: SpotlightIndicatorsService,
+        public projecthubservice: ProjectHubService,
+        public _fuseNavigationService: FuseNavigationService,
         private titleService: Title,
         private snack: MatSnackBar) {
         this.projecthubservice.isNavChanged.subscribe(res => {
@@ -77,9 +77,10 @@ export class ProjectHubComponent implements OnInit {
         })
         this.projecthubservice.successSave.subscribe(res => {
             if (res == true) {
-                this.snack.open("The information has been saved successfully","",{
+                this.snack.open("The information has been saved successfully", "", {
                     duration: 2000,
-                    panelClass:["bg-primary","text-on-primary"]})
+                    panelClass: ["bg-primary", "text-on-primary"]
+                })
             }
         })
     }
@@ -104,13 +105,13 @@ export class ProjectHubComponent implements OnInit {
             mainNavComponent.refresh()
             this.apiService.getHubSettings(this.id).then((response: any) => {
                 //Budget
-                this.projecthubservice.menuData[0].children[3].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                this.projecthubservice.menuData[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
                 //Documents
-                this.projecthubservice.menuData[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                this.projecthubservice.menuData[0].children[7].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
                 //Teams
-                this.projecthubservice.menuData[0].children[4].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                this.projecthubservice.menuData[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
                 if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
-                    this.projecthubservice.menuData[0].children[11].disabled = true
+                    this.projecthubservice.menuData[0].children[12].disabled = true
                 }
 
                 //nav refresh
@@ -133,7 +134,10 @@ export class ProjectHubComponent implements OnInit {
     }
     toggleSideNav() {
         this.drawerOpened = !this.drawerOpened
-        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' || this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team') {
+        if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits') {
             this.projecthubservice.submitbutton.next(true)
         }
     }

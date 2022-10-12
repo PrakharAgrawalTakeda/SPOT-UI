@@ -1,0 +1,26 @@
+<div class="flex flex-col flex-auto w-full px-8" *ngIf="viewContent">
+    <div class="flex bg-card rounded-2xl p-3 pb-0 justify-between items-center">
+        <div class="w-full">
+            <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
+                <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
+                    [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
+                    [dropDownArray]="kpiMasters">
+                </spot-singleselect-autocomplete>
+            </form>
+        </div>
+        <div class="w-10">
+            <a href="javascript:void(0)" *ngIf="projecthubservice.roleControllerControl.projectBenefits" title="Edit Single"
+                (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.projectViewDetails.projectData.primaryKpi , [], id)">
+                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="xl:col-span-6 flex flex-col mt-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
+        <app-operational-performance-table [kpi]="kpiMasters" [lookup]="lookupMasters"
+            [projectViewDetails]="projectViewDetails" [projectid]="id"
+            [editable]="projecthubservice.roleControllerControl.projectBenefits">
+        </app-operational-performance-table>
+    </div>
+
+
+</div>
