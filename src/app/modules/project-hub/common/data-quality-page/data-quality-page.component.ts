@@ -45,7 +45,7 @@ export class DataQualityPageComponent implements OnInit {
   targetPercentage = Constants.QUALITY_TARGET_PERCENTAGE;
   dataQualityPercentageString: string = '';
   lowerTargetPercentage = Constants.QUALITY_LOWER_TARGET_PERCENTAGE;
-  columns = [{name:'Phase', prop: 'phase', sortable:false, minWidth: 100, maxWidth: 150}, { name: 'Requirement' , prop:'requirement',sortable:false, minWidth:200, maxWidth: 350}, { name: 'Hit/Miss', prop:'hitMiss', cellClass: getCellClass, sortable:false, minWidth:50, maxWidth: 150}, {name: 'Detailed Description', prop:'detailedDescription', sortable:false, width: "auto", flexGrow:"5"}];
+  columns = [{name:'Phase', prop: 'phase', sortable:false, minWidth: 100, maxWidth: 150}, { name: 'Requirement' , prop:'requirement',sortable:false, minWidth:300, maxWidth: 350}, { name: 'Hit/Miss', prop:'hitMiss', cellClass: getCellClass, sortable:false, minWidth:100, maxWidth: 150}, {name: 'Detailed Description', prop:'detailedDescription', sortable:false, width: "auto", flexGrow:"5"}];
   rowClass  = getRowClass;
   ColumnMode = ColumnMode;
   ngOnInit(): void {

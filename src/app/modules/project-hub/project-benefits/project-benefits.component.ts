@@ -26,7 +26,6 @@ export class ProjectBenefitsComponent implements OnInit {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
         this.dataloader()
-        //test
       }
     })
     this.projecthubservice.isNavChanged.subscribe(res => {
