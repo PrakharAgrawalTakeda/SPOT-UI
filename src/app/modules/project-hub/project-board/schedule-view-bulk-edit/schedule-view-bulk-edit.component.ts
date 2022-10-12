@@ -67,6 +67,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   baselineLogForm = new FormArray([])
   isclosed: boolean = false
   schedulengxdata: any = []
+  log: any = {}
   getRowClass = (row) => {
     return {
       'row-color1': row.completionDate != null,
@@ -121,11 +122,17 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+      logs.sort((a, b) => {
+        return b.baselineCount - a.baselineCount;
+      })
     this.apiService.getProjectBaseline(this.id).then((count: any) => {
       this.apiService.getprojectviewdata(this.id).then((res: any) => {
         this.portApiService.getfilterlist().then(filterres => {
           this.authService.lookupMaster().then((lookup: any) => {
 
+            this.log = logs[0]
+            console.log(this.log)
             this.baselineCount = count
             console.log("Baseline Count", this.baselineCount)
             console.log('LookUp Data', lookup)
@@ -216,6 +223,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         })
       })
     })
+  })
 
   }
 

@@ -9,7 +9,7 @@
   </div>
   <div>
 
-    <div class="flex justify-between gap-8 mt-2">
+    <div class="flex justify-between">
       <div *ngIf="baselineCount.baselineCount > 0; else zero">
         <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
           Baseline : {{baselineCount.baselineCount}}
@@ -20,35 +20,39 @@
           Baseline : 0
         </h6>
       </ng-template>
-      <div style="padding-right: 5px;">
-        <mat-slide-toggle class="primary slider-adjust" (change)="changeschedule($event)">
-            Include Closed Items</mat-slide-toggle>
-    </div>
 
-      <div class="flex items-start justify-between">
-        <div style="padding-right: 5px;">
-          <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
-            style="margin-left: 2rem; padding:0px 28px!important" class="ml-4 text-primary bg-gray-200" mat-flat-button
-            [color]="'primary-200'" (click)="baselineLogs()">
-            Baseline Log
-          </button>
-        </div>
-        <div style="padding-right: 5px;">
-          <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
-            style="margin-left: 2rem; padding:0px 28px!important" class="ml-4 text-primary bg-gray-200" mat-flat-button
-            [color]="'primary-200'" (click)="baselineProject()">
-            Baseline Project
-          </button>
-        </div>
-        <div style="margin-right:22px">
-          <button href="javascript:void(0)" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-            (click)="addMilestoneRecord(target)">
-            <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-          </button>
-        </div>
-
+      <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+          Last Baseline: {{log.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
       </div>
 
+      <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        <mat-slide-toggle class="primary slider-adjust" (change)="changeschedule($event)">
+          Include Closed Items</mat-slide-toggle>
+      </div>
+    </div>
+
+
+
+    <div class="flex mt-4" style="padding-left:78rem !important">
+      <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
+        style="padding:0px 39px!important" class="mr-6 text-primary bg-gray-200" mat-flat-button
+        [color]="'primary-200'" (click)="baselineLogs()">
+        Baseline Log
+      </button>
+
+
+      <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
+        style="padding:0px 28px!important" class="mr-4 text-primary bg-gray-200" mat-flat-button
+        [color]="'primary-200'" (click)="baselineProject()">
+        Baseline Project
+      </button>
+
+
+      <button class="mr-2 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+        style="padding:0px 35px!important" (click)="addMilestoneRecord(target)">
+        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+      </button>
     </div>
 
 
@@ -86,7 +90,8 @@
           [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
+              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value |
+              date:'dd-MMM-yyyy'}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-input-date formControlName="plannedFinish" name="plannedFinish" [showLabel]="false">
@@ -98,7 +103,8 @@
           [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
+              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value |
+              date:'dd-MMM-yyyy'}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-input-date formControlName="baselineFinish" name="baselineFinish" [showLabel]="false">
@@ -130,7 +136,8 @@
           [flexGrow]="0.8">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{getLookupName(value)}}
+              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>
+              {{getLookupName(value)}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
@@ -143,7 +150,8 @@
           [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value | date:'dd-MMM-yyyy'}}
+              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value |
+              date:'dd-MMM-yyyy'}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-input-date formControlName="completionDate" name="completionDate" [showLabel]="false"
@@ -191,14 +199,14 @@
         </ngx-datatable-column>
       </ngx-datatable>
     </div>
-    <div class="mt-6 flex justify-between items-center w-full">
+    <div class="flex justify-between items-center w-full">
 
-      <button style="margin-left: 2rem; padding:0px 60px!important" class="w-auto" mat-flat-button [color]="'primary'"
+      <button style="margin-left: 2rem; padding:0px 65px!important; margin-top:-25px!important" class="w-auto" mat-flat-button [color]="'primary'"
         (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
         Cancel
       </button>
 
-      <button style="margin-right: 2rem; padding:0px 60px!important" class="w-auto" mat-flat-button [color]="'primary'"
+      <button style="margin-right: 2rem; padding:0px 65px!important; margin-top:-25px!important" class="w-auto" mat-flat-button [color]="'primary'"
         type="button" (click)="submitschedule()">
         Submit
       </button>
