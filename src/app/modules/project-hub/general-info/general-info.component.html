@@ -3,163 +3,201 @@
     <h3 class="text-xl text-primary">General Info</h3>
   </div>
   <!-- Enter Content here-->
-  <form class="w-full" [formGroup]="generalInfoForm" (ngSubmit)="submitGeneralInfo()">
-    <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
-      <spot-input formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
-        [placeholder]="'Project Name'">
-      </spot-input>
-      <app-project-single-dropdown [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
-        [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
-      </app-project-single-dropdown>
-      <spot-select formControlName="problemType" name="problemType" [label]="'Project Type'"
-        [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-        [dropDownArray]="projectTypeDropDrownValues">
-      </spot-select>
+  <form class="w-full" [formGroup]="generalInfoForm">
+    <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner"
+      class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+      <div class="flex justify-between items-center">
+        <div class="flex justify-start gap-1 items-center">Is Archived?
+        </div>
+        <div>
+          <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden"
+      [ngClass]="{'mt-6': projectHubService.roleControllerControl.generalInfo.porfolioOwner}">
       <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full" formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'"
-          [placeholder]="'TOPS Group'">
+        <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
+          [placeholder]="'Project Name'">
         </spot-input>
-        <spot-input-date class="w-full" formControlName="recordCreationDate" name="recordCreationDate"
-          [label]="'Record Creation Date'" [placeholder]="'Record Creation Date'"></spot-input-date>
-        <spot-input class="w-full" formControlName="submittedBy" name="submittedBy" [label]="'Submitted By'"
-          [placeholder]="'Submitted by'">
+        <spot-input class="w-full" formControlName="parentProgram" name="problemTitle" [label]="'Parent Program'"
+          [showHint]="true"
+          [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'"
+          [placeholder]="'Parent Program'">
+        </spot-input>
+      </div>
+      <div class="flex justify-between items-center gap-6">
+        <spot-input formControlName="portfolioOwner" class="w-full" name="portfolioOwner" [label]="'Portfolio Owner'"
+          [placeholder]="'Portfolio Owner'" [showHint]="true"
+          [hint]="'The group which is responsible for the oversight and process adherence of the record'">
+        </spot-input>
+        <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full" name="excecutionScope"
+          [label]="'Execution Scope'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
+          [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
+          [sortByType]="'custom'" [customSortPointer]="'pfid'"
+          [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+        </spot-multiselect-autocomplete>
+      </div>
+      <spot-input class="w-full" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+        [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'" [showHint]="true"
+        [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+      </spot-input>
+      <div class="flex justify-between items-center gap-6">
+        <spot-input class="w-full" formControlName="projectManager" name="projectManager" [label]="'Project Manager'"
+          [placeholder]="'Project Manager'">
         </spot-input>
         <spot-input class="w-full" formControlName="sponsor" name="sponsor" [label]="'Sponsor'"
           [placeholder]="'Sponsor'">
         </spot-input>
-        <spot-input class="w-full" formControlName="projectManager" name="projectManager" [label]="'Project Manager'"
-          [placeholder]="'Project Manager'">
-        </spot-input>
       </div>
       <div class="flex justify-between items-center gap-6">
-        <spot-singleselect-autocomplete formControlName="portfolioOwner" class="w-1/4" name="portfolioOwner"
-          [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
-          [dropDownArray]="getPortfolioOwner()" [showHint]="true"
-          [hint]="'The group which is responsible for the oversight and process adherence of the record'">
-        </spot-singleselect-autocomplete>
-        <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-1/2" name="excecutionScope"
-          [label]="'Execution Scope'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
-          [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
-          [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
-        </spot-multiselect-autocomplete>
-        <spot-singleselect-autocomplete class="w-1/4" formControlName="enviornmentalPortfolio"
-          name="enviornmentalPortfolio" [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'"
-          [valuePointer]="'portfolioOwner'" [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true"
-          [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
-        </spot-singleselect-autocomplete>
-      </div>
-      <div class="flex justify-between items-center gap-6">
-        <spot-singleselect-autocomplete class="w-1/4" formControlName="primaryProduct" name="primaryProduct"
-          [label]="'Primary Product'" [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
-          [dropDownArray]="filterCriteria.products" [showHint]="true"
+        <spot-input class="w-full" formControlName="primaryProduct" name="primaryProduct"
+          [label]="'Primary Product'" [placeholder]="'Primary Product'" [showHint]="true"
           [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
-        </spot-singleselect-autocomplete>
-        <spot-multiselect-autocomplete class="w-3/4" formControlName="otherImpactedProducts"
+        </spot-input>
+        <spot-multiselect-autocomplete class="w-full" formControlName="otherImpactedProducts"
           name="otherImpactedProducts" [label]="'Other Impacted Products'" [placeholder]="'Other Impacted Products'"
           [valuePointer]="'fullProductName'" [idPointer]="'productId'" [dropDownArray]="filterCriteria.products"
           [showHint]="true" [hint]="'Any additional products which are impacted by the project execution'">
         </spot-multiselect-autocomplete>
       </div>
+      <div class="flex justify-between items-start gap-6">
+        <spot-input class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
+          [placeholder]="'Project Type'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'"
+          [placeholder]="'TOPS Group'">
+        </spot-input>
+      </div>
+
+
       <spot-textarea formControlName="projectDescription" name="projectDescription"
         [label]="'Problem Description / Present Situation / Submission Description'"
         [placeholder]="'Problem Description / Present Situation / Submission Description'">
       </spot-textarea>
 
     </div>
-    <div class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
-      <div class="flex justify-between items-center">
-        <div>OE Project?</div>
-        <div>
-          <mat-slide-toggle formControlName="isOeproject"></mat-slide-toggle>
+    <div class="flex justify-between items-start gap-6">
+      <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center">
+          <div>OE Project</div>
+          <div>
+            <mat-slide-toggle formControlName="isOeproject"></mat-slide-toggle>
+          </div>
+        </div>
+        <div class="mt-3" *ngIf="generalInfoForm.controls['isOeproject'].value">
+          <spot-singleselect-autocomplete formControlName="oeprojectType" name="oeprojectType"
+            [label]="'OE Project Type'" [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'"
+            [dropDownArray]="getoeprojectType()">
+          </spot-singleselect-autocomplete>
         </div>
       </div>
-      <div class="mt-3" *ngIf="generalInfoForm.controls['isOeproject'].value">
-        <spot-singleselect-autocomplete formControlName="oeprojectType" name="oeprojectType" [label]="'OE Project Type'"
-          [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'" [dropDownArray]="getoeprojectType()">
-        </spot-singleselect-autocomplete>
-      </div>
-    </div>
-    <div class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
-      <div class="flex justify-between items-center">
-        <div>Tech Transfer?</div>
-        <div>
-          <mat-slide-toggle formControlName="isTechTransfer"></mat-slide-toggle>
-        </div>
-      </div>
-      <div class="mt-3 flex justify-between items-center gap-6"
-        *ngIf="generalInfoForm.controls['isTechTransfer'].value">
-        <spot-select class="w-full" formControlName="campaignPhaseId" name="campaignPhaseId"
-          [label]="'Project Permission'" [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'"
-          [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
-          [dropDownArray]="getCampaignPhase()">
-        </spot-select>
-        <spot-select class="w-full" formControlName="campaignTypeId" name="campaignTypeId"
-          [label]="'Project Permission'" [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'"
-          [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
-          [dropDownArray]="getCampaignType()">
-        </spot-select>
-        <spot-select class="w-full" formControlName="productionStepId" name="productionStepId"
-          [label]="'Project Permission'" [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'"
-          [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
-          [dropDownArray]="getProductionStep()">
-        </spot-select>
-      </div>
-    </div>
-    <div class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
-      <div class="flex justify-between items-center">
-        <div>Quality Reference #?</div>
-        <div>
-          <mat-slide-toggle formControlName="isQualityRef"></mat-slide-toggle>
-        </div>
-      </div>
-      <div class="mt-3">
-        <ngx-datatable *ngIf="generalInfoForm.controls['isQualityRef'].value" [headerHeight]="'auto'"
-          [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-          class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
-          [rows]="generalInfoData.qualityReferences" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #qualityRefTable>
-          <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
-            [flexGrow]="1">
-            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-              <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">{{value}}</a>
-              <form [formGroup]="qualityRefForm.controls[rowIndex]" *ngIf="qrTableEditStack.includes(rowIndex)">
-                <spot-singleselect-autocomplete formControlName="qualityReferenceType" [showLabel]="false"
-                  [placeholder]="'Quality Reference Type'" [valuePointer]="'lookUpName'" [dropDownArray]="getQRType()">
-                </spot-singleselect-autocomplete>
-              </form>
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false" [flexGrow]="1">
-            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-              <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">{{value}}</a>
-              <form [formGroup]="qualityRefForm.controls[rowIndex]" *ngIf="qrTableEditStack.includes(rowIndex)">
-                <spot-input formControlName="qualityReference" [showLabel]="false" [label]="'Project Name'"
-                  [placeholder]="'Project Name'">
-                </spot-input>
-              </form>
-            </ng-template>
-          </ngx-datatable-column>
-        </ngx-datatable>
-      </div>
-    </div>
-    <div class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
-      <div class="flex justify-between items-center">
-        <div class="flex justify-start gap-1 items-center">CAPS Project? <mat-icon class="pe icon-size-4"
-            matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+
+      <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center">
+          <div class="flex justify-start gap-1 items-center">CAPS Project <mat-icon class="pe icon-size-4"
+              matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
           CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-            help</mat-icon>
-        </div>
-        <div>
-          <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
+              help</mat-icon>
+          </div>
+          <div>
+            <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
+          </div>
         </div>
       </div>
     </div>
-    <div class="mt-6 flex justify-between items-center">
-      <button class="w-25" mat-flat-button [color]="'primary'" type="button" (click)="reset()">
-        Cancel
-      </button>
-      <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
-        Submit
-      </button>
+
+
+
+
+    <div class="flex justify-between items-start gap-6">
+      <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center">
+          <div>Tech Transfer</div>
+          <div>
+            <mat-slide-toggle formControlName="isTechTransfer"></mat-slide-toggle>
+          </div>
+        </div>
+        <div class="mt-3" *ngIf="generalInfoForm.controls['isTechTransfer'].value">
+          <spot-select class="w-full" formControlName="campaignTypeId" name="campaignTypeId" [label]="'Campaign Type'"
+            [placeholder]="'Campaign Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+            [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getCampaignType()">
+          </spot-select>
+          <spot-select class="w-full" formControlName="campaignPhaseId" name="campaignPhaseId"
+            [label]="'Campaign Phase'" [placeholder]="'Campaign Phase'" [valuePointer]="'lookUpName'"
+            [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
+            [dropDownArray]="getCampaignPhase()">
+          </spot-select>
+          <spot-select class="w-full" formControlName="productionStepId" name="productionStepId"
+            [label]="'Production Step'" [placeholder]="'Production Step'" [valuePointer]="'lookUpName'"
+            [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
+            [dropDownArray]="getProductionStep()">
+          </spot-select>
+        </div>
+      </div>
+      <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center">
+          <div>Quality Reference #</div>
+          <div class="flex justify-between items-center gap-3">
+            <div *ngIf="generalInfoForm.controls['isQualityRef'].value">
+              <button class="ml-4 text-primary" type="button" mat-flat-button [color]="'primary-200'" (click)="addQR()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+              </button>
+            </div>
+            <mat-slide-toggle formControlName="isQualityRef"></mat-slide-toggle>
+
+          </div>
+        </div>
+        <div *ngIf="generalInfoForm.controls['isQualityRef'].value" class="mt-3">
+          <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+            class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
+            [rows]="generalInfoData.qualityReferences" #qualityRefTable>
+            <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
+              [sortable]="false" [flexGrow]="1">
+              <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <a *ngIf="!qrTableEditStack.includes(rowIndex)"
+                  (click)="qrTableEditRow(rowIndex)">{{getLookUpName(value)}}</a>
+                <form [formGroup]="qualityRefForm.controls[rowIndex]" *ngIf="qrTableEditStack.includes(rowIndex)">
+                  <spot-singleselect-autocomplete formControlName="qualityReferenceTypeId" [showLabel]="false"
+                    [placeholder]="'Quality Reference Type'" [valuePointer]="'lookUpName'"
+                    [dropDownArray]="getQRType()">
+                  </spot-singleselect-autocomplete>
+                </form>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
+              [sortable]="false" [flexGrow]="1">
+              <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">
+                  <p *ngIf="!value">&nbsp;</p>{{value}}
+                </a>
+                <form [formGroup]="qualityRefForm.controls[rowIndex]" *ngIf="qrTableEditStack.includes(rowIndex)">
+                  <spot-input formControlName="qualityReference1" [showLabel]="false" [label]="'Quality Reference #'"
+                    [placeholder]="'Quality Reference #'">
+                  </spot-input>
+                </form>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.1">
+              <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <a href="javascript:void(0)" title="Delete Single" (click)="deleteQR(rowIndex)">
+                  <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden mt-6">
+      <div class="flex justify-between items-center gap-6">
+        <spot-input-date class="w-full" formControlName="recordCreationDate" name="recordCreationDate"
+          [label]="'Record Creation Date'" [placeholder]="'Record Creation Date'"></spot-input-date>
+        <spot-input class="w-full" formControlName="submittedBy" name="submittedBy" [label]="'Submitted By'"
+          [placeholder]="'Submitted by'">
+        </spot-input>
+      </div>
     </div>
   </form>
 

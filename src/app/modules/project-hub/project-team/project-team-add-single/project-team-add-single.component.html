@@ -8,16 +8,25 @@
 </div>
 <form class="w-full form-ask-need" [formGroup]="projectTeamAddForm" (ngSubmit)="submitProjectTeam()"
     style="overflow-y: scroll; height: 95vh;">
-    
-    <spot-singleselect-user-autocomplete formControlName="usersingle" name="usersingle" [label]="'Team Member(s)'" [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+
+    <spot-singleselect-user-autocomplete formControlName="usersingle" name="usersingle" [label]="'Team Member(s)'"
+        [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
     </spot-singleselect-user-autocomplete>
     <spot-singleselect-autocomplete formControlName="role" name="role" [label]="'Role'" [placeholder]="'Role'"
         [valuePointer]="'lookUpName'" [dropDownArray]="getRoles()">
     </spot-singleselect-autocomplete>
 
     <spot-select formControlName="permission" name="permission" [label]="'Project Permission'"
-        [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
-        [dropDownArray]="getPermissions()">
-      </spot-select>
-
+        [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+        [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getPermissions()">
+    </spot-select>
+    <div class="flex items-start justify-between mt-6">
+        <a class="w-25" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
 </form>

@@ -5,18 +5,20 @@ import * as moment from 'moment';
 import { DatePipe } from '@angular/common'
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../project-api.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-schedule-table',
   templateUrl: './schedule-table.component.html',
   styleUrls: ['./schedule-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() scheduleData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
+  @Input() baselineLog: any = {}
   @Input() lookup: any
   @Input() editable: boolean
   @ViewChild('scheduleTable') scheduleTable: any;
@@ -29,10 +31,13 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   isclosed: boolean = false
   today = new Date()
   variance: any;
-  constructor(public projecthubservice: ProjectHubService, 
+  baselineCount: any = {}
+  id: string = ""
+  constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
-    public fuseAlert: FuseConfirmationService) { }
+    public fuseAlert: FuseConfirmationService,
+    private _Activatedroute: ActivatedRoute) { }
 
 
 
@@ -51,10 +56,19 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     }
 
   }
+
   ngOnInit(): void {
+    //this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+    console.log(this.schedulengxdata)
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
   }
+
+  // getCount() {
+
+  //   return this.baselineCount.baselineCount
+  // }
 
   calculateVariance(row: any): string {
     var datetoday = new Date(moment(this.today).format('L'))

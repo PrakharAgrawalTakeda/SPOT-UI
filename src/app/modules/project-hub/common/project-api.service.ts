@@ -187,11 +187,60 @@ export class ProjectApiService {
     return response
   }
   async updatePrimayKPI(projectid:string ,itemid: string){
-    var userid = GlobalVariables.apiurl+"Projects/UpdatePrimaryKPI/"+projectid+'/'+itemid
-    const abc$ = this.http.patch(userid,{})
+    var userid = GlobalVariables.apiurl+"Projects/UpdatePrimaryKPI/"+projectid
+    const abc$ = this.http.patch(userid,itemid)
     const response = await lastValueFrom(abc$)
     return response
   }
+  async addProjectTeam(body){
+    var link = GlobalVariables.apiurl+"ProjectTeams"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async bulkeditQualityReference(body,projectId){
+    var link = GlobalVariables.apiurl+"QualityReference/BulkEditQualityRef/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getProjectBaseline(projectId){
+    var userid = GlobalVariables.apiurl+"ProjectBaselines/" + projectId
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async bulkeditProjectTeam(body,projectId){
+    var link = GlobalVariables.apiurl+"ProjectTeams/BulkEdit/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async bulkeditKeySuccess(body,projectId){
+    var link = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/BulkEdit/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async addProjectBaselineLog(body){
+    var link = GlobalVariables.apiurl+"ProjectBaselineLogs"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getProjectBaselineLog(projectId){
+    var userid = GlobalVariables.apiurl+"ProjectBaselineLogs/" + projectId
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async editProjectBaseline(body){
+    var link = GlobalVariables.apiurl+"ProjectBaselines/" + body.projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   getDataCompleteness(projectId){
     var url = GlobalVariables.apiurl + "ProjectHubData/DataCompleteness/"+ projectId
     const abc$ = this.http.get(url)
