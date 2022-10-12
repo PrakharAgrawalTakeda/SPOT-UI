@@ -9,6 +9,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulat
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-general-info',
@@ -25,8 +26,7 @@ export class GeneralInfoComponent implements OnInit {
   filterCriteria: any = {}
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
-    projectsingle: new FormControl(''),
-    projectsingleid: new FormControl(''),
+    parentProgram: new FormControl(''),
     problemType: new FormControl('Standard Project / Program'),
     topsGroup: new FormControl(''),
     recordCreationDate: new FormControl(''),
@@ -47,6 +47,7 @@ export class GeneralInfoComponent implements OnInit {
     campaignPhaseId: new FormControl(''),
     campaignTypeId: new FormControl(''),
     isQualityRef: new FormControl(false),
+    isArchived: new FormControl(false)
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -57,22 +58,147 @@ export class GeneralInfoComponent implements OnInit {
     private portApiService: PortfolioApiService,
     private authService: AuthService,
     private projectHubService: ProjectHubService,
-    private router: Router) {
+    private router: Router,
+    public fuseAlert: FuseConfirmationService) {
+    this.projectHubService.submitbutton.subscribe(res => {
+      if (this.viewContent == true) {
+        this.tableAlter()
+      }
+    })
 
-    this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
+    this.generalInfoForm.controls.isTechTransfer.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
         if (res == false) {
-          this.generalInfoForm.controls.oeprojectType.patchValue({})
-        }
-        else {
-          this.generalInfoForm.controls.oeprojectType.patchValue(this.generalInfoData.projectData.oeprojectType == '' ? {} : this.lookUpData.find(x => x.lookUpId == this.generalInfoData.projectData.oeprojectType))
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the Tech Transfer Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.generalInfoForm.controls.campaignTypeId.patchValue('')
+              this.generalInfoForm.controls.campaignPhaseId.patchValue('')
+              this.generalInfoForm.controls.productionStepId.patchValue('')
+            }
+            else {
+              this.generalInfoForm.controls.isTechTransfer.patchValue(true)
+            }
+          })
         }
       }
     })
 
-    this.qualityRefForm.valueChanges.subscribe(res => {
-      console.log("QR form Value", this.qualityRefForm.getRawValue())
+
+    this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
+      if (this.viewContent == true) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the OE Project Type Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.generalInfoForm.controls.oeprojectType.patchValue({})
+            }
+            else {
+              this.generalInfoForm.controls.isOeproject.patchValue(true)
+            }
+          })
+        }
+      }
     })
+
+    this.generalInfoForm.controls.isQualityRef.valueChanges.subscribe(res => {
+      if (this.viewContent == true) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the Quality Reference Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.qrTableEditStack = []
+              this.qualityRefForm = new FormArray([])
+              this.generalInfoData.qualityReferences = []
+            }
+            else {
+              this.generalInfoForm.controls.isQualityRef.patchValue(true)
+              this.tableAlter()
+            }
+          })
+        }
+      }
+    })
+  }
+
+  tableAlter() {
+    if (this.generalInfoData.qualityReferences.length > 0) {
+      this.generalInfoData.qualityReferences = []
+      var qr = []
+      var genQRFORM = this.qualityRefForm.getRawValue()
+      for (var quality of genQRFORM) {
+        qr.push({
+          qualityUniqueId: quality.qualityUniqueId,
+          qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+          qualityReference1: quality.qualityReference1,
+          problemUniqueId: quality.problemUniqueId
+        })
+      }
+      this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...qr]
+    }
   }
   ngOnInit(): void {
     this.dataloader()
@@ -93,32 +219,33 @@ export class GeneralInfoComponent implements OnInit {
             problemType: res.projectData.problemType,
             topsGroup: res.topsData ? res.topsData.topsgroup : '',
             recordCreationDate: res.projectData.createdDate,
-            projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-            projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+            parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
             submittedBy: res.projectData.problemOwnerName,
             projectManager: res.portfolioCenterData.pm,
             sponsor: res.portfolioCenterData.sponsor,
             projectDescription: res.projectData.projectDescription,
-            primaryProduct: res.primaryProduct,
-            otherImpactedProducts: res.otherImpactedProducts,
-            portfolioOwner: res.portfolioOwner,
-            excecutionScope: res.excecutionScope,
-            enviornmentalPortfolio: res.enviornmentalPortfolio,
+            primaryProduct: res.primaryProduct?res.primaryProduct.fullProductName:'',
+            otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+            portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
+            excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+            enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
             isOeproject: res.projectData.isOeproject,
-            oeprojectType: res.projectData.oeprojectType == '' ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
+            oeprojectType: res.projectData.oeprojectType ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
             isCapsProject: res.projectData.isCapsProject,
             isTechTransfer: res.projectData.isTechTransfer,
             productionStepId: res.projectData.productionStepId,
             campaignPhaseId: res.projectData.campaignPhaseId,
             campaignTypeId: res.projectData.campaignTypeId,
             isQualityRef: res.qualityReferences.length != 0,
+            isArchived: res.projectData.isArchived
           })
           if (res.qualityReferences.length != 0) {
             for (var i of res.qualityReferences) {
               this.qualityRefForm.push(new FormGroup({
                 qualityUniqueId: new FormControl(i.qualityUniqueId),
-                qualityReferenceType: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
-                qualityReference: new FormControl(i.qualityReference1)
+                qualityReferenceTypeId: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
+                qualityReference1: new FormControl(i.qualityReference1),
+                problemUniqueId: new FormControl(this.id)
               }))
             }
           }
@@ -132,27 +259,10 @@ export class GeneralInfoComponent implements OnInit {
 
 
   disabler() {
-    this.generalInfoForm.controls.topsGroup.disable()
-    this.generalInfoForm.controls.recordCreationDate.disable()
-    this.generalInfoForm.controls.submittedBy.disable()
-    this.generalInfoForm.controls.projectManager.disable()
-    this.generalInfoForm.controls.sponsor.disable()
-  }
-  addQrRecord() {
-    this.qualityRefForm.push(new FormGroup({
-      qualityUniqueId: new FormControl(''),
-      qualityReferenceType: new FormControl({}),
-      qualityReference: new FormControl('')
-    }))
-  }
-  getPortfolioOwner(): any {
-    return this.filterCriteria.portfolioOwner
+    this.generalInfoForm.disable()
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
-  }
-  getEnviornmentPortfolio(): any {
-    return this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
   }
   getoeprojectType(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
@@ -169,39 +279,41 @@ export class GeneralInfoComponent implements OnInit {
   getQRType(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
   }
+  getLookUpName(id: string): string {
+    return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
+  }
   qrTableEditRow(row: number) {
     if (!this.qrTableEditStack.includes(row)) {
       this.qrTableEditStack.push(row)
     }
   }
-  reset() {
-    this.router.navigate(['project-hub/' + this.id + '/project-board'])
-  }
-  submitGeneralInfo() {
-    var formValue = this.generalInfoForm.getRawValue()
-    var submitObj = this.generalInfoData.projectData
-    submitObj.problemTitle = formValue.problemTitle
-    submitObj.parentProgramId = formValue.projectsingleid
-    submitObj.problemType = formValue.problemType
-    submitObj.projectDescription = formValue.projectDescription
-    submitObj.primaryProductId = formValue.primaryProduct?formValue.primaryProduct.productId:''
-    submitObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
-    submitObj.portfolioOwnerId = formValue.portfolioOwner.portfolioOwnerId
-    submitObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
-    submitObj.emissionPortfolioId = formValue.enviornmentalPortfolio.portfolioOwnerId
-    submitObj.isOeproject = formValue.isOeproject
-    submitObj.oeprojectType =formValue.oeprojectType?formValue.oeprojectType.lookUpId:''
-    submitObj.isCapsProject = formValue.isCapsProject
-    submitObj.isTechTransfer = formValue.isTechTransfer
-    submitObj.productionStepId = formValue.productionStepId
-    submitObj.campaignPhaseId = formValue.campaignPhaseId
-    submitObj.campaignTypeId = formValue.campaignTypeId
-    console.log('Final Object', submitObj)
-    this.apiService.editGeneralInfo(this.id, submitObj).then(res => {
-      console.log("Success", res)
-      this.projectHubService.isNavChanged.next(true)
-      this.projectHubService.successSave.next(true)
-      this.router.navigate(['project-hub/' + this.id + '/project-board'])
+  deleteQR(rowIndex: number) {
+    this.generalInfoData.qualityReferences.splice(rowIndex, 1)
+    this.qualityRefForm.removeAt(rowIndex)
+    if (this.qrTableEditStack.includes(rowIndex)) {
+      this.qrTableEditStack.splice(this.qrTableEditStack.indexOf(rowIndex), 1)
+    }
+    this.qrTableEditStack = this.qrTableEditStack.map(function (value) {
+      return value > rowIndex ? value - 1 : value;
     })
+    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences]
+    
+  }
+  addQR() {
+    this.qualityRefForm.push(new FormGroup({
+      qualityUniqueId: new FormControl(''),
+      qualityReferenceTypeId: new FormControl({}),
+      qualityReference1: new FormControl(''),
+      problemUniqueId: new FormControl(this.id)
+    }))
+    var j = [{
+      qualityUniqueId: '',
+      qualityReferenceTypeId: '',
+      qualityReference1: '',
+      problemUniqueId: ''
+    }]
+    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...j]
+    this.qrTableEditStack.push(this.generalInfoData.qualityReferences.length - 1)
+
   }
 }

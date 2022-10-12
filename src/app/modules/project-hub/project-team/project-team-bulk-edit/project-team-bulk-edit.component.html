@@ -1,0 +1,93 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Project Team</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="py-3 px-0">
+        <div class="flex justify-between items-center">
+            <div></div>
+            <div class="flex justify-between items-center gap-3">
+                <div class="pr-3">
+                    <button class="ml-4 text-primary" type="button" mat-flat-button [color]="'primary-200'"
+                        (click)="addPT()">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-x-auto overflow-y-scroll h-[80vh] ml-3 mt-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="teamMembers"
+                #projectTeamsTable>
+                <ngx-datatable-column [sortable]="false" name="Role" prop="roleName" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="projectTeamForm.controls[rowIndex]"
+                            *ngIf="ptTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-autocomplete formControlName="role" [showLabel]="false" [label]="'Role'"
+                                [placeholder]="'Role'" [valuePointer]="'lookUpName'" [dropDownArray]="getRoles()">
+                            </spot-singleselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Team Member" prop="userName" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="projectTeamForm.controls[rowIndex]"
+                            *ngIf="ptTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-user-autocomplete formControlName="user" [showLabel]="false"
+                                [label]="'Team Member(s)'"
+                                [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'"
+                                (valueChange)='valueChanges($event, rowIndex)'>
+                            </spot-singleselect-user-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Team Member" prop="teamPermissionId" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{getLookUpName(value)}}</p>
+                        </a>
+                        <form [formGroup]="projectTeamForm.controls[rowIndex]"
+                            *ngIf="ptTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="teamPermissionId" [showLabel]="false"
+                                [label]="'Project Permission'" [placeholder]="'Project Permission'"
+                                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [showNoneOption]="false"
+                                [dropDownArrayType]="'object'" [dropDownArray]="getPermissions()">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [flexGrow]="0.05" [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+                        <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single" (click)="deletePT(rowIndex)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="flex items-start justify-between mt-6 px-3">
+            <a class="w-1/6" mat-flat-button [color]="'primary'" type="button"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+                Cancel
+            </a>
+            <button class="w-1/6" mat-flat-button [color]="'primary'" (click)="submitProjectTeams()" type="button">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>

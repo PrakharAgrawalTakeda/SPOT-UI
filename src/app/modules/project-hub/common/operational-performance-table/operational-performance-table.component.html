@@ -1,9 +1,12 @@
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Performace</div>
+    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Performance</div>
 
     <div class="text-primary">
         <div class="flex items-start justify-between">
             <div style="padding-right: 5px;">
+                <button class="text-primary" mat-flat-button *ngIf="editable" [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceBulkEdit', 'new', [], projectid, true)">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                </button>
                 <button class="ml-4 text-primary" *ngIf="editable" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceSingleEdit', 'new', projectViewDetails.overallPerformace , projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -12,13 +15,6 @@
         </div>
     </div>
 </div>
-<form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
-    <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
-        [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
-        [dropDownArray]="kpi" [showHint]="true" [hintPostion]="'mat-hint'"
-        [hint]="'This change would be saved on edit ~~TO BE DISCUSSED IN NEXT TEAM MEETING'">
-    </spot-singleselect-autocomplete>
-</form>
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"

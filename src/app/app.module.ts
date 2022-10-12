@@ -23,8 +23,7 @@ export function MsalInstanceFactory(): IPublicClientApplication {
         auth: {
             authority: 'https://login.microsoftonline.com/57fdf63b-7e22-45a3-83dc-d37003163aae',
             clientId: '1457c97b-39c4-4789-9ac6-1c7a39211d9a',
-            redirectUri: GlobalVariables.spotui,
-            
+            redirectUri: GlobalVariables.spotui,            
         }
     });
 }
