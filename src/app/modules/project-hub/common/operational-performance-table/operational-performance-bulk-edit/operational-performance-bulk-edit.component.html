@@ -21,12 +21,12 @@
                 class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
                 [rows]="projectViewDetails.overallPerformace" #operationalPerformanceTable>
                 <ngx-datatable-column name="Status" [resizeable]="false" [sortable]="false" prop="status"
-                    [flexGrow]="1">
+                    [flexGrow]="0.8">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
-                            <div class="flex items-center justify-start gap-6">
+                            <div class="flex items-center justify-start gap-3">
                                 <mat-icon
                                     svgIcon="{{(indicator.getIndicators(getIndicator(value), 'circle')).icontype}}"
                                     class="{{(indicator.getIndicators(getIndicator(value), 'circle')).iconcolor}}">
@@ -36,7 +36,7 @@
                         </a>
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
                             *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
-                            <div class="flex justify-start items-center gap-6">
+                            <div class="flex justify-start items-center gap-3">
                                 <mat-icon
                                     svgIcon="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).icontype}}"
                                     class="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).iconcolor}}">
@@ -51,7 +51,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="KPI" prop="kpiid" [flexGrow]="1">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="KPI" prop="kpiid" [flexGrow]="1.6">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)">
