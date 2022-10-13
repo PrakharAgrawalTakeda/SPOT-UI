@@ -452,13 +452,13 @@
     }
 
     /* Focused and valid fields */
-    &.mat-focused:not(.mat-form-field-invalid) {
+    &.mat-focused:not(.mat-form-field-invalid){
 
         .mat-form-field-wrapper {
 
             /* Border color */
             .mat-form-field-flex {
-                @apply border-primary dark:border-primary #{'!important'};
+                @apply border-primary dark:border-primary;
             }
         }
     }
