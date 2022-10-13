@@ -1,5 +1,5 @@
 import { GlobalPositionStrategy } from '@angular/cdk/overlay';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { GlobalVariables } from 'app/shared/global-variables';
@@ -249,6 +249,20 @@ export class ProjectApiService {
   async editProjectBaseline(body){
     var link = GlobalVariables.apiurl+"ProjectBaselines/" + body.projectId
     const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getprojectTeams(projectid, teamMemberAdId) {
+    const params = new HttpParams().set('id',teamMemberAdId)
+    var link = GlobalVariables.apiurl + "ProjectTeams/" + projectid + `?${params.toString()}`
+    const abc$ = this.http.get(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  
+  async patchBaselineLogs(body){
+    var link = GlobalVariables.apiurl+"ProjectBaselineLogs/IncludedInSlipChart"
+    const abc$ = this.http.patch(link,body)
     const response = await lastValueFrom(abc$)
     return response
   }

@@ -36,15 +36,15 @@
 
     <div class="flex mt-4" style="padding-left:78rem !important">
       <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
-        style="padding:0px 39px!important" class="mr-6 text-primary bg-gray-200" mat-flat-button
-        [color]="'primary-200'" (click)="baselineLogs()">
+        style="padding:0px 39px!important" class="mr-6 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+        (click)="baselineLogs()">
         Baseline Log
       </button>
 
 
       <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
-        style="padding:0px 28px!important" class="mr-4 text-primary bg-gray-200" mat-flat-button
-        [color]="'primary-200'" (click)="baselineProject()">
+        style="padding:0px 28px!important" class="mr-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+        (click)="baselineProject()">
         Baseline Project
       </button>
 
@@ -269,13 +269,14 @@
           [rowClass]="getRowClass">
 
           <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
-            [resizeable]="false" [flexGrow]="0.50">
+            [resizeable]="false" [flexGrow]="0.6">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-              <a>
+              <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)">
                 <p *ngIf="!value">&nbsp;</p>
                 <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
               </a>
-              <form [formGroup]="baselineLogForm.controls[rowIndex]" class="p-2 overflow-hidden">
+              <form [formGroup]="baselineLogForm.controls[rowIndex]" class="p-2 overflow-hidden"
+                *ngIf="baselinelogTableEditStack.includes(rowIndex)">
                 <div class="flex items-center justify-between p-2 overflow-hidden">
                   <mat-slide-toggle name="includeSlipChart" [showLabel]="false" formControlName="includeSlipChart">
                   </mat-slide-toggle>
@@ -284,26 +285,51 @@
             </ng-template>
           </ngx-datatable-column>
 
+          <!-- <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
+          [resizeable]="false" [flexGrow]="0.40">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+              <p *ngIf="!value" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>
+              <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+            </a>
+            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
+              class="p-2 overflow-hidden">
+              <div class="flex items-center justify-between">
+                <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
+                </mat-slide-toggle>
+              </div>
+            </form>
+          </ng-template>
+        </ngx-datatable-column> -->
 
 
-
-
-
-          <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.5">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <p>{{value}}</p>
+          <ngx-datatable-column name="Log ID" [flexGrow]="0.5">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <div class="logID">
+                <a>{{rowIndex+1}}</a>
+              </div>
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1">
+
+
+          <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <p>{{value | date:'dd-MMM-yyyy'}}</p>
+              <div class="count">
+                <p>{{value}}</p>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
             </ng-template>
           </ngx-datatable-column>
 
 
 
-          <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="2">
+          <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="3">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <p>{{value}}</p>
             </ng-template>
@@ -323,7 +349,7 @@
 
     <button style="margin-left: 45rem; padding:0px 60px!important" class="w-auto" mat-flat-button [color]="'primary'"
       (click)="submitslipchart()">
-      Save changes applied to "Include in Slip Chart"
+      Submit
     </button>
 
   </div>
