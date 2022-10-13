@@ -1,1 +1,77 @@
-<p>quality-ref-bulk-edit works!</p>
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Quality Reference Bulk Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="flex p-[15px] justify-between items-center mt-2">
+        <div>Quality Reference #</div>
+        <form [formGroup]="isQualityRef">
+            <mat-slide-toggle formControlName="isQualityRef"></mat-slide-toggle>
+        </form>
+    </div>
+    <div *ngIf="isQualityRef.controls.isQualityRef.value">
+        <div class="flex justify-end items-center mt-2">
+            <button class="ml-4 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'" (click)="addQR()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+        </div>
+
+        <div class="w-full p-[20px] overflow-y-scroll h-[75vh]">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
+                [rows]="generalInfoData.qualityReferences" #qualityRefTable>
+                <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
+                    [sortable]="false" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{getLookUpName(value)}}</p>
+                        </a>
+                        <form [formGroup]="qualityRefForm.controls[rowIndex]"
+                            *ngIf="qrTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-autocomplete formControlName="qualityReferenceTypeId" [showLabel]="false"
+                                [placeholder]="'Quality Reference Type'" [valuePointer]="'lookUpName'"
+                                [dropDownArray]="getQRType()">
+                            </spot-singleselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
+                    [sortable]="false" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="qualityRefForm.controls[rowIndex]"
+                            *ngIf="qrTableEditStack.includes(rowIndex)">
+                            <spot-input formControlName="qualityReference1" [showLabel]="false"
+                                [label]="'Quality Reference #'" [placeholder]="'Quality Reference #'">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a href="javascript:void(0)" title="Delete Single" (click)="deleteQR(rowIndex)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-3">
+        <a class="w-1/6" mat-flat-button [color]="'primary'" type="button"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="w-1/6" mat-flat-button [color]="'primary'" (click)="submitQR()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

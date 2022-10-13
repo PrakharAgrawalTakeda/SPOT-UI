@@ -53,7 +53,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="Team Member" prop="teamPermissionId" [flexGrow]="1">
+                <ngx-datatable-column [sortable]="false" name="Permission" prop="teamPermissionId" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>

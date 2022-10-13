@@ -75,6 +75,9 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               includeInProposal: new FormControl(i.includeInProposal),
               problemUniqueId: new FormControl(i.problemUniqueId),
             }))
+            if(i.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc' || i.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'){
+              this.projectTeamForm.controls[this.projectTeamForm.value.length-1]['controls']['role'].disable()
+            }
           }
 
         }

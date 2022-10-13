@@ -68,7 +68,6 @@ import { OperationalPerformanceBulkEditComponent } from './common/operational-pe
 import { PrimaryKpiSingleEditComponent } from './project-benefits/primary-kpi-single-edit/primary-kpi-single-edit.component';
 import { GeneralInfoSingleEditComponent } from './general-info/general-info-single-edit/general-info-single-edit.component';
 import { OeProjectSingleEditComponent } from './general-info/oe-project-single-edit/oe-project-single-edit.component';
-import { CapsProjectSingleEditComponent } from './general-info/caps-project-single-edit/caps-project-single-edit.component';
 import { TechTransferSingleEditComponent } from './general-info/tech-transfer-single-edit/tech-transfer-single-edit.component';
 import { QualityRefBulkEditComponent } from './general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
 
@@ -204,7 +203,6 @@ export const projectRoutes: Route[] = [
     PrimaryKpiSingleEditComponent,
     GeneralInfoSingleEditComponent,
     OeProjectSingleEditComponent,
-    CapsProjectSingleEditComponent,
     TechTransferSingleEditComponent,
     QualityRefBulkEditComponent
   ],
