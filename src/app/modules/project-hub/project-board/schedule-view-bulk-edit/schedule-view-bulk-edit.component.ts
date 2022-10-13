@@ -67,6 +67,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   baselineLogForm = new FormArray([])
   isclosed: boolean = false
   schedulengxdata: any = []
+  completed: any = []
   log: any = {}
   getRowClass = (row) => {
     return {
@@ -106,10 +107,10 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(this.isclosed)
     console.log(this.scheduleData.scheduleData)
     if (this.isclosed == false) {
-      this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+      this.scheduleData.scheduleData = this.schedulengxdata
     }
     else {
-      this.schedulengxdata = this.scheduleData.scheduleData
+      this.scheduleData.scheduleData = this.completed
     }
 
   }
@@ -142,6 +143,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
             console.log("Milestone info:", res)
             this.scheduleData = res
             this.schedulengxdata = res.scheduleData.filter(x => x.completionDate == null)
+            this.completed = this.scheduleData.scheduleData
+            this.scheduleData.scheduleData = res.scheduleData.filter(x => x.completionDate == null)
             this.scheduledataDB = res.scheduleData
             console.log(this.id)
             if (res.scheduleData.length != 0) {
@@ -231,13 +234,14 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   changeschedule(event: any) {
     console.log(event)
     console.log(this.scheduleData.scheduleData)
+    console.log(this.scheduledataDB)
     if (event.checked == true) {
-      this.schedulengxdata = this.scheduleData.scheduleData
+      this.scheduleData.scheduleData = this.completed
       this.isclosed = true
 
     }
     else {
-      this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+      this.scheduleData.scheduleData = this.schedulengxdata
       this.isclosed = false
     }
   }
@@ -283,7 +287,11 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   // }
 
   addMilestoneRecord(el) : void {
-
+    this.myScrollContainer.nativeElement.scroll({
+      top: this.myScrollContainer.nativeElement.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
     this.milestoneForm.push(new FormGroup({
       scheduleUniqueId: new FormControl(''),
       projectId: new FormControl(this.id),
@@ -338,11 +346,6 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(this.scheduleData.scheduleData)
     console.log(this.milestoneTableEditStack)
     this.milestoneTableEditRow(this.scheduleData.scheduleData.length - 1)
-    this.myScrollContainer.nativeElement.scroll({
-      top: this.myScrollContainer.nativeElement.scrollHeight,
-      left: 0,
-      behavior: 'smooth'
-    });
   }
 
   //let index = this.datarows.indexOf(this.selected[0])

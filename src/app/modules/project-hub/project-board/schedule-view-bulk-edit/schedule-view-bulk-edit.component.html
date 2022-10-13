@@ -58,7 +58,7 @@
 
     <div class="mt-3 p-3 h-[74vh] overflow-y-scroll" #target>
       <ngx-datatable class="pr-6 pl-2 material font-medium text-sm text-secondary whitespace-nowrap"
-        [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
+        [rows]="scheduleData.scheduleData" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
         [scrollbarV]="false" [rowClass]="getRowClass">
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
