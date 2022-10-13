@@ -43,7 +43,7 @@
             <div>
                 <div class="flex items-center justify-between">
                     <div></div>
-                    <button class="text-primary text-md" mat-flat-button [color]="'primary-200'"
+                    <button class="text-primary text-md bg-gray-200" mat-flat-button [color]="'primary-200'"
                         *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit"
                         (click)="projecthubservice.toggleDrawerOpen('Overall',projectViewDetails.statusData.statusUnquieId, [], id)">
                         <mat-icon class="customIconSize" svgIcon="heroicons_outline:pencil"></mat-icon>&nbsp; Edit
@@ -196,7 +196,7 @@
             <div class="text-primary">
                 <div class="flex items-start justify-between">
                     <div style="padding-right: 5px;">
-                        <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                        <button class="ml-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'"
                             *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                             (click)="projecthubservice.toggleDrawerOpen('AskNeed', 'new', projectViewDetails.askNeedData, id)">
                             <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
