@@ -25,7 +25,8 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     portfolioOwner: new FormControl({}),
     excecutionScope: new FormControl([]),
     enviornmentalPortfolio: new FormControl({}),
-    isArchived: new FormControl(false)
+    isArchived: new FormControl(false),
+    isCapsProject: new FormControl(false)
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -53,7 +54,8 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
         excecutionScope: res.excecutionScope ? res.excecutionScope : [],
         enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
-        isArchived: res.projectData.isArchived
+        isArchived: res.projectData.isArchived,
+        isCapsProject: res.projectData.isCapsProject
       })
       this.viewContent = true
     })
@@ -123,6 +125,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.primaryProductId = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
     mainObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
+    mainObj.isCapsProject = formValue.isCapsProject
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)

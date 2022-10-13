@@ -32,6 +32,16 @@
             [sortByType]="'custom'" [customSortPointer]="'pfid'"
             [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
         </spot-singleselect-autocomplete>
+        <div class="flex justify-between items-center w-full pt-4 pb-6">
+            <div class="flex justify-start gap-1 items-center">CAPS Project <mat-icon class="pe icon-size-4"
+                    matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+            CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
+                    help</mat-icon>
+            </div>
+            <div>
+                <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
+            </div>
+        </div>
         <spot-singleselect-autocomplete class="w-full" formControlName="primaryProduct" name="primaryProduct"
             [label]="'Primary Product'" [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
             [dropDownArray]="filterCriteria.products" [showHint]="true"
