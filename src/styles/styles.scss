@@ -2,7 +2,35 @@
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
+$circle-size: 15px;
 .text-red-green{
     color: linear-gradient(to right, red 0%, red 50%, green 50%);
     
+}
+.hit-miss-false{
+    color: #808080
+}
+.hit-miss-true{
+    color: #000000 
+}
+.hit-miss {
+    div::before{ 
+        content: '';
+        display: inline-block;
+        width: $circle-size;
+        height: $circle-size;
+        -moz-border-radius: 50%px;
+        -webkit-border-radius: 50%px;
+        border-radius: 50%;
+        margin-right: 5px;
+        vertical-align: text-top
+    }
+    &.complete div::before{ 
+        background-color: #008000; 
+        
+    }
+    &.incomplete div::before{ 
+        background-color: #ff0000;
+    
+    }
 }

@@ -1,6 +1,6 @@
 <fuse-drawer [name]="'rightDrawer'" [opened]="projecthubservice.drawerOpenedright"
     (openedChanged)="projecthubservice.drawerOpenedChanged($event)" [mode]="'over'" #myDiv [position]="'right'"
-    [ngClass]="projecthubservice.isBulkEdit?'bulkEdit':''">
+    [ngClass]="{'bulkEdit':projecthubservice.isBulkEdit , 'dataQuality':projecthubservice.dataQuality}">
     <div>
         <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
@@ -11,6 +11,7 @@
         <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
         <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'"></app-project-team-bulk-edit>
         <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+        <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
     </div>
@@ -122,7 +123,10 @@
                             </mat-icon>
                         </div>
                     </div>
-                    <div></div>
+                    <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                    (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '1',false,true)">
+                    <b>Data Quality:&nbsp;</b><a [ngStyle]="{'color':getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}%</a>
+                </button>
                 </div>
                 <div class="flex shrink-0 items-center justify-between sm:mt-0">
 
