@@ -71,6 +71,8 @@ import { OeProjectSingleEditComponent } from './general-info/oe-project-single-e
 import { CapsProjectSingleEditComponent } from './general-info/caps-project-single-edit/caps-project-single-edit.component';
 import { TechTransferSingleEditComponent } from './general-info/tech-transfer-single-edit/tech-transfer-single-edit.component';
 import { QualityRefBulkEditComponent } from './general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
+import { LinkProjectComponent } from './common/link-project/link-project.component';
+import { UpdateParentComponent } from './common/update-parent/update-parent.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -206,7 +208,9 @@ export const projectRoutes: Route[] = [
     OeProjectSingleEditComponent,
     CapsProjectSingleEditComponent,
     TechTransferSingleEditComponent,
-    QualityRefBulkEditComponent
+    QualityRefBulkEditComponent,
+    LinkProjectComponent,
+    UpdateParentComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

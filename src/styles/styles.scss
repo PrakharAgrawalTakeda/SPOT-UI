@@ -34,3 +34,7 @@ $circle-size: 15px;
     
     }
 }
+.horizontal-header-class {
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);
+}

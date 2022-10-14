@@ -1,31 +1,19 @@
-import { O } from '@angular/cdk/keycodes';
+
 import {
-    ChangeDetectionStrategy,
     Component,
-    Input,
-    OnChanges,
     OnInit,
-    SimpleChanges,
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
-    FuseConfirmationConfig,
     FuseConfirmationService,
 } from '@fuse/services/confirmation';
-import { ColumnMode, sortRows } from '@swimlane/ngx-datatable';
+import { ColumnMode } from '@swimlane/ngx-datatable';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 import { Constants } from '../../../../shared/constants';
 
-export interface Row {
-    phase: string;
-    requirement: string;
-    hitMiss: string;
-    detailedDescription: string;
-}
 @Component({
     selector: 'app-data-quality-page',
     templateUrl: './data-quality-page.component.html',
@@ -41,7 +29,6 @@ export class DataQualityPageComponent implements OnInit {
         public fuseAlert: FuseConfirmationService,
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
-        private fb: FormBuilder
     ) {}
     id: string = '';
     rows = [];
