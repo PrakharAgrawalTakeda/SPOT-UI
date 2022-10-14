@@ -758,12 +758,15 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   }
 
   baselineProject() {
-    debugger
     for (var i of this.milestoneForm.controls) {
-      if ((i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) || (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
+      if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) || 
+      !this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
         i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
         this.flag = true
-        break;
+      }
+      else  if (this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) || 
+      this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
+        i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
       }
       else {
         this.flag = false
@@ -771,10 +774,12 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
     }
     for (var j of this.scheduleData.scheduleData) {
-      if ((j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
+      if (!this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || !this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
         j.baselineFinish = j.plannedFinish
         this.flag = true
-        break;
+      }
+      else if (this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
+        j.baselineFinish = j.plannedFinish
       }
       else {
         this.flag = false
