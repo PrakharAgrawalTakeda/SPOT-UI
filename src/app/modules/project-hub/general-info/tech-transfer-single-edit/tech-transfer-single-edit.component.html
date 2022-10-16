@@ -7,4 +7,35 @@
             </a>
         </div>
     </div>
+    <form class="w-full p-[20px] overflow-y-scroll h-[95vh]" [formGroup]="generalInfoForm" (ngSubmit)="techTransfer()">
+        <div class="flex justify-between items-center">
+            <div>Tech Transfer</div>
+            <mat-slide-toggle formControlName="isTechTransfer"></mat-slide-toggle>
+        </div>
+        <div class="mt-6" *ngIf="generalInfoForm.controls['isTechTransfer'].value">
+            <spot-select class="w-full" formControlName="campaignTypeId" name="campaignTypeId" [label]="'Campaign Type'"
+                [placeholder]="'Campaign Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getCampaignType()">
+            </spot-select>
+            <spot-select class="w-full" formControlName="campaignPhaseId" name="campaignPhaseId"
+                [label]="'Campaign Phase'" [placeholder]="'Campaign Phase'" [valuePointer]="'lookUpName'"
+                [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
+                [dropDownArray]="getCampaignPhase()">
+            </spot-select>
+            <spot-select class="w-full" formControlName="productionStepId" name="productionStepId"
+                [label]="'Production Step'" [placeholder]="'Production Step'" [valuePointer]="'lookUpName'"
+                [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
+                [dropDownArray]="getProductionStep()">
+            </spot-select>
+        </div>
+        <div class="flex items-start justify-between mt-6">
+            <a class="w-25" mat-flat-button [color]="'primary'"
+                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
 </div>
