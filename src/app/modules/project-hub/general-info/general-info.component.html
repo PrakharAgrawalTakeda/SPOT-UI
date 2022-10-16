@@ -110,10 +110,11 @@
           </div>
         </div>
         <div class="mt-3" *ngIf="generalInfoForm.controls['isOeproject'].value">
-          <spot-singleselect-autocomplete formControlName="oeprojectType" name="oeprojectType"
-            [label]="'OE Project Type'" [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'"
-            [dropDownArray]="getoeprojectType()">
-          </spot-singleselect-autocomplete>
+          <spot-multiselect-autocomplete formControlName="oeprojectType" name="oeprojectType"
+          [label]="'OE Project Type'" [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'"
+          [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'" [dropDownArray]="getoeprojectType()"
+          [sortByType]="'custom'">
+      </spot-multiselect-autocomplete>
         </div>
       </div>
     </div>

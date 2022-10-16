@@ -35,7 +35,7 @@
                             *ngIf="qrTableEditStack.includes(rowIndex)">
                             <spot-singleselect-autocomplete formControlName="qualityReferenceTypeId" [showLabel]="false"
                                 [placeholder]="'Quality Reference Type'" [valuePointer]="'lookUpName'"
-                                [dropDownArray]="getQRType()">
+                                [dropDownArray]="getQRType()" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'">
                             </spot-singleselect-autocomplete>
                         </form>
                     </ng-template>
