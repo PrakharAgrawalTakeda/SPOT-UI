@@ -19,8 +19,9 @@
       <div class="flex justify-end items-end">
         <div></div>
         <div>
-          <button class="ml-4 text-primary bg-gray-200" *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
-            mat-flat-button [color]="'primary-200'"
+          <button class="ml-4 text-primary bg-gray-200"
+            *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+            [color]="'primary-200'"
             (click)="projectHubService.toggleDrawerOpen('GeneralInfoSingleEdit', '', filterCriteria , id)">
             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
           </button>
@@ -103,8 +104,14 @@
       <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
         <div class="flex justify-between items-center">
           <div>OE Project</div>
-          <div>
+          <div class="flex items-center">
             <mat-slide-toggle formControlName="isOeproject"></mat-slide-toggle>
+            <button class="ml-4 text-primary bg-gray-200"
+              *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+              [color]="'primary-200'"
+              (click)="projectHubService.toggleDrawerOpen('OEProjectSingleEdit', '', filterCriteria , id)">
+              <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+            </button>
           </div>
         </div>
         <div class="mt-3" *ngIf="generalInfoForm.controls['isOeproject'].value">
@@ -123,8 +130,14 @@
       <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
         <div class="flex justify-between items-center">
           <div>Tech Transfer</div>
-          <div>
+          <div class="flex items-center">
             <mat-slide-toggle formControlName="isTechTransfer"></mat-slide-toggle>
+            <button class="ml-4 text-primary bg-gray-200"
+              *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+              [color]="'primary-200'"
+              (click)="projectHubService.toggleDrawerOpen('TechTransferSingleEdit', '', filterCriteria , id)">
+              <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+            </button>
           </div>
         </div>
         <div class="mt-3" *ngIf="generalInfoForm.controls['isTechTransfer'].value">
