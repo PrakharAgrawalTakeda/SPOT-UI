@@ -261,8 +261,7 @@
       <div class="mt-3 p-3 h-[83vh] overflow-y-scroll">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
           class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
-          [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #riskIssuesTable
-          [rowClass]="getRowClass">
+          [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
 
           <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
             [resizeable]="false" [flexGrow]="0.6">
@@ -282,10 +281,10 @@
           </ngx-datatable-column>
 
 
-          <ngx-datatable-column name="Log ID" [flexGrow]="0.5">
+          <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
               <div class="logID">
-                <a>{{rowIndex+1}}</a>
+                <a>{{value}}</a>
               </div>
             </ng-template>
           </ngx-datatable-column>
@@ -300,7 +299,7 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="2">
+          <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
             </ng-template>
@@ -308,7 +307,7 @@
 
 
 
-          <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="3">
+          <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <p>{{getUserName(value)}}</p>
             </ng-template>

@@ -19,6 +19,7 @@ import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@ang
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { MsalService } from '@azure/msal-angular';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-schedule-view-bulk-edit',
@@ -479,6 +480,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     }
   }
 
+
   islink(uid: string): boolean {
     return this.scheduleData.links.some(x => x.linkItemId == uid)
   }
@@ -546,18 +548,18 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       else {
         //console.log(this.baselineForm.value.counter)
         if (this.baselineForm.value.counter == false) {
-          var justificationObj = {
+          var justjustificationObj = {
             baselineLogId: "new",
             projectId: this.baselineLogObj.projectId,
             baselineCount: this.baselineLogObj.baselineCount,
-            teamMemberAdId: this.baselineLogObj.teamMemberAdId,
+            teamMemberAdId: this.teamMemberAdId,
             modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
             baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
             includeInCloseout: this.baselineLogObj.includeInCloseout,
             includeSlipChart: this.baselineLogObj.includeSlipChart
           }
           console.log(justificationObj)
-          this.apiService.addProjectBaselineLog(justificationObj).then(res => {
+          this.apiService.addProjectBaselineLog(justjustificationObj).then(res => {
             //this.viewContent = true
             // this.viewBaseline = false
 
@@ -604,7 +606,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
             baselineLogId: "new",
             projectId: this.baselineLogObj.projectId,
             baselineCount: this.baselineLogObj.baselineCount + 1,
-            teamMemberAdId: this.baselineLogObj.teamMemberAdId,
+            teamMemberAdId: this.teamMemberAdId,
             modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
             baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
             includeInCloseout: this.baselineLogObj.includeInCloseout,
@@ -761,15 +763,21 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     this.baselineLogForm = new FormArray([])
     console.log(this.baselineLogForm.getRawValue())
     this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+      console.log("Logs",logs)
+      console.log("Users List", this.userlist)
       this.userlist = logs.users
       this.getUserName(this.id)
       this.baselinelogTableEditStack = []
       console.log(this.baselineLogForm.getRawValue())
+
       this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
         return a.baselineCount - b.baselineCount;
       })
-      //this.baselinelogTableEditStack = []
+
+      var count = 1
       for (var i of this.baselineLogData) {
+        i.logId = count
+        count = count + 1
         this.baselineLogForm.push(new FormGroup({
           baselineLogId: new FormControl(i.baselineLogId),
           includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
