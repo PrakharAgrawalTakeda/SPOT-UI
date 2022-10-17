@@ -97,7 +97,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.7">
+          [flexGrow]="0.6">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value |
@@ -109,7 +109,7 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false" [flexGrow]="0.45">
+        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false" [flexGrow]="0.25">
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
             <div class="variance" [ngClass]="{'closed': row.completionDate != null}">
               {{calculateVariance(row)}}
@@ -117,7 +117,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
-          [sortable]="false" [flexGrow]="0.8">
+          [sortable]="false" [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value}}
