@@ -8,6 +8,14 @@
         </div>
     </div>
     <form class="w-full p-[20px] overflow-y-scroll h-[95vh]" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
+        <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner"
+            class="flex justify-between items-center mt-6 mb-6">
+            <div class="flex justify-start gap-1 items-center">Is Archived?
+            </div>
+            <div>
+                <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
+            </div>
+        </div>
         <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
             [placeholder]="'Project Name'">
         </spot-input>
