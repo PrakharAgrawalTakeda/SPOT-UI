@@ -166,8 +166,14 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
   }
   getlinkname(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
+    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
+    if (temp) {
+      return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    }
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    if(temp){
+      return "A link to this ask/need has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
+    }
 
   }
   allAskNeeds() {
