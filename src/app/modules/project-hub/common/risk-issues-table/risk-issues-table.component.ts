@@ -62,10 +62,17 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   islink(uid: string): boolean {
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
-  getlinkname(uid: string): string {
+    getlinkname(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
+    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
+    if (temp) {
+      return "This risk/issue is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    }
+    temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    return "This risk/issue is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    if(temp){
+      return "A link to this risk/issue has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
+    }
 
   }
 

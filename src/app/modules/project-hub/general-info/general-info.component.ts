@@ -83,6 +83,7 @@ export class GeneralInfoComponent implements OnInit {
           this.filterCriteria = filterres
           console.log("General Info:", res)
           this.generalInfoData = res
+          var oeprojectypelist = res.projectData.oeprojectType && res.projectData.oeprojectType != '' ? res.projectData.oeprojectType.split(',') : []
           this.generalInfoForm.patchValue({
             problemTitle: res.projectData.problemTitle,
             problemType: res.projectData.problemType,
@@ -99,7 +100,7 @@ export class GeneralInfoComponent implements OnInit {
             excecutionScope: res.excecutionScope ? res.excecutionScope : [],
             enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
             isOeproject: res.projectData.isOeproject,
-            oeprojectType: res.projectData.oeprojectType ? {} : lookup.find(x => x.lookUpId == res.projectData.oeprojectType),
+            oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => res.projectData.oeprojectType.includes(x.lookUpId)) : [],
             isCapsProject: res.projectData.isCapsProject,
             isTechTransfer: res.projectData.isTechTransfer,
             productionStepId: res.projectData.productionStepId,

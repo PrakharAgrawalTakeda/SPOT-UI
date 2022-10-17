@@ -116,6 +116,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
+    mainObj.isArchived = formValue.isArchived
     mainObj.problemTitle = formValue.problemTitle
     mainObj.problemType = formValue.problemType
     mainObj.projectDescription = formValue.projectDescription
