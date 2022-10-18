@@ -84,8 +84,8 @@
         <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
           [flexGrow]="0.9">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value}}
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="value == ''">&nbsp;</p>{{value}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false">
@@ -97,8 +97,8 @@
         <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
           [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value |
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="value == ''">&nbsp;</p>{{value |
               date:'dd-MMM-yyyy'}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
@@ -110,8 +110,8 @@
         <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [resizeable]="false" [sortable]="false"
           [flexGrow]="0.6">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value |
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="value == ''">&nbsp;</p>{{value |
               date:'dd-MMM-yyyy'}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
@@ -130,8 +130,8 @@
         <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
           [sortable]="false" [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value}}
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"  [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="value == ''">&nbsp;</p>{{value}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-singleselect-user-autocomplete formControlName="responsiblePersonName" name="responsiblePersonName"
@@ -143,8 +143,8 @@
         <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
           [flexGrow]="0.8">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="value == ''">&nbsp;</p>
               {{getLookupName(value)}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
@@ -157,8 +157,8 @@
         <ngx-datatable-column name="Completion Date" prop="completionDate" [resizeable]="false" [sortable]="false"
           [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value |
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="value == ''">&nbsp;</p>{{value |
               date:'dd-MMM-yyyy'}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
@@ -169,8 +169,8 @@
         </ngx-datatable-column>
         <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="value == ''" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>{{value}}
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="value == ''">&nbsp;</p>{{value}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-textarea [rows]="3" formControlName="comments" name="comments" [showLabel]="false">
@@ -181,8 +181,8 @@
         <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
           [resizeable]="false" [flexGrow]="0.40">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
-              <p *ngIf="!value" [ngClass]="{'closed': row.completionDate != null}">&nbsp;</p>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="!value">&nbsp;</p>
               <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"

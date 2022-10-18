@@ -122,12 +122,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.dataloader()
-
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
     console.log(this.isclosed)
     console.log(this.scheduleData.scheduleData)
     if (this.isclosed == false) {
@@ -138,6 +134,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     }
 
   }
+
+  ngOnInit(): void {
+    this.dataloader()
+
+  }
+
+
 
   getFunctionOwner(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
