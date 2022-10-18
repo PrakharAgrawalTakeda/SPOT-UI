@@ -120,7 +120,7 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false" [flexGrow]="0.25">
+        <ngx-datatable-column name="Variance" prop="variance" [resizeable]="false" [sortable]="false" [flexGrow]="0.4">
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
             <div class="variance" [ngClass]="{'closed': row.completionDate != null}">
               {{calculateVariance(row)}}
