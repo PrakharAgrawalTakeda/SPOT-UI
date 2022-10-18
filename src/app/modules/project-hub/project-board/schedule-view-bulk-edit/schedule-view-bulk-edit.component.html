@@ -21,10 +21,21 @@
         </h6>
       </ng-template>
 
+      <div *ngIf="log != ''; else null">
+
       <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        
         <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
           Last Baseline: {{log.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
+        </div>
       </div>
+      <ng-template #null>
+        <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        
+          <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+            Last Baseline: </h6>
+            </div>
+      </ng-template>
 
       <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
         <mat-slide-toggle class="primary slider-adjust" (change)="changeschedule($event)">

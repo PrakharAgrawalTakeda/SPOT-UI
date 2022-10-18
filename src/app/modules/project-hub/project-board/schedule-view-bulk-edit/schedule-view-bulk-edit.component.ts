@@ -158,8 +158,19 @@ export class ScheduleViewBulkEditComponent implements OnInit {
               this.authService.lookupMaster().then((lookup: any) => {
                 console.log("Users List", this.userlist)
                 this.teamMemberRole = teamrole.roleId
+               console.log(log)
+               if(log.projectBaselineLog.length != 0)
+               {
                 this.log = log.projectBaselineLog[0]
+
                 console.log(this.log)
+               }
+               else
+               {
+                 this.log = ''
+                 console.log(this.log)
+               }
+               
                 this.baselineCount = count
                 console.log("Baseline Count", this.baselineCount)
                 console.log('LookUp Data', lookup)
@@ -517,9 +528,16 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         return b.baselineCount - a.baselineCount;
 
       })
-      this.baselineLogObj = this.baselineLog.find(x => x.projectId == this.id)
+      if(this.baselineLog.length > 0)
+      {
+        this.baselineLogObj = this.baselineLog.find(x => x.projectId == this.id)
+      }
+      else{
+        this.baselineLogObj = ''
+      }
+      
 
-      if (this.baselineLogObj.length == 0) {
+      if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
         var justificationObjNew = {
           baselineLogId: "new",
@@ -532,8 +550,14 @@ export class ScheduleViewBulkEditComponent implements OnInit {
           includeSlipChart: false
         }
         console.log(justificationObjNew)
-
-
+        
+        var baselineObjNew = {
+          projectId: this.id,
+          baselineCount: 1,
+          teamMemberAdId: this.teamMemberAdId,
+          modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+        }
+        this.apiService.editProjectBaseline(baselineObjNew).then((count: any) => {
         this.apiService.addProjectBaselineLog(justificationObjNew).then(res => {
           //this.viewContent = true
           //this.viewBaseline = false
@@ -541,11 +565,36 @@ export class ScheduleViewBulkEditComponent implements OnInit {
           this.projecthubservice.submitbutton.next(true)
           this.saveScheduleBulkEdit()
         })
+      })
 
 
       }
 
-      else {
+      else if (this.baselineLogObj == '' && this.baselineForm.value.counter == false) {
+
+        var justificationObjNewnocounter = {
+          baselineLogId: "new",
+          projectId: this.id,
+          baselineCount: 1,
+          teamMemberAdId: this.teamMemberAdId,
+          modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
+          includeInCloseout: false,
+          includeSlipChart: false
+        }
+        console.log(justificationObjNewnocounter)
+       
+        this.apiService.addProjectBaselineLog(justificationObjNewnocounter).then(res => {
+          //this.viewContent = true
+          //this.viewBaseline = false
+
+          this.projecthubservice.submitbutton.next(true)
+          this.saveScheduleBulkEdit()
+        })
+
+      }
+
+      else if (this.baselineLogObj != '') {
         //console.log(this.baselineForm.value.counter)
         if (this.baselineForm.value.counter == false) {
           var justjustificationObj = {
@@ -601,7 +650,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         }
 
 
-        else {
+        else if(this.baselineForm.value.counter == true) {
           var justificationObj = {
             baselineLogId: "new",
             projectId: this.baselineLogObj.projectId,
