@@ -330,7 +330,6 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   // }
 
   addMilestoneRecord(el): void {
-    debugger
     this.myScrollContainer.nativeElement.scroll({
       top: this.myScrollContainer.nativeElement.scrollHeight,
       left: 0,
@@ -746,7 +745,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(formValue)
 
     for (var i of formValue) {
-      console.log(i)
+      console.log(i.function)
       this.scheduleObj.push({
         scheduleUniqueId: "new",
         projectId: i.projectId,
@@ -757,7 +756,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
         comments: i.comments,
         includeInReport: i.includeInReport,
-        functionGroupId: i.function == null ? null : i.function.lookUpId,
+        functionGroupId: i.function == '' ? null : i.function.lookUpId,
         includeInCharter: i.includeInCharter,
         milestoneType: i.milestoneType,
         templateMilestoneId: i.templateMilestoneId,
