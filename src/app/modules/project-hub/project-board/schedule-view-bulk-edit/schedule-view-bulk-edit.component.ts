@@ -330,6 +330,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   // }
 
   addMilestoneRecord(el): void {
+    debugger
     this.myScrollContainer.nativeElement.scroll({
       top: this.myScrollContainer.nativeElement.scrollHeight,
       left: 0,
@@ -699,7 +700,9 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   }
 
   saveScheduleBulkEdit() {
-
+    //debugger
+    if(this.scheduledataDb.length != 0)
+    {
     if (JSON.stringify(this.scheduledataDb) != JSON.stringify(this.scheduleObj)) {
       console.log(this.scheduleObj)
       this.projecthubservice.isFormChanged = false
@@ -735,6 +738,41 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         this.projecthubservice.submitbutton.next(true)
       })
     }
+  }
+  else{
+    this.projecthubservice.isFormChanged = false
+
+    var formValue = this.milestoneForm.getRawValue()
+    console.log(formValue)
+
+    for (var i of formValue) {
+      console.log(i)
+      this.scheduleObj.push({
+        scheduleUniqueId: "new",
+        projectId: i.projectId,
+        milestone: i.milestone,
+        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
+        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        comments: i.comments,
+        includeInReport: i.includeInReport,
+        functionGroupId: i.function == null ? null : i.function.lookUpId,
+        includeInCharter: i.includeInCharter,
+        milestoneType: i.milestoneType,
+        templateMilestoneId: i.templateMilestoneId,
+        includeInCloseout: i.includeInCloseout,
+        responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
+        indicator: i.indicator
+      })
+    }
+    console.log(this.scheduleObj)
+    this.apiService.bulkeditSchedule(this.scheduleObj, this.id).then(res => {
+
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      this.projecthubservice.submitbutton.next(true)
+    })
+  }
   }
 
   getUserName(adid: string): string {
