@@ -747,7 +747,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     for (var i of formValue) {
       console.log(i.function)
       this.scheduleObj.push({
-        scheduleUniqueId: "new",
+        scheduleUniqueId: "",
         projectId: i.projectId,
         milestone: i.milestone,
         plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
@@ -756,7 +756,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
         comments: i.comments,
         includeInReport: i.includeInReport,
-        functionGroupId: i.function == '' ? null : i.function.lookUpId,
+        functionGroupId: Object.keys(i.function).length == 0 ? null : i.function.lookUpId,
         includeInCharter: i.includeInCharter,
         milestoneType: i.milestoneType,
         templateMilestoneId: i.templateMilestoneId,
