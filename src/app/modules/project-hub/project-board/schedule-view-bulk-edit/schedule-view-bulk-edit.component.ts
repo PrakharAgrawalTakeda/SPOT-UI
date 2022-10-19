@@ -504,6 +504,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     if (temp) {
       return "This milestone is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
     }
+    temp = this.scheduleData.links.find(x => x.linkItemId == uid)
     temp = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
     if(temp){
       return "A link to this milestone has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
