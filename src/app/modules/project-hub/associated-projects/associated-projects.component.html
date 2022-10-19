@@ -1,189 +1,337 @@
+<div class="w-full min-w-0 p-8 pt-0">
+    <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate">
+        <h3 class="text-xl text-primary">Associated Projects</h3>
+    </div>
 
-    <div class="w-full min-w-0 p-8 pt-0">
-        <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate">
-            <h3 class="text-xl text-primary">Associated Projects</h3>
-        </div>
-
-        <div
-            class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
-        >
-            <div class="flex justify-between items-center">
-                <button mat-flat-button [color]="'primary'" type="button">
-                    Program Report
-                </button>
-                <button mat-flat-button [color]="'primary'" type="button">
-                    Export to excel
-                </button>
-                <div style="padding-right: 5px;">
-                    <button class="ml-4 text-primary"  mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen('LinkProject', 'new', [] , '1',false)">
-                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Link Project/Program
-                    </button>
-                </div>
-                <div style="padding-right: 5px;">
-                    <button class="ml-4 text-primary"  mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen('UpdateParent', 'new', [] , '1',false)">
-                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Update Parent project
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
-        >
-            <div>
-                <ngx-datatable
-                    [headerHeight]="'auto'"
-                    [rowHeight]="'auto'"
-                    [scrollbarV]="false"
-                    columnMode="flex"
-                    class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-                    [rows]="rows"
-                    #dataQualityTable
+    <div
+        class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
+    >
+        <div class="flex justify-between items-center">
+            <button mat-flat-button [color]="'primary'" type="button">
+                Program Report
+            </button>
+            <button mat-flat-button [color]="'primary'" type="button">
+                Export to excel
+            </button>
+            <div style="padding-right: 5px">
+                <button
+                    class="ml-4 text-primary"
+                    mat-flat-button
+                    [color]="'primary-200'"
+                    (click)="
+                        projecthubservice.toggleDrawerOpen(
+                            'LinkProject',
+                            'new',
+                            [],
+                            '1',
+                            false
+                        )
+                    "
                 >
-                    <ngx-datatable-column
-                        name="Program / Project Name"
-                        prop="projectName"
-                        [flexGrow]="6"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="TOPS" prop="tops" [headerClass]="getHeaderClass" [flexGrow]="1">
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="PM Sponsor" prop="pmSponsor" [flexGrow]="3">
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="Schedule" prop="schedule" [headerClass]="getHeaderClass" [flexGrow]="1">
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="Risk/Issues" prop="riskIssues" [headerClass]="getHeaderClass" [flexGrow]="1">
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="Ask/Needs" prop="askNeeds" [headerClass]="getHeaderClass" [flexGrow]="1">
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="Budget" prop="budget" [headerClass]="getHeaderClass" [flexGrow]="1">
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="Spend" prop="spend" [headerClass]="getHeaderClass" [flexGrow]="1">
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column
-                        name="Milestone / Progression"
-                        prop="progression"
-                        [flexGrow]="3"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column
-                        name="Total CAPEX Approved / Forecast"
-                        prop="totalCapex"
-                        [flexGrow]="3"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column
-                        name="Next Milestone"
-                        prop="nextMilestone"
-                        [flexGrow]="4"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column
-                        name="Next Milestone Planned Finish Date"
-                        prop="nextMilestonePlannedDate"
-                        [flexGrow]="3"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column
-                        name="Planned Project Complete Date"
-                        prop="plannedProjectCompleteDate"
-                        [flexGrow]="3"
-                    >
-                        <ng-template
-                            let-row="row"
-                            let-value="value"
-                            ngx-datatable-cell-template
-                        >
-                            {{ value }}
-                        </ng-template>
-                    </ngx-datatable-column>
-                </ngx-datatable>
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon
+                    >&nbsp; Link Project/Program
+                </button>
+            </div>
+            <div style="padding-right: 5px">
+                <button
+                    class="ml-4 text-primary"
+                    mat-flat-button
+                    [color]="'primary-200'"
+                    (click)="
+                        projecthubservice.toggleDrawerOpen(
+                            'UpdateParent',
+                            'new',
+                            [],
+                            '1',
+                            false
+                        )
+                    "
+                >
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon
+                    >&nbsp; Update Parent project
+                </button>
             </div>
         </div>
     </div>
+
+    <div
+        class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
+    >
+        <div>
+            <ngx-datatable
+                [headerHeight]="'auto'"
+                [rowHeight]="'auto'"
+                [scrollbarV]="false"
+                columnMode="flex"
+                class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                [rows]="rows"
+                [treeFromRelation]="'parentId'"
+                [treeToRelation]="'problemUniqueId'"
+                (treeAction)="onTreeAction($event)"
+            >
+                <ngx-datatable-column
+                    name="Program / Project Name"
+                    prop="projectName"
+                    [flexGrow]="6"
+                    [isTreeColumn]="true"
+                    [treeLevelIndent]="20"
+
+                >
+                    <ng-template let-row="row"
+                                 let-value="value"
+                                 let-tree="cellContext"
+                                 ngx-datatable-cell-template>
+                        <button mat-icon-button [disabled]="row.treeStatus === 'disabled'" (click)="onTreeAction(row)">
+                              <span *ngIf="row.treeStatus === 'loading'">
+                                ...
+                              </span>
+                                            <span *ngIf="row.treeStatus === 'collapsed'">
+                                ↑
+                              </span>
+                                            <span *ngIf="row.treeStatus === 'expanded'">
+                                ↓
+                              </span>
+                                            <span *ngIf="row.treeStatus === 'disabled'">
+                                ⃠
+                              </span>
+                        </button>
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="TOPS"
+                    prop="tops"
+                    [headerClass]="getHeaderClass"
+                    [flexGrow]="1"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Phase (Project-Capital-OE)"
+                    prop="projectCapitalOe"
+                    [flexGrow]="3"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="PM Sponsor"
+                    prop="sponsor"
+                    [flexGrow]="2"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Schedule"
+                    prop="scheduleIndicator"
+                    [headerClass]="getHeaderClass"
+                    [flexGrow]="1"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                    <mat-icon
+                    svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                    class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                    </mat-icon>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Risk/Issues"
+                    prop="riskIndicator"
+                    [headerClass]="getHeaderClass"
+                    [flexGrow]="1"
+                    [cellClass]="getCellClass"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                    <mat-icon
+                    svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                    class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                    </mat-icon>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Ask/Needs"
+                    prop="askNeedIndicator"
+                    [headerClass]="getHeaderClass"
+                    [flexGrow]="1"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                    <mat-icon
+                    svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                    class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                    </mat-icon>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Budget"
+                    prop="budgetIndicator"
+                    [headerClass]="getHeaderClass"
+                    [flexGrow]="1"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                    <mat-icon
+                    svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                    class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                    </mat-icon>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Spend"
+                    prop="budgetSpendIndicator"
+                    [headerClass]="getHeaderClass"
+                    [flexGrow]="1"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                    <mat-icon
+                    svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                    class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                    </mat-icon>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Milestone / Progression"
+                    prop="progression"
+                    [flexGrow]="4"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                        <apx-chart
+                            [chart]="{
+                                type: 'bar',
+                                toolbar: {
+                                    show: false,
+                                    tools: {
+                                        download: false
+                                    }
+                                },
+                                height: 100
+                            }"
+                            [series]="[
+                                {
+                                    name: 'Completed',
+                                    data: [
+                                        {
+                                            x: '',
+                                            y: row.actualCompletedMilestones,
+                                            goals: [
+                                                {
+                                                    name: 'Target',
+                                                    value: row.targetToComplete,
+                                                    strokeWidth: 5,
+                                                    strokeColor: '#775DD0'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]"
+                            [dataLabels]="{ enabled: false}"
+                            [xaxis]="{ labels:{ show:false} }"
+                            [yaxis]="{ labels:{ show:false}, max: row.totalMilestone ?  row.totalMilestone : row.targetToComplete }"
+                            [plotOptions]="{
+                                bar: {
+                                    horizontal: true
+                                }
+                            }"
+
+                        ></apx-chart>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Total CAPEX Approved / Forecast"
+                    [flexGrow]="3"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                        {{
+                            row.totalApprovedCapex ? row.totalApprovedCapex : 0
+                        }}
+                        &nbsp; USD <br />
+                        {{ row.forecast ? row.forecast : 0 }} &nbsp; USD
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Next Milestone"
+                    prop="nextMilestone"
+                    [flexGrow]="3"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                    {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Next Milestone Planned Finish Date"
+                    prop="nextMilestoneFinishDate"
+                    [flexGrow]="3"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column
+                    name="Planned Project Complete Date"
+                    prop="projectPlannedFinishDate"
+                    [flexGrow]="3"
+                >
+                    <ng-template
+                        let-row="row"
+                        let-value="value"
+                        ngx-datatable-cell-template
+                    >
+                        {{ value }}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

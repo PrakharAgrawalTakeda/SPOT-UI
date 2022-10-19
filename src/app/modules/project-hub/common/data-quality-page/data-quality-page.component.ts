@@ -34,7 +34,6 @@ export class DataQualityPageComponent implements OnInit {
     rows = [];
     loadingIndicator = false;
     reorderable = true;
-    phase: string = '';
     spotId: string = '';
     projectName: string = '';
     projectType: string = '';
@@ -84,18 +83,17 @@ export class DataQualityPageComponent implements OnInit {
                 if (element.hitMiss == null) element.hitMiss = 'N/A';
             });
             this.rows = res.rows;
-            this.phase = res.phase;
             this.spotId = res.spotId;
             this.projectName = res.projectName;
             this.dataQualityPercentage = res.dataQualityPercentage * 100;
-            if (this.phase == 'Initiate') {
+            if (res.phase == 'Initiate') {
                 this.dataQualityPercentageString = 'N/A';
             } else {
                 this.dataQualityPercentageString =
-                    this.dataQualityPercentage.toString();
+                padTo2Digits(this.dataQualityPercentage).toString();
             }
             this.projectType = res.projectType;
-            this.viewContent = true;
+            this.viewContent = true;         
         });
     }
 }
@@ -106,3 +104,6 @@ function getRowClass(row) {
     }
     return 'hit-miss-true';
 }
+function padTo2Digits(num) {
+    return parseFloat(num.toString().padStart(2, '0'));
+  }

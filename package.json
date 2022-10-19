@@ -29,6 +29,7 @@
         "@azure/msal-browser": "^2.21.0",
         "@microsoft/microsoft-graph-client": "^3.0.2",
         "@ngneat/transloco": "3.1.1",
+        "@swimlane/ngx-charts": "^20.1.0",
         "@swimlane/ngx-datatable": "^20.0.0",
         "apexcharts": "3.32.1",
         "crypto-js": "3.3.0",

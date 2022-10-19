@@ -252,5 +252,10 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-
+  getProjectTree(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectTree/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
 }
