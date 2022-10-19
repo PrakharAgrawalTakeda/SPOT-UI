@@ -753,9 +753,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   cancelBaselineLogs() {
     console.log("655", this.baselinelogTableEditStack)
-    //debugger 
+     this.logflag = false
     for (let control of this.baselineLogForm.controls) {
       for (let i of this.baselineLogData.filter(x => x.baselineLogId == control['controls']['baselineLogId'].value)) {
+        console.log("form",JSON.stringify(control['controls']['includeSlipChart'].value))
+        console.log("db",JSON.stringify(i.includeSlipChart))
+        console.log("flag",this.logflag)
+        
         if (!this.logflag && (JSON.stringify(control['controls']['includeSlipChart'].value) != JSON.stringify(i.includeSlipChart))) {
            
           this.logflag = true
