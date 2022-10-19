@@ -70,6 +70,11 @@ import { GeneralInfoSingleEditComponent } from './general-info/general-info-sing
 import { OeProjectSingleEditComponent } from './general-info/oe-project-single-edit/oe-project-single-edit.component';
 import { TechTransferSingleEditComponent } from './general-info/tech-transfer-single-edit/tech-transfer-single-edit.component';
 import { QualityRefBulkEditComponent } from './general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
+import { AskNeedComponent } from './project-board/ask-need/ask-need.component';
+import { AskNeedTableComponent } from './project-board/ask-need/ask-need-table/ask-need-table.component';
+import { AskNeedBulkEditComponent } from './project-board/ask-need/ask-need-bulk-edit/ask-need-bulk-edit.component';
+import { AskNeedSingleEditComponent } from './project-board/ask-need/ask-need-single-edit/ask-need-single-edit.component';
+import { AskNeedLinkComponent } from './project-board/ask-need/ask-need-link/ask-need-link.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -204,7 +209,12 @@ export const projectRoutes: Route[] = [
     GeneralInfoSingleEditComponent,
     OeProjectSingleEditComponent,
     TechTransferSingleEditComponent,
-    QualityRefBulkEditComponent
+    QualityRefBulkEditComponent,
+    AskNeedComponent,
+    AskNeedTableComponent,
+    AskNeedBulkEditComponent,
+    AskNeedSingleEditComponent,
+    AskNeedLinkComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
