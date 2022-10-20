@@ -7,20 +7,14 @@
             </a>
         </div>
     </div>
-    <div class="flex p-[15px] justify-between items-center mt-2">
-        <div>Quality Reference #</div>
-        <form [formGroup]="isQualityRef">
-            <mat-slide-toggle formControlName="isQualityRef"></mat-slide-toggle>
-        </form>
-    </div>
-    <div *ngIf="isQualityRef.controls.isQualityRef.value">
+    <div>
         <div class="flex justify-end items-center mt-2">
             <button class="ml-4 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'" (click)="addQR()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
 
-        <div class="w-full p-[20px] overflow-y-scroll h-[75vh]">
+        <div class="w-full p-[20px] overflow-y-scroll h-[80vh]">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>

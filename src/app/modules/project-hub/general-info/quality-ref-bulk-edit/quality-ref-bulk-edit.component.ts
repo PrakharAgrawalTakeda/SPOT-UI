@@ -15,52 +15,11 @@ export class QualityRefBulkEditComponent implements OnInit {
   viewContent = false
   generalInfoData: any = {}
   qrTableEditStack: any = []
-  isQualityRef = new FormGroup({
-    isQualityRef: new FormControl(false)
-  })
   formValue = []
   dbvalue = []
   constructor(private apiService: ProjectApiService,
     private projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService) {
-    this.isQualityRef.controls.isQualityRef.valueChanges.subscribe(res => {
-      if (this.viewContent) {
-        if (res == false) {
-          var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Are you sure?",
-            "message": "Are you sure you want to remove the Quality Reference Information?",
-            "icon": {
-              "show": true,
-              "name": "heroicons_outline:exclamation",
-              "color": "warn"
-            },
-            "actions": {
-              "confirm": {
-                "show": true,
-                "label": "Remove",
-                "color": "warn"
-              },
-              "cancel": {
-                "show": true,
-                "label": "Cancel"
-              }
-            },
-            "dismissible": true
-          }
-          const alert = this.fuseAlert.open(comfirmConfig)
-          alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-              this.qualityRefForm.clear()
-              this.generalInfoData.qualityReferences = []
-              this.formValue = []
-            }
-            else{
-              this.isQualityRef.controls.isQualityRef.patchValue(true)
-            }
-          })
-        }
-      }
-    })
     this.qualityRefForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.dataprep()
@@ -82,7 +41,6 @@ export class QualityRefBulkEditComponent implements OnInit {
   dataloader(): void {
     this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
       this.generalInfoData = res
-      this.isQualityRef.controls.isQualityRef.patchValue(res.qualityReferences.length > 0)
       if (res.qualityReferences.length != 0) {
         for (var i of res.qualityReferences) {
           this.dbvalue.push(i)
