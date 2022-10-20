@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation, Input, ChangeDetectionStrategy, SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation, Input, ChangeDetectionStrategy, SimpleChanges, OnChanges, ChangeDetectorRef, NgZone, DoCheck } from '@angular/core';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -19,16 +19,25 @@ import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@ang
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { MsalService } from '@azure/msal-angular';
-import { I } from '@angular/cdk/keycodes';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-schedule-view-bulk-edit',
   templateUrl: './schedule-view-bulk-edit.component.html',
   styleUrls: ['./schedule-view-bulk-edit.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  // template: '<p>Viewport size: {{ width }} x {{ height }}</p>'
+  // host: {
+  //   '(window:resize)': 'onResize($event)'
+  // }
 })
 
-export class ScheduleViewBulkEditComponent implements OnInit {
+export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
+  // width: number;
+  // height: number;
+  // private readonly viewportChange = this.viewportRuler
+  //   .change(200)
+  //   .subscribe(() => this.ngZone.run(() => this.setSize()));
   @Input() scheduleData: any;
   @Input() schedulengxdata: any;
   @Input() baselineLogData: any;
@@ -58,6 +67,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   viewContent: boolean = false
   viewBaseline: boolean = false
   viewBaselineLogs: boolean = false
+  compareBaselineLogs: boolean = false
   roleMaster: any = {}
   baselineCount: any = {}
   baselineLog: any = {}
@@ -77,17 +87,24 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   userlist: any = {}
   users: any = {}
   logflag: boolean = false
+  logdetails: any = {}
   getRowClass = (row) => {
     return {
       'row-color1': row.completionDate != null,
     };
   };
 
+  // onResize(event){
+  //   event.window.innerWidth; // window width
+  // }
+
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
     private portApiService: PortfolioApiService,
     private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService,
     private router: Router, private _Activatedroute: ActivatedRoute, public fuseAlert: FuseConfirmationService, private changeDetectorRef: ChangeDetectorRef,
-    private msalService: MsalService) {
+    private msalService: MsalService, private readonly viewportRuler: ViewportRuler,
+    private readonly ngZone: NgZone) {
+      //this.setSize();
     this.milestoneForm.valueChanges.subscribe(res => {
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
       console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
@@ -130,11 +147,11 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(this.scheduleData.scheduleData)
     if (this.isclosed == false) {
       this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
-
+      this.dataloader()
     }
     else {
       this.schedulengxdata = this.scheduleData.scheduleData
-
+      this.dataloader()
     }
 
   }
@@ -149,7 +166,11 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   getFunctionOwner(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
-
+  // private setSize() {
+  //   const { width, height } = this.viewportRuler.getViewportSize();
+  //   this.width = width;
+  //   this.height = height;
+  // }
 
 
   dataloader() {
@@ -159,6 +180,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
       log.projectBaselineLog.sort((a, b) => {
         return b.baselineCount - a.baselineCount;
       })
+      this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
       this.apiService.getprojectTeams(this.id, this.msalService.instance.getActiveAccount().localAccountId).then((teamrole: any) => {
         this.apiService.getProjectBaseline(this.id).then((count: any) => {
           this.apiService.getprojectviewdata(this.id).then((res: any) => {
@@ -178,7 +200,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                  this.log = ''
                  console.log(this.log)
                }
-               
+               console.log("Log Details",logDetails)
+               this.logdetails = logDetails
                 this.baselineCount = count
                 console.log("Baseline Count", this.baselineCount)
                 console.log('LookUp Data', lookup)
@@ -281,7 +304,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
         })
       })
     })
-
+        
+  })
   }
 
 
@@ -933,6 +957,40 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(this.schedule.scheduleData)
   }
 
+  baselineLogDetails() {
+    // this.baselineLogForm = new FormArray([])
+    // console.log(this.baselineLogForm.getRawValue())
+    // this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+    //   console.log("Logs",logs)
+    //   console.log("Users List", this.userlist)
+    //   this.userlist = logs.users
+    //   this.getUserName(this.id)
+    //   this.baselinelogTableEditStack = []
+    //   console.log(this.baselineLogForm.getRawValue())
+
+    //   this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
+    //     return a.baselineCount - b.baselineCount;
+    //   })
+
+    //   var count = 1
+    //   for (var i of this.baselineLogData) {
+    //     i.logId = count
+    //     count = count + 1
+    //     this.baselineLogForm.push(new FormGroup({
+    //       baselineLogId: new FormControl(i.baselineLogId),
+    //       includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
+    //     }))
+    //     console.log(this.baselineLogData)
+    //   }
+
+      this.viewContent = false
+      this.viewBaseline = false
+      this.viewBaselineLogs = false
+      this.compareBaselineLogs = true
+    // })
+
+  }
+
   submitschedule() {
 
     var baselineFormValue = this.milestoneForm.getRawValue()
@@ -1019,8 +1077,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     }
 
   }
+//   @HostListener('window:resize', ['$event'])
+// onResize(event) {
+//   event.target.innerWidth;
+// }
 
   @HostListener('unloaded')
-  ngOnDestroy(): void {
+  ngOnDestroy() {
+    //this.viewportChange.unsubscribe();
   }
 }

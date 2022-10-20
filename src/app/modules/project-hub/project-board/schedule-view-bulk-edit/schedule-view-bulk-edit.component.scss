@@ -9,9 +9,17 @@
 }
 .logID {
 text-align: right;
-
+ color: rgba(var(--fuse-primary-rgb), var(--tw-bg-opacity));
   padding-right: 55%;
 
+}
+.logID1 {
+  text-align: right;
+ 
+  padding-right: 55%;
+}
+.logID:hover {
+  text-decoration: underline;
 }
 .count {
   text-align: right;

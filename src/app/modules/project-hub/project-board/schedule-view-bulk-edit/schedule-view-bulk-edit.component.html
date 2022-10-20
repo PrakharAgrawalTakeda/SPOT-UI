@@ -1,3 +1,4 @@
+<!-- <div (window:resize)="onResize($event)"> -->
 <div *ngIf="viewContent" [hidden]="viewBaseline && viewBaselineLogs">
   <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Milestones</div>
@@ -259,7 +260,7 @@
   </form>
 </div>
 
-<div *ngIf="!viewContent" [hidden]="!viewBaselineLogs">
+<div *ngIf="!viewContent" [hidden]="!viewBaselineLogs"> 
   <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Baseline Log</div>
     <div style="padding-top: 2px">
@@ -295,7 +296,10 @@
 
           <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-              <div class="logID">
+              <div *ngIf="value != '1'" class="logID">
+                <a (click)="baselineLogDetails()">{{value}}</a>
+              </div>
+              <div *ngIf="value == '1'" class="logID1">
                 <a>{{value}}</a>
               </div>
             </ng-template>
@@ -340,9 +344,57 @@
       Cancel
     </button>
 
-    <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitslipchart()">
+    <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitslipchart()">
       Submit
-    </button>
+    </button> -->
 
   </div>
 </div>
+<div *ngIf="!viewContent" [hidden]="!compareBaselineLogs">
+  <div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Baseline Log Details</div>
+    <div style="padding-top: 2px">
+      <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
+        <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+      </a>
+    </div>
+  </div>
+
+  <div class="flex justify-start gap-64 items-center">
+    <div class="font-medium text-secondary text-md italic mt-2">
+      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        Log ID : 
+      </h6>
+    </div>
+
+    <div class="font-medium text-secondary text-md italic mt-2">
+      
+      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        Baseline : {{baselineCount.baselineCount}} </h6>
+      </div>
+    
+
+    <div class="font-medium text-secondary text-md italic mt-2">
+      
+      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        Baseline Date :  </h6>
+      
+    </div>
+
+    <div class="font-medium text-secondary text-md italic mt-2">
+      
+      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        Baseline Set By :  </h6>
+      
+    </div>
+
+    <div class="font-medium text-secondary text-md italic mt-2">
+      
+      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        Justification :  </h6>
+      
+    </div>
+
+  </div>
+</div>
+<!-- </div> -->
