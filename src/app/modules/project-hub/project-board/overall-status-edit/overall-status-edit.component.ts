@@ -92,6 +92,7 @@ export class OverallStatusEditComponent implements OnInit {
     console.log(overall)
     this.apiService.editOverallStatus(overall).then(res => {
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      this.projecthubservice.isNavChanged.next(true)
       this.projecthubservice.submitbutton.next(true)
     })
   }
