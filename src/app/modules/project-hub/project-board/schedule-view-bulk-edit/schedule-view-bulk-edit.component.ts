@@ -30,6 +30,7 @@ import { I } from '@angular/cdk/keycodes';
 
 export class ScheduleViewBulkEditComponent implements OnInit {
   @Input() scheduleData: any;
+  @Input() schedulengxdata: any;
   @Input() baselineLogData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
@@ -63,12 +64,13 @@ export class ScheduleViewBulkEditComponent implements OnInit {
   baselineLogObj: any = []
   scheduledataDB: any = {}
   scheduledataDb = []
+  copyscheduledata = []
   milestonesSubmit = []
   flag: boolean = false
   baselineLogForm = new FormArray([])
   baselinelogTableEditStack: any = []
   isclosed: boolean = false
-  schedulengxdata: any = []
+  //schedulengxdata: any = []
   completed: any = []
   log: any = {}
   teamMemberRole: string = ""
@@ -124,13 +126,15 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
-    console.log(this.isclosed)
+    console.log("Closed",this.isclosed)
     console.log(this.scheduleData.scheduleData)
     if (this.isclosed == false) {
-      this.scheduleData.scheduleData = this.schedulengxdata
+      this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+
     }
     else {
-      this.scheduleData.scheduleData = this.completed
+      this.schedulengxdata = this.scheduleData.scheduleData
+
     }
 
   }
@@ -149,6 +153,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
 
 
   dataloader() {
+    //console.log("Closed",this.isclosed)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getProjectBaselineLog(this.id).then((log: any) => {
       log.projectBaselineLog.sort((a, b) => {
@@ -182,9 +187,14 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                 this.filterCriteria = filterres
                 console.log("Milestone info:", res)
                 this.scheduleData = res
-                this.schedulengxdata = res.scheduleData.filter(x => x.completionDate == null)
-                this.completed = this.scheduleData.scheduleData
-                this.scheduleData.scheduleData = res.scheduleData.filter(x => x.completionDate == null)
+                if(this.isclosed == false)
+                {
+                  this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+                  console.log("ngx", this.schedulengxdata)
+                }
+                
+                //this.completed = this.scheduledataDB
+                //this.scheduleData.scheduleData = res.scheduleData.filter(x => x.completionDate == null)
                 this.scheduledataDB = res.scheduleData
                 console.log(this.id)
                 if (res.scheduleData.length != 0) {
@@ -210,8 +220,8 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                       "indicator": x.indicator
                     }
                   })
-                  for (var i of res.scheduleData) {
-                    console.log(res.scheduleData)
+                  for (var i of this.schedulengxdata) {
+                    console.log(this.schedulengxdata)
                     this.milestoneForm.push(new FormGroup({
                       scheduleUniqueId: new FormControl(i.scheduleUniqueId),
                       projectId: new FormControl(i.projectId),
@@ -241,6 +251,7 @@ export class ScheduleViewBulkEditComponent implements OnInit {
                     }
 
                   }
+
                   console.log(this.projecthubservice.roleControllerControl.roleId)
                   if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
 
@@ -278,16 +289,20 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     console.log(event)
     console.log(this.scheduleData.scheduleData)
     console.log(this.scheduledataDB)
+    console.log("Closed",this.isclosed)
     if (event.checked == true) {
-      this.scheduleData.scheduleData = this.completed
+      this.schedulengxdata = this.scheduleData.scheduleData
       this.isclosed = true
-
+      this.milestoneForm = new FormArray([])
+      this.dataloader()
     }
     else {
-      this.scheduleData.scheduleData = this.schedulengxdata
+      this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
       this.isclosed = false
+      this.milestoneForm = new FormArray([])
+      this.dataloader()
     }
-  }
+   }
 
   getLookupName(lookUpId: string): string {
 
@@ -296,38 +311,6 @@ export class ScheduleViewBulkEditComponent implements OnInit {
     return lookup ? lookup.lookUpName : ""
 
   }
-
-
-  // formValue() {
-  //   var form = this.milestoneForm.getRawValue()
-  //   if (form.length > 0) {
-  //     this.milestonesSubmit = []
-  //     for (var i of form) {
-  //       this.milestonesSubmit.push({
-  //         "scheduleUniqueId": i.scheduleUniqueId,
-  //         "projectId": i.projectId,
-  //         "milestone": i.milestone,
-  //         "plannedFinish": i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-  //         "baselineFinish": i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-  //         "responsiblePersonName": Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
-  //         "completionDate": i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-  //         "comments": i.comments,
-  //         "includeInReport": i.includeInReport,
-  //         "functionGroupId": i.function == null ? null : i.function.lookUpId,
-  //         "includeInCharter": i.includeInCharter,
-  //         "milestoneType": i.milestoneType,
-  //         "templateMilestoneId": i.templateMilestoneId,
-  //         "includeInCloseout": i.includeInCloseout,
-  //         "responsiblePersonId": Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
-  //         "indicator": i.indicator
-
-  //       })
-  //     }
-  //   }
-  //   else {
-  //     this.milestonesSubmit = []
-  //   }
-  // }
 
   addMilestoneRecord(el): void {
     this.myScrollContainer.nativeElement.scroll({
