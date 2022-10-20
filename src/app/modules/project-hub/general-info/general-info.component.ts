@@ -109,17 +109,6 @@ export class GeneralInfoComponent implements OnInit {
             isQualityRef: res.qualityReferences.length != 0,
             isArchived: res.projectData.isArchived
           })
-          if (res.qualityReferences.length != 0) {
-            for (var i of res.qualityReferences) {
-              this.qualityRefForm.push(new FormGroup({
-                qualityUniqueId: new FormControl(i.qualityUniqueId),
-                qualityReferenceTypeId: new FormControl(this.lookUpData.find(x => x.lookUpId == i.qualityReferenceTypeId)),
-                qualityReference1: new FormControl(i.qualityReference1),
-                problemUniqueId: new FormControl(this.id)
-              }))
-            }
-          }
-          console.log(this.qualityRefForm.getRawValue())
           this.viewContent = true
         })
       })
@@ -151,39 +140,5 @@ export class GeneralInfoComponent implements OnInit {
   }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
-  }
-  qrTableEditRow(row: number) {
-    if (!this.qrTableEditStack.includes(row)) {
-      this.qrTableEditStack.push(row)
-    }
-  }
-  deleteQR(rowIndex: number) {
-    this.generalInfoData.qualityReferences.splice(rowIndex, 1)
-    this.qualityRefForm.removeAt(rowIndex)
-    if (this.qrTableEditStack.includes(rowIndex)) {
-      this.qrTableEditStack.splice(this.qrTableEditStack.indexOf(rowIndex), 1)
-    }
-    this.qrTableEditStack = this.qrTableEditStack.map(function (value) {
-      return value > rowIndex ? value - 1 : value;
-    })
-    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences]
-    
-  }
-  addQR() {
-    this.qualityRefForm.push(new FormGroup({
-      qualityUniqueId: new FormControl(''),
-      qualityReferenceTypeId: new FormControl({}),
-      qualityReference1: new FormControl(''),
-      problemUniqueId: new FormControl(this.id)
-    }))
-    var j = [{
-      qualityUniqueId: '',
-      qualityReferenceTypeId: '',
-      qualityReference1: '',
-      problemUniqueId: ''
-    }]
-    this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...j]
-    this.qrTableEditStack.push(this.generalInfoData.qualityReferences.length - 1)
-
   }
 }
