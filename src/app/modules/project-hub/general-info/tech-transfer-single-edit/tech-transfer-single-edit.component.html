@@ -14,17 +14,17 @@
         </div>
         <div class="mt-6" *ngIf="generalInfoForm.controls['isTechTransfer'].value">
             <spot-select class="w-full" formControlName="campaignTypeId" name="campaignTypeId" [label]="'Campaign Type'"
-                [placeholder]="'Campaign Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
-                [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getCampaignType()" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'">
+                [placeholder]="'Campaign Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" 
+                [showNoneOption]="true" [dropDownArrayType]="'object'" [dropDownArray]="getCampaignType()" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'">
             </spot-select>
             <spot-select class="w-full" formControlName="campaignPhaseId" name="campaignPhaseId"
                 [label]="'Campaign Phase'" [placeholder]="'Campaign Phase'" [valuePointer]="'lookUpName'"
-                [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
+                [idPointer]="'lookUpId'" [showNoneOption]="true" [dropDownArrayType]="'object'"
                 [dropDownArray]="getCampaignPhase()" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'">
             </spot-select>
             <spot-select class="w-full" formControlName="productionStepId" name="productionStepId"
-                [label]="'Production Step'" [placeholder]="'Production Step'" [valuePointer]="'lookUpName'"
-                [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'"
+                [label]="'Production Step'" [placeholder]="'Production Step'" [valuePointer]="'lookUpName'" 
+                [idPointer]="'lookUpId'" [showNoneOption]="true" [dropDownArrayType]="'object'" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'"
                 [dropDownArray]="getProductionStep()">
             </spot-select>
         </div>
