@@ -46,15 +46,16 @@
 
 
     <div class="flex justify-end items-center gap-3 pr-6 mt-4">
+      <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+      (click)="baselineLogs()">
+      Baseline Log
+    </button>
 
       <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit"
         class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="baselineProject()">
         Baseline Project
       </button>
-      <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-        (click)="baselineLogs()">
-        Baseline Log
-      </button>
+
 
       <!-- *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" -->
       <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
@@ -274,7 +275,7 @@
           class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
           [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
 
-          <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
+          <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
             [resizeable]="false" [flexGrow]="0.6">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
               <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)">
@@ -289,7 +290,7 @@
                 </div>
               </form>
             </ng-template>
-          </ngx-datatable-column>
+          </ngx-datatable-column> -->
 
 
           <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
