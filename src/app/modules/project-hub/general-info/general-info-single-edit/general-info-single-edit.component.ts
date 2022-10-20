@@ -37,6 +37,18 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         this.projectHubService.isFormChanged = true
       }
     })
+    this.generalInfoForm.controls.problemType.valueChanges.subscribe(res=>{
+      if(this.viewContent){
+        if(res == 'Standard Project / Program'){
+          if(!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner){
+            this.generalInfoForm.controls.portfolioOwner.disable()
+          }
+        }
+        else{
+          this.generalInfoForm.controls.portfolioOwner.enable()
+        }
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -57,6 +69,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         isArchived: res.projectData.isArchived,
         isCapsProject: res.projectData.isCapsProject
       })
+      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true
     })
   }
@@ -103,7 +116,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
           }
         })
       }
-      else{
+      else {
         this.submitLogic()
       }
     }
@@ -131,7 +144,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)
       this.projectHubService.successSave.next(true)
-      this.projectHubService.toggleDrawerOpen('', '',[],'')
+      this.projectHubService.toggleDrawerOpen('', '', [], '')
     })
   }
 }
