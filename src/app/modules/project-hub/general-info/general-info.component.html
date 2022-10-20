@@ -16,13 +16,13 @@
           </button>
         </div>
       </div>
-      <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner"
-        class="flex justify-between items-center mt-6 mb-6">
-        <div class="flex justify-start gap-6 items-center">
+      <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner" class="mt-6 mb-6">
+        <div class="flex justify-start gap-3 items-center">
           Is Archived?
-          <div>
-            <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
-          </div>
+          <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
+          <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isArchived.value">
+          </mat-icon>
+
         </div>
       </div>
       <div class="flex justify-between items-center gap-6">
@@ -50,15 +50,19 @@
           [label]="'Environmental Portfolio'" [showHint]="true"
           [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
         </spot-input>
-        <div class="flex justify-start gap-6 items-center w-full pt-2">
-          <div class="flex justify-start gap-1 items-center">CAPS Project <mat-icon class="pe icon-size-4"
+        <div class="flex justify-start gap-3 items-center w-full pt-2">
+          <div class="flex justify-start gap-1 items-center">
+            CAPS Project <mat-icon class="pe icon-size-4"
               matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
           CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
               help</mat-icon>
           </div>
-          <div>
-            <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
-          </div>
+
+          <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
+          </mat-icon>
+          <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isCapsProject.value">
+          </mat-icon>
+
         </div>
       </div>
       <div class="flex justify-between items-center gap-6">
@@ -94,9 +98,12 @@
     <div class="flex justify-between items-start gap-6">
       <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
         <div class="flex justify-between items-center">
-          <div class="flex justify-start items-center gap-6">
+          <div class="flex justify-start items-center gap-3">
             OE Project
-            <mat-slide-toggle formControlName="isOeproject"></mat-slide-toggle>
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isOeproject.value">
+            </mat-icon>
+            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isOeproject.value">
+            </mat-icon>
           </div>
           <div class="flex items-center">
             <button class="ml-4 text-primary bg-gray-200"
@@ -121,9 +128,12 @@
     <div class="flex justify-between items-start gap-6">
       <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
         <div class="flex justify-between items-center">
-          <div class="flex justify-start items-center gap-6">
+          <div class="flex justify-start items-center gap-3">
             Tech Transfer
-            <mat-slide-toggle formControlName="isTechTransfer"></mat-slide-toggle>
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isTechTransfer.value">
+            </mat-icon>
+            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isTechTransfer.value">
+            </mat-icon>
           </div>
           <div class="flex items-center">
             <button class="ml-4 text-primary bg-gray-200"
@@ -153,9 +163,12 @@
     <div class="flex justify-between items-start gap-6">
       <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
         <div class="flex justify-between items-center">
-          <div class="flex justify-start items-center gap-6">
+          <div class="flex justify-start items-center gap-3">
             Quality Reference #
-            <mat-slide-toggle formControlName="isQualityRef"></mat-slide-toggle>
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isQualityRef.value">
+            </mat-icon>
+            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isQualityRef.value">
+            </mat-icon>
           </div>
           <div class="flex justify-between items-center gap-3">
             <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
