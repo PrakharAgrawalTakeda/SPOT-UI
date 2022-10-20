@@ -24,21 +24,21 @@
         </div>
       </div>
       <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
+        <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
           [placeholder]="'Project Name'">
         </spot-input>
-        <spot-input class="w-full" formControlName="parentProgram" name="problemTitle" [label]="'Parent Program'"
+        <spot-input class="w-full read-only" formControlName="parentProgram" name="problemTitle" [label]="'Parent Program'"
           [showHint]="true"
           [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'"
           [placeholder]="'Parent Program'">
         </spot-input>
       </div>
       <div class="flex justify-between items-center gap-6">
-        <spot-input formControlName="portfolioOwner" class="w-full" name="portfolioOwner" [label]="'Portfolio Owner'"
+        <spot-input formControlName="portfolioOwner" class="w-full read-only" name="portfolioOwner" [label]="'Portfolio Owner'"
           [placeholder]="'Portfolio Owner'" [showHint]="true"
           [hint]="'The group which is responsible for the oversight and process adherence of the record'">
         </spot-input>
-        <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full" name="excecutionScope"
+        <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full read-only" name="excecutionScope"
           [label]="'Execution Scope'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
           [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
           [sortByType]="'custom'" [customSortPointer]="'pfid'"
@@ -46,7 +46,7 @@
         </spot-multiselect-autocomplete>
       </div>
       <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+        <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
           [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'" [showHint]="true"
           [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
         </spot-input>
@@ -62,35 +62,35 @@
         </div>
       </div>
       <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full" formControlName="projectManager" name="projectManager" [label]="'Project Manager'"
+        <spot-input class="w-full read-only" formControlName="projectManager" name="projectManager" [label]="'Project Manager'"
           [placeholder]="'Project Manager'">
         </spot-input>
-        <spot-input class="w-full" formControlName="sponsor" name="sponsor" [label]="'Sponsor'"
+        <spot-input class="w-full read-only" formControlName="sponsor" name="sponsor" [label]="'Sponsor'"
           [placeholder]="'Sponsor'">
         </spot-input>
       </div>
       <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full" formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
+        <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
           [placeholder]="'Primary Product'" [showHint]="true"
           [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
         </spot-input>
-        <spot-multiselect-autocomplete class="w-full" formControlName="otherImpactedProducts"
+        <spot-multiselect-autocomplete class="w-full read-only" formControlName="otherImpactedProducts"
           name="otherImpactedProducts" [label]="'Other Impacted Products'" [placeholder]="'Other Impacted Products'"
           [valuePointer]="'fullProductName'" [idPointer]="'productId'" [dropDownArray]="filterCriteria.products"
           [showHint]="true" [hint]="'Any additional products which are impacted by the project execution'">
         </spot-multiselect-autocomplete>
       </div>
       <div class="flex justify-between items-start gap-6">
-        <spot-input class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
+        <spot-input class="w-full read-only" formControlName="problemType" name="problemType" [label]="'Project Type'"
           [placeholder]="'Project Type'">
         </spot-input>
-        <spot-input class="w-full" formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'"
+        <spot-input class="w-full read-only" formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'"
           [placeholder]="'TOPS Group'">
         </spot-input>
       </div>
 
 
-      <spot-textarea formControlName="projectDescription" name="projectDescription"
+      <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
         [label]="'Problem Description / Present Situation / Submission Description'"
         [placeholder]="'Problem Description / Present Situation / Submission Description'">
       </spot-textarea>
@@ -110,7 +110,7 @@
           </div>
         </div>
         <div class="mt-3" *ngIf="generalInfoForm.controls['isOeproject'].value">
-          <spot-multiselect-autocomplete formControlName="oeprojectType" name="oeprojectType"
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="oeprojectType" name="oeprojectType"
           [label]="'OE Project Type'" [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'"
           [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'" [dropDownArray]="getoeprojectType()"
           [sortByType]="'custom'">
@@ -137,16 +137,16 @@
           </div>
         </div>
         <div class="mt-3" *ngIf="generalInfoForm.controls['isTechTransfer'].value">
-          <spot-select class="w-full" formControlName="campaignTypeId" name="campaignTypeId" [label]="'Campaign Type'"
+          <spot-select class="w-full read-only" formControlName="campaignTypeId" name="campaignTypeId" [label]="'Campaign Type'"
             [placeholder]="'Campaign Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
             [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getCampaignType()">
           </spot-select>
-          <spot-select class="w-full" formControlName="campaignPhaseId" name="campaignPhaseId"
+          <spot-select class="w-full read-only" formControlName="campaignPhaseId" name="campaignPhaseId"
             [label]="'Campaign Phase'" [placeholder]="'Campaign Phase'" [valuePointer]="'lookUpName'"
             [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
             [dropDownArray]="getCampaignPhase()">
           </spot-select>
-          <spot-select class="w-full" formControlName="productionStepId" name="productionStepId"
+          <spot-select class="w-full read-only" formControlName="productionStepId" name="productionStepId"
             [label]="'Production Step'" [placeholder]="'Production Step'" [valuePointer]="'lookUpName'"
             [idPointer]="'lookUpId'" [showNoneOption]="false" [dropDownArrayType]="'object'"
             [dropDownArray]="getProductionStep()">
@@ -192,9 +192,9 @@
 
     <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden mt-6">
       <div class="flex justify-between items-center gap-6">
-        <spot-input-date class="w-full" formControlName="recordCreationDate" name="recordCreationDate"
+        <spot-input-date class="w-full read-only" formControlName="recordCreationDate" name="recordCreationDate"
           [label]="'Record Creation Date'" [placeholder]="'Record Creation Date'"></spot-input-date>
-        <spot-input class="w-full" formControlName="submittedBy" name="submittedBy" [label]="'Submitted By'"
+        <spot-input class="w-full read-only" formControlName="submittedBy" name="submittedBy" [label]="'Submitted By'"
           [placeholder]="'Submitted by'">
         </spot-input>
       </div>
