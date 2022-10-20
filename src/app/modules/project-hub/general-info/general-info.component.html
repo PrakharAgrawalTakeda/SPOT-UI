@@ -34,7 +34,7 @@
           [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
         </spot-input>
       </div>
-      <div class="flex justify-between items-center gap-6">
+      <div class="flex justify-between items-start gap-6">
         <spot-input formControlName="portfolioOwner" class="w-full read-only" name="portfolioOwner"
           [label]="'Portfolio Owner'" [showHint]="true"
           [hint]="'The group which is responsible for the oversight and process adherence of the record'">
@@ -68,7 +68,7 @@
         <spot-input class="w-full read-only" formControlName="sponsor" name="sponsor" [label]="'Sponsor'">
         </spot-input>
       </div>
-      <div class="flex justify-between items-center gap-6">
+      <div class="flex justify-between items-start gap-6">
         <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
           [label]="'Primary Product'" [showHint]="true"
           [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
