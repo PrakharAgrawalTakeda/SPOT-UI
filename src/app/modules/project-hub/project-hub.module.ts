@@ -73,6 +73,13 @@ import { TechTransferSingleEditComponent } from './general-info/tech-transfer-si
 import { QualityRefBulkEditComponent } from './general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
 import { LinkProjectComponent } from './common/link-project/link-project.component';
 import { UpdateParentComponent } from './common/update-parent/update-parent.component';
+import {SearchModule} from "../../layout/common/search/search.module";
+import {LanguagesModule} from "../../layout/common/languages/languages.module";
+import {FuseFullscreenModule} from "../../../@fuse/components/fullscreen";
+import {ShortcutsModule} from "../../layout/common/shortcuts/shortcuts.module";
+import {MessagesModule} from "../../layout/common/messages/messages.module";
+import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
+import {UserModule} from "../../layout/common/user/user.module";
 
 export const projectRoutes: Route[] = [
   {
@@ -212,40 +219,47 @@ export const projectRoutes: Route[] = [
     LinkProjectComponent,
     UpdateParentComponent
   ],
-  imports: [
-    RouterModule.forChild(projectRoutes),
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatExpansionModule,
-    NgApexchartsModule,
-    TranslocoModule,
-    SharedModule,
-    CommonModule,
-    FuseDrawerModule,
-    FuseNavigationModule,
-    NgScrollbarModule,
-    MatChipsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    NgxDatatableModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    MatSnackBarModule,
-    FuseAlertModule,
-    SpotFormsModule
-  ]
+    imports: [
+        RouterModule.forChild(projectRoutes),
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatExpansionModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        SharedModule,
+        CommonModule,
+        FuseDrawerModule,
+        FuseNavigationModule,
+        NgScrollbarModule,
+        MatChipsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NgxDatatableModule,
+        MatSlideToggleModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatAutocompleteModule,
+        MatTooltipModule,
+        MatSnackBarModule,
+        FuseAlertModule,
+        SpotFormsModule,
+        SearchModule,
+        LanguagesModule,
+        FuseFullscreenModule,
+        ShortcutsModule,
+        MessagesModule,
+        NotificationsModule,
+        UserModule
+    ]
 })
 export class ProjectHubModule { }

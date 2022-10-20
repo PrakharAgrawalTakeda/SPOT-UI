@@ -118,7 +118,7 @@ export class ProjectHubComponent implements OnInit {
                 const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
                 navComponent.refresh();
             })
-            // 
+            //
         })
         this.apiService.getportfolioData(this.id).then((res) => {
             this.portfolioDetails = res

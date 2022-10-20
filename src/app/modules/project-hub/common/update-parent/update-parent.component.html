@@ -19,23 +19,54 @@
             </a>
         </div>
     </div>
-    <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-        <form class="link-child-form">
-            <mat-form-field class="example-full-width" appearance="fill" >
-              <input type="text"
-
-                     placeholder="Pick one"
-                     aria-label="Number"
-                     matInput
-                     [formControl]="myControl"
-                     [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                  {{option}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-            <button mat-flat-button [color]="'primary'" type="button">
+    <div class="">
+        <form class="flex link-child-form flex-row">
+            <div class="w-5/6">
+                <div
+                    class="flex w-auto flex-row">
+                    <mat-icon
+                        class="flex-initial"
+                        [svgIcon]="'heroicons_outline:search'"></mat-icon>
+                    <input
+                        class="flex-1 w-64"
+                        [formControl]="searchControl"
+                        [matAutocomplete]="matAutocomplete"
+                        [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
+                        (keydown)="onKeydown($event)"
+                        id="myText">
+                    <mat-autocomplete
+                        class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
+                        [disableRipple]="true"
+                        (optionSelected)="onOptionSelected(resultSets[0])"
+                        #matAutocomplete="matAutocomplete">
+                        <mat-option
+                            class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                            *ngIf="resultSets && !resultSets.length">
+                            No results found!
+                        </mat-option>
+                        <ng-container *ngIf="resultSets && resultSets.length">
+                            <mat-optgroup class="flex items-center mt-2 px-2">
+                                <span  class="text-sm font-semibold tracking-wider text-secondary">Projects</span>
+                            </mat-optgroup>
+                            <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
+                                <mat-option
+                                    class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                                    [value]="result.problemUniqueId">
+                                    <!-- Contacts -->
+                                    {{result.problemId}} {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
+                                </mat-option>
+                            </ng-container>
+                        </ng-container>
+                    </mat-autocomplete>
+                    <button
+                        class=" "
+                        mat-icon-button
+                        (click)="close()">
+                        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <button mat-flat-button [color]="'primary'" type="button" (click)="onSave(searchControl.value)">
                 Save
             </button>
           </form>
