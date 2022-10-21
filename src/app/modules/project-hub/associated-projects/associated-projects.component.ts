@@ -1,9 +1,8 @@
 
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {Component, OnInit,  ViewEncapsulation} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
-import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexLegend, ApexPlotOptions,
-    ApexTooltip, ApexXAxis, ApexYAxis, ChartComponent } from 'ng-apexcharts';
+import {ApexTooltip } from 'ng-apexcharts';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 export type ChartOptions = {
@@ -23,40 +22,17 @@ export class AssociatedProjectsComponent implements OnInit {
         private _Activatedroute: ActivatedRoute,
         public projecthubservice: ProjectHubService,
         public indicator: SpotlightIndicatorsService,
+        private router: Router
     ) {
-        this.chartOptions = {
-            tooltip: {
-                custom: function({series, seriesIndex, dataPointIndex, w}) {
-                    var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
-
-                    return '<ul>' +
-                        '<li><b>Price</b>: ' + data.x + '</li>' +
-                        '<li><b>Number</b>: ' + data.y + '</li>' +
-                        '<li><b>Product</b>: \'' + data.product + '\'</li>' +
-                        '<li><b>Info</b>: \'' + data.info + '\'</li>' +
-                        '<li><b>Site</b>: \'' + data.site + '\'</li>' +
-                        '</ul>';
-                }
-            },
-        }
     }
     id: string = '';
     rows = [];
     viewContent = false;
     view: any[] = [700, 400];
-
-    // options
-    showXAxis: boolean = true;
-    showYAxis: boolean = true;
-    gradient: boolean = false;
-    colorScheme = {
-        domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-    };
     lastIndex = 15;
-    getCellClass(row: any): any {
-        if (row.value == 'RedStop') {
-            return 'red-stop';
-        }
+    ngOnInit(): void {
+        this.dataloader();
+        window.dispatchEvent(new Event('resize'));
     }
     getApexTooltip({series, seriesIndex, dataPointIndex, w}) {
         var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
@@ -68,16 +44,17 @@ export class AssociatedProjectsComponent implements OnInit {
             '<li><b>Site</b>: \'' + data.site + '\'</li>' +
             '</ul>';
     }
-    ngOnInit(): void {
-        this.dataloader();
-        window.dispatchEvent(new Event('resize'));
-    }
-
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get('id');
         var projects = [];
+        var ids = [];
+        var children = [];
         this.apiService.getProjectTree(this.id).then((res: any) => {
             res.values.forEach(project => {
+                ids.push(project.problemUniqueId);
+                if(project.parentId == this.id){
+                    children.push(project)
+                }
                 project.projectName =
                     project.problemId + ' - ' + project.problemTitle;
                 project.projectCapitalOe =
@@ -95,7 +72,8 @@ export class AssociatedProjectsComponent implements OnInit {
                 project.treeStatus = "expanded";
                 projects.push(project);
             })
-
+            this.projecthubservice.removedIds = ids;
+            this.projecthubservice.projectChildren = children;
             this.rows = projects;
         });
         this.viewContent = true;
@@ -111,9 +89,23 @@ export class AssociatedProjectsComponent implements OnInit {
         }
         this.rows = [...this.rows];
     }
+    sendToProject(row: any) {
+        const url = this.router.serializeUrl(
+            this.router.createUrlTree([`/project-hub/${row.problemUniqueId}`])
+        );
+        window.open(url, '_blank');
+    }
 
     yAxisTickFormatting(value){
         return percentTickFormatting(value);
+    }
+
+    getCellClass(): any {
+        return 'first-column-datatable';
+    }
+    getRowClass = (row) => {
+        if(row.problemUniqueId == this.id){
+            return 'current-project';}
     }
 }
 function percentTickFormatting(val: any) {
@@ -129,5 +121,3 @@ function formatDate(date) {
 function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
 }
-
-

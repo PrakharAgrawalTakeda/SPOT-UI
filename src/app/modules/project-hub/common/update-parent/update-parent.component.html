@@ -19,25 +19,27 @@
             </a>
         </div>
     </div>
-    <div class="">
-        <form class="flex link-child-form flex-row">
-            <div class="w-5/6">
-                <div
-                    class="flex w-auto flex-row">
+    <div>
+        <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+            <form class="link-child-form">
+                <mat-form-field class="example-full-width" appearance="fill" >
                     <mat-icon
                         class="flex-initial"
                         [svgIcon]="'heroicons_outline:search'"></mat-icon>
                     <input
-                        class="flex-1 w-64"
+                        matInput
+                        (keydown)="onKeydown($event)"
                         [formControl]="searchControl"
                         [matAutocomplete]="matAutocomplete"
                         [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
-                        (keydown)="onKeydown($event)"
+                        [(ngModel)]="inputValue"
+                        class="flex-1 w-64"
                         id="myText">
                     <mat-autocomplete
                         class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
                         [disableRipple]="true"
-                        (optionSelected)="onOptionSelected(resultSets[0])"
+                        (optionSelected)="onOptionSelected($event)"
+                        [displayWith]="displayFn.bind(this)"
                         #matAutocomplete="matAutocomplete">
                         <mat-option
                             class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
@@ -58,17 +60,15 @@
                             </ng-container>
                         </ng-container>
                     </mat-autocomplete>
-                    <button
-                        class=" "
-                        mat-icon-button
-                        (click)="close()">
-                        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    <button type="button" mat-button *ngIf="inputValue!=''" matSuffix mat-icon-button aria-label="Clear">
+                        <mat-icon>close</mat-icon>
                     </button>
-                </div>
-            </div>
-            <button mat-flat-button [color]="'primary'" type="button" (click)="onSave(searchControl.value)">
-                Save
-            </button>
-          </form>
+                </mat-form-field>
+                <button mat-flat-button [color]="'primary'" type="button" (click)="inputValue!='' ? onSave(searchControl.value) : this.projecthubservice.toggleDrawerOpen('', '', [], '')">
+                    Save
+                </button>
+            </form>
+        </div>
+
     </div>
 </div>

@@ -39,3 +39,9 @@ $square-size: 10px;
     writing-mode: tb-rl;
     transform: rotate(-180deg);
 }
+.current-project{
+    background-color: var(--fuse-primary-200);
+}
+.first-column-datatable{
+    margin-left: 10px;
+}

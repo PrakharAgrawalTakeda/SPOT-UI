@@ -55,7 +55,7 @@
     </div>
 
     <div
-        class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
+        class="flex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden"
     >
         <div>
             <ngx-datatable
@@ -63,8 +63,9 @@
                 [rowHeight]="'auto'"
                 [scrollbarV]="false"
                 columnMode="flex"
-                class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                class="mx-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
                 [rows]="rows"
+                [rowClass]="getRowClass"
                 [treeFromRelation]="'parentId'"
                 [treeToRelation]="'problemUniqueId'"
                 (treeAction)="onTreeAction($event)"
@@ -75,11 +76,13 @@
                     [flexGrow]="6"
                     [isTreeColumn]="true"
                     [treeLevelIndent]="20"
+                    [cellClass]="getCellClass"
 
                 >
                     <ng-template let-row="row"
                                  let-value="value"
                                  let-tree="cellContext"
+                                 class="ml-20"
                                  ngx-datatable-cell-template>
                         <button mat-icon-button [disabled]="row.treeStatus === 'disabled'" (click)="onTreeAction(row)">
                               <span *ngIf="row.treeStatus === 'loading'">
@@ -95,7 +98,7 @@
                                 ⃠
                               </span>
                         </button>
-                        {{value}}
+                        <a class="cursor-pointer" (click)="sendToProject(row)">{{value}} </a>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column
@@ -160,7 +163,6 @@
                     prop="riskIndicator"
                     [headerClass]="getHeaderClass"
                     [flexGrow]="1"
-                    [cellClass]="getCellClass"
                 >
                     <ng-template
                         let-row="row"

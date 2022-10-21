@@ -90,10 +90,10 @@ export class DataQualityPageComponent implements OnInit {
                 this.dataQualityPercentageString = 'N/A';
             } else {
                 this.dataQualityPercentageString =
-                padTo2Digits(this.dataQualityPercentage).toString();
+                    (~~this.dataQualityPercentage).toString();
             }
             this.projectType = res.projectType;
-            this.viewContent = true;         
+            this.viewContent = true;
         });
     }
 }
@@ -104,6 +104,3 @@ function getRowClass(row) {
     }
     return 'hit-miss-true';
 }
-function padTo2Digits(num) {
-    return parseFloat(num.toString().padStart(2, '0'));
-  }

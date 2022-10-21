@@ -128,7 +128,7 @@ export class ProjectHubComponent implements OnInit {
                 if(this.portfolioDetails.phase == "Initiate"){
                     this.dataQualityPercentageString = "N/A";
                   }else{
-                    this.dataQualityPercentageString = padTo2Digits(this.dataQualityPercentage).toString();
+                    this.dataQualityPercentageString = (~~this.dataQualityPercentage).toString();
                   }
           })
     }
@@ -163,6 +163,3 @@ export class ProjectHubComponent implements OnInit {
         }
       }
 }
-function padTo2Digits(num) {
-    return parseFloat(num.toString().padStart(2, '0'));
-  }

@@ -258,11 +258,17 @@ export class ProjectApiService {
     const response =  lastValueFrom(abc$)
     return response
   }
-    async updateParent(projectId:string, parentId: string){
-        var url = GlobalVariables.apiurl + "ProjectHubData/UpdateParent/"+ projectId + "/" +parentId
-        var body = [];
-        const abc$ = this.http.put(url, body)
-        const response =  lastValueFrom(abc$)
-        return response
-    }
+  async updateParent(projectId:string, parentId: string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/UpdateParent/"+ projectId + "/" +parentId
+      var body = [];
+      const abc$ = this.http.put(url, body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async DeleteLink(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/DeleteLink/"+ projectId
+      const abc$ = this.http.delete(url,)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
 }
