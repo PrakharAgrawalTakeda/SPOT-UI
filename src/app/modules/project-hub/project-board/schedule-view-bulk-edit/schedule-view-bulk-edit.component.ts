@@ -93,6 +93,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       'row-color1': row.completionDate != null,
     };
   };
+  milestoneName: any;
 
   // onResize(event){
   //   event.window.innerWidth; // window width
@@ -202,6 +203,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                }
                console.log("Log Details",logDetails)
                this.logdetails = logDetails
+              //  let baselinelogid = log.
+              //  this.modifiedDate = this.logdetails.filter(x => x.baselineLogId == )
                 this.baselineCount = count
                 console.log("Baseline Count", this.baselineCount)
                 console.log('LookUp Data', lookup)
@@ -245,10 +248,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                   })
                   for (var i of this.schedulengxdata) {
                     console.log(this.schedulengxdata)
+                    this.milestoneName = i.milestone
+                    console.log(this.milestoneName)
                     this.milestoneForm.push(new FormGroup({
                       scheduleUniqueId: new FormControl(i.scheduleUniqueId),
                       projectId: new FormControl(i.projectId),
-                      milestone: new FormControl(i.milestone),
+                      milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
                       plannedFinish: new FormControl(i.plannedFinish),
                       baselineFinish: new FormControl(i.baselineFinish),
                       responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
@@ -718,10 +723,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
       for (var i of formValue) {
         console.log(i)
+        if((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null))
+        {
         this.scheduleObj.push({
           scheduleUniqueId: i.scheduleUniqueId,
           projectId: i.projectId,
-          milestone: i.milestone,
+          milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
           plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
@@ -736,6 +743,28 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
           responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
           indicator: i.indicator
         })
+      }
+      else 
+      {
+        this.scheduleObj.push({
+          scheduleUniqueId: i.scheduleUniqueId,
+          projectId: i.projectId,
+          milestone: (i.milestone),
+          plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
+          completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          comments: i.comments,
+          includeInReport: i.includeInReport,
+          functionGroupId: i.function == null ? null : i.function.lookUpId,
+          includeInCharter: i.includeInCharter,
+          milestoneType: i.milestoneType,
+          templateMilestoneId: i.templateMilestoneId,
+          includeInCloseout: i.includeInCloseout,
+          responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
+          indicator: i.indicator
+        })
+      }
       }
       console.log(this.scheduleObj)
       this.apiService.bulkeditSchedule(this.scheduleObj, this.id).then(res => {
@@ -753,17 +782,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     for (var i of formValue) {
       console.log(i.function)
+      if((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null))
+      {
       this.scheduleObj.push({
-        scheduleUniqueId: "",
+        scheduleUniqueId: i.scheduleUniqueId,
         projectId: i.projectId,
-        milestone: i.milestone,
+        milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
         plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
         baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
         responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
         completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
         comments: i.comments,
         includeInReport: i.includeInReport,
-        functionGroupId: Object.keys(i.function).length == 0 ? null : i.function.lookUpId,
+        functionGroupId: i.function == null ? null : i.function.lookUpId,
         includeInCharter: i.includeInCharter,
         milestoneType: i.milestoneType,
         templateMilestoneId: i.templateMilestoneId,
@@ -771,6 +802,28 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
         indicator: i.indicator
       })
+    }
+    else 
+    {
+      this.scheduleObj.push({
+        scheduleUniqueId: i.scheduleUniqueId,
+        projectId: i.projectId,
+        milestone: (i.milestone),
+        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
+        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        comments: i.comments,
+        includeInReport: i.includeInReport,
+        functionGroupId: i.function == null ? null : i.function.lookUpId,
+        includeInCharter: i.includeInCharter,
+        milestoneType: i.milestoneType,
+        templateMilestoneId: i.templateMilestoneId,
+        includeInCloseout: i.includeInCloseout,
+        responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
+        indicator: i.indicator
+      })
+    }
     }
     console.log(this.scheduleObj)
     this.apiService.bulkeditSchedule(this.scheduleObj, this.id).then(res => {
