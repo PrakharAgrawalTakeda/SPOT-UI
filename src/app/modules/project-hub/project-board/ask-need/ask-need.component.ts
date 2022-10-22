@@ -8,10 +8,15 @@ import { ProjectHubService } from '../../project-hub.service';
 })
 export class AskNeedComponent implements OnInit, OnChanges {
 
-  constructor(public projectHubService: ProjectHubService) { }
+  constructor(public projectHubService: ProjectHubService) { 
+    this.projectHubService.includeClosedItems.askNeed.subscribe(res=>{
+      this.changeaskneed(res)
+    })
+  }
   @Input() askNeedData: any = []
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
+  @Input() projectId: string = ''
   isclosedaskneedtoggle: boolean = false
   tableData: any = []
   viewContent: boolean = false
@@ -30,8 +35,11 @@ export class AskNeedComponent implements OnInit, OnChanges {
       this.tableData = this.askNeedData.filter(row => row.closeDate == null)
     }
   }
+  toggleAskNeed(event: any){
+    this.projectHubService.includeClosedItems.askNeed.next(event.checked)
+  }
   changeaskneed(event: any) {
-    if (event.checked == true) {
+    if (event == true) {
       this.isclosedaskneedtoggle = true
       this.tableData = this.askNeedData
     }

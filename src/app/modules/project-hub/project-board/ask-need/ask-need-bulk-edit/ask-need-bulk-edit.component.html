@@ -1,1 +1,112 @@
-<p>ask-need-bulk-edit works!</p>
+<div *ngIf="viewContent" [hidden]="viewBaseline && viewBaselineLogs">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Ask/Needs</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+
+    <div class="p-3">
+
+        <div class="flex items-center justify-end">
+            <button class="ml-4 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'" (click)="addAN()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+        </div>
+
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+            class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="tableData"
+            #askNeedTable [rowClass]="getRowClass">
+            <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [flexGrow]="0.5">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                        class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+                    </mat-icon>
+                    &nbsp;
+                    &nbsp;
+                    <mat-icon [matTooltip]="getlinkname(row.askNeedUniqueId)" *ngIf="islink(row.askNeedUniqueId)"
+                        svgIcon="heroicons_outline:link"></mat-icon>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="3">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"
+                        (click)="anTableEditRow(rowIndex)">
+                        <p *ngIf="!value">&nbsp;</p>
+                        <p>{{value}}</p>
+                    </a>
+                    <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
+                        <spot-input [label]="'Team Member(s)'" formControlName="askNeed1" [showLabel]="false"
+                            [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'"></spot-input>
+                    </form>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Need From" prop="needFromName" [flexGrow]="2">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"
+                        (click)="anTableEditRow(rowIndex)">
+                        <p *ngIf="!value">&nbsp;</p>
+                        <p>{{value}}</p>
+                    </a>
+                    <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
+                        <spot-singleselect-user-autocomplete formControlName="needFrom" [showLabel]="false"
+                            [label]="'Team Member(s)'"
+                            [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+                        </spot-singleselect-user-autocomplete>
+                    </form>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Need Date" prop="needByDate" [flexGrow]="1">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"
+                        (click)="anTableEditRow(rowIndex)">
+                        <p *ngIf="!value">&nbsp;</p>
+                        <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                    </a>
+                    <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
+                        <spot-input-date formControlName="needByDate" [showLabel]="false">
+                        </spot-input-date>
+                    </form>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Comments" prop="comments" [flexGrow]="3">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"
+                        (click)="anTableEditRow(rowIndex)">
+                        <p *ngIf="!value">&nbsp;</p>
+                        <p>{{value}}</p>
+                    </a>
+                    <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
+                        <spot-textarea [label]="'Team Member(s)'" formControlName="comments" [showLabel]="false"
+                            [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'"></spot-textarea>
+                    </form>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Close Date" prop="closeDate" [flexGrow]="1">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"
+                        (click)="anTableEditRow(rowIndex)">
+                        <p *ngIf="!value">&nbsp;</p>
+                        <p>{{value | date:'dd-MMM-yyyy'}}</p>
+                    </a>
+                    <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
+                        <spot-input-date formControlName="closeDate" [showLabel]="false">
+                        </spot-input-date>
+                    </form>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [flexGrow]="0.5" [resizeable]="false" [sortable]="false" [draggable]="false">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded" ngx-datatable-cell-template>
+                    <div class="flex justify-start items-center gap-6">
+                        <a href="javascript:void(0)" title="Delete Single" (click)="deleteAN(rowIndex)">
+                            {{row.askNeed1}}
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
