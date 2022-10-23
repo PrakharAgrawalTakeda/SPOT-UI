@@ -3,6 +3,7 @@ import { ProjectApiService } from 'app/modules/project-hub/common/project-api.se
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-ask-need-bulk-edit',
   templateUrl: './ask-need-bulk-edit.component.html',
@@ -14,12 +15,30 @@ export class AskNeedBulkEditComponent implements OnInit {
     this.projectHubService.includeClosedItems.askNeed.subscribe(res => {
       this.changeaskneed(res)
     })
+
+    this.askNeedForm.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        this.submitPrep()
+        this.formValue = this.sortByNeedByDate(this.formValue)
+        this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
+        if (JSON.stringify(this.formValue) != JSON.stringify(this.dbAskNeeds)) {
+          console.log("DB VALUE", this.dbAskNeeds)
+          console.log("FORM VALUE", this.formValue)
+          console.log("FLASH CHANGE FLASH CHANGEEEEEEEE")
+        }
+        else {
+          console.log('CONGRATS')
+        }
+      }
+    })
   }
   askNeedData: any = []
   isclosedaskneedtoggle: boolean = false
   tableData: any = []
   anTableEditStack = []
   viewContent: boolean = false
+  dbAskNeeds: any = []
+  formValue: any = []
   links: any = []
   linksProblemCapture: any = []
   getRowClass = (row) => {
@@ -34,24 +53,28 @@ export class AskNeedBulkEditComponent implements OnInit {
   dataloader() {
     this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
       this.askNeedData = res.askNeedData
+      if (res.askNeedData.length > 0) {
+        for (var i of res.askNeedData) {
+          this.dbAskNeeds.push({
+            askNeedUniqueId: i.askNeedUniqueId,
+            projectId: i.projectId,
+            askNeed1: i.askNeed1,
+            needFromId: i.needFromId,
+            needFromName: i.needFromName,
+            needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            comments: i.comments,
+            logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            includeInReport: i.includeInReport,
+            indicator: i.indicator
+          })
+        }
+        this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
+      }
       this.links = res.links
       this.linksProblemCapture = res.linksProblemCapture
       this.changeaskneed(this.projectHubService.includeClosedItems.askNeed.value)
-      this.tableData = this.tableData.length > 1 ? this.tableData.sort((a, b) => {
-        if (a.needByDate === null) {
-          return -1;
-        }
-      
-        if (b.needByDate === null) {
-          return 1;
-        }
-      
-        if (a.needByDate === b.needByDate) {
-          return 0;
-        }
-      
-        return a.needByDate < b.needByDate ? -1 : 1;
-      }) : this.tableData
+      this.tableData = this.sortByNeedByDate(this.tableData)
       console.log(this.tableData)
       this.tableData.length > 0 ? this.formIntializer() : ''
 
@@ -82,8 +105,45 @@ export class AskNeedBulkEditComponent implements OnInit {
     }
   }
 
+  submitPrep() {
+    this.formValue = []
+    var formValue = this.askNeedForm.getRawValue()
+    if (!this.projectHubService.includeClosedItems.askNeed.value) {
+      this.formValue = this.dbAskNeeds.length > 0 ? this.dbAskNeeds.filter(x => x.closeDate != null) : []
+    }
+    for (var i of formValue) {
+      this.formValue.push({
+        askNeedUniqueId: i.askNeedUniqueId,
+        projectId: i.projectId,
+        askNeed1: i.askNeed1,
+        needFromId: Object.keys(i.needFrom).length > 0 ? i.needFrom.userAdid : null,
+        needFromName: Object.keys(i.needFrom).length > 0 ? i.needFrom.userDisplayName : null,
+        needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        comments: i.comments,
+        logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+        includeInReport: i.includeInReport,
+        indicator: i.indicator
+      })
+    }
+  }
+  sortByNeedByDate(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.needByDate === null) {
+        return -1;
+      }
 
+      if (b.needByDate === null) {
+        return 1;
+      }
 
+      if (a.needByDate === b.needByDate) {
+        return 0;
+      }
+
+      return a.needByDate < b.needByDate ? -1 : 1;
+    }) : array
+  }
   // ASK NEED CONTROL
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
