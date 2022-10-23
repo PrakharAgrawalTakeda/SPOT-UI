@@ -88,8 +88,8 @@
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
               <p *ngIf="value == ''">&nbsp;</p>
-              <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p>
-              <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
+              <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p></strong>
+              <strong><p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p></strong>
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false">

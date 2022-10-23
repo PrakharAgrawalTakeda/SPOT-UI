@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation, Input, ChangeDetectionStrategy, SimpleChanges, OnChanges, ChangeDetectorRef, NgZone, DoCheck } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation, Input, ChangeDetectionStrategy, SimpleChanges, OnChanges, ChangeDetectorRef, NgZone, DoCheck, ComponentFactoryResolver } from '@angular/core';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -94,6 +94,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     };
   };
   milestoneName: any;
+  true: any;
+  value: any[];
 
   // onResize(event){
   //   event.window.innerWidth; // window width
@@ -148,15 +150,18 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     console.log(this.scheduleData.scheduleData)
     if (this.isclosed == false) {
       this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+      this.milestoneTableEditStack = []
+      this.milestoneForm = new FormArray([])
       this.dataloader()
     }
     else {
       this.schedulengxdata = this.scheduleData.scheduleData
+      this.milestoneTableEditStack = []
+      this.milestoneForm = new FormArray([])
       this.dataloader()
     }
 
   }
-
   ngOnInit(): void {
     this.dataloader()
 
@@ -167,15 +172,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   getFunctionOwner(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
-  // private setSize() {
-  //   const { width, height } = this.viewportRuler.getViewportSize();
-  //   this.width = width;
-  //   this.height = height;
-  // }
 
 
   dataloader() {
-    //console.log("Closed",this.isclosed)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getProjectBaselineLog(this.id).then((log: any) => {
       log.projectBaselineLog.sort((a, b) => {
@@ -203,8 +202,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                }
                console.log("Log Details",logDetails)
                this.logdetails = logDetails
-              //  let baselinelogid = log.
-              //  this.modifiedDate = this.logdetails.filter(x => x.baselineLogId == )
                 this.baselineCount = count
                 console.log("Baseline Count", this.baselineCount)
                 console.log('LookUp Data', lookup)
@@ -218,13 +215,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                   this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
                   console.log("ngx", this.schedulengxdata)
                 }
-                
-                //this.completed = this.scheduledataDB
-                //this.scheduleData.scheduleData = res.scheduleData.filter(x => x.completionDate == null)
                 this.scheduledataDB = res.scheduleData
                 console.log(this.id)
                 if (res.scheduleData.length != 0) {
-                  this.scheduledataDb = this.scheduleData.scheduleData.map(x => {
+                  this.scheduledataDb = this.schedulengxdata.map(x => {
                     return {
                       "scheduleUniqueId": x.scheduleUniqueId,
                       "projectId": x.projectId,
@@ -300,7 +294,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                   }
 
                 }
-
+                //this.value = this.milestoneForm.getRawValue()
                 console.log('MilestoneForm:', this.milestoneForm.getRawValue())
                 this.viewContent = true
               })
@@ -313,21 +307,220 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   })
   }
 
-
   changeschedule(event: any) {
-    console.log(event)
-    console.log(this.scheduleData.scheduleData)
-    console.log(this.scheduledataDB)
-    console.log("Closed",this.isclosed)
-    if (event.checked == true) {
-      this.schedulengxdata = this.scheduleData.scheduleData
-      this.isclosed = true
-      this.milestoneForm = new FormArray([])
-      this.dataloader()
+    for (var i of this.scheduleData.scheduleData)
+    {
+
+    for (let control of this.milestoneForm.controls.filter(x => x.value.scheduleUniqueId == i.scheduleUniqueId )) {
+      console.log(control['controls']['milestone'])
+
+    if(i.milestoneType == 1){
+      control['controls']['milestone'].patchValue('Execution Start - '.concat(control['controls']['milestone'].value))
+      console.log(control['controls']['milestone'])
+
     }
-    else {
+    else if(i.milestoneType == 2)
+    {
+      control['controls']['milestone'].patchValue('Execution End - '.concat(control['controls']['milestone'].value))
+      console.log(control['controls']['milestone'])
+
+    }
+
+  }
+  }
+
+
+  this.value = this.milestoneForm.getRawValue()
+  var baseline = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+  })
+  var baseline2 = this.value.map(x => {
+    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+  })
+  var planned = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+  })
+  var planned2 = this.value.map(x => {
+    return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+  })
+  var completion = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+  })
+  var completion2 = this.value.map(x => {
+    return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+  })
+  var comments = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.comments 
+  })
+  var comments2 = this.value.map(x => {
+    return x.comments 
+  })
+  var includein = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.includeInReport 
+  })
+  var includein2 = this.value.map(x => {
+    return x.includeInReport 
+  })
+  var functionowner = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.functionGroupId 
+  })
+  var functionowner2 = this.value.map(x => {
+    return x.functionGroupId 
+  })
+  var milestone = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.milestone 
+  })
+  var milestone2 = this.value.map(x => {
+    return x.milestone 
+  })
+  var responsible = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.responsiblePersonId 
+  })
+  var responsible2 = this.value.map(x => {
+    return x.responsiblePersonId 
+  })
+
+  var baselineall = this.scheduleData.scheduleData.map(x => {
+    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+  })
+  var baselineall2 = this.value.map(x => {
+    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+  })
+  var plannedall = this.scheduleData.scheduleData.map(x => {
+    return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+  })
+  var plannedall2 = this.value.map(x => {
+    return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+  })
+  var completionall = this.scheduleData.scheduleData.map(x => {
+    return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+  })
+  var completionall2 = this.value.map(x => {
+    return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+  })
+  var commentsall = this.scheduleData.scheduleData.map(x => {
+    return x.comments 
+  })
+  var commentsall2 = this.value.map(x => {
+    return x.comments 
+  })
+  var includeinall = this.scheduleData.scheduleData.map(x => {
+    return x.includeInReport 
+  })
+  var includeinall2 = this.value.map(x => {
+    return x.includeInReport 
+  })
+  var functionownerall = this.scheduleData.scheduleData.map(x => {
+    return x.functionGroupId 
+  })
+  var functionownerall2 = this.value.map(x => {
+    return x.functionGroupId 
+  })
+  var milestoneall = this.scheduleData.scheduleData.map(x => {
+    return x.milestone 
+  })
+  var milestoneall2 = this.value.map(x => {
+    return x.milestone 
+  })
+  var responsibleall = this.scheduleData.scheduleData.map(x => {
+    return x.responsiblePersonId 
+  })
+  var responsibleall2 = this.value.map(x => {
+    return x.responsiblePersonId 
+  })
+
+  console.log(event)
+  console.log(this.value)
+  console.log(this.true)
+  console.log(this.scheduleData.scheduleData)
+    console.log("Closed",this.isclosed)
+    if (event.checked == true && (JSON.stringify(baseline) != JSON.stringify(baseline2) || JSON.stringify(planned) != JSON.stringify(planned2) || JSON.stringify(completion) != JSON.stringify(completion2) || JSON.stringify(comments) != JSON.stringify(comments2)
+    || JSON.stringify(includein) != JSON.stringify(includein2) || JSON.stringify(functionowner) != JSON.stringify(functionowner2) || JSON.stringify(milestone) != JSON.stringify(milestone2) || JSON.stringify(responsible) != JSON.stringify(responsible2))) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "",
+        "message": "Are you sure you want to show/hide closed items? All unsaved data will be lost.",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Ok",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const Alert = this.fuseAlert.open(comfirmConfig)
+  
+      Alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          this.schedulengxdata = this.scheduleData.scheduleData
+          this.isclosed = true
+          this.milestoneTableEditStack = []
+          this.milestoneForm = new FormArray([])
+          this.dataloader()  
+        }
+      })
+      
+    }
+    else  if (event.checked == true && (JSON.stringify(baseline) == JSON.stringify(baseline2) || JSON.stringify(planned) == JSON.stringify(planned2) || JSON.stringify(completion) == JSON.stringify(completion2) || JSON.stringify(comments) == JSON.stringify(comments2)
+    || JSON.stringify(includein) == JSON.stringify(includein2) || JSON.stringify(functionowner) == JSON.stringify(functionowner2) || JSON.stringify(milestone) == JSON.stringify(milestone2) || JSON.stringify(responsible) == JSON.stringify(responsible2))) {
+      
+          this.schedulengxdata = this.scheduleData.scheduleData
+          this.isclosed = true
+          this.milestoneTableEditStack = []
+          this.milestoneForm = new FormArray([])
+          this.dataloader()  
+    
+    }
+    else if (event.checked == false && (JSON.stringify(baselineall) != JSON.stringify(baselineall2) || JSON.stringify(plannedall) != JSON.stringify(plannedall2) || JSON.stringify(completionall) != JSON.stringify(completionall2) || JSON.stringify(commentsall) != JSON.stringify(commentsall2)
+    || JSON.stringify(includeinall) != JSON.stringify(includeinall2) || JSON.stringify(functionownerall) != JSON.stringify(functionownerall2) || JSON.stringify(milestoneall) != JSON.stringify(milestoneall2) || JSON.stringify(responsibleall) != JSON.stringify(responsibleall2))) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "",
+        "message": "Are you sure you want to show/hide closed items? All unsaved data will be lost.",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Ok",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const Alert = this.fuseAlert.open(comfirmConfig)
+  
+      Alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
       this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
       this.isclosed = false
+      this.milestoneTableEditStack = []
+      this.milestoneForm = new FormArray([])
+      this.dataloader()
+        }
+      })
+    }
+    else if (event.checked == false && (JSON.stringify(baselineall) == JSON.stringify(baselineall2) || JSON.stringify(plannedall) == JSON.stringify(plannedall2) || JSON.stringify(completionall) == JSON.stringify(completionall2) || JSON.stringify(commentsall) == JSON.stringify(commentsall2)
+    || JSON.stringify(includeinall) == JSON.stringify(includeinall2) || JSON.stringify(functionownerall) == JSON.stringify(functionownerall2) || JSON.stringify(milestoneall) == JSON.stringify(milestoneall2) || JSON.stringify(responsibleall) == JSON.stringify(responsibleall2))) {
+
+      this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+      this.isclosed = false
+      this.milestoneTableEditStack = []
       this.milestoneForm = new FormArray([])
       this.dataloader()
     }
@@ -397,10 +590,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       templateMilestoneId: null
     }]
 
-    this.scheduleData.scheduleData = [...this.scheduleData.scheduleData, ...j]
+    this.schedulengxdata = [...this.schedulengxdata, ...j]
     console.log(this.scheduleData.scheduleData)
     console.log(this.milestoneTableEditStack)
-    this.milestoneTableEditRow(this.scheduleData.scheduleData.length - 1)
+    this.milestoneTableEditRow(this.schedulengxdata.length - 1)
   }
 
   //let index = this.datarows.indexOf(this.selected[0])
@@ -444,7 +637,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       if (close == 'confirmed') {
 
         this.milestoneForm.removeAt(rowIndex)
-        this.scheduleData.scheduleData.splice(rowIndex, 1)
+        this.schedulengxdata.splice(rowIndex, 1)
         if (this.milestoneTableEditStack.includes(rowIndex)) {
 
           this.milestoneTableEditStack.splice(this.milestoneTableEditStack.indexOf(rowIndex), 1)
@@ -456,7 +649,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
           return value > rowIndex ? value - 1 : value;
 
         })
-        this.scheduleData.scheduleData = [...this.scheduleData.scheduleData];
+        this.schedulengxdata = [...this.schedulengxdata];
 
 
       }
@@ -992,7 +1185,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       }
 
     }
-    for (var j of this.scheduleData.scheduleData) {
+    for (var j of this.schedulengxdata) {
       if (!this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || !this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
         j.baselineFinish = j.plannedFinish
         this.flag = true
@@ -1006,7 +1199,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     }
 
-    this.scheduleData.scheduleData = [...this.scheduleData.scheduleData]
+    this.schedulengxdata = [...this.schedule.scheduleData]
     console.log(this.schedule.scheduleData)
   }
 
@@ -1035,7 +1228,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //     }))
     //     console.log(this.baselineLogData)
     //   }
-
+console.log(this.logdetails)
       this.viewContent = false
       this.viewBaseline = false
       this.viewBaselineLogs = false
@@ -1049,7 +1242,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 
-    var baselinedates = this.scheduleData.scheduleData.map(x => {
+    var baselinedates = this.schedulengxdata.map(x => {
       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
     })
     var baselinedates2 = baselineFormValue.map(x => {
