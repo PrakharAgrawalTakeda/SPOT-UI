@@ -21,6 +21,11 @@ export class ProjectHubService {
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
   isFormChanged: boolean = false
+  includeClosedItems = {
+    askNeed: new BehaviorSubject<boolean>(false),
+    riskIssue: new BehaviorSubject<boolean>(false),
+    schedule: new BehaviorSubject<boolean>(false)
+  }
   successSave = new BehaviorSubject<boolean>(false)
   isBulkEdit: boolean = false
   dataQuality: boolean = false

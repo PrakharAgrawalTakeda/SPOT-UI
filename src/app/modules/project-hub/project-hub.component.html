@@ -3,6 +3,7 @@
     [ngClass]="{'bulkEdit':projecthubservice.isBulkEdit , 'dataQuality':projecthubservice.dataQuality}">
     <div>
         <app-ask-need-view-edit *ngIf="projecthubservice.itemtype == 'AskNeed'"></app-ask-need-view-edit>
+        <app-ask-need-bulk-edit *ngIf="projecthubservice.itemtype == 'AskNeedBulkEdit'"></app-ask-need-bulk-edit>
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
@@ -88,43 +89,43 @@
                         <div class="flex items-center gap-4">
                             <p>Overall Status</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.overallStatus, 'overall')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.overallIndicator, 'circle')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.overallIndicator, 'circle')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Budget</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.budgetIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.budgetIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.budgetIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Spend </p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.budgetSpendIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.spendIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.spendIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Schedule</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.scheduleIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.scheduleIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.scheduleIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Risk/Issues</p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.riskIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.riskIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.riskIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
                             <p> Ask/Needs </p>
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).icontype}}"
-                                class="{{(indicator.getIndicators(portfolioDetails.askNeedIndicator, '')).iconcolor}} icon-size-12">
+                                svgIcon="{{(indicator.getIndicators(spotLightIndicator.askNeedIndicator, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(spotLightIndicator.askNeedIndicator, 'overall')).iconcolor}} icon-size-12">
                             </mat-icon>
                         </div>
                     </div>

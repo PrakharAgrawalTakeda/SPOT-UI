@@ -42,11 +42,11 @@ export class SpotInputDateComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder: string = ''
   @Input() showHint: boolean = false
   @Input() hint: string = ''
-  @Input() max: 'today'|'end'|'custom' = 'end'
-  @Input() customMax: Date =  new Date()
+  @Input() max: 'today' | 'end' | 'custom' = 'end'
+  @Input() customMax: Date = new Date()
   @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
   today = new Date();
-  
+
 
 
   formFieldHelpers: any
@@ -66,7 +66,8 @@ export class SpotInputDateComponent implements OnInit, ControlValueAccessor {
     return this.form.get('control');
   }
 
-  addEvent(event: any){
+  addEvent(event: any) {
+    console.log(event)
     this.onChange(event)
   }
   registerOnTouched(fn: any): void {
@@ -79,13 +80,13 @@ export class SpotInputDateComponent implements OnInit, ControlValueAccessor {
 
   writeValue(val: any) {
     this.control.setValue(val);
-    this.onChange(val)
+    val ? this.onChange(val) : ''
   }
-  getMax(): Date{
-    if(this.max == 'today'){
+  getMax(): Date {
+    if (this.max == 'today') {
       return new Date()
     }
-    else if(this.max == 'custom'){
+    else if (this.max == 'custom') {
       return this.customMax
     }
     return

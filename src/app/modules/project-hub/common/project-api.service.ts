@@ -266,7 +266,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-
+  async getProjectHubData(projectid) {
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectHubData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   async getProjectBaselineLogDetails(projectId){
     var userid = GlobalVariables.apiurl+"ProjectBaselineLogs/GetProjectBaselineLogDetails" + projectId
     const abc$ = this.http.get(userid)

@@ -191,7 +191,7 @@
     <div *ngIf="hubsetting.asks"
         class="xl:col-span-6 flex flex-col flex-auto p-3 mb-6 bg-card shadow rounded-2xl overflow-hidden">
         <app-ask-need [askNeedData]="projectViewDetails.askNeedData"
-            [linksProblemCapture]="projectViewDetails.linksProblemCapture" [links]="projectViewDetails.links">
+            [linksProblemCapture]="projectViewDetails.linksProblemCapture" [links]="projectViewDetails.links" [projectId]="id">
         </app-ask-need>
     </div>
     <!-- Milestones -->
