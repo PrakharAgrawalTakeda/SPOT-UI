@@ -89,7 +89,7 @@
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)" [ngClass]="{'closed': row.completionDate != null}">
               <p *ngIf="value == ''">&nbsp;</p>
               <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p></strong>
-              <strong><p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p></strong>
+              <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false">
