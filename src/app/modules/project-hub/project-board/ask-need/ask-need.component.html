@@ -15,9 +15,12 @@
                 </button>
             </div>
             <div>
-                <mat-slide-toggle class="primary slider-adjust" (checked)="projectHubService.includeClosedItems.askNeed.value"  (change)="toggleAskNeed($event)">
-                    Include Closed Items
-                </mat-slide-toggle>
+                <form [formGroup]="localIncludedItems">
+                    <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
+                        (checked)="projectHubService.includeClosedItems.askNeed.value" (change)="toggleAskNeed($event)">
+                        Include Closed Items
+                    </mat-slide-toggle>
+                </form>
             </div>
         </div>
     </div>

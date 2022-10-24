@@ -278,5 +278,10 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-
+  async bulkeditAskNeeds(body,projectId){
+    var link = GlobalVariables.apiurl+"AskNeed/BulkEdit/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

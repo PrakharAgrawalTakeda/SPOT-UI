@@ -4,6 +4,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import * as moment from 'moment';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'app-ask-need-bulk-edit',
   templateUrl: './ask-need-bulk-edit.component.html',
@@ -11,9 +12,13 @@ import * as moment from 'moment';
 })
 export class AskNeedBulkEditComponent implements OnInit {
 
-  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService) {
+  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService, public fuseAlert: FuseConfirmationService) {
     this.projectHubService.includeClosedItems.askNeed.subscribe(res => {
-      this.changeaskneed(res)
+      if (this.viewContent) {
+        if (this.toggleHelper) {
+          this.changeaskneed(res, true)
+        }
+      }
     })
 
     this.askNeedForm.valueChanges.subscribe(res => {
@@ -25,15 +30,22 @@ export class AskNeedBulkEditComponent implements OnInit {
           console.log("DB VALUE", this.dbAskNeeds)
           console.log("FORM VALUE", this.formValue)
           console.log("FLASH CHANGE FLASH CHANGEEEEEEEE")
+          this.projectHubService.isFormChanged = true
         }
         else {
+          this.projectHubService.isFormChanged = false
           console.log('CONGRATS')
         }
       }
     })
   }
+  today = new Date()
   askNeedData: any = []
   isclosedaskneedtoggle: boolean = false
+  localIncludedItems = new FormGroup({
+    toggle: new FormControl(false)
+  })
+  toggleHelper: boolean = false
   tableData: any = []
   anTableEditStack = []
   viewContent: boolean = false
@@ -51,40 +63,48 @@ export class AskNeedBulkEditComponent implements OnInit {
     this.dataloader()
   }
   dataloader() {
-    this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
-      this.askNeedData = res.askNeedData
-      if (res.askNeedData.length > 0) {
-        for (var i of res.askNeedData) {
-          this.dbAskNeeds.push({
-            askNeedUniqueId: i.askNeedUniqueId,
-            projectId: i.projectId,
-            askNeed1: i.askNeed1,
-            needFromId: i.needFromId,
-            needFromName: i.needFromName,
-            needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-            comments: i.comments,
-            logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-            closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-            includeInReport: i.includeInReport,
-            indicator: i.indicator
-          })
+    this.viewContent = false
+    if (this.projectHubService.projectid) {
+      this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
+        this.askNeedData = res.askNeedData
+        if (res.askNeedData.length > 0) {
+          for (var i of res.askNeedData) {
+            this.dbAskNeeds.push({
+              askNeedUniqueId: i.askNeedUniqueId,
+              projectId: i.projectId,
+              askNeed1: i.askNeed1,
+              needFromId: i.needFromId,
+              needFromName: i.needFromName,
+              needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              comments: i.comments,
+              logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              includeInReport: i.includeInReport,
+              indicator: i.indicator
+            })
+          }
+          this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
         }
-        this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
-      }
-      this.links = res.links
-      this.linksProblemCapture = res.linksProblemCapture
-      this.changeaskneed(this.projectHubService.includeClosedItems.askNeed.value)
-      this.tableData = this.sortByNeedByDate(this.tableData)
-      console.log(this.tableData)
-      this.tableData.length > 0 ? this.formIntializer() : ''
+        this.links = res.links
+        this.linksProblemCapture = res.linksProblemCapture
+        this.changeaskneed(this.projectHubService.includeClosedItems.askNeed.value)
+        this.tableData = this.sortByNeedByDate(this.tableData)
+        console.log(this.tableData)
+        this.tableData.length > 0 ? this.formIntializer() : ''
 
 
 
 
-      this.viewContent = true
-    })
+        this.viewContent = true
+      })
+    }
   }
-
+  reset() {
+    this.dbAskNeeds = []
+    this.formValue = []
+    this.anTableEditStack = []
+    this.askNeedForm.clear()
+  }
   formIntializer() {
     for (var x of this.tableData) {
       this.askNeedForm.push(new FormGroup({
@@ -103,6 +123,7 @@ export class AskNeedBulkEditComponent implements OnInit {
         indicator: new FormControl(x.indicator)
       }))
     }
+    this.disabler()
   }
 
   submitPrep() {
@@ -144,6 +165,42 @@ export class AskNeedBulkEditComponent implements OnInit {
       return a.needByDate < b.needByDate ? -1 : 1;
     }) : array
   }
+
+  disabler() {
+    this.submitPrep()
+    var formValue = this.formValue
+    if (formValue.length > 0) {
+      if (formValue.filter(x => x.includeInReport == true).length < 1) {
+        for (var i of this.askNeedForm.controls) {
+          i['controls']['includeInReport'].enable()
+        }
+      }
+      else {
+        for (var i of this.askNeedForm.controls) {
+          if (i['controls']['includeInReport'].value != true) {
+            i['controls']['includeInReport'].disable()
+          }
+        }
+      }
+    }
+  }
+
+  submitAN(){
+    if(this.projectHubService.isFormChanged){
+      this.submitPrep()
+      this.projectHubService.isFormChanged = false
+      this.apiService.bulkeditAskNeeds(this.formValue, this.projectHubService.projectid).then(res=>{
+        this.projectHubService.toggleDrawerOpen('', '',[],'')
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+      }
+      )
+    }
+    else{
+      this.projectHubService.toggleDrawerOpen('', '',[],'')
+      this.projectHubService.successSave.next(true)
+    }
+  }
   // ASK NEED CONTROL
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
@@ -160,16 +217,83 @@ export class AskNeedBulkEditComponent implements OnInit {
     }
   }
   toggleAskNeed(event: any) {
+    this.toggleHelper = true
     this.projectHubService.includeClosedItems.askNeed.next(event.checked)
   }
-  changeaskneed(event: any) {
-    if (event == true) {
-      this.isclosedaskneedtoggle = true
-      this.tableData = this.askNeedData
+  changeaskneed(event: any, initial: boolean = false) {
+    if (initial) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Are you sure?",
+        "message": "Are you sure you want to show/hide closed items, all unsaved data will be lost. ",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "OK",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      if (this.projectHubService.isFormChanged) {
+        const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+        askNeedAlert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            if (event == true) {
+              this.isclosedaskneedtoggle = true
+              this.tableData = this.askNeedData
+            }
+            else {
+              this.isclosedaskneedtoggle = false
+              this.tableData = this.askNeedData.filter(row => row.closeDate == null)
+            }
+            this.localIncludedItems.controls.toggle.patchValue(event)
+            this.localIncludedItems.controls.toggle.markAsPristine()
+            this.reset()
+            this.dataloader()
+          }
+          else {
+            this.localIncludedItems.controls.toggle.patchValue(!event)
+            this.localIncludedItems.controls.toggle.markAsPristine()
+            this.toggleHelper = false
+            this.projectHubService.includeClosedItems.askNeed.next(!event)
+          }
+        })
+      }
+      else{
+        if (event == true) {
+          this.isclosedaskneedtoggle = true
+          this.tableData = this.askNeedData
+        }
+        else {
+          this.isclosedaskneedtoggle = false
+          this.tableData = this.askNeedData.filter(row => row.closeDate == null)
+        }
+        this.localIncludedItems.controls.toggle.patchValue(event)
+        this.localIncludedItems.controls.toggle.markAsPristine()
+        this.reset()
+        this.dataloader()
+      }
     }
     else {
-      this.isclosedaskneedtoggle = false
-      this.tableData = this.askNeedData.filter(row => row.closeDate == null)
+      if (event == true) {
+        this.isclosedaskneedtoggle = true
+        this.tableData = this.askNeedData
+      }
+      else {
+        this.isclosedaskneedtoggle = false
+        this.tableData = this.askNeedData.filter(row => row.closeDate == null)
+      }
+      this.localIncludedItems.controls.toggle.patchValue(event)
+      this.localIncludedItems.controls.toggle.markAsPristine()
     }
   }
 
@@ -179,6 +303,7 @@ export class AskNeedBulkEditComponent implements OnInit {
     if (!this.anTableEditStack.includes(rowIndex)) {
       this.anTableEditStack.push(rowIndex)
     }
+    this.disabler()
   }
 
   deleteAN(rowIndex: number) {
@@ -192,6 +317,7 @@ export class AskNeedBulkEditComponent implements OnInit {
     this.anTableEditStack = this.anTableEditStack.map(function (value) {
       return value > rowIndex ? value - 1 : value;
     })
+    this.disabler()
     this.tableData = [...this.tableData]
   }
 
@@ -203,9 +329,9 @@ export class AskNeedBulkEditComponent implements OnInit {
       needFrom: new FormControl({}),
       needByDate: new FormControl(''),
       comments: new FormControl(''),
-      logDate: new FormControl(''),
+      logDate: new FormControl(this.today),
       closeDate: new FormControl(''),
-      includeInReport: new FormControl(''),
+      includeInReport: new FormControl(false),
       indicator: new FormControl('')
     }))
     var j = [{
@@ -221,6 +347,7 @@ export class AskNeedBulkEditComponent implements OnInit {
       includeInReport: '',
       indicator: ''
     }]
+    this.disabler()
     this.tableData = [...this.tableData, ...j]
     this.anTableEditStack.push(this.tableData.length - 1)
 
