@@ -1,5 +1,5 @@
-import { GlobalPositionStrategy } from '@angular/cdk/overlay';
-import { HttpClient } from '@angular/common/http';
+
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { GlobalVariables } from 'app/shared/global-variables';
@@ -267,7 +267,7 @@ export class ProjectApiService {
     return response
   }
   async getProjectHubData(projectid) {
-    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectHubData/" + projectid
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectView/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
