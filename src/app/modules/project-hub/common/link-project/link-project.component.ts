@@ -7,6 +7,7 @@ import {ProjectApiService} from "../project-api.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
 import {ActivatedRoute} from "@angular/router";
+import {add} from "lodash-es";
 
 @Component({
     selector: 'app-link-project',
@@ -111,6 +112,12 @@ export class LinkProjectComponent implements OnInit {
             if (close == 'confirmed') {
                 this.apiService.DeleteLink(projectId).then((res: any) => {
                 });
+                const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === projectId);
+                this.projecthubservice.projectChildren.splice(objWithIdIndex, 1);
+                this.projecthubservice.projects.splice(objWithIdIndex, 1);
+                const index = this.projecthubservice.removedIds.indexOf(projectId);
+                this.projecthubservice.removedIds.splice(index, 1);
+                this.selectedValue.setValue(true)
             }
         })
 
@@ -153,10 +160,27 @@ export class LinkProjectComponent implements OnInit {
         return item.id || index;
     }
     onAdd(childId) {
+        var childrenProjects: any[];
+        var projects: any[];
         this.apiService.updateParent(childId, this.id).then((res: any) => {
         });
-        this.projecthubservice.toggleDrawerOpen('', '', [], '');
-        window.location.reload();
+        var addedProject = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === childId);
+        childrenProjects = this.projecthubservice.projectChildren;
+        projects = this.projecthubservice.projects;
+        childrenProjects.push(addedProject);
+        projects.push(addedProject)
+        this.projecthubservice.projectChildren = childrenProjects;
+        this.projecthubservice.projects = projects;
+        this.selectedValue.setValue(true);
+        this.inputValue = "";
+    }
+    displayFn(value?: number) {
+        let returnValue = "";
+        if (value) {
+            const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
+            returnValue = selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
+        }
+        return returnValue;
     }
 
 }

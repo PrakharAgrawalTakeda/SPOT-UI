@@ -45,6 +45,7 @@ export class UpdateParentComponent implements OnInit {
 
     ngOnInit(): void {
         this.dataloader();
+
         window.dispatchEvent(new Event('resize'));
         this.searchControl.valueChanges
             .pipe(
@@ -82,6 +83,13 @@ export class UpdateParentComponent implements OnInit {
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        var currentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === this.id);
+        if(currentProj.parentId!=null){
+            var parrentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === currentProj.parentId);
+            this.resultSets = currentProj.parentId;
+            this.inputValue = parrentProj.problemId + " - " + this.budgetfind(parrentProj.problemUniqueId) + parrentProj.problemTitle;
+            this.selectedValue.setValue(false);
+        }
         this.viewContent = true;
     }
 
@@ -123,7 +131,7 @@ export class UpdateParentComponent implements OnInit {
 
     displayFn(value?: number) {
         let returnValue = "";
-        if (value) {
+        if (value && this.resultSets ) {
             const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
             returnValue = selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
         }
@@ -163,7 +171,6 @@ export class UpdateParentComponent implements OnInit {
                 this.apiService.updateParent(this.id, parentId).then((res: any) => {
                 });
                 this.projecthubservice.toggleDrawerOpen('', '', [], '');
-                // this.redirectTo("/project-hub/"+this.id+"/associated-projects");
                 window.location.reload();
             }
         })

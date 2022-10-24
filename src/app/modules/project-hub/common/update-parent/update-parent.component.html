@@ -31,7 +31,7 @@
                         (keydown)="onKeydown($event)"
                         [formControl]="searchControl"
                         [matAutocomplete]="matAutocomplete"
-                        [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
+                        [placeholder]="inputValue!= '' ? inputValue : 'Search for a Project by Project ID / Title / Budget ID'"
                         [(ngModel)]="inputValue"
                         class="flex-1 w-64"
                         id="myText">

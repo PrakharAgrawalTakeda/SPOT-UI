@@ -32,6 +32,7 @@ export class ProjectHubService {
   roleControllerControl: RoleController = new RoleController;
   removedIds: any[];
   projectChildren: any[];
+  projects: any[];
 
 
   alert: FuseConfirmationConfig = {

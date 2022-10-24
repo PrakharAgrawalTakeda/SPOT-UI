@@ -128,7 +128,8 @@ export class ProjectHubComponent implements OnInit {
             if (this.portfolioDetails.phase == "Initiate") {
                 this.dataQualityPercentageString = "N/A";
             } else {
-                this.dataQualityPercentageString = this.dataQualityPercentage.toString();
+                this.dataQualityPercentageString =
+                    (~~this.dataQualityPercentage).toString();
             }
         })
     }

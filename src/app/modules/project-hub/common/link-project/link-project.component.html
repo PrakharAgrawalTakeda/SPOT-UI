@@ -38,6 +38,7 @@
                     class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
                     [disableRipple]="true"
                     (optionSelected)="onOptionSelected()"
+                    [displayWith]="displayFn.bind(this)"
                     #matAutocomplete="matAutocomplete">
                     <mat-option
                         class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"

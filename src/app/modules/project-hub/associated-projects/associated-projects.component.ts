@@ -74,7 +74,8 @@ export class AssociatedProjectsComponent implements OnInit {
             })
             this.projecthubservice.removedIds = ids;
             this.projecthubservice.projectChildren = children;
-            this.rows = projects;
+            this.projecthubservice.projects = projects;
+            this.rows = this.projecthubservice.projects;
         });
         this.viewContent = true;
     }
