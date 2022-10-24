@@ -61,6 +61,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     //this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+    console.log(this.scheduleData)
     console.log(this.schedulengxdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
   }
@@ -157,8 +158,19 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   }
   getlinkname(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
+    console.log(this.projectViewDetails.links)
+    console.log(this.projectViewDetails.linksProblemCapture)
+    console.log(this.projectViewDetails.scheduleData)
+
+    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
+    if (temp) {
+      return "This milestone is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    }
+    temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    return "This milestone is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    if(temp){
+      return "A link to this milestone has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
+    }
 
   }
   onDetailToggle(event: any) {

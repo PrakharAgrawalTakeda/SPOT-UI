@@ -68,9 +68,13 @@ import { OperationalPerformanceBulkEditComponent } from './common/operational-pe
 import { PrimaryKpiSingleEditComponent } from './project-benefits/primary-kpi-single-edit/primary-kpi-single-edit.component';
 import { GeneralInfoSingleEditComponent } from './general-info/general-info-single-edit/general-info-single-edit.component';
 import { OeProjectSingleEditComponent } from './general-info/oe-project-single-edit/oe-project-single-edit.component';
-import { CapsProjectSingleEditComponent } from './general-info/caps-project-single-edit/caps-project-single-edit.component';
 import { TechTransferSingleEditComponent } from './general-info/tech-transfer-single-edit/tech-transfer-single-edit.component';
 import { QualityRefBulkEditComponent } from './general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
+import { AskNeedComponent } from './project-board/ask-need/ask-need.component';
+import { AskNeedTableComponent } from './project-board/ask-need/ask-need-table/ask-need-table.component';
+import { AskNeedBulkEditComponent } from './project-board/ask-need/ask-need-bulk-edit/ask-need-bulk-edit.component';
+import { AskNeedSingleEditComponent } from './project-board/ask-need/ask-need-single-edit/ask-need-single-edit.component';
+import { AskNeedLinkComponent } from './project-board/ask-need/ask-need-link/ask-need-link.component';
 import { LinkProjectComponent } from './common/link-project/link-project.component';
 import { UpdateParentComponent } from './common/update-parent/update-parent.component';
 import {SearchModule} from "../../layout/common/search/search.module";
@@ -213,8 +217,13 @@ export const projectRoutes: Route[] = [
     PrimaryKpiSingleEditComponent,
     GeneralInfoSingleEditComponent,
     OeProjectSingleEditComponent,
-    CapsProjectSingleEditComponent,
     TechTransferSingleEditComponent,
+    QualityRefBulkEditComponent,
+    AskNeedComponent,
+    AskNeedTableComponent,
+    AskNeedBulkEditComponent,
+    AskNeedSingleEditComponent,
+    AskNeedLinkComponent,
     QualityRefBulkEditComponent,
     LinkProjectComponent,
     UpdateParentComponent

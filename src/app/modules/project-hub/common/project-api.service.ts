@@ -252,6 +252,38 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getprojectTeams(projectid, teamMemberAdId) {
+    const params = new HttpParams().set('id',teamMemberAdId)
+    var link = GlobalVariables.apiurl + "ProjectTeams/" + projectid + `?${params.toString()}`
+    const abc$ = this.http.get(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async patchBaselineLogs(body){
+    var link = GlobalVariables.apiurl+"ProjectBaselineLogs/IncludedInSlipChart"
+    const abc$ = this.http.patch(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getProjectHubData(projectid) {
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectHubData/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getProjectBaselineLogDetails(projectId){
+    var userid = GlobalVariables.apiurl+"ProjectBaselineLogs/GetProjectBaselineLogDetails" + projectId
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async bulkeditAskNeeds(body,projectId){
+    var link = GlobalVariables.apiurl+"AskNeed/BulkEdit/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   getProjectTree(projectId){
     var url = GlobalVariables.apiurl + "ProjectHubData/ProjectTree/"+ projectId
     const abc$ = this.http.get(url)

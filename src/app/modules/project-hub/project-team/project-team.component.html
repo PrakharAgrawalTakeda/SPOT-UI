@@ -5,10 +5,10 @@
             <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
                 <div class="flex items-start justify-between">
                     <div class=" flex gap-2">
-                        <button class="text-primary" mat-flat-button [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen('ProjectTeamBulkEdit', 'new', teamMembers, id, true)">
+                        <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen('ProjectTeamBulkEdit', 'new', teamMembers, id, true)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                         </button>
-                        <button class="text-primary" mat-flat-button [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen('ProjectTeamAddSingle', 'new', teamMembers, id)">
+                        <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen('ProjectTeamAddSingle', 'new', teamMembers, id)">
                             <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                         </button>
                     </div>

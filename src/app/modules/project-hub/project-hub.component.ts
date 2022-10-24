@@ -20,6 +20,7 @@ export class ProjectHubComponent implements OnInit {
     drawerMode: 'over' | 'side' = 'side';
     projectDetails: any = {}
     portfolioDetails: any = {}
+    spotLightIndicator: any = {}
     id: string = ""
     panelOpenState = true;
     navigationAppearance: 'default' | 'dense' = 'dense';
@@ -96,8 +97,10 @@ export class ProjectHubComponent implements OnInit {
 
     getdata(): void {
 
-        this.apiService.getproject(this.id).then((res) => {
-            this.projectDetails = res
+        this.apiService.getProjectHubData(this.id).then((res: any) => {
+            this.projectDetails = res.projectData
+            this.portfolioDetails = res.portfolioCeterData
+            this.spotLightIndicator = res.indicators
             this.projectType = this.projectDetails.problemType;
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
@@ -120,17 +123,14 @@ export class ProjectHubComponent implements OnInit {
             })
             //
         })
-        this.apiService.getportfolioData(this.id).then((res) => {
-            this.portfolioDetails = res
-        })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
-                this.dataQualityPercentage = res*100;
-                if(this.portfolioDetails.phase == "Initiate"){
-                    this.dataQualityPercentageString = "N/A";
-                  }else{
-                    this.dataQualityPercentageString = (~~this.dataQualityPercentage).toString();
-                  }
-          })
+            this.dataQualityPercentage = res * 100;
+            if (this.portfolioDetails.phase == "Initiate") {
+                this.dataQualityPercentageString = "N/A";
+            } else {
+                this.dataQualityPercentageString = this.dataQualityPercentage.toString();
+            }
+        })
     }
     toggleSideNav() {
         this.drawerOpened = !this.drawerOpened
@@ -145,21 +145,18 @@ export class ProjectHubComponent implements OnInit {
         this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
     }
     getColor(percentage: number) {
-        if(this.projectType=="Simple Project"){
-          return '#4c9bcf';
-        }else{
-          if(percentage<this.lowerTargetPercentage)
-          {
-            return "red";
-          }
-          if(this.targetPercentage>percentage && percentage>this.lowerTargetPercentage)
-          {
-            return "orange";
-          }
-          if(this.targetPercentage<percentage)
-          {
-            return "green";
-          }
+        if (this.projectType == "Simple Project") {
+            return '#4c9bcf';
+        } else {
+            if (percentage < this.lowerTargetPercentage) {
+                return "red";
+            }
+            if (this.targetPercentage > percentage && percentage > this.lowerTargetPercentage) {
+                return "orange";
+            }
+            if (this.targetPercentage < percentage) {
+                return "green";
+            }
         }
       }
 }
