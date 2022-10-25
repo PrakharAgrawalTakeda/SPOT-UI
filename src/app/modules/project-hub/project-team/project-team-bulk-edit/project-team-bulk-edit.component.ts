@@ -75,8 +75,8 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               includeInProposal: new FormControl(i.includeInProposal),
               problemUniqueId: new FormControl(i.problemUniqueId),
             }))
-            if(i.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc' || i.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'){
-              this.projectTeamForm.controls[this.projectTeamForm.value.length-1]['controls']['role'].disable()
+            if (i.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc' || i.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8') {
+              this.projectTeamForm.controls[this.projectTeamForm.value.length - 1]['controls']['role'].disable()
             }
           }
 
@@ -102,7 +102,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   getRoles(): any {
     var j = this.projectTeamForm.getRawValue()
-    if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x=> x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+    if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x => x.role.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
       return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc', 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
     }
     else if (j.some(x => x.role.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc')) {
@@ -162,7 +162,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       console.log(this.teamMembersSubmit)
       this.projecthubservice.isFormChanged = false
       this.formValue()
-      if (this.teamMembersSubmit.some(x => x.teamMemberAdId == "")) {
+      /*if (this.teamMembersSubmit.some(x => x.teamMemberAdId == "")) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Please select a Team Member Name",
           "message": "",
@@ -186,12 +186,11 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
       }
-      else {
-        this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        })
-      }
+      else {*/
+      this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      })
     }
     else {
       this.projecthubservice.submitbutton.next(true)
