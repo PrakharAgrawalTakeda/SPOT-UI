@@ -82,7 +82,7 @@ export class DataQualityPageComponent implements OnInit {
                 if (element.hitMiss == null) element.hitMiss = 'N/A';
             });
             this.rows = res.rows;
-            this.spotId = res.spotId;
+            this.spotId = res.spotId!=0 ? res.spotId : this.projecthubservice.currentSpotId;
             this.projectName = res.projectName;
             this.dataQualityPercentage = res.dataQualityPercentage * 100;
             if (res.phase == 'Initiate') {

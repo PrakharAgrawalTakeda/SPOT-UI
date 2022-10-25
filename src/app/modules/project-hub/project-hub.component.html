@@ -129,7 +129,7 @@
                             </mat-icon>
                         </div>
                     </div>
-                    <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '1',false,true)">
                     <b>Data Quality:&nbsp;</b><a [ngStyle]="{'color':getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}%</a>
                 </button>

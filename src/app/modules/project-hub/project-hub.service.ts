@@ -33,6 +33,7 @@ export class ProjectHubService {
   removedIds: any[];
   projectChildren: any[];
   projects: any[];
+  currentSpotId: string;
 
 
   alert: FuseConfirmationConfig = {

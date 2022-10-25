@@ -103,6 +103,7 @@ export class ProjectHubComponent implements OnInit {
             this.spotLightIndicator = res.indicators
             this.projectType = this.projectDetails.problemType;
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
+            this.projecthubservice.currentSpotId = this.projectDetails.problemId;
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
