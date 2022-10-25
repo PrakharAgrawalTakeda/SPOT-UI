@@ -2,14 +2,12 @@
 import {Component, OnInit,  ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
-import {ApexTooltip } from 'ng-apexcharts';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 @Component({
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
     styleUrls: ['./associated-projects.component.scss'],
-    encapsulation: ViewEncapsulation.None,
 })
 export class AssociatedProjectsComponent implements OnInit {
     single: any[];
@@ -23,7 +21,6 @@ export class AssociatedProjectsComponent implements OnInit {
     }
     id: string = '';
     rows = [];
-    viewContent = false;
     view: any[] = [700, 400];
     lastIndex = 15;
     ngOnInit(): void {
@@ -63,7 +60,6 @@ export class AssociatedProjectsComponent implements OnInit {
             this.projecthubservice.projects = projects;
             this.rows = this.projecthubservice.projects;
         });
-        this.viewContent = true;
     }
     getHeaderClass(): any {
         return ' horizontal-header-class';
@@ -96,6 +92,11 @@ export class AssociatedProjectsComponent implements OnInit {
     getRowClass = (row) => {
         if(row.problemUniqueId == this.id){
             return 'current-project';}
+    }
+    exportToExcel(): any {
+        //To be changed once the power BI report is done
+        const url = 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae';
+        window.open(url, '_blank');
     }
 }
 function percentTickFormatting(val: any) {

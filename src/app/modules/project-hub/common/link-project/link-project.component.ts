@@ -6,7 +6,7 @@ import {ProjectHubService} from '../../project-hub.service';
 import {ProjectApiService} from "../project-api.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {add} from "lodash-es";
 
 @Component({
@@ -27,7 +27,8 @@ export class LinkProjectComponent implements OnInit {
         public projecthubservice: ProjectHubService,
         private apiService: ProjectApiService,
         private _httpClient: HttpClient,
-        private _Activatedroute: ActivatedRoute,) {
+        private _Activatedroute: ActivatedRoute,
+        private router: Router) {
     }
 
     searchControl: FormControl = new FormControl();

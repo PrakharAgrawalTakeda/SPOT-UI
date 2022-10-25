@@ -175,8 +175,4 @@ export class UpdateParentComponent implements OnInit {
             }
         })
     }
-    redirectTo(uri:string){
-        this.router.navigateByUrl('/', )
-            .then(()=> this.router.navigate([uri]));
-    }
 }
