@@ -297,6 +297,19 @@ export class ProjectApiService {
       const response =  lastValueFrom(abc$)
       return response
   }
+  async linkProject(projectId:string, parentId: string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/LinkProject/"+ projectId + "/" +parentId
+      var body = [];
+      const abc$ = this.http.put(url, body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async getChildren(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/GetChildren/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
   async DeleteLink(projectId:string){
       var url = GlobalVariables.apiurl + "ProjectHubData/DeleteLink/"+ projectId
       const abc$ = this.http.delete(url,)

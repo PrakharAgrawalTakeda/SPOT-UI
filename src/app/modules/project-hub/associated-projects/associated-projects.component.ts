@@ -5,9 +5,6 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import {ApexTooltip } from 'ng-apexcharts';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
-export type ChartOptions = {
-    tooltip: ApexTooltip;
-};
 @Component({
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
@@ -16,7 +13,6 @@ export type ChartOptions = {
 })
 export class AssociatedProjectsComponent implements OnInit {
     single: any[];
-    public chartOptions: Partial<ChartOptions>;
     constructor(
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
@@ -33,16 +29,6 @@ export class AssociatedProjectsComponent implements OnInit {
     ngOnInit(): void {
         this.dataloader();
         window.dispatchEvent(new Event('resize'));
-    }
-    getApexTooltip({series, seriesIndex, dataPointIndex, w}) {
-        var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
-        return '<ul>' +
-            '<li><b>Price</b>: ' + data.x + '</li>' +
-            '<li><b>Number</b>: ' + data.y + '</li>' +
-            '<li><b>Product</b>: \'' + data.product + '\'</li>' +
-            '<li><b>Info</b>: \'' + data.info + '\'</li>' +
-            '<li><b>Site</b>: \'' + data.site + '\'</li>' +
-            '</ul>';
     }
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get('id');
@@ -103,6 +89,9 @@ export class AssociatedProjectsComponent implements OnInit {
 
     getCellClass(): any {
         return 'first-column-datatable';
+    }
+    getGraphCellClass(): any {
+        return 'graph-cell-datatable';
     }
     getRowClass = (row) => {
         if(row.problemUniqueId == this.id){

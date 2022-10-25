@@ -84,7 +84,7 @@
                     ngx-datatable-cell-template
                 >
                     <div class="flex items-center justify-start gap-6">
-                        {{ value }}
+                        {{ value ? value : (row.problemId + " - " + row.problemTitle)}}
                     </div>
                 </ng-template>
             </ngx-datatable-column>

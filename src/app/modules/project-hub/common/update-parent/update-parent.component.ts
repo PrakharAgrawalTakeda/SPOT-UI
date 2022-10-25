@@ -45,7 +45,6 @@ export class UpdateParentComponent implements OnInit {
 
     ngOnInit(): void {
         this.dataloader();
-
         window.dispatchEvent(new Event('resize'));
         this.searchControl.valueChanges
             .pipe(
@@ -88,7 +87,6 @@ export class UpdateParentComponent implements OnInit {
             var parrentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === currentProj.parentId);
             this.resultSets = currentProj.parentId;
             this.inputValue = parrentProj.problemId + " - " + this.budgetfind(parrentProj.problemUniqueId) + parrentProj.problemTitle;
-            this.selectedValue.setValue(false);
         }
         this.viewContent = true;
     }
@@ -99,6 +97,8 @@ export class UpdateParentComponent implements OnInit {
                 this.close();
             }
         }
+    }
+    ngOnDestroy() {
     }
 
     close(): void {
@@ -154,7 +154,7 @@ export class UpdateParentComponent implements OnInit {
             "actions": {
                 "confirm": {
                     "show": true,
-                    "label": "Remove",
+                    "label": "Update",
                     "color": "warn"
                 },
                 "cancel": {

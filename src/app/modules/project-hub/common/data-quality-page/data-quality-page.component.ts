@@ -32,7 +32,6 @@ export class DataQualityPageComponent implements OnInit {
     ) {}
     id: string = '';
     rows = [];
-    loadingIndicator = false;
     reorderable = true;
     spotId: string = '';
     projectName: string = '';

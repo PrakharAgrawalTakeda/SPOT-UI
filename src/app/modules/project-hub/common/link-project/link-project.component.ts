@@ -83,7 +83,9 @@ export class LinkProjectComponent implements OnInit {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.viewContent = true;
     }
-
+    ngOnDestroy() {
+        window.location.reload();
+    }
     onRemoveLink(projectId) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Remove child",
@@ -106,21 +108,20 @@ export class LinkProjectComponent implements OnInit {
             },
             "dismissible": true
         }
-        const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
+        const deleteAlert = this.fuseAlert.open(comfirmConfig)
 
-        riskIssueAlert.afterClosed().subscribe(close => {
+        deleteAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
                 this.apiService.DeleteLink(projectId).then((res: any) => {
                 });
                 const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === projectId);
-                this.projecthubservice.projectChildren.splice(objWithIdIndex, 1);
-                this.projecthubservice.projects.splice(objWithIdIndex, 1);
                 const index = this.projecthubservice.removedIds.indexOf(projectId);
                 this.projecthubservice.removedIds.splice(index, 1);
                 this.selectedValue.setValue(true)
+                this.rows.splice(objWithIdIndex, 1);
+                this.rows = [...this.rows];
             }
         })
-
     }
 
     onKeydown(event: KeyboardEvent): void {
@@ -160,19 +161,17 @@ export class LinkProjectComponent implements OnInit {
         return item.id || index;
     }
     onAdd(childId) {
-        var childrenProjects: any[];
-        var projects: any[];
-        this.apiService.updateParent(childId, this.id).then((res: any) => {
+        var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
+        this.apiService.linkProject(childId, this.id).then((res: any) => {
         });
-        var addedProject = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === childId);
-        childrenProjects = this.projecthubservice.projectChildren;
-        projects = this.projecthubservice.projects;
-        childrenProjects.push(addedProject);
-        projects.push(addedProject)
-        this.projecthubservice.projectChildren = childrenProjects;
-        this.projecthubservice.projects = projects;
+        // this.projecthubservice.projects.push(addedProject);
+        // this.projecthubservice.projectChildren.push(addedProject)
         this.selectedValue.setValue(true);
+        this.projecthubservice.removedIds.push(childId, 1);
         this.inputValue = "";
+        this.rows.push(addedProject);
+        this.rows = [...this.rows];
+
     }
     displayFn(value?: number) {
         let returnValue = "";
