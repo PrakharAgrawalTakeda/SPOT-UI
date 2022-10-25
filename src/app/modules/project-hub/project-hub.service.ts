@@ -29,7 +29,10 @@ export class ProjectHubService {
   successSave = new BehaviorSubject<boolean>(false)
   isBulkEdit: boolean = false
   dataQuality: boolean = false
-  roleControllerControl: RoleController = new RoleController
+  roleControllerControl: RoleController = new RoleController;
+  removedIds: any[];
+  projectChildren: any[];
+  projects: any[];
 
 
   alert: FuseConfirmationConfig = {

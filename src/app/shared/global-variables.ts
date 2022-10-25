@@ -1,6 +1,6 @@
 export class GlobalVariables {
 
-    //SPOT UI APPLICATION VARIABLES 
+    //SPOT UI APPLICATION VARIABLES
     //public static spotui: string = 'http://localhost:4200/'
     public static spotui: string =  process.env.NODE_ENV === 'development' ? 'http://localhost:4200/' : 'https://salmon-grass-03d30f90f.1.azurestaticapps.net/'
 
