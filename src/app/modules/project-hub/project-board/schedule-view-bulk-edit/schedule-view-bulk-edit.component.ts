@@ -871,11 +871,23 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   addMilestoneRecord(el): void {
-    this.myScrollContainer.nativeElement.scroll({
-      top: this.myScrollContainer.nativeElement.scrollHeight,
-      left: 0,
-      behavior: 'smooth'
-    });
+    var div = document.getElementById('scheduleTableDiv')
+
+
+
+    setTimeout(() => {
+
+      div.scroll({
+
+        top: div.scrollHeight,
+
+        left: 0,
+
+        behavior: 'smooth'
+
+      });
+
+    }, 100);
     this.milestoneForm.push(new FormGroup({
       scheduleUniqueId: new FormControl(''),
       projectId: new FormControl(this.id),
