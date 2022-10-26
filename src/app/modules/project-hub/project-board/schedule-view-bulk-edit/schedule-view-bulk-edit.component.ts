@@ -208,15 +208,23 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 console.log("Users List", this.userlist)
                 this.teamMemberRole = teamrole.roleId
                 console.log(log)
-                if (log.projectBaselineLog.length != 0) {
-                  this.log = log.projectBaselineLog[0]
-
-                  console.log(this.log)
+                if(log.length != 0)
+                {
+                  if (log.projectBaselineLog.length != 0) {
+                    this.log = log.projectBaselineLog[0]
+  
+                    console.log(this.log)
+                  }
+                  else {
+                    this.log.projectBaselineLog = ''
+                    console.log(this.log)
+                  }
                 }
-                else {
+                else{
                   this.log = ''
-                  console.log(this.log)
+                    console.log(this.log)
                 }
+                
                 // console.log("Log Details",logDetails)
                 //this.logdetails = logDetails
                 this.baselineCount = count
@@ -1613,7 +1621,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         "actions": {
           "confirm": {
             "show": true,
-            "label": "Okay",
+            "label": "OK",
             "color": "primary"
           },
           "cancel": {
@@ -1639,7 +1647,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         "actions": {
           "confirm": {
             "show": true,
-            "label": "Okay",
+            "label": "OK",
             "color": "primary"
           },
           "cancel": {
