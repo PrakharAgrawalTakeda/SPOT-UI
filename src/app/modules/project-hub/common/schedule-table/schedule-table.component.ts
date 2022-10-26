@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common'
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../project-api.service';
 import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-schedule-table',
@@ -15,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScheduleTableComponent implements OnInit, OnChanges {
-  @Input() scheduleData: any;
+  //@Input() scheduleData: any;
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() baselineLog: any = {}
@@ -33,11 +34,19 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   variance: any;
   baselineCount: any = {}
   id: string = ""
+  localIncludedItems = new FormGroup({
+    toggle: new FormControl(false)
+  })
+  scheduleData: any = []
   constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
     public fuseAlert: FuseConfirmationService,
-    private _Activatedroute: ActivatedRoute) { }
+    private _Activatedroute: ActivatedRoute) { 
+      this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
+        this.changeschedule(res)
+      })
+    }
 
 
 
@@ -54,12 +63,14 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     else {
       this.schedulengxdata = this.scheduleData
     }
-
+    //this.localIncludedItems.controls.toggle.patchValue(event)
+    //this.localIncludedItems.controls.toggle.markAsPristine()
   }
 
   ngOnInit(): void {
     //this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
+    console.log(this.scheduleData)
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
     console.log(this.scheduleData)
     console.log(this.schedulengxdata)
@@ -70,6 +81,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   //   return this.baselineCount.baselineCount
   // }
+
+  toggleSchedule(event: any) {
+    this.projecthubservice.includeClosedItems.schedule.next(event.checked)
+  }
 
   calculateVariance(row: any): string {
     var datetoday = new Date(moment(this.today).format('L'))
@@ -140,19 +155,23 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   }
   changeschedule(event: any) {
-    console.log(event)
-    if (event.checked == true) {
+
+    console.log(this.scheduleData)
+    if (event == true) {
       this.schedulengxdata = this.scheduleData
       this.isclosed = true
       console.log(this.schedulengxdata)
 
     }
     else {
-      this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-      this.isclosed = false
-      console.log(this.schedulengxdata)
-    }
+        this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+        this.isclosed = false
+        console.log(this.schedulengxdata)
+      }
+    this.localIncludedItems.controls.toggle.patchValue(event)
+    this.localIncludedItems.controls.toggle.markAsPristine()
   }
+
   islink(uid: string): boolean {
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
