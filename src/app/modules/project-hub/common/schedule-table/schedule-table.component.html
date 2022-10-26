@@ -17,8 +17,11 @@
                 </button>
             </div>
             <div style="padding-right: 5px;">
-                <mat-slide-toggle class="primary slider-adjust" (change)="changeschedule($event)">
+                <form [formGroup]="localIncludedItems">
+                <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
+                (checked)="projecthubservice.includeClosedItems.schedule.value" (change)="toggleSchedule($event)">
                     Include Closed Items</mat-slide-toggle>
+                </form>
             </div>
 
         </div>
@@ -101,7 +104,7 @@
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
                     </a>
-                    <a href="javascript:void(0)" title="Delete Single" *ngIf="row.milestoneType == null && editable"                  
+                    <a href="javascript:void(0)" title="Delete Single" *ngIf="row.milestoneType?!row.milestoneType >=1:true && editable"                  
                         (click)="deleteSchedule(row.scheduleUniqueId)">
                         <!-- && " -->
                         <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
