@@ -15,7 +15,6 @@ import { appRoutes } from 'app/app.routing';
 import { MsalModule, MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
 import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-browser';
 import { GlobalVariables } from './shared/global-variables';
-import { MyPreferenceComponent } from './modules/my-preference/my-preference.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 export function MsalInstanceFactory(): IPublicClientApplication {
@@ -23,7 +22,7 @@ export function MsalInstanceFactory(): IPublicClientApplication {
         auth: {
             authority: 'https://login.microsoftonline.com/57fdf63b-7e22-45a3-83dc-d37003163aae',
             clientId: '1457c97b-39c4-4789-9ac6-1c7a39211d9a',
-            redirectUri: GlobalVariables.spotui,            
+            redirectUri: GlobalVariables.spotui,
         }
     });
 }

@@ -3,7 +3,7 @@
         class="flex items-start justify-between bg-primary sidepanel-header"
         style="margin-bottom: 10px"
     >
-        <div class="text-on-primary" style="padding-top: 6px">Data Quality</div>
+        <div class="text-on-primary" style="padding-top: 6px">Project Data Quality</div>
         <div style="padding-top: 2px">
             <a
                 (click)="
@@ -35,7 +35,7 @@
         >
             Data Quality:
             <a [ngStyle]="{ color: getColor(dataQualityPercentage) }"
-                >{{ dataQualityPercentageString }}%</a
+                >{{ dataQualityPercentageString }}</a
             >
             (Target {{ targetPercentage }}%)
         </div>
@@ -51,7 +51,7 @@
             [rows]="rows"
             #dataQualityTable
         >
-            <ngx-datatable-column name="Phase" prop="phase" [flexGrow]="1">
+            <ngx-datatable-column name="Phase/State" prop="phase" [flexGrow]="1">
                 <ng-template
                     let-row="row"
                     let-value="value"
@@ -103,5 +103,9 @@
                 </ng-template>
             </ngx-datatable-column>
         </ngx-datatable>
+        <div class="p-6 pb-3 pt-0 flex items-center justify-between">>
+            <button mat-flat-button [color]="'primary'" type="button" class='bottom-0 right-0'
+                    (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')" >Ok</button>
+        </div>
     </div>
 </div>
