@@ -1,31 +1,19 @@
-import { O } from '@angular/cdk/keycodes';
+
 import {
-    ChangeDetectionStrategy,
     Component,
-    Input,
-    OnChanges,
     OnInit,
-    SimpleChanges,
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
-    FuseConfirmationConfig,
     FuseConfirmationService,
 } from '@fuse/services/confirmation';
-import { ColumnMode, sortRows } from '@swimlane/ngx-datatable';
+import { ColumnMode } from '@swimlane/ngx-datatable';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 import { Constants } from '../../../../shared/constants';
 
-export interface Row {
-    phase: string;
-    requirement: string;
-    hitMiss: string;
-    detailedDescription: string;
-}
 @Component({
     selector: 'app-data-quality-page',
     templateUrl: './data-quality-page.component.html',
@@ -41,13 +29,10 @@ export class DataQualityPageComponent implements OnInit {
         public fuseAlert: FuseConfirmationService,
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
-        private fb: FormBuilder
     ) {}
     id: string = '';
     rows = [];
-    loadingIndicator = false;
     reorderable = true;
-    phase: string = '';
     spotId: string = '';
     projectName: string = '';
     projectType: string = '';
@@ -97,15 +82,14 @@ export class DataQualityPageComponent implements OnInit {
                 if (element.hitMiss == null) element.hitMiss = 'N/A';
             });
             this.rows = res.rows;
-            this.phase = res.phase;
-            this.spotId = res.spotId;
+            this.spotId = res.spotId!=0 ? res.spotId : this.projecthubservice.currentSpotId;
             this.projectName = res.projectName;
             this.dataQualityPercentage = res.dataQualityPercentage * 100;
-            if (this.phase == 'Initiate') {
+            if (res.phase == 'Initiate') {
                 this.dataQualityPercentageString = 'N/A';
             } else {
                 this.dataQualityPercentageString =
-                    this.dataQualityPercentage.toString();
+                    (~~this.dataQualityPercentage).toString();
             }
             this.projectType = res.projectType;
             this.viewContent = true;

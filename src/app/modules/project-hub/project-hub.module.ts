@@ -75,6 +75,15 @@ import { AskNeedTableComponent } from './project-board/ask-need/ask-need-table/a
 import { AskNeedBulkEditComponent } from './project-board/ask-need/ask-need-bulk-edit/ask-need-bulk-edit.component';
 import { AskNeedSingleEditComponent } from './project-board/ask-need/ask-need-single-edit/ask-need-single-edit.component';
 import { AskNeedLinkComponent } from './project-board/ask-need/ask-need-link/ask-need-link.component';
+import { LinkProjectComponent } from './common/link-project/link-project.component';
+import { UpdateParentComponent } from './common/update-parent/update-parent.component';
+import {SearchModule} from "../../layout/common/search/search.module";
+import {LanguagesModule} from "../../layout/common/languages/languages.module";
+import {FuseFullscreenModule} from "../../../@fuse/components/fullscreen";
+import {ShortcutsModule} from "../../layout/common/shortcuts/shortcuts.module";
+import {MessagesModule} from "../../layout/common/messages/messages.module";
+import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
+import {UserModule} from "../../layout/common/user/user.module";
 
 export const projectRoutes: Route[] = [
   {
@@ -214,42 +223,52 @@ export const projectRoutes: Route[] = [
     AskNeedTableComponent,
     AskNeedBulkEditComponent,
     AskNeedSingleEditComponent,
-    AskNeedLinkComponent
+    AskNeedLinkComponent,
+    QualityRefBulkEditComponent,
+    LinkProjectComponent,
+    UpdateParentComponent
   ],
-  imports: [
-    RouterModule.forChild(projectRoutes),
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatExpansionModule,
-    NgApexchartsModule,
-    TranslocoModule,
-    SharedModule,
-    CommonModule,
-    FuseDrawerModule,
-    FuseNavigationModule,
-    NgScrollbarModule,
-    MatChipsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    NgxDatatableModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    MatSnackBarModule,
-    FuseAlertModule,
-    SpotFormsModule
-  ]
+    imports: [
+        RouterModule.forChild(projectRoutes),
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatExpansionModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        SharedModule,
+        CommonModule,
+        FuseDrawerModule,
+        FuseNavigationModule,
+        NgScrollbarModule,
+        MatChipsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NgxDatatableModule,
+        MatSlideToggleModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatAutocompleteModule,
+        MatTooltipModule,
+        MatSnackBarModule,
+        FuseAlertModule,
+        SpotFormsModule,
+        SearchModule,
+        LanguagesModule,
+        FuseFullscreenModule,
+        ShortcutsModule,
+        MessagesModule,
+        NotificationsModule,
+        UserModule
+    ]
 })
 export class ProjectHubModule { }

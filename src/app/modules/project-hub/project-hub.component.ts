@@ -98,12 +98,13 @@ export class ProjectHubComponent implements OnInit {
     getdata(): void {
 
         this.apiService.getProjectHubData(this.id).then((res: any) => {
-            console.log("HAAAAAAAAAAAAA",res)
             this.projectDetails = res.projectData
             this.portfolioDetails = res.portfolioCeterData
+            console.log(res.indicator)
             this.spotLightIndicator = res.indicators
             this.projectType = this.projectDetails.problemType;
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
+            this.projecthubservice.currentSpotId = this.projectDetails.problemId;
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
@@ -122,14 +123,15 @@ export class ProjectHubComponent implements OnInit {
                 const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
                 navComponent.refresh();
             })
-            // 
+            //
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
             this.dataQualityPercentage = res * 100;
             if (this.portfolioDetails.phase == "Initiate") {
                 this.dataQualityPercentageString = "N/A";
             } else {
-                this.dataQualityPercentageString = this.dataQualityPercentage.toString();
+                this.dataQualityPercentageString =
+                    (~~this.dataQualityPercentage).toString();
             }
         })
     }
@@ -159,5 +161,5 @@ export class ProjectHubComponent implements OnInit {
                 return "green";
             }
         }
-    }
+      }
 }

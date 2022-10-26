@@ -15,7 +15,8 @@
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
-        
+        <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
+        <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
         <app-quality-ref-bulk-edit *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
         <app-oe-project-single-edit *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
@@ -129,7 +130,7 @@
                             </mat-icon>
                         </div>
                     </div>
-                    <button class="ml-4 text-primary" mat-flat-button [color]="'primary-200'"
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '1',false,true)">
                     <b>Data Quality:&nbsp;</b><a [ngStyle]="{'color':getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}%</a>
                 </button>

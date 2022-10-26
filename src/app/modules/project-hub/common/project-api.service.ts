@@ -1,5 +1,5 @@
-import { GlobalPositionStrategy } from '@angular/cdk/overlay';
-import { HttpClient, HttpParams } from '@angular/common/http';
+
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { GlobalVariables } from 'app/shared/global-variables';
@@ -259,7 +259,7 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  
+
   async patchBaselineLogs(body){
     var link = GlobalVariables.apiurl+"ProjectBaselineLogs/IncludedInSlipChart"
     const abc$ = this.http.patch(link,body)
@@ -273,7 +273,7 @@ export class ProjectApiService {
     return response
   }
   async getProjectBaselineLogDetails(projectId){
-    var userid = GlobalVariables.apiurl+"ProjectBaselineLogs/GetProjectBaselineLogDetails" + projectId
+    var userid = GlobalVariables.apiurl+"ProjectBaselineLogs/GetProjectBaselineLogDetails/" + projectId
     const abc$ = this.http.get(userid)
     const response = await lastValueFrom(abc$)
     return response
@@ -283,5 +283,37 @@ export class ProjectApiService {
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  getProjectTree(projectId){
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectTree/"+ projectId
+    const abc$ = this.http.get(url)
+    const response =  lastValueFrom(abc$)
+    return response
+  }
+  async updateParent(projectId:string, parentId: string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/UpdateParent/"+ projectId + "/" +parentId
+      var body = [];
+      const abc$ = this.http.put(url, body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async linkProject(projectId:string, parentId: string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/LinkProject/"+ projectId + "/" +parentId
+      var body = [];
+      const abc$ = this.http.put(url, body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async getChildren(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/GetChildren/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  async DeleteLink(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/DeleteLink/"+ projectId
+      const abc$ = this.http.delete(url,)
+      const response =  lastValueFrom(abc$)
+      return response
   }
 }
