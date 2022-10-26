@@ -21,7 +21,8 @@ export class UpdateParentComponent implements OnInit {
     @Output() search: EventEmitter<any> = new EventEmitter<any>();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     searchControl: FormControl = new FormControl();
-    selectedValue: FormControl = new FormControl(true);
+    selectedValueExists: FormControl = new FormControl(true);
+    detailsHaveBeenChanged: FormControl = new FormControl(false);
     resultSets: any[];
     budget: any = [];
     temp: string = "";
@@ -29,6 +30,7 @@ export class UpdateParentComponent implements OnInit {
     id: string = '';
     removedIds: any[];
     inputValue = '';
+    rows = [];
 
 
     constructor(
@@ -62,7 +64,7 @@ export class UpdateParentComponent implements OnInit {
             )
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
-                if (this.selectedValue.value == true) {
+                if (this.selectedValueExists.value == true) {
                     this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
                         .subscribe((resultSets: any) => {
                             resultSets.projectData.forEach((item, index) => {
@@ -83,10 +85,9 @@ export class UpdateParentComponent implements OnInit {
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         var currentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === this.id);
-        if(currentProj.parentId!=null){
+        if (currentProj.parentId != null) {
             var parrentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === currentProj.parentId);
-            this.resultSets = currentProj.parentId;
-            this.inputValue = parrentProj.problemId + " - " + this.budgetfind(parrentProj.problemUniqueId) + parrentProj.problemTitle;
+            this.rows.push(parrentProj);
         }
         this.viewContent = true;
     }
@@ -98,7 +99,10 @@ export class UpdateParentComponent implements OnInit {
             }
         }
     }
+
     ngOnDestroy() {
+        if(this.detailsHaveBeenChanged.value==true)
+            window.location.reload();
     }
 
     close(): void {
@@ -131,7 +135,7 @@ export class UpdateParentComponent implements OnInit {
 
     displayFn(value?: number) {
         let returnValue = "";
-        if (value && this.resultSets ) {
+        if (value && this.resultSets) {
             const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
             returnValue = selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
         }
@@ -139,7 +143,7 @@ export class UpdateParentComponent implements OnInit {
     }
 
     onOptionSelected(event: any): void {
-        this.selectedValue.setValue(false)
+        this.selectedValueExists.setValue(false)
     }
 
     onSave(parentId) {
@@ -168,10 +172,55 @@ export class UpdateParentComponent implements OnInit {
 
         riskIssueAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
+                var addedProject = this.resultSets.find(_ => _.problemUniqueId === parentId);
                 this.apiService.updateParent(this.id, parentId).then((res: any) => {
                 });
-                this.projecthubservice.toggleDrawerOpen('', '', [], '');
-                window.location.reload();
+                this.searchControl.setValue('');
+                this.selectedValueExists.setValue(true);
+                this.rows = [];
+                this.rows.push(addedProject);
+                this.rows = [...this.rows];
+                this.detailsHaveBeenChanged.setValue(true);
+            }
+        })
+    }
+
+    onRemoveLink(parentId) {
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Remove child",
+            "message": "Are you sure you want to unlink this record?",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warn"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "Remove",
+                    "color": "warn"
+                },
+                "cancel": {
+                    "show": true,
+                    "label": "Cancel"
+                }
+            },
+            "dismissible": true
+        }
+        const deleteAlert = this.fuseAlert.open(comfirmConfig)
+
+        deleteAlert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+                this.apiService.DeleteLink(this.id).then((res: any) => {
+                });
+                const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === this.id);
+                const index = this.projecthubservice.removedIds.indexOf(parentId);
+                this.projecthubservice.removedIds.splice(index, 1);
+                this.searchControl.setValue('');
+                this.selectedValueExists.setValue(true)
+                this.rows.splice(objWithIdIndex, 1);
+                this.rows = [...this.rows];
+                this.detailsHaveBeenChanged.setValue(true);
             }
         })
     }
