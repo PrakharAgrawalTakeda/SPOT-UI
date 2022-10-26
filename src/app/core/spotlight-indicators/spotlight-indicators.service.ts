@@ -43,7 +43,7 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = 'text-[#FFCC00]'
       }
       else if(indicator == 'PurpleStop'){
-        temp.icontype = 'heroicons_solid:arrow-circle-right'
+        temp.icontype = 'mat_solid:circle'
         temp.iconcolor = 'text-[#B4A7D6]'
       }
       else{
