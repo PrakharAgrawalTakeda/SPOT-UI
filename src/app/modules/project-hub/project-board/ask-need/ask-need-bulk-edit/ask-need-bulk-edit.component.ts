@@ -350,6 +350,14 @@ export class AskNeedBulkEditComponent implements OnInit {
     this.disabler()
     this.tableData = [...this.tableData, ...j]
     this.anTableEditStack.push(this.tableData.length - 1)
+    var div = document.getElementById('askNeedTableDiv')
 
+    setTimeout(() => {
+      div.scroll({
+        top: div.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
   }
 }
