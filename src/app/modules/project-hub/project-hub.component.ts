@@ -127,11 +127,11 @@ export class ProjectHubComponent implements OnInit {
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
             this.dataQualityPercentage = res * 100;
-            if (this.portfolioDetails.phase == "Initiate") {
+            if (res == null || res.phase == "Initiate") {
                 this.dataQualityPercentageString = "N/A";
             } else {
                 this.dataQualityPercentageString =
-                    (~~this.dataQualityPercentage).toString();
+                    (~~this.dataQualityPercentage).toString() + "%";
             }
         })
     }

@@ -89,7 +89,7 @@ export class DataQualityPageComponent implements OnInit {
                 this.dataQualityPercentageString = 'N/A';
             } else {
                 this.dataQualityPercentageString =
-                    (~~this.dataQualityPercentage).toString();
+                    (~~this.dataQualityPercentage).toString() + "%";
             }
             this.projectType = res.projectType;
             this.viewContent = true;

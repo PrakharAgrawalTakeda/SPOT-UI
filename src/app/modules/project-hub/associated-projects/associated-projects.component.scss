@@ -3,6 +3,8 @@
     height: 10px ;
     width: 10px ;
 }
-.ngx-datatable .datatable-body-cell, .ngx-datatable .datatable-header-cell {
-    overflow-x: visible !important;
+.datatable-body-cell-label .datatable-tree-button.ng-star-inserted{
+    height: 0 !important;
+    width: 0 !important;
+    opacity: 0 !important;
 }
