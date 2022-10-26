@@ -8,6 +8,7 @@ import { ProjectHubService } from '../project-hub.service';
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
     styleUrls: ['./associated-projects.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class AssociatedProjectsComponent implements OnInit {
     single: any[];
@@ -23,6 +24,7 @@ export class AssociatedProjectsComponent implements OnInit {
     rows = [];
     view: any[] = [700, 400];
     lastIndex = 15;
+    viewContent = false;
     ngOnInit(): void {
         this.dataloader();
         window.dispatchEvent(new Event('resize'));
@@ -60,6 +62,7 @@ export class AssociatedProjectsComponent implements OnInit {
             this.projecthubservice.projects = projects;
             this.rows = this.projecthubservice.projects;
         });
+        this.viewContent = true;
     }
     getHeaderClass(): any {
         return ' horizontal-header-class';

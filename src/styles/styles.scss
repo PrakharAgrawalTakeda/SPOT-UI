@@ -46,5 +46,9 @@ $square-size: 10px;
     margin-left: 10px;
 }
 .graph-cell-datatable{
-    overflow: visible;
+    overflow-x: visible !important;
+    &.ngx-datatable .datatable-header-cell {
+        overflow-x: visible !important;
+    }
 }
+
