@@ -1579,47 +1579,47 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     }
     console.log(this.scheduleData.scheduleData)
-    if (this.projecthubservice.includeClosedItems.schedule.value) {
+    // if (this.projecthubservice.includeClosedItems.schedule.value) {
       this.schedulengxdata = [...this.scheduleData.scheduleData]
-    }
-    else {
-      this.schedulengxdata = [...this.schedulengxdata]
-    }
+    // }
+    // else {
+    //   this.schedulengxdata = [...this.schedulengxdata]
+    // }
 
 
   }
 
   baselineLogDetails() {
-    //   // this.baselineLogForm = new FormArray([])
-    //   // console.log(this.baselineLogForm.getRawValue())
-    //   // this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
-    //   //   console.log("Logs",logs)
-    //   //   console.log("Users List", this.userlist)
-    //   //   this.userlist = logs.users
-    //   //   this.getUserName(this.id)
-    //   //   this.baselinelogTableEditStack = []
-    //   //   console.log(this.baselineLogForm.getRawValue())
+      // this.baselineLogForm = new FormArray([])
+      // console.log(this.baselineLogForm.getRawValue())
+      // this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+      //   console.log("Logs",logs)
+      //   console.log("Users List", this.userlist)
+      //   this.userlist = logs.users
+      //   this.getUserName(this.id)
+      //   this.baselinelogTableEditStack = []
+      //   console.log(this.baselineLogForm.getRawValue())
 
-    //   //   this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
-    //   //     return a.baselineCount - b.baselineCount;
-    //   //   })
+      //   this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
+      //     return a.baselineCount - b.baselineCount;
+      //   })
 
-    //   //   var count = 1
-    //   //   for (var i of this.baselineLogData) {
-    //   //     i.logId = count
-    //   //     count = count + 1
-    //   //     this.baselineLogForm.push(new FormGroup({
-    //   //       baselineLogId: new FormControl(i.baselineLogId),
-    //   //       includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
-    //   //     }))
-    //   //     console.log(this.baselineLogData)
-    //   //   }
-    //     console.log(this.logdetails)
-    //     this.viewContent = false
-    //     this.viewBaseline = false
-    //     this.viewBaselineLogs = false
-    //     this.compareBaselineLogs = true
-    //   // })
+      //   var count = 1
+      //   for (var i of this.baselineLogData) {
+      //     i.logId = count
+      //     count = count + 1
+      //     this.baselineLogForm.push(new FormGroup({
+      //       baselineLogId: new FormControl(i.baselineLogId),
+      //       includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
+      //     }))
+      //     console.log(this.baselineLogData)
+      //   }
+        console.log(this.logdetails)
+        this.viewContent = false
+        this.viewBaseline = false
+        this.viewBaselineLogs = false
+        this.compareBaselineLogs = true
+      // })
 
   }
 
