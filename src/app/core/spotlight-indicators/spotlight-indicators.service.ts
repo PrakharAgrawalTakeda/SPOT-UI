@@ -31,19 +31,19 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = ''
       }
       else if(indicator == 'GreenStop'){
-        temp.icontype = 'heroicons_solid:arrow-circle-right'
+        temp.icontype = 'mat_solid:circle'
         temp.iconcolor = 'text-[#008000]'
       }
       else if(indicator == 'RedStop'){
-        temp.icontype = 'heroicons_solid:arrow-circle-right'
+        temp.icontype = 'mat_solid:circle'
         temp.iconcolor = 'text-[#ff0000]'
       }
       else if(indicator == 'YellowStop'){
-        temp.icontype = 'heroicons_solid:arrow-circle-right'
+        temp.icontype = 'mat_solid:circle'
         temp.iconcolor = 'text-[#FFCC00]'
       }
       else if(indicator == 'PurpleStop'){
-        temp.icontype = 'heroicons_solid:arrow-circle-right'
+        temp.icontype = 'mat_solid:circle'
         temp.iconcolor = 'text-[#B4A7D6]'
       }
       else{

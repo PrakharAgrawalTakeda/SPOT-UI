@@ -267,7 +267,7 @@ export class ProjectApiService {
     return response
   }
   async getProjectHubData(projectid) {
-    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectView/" + projectid
+    var url = GlobalVariables.apiurl + "ProjectHubData/ProjectHubData/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response

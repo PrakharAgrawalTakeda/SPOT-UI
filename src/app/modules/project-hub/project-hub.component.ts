@@ -100,6 +100,7 @@ export class ProjectHubComponent implements OnInit {
         this.apiService.getProjectHubData(this.id).then((res: any) => {
             this.projectDetails = res.projectData
             this.portfolioDetails = res.portfolioCeterData
+            console.log(res.indicator)
             this.spotLightIndicator = res.indicators
             this.projectType = this.projectDetails.problemType;
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)

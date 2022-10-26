@@ -39,8 +39,11 @@
       </ng-template>
 
       <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
-        <mat-slide-toggle class="primary slider-adjust" (change)="changeschedule($event)">
+        <form [formGroup]="localIncludedItems">
+        <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
+        (checked)="projecthubservice.includeClosedItems.schedule.value" (change)="toggleSchedule($event)">
           Include Closed Items</mat-slide-toggle>
+        </form>
       </div>
     </div>
 
