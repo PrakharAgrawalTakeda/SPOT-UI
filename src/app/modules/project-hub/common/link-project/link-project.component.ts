@@ -32,10 +32,10 @@ export class LinkProjectComponent implements OnInit {
     }
 
     searchControl: FormControl = new FormControl();
-    selectedValue: FormControl = new FormControl(true);
+    selectedValueExists: FormControl = new FormControl(true);
+    detailsHaveBeenChanged: FormControl = new FormControl(false);
     opened: boolean = false;
     rows = [];
-    inputValue = '';
     resultSets: any[];
     budget: any = [];
     temp: string = "";
@@ -62,7 +62,7 @@ export class LinkProjectComponent implements OnInit {
             )
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
-                if (this.selectedValue.value == true) {
+                if (this.selectedValueExists.value == true) {
                     this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
                         .subscribe((resultSets: any) => {
                             resultSets.projectData.forEach((item, index) => {
@@ -85,7 +85,8 @@ export class LinkProjectComponent implements OnInit {
         this.viewContent = true;
     }
     ngOnDestroy() {
-        window.location.reload();
+        if(this.detailsHaveBeenChanged.value==true)
+            window.location.reload();
     }
     onRemoveLink(projectId) {
         var comfirmConfig: FuseConfirmationConfig = {
@@ -118,9 +119,11 @@ export class LinkProjectComponent implements OnInit {
                 const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === projectId);
                 const index = this.projecthubservice.removedIds.indexOf(projectId);
                 this.projecthubservice.removedIds.splice(index, 1);
-                this.selectedValue.setValue(true)
+                this.searchControl.setValue('');
+                this.selectedValueExists.setValue(true)
                 this.rows.splice(objWithIdIndex, 1);
                 this.rows = [...this.rows];
+                this.detailsHaveBeenChanged.setValue(true);
             }
         })
     }
@@ -143,7 +146,7 @@ export class LinkProjectComponent implements OnInit {
     }
 
     onOptionSelected() {
-        this.selectedValue.setValue(false)
+        this.selectedValueExists.setValue(false)
     }
 
     budgetfind(projectid: string): string {
@@ -162,17 +165,41 @@ export class LinkProjectComponent implements OnInit {
         return item.id || index;
     }
     onAdd(childId) {
-        var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
-        this.apiService.linkProject(childId, this.id).then((res: any) => {
-        });
-        // this.projecthubservice.projects.push(addedProject);
-        // this.projecthubservice.projectChildren.push(addedProject)
-        this.selectedValue.setValue(true);
-        this.projecthubservice.removedIds.push(childId, 1);
-        this.inputValue = "";
-        this.rows.push(addedProject);
-        this.rows = [...this.rows];
-
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Add child",
+            "message": "Are you sure you want to add this project as a child?",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "primary"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "Yes",
+                    "color": "primary"
+                },
+                "cancel": {
+                    "show": true,
+                    "label": "No"
+                }
+            },
+            "dismissible": true
+        }
+        const addAlert = this.fuseAlert.open(comfirmConfig)
+        addAlert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+                var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
+                this.apiService.linkProject(childId, this.id).then((res: any) => {
+                });
+                this.searchControl.setValue('');
+                this.selectedValueExists.setValue(true);
+                this.projecthubservice.removedIds.push(childId, 1);
+                this.rows.push(addedProject);
+                this.rows = [...this.rows];
+                this.detailsHaveBeenChanged.setValue(true);
+            }
+        })
     }
     displayFn(value?: number) {
         let returnValue = "";

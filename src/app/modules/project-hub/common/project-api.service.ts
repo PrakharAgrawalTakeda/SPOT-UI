@@ -316,4 +316,10 @@ export class ProjectApiService {
       const response =  lastValueFrom(abc$)
       return response
   }
+  async programReport(body){
+     var link = GlobalVariables.apiurl+"ProjectHubData/InsertReports"
+     const abc$ = this.http.post(link,body)
+     const response = await lastValueFrom(abc$)
+     return response
+  }
 }

@@ -1,9 +1,11 @@
 
-import {Component, OnInit,  ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
+import {DatatableComponent} from "@swimlane/ngx-datatable";
 @Component({
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
@@ -17,7 +19,8 @@ export class AssociatedProjectsComponent implements OnInit {
         private _Activatedroute: ActivatedRoute,
         public projecthubservice: ProjectHubService,
         public indicator: SpotlightIndicatorsService,
-        private router: Router
+        private router: Router,
+        public fuseAlert: FuseConfirmationService,
     ) {
     }
     id: string = '';
@@ -65,7 +68,7 @@ export class AssociatedProjectsComponent implements OnInit {
         this.viewContent = true;
     }
     getHeaderClass(): any {
-        return ' horizontal-header-class';
+        return ' vertical-header-class';
     }
     onTreeAction(row: any) {
         if (row.treeStatus === 'collapsed') {
@@ -94,12 +97,47 @@ export class AssociatedProjectsComponent implements OnInit {
     }
     getRowClass = (row) => {
         if(row.problemUniqueId == this.id){
-            return 'current-project';}
+            return 'current-project';
+        }
+        return 'associated-projects-row'
     }
     exportToExcel(): any {
         //To be changed once the power BI report is done
         const url = 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae';
         window.open(url, '_blank');
+    }
+    onProgramReport(): any {
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Program Report",
+            "message": "The selected report will be processed and distributed by e-Mail and may take a few minutes. Please check your inbox.",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "primary"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "OK",
+                    "color": "primary"
+                }
+            },
+            "dismissible": true
+        }
+        const deleteAlert = this.fuseAlert.open(comfirmConfig)
+
+        deleteAlert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+                let body = {reportsData:[{projectID:"", userADID:"", reportName:""}]};
+                body.reportsData[0].projectID = this.projecthubservice.projects.map(x=>{
+                        return x.problemId.toString()
+                }).join(' ');
+                body.reportsData[0].reportName = "Portfolio Report";
+                //TODO: Find UserIDAD
+                this.apiService.programReport(this.id).then((res: any) => {
+                });
+            }
+        })
     }
 }
 function percentTickFormatting(val: any) {
