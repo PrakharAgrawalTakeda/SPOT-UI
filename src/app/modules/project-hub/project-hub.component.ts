@@ -140,7 +140,8 @@ export class ProjectHubComponent implements OnInit {
         if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info' ||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits') {
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits'||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'associated-projects') {
             this.projecthubservice.submitbutton.next(true)
         }
     }
