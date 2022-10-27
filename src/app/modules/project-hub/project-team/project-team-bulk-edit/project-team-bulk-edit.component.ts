@@ -208,6 +208,8 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   //Table Controls
   addPT() {
+
+    console.log("Initial view", document.getElementById('projectTeamTableDiv').scrollHeight)
     var j = [{
       projectTeamUniqueId: '',
       userId: '',
@@ -231,6 +233,16 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     }))
     this.teamMembers = [...this.teamMembers, ...j]
     this.ptTableEditStack.push(this.teamMembers.length - 1)
+    var div = document.getElementById('projectTeamTableDiv')
+
+    setTimeout(() => {
+      div.scroll({
+        top: div.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
+
   }
   deletePT(rowIndex: number) {
     var comfirmConfig: FuseConfirmationConfig = {

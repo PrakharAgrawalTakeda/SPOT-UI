@@ -69,7 +69,7 @@
     </div>
 
 
-    <div class="mt-3 p-3 h-[74vh] overflow-y-scroll" #target>
+    <div class="mt-3 p-3 h-[74vh] overflow-y-scroll" #target  id="scheduleTableDiv">
       <ngx-datatable class="pr-6 pl-2 material font-medium text-sm text-secondary whitespace-nowrap"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
         [scrollbarV]="false" [rowClass]="getRowClass">
@@ -344,14 +344,14 @@
       </div>
     </div>
   </form>
-  <div class="mt-6 pr-6 pl-6 flex justify-between items-center w-full">
-    <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
+  <div class="mt-6 pr-12 pl-6 flex justify-end items-center w-full">
+    <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
       Cancel
-    </button>
-
-    <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitslipchart()">
-      Submit
     </button> -->
+
+    <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
+      OK
+    </button>
 
   </div>
 </div>

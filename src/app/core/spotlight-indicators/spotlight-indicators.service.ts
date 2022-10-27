@@ -27,27 +27,27 @@ export class SpotlightIndicatorsService {
         temp.iconcolor = 'text-[#ff0000]'
       }
       else if(indicator == 'GreyStop'){
-        temp.icontype = 'mat_solid:circle'
+        temp.icontype = 'heroicons_solid:arrow-circle-right'
         temp.iconcolor = ''
       }
       else if(indicator == 'GreenStop'){
-        temp.icontype = 'mat_solid:circle'
+        temp.icontype = 'heroicons_solid:arrow-circle-right'
         temp.iconcolor = 'text-[#008000]'
       }
       else if(indicator == 'RedStop'){
-        temp.icontype = 'mat_solid:circle'
+        temp.icontype = 'heroicons_solid:arrow-circle-right'
         temp.iconcolor = 'text-[#ff0000]'
       }
       else if(indicator == 'YellowStop'){
-        temp.icontype = 'mat_solid:circle'
+        temp.icontype = 'heroicons_solid:arrow-circle-right'
         temp.iconcolor = 'text-[#FFCC00]'
       }
       else if(indicator == 'PurpleStop'){
-        temp.icontype = 'mat_solid:circle'
+        temp.icontype = 'heroicons_solid:arrow-circle-right'
         temp.iconcolor = 'text-[#B4A7D6]'
       }
       else{
-        temp.icontype = 'mat_solid:circle'
+        temp.icontype = 'heroicons_solid:arrow-circle-right'
         temp.iconcolor = ''
       }
     }

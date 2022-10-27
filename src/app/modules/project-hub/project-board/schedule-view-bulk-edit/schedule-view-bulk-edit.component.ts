@@ -136,24 +136,25 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
       }
     })
-    this.baselineLogForm.valueChanges.subscribe(res => {
-      if (this.viewContent == false) {
-        //this.saveScheduleBulkEdit()
-        console.log("DB", this.baselineLogForm)
-        console.log("SUB", this.baselineLogObj)
-        for (let control of this.baselineLogObj) {
-          for (let i of this.baselineLogData.filter(x => x.baselineLogId == control.includedInSlipChart)) {
-            if (JSON.stringify(control.includedInSlipChart) != JSON.stringify(i.includeSlipChart)) {
+    //Baseline Log Form changes
+    // this.baselineLogForm.valueChanges.subscribe(res => {
+    //   if (this.viewContent == false) {
+    //     //this.saveScheduleBulkEdit()
+    //     console.log("DB", this.baselineLogForm)
+    //     console.log("SUB", this.baselineLogObj)
+    //     for (let control of this.baselineLogObj) {
+    //       for (let i of this.baselineLogData.filter(x => x.baselineLogId == control.includedInSlipChart)) {
+    //         if (JSON.stringify(control.includedInSlipChart) != JSON.stringify(i.includeSlipChart)) {
 
-              this.projecthubservice.isFormChanged = true
-            }
-            else {
-              this.projecthubservice.isFormChanged = false
-            }
-          }
-        }
-      }
-    })
+    //           this.projecthubservice.isFormChanged = true
+    //         }
+    //         else {
+    //           this.projecthubservice.isFormChanged = false
+    //         }
+    //       }
+    //     }
+    //   }
+    // })
 
   }
 
@@ -208,15 +209,22 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 console.log("Users List", this.userlist)
                 this.teamMemberRole = teamrole.roleId
                 console.log(log)
-                if (log.projectBaselineLog.length != 0) {
-                  this.log = log.projectBaselineLog[0]
+                if (log.length != 0) {
+                  if (log.projectBaselineLog.length != 0) {
+                    this.log = log.projectBaselineLog[0]
 
-                  console.log(this.log)
+                    console.log(this.log)
+                  }
+                  else {
+                    this.log.projectBaselineLog = ''
+                    console.log(this.log)
+                  }
                 }
                 else {
                   this.log = ''
                   console.log(this.log)
                 }
+
                 // console.log("Log Details",logDetails)
                 //this.logdetails = logDetails
                 this.baselineCount = count
@@ -238,26 +246,26 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 console.log(this.projecthubservice.includeClosedItems.schedule.value)
 
                 if (res.scheduleData.length != 0) {
-                    for (var i of res.scheduleData) {
-                      this.dbSchedule.push({
-                        scheduleUniqueId: i.scheduleUniqueId,
-                        projectId: i.projectId,
-                        milestone: i.milestone,
-                        plannedFinish: i.plannedFinish  ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        baselineFinish: i.plannedFinish  ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        responsiblePersonName: (i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
-                        functionGroupId: i.functionGroupId,
-                        completionDate: i.plannedFinish  ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                        comments: (i.comments),
-                        includeInReport: (i.includeInReport),
-                        includeInCharter: (i.includeInCharter),
-                        milestoneType: (i.milestoneType),
-                        templateMilestoneId: (i.templateMilestoneId),
-                        includeInCloseout: (i.includeInCloseout),
-                        responsiblePersonId: (i.responsiblePersonId),
-                        indicator: (i.indicator)
-                      })
-                    }
+                  for (var i of res.scheduleData) {
+                    this.dbSchedule.push({
+                      scheduleUniqueId: i.scheduleUniqueId,
+                      projectId: i.projectId,
+                      milestone: i.milestone,
+                      plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                      baselineFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                      responsiblePersonName: (i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
+                      functionGroupId: i.functionGroupId,
+                      completionDate: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                      comments: (i.comments),
+                      includeInReport: (i.includeInReport),
+                      includeInCharter: (i.includeInCharter),
+                      milestoneType: (i.milestoneType),
+                      templateMilestoneId: (i.templateMilestoneId),
+                      includeInCloseout: (i.includeInCloseout),
+                      responsiblePersonId: (i.responsiblePersonId),
+                      indicator: (i.indicator)
+                    })
+                  }
                   this.scheduledataDb = this.schedulengxdata.map(x => {
                     return {
                       "scheduleUniqueId": x.scheduleUniqueId,
@@ -353,7 +361,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   changeschedule(event: any, initial: boolean = false) {
-  debugger
+    //debugger
     for (var i of this.scheduleData.scheduleData) {
 
       for (let control of this.milestoneForm.controls.filter(x => x.value.scheduleUniqueId == i.scheduleUniqueId)) {
@@ -476,8 +484,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     if (initial) {
       if (event == true) {
         if ((JSON.stringify(baseline) != JSON.stringify(baseline2) || JSON.stringify(planned) != JSON.stringify(planned2) || JSON.stringify(completion) != JSON.stringify(completion2) || JSON.stringify(comments) != JSON.stringify(comments2)
-          || JSON.stringify(includein) != JSON.stringify(includein2) || JSON.stringify(functionowner) != JSON.stringify(functionowner2) || JSON.stringify(milestone) != JSON.stringify(milestone2) || JSON.stringify(responsible) != JSON.stringify(responsible2))) 
-          {
+          || JSON.stringify(includein) != JSON.stringify(includein2) || JSON.stringify(functionowner) != JSON.stringify(functionowner2) || JSON.stringify(milestone) != JSON.stringify(milestone2) || JSON.stringify(responsible) != JSON.stringify(responsible2))) {
 
           var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
@@ -539,8 +546,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
       }
 
-      else if(event == false)
-      {
+      else if (event == false) {
         if ((JSON.stringify(baselineall) != JSON.stringify(baselineall2) || JSON.stringify(plannedall) != JSON.stringify(plannedall2) || JSON.stringify(completionall) != JSON.stringify(completionall2) || JSON.stringify(commentsall) != JSON.stringify(commentsall2)
           || JSON.stringify(includeinall) != JSON.stringify(includeinall2) || JSON.stringify(functionownerall) != JSON.stringify(functionownerall2) || JSON.stringify(milestoneall) != JSON.stringify(milestoneall2) || JSON.stringify(responsibleall) != JSON.stringify(responsibleall2))) {
 
@@ -866,11 +872,23 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   addMilestoneRecord(el): void {
-    this.myScrollContainer.nativeElement.scroll({
-      top: this.myScrollContainer.nativeElement.scrollHeight,
-      left: 0,
-      behavior: 'smooth'
-    });
+    var div = document.getElementById('scheduleTableDiv')
+
+
+
+    setTimeout(() => {
+
+      div.scroll({
+
+        top: div.scrollHeight,
+
+        left: 0,
+
+        behavior: 'smooth'
+
+      });
+
+    }, 100);
     this.milestoneForm.push(new FormGroup({
       scheduleUniqueId: new FormControl(''),
       projectId: new FormControl(this.id),
@@ -1068,6 +1086,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         return b.baselineCount - a.baselineCount;
 
       })
+    })
+
       if (this.baselineLog.length > 0) {
         this.baselineLogObj = this.baselineLog.find(x => x.projectId == this.id)
       }
@@ -1075,7 +1095,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         this.baselineLogObj = ''
       }
 
-
+      debugger
       if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
         var justificationObjNew = {
@@ -1223,7 +1243,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
       }
 
-    })
+    //})
   }
 
 
@@ -1234,7 +1254,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   saveScheduleBulkEdit() {
-    debugger
+    //debugger
+
     if (this.scheduledataDb.length != 0) {
       if (JSON.stringify(this.scheduledataDb) != JSON.stringify(this.scheduleObj)) {
         console.log(this.scheduleObj)
@@ -1304,10 +1325,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       var formValue = this.milestoneForm.getRawValue()
       console.log(formValue)
       //this.scheduleObj = formValue
-        console.log(formValue)
-        if (!this.projecthubservice.includeClosedItems.schedule.value) {
-          this.scheduleObj = this.dbSchedule.length > 0 ? this.dbSchedule.filter(x => x.completionDate != null) : []
-        }
+      console.log(formValue)
+      if (!this.projecthubservice.includeClosedItems.schedule.value) {
+        this.scheduleObj = this.dbSchedule.length > 0 ? this.dbSchedule.filter(x => x.completionDate != null) : []
+      }
 
 
       for (var i of formValue) {
@@ -1363,10 +1384,14 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   getUserName(adid: string): string {
-    var baselinesetby = this.userlist.find(x => x.userAdid == adid)
+    if (this.userlist != null) {
+      var baselinesetby = this.userlist.find(x => x.userAdid == adid)
 
-    return baselinesetby ? baselinesetby.userDisplayName : ""
-
+      return baselinesetby ? baselinesetby.userDisplayName : ""
+    }
+    else {
+      return ""
+    }
   }
 
   baselinelogTableEditRow(row: number) {
@@ -1377,68 +1402,71 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   cancelBaselineLogs() {
-    console.log("655", this.baselinelogTableEditStack)
-    this.logflag = false
-    for (let control of this.baselineLogForm.controls) {
-      for (let i of this.baselineLogData.filter(x => x.baselineLogId == control['controls']['baselineLogId'].value)) {
-        console.log("form", JSON.stringify(control['controls']['includeSlipChart'].value))
-        console.log("db", JSON.stringify(i.includeSlipChart))
-        console.log("flag", this.logflag)
 
-        if (!this.logflag && (JSON.stringify(control['controls']['includeSlipChart'].value) != JSON.stringify(i.includeSlipChart))) {
+    //Baseline Log Form Changes
 
-          this.logflag = true
+    // console.log("655", this.baselinelogTableEditStack)
+    // this.logflag = false
+    // for (let control of this.baselineLogForm.controls) {
+    //   for (let i of this.baselineLogData.filter(x => x.baselineLogId == control['controls']['baselineLogId'].value)) {
+    //     console.log("form", JSON.stringify(control['controls']['includeSlipChart'].value))
+    //     console.log("db", JSON.stringify(i.includeSlipChart))
+    //     console.log("flag", this.logflag)
 
-        }
-        else if (this.logflag && (JSON.stringify(control['controls']['includeSlipChart'].value) == JSON.stringify(i.includeSlipChart))) {
+    //     if (!this.logflag && (JSON.stringify(control['controls']['includeSlipChart'].value) != JSON.stringify(i.includeSlipChart))) {
 
-        }
-        else {
-          this.logflag = false
-        }
+    //       this.logflag = true
 
-      }
-    }
+    //     }
+    //     else if (this.logflag && (JSON.stringify(control['controls']['includeSlipChart'].value) == JSON.stringify(i.includeSlipChart))) {
+
+    //     }
+    //     else {
+    //       this.logflag = false
+    //     }
+
+    //   }
+    // }
 
 
-    if (this.logflag) {
+    // if (this.logflag) {
 
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Are you sure you want to exit? ",
-        "message": "All unsaved data will be lost.",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warn"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Ok",
-            "color": "warn"
-          },
-          "cancel": {
-            "show": true,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+    //   var comfirmConfig: FuseConfirmationConfig = {
+    //     "title": "Are you sure you want to exit? ",
+    //     "message": "All unsaved data will be lost.",
+    //     "icon": {
+    //       "show": true,
+    //       "name": "heroicons_outline:exclamation",
+    //       "color": "warn"
+    //     },
+    //     "actions": {
+    //       "confirm": {
+    //         "show": true,
+    //         "label": "Ok",
+    //         "color": "warn"
+    //       },
+    //       "cancel": {
+    //         "show": true,
+    //         "label": "Cancel"
+    //       }
+    //     },
+    //     "dismissible": true
+    //   }
+    //   const scheduleAlert = this.fuseAlert.open(comfirmConfig)
 
-      scheduleAlert.afterClosed().subscribe(close => {
-        if (close == 'confirmed') {
-          //this.baselinelogTableEditStack = []
-          this.viewContent = true
-          this.viewBaseline = false
-        }
-      })
-    }
-    else {
-      //this.baselinelogTableEditStack = []
-      this.viewContent = true
-      this.viewBaseline = false
-    }
+    //   scheduleAlert.afterClosed().subscribe(close => {
+    //     if (close == 'confirmed') {
+    //       //this.baselinelogTableEditStack = []
+    //       this.viewContent = true
+    //       this.viewBaseline = false
+    //     }
+    //   })
+    // }
+    // else {
+    //   //this.baselinelogTableEditStack = []
+       this.viewContent = true
+       this.viewBaseline = false
+    // }
   }
 
   baselineLogs() {
@@ -1447,62 +1475,79 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
       console.log("Logs", logs)
       console.log("Users List", this.userlist)
-      this.userlist = logs.users
-      this.getUserName(this.id)
-      this.baselinelogTableEditStack = []
-      console.log(this.baselineLogForm.getRawValue())
+      console.log(logs.projectBaselineLog.length)
+      if (logs.projectBaselineLog.length != 0 || logs.users != null) {
+        this.userlist = logs.users
+        this.getUserName(this.id)
+        this.baselinelogTableEditStack = []
+        console.log(this.baselineLogForm.getRawValue())
 
-      this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
-        return a.baselineCount - b.baselineCount;
-      })
+        this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
+          return a.baselineCount - b.baselineCount;
+        })
+        var count = 1
+        for (var i of this.baselineLogData) {
+          i.logId = count
+          count = count + 1
 
-      var count = 1
-      for (var i of this.baselineLogData) {
-        i.logId = count
-        count = count + 1
-        this.baselineLogForm.push(new FormGroup({
-          baselineLogId: new FormControl(i.baselineLogId),
-          includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
-        }))
-        console.log(this.baselineLogData)
+//Baseline Log Form changes
+
+          // this.baselineLogForm.push(new FormGroup({
+          //   baselineLogId: new FormControl(i.baselineLogId),
+          //   includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
+          // }))
+          console.log(this.baselineLogData)
+        }
+        this.viewContent = false
+        this.viewBaseline = false
+        this.viewBaselineLogs = true
+      }
+      else {
+        this.viewContent = false
+        this.viewBaseline = false
+        this.viewBaselineLogs = true
       }
 
-      this.viewContent = false
-      this.viewBaseline = false
-      this.viewBaselineLogs = true
+
+
+
+
     })
+
 
   }
 
-  submitslipchart() {
-    console.log("780", this.baselinelogTableEditStack)
-    this.projecthubservice.isFormChanged = false
-    var logformValue = this.baselineLogForm.getRawValue()
-    console.log(logformValue)
-    for (var i of logformValue) {
-      console.log(i)
-      console.log(i.includeSlipChart)
-      console.log(i.baselineLogId)
-      this.baselineLogObj.push({
-        baselineLogId: i.baselineLogId,
-        includedInSlipChart: i.includeSlipChart
-      })
-    }
-    console.log(this.baselineLogObj)
-    this.apiService.patchBaselineLogs(this.baselineLogObj).then(res => {
-      this.projecthubservice.isBulkEdit = true
-      this.viewContent = true
-      this.viewBaseline = false
-      this.viewBaselineLogs = false
+//Baseline Log Form Changes
 
-      this.projecthubservice.successSave.next(true)
-      //this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      this.projecthubservice.submitbutton.next(true)
+  // submitslipchart() {
+  //   console.log("780", this.baselinelogTableEditStack)
+  //   this.projecthubservice.isFormChanged = false
+  //   var logformValue = this.baselineLogForm.getRawValue()
+  //   console.log(logformValue)
+  //   for (var i of logformValue) {
+  //     console.log(i)
+  //     console.log(i.includeSlipChart)
+  //     console.log(i.baselineLogId)
+  //     this.baselineLogObj.push({
+  //       baselineLogId: i.baselineLogId,
+  //       includedInSlipChart: i.includeSlipChart
+  //     })
+  //   }
+  //   console.log(this.baselineLogObj)
+  //   this.apiService.patchBaselineLogs(this.baselineLogObj).then(res => {
+  //     this.projecthubservice.isBulkEdit = true
+  //     this.viewContent = true
+  //     this.viewBaseline = false
+  //     this.viewBaselineLogs = false
 
-    })
-    //this.baselinelogTableEditStack = []
+  //     this.projecthubservice.successSave.next(true)
+  //     //this.projecthubservice.toggleDrawerOpen('', '', [], '')
+  //     this.projecthubservice.submitbutton.next(true)
 
-  }
+  //   })
+  //   //this.baselinelogTableEditStack = []
+
+  // }
 
   baselineProject() {
     for (var i of this.milestoneForm.controls) {
@@ -1533,42 +1578,48 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       }
 
     }
+    console.log(this.scheduleData.scheduleData)
+    // if (this.projecthubservice.includeClosedItems.schedule.value) {
+      this.schedulengxdata = [...this.scheduleData.scheduleData]
+    // }
+    // else {
+    //   this.schedulengxdata = [...this.schedulengxdata]
+    // }
 
-    this.schedulengxdata = [...this.schedule.scheduleData]
-    console.log(this.schedule.scheduleData)
+
   }
 
   baselineLogDetails() {
-    //   // this.baselineLogForm = new FormArray([])
-    //   // console.log(this.baselineLogForm.getRawValue())
-    //   // this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
-    //   //   console.log("Logs",logs)
-    //   //   console.log("Users List", this.userlist)
-    //   //   this.userlist = logs.users
-    //   //   this.getUserName(this.id)
-    //   //   this.baselinelogTableEditStack = []
-    //   //   console.log(this.baselineLogForm.getRawValue())
+      // this.baselineLogForm = new FormArray([])
+      // console.log(this.baselineLogForm.getRawValue())
+      // this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+      //   console.log("Logs",logs)
+      //   console.log("Users List", this.userlist)
+      //   this.userlist = logs.users
+      //   this.getUserName(this.id)
+      //   this.baselinelogTableEditStack = []
+      //   console.log(this.baselineLogForm.getRawValue())
 
-    //   //   this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
-    //   //     return a.baselineCount - b.baselineCount;
-    //   //   })
+      //   this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
+      //     return a.baselineCount - b.baselineCount;
+      //   })
 
-    //   //   var count = 1
-    //   //   for (var i of this.baselineLogData) {
-    //   //     i.logId = count
-    //   //     count = count + 1
-    //   //     this.baselineLogForm.push(new FormGroup({
-    //   //       baselineLogId: new FormControl(i.baselineLogId),
-    //   //       includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
-    //   //     }))
-    //   //     console.log(this.baselineLogData)
-    //   //   }
-    //     console.log(this.logdetails)
-    //     this.viewContent = false
-    //     this.viewBaseline = false
-    //     this.viewBaselineLogs = false
-    //     this.compareBaselineLogs = true
-    //   // })
+      //   var count = 1
+      //   for (var i of this.baselineLogData) {
+      //     i.logId = count
+      //     count = count + 1
+      //     this.baselineLogForm.push(new FormGroup({
+      //       baselineLogId: new FormControl(i.baselineLogId),
+      //       includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
+      //     }))
+      //     console.log(this.baselineLogData)
+      //   }
+        console.log(this.logdetails)
+        this.viewContent = false
+        this.viewBaseline = false
+        this.viewBaselineLogs = false
+        this.compareBaselineLogs = true
+      // })
 
   }
 
@@ -1613,7 +1664,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         "actions": {
           "confirm": {
             "show": true,
-            "label": "Okay",
+            "label": "OK",
             "color": "primary"
           },
           "cancel": {
@@ -1639,7 +1690,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         "actions": {
           "confirm": {
             "show": true,
-            "label": "Okay",
+            "label": "OK",
             "color": "primary"
           },
           "cancel": {
