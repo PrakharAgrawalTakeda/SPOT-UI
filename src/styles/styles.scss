@@ -35,12 +35,17 @@ $square-size: 10px;
 
     }
 }
-.horizontal-header-class {
+.vertical-header-class {
     writing-mode: tb-rl;
     transform: rotate(-180deg);
+    left:10px;
 }
 .current-project{
+    padding-top: -30px;
     background-color: var(--fuse-primary-200);
+}
+.associated-projects-row{
+    padding-top: -30px;
 }
 .first-column-datatable{
     margin-left: 10px;

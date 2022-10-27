@@ -1,22 +1,24 @@
 <ng-container *ngIf="viewContent">
     <div class="w-full min-w-0 p-8 pt-0">
-        <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate">
+        <div class="pb-2 pl-2 font-medium tracking-tight leading-6 truncate">
             <h3 class="text-xl text-primary">Associated Projects</h3>
         </div>
 
         <div
-            class="flex flex-col flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
+            class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden"
         >
-            <div class="flex justify-between items-center">
-                <button mat-flat-button [color]="'primary'" type="button">
-                    Program Report
-                </button>
-                <button mat-flat-button [color]="'primary'" type="button" (click)="exportToExcel()">
-                    Program Gantt Chart
-                </button>
-                <div style="padding-right: 5px">
+            <div class="flex flex-row justify-between">
+                <div>
+                    <button mat-flat-button [color]="'primary'" (click)="onProgramReport()">
+                        Program Report
+                    </button>
+                    <button mat-flat-button [color]="'primary'"  class="ml-5" (click)="exportToExcel()">
+                        Program Gantt Chart
+                    </button>
+                </div>
+                <div>
                     <button
-                        class="ml-4 text-primary bg-gray-200"
+                        class="text-primary bg-gray-200 mr-5"
                         mat-flat-button
                         [color]="'primary-200'"
                         (click)="
@@ -32,10 +34,8 @@
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon
                         >&nbsp; Link Project/Program
                     </button>
-                </div>
-                <div style="padding-right: 5px">
                     <button
-                        class="ml-4 text-primary bg-gray-200"
+                        class="text-primary bg-gray-200"
                         mat-flat-button
                         [color]="'primary-200'"
                         (click)="
@@ -49,7 +49,7 @@
                         "
                     >
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon
-                        >&nbsp; Update Parent project
+                        >&nbsp; Update Parent Project
                     </button>
                 </div>
             </div>
@@ -63,12 +63,13 @@
                     [headerHeight]="'auto'"
                     [rowHeight]="'auto'"
                     [scrollbarV]="false"
+                    [rowClass]="getRowClass"
                     columnMode="flex"
                     class="mx-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
                     [rows]="rows"
-                    [rowClass]="getRowClass"
                     [treeFromRelation]="'parentId'"
                     [treeToRelation]="'problemUniqueId'"
+                    #table
                 >
                     <ngx-datatable-column
                         name="Program / Project Name"
@@ -77,27 +78,30 @@
                         [isTreeColumn]="true"
                         [treeLevelIndent]="20"
                         [cellClass]="getCellClass"
+                        [sortable]="false"
 
                     >
                         <ng-template let-row="row"
                                      let-value="value"
-                                     class="ml-20"
                                      ngx-datatable-cell-template>
-                            <button mat-icon-button [disabled]="row.treeStatus === 'disabled'" (click)="onTreeAction(row)">
-                                  <ng-container *ngIf="row.treeStatus === 'loading'">
-                                    ...
-                                  </ng-container>
-                                                <ng-container *ngIf="row.treeStatus === 'collapsed'">
-                                    ↑
-                                  </ng-container>
-                                                <ng-container *ngIf="row.treeStatus === 'expanded'">
-                                    ↓
-                                  </ng-container>
-                                                <ng-container *ngIf="row.treeStatus === 'disabled'">
-                                    ⃠
-                                  </ng-container>
-                            </button>
-                            <a class="cursor-pointer" (click)="sendToProject(row)">{{value}} </a>
+                            <div class="flex flex-row ...">
+                                <button mat-icon-button [disabled]="row.treeStatus === 'disabled'"
+                                        (click)="onTreeAction(row)">
+                                    <ng-container *ngIf="row.treeStatus === 'loading'">
+                                        ...
+                                    </ng-container>
+                                    <ng-container *ngIf="row.treeStatus === 'collapsed'">
+                                        ↑
+                                    </ng-container>
+                                    <ng-container *ngIf="row.treeStatus === 'expanded'">
+                                        ↓
+                                    </ng-container>
+                                    <ng-container *ngIf="row.treeStatus === 'disabled'">
+                                        ⃠
+                                    </ng-container>
+                                </button>
+                                <a class="cursor-pointer" (click)="sendToProject(row)">{{value}} </a>
+                            </div>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
@@ -105,6 +109,7 @@
                         prop="tops"
                         [headerClass]="getHeaderClass"
                         [flexGrow]="1"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
@@ -118,6 +123,7 @@
                         name="Phase (Project-Capital-OE)"
                         prop="projectCapitalOe"
                         [flexGrow]="3"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
@@ -131,6 +137,7 @@
                         name="PM Sponsor"
                         prop="sponsor"
                         [flexGrow]="2"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
@@ -145,16 +152,17 @@
                         prop="scheduleIndicator"
                         [headerClass]="getHeaderClass"
                         [flexGrow]="1"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                        <mat-icon
-                        svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                        class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
-                        </mat-icon>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                            </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
@@ -162,16 +170,17 @@
                         prop="riskIndicator"
                         [headerClass]="getHeaderClass"
                         [flexGrow]="1"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                        <mat-icon
-                        svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                        class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
-                        </mat-icon>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                            </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
@@ -179,16 +188,17 @@
                         prop="askNeedIndicator"
                         [headerClass]="getHeaderClass"
                         [flexGrow]="1"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                        <mat-icon
-                        svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                        class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
-                        </mat-icon>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                            </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
@@ -196,16 +206,17 @@
                         prop="budgetIndicator"
                         [headerClass]="getHeaderClass"
                         [flexGrow]="1"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                        <mat-icon
-                        svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                        class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
-                        </mat-icon>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                            </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
@@ -213,16 +224,17 @@
                         prop="budgetSpendIndicator"
                         [headerClass]="getHeaderClass"
                         [flexGrow]="1"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                        <mat-icon
-                        svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                        class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
-                        </mat-icon>
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
+                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                            </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
@@ -230,6 +242,7 @@
                         prop="progression"
                         [cellClass]="getGraphCellClass"
                         [flexGrow]="4"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
@@ -280,6 +293,7 @@
                     <ngx-datatable-column
                         name="Total CAPEX Approved / Forecast"
                         [flexGrow]="3"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
@@ -287,9 +301,9 @@
                             ngx-datatable-cell-template
                         >
                             {{
-                                row.totalApprovedCapex ? row.totalApprovedCapex : 0
+                            row.totalApprovedCapex ? row.totalApprovedCapex : 0
                             }}
-                            &nbsp; USD <br />
+                            &nbsp; USD <br/>
                             {{ row.forecast ? row.forecast : 0 }} &nbsp; USD
                         </ng-template>
                     </ngx-datatable-column>
@@ -297,19 +311,21 @@
                         name="Next Milestone"
                         prop="nextMilestone"
                         [flexGrow]="3"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                        {{ value }}
+                            {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
                         name="Next Milestone Planned Finish Date"
                         prop="nextMilestoneFinishDate"
                         [flexGrow]="3"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
@@ -323,6 +339,7 @@
                         name="Planned Project Complete Date"
                         prop="projectPlannedFinishDate"
                         [flexGrow]="3"
+                        [sortable]="false"
                     >
                         <ng-template
                             let-row="row"
