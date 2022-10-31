@@ -1579,11 +1579,14 @@ console.log(this.baselineLogObj)
       if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         !this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
         i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
+        i['controls']['baselineFinish'].dirty()
         this.flag = true
+
       }
       else if (this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
         i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
+        i['controls']['baselineFinish'].dirty()
       }
       else {
         this.flag = false
@@ -1593,10 +1596,12 @@ console.log(this.baselineLogObj)
     for (var j of this.schedulengxdata) {
       if (!this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || !this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
         j.baselineFinish = j.plannedFinish
+        j.baselineFinish.dirty()
         this.flag = true
       }
       else if (this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
         j.baselineFinish = j.plannedFinish
+        j.baselineFinish.dirty()
       }
       else {
         this.flag = false
