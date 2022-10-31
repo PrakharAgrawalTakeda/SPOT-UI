@@ -1573,12 +1573,12 @@ console.log(this.baselineLogObj)
   // }
 
   baselineProject() {
+    console.log(this.schedulengxdata)
     debugger
     for (var i of this.milestoneForm.controls) {
       if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         !this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
         i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
-        this.milestoneForm.controls['baselineFinish'].markAsDirty()
         this.flag = true
       }
       else if (this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
@@ -1604,12 +1604,12 @@ console.log(this.baselineLogObj)
 
     }
     console.log(this.scheduleData.scheduleData)
-    // if (this.projecthubservice.includeClosedItems.schedule.value) {
-      this.schedulengxdata = [...this.scheduleData.scheduleData]
-    // }
-    // else {
-    //   this.schedulengxdata = [...this.schedulengxdata]
-    // }
+    //  if (this.projecthubservice.includeClosedItems.schedule.value) {
+    //   this.schedulengxdata = [...this.scheduleData.scheduleData]
+    //  }
+    //  else {
+      this.schedulengxdata = [...this.schedulengxdata]
+     //}
 
 
   }
