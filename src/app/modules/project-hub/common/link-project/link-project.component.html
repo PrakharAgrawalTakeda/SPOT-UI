@@ -1,4 +1,4 @@
-<div *ngIf="viewContent">
+<div>
     <div
         class="flex items-start justify-between bg-primary sidepanel-header"
         style="margin-bottom: 10px"
@@ -20,55 +20,53 @@
         </div>
     </div>
     <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-        <form class="link-child-form">
-            <mat-form-field class="example-full-width" appearance="fill" >
-                <mat-icon
-                    class="flex-initial"
-                    [svgIcon]="'heroicons_outline:search'"></mat-icon>
-                <input
-                    matInput
-                    (keydown)="onKeydown($event)"
-                    [formControl]="searchControl"
-                    [matAutocomplete]="matAutocomplete"
-                    [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
-                    [(ngModel)]="inputValue"
-                    class="flex-1 w-64"
-                    id="myText">
-                <mat-autocomplete
-                    class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
-                    [disableRipple]="true"
-                    (optionSelected)="onOptionSelected()"
-                    [displayWith]="displayFn.bind(this)"
-                    #matAutocomplete="matAutocomplete">
-                    <mat-option
-                        class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
-                        *ngIf="resultSets && !resultSets.length">
-                        No results found!
-                    </mat-option>
-                    <ng-container *ngIf="resultSets && resultSets.length">
-                        <mat-optgroup class="flex items-center mt-2 px-2">
-                            <span  class="text-sm font-semibold tracking-wider text-secondary">Projects</span>
-                        </mat-optgroup>
-                        <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
-                            <mat-option
-                                class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
-                                [value]="result.problemUniqueId">
-                                <!-- Contacts -->
-                                {{result.problemId}} {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
-                            </mat-option>
-                        </ng-container>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-icon
+                class="flex-initial"
+                [svgIcon]="'heroicons_outline:search'"></mat-icon>
+            <input
+                matInput
+                (keydown)="onKeydown($event)"
+                [formControl]="searchControl"
+                [matAutocomplete]="matAutocomplete"
+                [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
+                class="flex-1 w-64"
+                id="myText">
+            <mat-autocomplete
+                class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
+                [disableRipple]="true"
+                (optionSelected)="onOptionSelected()"
+                [displayWith]="displayFn.bind(this)"
+                #matAutocomplete="matAutocomplete">
+                <mat-option
+                    class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                    *ngIf="resultSets && !resultSets.length">
+                    No results found!
+                </mat-option>
+                <ng-container *ngIf="resultSets && resultSets.length">
+                    <mat-optgroup class="flex items-center mt-2 px-2">
+                        <span class="text-sm font-semibold tracking-wider text-secondary">Projects</span>
+                    </mat-optgroup>
+                    <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
+                        <mat-option
+                            class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                            [value]="result.problemUniqueId">
+                            <!-- Contacts -->
+                            {{result.problemId}} {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
+                        </mat-option>
                     </ng-container>
-                </mat-autocomplete>
-                <button type="button" mat-button *ngIf="inputValue!=''" matSuffix mat-icon-button aria-label="Clear" (click)="inputValue = ''">
-                    <mat-icon>close</mat-icon>
-                </button>
-            </mat-form-field>
-            <button mat-flat-button [color]="'primary'" type="button" class="btn" (click)="onAdd(searchControl.value)" >
-                Add
+                </ng-container>
+            </mat-autocomplete>
+            <button type="button" mat-button *ngIf="searchControl.value!=''" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="searchControl.setValue('')">
+                <mat-icon>close</mat-icon>
             </button>
-          </form>
+        </mat-form-field>
+        <button mat-flat-button [color]="'primary'" type="button" class="btn" (click)="onAdd(searchControl.value)">
+            Add
+        </button>
     </div>
-    <div>
+    <div class="overflow-x-auto  h-[75vh]">
         <ngx-datatable
             [headerHeight]="'auto'"
             [rowHeight]="'auto'"
@@ -77,7 +75,7 @@
             class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
             [rows]="rows"
         >
-            <ngx-datatable-column name="Child Project/Program" prop="projectName"   [flexGrow]="9">
+            <ngx-datatable-column name="Child Project/Program" prop="projectName" [flexGrow]="9">
                 <ng-template
                     let-row="row"
                     let-value="value"
@@ -88,17 +86,21 @@
                     </div>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name=" " prop="projectId"  [flexGrow]="1">
+            <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1">
                 <ng-template
                     let-row="row"
                     let-value="value"
                     ngx-datatable-cell-template
                 >
-                    <button mat-mini-fab color="primary" class="mat-elevation-z0"  matTooltip="Remove child" (click)="onRemoveLink(row.problemUniqueId)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                    <a href="javascript:void(0)" title="Remove child"
+                       (click)="onRemoveLink(row.problemUniqueId)">
+                        <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                    </a>
                 </ng-template>
             </ngx-datatable-column>
         </ngx-datatable>
     </div>
+    <button mat-flat-button [color]="'primary'" type="button" class='absolute bottom-5 right-5'
+            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')">Ok
+    </button>
 </div>
