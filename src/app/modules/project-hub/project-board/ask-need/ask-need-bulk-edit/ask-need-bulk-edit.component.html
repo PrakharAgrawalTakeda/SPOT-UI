@@ -24,7 +24,7 @@
         <div class="overflow-y-hidden h-[80vh] pl-3" id="askNeedTableDiv">
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                 columnMode="flex"
-                class="material datatable-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
                 [rows]="tableData" #askNeedTable [rowClass]="getRowClass">
                 <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false"
                     [flexGrow]="0.5" [draggable]="false">
