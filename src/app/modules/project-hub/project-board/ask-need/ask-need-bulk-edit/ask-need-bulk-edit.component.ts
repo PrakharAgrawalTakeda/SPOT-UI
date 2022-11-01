@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
@@ -8,7 +8,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 @Component({
   selector: 'app-ask-need-bulk-edit',
   templateUrl: './ask-need-bulk-edit.component.html',
-  styleUrls: ['./ask-need-bulk-edit.component.scss']
+  styleUrls: ['./ask-need-bulk-edit.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AskNeedBulkEditComponent implements OnInit {
 
@@ -350,8 +351,7 @@ export class AskNeedBulkEditComponent implements OnInit {
     this.disabler()
     this.tableData = [...this.tableData, ...j]
     this.anTableEditStack.push(this.tableData.length - 1)
-    var div = document.getElementById('askNeedTableDiv')
-
+    var div = document.getElementsByClassName('datatable-scroll')[0]
     setTimeout(() => {
       div.scroll({
         top: div.scrollHeight,

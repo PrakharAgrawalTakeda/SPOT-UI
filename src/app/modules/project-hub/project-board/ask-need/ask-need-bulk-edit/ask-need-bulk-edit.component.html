@@ -8,9 +8,8 @@
         </div>
     </div>
 
-    <div class="p-3">
-
-        <div class="flex items-center justify-end gap-3 pb-3">
+    <div>
+        <div class="flex items-center justify-end gap-3 p-3">
             <button class="ml-4 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'"
                 (click)="addAN()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -22,10 +21,10 @@
                 </mat-slide-toggle>
             </form>
         </div>
-        <div class="overflow-y-scroll h-[80vh]" id="askNeedTableDiv">
+        <div class="overflow-y-hidden h-[80vh] pl-3" id="askNeedTableDiv">
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                 columnMode="flex"
-                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                class="material datatable-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
                 [rows]="tableData" #askNeedTable [rowClass]="getRowClass">
                 <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false"
                     [flexGrow]="0.5" [draggable]="false">
@@ -48,8 +47,7 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
-                            <spot-input [label]="'Team Member(s)'" formControlName="askNeed1" [showLabel]="false"
-                                [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'"></spot-input>
+                            <spot-textarea formControlName="askNeed1" [showLabel]="false"></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -92,8 +90,7 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
-                            <spot-textarea [label]="'Team Member(s)'" formControlName="comments" [showLabel]="false"
-                                [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'"></spot-textarea>
+                            <spot-textarea formControlName="comments" [showLabel]="false"></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -140,7 +137,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="flex items-start justify-between mt-6 px-3">
+        <div class="flex items-start justify-between mt-6 px-6">
             <a class="w-1/6" mat-flat-button [color]="'primary'" type="button"
                 (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
                 Cancel
