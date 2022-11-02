@@ -5,7 +5,8 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
-import {DatatableComponent} from "@swimlane/ngx-datatable";
+import {MsalService} from "@azure/msal-angular";
+
 @Component({
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
@@ -21,6 +22,7 @@ export class AssociatedProjectsComponent implements OnInit {
         public indicator: SpotlightIndicatorsService,
         private router: Router,
         public fuseAlert: FuseConfirmationService,
+        private msalService: MsalService
     ) {
     }
     id: string = '';
@@ -124,17 +126,19 @@ export class AssociatedProjectsComponent implements OnInit {
             },
             "dismissible": true
         }
-        const deleteAlert = this.fuseAlert.open(comfirmConfig)
+        const reportAlert = this.fuseAlert.open(comfirmConfig)
 
-        deleteAlert.afterClosed().subscribe(close => {
+        reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                let body = {reportsData:[{projectID:"", userADID:"", reportName:""}]};
-                body.reportsData[0].projectID = this.projecthubservice.projects.map(x=>{
-                        return x.problemId.toString()
-                }).join(' ');
-                body.reportsData[0].reportName = "Portfolio Report";
-                //TODO: Find UserIDAD
-                this.apiService.programReport(this.id).then((res: any) => {
+                let body = {ReportsData:[]};
+                var newReport ={ProjectID:"", UserADID:"", ReportName:""};
+                newReport.ProjectID = this.projecthubservice.projects.map(x=>{
+                    return x.problemId.toString()
+                }).join(',');
+                newReport.ReportName = "Portfolio Report";
+                newReport.UserADID = this.msalService.instance.getActiveAccount().localAccountId;
+                body.ReportsData.push(newReport);
+                this.apiService.programReport(body).then((res: any) => {
                 });
             }
         })
