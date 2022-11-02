@@ -125,6 +125,9 @@ export class AssociatedProjectsComponent implements OnInit {
                     "show": true,
                     "label": "OK",
                     "color": "primary"
+                },
+                "cancel": {
+                    "show": false,
                 }
             },
             "dismissible": true

@@ -29,7 +29,6 @@ export class UpdateParentComponent implements OnInit {
     opened: boolean = false;
     id: string = '';
     removedIds: any[];
-    inputValue = '';
     rows = [];
 
 
@@ -64,7 +63,7 @@ export class UpdateParentComponent implements OnInit {
             )
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
-                if (this.selectedValueExists.value == true) {
+                if (this.selectedValueExists.value == true && this.searchControl.value !="") {
                     this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
                         .subscribe((resultSets: any) => {
                             resultSets.projectData.forEach((item, index) => {
@@ -187,8 +186,8 @@ export class UpdateParentComponent implements OnInit {
 
     onRemoveLink(parentId) {
         var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Remove child",
-            "message": "Are you sure you want to unlink this record?",
+            "title": "Remove Parent",
+            "message": "Changing the parent project will remove all links to the original parent program. Are you sure you want to update the parent project?",
             "icon": {
                 "show": true,
                 "name": "heroicons_outline:exclamation",

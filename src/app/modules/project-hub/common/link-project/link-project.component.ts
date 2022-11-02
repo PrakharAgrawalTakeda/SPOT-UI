@@ -41,6 +41,7 @@ export class LinkProjectComponent implements OnInit {
     temp: string = "";
     viewContent = false;
     id: string = '';
+    isParent: boolean = false;
 
     ngOnInit(): void {
         this.rows = this.projecthubservice.projectChildren;
@@ -62,7 +63,7 @@ export class LinkProjectComponent implements OnInit {
             )
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
-                if (this.selectedValueExists.value == true) {
+                if (this.selectedValueExists.value == true && this.searchControl.value !="") {
                     this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
                         .subscribe((resultSets: any) => {
                             resultSets.projectData.forEach((item, index) => {
@@ -75,7 +76,15 @@ export class LinkProjectComponent implements OnInit {
                             this.resultSets = resultSets.projectData;
                             this.budget = resultSets.budget
                             this.search.next(resultSets);
+                            if(this.resultSets.length <= 5){
+                                this.resultSets.forEach(x=> {
+                                    this.apiService.isParent(x.problemUniqueId).then((res: any) => {
+                                        x.isParent = res;
+                                    });
+                                })
+                            }
                         });
+
                 }
             });
     }
@@ -205,7 +214,7 @@ export class LinkProjectComponent implements OnInit {
         let returnValue = "";
         if (value) {
             const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
-            returnValue = selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
+            returnValue = (selectedValue.isParent ? "[PGM] " : "") + selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
         }
         return returnValue;
     }

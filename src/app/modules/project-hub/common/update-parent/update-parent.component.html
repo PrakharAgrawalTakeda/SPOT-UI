@@ -57,7 +57,8 @@
                     </ng-container>
                 </ng-container>
             </mat-autocomplete>
-            <button type="button" mat-button *ngIf="inputValue!=''" matSuffix mat-icon-button aria-label="Clear">
+            <button type="button" mat-button *ngIf="searchControl.value!=''" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="searchControl.setValue(''); this.selectedValueExists.setValue(true)">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
