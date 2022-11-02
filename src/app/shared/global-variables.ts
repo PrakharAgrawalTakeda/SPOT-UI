@@ -10,11 +10,11 @@ export class GlobalVariables {
     //SPOT API APPLICATION VARIABLES
 
 
-    public static apiurl: string = process.env.NODE_ENV === 'development' ?
+    // public static apiurl: string = process.env.NODE_ENV === 'development' ?
 
         //Mannat
 
-        // 'https://spotapi-gateway-dev.azurewebsites.net/api/'
+        'https://spotapi-gateway-dev.azurewebsites.net/api/'
 
         //Nick&Toader
 
