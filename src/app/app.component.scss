@@ -120,3 +120,8 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+::ng-deep .ngx-datatable.datatable-qr-80 .datatable-body .datatable-scroll {
+    height: 77vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
