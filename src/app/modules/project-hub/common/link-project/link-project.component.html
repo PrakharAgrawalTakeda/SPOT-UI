@@ -52,13 +52,13 @@
                             class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
                             [value]="result.problemUniqueId">
                             <!-- Contacts -->
-                            {{result.problemId}} {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
+                            {{result.isParent ? "[PGM] " : "" }}{{result.problemId}} {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
                         </mat-option>
                     </ng-container>
                 </ng-container>
             </mat-autocomplete>
             <button type="button" mat-button *ngIf="searchControl.value!=''" matSuffix mat-icon-button aria-label="Clear"
-                    (click)="searchControl.setValue('')">
+                    (click)="searchControl.setValue(''); this.selectedValueExists.setValue(true)">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
@@ -82,7 +82,7 @@
                     ngx-datatable-cell-template
                 >
                     <div class="flex items-center justify-start gap-6">
-                        {{ value ? value : (row.problemId + " - " + row.problemTitle)}}
+                        {{ value ? value : ( (row.isParent ? "[PGM] ": "") + row.problemId + " - " + row.problemTitle)}}
                     </div>
                 </ng-template>
             </ngx-datatable-column>

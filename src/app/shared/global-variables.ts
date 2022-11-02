@@ -18,7 +18,7 @@ export class GlobalVariables {
 
         //Nick&Toader
 
-        //'https://localhost:7288/api/'
+        // 'https://localhost:7288/api/'
 
         // Prakhar Local API
 

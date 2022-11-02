@@ -125,21 +125,26 @@ export class AssociatedProjectsComponent implements OnInit {
                     "show": true,
                     "label": "OK",
                     "color": "primary"
+                },
+                "cancel": {
+                    "show": false,
                 }
             },
             "dismissible": true
         }
-        const deleteAlert = this.fuseAlert.open(comfirmConfig)
+        const reportAlert = this.fuseAlert.open(comfirmConfig)
 
-        deleteAlert.afterClosed().subscribe(close => {
+        reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                let body = { reportsData: [{ projectID: "", userADID: "", reportName: "" }] };
-                body.reportsData[0].projectID = this.projecthubservice.projects.map(x => {
+                let body = {ReportsData:[]};
+                var newReport ={ProjectID:"", UserADID:"", ReportName:""};
+                newReport.ProjectID = this.projecthubservice.projects.map(x=>{
                     return x.problemId.toString()
-                }).join(' ');
-                body.reportsData[0].reportName = "Portfolio Report";
-                //TODO: Find UserIDAD
-                this.apiService.programReport(this.id).then((res: any) => {
+                }).join(',');
+                newReport.ReportName = "Portfolio Report";
+                newReport.UserADID = this.msalService.instance.getActiveAccount().localAccountId;
+                body.ReportsData.push(newReport);
+                this.apiService.programReport(body).then((res: any) => {
                 });
             }
         })

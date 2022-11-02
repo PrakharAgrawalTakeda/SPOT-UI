@@ -322,4 +322,10 @@ export class ProjectApiService {
      const response = await lastValueFrom(abc$)
      return response
   }
+  async isParent(projectId:string){
+      var url = GlobalVariables.apiurl + "ProjectHubData/IsParent/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+    }
 }
