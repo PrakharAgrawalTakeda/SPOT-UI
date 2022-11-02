@@ -8,7 +8,7 @@
 </div>
 <form class="w-full form-ask-need" [formGroup]="scheduleForm" (ngSubmit)="submitschedule()"
     style="overflow-y: scroll; height: 95vh;">
-    <spot-textarea formControlName="milestone" name="milestone" [label]="'Milestone'" [placeholder]="'Milestone'"
+    <spot-textarea formControlName="milestone" name="milestone" [label]="(this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Milestone (Execution Start - ...)' : (this.schedule.milestoneType == 2 ? 'Milestone (Execution End - ...)' : 'Milestone')) : 'Milestone')" [placeholder]="'Milestone'"
         [rows]="1">
     </spot-textarea>
 

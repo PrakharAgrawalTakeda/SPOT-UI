@@ -45,6 +45,7 @@ export class ScheduleViewEditComponent implements OnInit {
   today = new Date();
   item: any = {}
   functionSets: any = []
+  milestoneName: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _elementRef: ElementRef) {
     //this.scheduleForm.controls.function.valueChanges.subscribe(res => (console.log(res)))
   }
@@ -73,8 +74,9 @@ export class ScheduleViewEditComponent implements OnInit {
         console.log(this.projecthubservice)
         console.log('res')
         console.log(res)
+        this.milestoneName = res.milestone
         this.scheduleForm.patchValue({
-          milestone: res.milestone,
+          milestone: (res.milestoneType > 0 ? res.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : res.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : res.milestone : res.milestone),
           plannedFinish: res.plannedFinish,
           baselineFinish: res.baselineFinish,
           comments: res.comments,
@@ -149,7 +151,7 @@ export class ScheduleViewEditComponent implements OnInit {
         var mainObjnew = {
           scheduleUniqueId: "new",
           projectId: this.projecthubservice.projectid,
-          milestone: this.scheduleForm.value.milestone,
+          milestone: (this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Execution Start - '.concat(this.scheduleForm.value.milestone) : (this.schedule.milestoneType == 2 ? 'Execution End - '.concat(this.scheduleForm.value.milestone) : this.scheduleForm.value.milestone)) : this.scheduleForm.value.milestone),
           plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           baselineFinish: this.scheduleForm.controls.baselineFinish.value ? moment(this.scheduleForm.value.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           functionGroupId: this.scheduleForm.value.function ? this.scheduleForm.value.function.lookUpId : null,
@@ -197,7 +199,7 @@ export class ScheduleViewEditComponent implements OnInit {
         var mainObj = {
           scheduleUniqueId: this.schedule.scheduleUniqueId,
           projectId: this.schedule.projectId,
-          milestone: this.scheduleForm.value.milestone,
+          milestone: (this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Execution Start - '.concat(this.scheduleForm.value.milestone) : (this.schedule.milestoneType == 2 ? 'Execution End - '.concat(this.scheduleForm.value.milestone) : this.scheduleForm.value.milestone)) : this.scheduleForm.value.milestone),
           plannedFinish: moment(this.scheduleForm.value.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           baselineFinish: moment(this.schedule.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           functionGroupId: this.scheduleForm.value.function ? this.scheduleForm.value.function.lookUpId : null,
