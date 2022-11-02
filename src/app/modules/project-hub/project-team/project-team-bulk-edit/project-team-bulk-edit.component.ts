@@ -233,8 +233,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     }))
     this.teamMembers = [...this.teamMembers, ...j]
     this.ptTableEditStack.push(this.teamMembers.length - 1)
-    var div = document.getElementById('projectTeamTableDiv')
-
+    var div = document.getElementsByClassName('datatable-scroll')[0]
     setTimeout(() => {
       div.scroll({
         top: div.scrollHeight,

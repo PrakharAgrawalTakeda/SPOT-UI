@@ -19,9 +19,9 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-x-auto overflow-y-scroll h-[80vh] ml-3 mt-3" id="projectTeamTableDiv">
+        <div class="overflow-x-auto overflow-hidden h-[80vh] ml-3 mt-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="teamMembers"
+                class="datatable-pt-80 font-medium text-sm text-secondary whitespace-nowrap" [rows]="teamMembers"
                 #projectTeamsTable>
                 <ngx-datatable-column [sortable]="false" name="Role" prop="roleName" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -70,7 +70,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [flexGrow]="0.05" [resizeable]="false" [sortable]="false" [draggable]="false">
+                <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                         ngx-datatable-cell-template>
                         <a href="javascript:void(0)" *ngIf="deleteShowLogic(rowIndex)" title="Delete Single" (click)="deletePT(rowIndex)">

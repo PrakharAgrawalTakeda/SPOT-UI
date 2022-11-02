@@ -208,6 +208,14 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
       this.projectViewDetails.overallPerformace = [...this.projectViewDetails.overallPerformace, ...j]
       this.disabler()
       this.operationalPerformanceEditStack.push(this.projectViewDetails.overallPerformace.length - 1)
+      var div = document.getElementsByClassName('datatable-scroll')[0]
+      setTimeout(() => {
+        div.scroll({
+          top: div.scrollHeight,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }, 100);
     }
   }
   submitOP() {

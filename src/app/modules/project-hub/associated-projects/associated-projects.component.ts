@@ -1,12 +1,12 @@
 
-import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
-import {MsalService} from "@azure/msal-angular";
-
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
+import { DatatableComponent } from "@swimlane/ngx-datatable";
+import { MsalService } from '@azure/msal-angular';
 @Component({
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
@@ -24,6 +24,9 @@ export class AssociatedProjectsComponent implements OnInit {
         public fuseAlert: FuseConfirmationService,
         private msalService: MsalService
     ) {
+        this.projecthubservice.submitbutton.subscribe(res => {
+            this.dataloader()
+        })
     }
     id: string = '';
     rows = [];
@@ -42,7 +45,7 @@ export class AssociatedProjectsComponent implements OnInit {
         this.apiService.getProjectTree(this.id).then((res: any) => {
             res.values.forEach(project => {
                 ids.push(project.problemUniqueId);
-                if(project.parentId == this.id){
+                if (project.parentId == this.id) {
                     children.push(project)
                 }
                 project.projectName =
@@ -87,7 +90,7 @@ export class AssociatedProjectsComponent implements OnInit {
         window.open(url, '_blank');
     }
 
-    yAxisTickFormatting(value){
+    yAxisTickFormatting(value) {
         return percentTickFormatting(value);
     }
 
@@ -98,7 +101,7 @@ export class AssociatedProjectsComponent implements OnInit {
         return 'graph-cell-datatable';
     }
     getRowClass = (row) => {
-        if(row.problemUniqueId == this.id){
+        if (row.problemUniqueId == this.id) {
             return 'current-project';
         }
         return 'associated-projects-row'
@@ -149,11 +152,11 @@ function percentTickFormatting(val: any) {
 }
 function formatDate(date) {
     return [
-      padTo2Digits(date.getDate()),
-      padTo2Digits(date.getMonth() + 1),
-      date.getFullYear(),
+        padTo2Digits(date.getDate()),
+        padTo2Digits(date.getMonth() + 1),
+        date.getFullYear(),
     ].join('/');
-  }
+}
 function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
 }

@@ -9,13 +9,16 @@
     color: black !important;
     @apply cursor-not-allowed
 }
-::ng-deep .mat-chip.mat-standard-chip.mat-chip-disabled{
+
+::ng-deep .mat-chip.mat-standard-chip.mat-chip-disabled {
     opacity: 1 !important;
 }
+
 ::ng-deep .mat-form-field-disabled .mat-form-field-wrapper .mat-form-field-flex {
     background: #f1f5f9 !important;
     background-size: 1px 100% !important;
     background-repeat: repeat-x !important;
+
     input {
         color: black !important;
         @apply cursor-not-allowed
@@ -24,11 +27,13 @@
     input::placeholder {
         color: black !important;
     }
-    textarea{
+
+    textarea {
         color: black !important;
         @apply cursor-not-allowed;
     }
-    textarea::placeholder{
+
+    textarea::placeholder {
         color: black !important;
     }
 }
@@ -37,6 +42,7 @@
     background: white !important;
     background-size: 1px 100% !important;
     background-repeat: repeat-x !important;
+
     input {
         color: black !important;
         @apply cursor-not-allowed
@@ -45,11 +51,13 @@
     input::placeholder {
         color: black !important;
     }
-    textarea{
+
+    textarea {
         color: black !important;
         @apply cursor-not-allowed;
     }
-    textarea::placeholder{
+
+    textarea::placeholder {
         color: black !important;
     }
 }
@@ -94,4 +102,49 @@
     padding-left: 10px;
     border-radius: 5px;
     border-left: 5px solid #eba800 !important;
+}
+
+
+
+
+
+//DATA TABLE FIX HEADERS
+::ng-deep .ngx-datatable.datatable-an-80 .datatable-body .datatable-scroll {
+    height: 75vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+
+::ng-deep .ngx-datatable.datatable-op-80 .datatable-body .datatable-scroll {
+    height: 70vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-qr-80 .datatable-body .datatable-scroll {
+    height: 77vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-pt-80 .datatable-body .datatable-scroll {
+    height: 77vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-schedule-74 .datatable-body .datatable-scroll {
+    height: 65vh !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-bl-83 .datatable-body .datatable-scroll {
+    height: 80vh !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+::ng-deep .ngx-datatable.datatable-dq-83 .datatable-body .datatable-scroll {
+    height: 80vh !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
 }

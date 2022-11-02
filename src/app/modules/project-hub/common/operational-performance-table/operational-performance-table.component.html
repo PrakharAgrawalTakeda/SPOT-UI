@@ -18,7 +18,7 @@
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]"
+        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'kpiid', dir: 'asc' }]"
         #operationalPerformanceTable>
         <ngx-datatable-column name="Status" prop="status" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -61,7 +61,7 @@
 
                 <div class="flex items-center justify-start gap-6">
                     <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
-                        (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceSingleEdit', row.keySuccessUniqueId, projectViewDetails.overallPerformace)">
+                        (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceSingleEdit', row.keySuccessUniqueId, projectViewDetails.overallPerformace, projectid)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
                     </a>
