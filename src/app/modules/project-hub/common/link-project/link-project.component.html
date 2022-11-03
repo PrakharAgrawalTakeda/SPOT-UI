@@ -75,7 +75,7 @@
             class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
             [rows]="rows"
         >
-            <ngx-datatable-column name="Child Project/Program" prop="projectName" [flexGrow]="9">
+            <ngx-datatable-column name="Child Project/Program" prop="projectName" [flexGrow]="9"  [resizeable]="false" [draggable]="false">
                 <ng-template
                     let-row="row"
                     let-value="value"
@@ -86,7 +86,8 @@
                     </div>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1">
+            <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1"  [resizeable]="false"
+            [sortable]="false" [draggable]="false">
                 <ng-template
                     let-row="row"
                     let-value="value"
