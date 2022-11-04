@@ -6,51 +6,54 @@
         </a>
     </div>
 </div>
-<form class="w-full form-ask-need" [formGroup]="riskIssueForm" (ngSubmit)="submitriskissue()"
+<form class="w-full overflow-hidden" [formGroup]="riskIssueForm" (ngSubmit)="submitriskissue()"
     style="overflow-y: scroll; height: 95vh;">
-    <div class="flex items-start justify-between">
-        <div class="w-25">
-            <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
-                <mat-label>Type</mat-label>
-                <mat-select [placeholder]="'Type'" formControlName="type" name="type">
-                    <mat-option value="">None</mat-option>
-                    <mat-option *ngFor="let option of getissuetype()" value="{{option.lookUpId}}">{{option.lookUpName}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+    <div class=" form-ask-need h-[87vh] overflow-y-scroll">
+        <div class="flex items-start justify-between">
+            <div class="w-25">
+                <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3"
+                    [floatLabel]="'always'">
+                    <mat-label>Type</mat-label>
+                    <mat-select [placeholder]="'Type'" formControlName="type" name="type">
+                        <mat-option value="">None</mat-option>
+                        <mat-option *ngFor="let option of getissuetype()" value="{{option.lookUpId}}">
+                            {{option.lookUpName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="w-25">
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                    <mat-label>Log Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+                        formControlName="logDate" name="logDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
         </div>
-        <div class="w-25">
-            <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-                <mat-label>Log Date</mat-label>
-                <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
-                    formControlName="logDate" name="logDate">
-                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
-        </div>
-    </div>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>If This Happens</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'If This Happens'" formControlName="ifThisHappens"
-            name="ifThisHappens"></textarea>
-    </mat-form-field>
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+            <mat-label>If This Happens</mat-label>
+            <textarea matInput [rows]="5" [placeholder]="'If This Happens'" formControlName="ifThisHappens"
+                name="ifThisHappens"></textarea>
+        </mat-form-field>
 
-    <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
-        <mat-label>Probability</mat-label>
-        <mat-select [placeholder]="'Probability'" formControlName="probability" name="probability">
-            <mat-option value="">None</mat-option>
-            <mat-option *ngFor="let option of getprobability()" value="{{option.lookUpId}}">{{option.lookUpName}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+        <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
+            <mat-label>Probability</mat-label>
+            <mat-select [placeholder]="'Probability'" formControlName="probability" name="probability">
+                <mat-option value="">None</mat-option>
+                <mat-option *ngFor="let option of getprobability()" value="{{option.lookUpId}}">{{option.lookUpName}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>This Is The Result</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'This Is The Result'" formControlName="thisIsTheResult"
-            name="thisIsTheResult"></textarea>
-    </mat-form-field>
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+            <mat-label>This Is The Result</mat-label>
+            <textarea matInput [rows]="5" [placeholder]="'This Is The Result'" formControlName="thisIsTheResult"
+                name="thisIsTheResult"></textarea>
+        </mat-form-field>
 
-    <!--<mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
+        <!--<mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
         <mat-label>Impact</mat-label>
         <mat-select [placeholder]="'Impact'" formControlName="impact" name="impact">
             <mat-option value="">None</mat-option>
@@ -59,104 +62,107 @@
         </mat-select>
     </mat-form-field>-->
 
-    <spot-select formControlName="impact" name="impact" [label]="'Impact'" [placeholder]="'Impact'"
-        [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"
-        [valuePointer]="'lookUpName'">
-    </spot-select>
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>Mitigation</mat-label>
-        <textarea matInput [rows]="5" [placeholder]="'Mitigation'" formControlName="mitigation"
-            name="mitigation"></textarea>
-    </mat-form-field>
+        <spot-select formControlName="impact" name="impact" [label]="'Impact'" [placeholder]="'Impact'"
+            [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"
+            [valuePointer]="'lookUpName'">
+        </spot-select>
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+            <mat-label>Mitigation</mat-label>
+            <textarea matInput [rows]="5" [placeholder]="'Mitigation'" formControlName="mitigation"
+                name="mitigation"></textarea>
+        </mat-form-field>
 
-    <app-user-single-dropdown [formgroup]="riskIssueForm" [label]="'Owner'"></app-user-single-dropdown>
+        <app-user-single-dropdown [formgroup]="riskIssueForm" [label]="'Owner'"></app-user-single-dropdown>
 
-    <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>Function</mat-label>
-        <input matInput [placeholder]="'Function'" formControlName="function" name="function"
-            [matAutocomplete]="function">
-        <mat-autocomplete autoActiveFirstOption #function="matAutocomplete" (optionSelected)="onFunctionSelect($event)">
-            <mat-option *ngFor="let function of functionSets | async" [value]="function">
-                {{function.lookUpName}}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Function</mat-label>
+            <input matInput [placeholder]="'Function'" formControlName="function" name="function"
+                [matAutocomplete]="function">
+            <mat-autocomplete autoActiveFirstOption #function="matAutocomplete"
+                (optionSelected)="onFunctionSelect($event)">
+                <mat-option *ngFor="let function of functionSets | async" [value]="function">
+                    {{function.lookUpName}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
 
 
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>Due Date</mat-label>
-        <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="dueDate"
-            name="dueDate">
-        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2></mat-datepicker>
-    </mat-form-field>
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="dueDate"
+                name="dueDate">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
 
-    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-        <mat-label>Close Date</mat-label>
-        <input matInput [matDatepicker]="picker3" [max]="today" [placeholder]="'Choose a date'"
-            formControlName="closeDate" name="closeDate">
-        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-        <mat-datepicker #picker3></mat-datepicker>
-    </mat-form-field>
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+            <mat-label>Close Date</mat-label>
+            <input matInput [matDatepicker]="picker3" [max]="today" [placeholder]="'Choose a date'"
+                formControlName="closeDate" name="closeDate">
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
 
-    <div class="flex items-start justify-between incuded-in-dash">
-        <mat-slide-toggle
-            [matTooltip]="this.riskIssueForm.controls['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
-            formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
+        <div class="flex items-start justify-between incuded-in-dash">
+            <mat-slide-toggle
+                [matTooltip]="this.riskIssueForm.controls['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
+                formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
+        </div>
+
+        <mat-accordion class="h-120" multi>
+            <mat-expansion-panel [expanded]="false">
+                <mat-expansion-panel-header class="pt-10 pb-10">
+                    <mat-panel-title class="font-bold">
+                        Post Mitigation
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="padding">
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                            <mat-label>Post-Mitigation Probability</mat-label>
+                            <mat-select [placeholder]="'Post-Mitigation Probability'"
+                                formControlName="postMitigationProbability" name="postMitigationProbability">
+                                <mat-option value="">None</mat-option>
+                                <mat-option *ngFor="let option of getpostMitigationProbability()"
+                                    value="{{option.lookUpId}}">
+                                    {{option.lookUpName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="padding">
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                            <mat-label>Post-Mitigation Impact</mat-label>
+                            <mat-select [placeholder]="'Post-Mitigation Impact'" formControlName="postMitigationImpact"
+                                name="postMitigationImpact">
+                                <mat-option value="">None</mat-option>
+                                <mat-option *ngFor="let option of getpostMitigationImpact()"
+                                    value="{{option.lookUpId}}">
+                                    {{option.lookUpName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="padding">
+                    <div class="flex items-start justify-between incuded-in-dash">
+                        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                            <mat-label>Post-Mitigation Comments</mat-label>
+                            <textarea matInput [rows]="5" [placeholder]="'Post-Mitigation Comments'"
+                                formControlName="postMitigationComments" name="postMitigationComments"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <br>
     </div>
-
-    <mat-accordion class="h-120" multi>
-        <mat-expansion-panel [expanded]="false">
-            <mat-expansion-panel-header class="pt-10 pb-10">
-                <mat-panel-title class="font-bold">
-                    Post Mitigation
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="padding">
-                <div class="flex items-start justify-between incuded-in-dash">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-                        <mat-label>Post-Mitigation Probability</mat-label>
-                        <mat-select [placeholder]="'Post-Mitigation Probability'"
-                            formControlName="postMitigationProbability" name="postMitigationProbability">
-                            <mat-option value="">None</mat-option>
-                            <mat-option *ngFor="let option of getpostMitigationProbability()"
-                                value="{{option.lookUpId}}">
-                                {{option.lookUpName}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-
-            <div class="padding">
-                <div class="flex items-start justify-between incuded-in-dash">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-                        <mat-label>Post-Mitigation Impact</mat-label>
-                        <mat-select [placeholder]="'Post-Mitigation Impact'" formControlName="postMitigationImpact"
-                            name="postMitigationImpact">
-                            <mat-option value="">None</mat-option>
-                            <mat-option *ngFor="let option of getpostMitigationImpact()" value="{{option.lookUpId}}">
-                                {{option.lookUpName}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="padding">
-                <div class="flex items-start justify-between incuded-in-dash">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
-                        <mat-label>Post-Mitigation Comments</mat-label>
-                        <textarea matInput [rows]="5" [placeholder]="'Post-Mitigation Comments'"
-                            formControlName="postMitigationComments" name="postMitigationComments"></textarea>
-                    </mat-form-field>
-                </div>
-            </div>
-
-        </mat-expansion-panel>
-    </mat-accordion>
-
-    <br>
-    <div class="flex items-start justify-between">
+    <div class="flex items-start justify-between  form-ask-need">
         <a class="w-25" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
