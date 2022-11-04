@@ -186,19 +186,19 @@ export class AskNeedBulkEditComponent implements OnInit {
     }
   }
 
-  submitAN(){
-    if(this.projectHubService.isFormChanged){
+  submitAN() {
+    if (this.projectHubService.isFormChanged) {
       this.submitPrep()
       this.projectHubService.isFormChanged = false
-      this.apiService.bulkeditAskNeeds(this.formValue, this.projectHubService.projectid).then(res=>{
-        this.projectHubService.toggleDrawerOpen('', '',[],'')
+      this.apiService.bulkeditAskNeeds(this.formValue, this.projectHubService.projectid).then(res => {
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
       }
       )
     }
-    else{
-      this.projectHubService.toggleDrawerOpen('', '',[],'')
+    else {
+      this.projectHubService.toggleDrawerOpen('', '', [], '')
       this.projectHubService.successSave.next(true)
     }
   }
@@ -269,7 +269,7 @@ export class AskNeedBulkEditComponent implements OnInit {
           }
         })
       }
-      else{
+      else {
         if (event == true) {
           this.isclosedaskneedtoggle = true
           this.tableData = this.askNeedData
@@ -308,18 +308,45 @@ export class AskNeedBulkEditComponent implements OnInit {
   }
 
   deleteAN(rowIndex: number) {
-    console.log(this.tableData)
-    this.tableData.splice(rowIndex, 1)
-    console.log(this.askNeedForm.getRawValue())
-    this.askNeedForm.removeAt(rowIndex)
-    if (this.anTableEditStack.includes(rowIndex)) {
-      this.anTableEditStack.splice(this.anTableEditStack.indexOf(rowIndex), 1)
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": "Are you sure you want Delete this Record?",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
     }
-    this.anTableEditStack = this.anTableEditStack.map(function (value) {
-      return value > rowIndex ? value - 1 : value;
-    })
-    this.disabler()
-    this.tableData = [...this.tableData]
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        console.log(this.tableData)
+        this.tableData.splice(rowIndex, 1)
+        console.log(this.askNeedForm.getRawValue())
+        this.askNeedForm.removeAt(rowIndex)
+        if (this.anTableEditStack.includes(rowIndex)) {
+          this.anTableEditStack.splice(this.anTableEditStack.indexOf(rowIndex), 1)
+        }
+        this.anTableEditStack = this.anTableEditStack.map(function (value) {
+          return value > rowIndex ? value - 1 : value;
+        })
+        this.disabler()
+        this.tableData = [...this.tableData]
+      }
+    }
+    )
   }
 
   addAN() {
