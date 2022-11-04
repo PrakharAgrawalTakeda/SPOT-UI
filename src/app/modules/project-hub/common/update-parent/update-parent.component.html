@@ -76,7 +76,8 @@
             class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
             [rows]="rows"
         >
-            <ngx-datatable-column name="Parent" prop="projectName" [flexGrow]="9">
+            <ngx-datatable-column name="Parent" prop="projectName" [flexGrow]="9" [sortable]="false"
+            >
                 <ng-template
                     let-row="row"
                     let-value="value"
@@ -87,7 +88,8 @@
                     </div>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1">
+            <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1" [sortable]="false"
+            >
                 <ng-template
                     let-row="row"
                     let-value="value"

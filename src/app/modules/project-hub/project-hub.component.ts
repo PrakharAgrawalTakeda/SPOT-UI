@@ -96,7 +96,6 @@ export class ProjectHubComponent implements OnInit {
     }
 
     getdata(): void {
-
         this.apiService.getProjectHubData(this.id).then((res: any) => {
             this.projectDetails = res.projectData
             this.portfolioDetails = res.portfolioCeterData
@@ -163,4 +162,7 @@ export class ProjectHubComponent implements OnInit {
             }
         }
       }
+    openPhaseStateDrawer() {
+        this.projecthubservice.toggleDrawerOpen('PhaseState', 'new', [], '1', false, true);
+    }
 }

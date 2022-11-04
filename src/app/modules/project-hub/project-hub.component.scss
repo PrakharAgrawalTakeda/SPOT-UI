@@ -18,7 +18,7 @@
     min-width: 95vw !important;
     max-width: 95vw !important;
 }
-.dataQuality{
+.fuse-drawer-large{
     min-width: 95vw !important;
     max-width: 95vw !important;
 }
@@ -86,6 +86,7 @@ fuse-drawer .fuse-drawer-content {
     color: var(--fuse-on-primary);
     padding-left: 30px !important;
     border-radius: 20px 0 0 20px;
+    cursor: pointer;
 }
 
 .pointer-start-unselect:before {
@@ -109,6 +110,7 @@ fuse-drawer .fuse-drawer-content {
     background-color: var(--fuse-primary);
     color: var(--fuse-on-primary);
     padding-left: 30px !important;
+    cursor: pointer;
 }
 
 .pointer:after {
@@ -143,6 +145,7 @@ fuse-drawer .fuse-drawer-content {
     color: var(--fuse-on-primary);
     border-color: #4c9bcf;
     padding-left: 30px !important;
+    cursor: pointer;
 }
 
 .pointer-unselect:after {
@@ -155,6 +158,7 @@ fuse-drawer .fuse-drawer-content {
     border-left: 23px solid var(--fuse-bg-default);
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
+    cursor: pointer;
 }
 
 .pointer-unselect:before {
@@ -180,6 +184,7 @@ fuse-drawer .fuse-drawer-content {
     padding-left: 30px !important;
     padding-right: 30px !important;
     border-radius: 0px 20px 20px 0;
+    cursor: pointer;
 }
 
 .pointer-last:after {
@@ -205,6 +210,7 @@ fuse-drawer .fuse-drawer-content {
     padding-left: 30px !important;
     padding-right: 30px !important;
     border-radius: 0px 20px 20px 0;
+    cursor: pointer;
 }
 
 .pointer-last-unselect:after {

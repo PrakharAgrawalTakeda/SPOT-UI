@@ -24,9 +24,9 @@
     </div>
     <div class="overflow-hidden h-[83vh]">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-            [rowClass]="rowClass"
-            class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-            [rows]="rows" #dataQualityTable>
+                       [rowClass]="rowClass"
+                       class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                       [rows]="rows" #dataQualityTable>
             <ngx-datatable-column name="Phase/State" prop="phase" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <div class="flex items-center justify-start gap-6">
@@ -54,6 +54,7 @@
     </div>
     <div class="p-6 pb-3 pt-3 flex items-center justify-end">
         <button mat-flat-button [color]="'primary'" type="button" class='text-right'
-            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')">Ok</button>
+                (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')">Ok
+        </button>
     </div>
 </div>
