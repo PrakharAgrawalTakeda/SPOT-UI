@@ -84,7 +84,8 @@ import {ShortcutsModule} from "../../layout/common/shortcuts/shortcuts.module";
 import {MessagesModule} from "../../layout/common/messages/messages.module";
 import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
 import {UserModule} from "../../layout/common/user/user.module";
-import { PhaseStateComponent } from './phase-state/phase-state.component';
+import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
+import { StateCheckComponent } from './common/state-check/state-check.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -228,7 +229,8 @@ export const projectRoutes: Route[] = [
     QualityRefBulkEditComponent,
     LinkProjectComponent,
     UpdateParentComponent,
-    PhaseStateComponent
+    PhaseStateComponent,
+    StateCheckComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

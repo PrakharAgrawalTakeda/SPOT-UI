@@ -13,7 +13,6 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from 
   ]
 })
 export class SpotSelectComponent implements OnInit, ControlValueAccessor {
-
   @Input() showLabel: boolean = true
   @Input() label: string = ''
   @Input() placeholder: string = ''

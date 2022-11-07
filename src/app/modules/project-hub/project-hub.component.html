@@ -22,6 +22,7 @@
         <app-oe-project-single-edit *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
         <app-tech-transfer-single-edit *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>
         <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
+        <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

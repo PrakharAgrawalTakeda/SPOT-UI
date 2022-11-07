@@ -1,0 +1,180 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
+    <div class="text-on-primary" style="padding-top: 6px">Incomplete Milestone(s)/ask/Need(s)/Issue(s)</div>
+    <div style="padding-top: 2px">
+        <a (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        " href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<div class="h-[85vh] pl-3">
+    <div class="w-full">
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+            Incomplete Milestone(s)
+        </div>
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                       class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                       [rows]="rows">
+            <ngx-datatable-column name="Incomplete Milestone" prop="milestoneName" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-start gap-6">
+                        {{ value }}
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Planned Finnish" prop="plannedFinnish" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Baseline Finish" prop="baselineFinnish" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Changed By" prop="changedBy" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Responsible Person" prop="responsiblePerson" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Function Owner" prop="functionOwner" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Completion Date(mm/dd/yyy)" prop="completionDate" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Comments" prop="Comments" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+    <div class="w-full mt-5">
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+            Incomplete Risk/Issue(s)
+        </div>
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                       class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                       [rows]="rows">
+            <ngx-datatable-column name="Incomplete Risk/Issue(s)" prop="riskIssue" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-start gap-6">
+                        {{ value }}
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date Initiated" prop="dateInitiate" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="If Happens" prop="ifhappens" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Probability" prop="probability" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="This is the result" prop="result" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Impact" prop="impact" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Owner" prop="owner" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Function Owner" prop="Function Owner" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Due Date(mm/dd/yyyy)" prop="dueDate" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Close Date" prop="Close Date" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+    <div class="w-full mt-5">
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+            Incomplete Ask/Need
+        </div>
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                       class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                       [rows]="rows">
+            <ngx-datatable-column name="Incomplete Ask/Need" prop="askNeed" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-start gap-6">
+                        {{ value }}
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Need From" prop="needFrom" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Need By Date" prop="needByDate" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Comments" prop="comments" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Close Date" prop="closeDate" [flexGrow]="1">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{ value }}
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>
+<div class="flex items-start justify-between mt-6">
+    <a class="w-25" mat-flat-button [color]="'primary'"
+       (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+        Cancel
+    </a>
+    <button class="w-25" mat-flat-button [color]="'primary'" type="submit"
+            (click)="onSubmit()"
+            (click)="projecthubservice.toggleDrawerOpen('StateCheck', 'new', [] , '1',false,true)">
+        Submit
+    </button>
+</div>
