@@ -84,6 +84,7 @@ import {ShortcutsModule} from "../../layout/common/shortcuts/shortcuts.module";
 import {MessagesModule} from "../../layout/common/messages/messages.module";
 import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
 import {UserModule} from "../../layout/common/user/user.module";
+import { LinkMilestonesComponent } from './project-board/link-milestones/link-milestones.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -226,7 +227,8 @@ export const projectRoutes: Route[] = [
     AskNeedLinkComponent,
     QualityRefBulkEditComponent,
     LinkProjectComponent,
-    UpdateParentComponent
+    UpdateParentComponent,
+    LinkMilestonesComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
