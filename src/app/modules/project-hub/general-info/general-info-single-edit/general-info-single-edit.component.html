@@ -7,7 +7,8 @@
             </a>
         </div>
     </div>
-    <form class="w-full p-[20px] overflow-y-scroll h-[95vh]" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
+        <div class="overflow-y-scroll overflow-x-hidden h-[86.5vh] pr-3">
         <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner"
             class="flex justify-between items-center mt-6 mb-6">
             <div class="flex justify-start gap-1 items-center">Is Archived?
@@ -68,12 +69,13 @@
             [label]="'Problem Description / Present Situation / Submission Description'"
             [placeholder]="'Problem Description / Present Situation / Submission Description'">
         </spot-textarea>
-        <div class="flex items-start justify-between mt-6">
-            <a class="w-25" mat-flat-button [color]="'primary'"
+    </div>
+        <div class="pr-3 flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
                 (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
                 Cancel
             </a>
-            <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
                 Submit
             </button>
         </div>
