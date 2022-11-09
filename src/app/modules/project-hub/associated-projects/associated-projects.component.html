@@ -9,16 +9,16 @@
         >
             <div class="flex flex-row justify-between">
                 <div>
-                    <button mat-flat-button [color]="'primary'" (click)="onProgramReport()">
+                    <button mat-flat-button class="min-w-26" [color]="'primary'" (click)="onProgramReport()">
                         Program Report
                     </button>
-                    <button mat-flat-button [color]="'primary'"  class="ml-5" (click)="exportToExcel()">
+                    <button mat-flat-button [color]="'primary'"  class="min-w-26 ml-5" (click)="exportToExcel()">
                         Program Gantt Chart
                     </button>
                 </div>
                 <div>
                     <button
-                        class="text-primary bg-gray-200 mr-5"
+                        class="min-w-26 text-primary bg-gray-200 mr-5"
                         mat-flat-button
                         [color]="'primary-200'"
                         (click)="
@@ -35,7 +35,7 @@
                         >&nbsp; Link Child Project(s)
                     </button>
                     <button
-                        class="text-primary bg-gray-200"
+                        class="min-w-26 text-primary bg-gray-200"
                         mat-flat-button
                         [color]="'primary-200'"
                         (click)="

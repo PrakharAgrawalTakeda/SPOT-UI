@@ -6,8 +6,9 @@
         </a>
     </div>
 </div>
-<form class="w-full p-[20px] overflow-y-scroll h-[95vh]" [formGroup]="OperationalPerformanceForm"
-    (ngSubmit)="submitop()">
+<form class="w-full overflow-hidden" [formGroup]="OperationalPerformanceForm"
+    (ngSubmit)="submitop()" style="overflow-y: scroll; height: 95vh;">
+    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
     <div class="flex justify-start items-center gap-6">
         <mat-icon
             svgIcon="{{(indicator.getIndicators(getIndicator(OperationalPerformanceForm.controls.status.value), 'circle')).icontype}}"
@@ -36,12 +37,13 @@
     <mat-slide-toggle
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInProjectDashboard'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
         formControlName="includeInProjectDashboard">Include in Project Dashboard</mat-slide-toggle>
-    <div class="flex items-start justify-between mt-6">
-        <a class="w-25" mat-flat-button [color]="'primary'"
+    </div>
+    <div class="flex items-start justify-between form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
-        <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
             Submit
         </button>
     </div>

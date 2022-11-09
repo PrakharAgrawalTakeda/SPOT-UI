@@ -17,7 +17,7 @@
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
-        <div class="h-[80vh] overflow-hidden pl-3">
+        <div class="h-[80vh] overflow-y-hidden pl-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="w-full datatable-op-80 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
                 [rows]="projectViewDetails.overallPerformace" #operationalPerformanceTable>
@@ -164,11 +164,11 @@
         </div>
     </div>
     <div class="flex items-start justify-between mt-6 px-6">
-        <a class="w-1/6" mat-flat-button [color]="'primary'" type="button"
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
             (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
             Cancel
         </a>
-        <button class="w-1/6" mat-flat-button [color]="'primary'" (click)="submitOP()" type="button">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitOP()" type="button">
             Submit
         </button>
     </div>

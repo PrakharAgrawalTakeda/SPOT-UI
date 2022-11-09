@@ -6,8 +6,7 @@
         </a>
     </div>
 </div>
-<form class="w-full overflow-hidden" [formGroup]="riskIssueForm" (ngSubmit)="submitriskissue()"
-    style="overflow-y: scroll; height: 95vh;">
+<form class="w-full overflow-hidden" [formGroup]="riskIssueForm" (ngSubmit)="submitriskissue()">
     <div class=" form-ask-need h-[87vh] overflow-y-scroll">
         <div class="flex items-start justify-between">
             <div class="w-25">
@@ -163,11 +162,11 @@
         <br>
     </div>
     <div class="flex items-start justify-between  form-ask-need">
-        <a class="w-25" mat-flat-button [color]="'primary'"
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
-        <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
             Submit
         </button>
     </div>

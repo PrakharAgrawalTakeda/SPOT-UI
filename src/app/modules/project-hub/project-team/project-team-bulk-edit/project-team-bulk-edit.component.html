@@ -12,7 +12,7 @@
             <div></div>
             <div class="flex justify-between items-center gap-3">
                 <div class="pr-3">
-                    <button class="ml-4 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'"
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'"
                         (click)="addPT()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
@@ -81,11 +81,11 @@
             </ngx-datatable>
         </div>
         <div class="flex items-start justify-between mt-6 px-3">
-            <a class="w-1/6" mat-flat-button [color]="'primary'" type="button"
+            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
                 (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
                 Cancel
             </a>
-            <button class="w-1/6" mat-flat-button [color]="'primary'" (click)="submitProjectTeams()" type="button">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitProjectTeams()" type="button">
                 Submit
             </button>
         </div>

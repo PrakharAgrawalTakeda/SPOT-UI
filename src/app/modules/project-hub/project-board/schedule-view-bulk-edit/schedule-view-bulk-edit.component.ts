@@ -1081,20 +1081,23 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     this.apiService.getProjectBaselineLog(this.id).then((res: any) => {
 
       this.baselineLog = res.projectBaselineLog.sort((a, b) => {
-        return b.baselineCount - a.baselineCount;
+        return a.baselineCount - b.baselineCount;
 
       })
     //})
    
 console.log(this.baselineLog)
       if (this.baselineLog.length > 0) {
-        this.baselineLogObj = this.baselineLog.filter(x => x.projectId == this.id)
+        this.baselineLogObj =  this.baselineLog.sort((a, b) => {
+          return a.baselineCount - b.baselineCount;
+  
+        })
       }
       else {
         this.baselineLogObj = ''
       }
 console.log(this.baselineLogObj)
-      debugger
+     // debugger
       if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
         var justificationObjNew = {
@@ -1179,7 +1182,7 @@ console.log(this.baselineLogObj)
           })
         }
 
-        else if (this.baselineCount.baselineCount == null || this.baselineCount.baselineCount == '') {
+        else if (this.baselineCount == null && this.baselineForm.value.counter == true || this.baselineCount == '' && this.baselineForm.value.counter == true) {
           for(var i of this.baselineLogObj)
           {
             var newbaselineObj = {
@@ -1192,7 +1195,7 @@ console.log(this.baselineLogObj)
             var newjustificationObj = {
               baselineLogId: "new",
               projectId: i.projectId,
-              baselineCount: i.baselineCount + 1,
+              baselineCount:  1,
               teamMemberAdId: this.teamMemberAdId,
               modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
               baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
@@ -1265,7 +1268,7 @@ console.log(this.baselineLogObj)
   }
 
   saveScheduleBulkEdit() {
-  debugger
+  //debugger
   this.formValue = []
     if (this.scheduleData.scheduleData.length != 0) {
       // if (JSON.stringify(this.dbSchedule) != JSON.stringify(formValue)) {
@@ -1484,14 +1487,17 @@ console.log(this.baselineLogObj)
   }
 
   baselineLogs() {
-    this.baselineLogForm = new FormArray([])
+    
+   // this.baselineLogForm = new FormArray([])
     console.log(this.baselineLogForm.getRawValue())
     this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
       console.log("Logs", logs)
       console.log("Users List", this.userlist)
       console.log(logs.projectBaselineLog.length)
+      //debugger
       if (logs.projectBaselineLog.length != 0 || logs.users != null) {
         this.userlist = logs.users
+
         this.getUserName(this.id)
         this.baselinelogTableEditStack = []
         console.log(this.baselineLogForm.getRawValue())
@@ -1565,7 +1571,7 @@ console.log(this.baselineLogObj)
 
   baselineProject() {
     console.log(this.schedulengxdata)
-    debugger
+    //debugger
     for (var i of this.milestoneForm.controls) {
       if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         !this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
@@ -1645,7 +1651,7 @@ console.log(this.baselineLogObj)
   }
 
   submitschedule() {
-    debugger
+    //debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 
