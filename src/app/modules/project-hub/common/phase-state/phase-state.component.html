@@ -1,155 +1,157 @@
-<div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
-    <div class="text-on-primary" style="padding-top: 6px">Phase/State</div>
-    <div style="padding-top: 2px">
-        <a (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                        " href="javascript:void(0)" title="Close">
-            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-        </a>
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
+        <div class="text-on-primary" style="padding-top: 6px">Phase/State</div>
+        <div style="padding-top: 2px">
+            <a (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            " href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
     </div>
-</div>
-<div class="flex h-[85vh]">
-    <form class="w-3/5 m-3" [formGroup]="phaseForm" (ngSubmit)="submitPhase()">
-        <div class="flex w-full">
-            <div class="basis-1/4">
-                <div class="flex-auto mr-3">
-                    <spot-select class="w-full" formControlName="phase" name="phase" [label]="'Phase'"
-                                 [placeholder]="'None'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                                 [dropDownArray]="phaseArray">
-                    </spot-select>
+    <div class="flex h-[85vh]">
+        <form class="w-3/5 m-3" [formGroup]="phaseForm" (ngSubmit)="submitPhase()">
+            <div class="flex w-full">
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="phase" name="phase" [label]="'Phase'"
+                                     [placeholder]="'None'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+                                     [dropDownArray]="phaseArray">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="capitalPhase" name="capitalPhase"
+                                     [label]="'Capital Phase'"
+                                     [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
+                                     [dropDownArrayType]="'string'"
+                                     [dropDownArray]="capitalPhaseArray">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="oePhase" name="oePhase" [label]="'OE Phase'"
+                                     [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
+                                     [dropDownArrayType]="'string'"
+                                     [dropDownArray]="oePhaseArray">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-1/4">
+                    <div class="flex-auto mr-3">
+                        <spot-input class="w-full" formControlName="phaseComment" name="phaseComment" [label]="'Comment'"
+                                    [showHint]="true"
+                                    [hint]="'Comment will only be saved if at least one phase has been changed'"
+                        >
+                        </spot-input>
+                    </div>
                 </div>
             </div>
-            <div class="basis-1/4">
-                <div class="flex-auto mr-3">
-                    <spot-select class="w-full" formControlName="capitalPhase" name="capitalPhase"
-                                 [label]="'Capital Phase'"
-                                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
-                                 [dropDownArrayType]="'string'"
-                                 [dropDownArray]="capitalPhaseArray">
-                    </spot-select>
+            <div class="w-full">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+                    Phase Change Log
                 </div>
-            </div>
-            <div class="basis-1/4">
-                <div class="flex-auto mr-3">
-                    <spot-select class="w-full" formControlName="oePhase" name="oePhase" [label]="'OE Phase'"
-                                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
-                                 [dropDownArrayType]="'string'"
-                                 [dropDownArray]="oePhaseArray">
-                    </spot-select>
-                </div>
-            </div>
-            <div class="basis-1/4">
-                <div class="flex-auto mr-3">
-                    <spot-input class="w-full" formControlName="phaseComment" name="phaseComment" [label]="'Comment'"
-                                [showHint]="true"
-                                [hint]="'Comment will only be saved if at least one phase has been changed'"
-                    >
-                    </spot-input>
-                </div>
-            </div>
-        </div>
-        <div class="w-full">
-            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
-                Phase Change Log
-            </div>
-            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                           class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-                           [rows]="rows">
-                <ngx-datatable-column name="FromPhase" prop="fromPhase" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div class="flex items-center justify-start gap-6">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                               class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                               [rows]="rows">
+                    <ngx-datatable-column name="FromPhase" prop="fromPhase" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div class="flex items-center justify-start gap-6">
+                                {{ value }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ToPhase" prop="toPhase" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="ToPhase" prop="toPhase" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Change Date" prop="changeDate" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Changed By" prop="changedBy" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Phase Change Comment" prop="phaseChangeComment" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-            </ngx-datatable>
-        </div>
-    </form>
-    <form class="w-2/5 m-3" [formGroup]="stateForm" (ngSubmit)="submitState()">
-        <div class="flex w-full">
-            <div class="basis-2/4">
-                <div class="flex-auto mr-3">
-                    <spot-select class="w-full" formControlName="state" name="state" [label]="'Project Phase'"
-                                 [placeholder]="'None'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                                 [dropDownArray]="stateArray">
-                    </spot-select>
-                </div>
-            </div>
-            <div class="basis-2/4">
-                <div class="flex-auto mr-3">
-                    <spot-input class="w-full" formControlName="stateComment" name="stateComment" [label]="'Comment'"
-                                [showHint]="true"
-                                [hint]="'Comment will only be saved if the state has been changed'"
-                    >
-                    </spot-input>
-                </div>
-            </div>
-        </div>
-        <div class="w-full">
-            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
-                State Change Log
-            </div>
-            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                           class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-                           [rows]="rows">
-                <ngx-datatable-column name="FromState" prop="fromState" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div class="flex items-center justify-start gap-6">
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Change Date" prop="changeDate" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="ToState" prop="toState" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Change Date" prop="stateChangeDate" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Changed By" prop="stateChangedBy" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Phase Change Comment" prop="stateChangeComment" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value }}
-                    </ng-template>
-                </ngx-datatable-column>
-            </ngx-datatable>
-        </div>
-    </form>
-</div>
-<div class="flex items-start justify-between mt-6">
-    <a class="w-25" mat-flat-button [color]="'primary'"
-       (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
-        Cancel
-    </a>
-    <button class="w-25" mat-flat-button [color]="'primary'" type="submit"
-            (click)="onSubmit()"
-            (click)="projecthubservice.toggleDrawerOpen('StateCheck', 'new', [] , '1',false,true)">
-        Submit
-    </button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Changed By" prop="changedBy" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Phase Change Comment" prop="phaseChangeComment" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </form>
+        <form class="w-2/5 m-3" [formGroup]="stateForm" (ngSubmit)="submitState()">
+            <div class="flex w-full">
+                <div class="basis-2/4">
+                    <div class="flex-auto mr-3">
+                        <spot-select class="w-full" formControlName="state" name="state" [label]="'Project Phase'"
+                                     [placeholder]="'None'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+                                     [dropDownArray]="stateArray">
+                        </spot-select>
+                    </div>
+                </div>
+                <div class="basis-2/4">
+                    <div class="flex-auto mr-3">
+                        <spot-input class="w-full" formControlName="stateComment" name="stateComment" [label]="'Comment'"
+                                    [showHint]="true"
+                                    [hint]="'Comment will only be saved if the state has been changed'"
+                        >
+                        </spot-input>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
+                    State Change Log
+                </div>
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                               class="ml-3 datatable-dq-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                               [rows]="rows">
+                    <ngx-datatable-column name="FromState" prop="fromState" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div class="flex items-center justify-start gap-6">
+                                {{ value }}
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ToState" prop="toState" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Change Date" prop="stateChangeDate" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Changed By" prop="stateChangedBy" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Phase Change Comment" prop="stateChangeComment" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </form>
+    </div>
+    <div class="flex items-start justify-between mt-6">
+        <a class="w-25" mat-flat-button [color]="'primary'"
+           (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="submit"
+                (click)="onSubmit()"
+                (click)="projecthubservice.toggleDrawerOpen('StateCheck', 'new', [] , '1',false,true)">
+            Submit
+        </button>
+    </div>
 </div>
