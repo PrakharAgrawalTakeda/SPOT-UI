@@ -4,11 +4,11 @@
         <div class="flex items-start justify-between">
             <div style="padding-right: 0px">
                 <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable"
-                    (click)=" projecthubservice.toggleDrawerOpen('LinkMilestones', 'new', [], '1', false)">
+                    (click)=" projecthubservice.toggleDrawerOpen('LinkMilestones', 'new', [], projectId, true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <!-- <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon> -->
-                    &nbsp; Link Milestones
+                    <mat-icon svgIcon="heroicons_solid:link"></mat-icon>&nbsp; Link Milestones
                 </button>
             </div>
             <div style="padding-right: 5px">
