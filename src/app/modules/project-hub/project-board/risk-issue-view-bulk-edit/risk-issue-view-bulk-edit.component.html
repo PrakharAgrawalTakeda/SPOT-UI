@@ -1,4 +1,4 @@
-<div>
+
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Risk/Issues</div>
         <div style="padding-top: 2px">
@@ -21,7 +21,7 @@
             </form>
         </div>
         <div class="overflow-y-hidden h-[80vh] pl-3" id="askNeedTableDiv">
-            <ngx-datatable  [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
+            <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
                            [rows]="tableData" #riskIssueTable [rowClass]="getRowClass">
@@ -37,20 +37,25 @@
                                   svgIcon="heroicons_outline:link"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Type" prop="type" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
                            (click)="riTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
+                               [ngClass]="{'closed': row.closeDate != null}">Risk</p>
+                            <p *ngIf="value == '2d9dbd40-14ec-47b3-badd-c5a63eb3dbd5'"
+                               [ngClass]="{'closed': row.closeDate != null}">Issue</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="type" [showLabel]="false"></spot-textarea>
+                            <spot-select formControlName="riskIssueTypeId" name="type" [placeholder]="'Type'"
+                                         [dropDownArrayType]="'object'" [dropDownArray]="getissuetype()" [idPointer]="'lookUpId'"
+                                         [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Date Initiated" prop="dateInitiated" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -59,12 +64,12 @@
                             <p>{{value | date:'dd-MMM-yyyy'}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="closeDate" [showLabel]="false">
+                            <spot-input-date formControlName="logDate" [showLabel]="false">
                             </spot-input-date>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="If This Happens" prop="ifThisHappens" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -73,28 +78,26 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="askNeed1" [showLabel]="false"></spot-textarea>
+                            <spot-textarea formControlName="ifHappens" [showLabel]="false"></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Probability" prop="probability" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Probability" prop="probabilityId" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
-                           (click)="riTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                        <a *ngIf="!riTableEditStack.includes(rowIndex)" (click)="riTableEditRow(rowIndex)" [ngClass]="{'closed': row.closeDate != null}">
+                            <p *ngIf="value == ''">&nbsp;</p>
+                            {{getLookUpName(value)}}
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-<!--                            //TODO: probability dropdown-->
-                            <spot-singleselect-user-autocomplete formControlName="probability" [showLabel]="false"
-                                                                 [label]="'Team Member(s)'"
-                                                                 [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
-                            </spot-singleselect-user-autocomplete>
+                            <spot-select formControlName="probabilityId" name="probability" [placeholder]="'Probability'"
+                                         [dropDownArrayType]="'object'" [dropDownArray]="getprobability()" [idPointer]="'lookUpId'"
+                                         [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="This is the result" prop="thisIsTheResult" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="This is the result" prop="riskIssueResult" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -103,24 +106,24 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="askNeed1" [showLabel]="false"></spot-textarea>
+                            <spot-textarea formControlName="riskIssueResult" [showLabel]="false"></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Impact" prop="impact" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Impact" prop="impactId" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
-                           (click)="riTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                        <a *ngIf="!riTableEditStack.includes(rowIndex)" (click)="riTableEditRow(rowIndex)" [ngClass]="{'closed': row.closeDate != null}">
+                            <p *ngIf="value == ''">&nbsp;</p>
+                            {{getLookUpName(value)}}
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-<!--                            //TODO: Impact dropdown-->
-                            <spot-singleselect-user-autocomplete formControlName="probability" [showLabel]="false"
-                                                                 [label]="'Team Member(s)'"
-                                                                 [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
-                            </spot-singleselect-user-autocomplete>
+                            <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="impactId" name="impact" [placeholder]="'Impact'"
+                                             [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"
+                                             [valuePointer]="'lookUpName'">
+                                </spot-select>
+                            </form>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -137,7 +140,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Owner" prop="owner" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Owner" prop="ownerName" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -153,23 +156,22 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Function Owner" prop="functionOwner" [flexGrow]="1" [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
+                                      [flexGrow]="0.8">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
-                           (click)="riTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                        <a *ngIf="!riTableEditStack.includes(rowIndex)" (click)="riTableEditRow(rowIndex)" [ngClass]="{'closed': row.closeDate != null}">
+                            <p *ngIf="value == ''">&nbsp;</p>
+                            {{getLookUpName(value)}}
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-user-autocomplete formControlName="functionOwner" [showLabel]="false"
-                                                                 [label]="'Function Owner'"
-                                                                 [placeholder]="'Type the name and hit enter'">
-                            </spot-singleselect-user-autocomplete>
+                            <spot-select formControlName="functionGroupId" name="functionGroupId" [placeholder]="'Function'"
+                                         [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
+                                         [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Due Date(mm/dd/yyyy)" prop="dueDate" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -183,7 +185,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Close Date(mm/dd/yyyy)" prop="closeDate" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Close Date" prop="closeDate" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -198,7 +200,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Included In Project Dashboard (Max 1)" prop="includeInReport"
-                                      [flexGrow]="0.6" [draggable]="false" [resizeable]="false" [sortable]="false">
+                                      [flexGrow]="1" [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
                            (click)="riTableEditRow(rowIndex)">
@@ -236,4 +238,3 @@
             </button>
         </div>
     </div>
-</div>

@@ -1,10 +1,11 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {ProjectApiService} from "../../common/project-api.service";
 import {SpotlightIndicatorsService} from "../../../../core/spotlight-indicators/spotlight-indicators.service";
 import * as moment from "moment";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {AuthService} from "../../../../core/auth/auth.service";
 
 @Component({
     selector: 'app-risk-issue-view-bulk-edit',
@@ -18,12 +19,27 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         public projectHubService: ProjectHubService,
         public apiService: ProjectApiService,
         public indicator: SpotlightIndicatorsService,
-        public fuseAlert: FuseConfirmationService
+        public fuseAlert: FuseConfirmationService,
+        public auth: AuthService
     ) {
-        this.projectHubService.includeClosedItems.askNeed.subscribe(res => {
+        this.projectHubService.includeClosedItems.riskIssue.subscribe(res => {
             if (this.viewContent) {
                 if (this.toggleHelper) {
                     this.changeRiskIssue(res, true)
+                }
+            }
+        })
+        this.riskIssueForm.valueChanges.subscribe(res => {
+            if (this.viewContent) {
+                this.submitPrep()
+                this.formValue = this.sortByDate(this.formValue)
+                this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
+                if (JSON.stringify(this.formValue) != JSON.stringify(this.dbRiskIssues)) {
+                    this.projectHubService.isFormChanged = true
+                }
+                else {
+                    this.projectHubService.isFormChanged = false
+                    console.log('CONGRATS')
                 }
             }
         })
@@ -41,29 +57,43 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     linksProblemCapture: any = []
     formValue: any = []
     riTableEditStack = []
-
+    isclosedriskissuetoggle: boolean = false;
+    lookupdata: any = []
     ngOnInit(): void {
-        this.dataloader()
+        this.getllookup()
     }
     dataloader() {
         this.viewContent = false
         if (this.projectHubService.projectid) {
             this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
-                this.riskIssueData = res.riskIssueData
-                if (res.riskIssueData.length > 0) {
-                    for (var i of res.riskIssueData) {
+                this.riskIssueData = res.riskIssuesData;
+                if (res.riskIssuesData?.length > 0) {
+                    for (var i of res.riskIssuesData) {
                         this.dbRiskIssues.push({
-                            askNeedUniqueId: i.askNeedUniqueId,
-                            projectId: i.projectId,
-                            askNeed1: i.askNeed1,
-                            needFromId: i.needFromId,
-                            needFromName: i.needFromName,
-                            needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            comments: i.comments,
-                            logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                             closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            functionGroupId: i.functionGroupId,
+                            functionGroupName: i.functionGroupName,
+                            ifHappens: i.ifHappens,
+                            impactId: i.impactId,
+                            impactName: this.getLookUpName(i.impactId),
+                            includeInCharter: i.includeInCharter,
                             includeInReport: i.includeInReport,
-                            indicator: i.indicator
+                            indicator: i.indicator,
+                            logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                            mitigation: i.mitigation,
+                            ownerId: i.ownerId,
+                            ownerName: i.ownerName,
+                            postMitigationComments: i.postMitigationComments,
+                            postMitigationImpact: i.postMitigationImpact,
+                            postMitigationProbability: i.postMitigationProbability,
+                            probabilityId: i.probabilityId,
+                            probabilityName: this.getLookUpName(i.probabilityId),
+                            projectId: i.projectId,
+                            riskIssueResult: i.riskIssueResult,
+                            riskIssueTypeId: i.riskIssueTypeId,
+                            riskIssueTypeName: i.riskIssueTypeName,
+                            riskIssueUniqueId: i.riskIssueUniqueId,
                         })
                     }
                     this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
@@ -71,9 +101,12 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 this.links = res.links
                 this.linksProblemCapture = res.linksProblemCapture
                 this.changeRiskIssue(this.projectHubService.includeClosedItems.riskIssue.value)
-                this.tableData = this.sortByDate(this.tableData)
-                console.log(this.tableData)
                 this.tableData.length > 0 ? this.formIntializer() : ''
+                this.tableData.forEach(x=>{
+                    if(x.probabilityId != ""){
+                        x.probabilityName = this.getLookUpName(x.probabilityId);
+                    }
+                })
                 this.viewContent = true
             })
         }
@@ -84,19 +117,150 @@ export class RisIssueViewBulkEditComponent implements OnInit {
 
     addRI() {
         this.riskIssueForm.push(new FormGroup({
-
+            owner: new FormControl( {}),
+            closeDate: new FormControl(""),
+            dueDate: new FormControl(""),
+            function: new FormControl( {}),
+            ifHappens: new FormControl(""),
+            impact: new FormControl( {}),
+            includeInCharter: new FormControl(""),
+            includeInReport: new FormControl(false),
+            indicator: new FormControl(""),
+            logDate: new FormControl(""),
+            mitigation: new FormControl(""),
+            postMitigationComments: new FormControl(""),
+            postMitigationImpact: new FormControl(""),
+            postMitigationProbability: new FormControl(""),
+            probability: new FormControl( {}),
+            projectId: new FormControl(this.projectHubService.projectid),
+            riskIssueResult: new FormControl(""),
+            riskIssueTypeId: new FormControl(""),
+            riskIssueTypeName: new FormControl(""),
+            riskIssueUniqueId: new FormControl(""),
         }))
         var j = [{
-
+            closeDate: null,
+            dueDate:  null,
+            functionGroupId: '',
+            functionGroupName: '',
+            ifHappens: '',
+            impactId: '',
+            impactName: '',
+            includeInCharter: '',
+            includeInReport: '',
+            indicator: '',
+            logDate: null,
+            mitigation: '',
+            ownerId: '',
+            ownerName: '',
+            postMitigationComments: '',
+            postMitigationImpact:'',
+            postMitigationProbability: '',
+            probabilityId: '',
+            probabilityName: '',
+            projectId: '',
+            riskIssueResult: '',
+            riskIssueTypeId: '',
+            riskIssueTypeName: '',
+            riskIssueUniqueId: '',
         }]
-
+        this.disabler()
+        this.tableData = [...this.tableData, ...j]
+        this.riTableEditStack.push(this.tableData.length - 1)
+        var div = document.getElementsByClassName('datatable-scroll')[0]
+        setTimeout(() => {
+            div.scroll({
+                top: div.scrollHeight,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }, 100);
     }
     toggleRiskIssue(event: any) {
         this.toggleHelper = true
         this.projectHubService.includeClosedItems.riskIssue.next(event.checked)
     }
     changeRiskIssue(event: any, initial: boolean = false) {
-
+        if (initial) {
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "Are you sure?",
+                "message": "Are you sure you want to show/hide closed items, all unsaved data will be lost. ",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warn"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "OK",
+                        "color": "warn"
+                    },
+                    "cancel": {
+                        "show": true,
+                        "label": "Cancel"
+                    }
+                },
+                "dismissible": true
+            }
+            if (this.projectHubService.isFormChanged) {
+                const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
+                riskIssueAlert.afterClosed().subscribe(close => {
+                    if (close == 'confirmed') {
+                        if (event == true) {
+                            this.isclosedriskissuetoggle = true
+                            this.tableData = this.riskIssueData
+                        }
+                        else {
+                            this.isclosedriskissuetoggle = false
+                            this.tableData = this.riskIssueData.filter(row => row.closeDate == null)
+                        }
+                        this.localIncludedItems.controls.toggle.patchValue(event)
+                        this.localIncludedItems.controls.toggle.markAsPristine()
+                        this.reset()
+                        this.dataloader()
+                    }
+                    else {
+                        this.localIncludedItems.controls.toggle.patchValue(!event)
+                        this.localIncludedItems.controls.toggle.markAsPristine()
+                        this.toggleHelper = false
+                        this.projectHubService.includeClosedItems.riskIssue.next(!event)
+                    }
+                })
+            }
+            else {
+                if (event == true) {
+                    this.isclosedriskissuetoggle = true
+                    this.tableData = this.riskIssueData
+                }
+                else {
+                    this.isclosedriskissuetoggle = false
+                    this.tableData = this.riskIssueData.filter(row => row.closeDate == null)
+                }
+                this.localIncludedItems.controls.toggle.patchValue(event)
+                this.localIncludedItems.controls.toggle.markAsPristine()
+                this.reset()
+                this.dataloader()
+            }
+        }
+        else {
+            if (event == true) {
+                this.isclosedriskissuetoggle = true
+                this.tableData = this.riskIssueData
+            }
+            else {
+                this.isclosedriskissuetoggle = false
+                this.tableData = this.riskIssueData.filter(row => row.closeDate == null)
+            }
+            this.localIncludedItems.controls.toggle.patchValue(event)
+            this.localIncludedItems.controls.toggle.markAsPristine()
+        }
+    }
+    reset() {
+        this.dbRiskIssues = []
+        this.formValue = []
+        this.riTableEditStack = []
+        this.riskIssueForm.clear()
     }
     getRowClass = (row) => {
         return {
@@ -105,6 +269,14 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     };
     submitRI() {
         if (this.projectHubService.isFormChanged) {
+            this.submitPrep()
+            this.projectHubService.isFormChanged = false
+            this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
+                    this.projectHubService.toggleDrawerOpen('', '', [], '')
+                    this.projectHubService.submitbutton.next(true)
+                    this.projectHubService.successSave.next(true)
+                }
+            )
         }
         else {
             this.projectHubService.toggleDrawerOpen('', '', [], '')
@@ -114,7 +286,32 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     formIntializer() {
         for (var x of this.tableData) {
             this.riskIssueForm.push(new FormGroup({
-
+                owner: new FormControl(x.ownerId ? {
+                    userAdid: x.ownerId,
+                    userDisplayName: x.ownerName
+                } : {}),
+                closeDate: new FormControl(x.closeDate),
+                dueDate: new FormControl(x.dueDate),
+                functionGroupId: new FormControl(x.functionGroupId),
+                functionGroupName: new FormControl(x.functionGroupName),
+                ifHappens: new FormControl(x.ifHappens),
+                impactId: new FormControl(x.impactId),
+                impactName: new FormControl(x.impactName),
+                includeInCharter: new FormControl(x.includeInCharter),
+                includeInReport: new FormControl(x.includeInReport),
+                indicator: new FormControl(x.indicator),
+                logDate: new FormControl(x.logDate),
+                mitigation: new FormControl(x.mitigation),
+                postMitigationComments: new FormControl(x.postMitigationComments),
+                postMitigationImpact: new FormControl(x.postMitigationImpact),
+                postMitigationProbability: new FormControl(x.postMitigationProbability),
+                probabilityId: new FormControl(x.probabilityId),
+                probabilityName: new FormControl(x.probabilityName),
+                projectId: new FormControl(x.projectId),
+                riskIssueResult: new FormControl(x.riskIssueResult),
+                riskIssueTypeId: new FormControl(x.riskIssueTypeId),
+                riskIssueTypeName: new FormControl(x.riskIssueTypeName),
+                riskIssueUniqueId: new FormControl(x.riskIssueUniqueId),
             }))
         }
         this.disabler()
@@ -145,7 +342,30 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }
         for (var i of formValue) {
             this.formValue.push({
-
+                closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                functionGroupId: i.functionGroupId,
+                functionGroupName: i.functionGroupName,
+                ifHappens: i.ifHappens,
+                includeInCharter: i.includeInCharter,
+                includeInReport: i.includeInReport,
+                indicator: i.indicator,
+                logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                mitigation: i.mitigation,
+                postMitigationComments: i.postMitigationComments,
+                postMitigationImpact: i.postMitigationImpact,
+                postMitigationProbability: i.postMitigationProbability,
+                projectId: i.projectId,
+                riskIssueResult: i.riskIssueResult,
+                riskIssueTypeId: i.riskIssueTypeId,
+                riskIssueTypeName: i.riskIssueTypeName,
+                riskIssueUniqueId: i.riskIssueUniqueId,
+                ownerId: Object.keys(i.owner).length > 0 ? i.owner.userAdid : null,
+                ownerName: Object.keys(i.owner).length > 0 ? i.owner.userDisplayName : null,
+                probabilityId: i.probabilityId,
+                probabilityName: i.probabilityName,
+                impactId: i.impactId,
+                impactName: i.impactName,
             })
         }
     }
@@ -191,11 +411,54 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
-
+                if (close == 'confirmed') {
+                    console.log(this.tableData)
+                    this.tableData.splice(rowIndex, 1)
+                    console.log(this.riskIssueForm.getRawValue())
+                    this.riskIssueForm.removeAt(rowIndex)
+                    if (this.riTableEditStack.includes(rowIndex)) {
+                        this.riTableEditStack.splice(this.riTableEditStack.indexOf(rowIndex), 1)
+                    }
+                    this.riTableEditStack = this.riTableEditStack.map(function (value) {
+                        return value > rowIndex ? value - 1 : value;
+                    })
+                    this.disabler()
+                    this.tableData = [...this.tableData]
+                }
             }
         )
     }
     islink(uid: string): boolean {
         return this.links.some(x => x.linkItemId == uid)
+    }
+    getprobability(): any {
+        return this.lookupdata.filter(x => x.lookUpParentId == '56b86714-15d8-45ef-ab5f-f50063254ceb').sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+        })
+    }
+    getLookUpName(id: string): string {
+        return id && id != '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == id).lookUpName : ''
+    }
+
+    getimpact(): any {
+        return this.lookupdata.filter(x => x.lookUpParentId == '08434f33-9e4d-482c-b776-efe1c3cae12e').sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+        })
+    }
+    getFunctionOwner(): any {
+        return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77").sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+        })
+    }
+    getllookup() {
+        this.auth.lookupMaster().then((resp: any) => {
+            this.lookupdata = resp
+            this.dataloader()
+        })
+    }
+    getissuetype(): any {
+        return this.lookupdata.filter(x => x.lookUpParentId == '6b4487a4-097d-43ee-890d-172c601cd09b').sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+        })
     }
 }
