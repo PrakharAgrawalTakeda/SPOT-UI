@@ -1097,7 +1097,7 @@ console.log(this.baselineLog)
         this.baselineLogObj = ''
       }
 console.log(this.baselineLogObj)
-      debugger
+     // debugger
       if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
         var justificationObjNew = {
@@ -1268,7 +1268,7 @@ console.log(this.baselineLogObj)
   }
 
   saveScheduleBulkEdit() {
-  debugger
+  //debugger
   this.formValue = []
     if (this.scheduleData.scheduleData.length != 0) {
       // if (JSON.stringify(this.dbSchedule) != JSON.stringify(formValue)) {
@@ -1494,7 +1494,7 @@ console.log(this.baselineLogObj)
       console.log("Logs", logs)
       console.log("Users List", this.userlist)
       console.log(logs.projectBaselineLog.length)
-      debugger
+      //debugger
       if (logs.projectBaselineLog.length != 0 || logs.users != null) {
         this.userlist = logs.users
 
@@ -1571,7 +1571,7 @@ console.log(this.baselineLogObj)
 
   baselineProject() {
     console.log(this.schedulengxdata)
-    debugger
+    //debugger
     for (var i of this.milestoneForm.controls) {
       if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         !this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
@@ -1651,7 +1651,7 @@ console.log(this.baselineLogObj)
   }
 
   submitschedule() {
-    debugger
+    //debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 
