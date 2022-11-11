@@ -73,10 +73,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                             dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                             functionGroupId: i.functionGroupId,
-                            functionGroupName: i.functionGroupName,
                             ifHappens: i.ifHappens,
                             impactId: i.impactId,
-                            impactName: this.getLookUpName(i.impactId),
                             includeInCharter: i.includeInCharter,
                             includeInReport: i.includeInReport,
                             indicator: i.indicator,
@@ -88,11 +86,9 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             postMitigationImpact: i.postMitigationImpact,
                             postMitigationProbability: i.postMitigationProbability,
                             probabilityId: i.probabilityId,
-                            probabilityName: this.getLookUpName(i.probabilityId),
                             projectId: i.projectId,
                             riskIssueResult: i.riskIssueResult,
                             riskIssueTypeId: i.riskIssueTypeId,
-                            riskIssueTypeName: i.riskIssueTypeName,
                             riskIssueUniqueId: i.riskIssueUniqueId,
                         })
                     }
@@ -102,11 +98,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 this.linksProblemCapture = res.linksProblemCapture
                 this.changeRiskIssue(this.projectHubService.includeClosedItems.riskIssue.value)
                 this.tableData.length > 0 ? this.formIntializer() : ''
-                this.tableData.forEach(x=>{
-                    if(x.probabilityId != ""){
-                        x.probabilityName = this.getLookUpName(x.probabilityId);
-                    }
-                })
                 this.viewContent = true
             })
         }
@@ -135,17 +126,14 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             projectId: new FormControl(this.projectHubService.projectid),
             riskIssueResult: new FormControl(""),
             riskIssueTypeId: new FormControl(""),
-            riskIssueTypeName: new FormControl(""),
             riskIssueUniqueId: new FormControl(""),
         }))
         var j = [{
             closeDate: null,
             dueDate:  null,
             functionGroupId: '',
-            functionGroupName: '',
             ifHappens: '',
             impactId: '',
-            impactName: '',
             includeInCharter: '',
             includeInReport: '',
             indicator: '',
@@ -157,11 +145,9 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             postMitigationImpact:'',
             postMitigationProbability: '',
             probabilityId: '',
-            probabilityName: '',
             projectId: '',
             riskIssueResult: '',
             riskIssueTypeId: '',
-            riskIssueTypeName: '',
             riskIssueUniqueId: '',
         }]
         this.disabler()
@@ -293,10 +279,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 closeDate: new FormControl(x.closeDate),
                 dueDate: new FormControl(x.dueDate),
                 functionGroupId: new FormControl(x.functionGroupId),
-                functionGroupName: new FormControl(x.functionGroupName),
                 ifHappens: new FormControl(x.ifHappens),
                 impactId: new FormControl(x.impactId),
-                impactName: new FormControl(x.impactName),
                 includeInCharter: new FormControl(x.includeInCharter),
                 includeInReport: new FormControl(x.includeInReport),
                 indicator: new FormControl(x.indicator),
@@ -306,11 +290,9 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 postMitigationImpact: new FormControl(x.postMitigationImpact),
                 postMitigationProbability: new FormControl(x.postMitigationProbability),
                 probabilityId: new FormControl(x.probabilityId),
-                probabilityName: new FormControl(x.probabilityName),
                 projectId: new FormControl(x.projectId),
                 riskIssueResult: new FormControl(x.riskIssueResult),
                 riskIssueTypeId: new FormControl(x.riskIssueTypeId),
-                riskIssueTypeName: new FormControl(x.riskIssueTypeName),
                 riskIssueUniqueId: new FormControl(x.riskIssueUniqueId),
             }))
         }
@@ -345,7 +327,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                 dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                 functionGroupId: i.functionGroupId,
-                functionGroupName: i.functionGroupName,
                 ifHappens: i.ifHappens,
                 includeInCharter: i.includeInCharter,
                 includeInReport: i.includeInReport,
@@ -358,14 +339,11 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 projectId: i.projectId,
                 riskIssueResult: i.riskIssueResult,
                 riskIssueTypeId: i.riskIssueTypeId,
-                riskIssueTypeName: i.riskIssueTypeName,
                 riskIssueUniqueId: i.riskIssueUniqueId,
                 ownerId: Object.keys(i.owner).length > 0 ? i.owner.userAdid : null,
                 ownerName: Object.keys(i.owner).length > 0 ? i.owner.userDisplayName : null,
                 probabilityId: i.probabilityId,
-                probabilityName: i.probabilityName,
                 impactId: i.impactId,
-                impactName: i.impactName,
             })
         }
     }
