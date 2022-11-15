@@ -162,9 +162,9 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       console.log(this.teamMembersSubmit)
       this.projecthubservice.isFormChanged = false
       this.formValue()
-      /*if (this.teamMembersSubmit.some(x => x.teamMemberAdId == "")) {
+      if (this.teamMembersSubmit.some(x => x.roleId == "")) {
         var comfirmConfig: FuseConfirmationConfig = {
-          "title": "Please select a Team Member Name",
+          "title": "Please select a Role",
           "message": "",
           "icon": {
             "show": true,
@@ -186,11 +186,12 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
       }
-      else {*/
-      this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      })
+      else {
+        this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        })
+      }
     }
     else {
       this.projecthubservice.submitbutton.next(true)

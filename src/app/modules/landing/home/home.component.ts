@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { lookupMaster } from 'app/shared/lookup-global';
 import { Title } from '@angular/platform-browser';
+import moment from 'moment';
 
 @Component({
     selector: 'landing-home',
@@ -28,6 +29,7 @@ export class LandingHomeComponent implements OnInit {
                 }
                 this.authService.instance.acquireTokenSilent(scopes).then(response => {
                     localStorage.setItem('token', response.accessToken)
+                    localStorage.setItem('token-initaited-time', moment(new Date()).toString())
                     if (localStorage.getItem('spot-redirect') != null) {
                         var temp = localStorage.getItem('spot-redirect')
                         console.log("hey" + temp)
