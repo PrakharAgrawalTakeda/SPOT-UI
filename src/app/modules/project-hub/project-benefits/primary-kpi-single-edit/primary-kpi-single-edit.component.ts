@@ -32,6 +32,7 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
     this.projecthubservice.isFormChanged = false
     this.apiService.updatePrimayKPI(this.projecthubservice.projectid, this.primaryKPIForm.controls.primaryKpi.value).then(res => {
       this.projecthubservice.submitbutton.next(true)
+      this.projecthubservice.isNavChanged.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
     })
   }
