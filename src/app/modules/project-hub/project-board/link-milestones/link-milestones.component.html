@@ -1,1 +1,37 @@
-<p>link-milestones works!</p>
+<div>
+   
+    <div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
+        <div class="text-on-primary" style="padding-top: 6px">Link Milestones</div>
+        <div style="padding-top: 2px">
+            <a (click)="
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                " href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+<div class="pr-6 pl-6 flex justify-end items-center w-full">
+    <div class="pl-3 font-medium text-secondary text-md italic mt-2">
+        <form [formGroup]="localIncludedItems">
+        <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
+        (checked)="projecthubservice.includeClosedItems.schedule.value" (change)="toggleSchedule($event)">
+          Include Closed Items</mat-slide-toggle>
+        </form>
+      </div>
+    </div>
+    <div class="h-[84vh] overflow-hidden">
+</div>
+    <div class="pr-6 pl-6 flex justify-between items-center w-full">
+
+        <button class="min-w-26" mat-flat-button [color]="'primary'"
+          (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
+          Cancel
+        </button>
+  
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitlink()">
+          Submit
+        </button>
+  
+      </div>
+
+</div>

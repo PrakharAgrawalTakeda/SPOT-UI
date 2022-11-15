@@ -302,8 +302,8 @@
 
           <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-              <div *ngIf="value != '1'" class="logID">
-                <a (click)="baselineLogDetails()">{{value}}</a>
+              <div *ngIf="row.baselineLogId && value != '1'" class="logID">
+                <a (click)="baselineLogDetails(row.baselineLogId)">{{value}}</a>
               </div>
               <div *ngIf="value == '1'" class="logID1">
                 <a>{{value}}</a>
@@ -369,39 +369,96 @@
   <div class="flex justify-start gap-64 items-center">
     <div class="font-medium text-secondary text-md italic mt-2">
       <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
-        Log ID : 
+        Log ID : {{baselinelogdetails.logId}}
       </h6>
     </div>
 
     <div class="font-medium text-secondary text-md italic mt-2">
       
-      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
-        Baseline : {{baselineCount.baselineCount}} </h6>
+      <h6 class="font-medium text-secondary text-md italic ml-2 mt-2">
+        Baseline : {{baselinelogdetails.baselineCount}} </h6>
       </div>
     
 
     <div class="font-medium text-secondary text-md italic mt-2">
       
-      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
-        Baseline Date :  </h6>
+      <h6 class="font-medium text-secondary text-md italic ml-2 mt-2">
+        Baseline Date : {{baselinelogdetails.modifiedDate | date:'dd-MMM-yyyy'}}  </h6>
       
     </div>
 
     <div class="font-medium text-secondary text-md italic mt-2">
       
       <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
-        Baseline Set By :  </h6>
+        Baseline Set By : {{getUserName(baselinelogdetails.teamMemberAdId)}}</h6>
       
     </div>
 
     <div class="font-medium text-secondary text-md italic mt-2">
       
       <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
-        Justification :  </h6>
+        Justification : {{baselinelogdetails.baselineComment}} </h6>
       
     </div>
 
   </div>
+  <div class="overflow-x-auto mx-4 mt-8">
+    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [row]="logdetails"
+         [rowClass]="getRowClass">
+
+        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="3">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+           <p>{{projectbaselinelogDetailscurr.milestone}}</p>
+          </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish" prop="plannedFinish" [flexGrow]="0.3">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <p>{{projectbaselinelogDetailsprev.plannedFinish | date:'dd-MMM-yyyy'}}</p>
+          </ng-template>
+      </ngx-datatable-column>
+    <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish" prop="plannedFinish" [flexGrow]="0.3">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p>{{projectbaselinelogDetailscurr.plannedFinish | date:'dd-MMM-yyyy'}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+
+      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish" prop="baselineFinish" [flexGrow]="0.3">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <p>{{projectbaselinelogDetailsprev.baselineFinish | date:'dd-MMM-yyyy'}}</p>
+          </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Baseline Finish" prop="baselineFinish" [flexGrow]="0.3">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p>{{projectbaselinelogDetailscurr.baselineFinish | date:'dd-MMM-yyyy'}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+
+      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Completion Date" prop="completionDate" [flexGrow]="0.3">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p>{{projectbaselinelogDetailsprev.completionDate | date:'dd-MMM-yyyy'}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Completion Date" prop="completionDate" [flexGrow]="0.3">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <p>{{projectbaselinelogDetailscurr.completionDate | date:'dd-MMM-yyyy'}}</p>
+      </ng-template>
+  </ngx-datatable-column>
+
+    <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Indicator" prop="indicator" [flexGrow]="0.3">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <p>{{projectbaselinelogDetailsprev.indicator}}</p>    
+      </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="indicator" [flexGrow]="0.3">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+    <p>{{projectbaselinelogDetailscurr.indicator}}</p>    
+    </ng-template>
+</ngx-datatable-column>
+
+      </ngx-datatable>
+      </div>
 </div>
 
 
