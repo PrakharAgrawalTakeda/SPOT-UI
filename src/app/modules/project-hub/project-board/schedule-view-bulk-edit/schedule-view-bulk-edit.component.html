@@ -413,9 +413,9 @@
     </div>
 
   </div>
-  <div class="overflow-x-auto mx-4 mt-8">
+  <div class="overflow-x-auto mx-4 mt-8 h-[79vh] overflow-hidden">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-      class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [row]="logdetails"
+      class="pr-2 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [row]="logdetails"
       [rowClass]="getRowClass">
 
       <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.8">
@@ -431,14 +431,14 @@
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish" prop="plannedFinish"
-        [flexGrow]="0.5">
+        [flexGrow]="0.48">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
           <p>{{projectbaselinelogDetailscurr.plannedFinish | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
       </ngx-datatable-column>
 
       <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish" prop="baselineFinish"
-        [flexGrow]="0.5">
+        [flexGrow]="0.48">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
           <p>{{projectbaselinelogDetailsprev.baselineFinish | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
@@ -468,13 +468,23 @@
           <p>{{projectbaselinelogDetailsprev.indicator}}</p>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="indicator" [flexGrow]="0.5">
+      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="indicator" [flexGrow]="0.4">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
           <p>{{projectbaselinelogDetailscurr.indicator}}</p>
         </ng-template>
       </ngx-datatable-column>
 
     </ngx-datatable>
+  </div>
+  <div class="mt-7 pr-6 pl-6 flex justify-end items-center w-full">
+    <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
+      Cancel
+    </button> -->
+
+    <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogDetails()">
+      OK
+    </button>
+
   </div>
 </div>
 

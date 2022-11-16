@@ -1497,6 +1497,13 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     // }
   }
 
+  cancelBaselineLogDetails()
+  {
+    //this.viewContent = true
+    this.compareBaselineLogs = false
+    this.viewBaselineLogs = true
+  }
+
   baselineLogs() {
 
     // this.baselineLogForm = new FormArray([])
