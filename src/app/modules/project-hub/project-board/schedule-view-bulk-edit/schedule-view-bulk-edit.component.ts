@@ -1137,9 +1137,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
           this.apiService.addProjectBaselineLog(justificationObjNew).then(res => {
             //this.viewContent = true
             //this.viewBaseline = false
-
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.submitbutton.next(true)
-            this.saveScheduleBulkEdit()
+            //this.saveScheduleBulkEdit()
           })
         })
 
@@ -1163,9 +1163,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         this.apiService.addProjectBaselineLog(justificationObjNewnocounter).then(res => {
           //this.viewContent = true
           //this.viewBaseline = false
-
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
-          this.saveScheduleBulkEdit()
+         // this.saveScheduleBulkEdit()
         })
 
       }
@@ -1190,9 +1190,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
           this.apiService.addProjectBaselineLog(justjustificationObj).then(res => {
             //this.viewContent = true
             // this.viewBaseline = false
-
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.submitbutton.next(true)
-            this.saveScheduleBulkEdit()
+            //this.saveScheduleBulkEdit()
           })
         }
 
@@ -1224,9 +1224,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.apiService.addProjectBaselineLog(newjustificationObj).then(res => {
               //this.viewContent = true
               //this.viewBaseline = false
-
+              this.projecthubservice.toggleDrawerOpen('', '', [], '')
               this.projecthubservice.submitbutton.next(true)
-              this.saveScheduleBulkEdit()
+              //this.saveScheduleBulkEdit()
             })
           })
         }
@@ -1261,9 +1261,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.apiService.addProjectBaselineLog(justificationObj).then(res => {
               //this.viewContent = true
               //this.viewBaseline = false
-
+              this.projecthubservice.toggleDrawerOpen('', '', [], '')
               this.projecthubservice.submitbutton.next(true)
-              this.saveScheduleBulkEdit()
+              //this.saveScheduleBulkEdit()
             })
           })
         }
@@ -1342,8 +1342,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       }
       console.log(this.formValue)
       this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-
-        this.projecthubservice.toggleDrawerOpen('', '', [], '', false)
+        this.submitjustification()
+        
         this.projecthubservice.submitbutton.next(true)
       })
     }
@@ -1405,8 +1405,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       }
       console.log(this.formValue)
       this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        this.submitjustification()
+        
         this.projecthubservice.submitbutton.next(true)
       })
     }
