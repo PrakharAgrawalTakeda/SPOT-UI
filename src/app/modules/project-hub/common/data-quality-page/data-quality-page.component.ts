@@ -56,7 +56,7 @@ export class DataQualityPageComponent implements OnInit {
         window.dispatchEvent(new Event('resize'));
     }
     getColor(percentage: number) {
-        if (this.projectType == 'Simple Project') {
+        if (this.projectType == 'Simple Project' || percentage == null) {
             return '#4c9bcf';
         } else {
             if (percentage < this.lowerTargetPercentage) {
@@ -84,10 +84,11 @@ export class DataQualityPageComponent implements OnInit {
             this.rows = res.rows;
             this.spotId = res.spotId!=0 ? res.spotId : this.projecthubservice.currentSpotId;
             this.projectName = res.projectName;
-            this.dataQualityPercentage = res.dataQualityPercentage * 100;
             if (res.phase == 'Initiate') {
+                this.dataQualityPercentage =null;
                 this.dataQualityPercentageString = 'N/A';
             } else {
+                this.dataQualityPercentage = res.dataQualityPercentage * 100;
                 this.dataQualityPercentageString =
                     (~~this.dataQualityPercentage).toString() + "%";
             }

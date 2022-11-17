@@ -216,6 +216,24 @@ export class ProjectApiService {
     const response =  lastValueFrom(abc$)
     return response
   }
+  getPhaseState(projectId){
+      var url = GlobalVariables.apiurl + "ProjectHubData/PhaseState/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  postPhaseState(body){
+      var url = GlobalVariables.apiurl + "ProjectHubData/PhaseState"
+      const abc$ = this.http.post(url,body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  getCapitalPhase(){
+      var url = GlobalVariables.apiurl + "ProjectHubData/CapitalPhase"
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
   getDataCompletenessPercent(projectId){
     var url = GlobalVariables.apiurl + "ProjectHubData/DataCompletenessPercent/"+ projectId
     const abc$ = this.http.get(url)
