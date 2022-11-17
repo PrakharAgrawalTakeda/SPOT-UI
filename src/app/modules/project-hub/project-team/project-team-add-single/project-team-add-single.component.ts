@@ -70,49 +70,49 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "474EE4AC-7A6C-4D30-B6EA-12A0D0F4BC2C" && x.lookUpId != "87DA989B-0BBA-406F-99C1-99E1E80EE9FE")
   }
   submitProjectTeam() {
-    //  if (Object.keys(this.projectTeamAddForm.controls.usersingle.value).length > 0) {
-    this.projecthubservice.isFormChanged = false
-    var projectTeam = this.projectTeamAddForm.getRawValue();
-    var mainObj = {
-      projectTeamUniqueId: "",
-      problemUniqueId: this.projecthubservice.projectid,
-      roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
-      teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
-      teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
-      teamPermissionId: projectTeam.permission,
-      percentTime: 0,
-      duration: 0,
-      includeInCharter: false,
-      includeInProposal: false
+    if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
+      this.projecthubservice.isFormChanged = false
+      var projectTeam = this.projectTeamAddForm.getRawValue();
+      var mainObj = {
+        projectTeamUniqueId: "",
+        problemUniqueId: this.projecthubservice.projectid,
+        roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
+        teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
+        teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
+        teamPermissionId: projectTeam.permission,
+        percentTime: 0,
+        duration: 0,
+        includeInCharter: false,
+        includeInProposal: false
+      }
+      this.apiService.addProjectTeam(mainObj).then(res => {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      })
     }
-    this.apiService.addProjectTeam(mainObj).then(res => {
-      this.projecthubservice.submitbutton.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-    })
-    // }
-    /* else{
-       var comfirmConfig: FuseConfirmationConfig = {
-         "title": "Please select a Team Member Name",
-         "message": "",
-         "icon": {
-           "show": true,
-           "name": "heroicons_outline:exclamation",
-           "color": "warning"
-         },
-         "actions": {
-           "confirm": {
-             "show": true,
-             "label": "Okay",
-             "color": "primary"
-           },
-           "cancel": {
-             "show": false,
-             "label": "Cancel"
-           }
-         },
-         "dismissible": true
-       }
-       const alert = this.fuseAlert.open(comfirmConfig)
-     }*/
+    else {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please select a Role",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
   }
 }

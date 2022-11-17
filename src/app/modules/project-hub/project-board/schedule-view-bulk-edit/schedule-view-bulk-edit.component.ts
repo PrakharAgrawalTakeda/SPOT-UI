@@ -71,6 +71,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   compareBaselineLogs: boolean = false
   roleMaster: any = {}
   baselineCount: any = {}
+  baselinelogdetails: any = {}
+  baselinelogdetailsprev: any = {}
+  projectbaselinelogDetailsprev: any = {}
+  projectbaselinelogDetailscurr: any = {}
+  baselinelogdetailscurr: any = {}
+  loglog: any = {}
   baselineLog: any = {}
   baselineLogObj: any = []
   scheduledataDB: any = {}
@@ -103,6 +109,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   toggleHelper: boolean = false
   dbSchedule: any = []
   formValue: any = []
+  logloglog: any;
   // onResize(event){
   //   event.window.innerWidth; // window width
   // }
@@ -201,159 +208,167 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       log.projectBaselineLog.sort((a, b) => {
         return b.baselineCount - a.baselineCount;
       })
-      //this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
-      this.apiService.getprojectTeams(this.id, this.msalService.instance.getActiveAccount().localAccountId).then((teamrole: any) => {
-        this.apiService.getProjectBaseline(this.id).then((count: any) => {
-          this.apiService.getprojectviewdata(this.id).then((res: any) => {
-            this.portApiService.getfilterlist().then(filterres => {
-              this.authService.lookupMaster().then((lookup: any) => {
-                console.log("Users List", this.userlist)
-                this.teamMemberRole = teamrole.roleId
-                console.log(log)
-                if (log.length != 0) {
-                  if (log.projectBaselineLog.length != 0) {
-                    this.log = log.projectBaselineLog[0]
+      this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
+        this.apiService.getprojectTeams(this.id, this.msalService.instance.getActiveAccount().localAccountId).then((teamrole: any) => {
+          this.apiService.getProjectBaseline(this.id).then((count: any) => {
+            this.apiService.getprojectviewdata(this.id).then((res: any) => {
+              this.portApiService.getfilterlist().then(filterres => {
+                this.authService.lookupMaster().then((lookup: any) => {
 
-                    console.log(this.log)
+                  this.teamMemberRole = teamrole.roleId
+                  console.log(log)
+                  if (log.length != 0) {
+                    if (log.projectBaselineLog.length != 0) {
+                      this.log = log.projectBaselineLog[0]
+
+                      console.log(this.log)
+                    }
+                    else {
+                      this.log.projectBaselineLog = ''
+                      console.log(this.log)
+                    }
                   }
                   else {
-                    this.log.projectBaselineLog = ''
+                    this.log = ''
                     console.log(this.log)
                   }
-                }
-                else {
-                  this.log = ''
-                  console.log(this.log)
-                }
-
-                // console.log("Log Details",logDetails)
-                //this.logdetails = logDetails
-                this.baselineCount = count
-                console.log("Baseline Count", this.baselineCount)
-                console.log('LookUp Data', lookup)
-                this.lookUpData = lookup
-                console.log('Filter Criteria:', filterres)
-                this.filterCriteria = filterres
-                console.log("Milestone info:", res)
-                this.scheduleData = res
-                console.log(this.isclosed)
-                console.log(this.scheduleData.scheduleData)
-                this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
-                if (this.isclosed == false) {
-                  this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
-                  console.log("ngx", this.schedulengxdata)
-                }
-                this.scheduledataDB = res.scheduleData
-                console.log(this.projecthubservice.includeClosedItems.schedule.value)
-
-                if (res.scheduleData.length != 0) {
-                  for (var i of res.scheduleData) {
-                    this.dbSchedule.push({
-                      scheduleUniqueId: i.scheduleUniqueId,
-                      projectId: i.projectId,
-                      milestone: i.milestone,
-                      plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                      baselineFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                      responsiblePersonName: (i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
-                      functionGroupId: i.functionGroupId,
-                      completionDate: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                      comments: (i.comments),
-                      includeInReport: (i.includeInReport),
-                      includeInCharter: (i.includeInCharter),
-                      milestoneType: (i.milestoneType),
-                      templateMilestoneId: (i.templateMilestoneId),
-                      includeInCloseout: (i.includeInCloseout),
-                      responsiblePersonId: (i.responsiblePersonId),
-                      indicator: (i.indicator)
-                    })
+                  //this.logloglog = log
+                  if (log.projectBaselineLog.length != 0 || log.users != null) {
+                    this.userlist = log.users
                   }
-                  this.scheduledataDb = this.schedulengxdata.map(x => {
-                    return {
-                      "scheduleUniqueId": x.scheduleUniqueId,
-                      "projectId": x.projectId,
-                      "milestone": x.milestone,
-                      "plannedFinish": moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss"),
-                      "baselineFinish": moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss"),
-                      "responsiblePersonName": (x.responsiblePersonId == null || x.responsiblePersonId == '' ? {} : { userAdid: x.responsiblePersonId, userDisplayName: x.responsiblePersonName }),
-                      "functionGroupId": x.functionGroupId,
-                      "function": (this.lookUpData.find(y => y.lookUpId == x.functionGroupId)),
-                      "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
-                      "comments": x.comments,
-                      "includeInReport": x.includeInReport,
-                      "includeInCharter": x.includeInCharter,
-                      "milestoneType": x.milestoneType,
-                      "templateMilestoneId": x.templateMilestoneId,
+                  console.log("Users List", this.userlist)
+                  console.log("Log Details", logDetails)
+                  if(logDetails.length != 0)
+                  {
+                    this.logdetails = logDetails
+                  }
+                  
+                  this.baselineCount = count
+                  console.log("Baseline Count", this.baselineCount)
+                  console.log('LookUp Data', lookup)
+                  this.lookUpData = lookup
+                  console.log('Filter Criteria:', filterres)
+                  this.filterCriteria = filterres
+                  console.log("Milestone info:", res)
+                  this.scheduleData = res
+                  console.log(this.isclosed)
+                  console.log(this.scheduleData.scheduleData)
+                  this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
+                  if (this.isclosed == false) {
+                    this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+                    console.log("ngx", this.schedulengxdata)
+                  }
+                  this.scheduledataDB = res.scheduleData
+                  console.log(this.projecthubservice.includeClosedItems.schedule.value)
 
-                      "includeInCloseout": x.includeInCloseout,
-                      "responsiblePersonId": x.responsiblePersonId,
-                      "indicator": x.indicator
+                  if (res.scheduleData.length != 0) {
+                    for (var i of res.scheduleData) {
+                      this.dbSchedule.push({
+                        scheduleUniqueId: i.scheduleUniqueId,
+                        projectId: i.projectId,
+                        milestone: i.milestone,
+                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        baselineFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        responsiblePersonName: (i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
+                        functionGroupId: i.functionGroupId,
+                        completionDate: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        comments: (i.comments),
+                        includeInReport: (i.includeInReport),
+                        includeInCharter: (i.includeInCharter),
+                        milestoneType: (i.milestoneType),
+                        templateMilestoneId: (i.templateMilestoneId),
+                        includeInCloseout: (i.includeInCloseout),
+                        responsiblePersonId: (i.responsiblePersonId),
+                        indicator: (i.indicator)
+                      })
                     }
-                  })
-                  for (var i of this.schedulengxdata) {
-                    console.log(this.schedulengxdata)
-                    this.milestoneName = i.milestone
-                    console.log(this.milestoneName)
-                    this.milestoneForm.push(new FormGroup({
-                      scheduleUniqueId: new FormControl(i.scheduleUniqueId),
-                      projectId: new FormControl(i.projectId),
-                      milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
-                      plannedFinish: new FormControl(i.plannedFinish),
-                      baselineFinish: new FormControl(i.baselineFinish),
-                      responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
-                      functionGroupId: new FormControl(i.functionGroupId),
-                      function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
-                      completionDate: new FormControl(i.completionDate),
-                      comments: new FormControl(i.comments),
-                      includeInReport: new FormControl(i.includeInReport),
-                      includeInCharter: new FormControl(i.includeInCharter),
-                      milestoneType: new FormControl(i.milestoneType),
-                      templateMilestoneId: new FormControl(i.templateMilestoneId),
-                      includeInCloseout: new FormControl(i.includeInCloseout),
-                      responsiblePersonId: new FormControl(i.responsiblePersonId),
-                      indicator: new FormControl(i.indicator)
-                    }))
-                    console.log(this.milestoneForm.controls.filter(x => x.value.completionDate != null))
-                    if (this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
-                      for (let control of this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
-                        console.log(control)
-                        console.log(control['controls']['baselineFinish'])
+                    this.scheduledataDb = this.schedulengxdata.map(x => {
+                      return {
+                        "scheduleUniqueId": x.scheduleUniqueId,
+                        "projectId": x.projectId,
+                        "milestone": x.milestone,
+                        "plannedFinish": moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss"),
+                        "baselineFinish": moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss"),
+                        "responsiblePersonName": (x.responsiblePersonId == null || x.responsiblePersonId == '' ? {} : { userAdid: x.responsiblePersonId, userDisplayName: x.responsiblePersonName }),
+                        "functionGroupId": x.functionGroupId,
+                        "function": (this.lookUpData.find(y => y.lookUpId == x.functionGroupId)),
+                        "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
+                        "comments": x.comments,
+                        "includeInReport": x.includeInReport,
+                        "includeInCharter": x.includeInCharter,
+                        "milestoneType": x.milestoneType,
+                        "templateMilestoneId": x.templateMilestoneId,
+
+                        "includeInCloseout": x.includeInCloseout,
+                        "responsiblePersonId": x.responsiblePersonId,
+                        "indicator": x.indicator
+                      }
+                    })
+                    for (var i of this.schedulengxdata) {
+                      console.log(this.schedulengxdata)
+                      this.milestoneName = i.milestone
+                      console.log(this.milestoneName)
+                      this.milestoneForm.push(new FormGroup({
+                        scheduleUniqueId: new FormControl(i.scheduleUniqueId),
+                        projectId: new FormControl(i.projectId),
+                        milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
+                        plannedFinish: new FormControl(i.plannedFinish),
+                        baselineFinish: new FormControl(i.baselineFinish),
+                        responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : { userAdid: i.responsiblePersonId, userDisplayName: i.responsiblePersonName }),
+                        functionGroupId: new FormControl(i.functionGroupId),
+                        function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
+                        completionDate: new FormControl(i.completionDate),
+                        comments: new FormControl(i.comments),
+                        includeInReport: new FormControl(i.includeInReport),
+                        includeInCharter: new FormControl(i.includeInCharter),
+                        milestoneType: new FormControl(i.milestoneType),
+                        templateMilestoneId: new FormControl(i.templateMilestoneId),
+                        includeInCloseout: new FormControl(i.includeInCloseout),
+                        responsiblePersonId: new FormControl(i.responsiblePersonId),
+                        indicator: new FormControl(i.indicator)
+                      }))
+                      console.log(this.milestoneForm.controls.filter(x => x.value.completionDate != null))
+                      if (this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
+                        for (let control of this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
+                          console.log(control)
+                          console.log(control['controls']['baselineFinish'])
+                          control['controls']['baselineFinish'].disable()
+                        }
+                      }
+
+                    }
+
+                    console.log(this.projecthubservice.roleControllerControl.roleId)
+                    if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
+
+                      if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
+                        this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
+                      }
+                    }
+                    if (this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                      if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
+
+                        this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
+                      }
+                    }
+                    for (let control of this.milestoneForm.controls) {
+                      if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
                         control['controls']['baselineFinish'].disable()
                       }
                     }
 
                   }
-
-                  console.log(this.projecthubservice.roleControllerControl.roleId)
-                  if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
-
-                    if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
-                      this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
-                    }
-                  }
-                  if (this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
-                    if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
-
-                      this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
-                    }
-                  }
-                  for (let control of this.milestoneForm.controls) {
-                    if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
-                      control['controls']['baselineFinish'].disable()
-                    }
-                  }
-
-                }
-                //this.value = this.milestoneForm.getRawValue()
-                console.log('MilestoneForm:', this.milestoneForm.getRawValue())
-                this.viewContent = true
+                  //this.value = this.milestoneForm.getRawValue()
+                  console.log('MilestoneForm:', this.milestoneForm.getRawValue())
+                  this.viewContent = true
+                })
               })
             })
           })
         })
       })
-    })
 
-    //})
+    })
   }
 
   toggleSchedule(event: any) {
@@ -1084,20 +1099,20 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         return a.baselineCount - b.baselineCount;
 
       })
-    //})
-   
-console.log(this.baselineLog)
+      //})
+
+      console.log(this.baselineLog)
       if (this.baselineLog.length > 0) {
-        this.baselineLogObj =  this.baselineLog.sort((a, b) => {
+        this.baselineLogObj = this.baselineLog.sort((a, b) => {
           return a.baselineCount - b.baselineCount;
-  
+
         })
       }
       else {
         this.baselineLogObj = ''
       }
-console.log(this.baselineLogObj)
-     // debugger
+      console.log(this.baselineLogObj)
+      // debugger
       if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
         var justificationObjNew = {
@@ -1158,8 +1173,7 @@ console.log(this.baselineLogObj)
       else if (this.baselineLogObj != '') {
         //console.log(this.baselineForm.value.counter)
         if (this.baselineForm.value.counter == false) {
-          for(var i of this.baselineLogObj)
-          {
+          for (var i of this.baselineLogObj) {
             var justjustificationObj = {
               baselineLogId: "new",
               projectId: i.projectId,
@@ -1171,7 +1185,7 @@ console.log(this.baselineLogObj)
               includeSlipChart: i.includeSlipChart
             }
           }
-         
+
           console.log(justificationObj)
           this.apiService.addProjectBaselineLog(justjustificationObj).then(res => {
             //this.viewContent = true
@@ -1183,8 +1197,7 @@ console.log(this.baselineLogObj)
         }
 
         else if (this.baselineCount == null && this.baselineForm.value.counter == true || this.baselineCount == '' && this.baselineForm.value.counter == true) {
-          for(var i of this.baselineLogObj)
-          {
+          for (var i of this.baselineLogObj) {
             var newbaselineObj = {
               projectId: i.projectId,
               baselineCount: 1,
@@ -1195,7 +1208,7 @@ console.log(this.baselineLogObj)
             var newjustificationObj = {
               baselineLogId: "new",
               projectId: i.projectId,
-              baselineCount:  1,
+              baselineCount: 1,
               teamMemberAdId: this.teamMemberAdId,
               modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
               baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
@@ -1203,7 +1216,7 @@ console.log(this.baselineLogObj)
               includeSlipChart: i.includeSlipChart
             }
           }
-          
+
           console.log(newjustificationObj)
           this.apiService.editProjectBaseline(newbaselineObj).then((count: any) => {
             //this.viewContent = true
@@ -1220,8 +1233,7 @@ console.log(this.baselineLogObj)
 
 
         else if (this.baselineForm.value.counter == true) {
-          for(var i of this.baselineLogObj)
-          {
+          for (var i of this.baselineLogObj) {
             var justificationObj = {
               baselineLogId: "new",
               projectId: i.projectId,
@@ -1239,7 +1251,7 @@ console.log(this.baselineLogObj)
               modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
             }
           }
-          
+
 
           console.log(justificationObj)
           console.log(baselineObj)
@@ -1268,74 +1280,74 @@ console.log(this.baselineLogObj)
   }
 
   saveScheduleBulkEdit() {
-  //debugger
-  this.formValue = []
+    //debugger
+    this.formValue = []
     if (this.scheduleData.scheduleData.length != 0) {
       // if (JSON.stringify(this.dbSchedule) != JSON.stringify(formValue)) {
-        
-        console.log(this.scheduleObj)
-        this.projecthubservice.isFormChanged = false
 
-        var formValue = this.milestoneForm.getRawValue()
-        console.log(formValue)
-        //this.scheduleObj = formValue
-        console.log(this.dbSchedule)
-        if (!this.projecthubservice.includeClosedItems.schedule.value) {
-          this.formValue = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
-          console.log(this.formValue)
-        }
+      console.log(this.scheduleObj)
+      this.projecthubservice.isFormChanged = false
 
-        for (var i of formValue) {
-          console.log(i)
-          if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
-            this.formValue.push({
-              scheduleUniqueId: i.scheduleUniqueId,
-              projectId: i.projectId,
-              milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
-              plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-              completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              comments: i.comments,
-              includeInReport: i.includeInReport,
-              functionGroupId: i.function == null ? null : i.function.lookUpId,
-              includeInCharter: i.includeInCharter,
-              milestoneType: i.milestoneType,
-              templateMilestoneId: i.templateMilestoneId,
-              includeInCloseout: i.includeInCloseout,
-              responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
-              indicator: i.indicator
-            })
-          }
-          else {
-            this.formValue.push({
-              scheduleUniqueId: i.scheduleUniqueId,
-              projectId: i.projectId,
-              milestone: (i.milestone),
-              plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-              completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              comments: i.comments,
-              includeInReport: i.includeInReport,
-              functionGroupId: i.function == null ? null : i.function.lookUpId,
-              includeInCharter: i.includeInCharter,
-              milestoneType: i.milestoneType,
-              templateMilestoneId: i.templateMilestoneId,
-              includeInCloseout: i.includeInCloseout,
-              responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
-              indicator: i.indicator
-            })
-          }
-        }
+      var formValue = this.milestoneForm.getRawValue()
+      console.log(formValue)
+      //this.scheduleObj = formValue
+      console.log(this.dbSchedule)
+      if (!this.projecthubservice.includeClosedItems.schedule.value) {
+        this.formValue = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
         console.log(this.formValue)
-        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-
-          this.projecthubservice.toggleDrawerOpen('', '', [], '',false)
-          this.projecthubservice.submitbutton.next(true)
-        })
       }
-   // }
+
+      for (var i of formValue) {
+        console.log(i)
+        if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
+          this.formValue.push({
+            scheduleUniqueId: i.scheduleUniqueId,
+            projectId: i.projectId,
+            milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            comments: i.comments,
+            includeInReport: i.includeInReport,
+            functionGroupId: i.function == null ? null : i.function.lookUpId,
+            includeInCharter: i.includeInCharter,
+            milestoneType: i.milestoneType,
+            templateMilestoneId: i.templateMilestoneId,
+            includeInCloseout: i.includeInCloseout,
+            responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+            indicator: i.indicator
+          })
+        }
+        else {
+          this.formValue.push({
+            scheduleUniqueId: i.scheduleUniqueId,
+            projectId: i.projectId,
+            milestone: (i.milestone),
+            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            comments: i.comments,
+            includeInReport: i.includeInReport,
+            functionGroupId: i.function == null ? null : i.function.lookUpId,
+            includeInCharter: i.includeInCharter,
+            milestoneType: i.milestoneType,
+            templateMilestoneId: i.templateMilestoneId,
+            includeInCloseout: i.includeInCloseout,
+            responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+            indicator: i.indicator
+          })
+        }
+      }
+      console.log(this.formValue)
+      this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+
+        this.projecthubservice.toggleDrawerOpen('', '', [], '', false)
+        this.projecthubservice.submitbutton.next(true)
+      })
+    }
+    // }
     else {
       this.projecthubservice.isFormChanged = false
 
@@ -1401,9 +1413,8 @@ console.log(this.baselineLogObj)
   }
 
   getUserName(adid: string): string {
-    if (this.userlist != null) {
+    if (this.userlist.length > 0) {
       var baselinesetby = this.userlist.find(x => x.userAdid == adid)
-
       return baselinesetby ? baselinesetby.userDisplayName : ""
     }
     else {
@@ -1481,14 +1492,21 @@ console.log(this.baselineLogObj)
     // }
     // else {
     //   //this.baselinelogTableEditStack = []
-       this.viewContent = true
-       this.viewBaseline = false
+    this.viewContent = true
+    this.viewBaseline = false
     // }
   }
 
+  cancelBaselineLogDetails()
+  {
+    //this.viewContent = true
+    this.compareBaselineLogs = false
+    this.viewBaselineLogs = true
+  }
+
   baselineLogs() {
-    
-   // this.baselineLogForm = new FormArray([])
+
+    // this.baselineLogForm = new FormArray([])
     console.log(this.baselineLogForm.getRawValue())
     this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
       console.log("Logs", logs)
@@ -1510,7 +1528,7 @@ console.log(this.baselineLogObj)
           i.logId = count
           count = count + 1
 
-//Baseline Log Form changes
+          //Baseline Log Form changes
 
           // this.baselineLogForm.push(new FormGroup({
           //   baselineLogId: new FormControl(i.baselineLogId),
@@ -1537,7 +1555,7 @@ console.log(this.baselineLogObj)
 
   }
 
-//Baseline Log Form Changes
+  //Baseline Log Form Changes
 
   // submitslipchart() {
   //   console.log("780", this.baselinelogTableEditStack)
@@ -1610,43 +1628,42 @@ console.log(this.baselineLogObj)
     //   this.schedulengxdata = [...this.scheduleData.scheduleData]
     //  }
     //  else {
-      this.schedulengxdata = [...this.schedulengxdata]
-     //}
+    this.schedulengxdata = [...this.schedulengxdata]
+    //}
 
 
   }
 
-  baselineLogDetails() {
-      // this.baselineLogForm = new FormArray([])
-      // console.log(this.baselineLogForm.getRawValue())
-      // this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
-      //   console.log("Logs",logs)
-      //   console.log("Users List", this.userlist)
-      //   this.userlist = logs.users
-      //   this.getUserName(this.id)
-      //   this.baselinelogTableEditStack = []
-      //   console.log(this.baselineLogForm.getRawValue())
+  baselineLogDetails(baselinelogid: string) {
+    
+      var count = 1
+      for (var i of this.logdetails) {
+        i.logId = count
+        count = count + 1
+      }
 
-      //   this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
-      //     return a.baselineCount - b.baselineCount;
-      //   })
+  console.log(baselinelogid)
+  console.log(this.logdetails)
+  this.baselinelogdetails = this.baselineLogData.find(x => x.baselineLogId == baselinelogid)
 
-      //   var count = 1
-      //   for (var i of this.baselineLogData) {
-      //     i.logId = count
-      //     count = count + 1
-      //     this.baselineLogForm.push(new FormGroup({
-      //       baselineLogId: new FormControl(i.baselineLogId),
-      //       includeSlipChart: new FormControl(i.includeSlipChart == null ? false : i.includeSlipChart)
-      //     }))
-      //     console.log(this.baselineLogData)
-      //   }
-        console.log(this.logdetails)
-        this.viewContent = false
-        this.viewBaseline = false
-        this.viewBaselineLogs = false
-        this.compareBaselineLogs = true
-      // })
+
+    this.baselinelogdetailsprev = this.baselineLogData.find(x=>x.logId == this.baselinelogdetails.logId -1)
+    this.baselinelogdetailscurr = this.baselineLogData.find(x=>x.logId == this.baselinelogdetails.logId)
+
+    this.projectbaselinelogDetailsprev = this.logdetails.find(x => x.baselineLogId == this.baselinelogdetailsprev.baselineLogId)
+    this.projectbaselinelogDetailscurr = this.logdetails.find(x => x.baselineLogId == this.baselinelogdetailscurr.baselineLogId)
+
+    console.log(this.logdetails)
+    console.log(this.baselinelogdetailsprev)
+    console.log(this.baselinelogdetailscurr)
+    console.log(this.projectbaselinelogDetailsprev)
+    console.log(this.projectbaselinelogDetailscurr)
+  
+    this.viewContent = false
+    this.viewBaseline = false
+    this.viewBaselineLogs = false
+    this.compareBaselineLogs = true
+
 
   }
 
