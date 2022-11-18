@@ -1,1 +1,27 @@
-<p>ask-need-link works!</p>
+<div *ngIf="viewContent" class="h-[100vh] bg-default">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Link Ask/Needs</div>
+        <div style="padding-top: 2px">
+            <a (click)="projectHubService.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="overflow-x-auto mx-6">
+        <mat-accordion multi>
+            <div *ngFor="let linkDatum of linkData">
+                <mat-expansion-panel class="my-6" [expanded]="true">
+                    <mat-expansion-panel-header class="pt-10 pb-10">
+                        <mat-panel-title class="font-bold">
+                            {{"&nbsp;".repeat(linkDatum.level*2)}}{{linkDatum.projectId}} - {{linkDatum.projectName}}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <app-ask-need-table [askNeedData]="linkDatum.askNeeds" [tableData]="linkDatum.askNeeds"
+                        [linksProblemCapture]="[]" [links]="[]">
+                    </app-ask-need-table>
+                </mat-expansion-panel>
+            </div>
+        </mat-accordion>
+    </div>
+</div>
