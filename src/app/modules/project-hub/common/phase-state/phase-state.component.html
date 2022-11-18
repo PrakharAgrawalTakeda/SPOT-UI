@@ -101,7 +101,7 @@
                 <div class="basis-2/4">
                     <div class="flex-auto mr-3">
                         <spot-select class="w-full" formControlName="state" name="state" [label]="'Project State'"
-                                     [dropDownArrayType]="'object'" [placeholder]="'State'"
+                                     [dropDownArrayType]="'object'" [placeholder]="'State'" [showNoneOption]="false"
                                      [dropDownArray]="getState()" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
                                      [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                         </spot-select>

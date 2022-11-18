@@ -32,7 +32,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         this.riskIssueForm.valueChanges.subscribe(res => {
             if (this.viewContent) {
                 this.submitPrep()
-                this.formValue = this.sortByDate(this.formValue)
                 this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
                 if (JSON.stringify(this.formValue) != JSON.stringify(this.dbRiskIssues)) {
                     this.projectHubService.isFormChanged = true
@@ -92,7 +91,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             riskIssueUniqueId: i.riskIssueUniqueId,
                         })
                     }
-                    this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
                 }
                 this.links = res.links
                 this.linksProblemCapture = res.linksProblemCapture

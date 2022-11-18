@@ -154,3 +154,9 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+::ng-deep .ngx-datatable.datatable-state-check .datatable-body .datatable-scroll {
+    max-height: 30vh !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}

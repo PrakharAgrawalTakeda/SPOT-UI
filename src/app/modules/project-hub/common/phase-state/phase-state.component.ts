@@ -106,9 +106,14 @@ export class PhaseStateComponent implements OnInit {
                 modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
                 phaseComment: this.stateForm.get('stateComment').value
             }
-            this.apiService.postPhaseState(stateBody)
+            this.apiService.postPhaseState(stateBody).catch(err => {
+                if(err.status == 400){
+                    this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
+                    this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', [], '1', false, true);
+                }
+            })
         }
-        this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
+
     }
     changePhase(phaseId) {
         this.phaseForm.patchValue({
@@ -134,5 +139,6 @@ export class PhaseStateComponent implements OnInit {
             return a.lookUpOrder - b.lookUpOrder;
         })
     }
+
 
 }
