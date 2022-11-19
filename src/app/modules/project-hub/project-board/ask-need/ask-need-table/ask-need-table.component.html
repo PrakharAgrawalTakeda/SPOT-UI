@@ -27,7 +27,7 @@
             <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
+    <ngx-datatable-column *ngIf="mode == 'Normal'" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
         <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
             <div class="flex justify-start items-center gap-6">
                 <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
@@ -47,7 +47,7 @@
             </div>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
+    <ngx-datatable-row-detail [rowHeight]="'auto'" *ngIf="mode == 'Normal'" #myDetailRow>
         <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
             <div class="pb-3 pt-3">
                 <div [ngClass]="{'closed': row.closeDate != null}"><strong>Comments:</strong>
