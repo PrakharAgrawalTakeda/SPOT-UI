@@ -12,6 +12,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 export class AskNeedTableComponent implements OnInit {
   @Input() tableData: any = []
   @Input() askNeedData: any = []
+  @Input() projectId: string = ''
   @Input() mode: 'Normal' | 'Link' = 'Normal'
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
@@ -33,7 +34,7 @@ export class AskNeedTableComponent implements OnInit {
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
   }
-  getlinkname(uid: string): string {
+  getlinkname2(uid: string): string {
     let temp = this.links.find(x => x.linkItemId == uid)
     temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
     if (temp) {
@@ -43,6 +44,28 @@ export class AskNeedTableComponent implements OnInit {
     if (temp) {
       return "A link to this ask/need has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     }
+  }
+  getlinkname(uid: string): string {
+    var linkItemList = this.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    console.log(linkItemList)
+    for (var linkItem of linkItemList) {
+      if (linkItem.childProjectId == this.projectId) {
+        if (returnString != '') {
+          returnString = returnString + '</br>'
+        }
+        var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        returnString = returnString + "A link to this ask/need has been created in project(s): " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      }
+      else if (linkItem.parentProjectId == this.projectId) {
+        if (returnString != '') {
+          returnString = returnString + '</br>'
+        }
+        var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.childProjectId)
+        returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+      }
+    }
+    return returnString
   }
   deleteAskNeed(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {

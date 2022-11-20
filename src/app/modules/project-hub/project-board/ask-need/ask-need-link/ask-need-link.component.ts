@@ -12,19 +12,40 @@ export class AskNeedLinkComponent implements OnInit {
   constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService) { }
   linkData: any = []
   tableData: any = []
-  viewContent:boolean = false
+  viewContent: boolean = false
   ngOnInit(): void {
     this.dataloader()
   }
   dataloader() {
     this.apiService.askNeedGetLinkData(this.projectHubService.projectid).then(res => {
       console.log("Link Data:", res)
-      this.linkData = this.sortByLevel(res)
+      if (!this.projectHubService.includeClosedItems.askNeed.value) {
+        this.linkData = this.sortByLevel(this.filterClosedItems(res))
+      }
+      else {
+        this.linkData = this.sortByLevel(res)
+      }
 
       this.viewContent = true
     })
   }
 
+
+  filterClosedItems(array: any): any {
+    var returnObject: any = []
+    for (var item of array) {
+      returnObject.push({
+        projectUId: item.projectUId,
+        projectId: item.projectId,
+        projectName: item.projectName,
+        level: item.level,
+        askNeeds: item.askNeeds.length > 0 ? item.askNeeds.filter(x => x.closeDate == null) : [],
+        askNeedLink: item.askNeedLink,
+        askNeedLinkProjectDetails: item.askNeedLinkProjectDetails
+      })
+    }
+    return returnObject
+  }
   sortByLevel(array: any): any {
     return array.length > 1 ? array.sort((a, b) => {
       if (a.level === null) {
