@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
@@ -12,9 +13,13 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 export class AskNeedTableComponent implements OnInit {
   @Input() tableData: any = []
   @Input() askNeedData: any = []
+  @Input() projectId: string = ''
+  @Input() parentProjectId: string = ''
   @Input() mode: 'Normal' | 'Link' = 'Normal'
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
+  selected = [];
+  SelectionType = SelectionType;
   getRowClass = (row) => {
     return {
       'row-color1': row.closeDate != null,
@@ -28,12 +33,25 @@ export class AskNeedTableComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.tableData)
+    if (this.mode == 'Link') {
+      this.dataloaderLink()
+    }
   }
-
+  dataloaderLink() {
+    var temp = []
+    for (var item of this.links) {
+      if (item.parentProjectId == this.parentProjectId && item.childProjectId == this.projectId) {
+        temp.push(this.askNeedData.find(x => x.askNeedUniqueId))
+      }
+    }
+    if (temp.length > 0) {
+      this.selected.push(...temp)
+    }
+  }
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
   }
-  getlinkname(uid: string): string {
+  getlinkname2(uid: string): string {
     let temp = this.links.find(x => x.linkItemId == uid)
     temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
     if (temp) {
@@ -43,6 +61,27 @@ export class AskNeedTableComponent implements OnInit {
     if (temp) {
       return "A link to this ask/need has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     }
+  }
+  getlinkname(uid: string): string {
+    var linkItemList = this.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    for (var linkItem of linkItemList) {
+      if (linkItem.childProjectId == this.projectId) {
+        if (returnString != '') {
+          returnString = returnString + '</br>'
+        }
+        var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        returnString = returnString + "A link to this ask/need has been created in project(s): " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      }
+      else if (linkItem.parentProjectId == this.projectId) {
+        if (returnString != '') {
+          returnString = returnString + '</br>'
+        }
+        var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.childProjectId)
+        returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+      }
+    }
+    return returnString
   }
   deleteAskNeed(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
@@ -74,6 +113,16 @@ export class AskNeedTableComponent implements OnInit {
         })
       }
     })
+  }
+  onSelect({ selected }) {
+    console.log('Select Event', selected, this.selected);
+
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+  }
+
+  onActivate(event) {
+    console.log('Activate Event', event);
   }
 
   toggleExpandRow(row) {
