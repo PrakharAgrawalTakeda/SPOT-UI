@@ -11,7 +11,6 @@ export class AskNeedLinkComponent implements OnInit {
 
   constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService) { }
   linkData: any = []
-  tableData: any = []
   viewContent: boolean = false
   ngOnInit(): void {
     this.dataloader()
@@ -39,7 +38,7 @@ export class AskNeedLinkComponent implements OnInit {
         projectId: item.projectId,
         projectName: item.projectName,
         level: item.level,
-        askNeeds: item.askNeeds.length > 0 ? item.askNeeds.filter(x => x.closeDate == null) : [],
+        askNeeds: item.askNeeds.length > 0 ? this.sortByNeedByDate(item.askNeeds.filter(x => x.closeDate == null)) : [],
         askNeedLink: item.askNeedLink,
         askNeedLinkProjectDetails: item.askNeedLinkProjectDetails
       })
@@ -61,6 +60,23 @@ export class AskNeedLinkComponent implements OnInit {
       }
 
       return a.level < b.level ? -1 : 1;
+    }) : array
+  }
+  sortByNeedByDate(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.needByDate === null) {
+        return -1;
+      }
+
+      if (b.needByDate === null) {
+        return 1;
+      }
+
+      if (a.needByDate === b.needByDate) {
+        return 0;
+      }
+
+      return a.needByDate < b.needByDate ? -1 : 1;
     }) : array
   }
   numSequence(n: number): Array<number> {

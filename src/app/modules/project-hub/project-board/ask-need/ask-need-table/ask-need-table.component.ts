@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
@@ -13,9 +14,12 @@ export class AskNeedTableComponent implements OnInit {
   @Input() tableData: any = []
   @Input() askNeedData: any = []
   @Input() projectId: string = ''
+  @Input() parentProjectId: string = ''
   @Input() mode: 'Normal' | 'Link' = 'Normal'
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
+  selected = [];
+  SelectionType = SelectionType;
   getRowClass = (row) => {
     return {
       'row-color1': row.closeDate != null,
@@ -29,8 +33,21 @@ export class AskNeedTableComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.tableData)
+    if (this.mode == 'Link') {
+      this.dataloaderLink()
+    }
   }
-
+  dataloaderLink() {
+    var temp = []
+    for (var item of this.links) {
+      if (item.parentProjectId == this.parentProjectId && item.childProjectId == this.projectId) {
+        temp.push(this.askNeedData.find(x => x.askNeedUniqueId))
+      }
+    }
+    if (temp.length > 0) {
+      this.selected.push(...temp)
+    }
+  }
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
   }
@@ -48,7 +65,6 @@ export class AskNeedTableComponent implements OnInit {
   getlinkname(uid: string): string {
     var linkItemList = this.links.filter(x => x.linkItemId == uid)
     var returnString = ''
-    console.log(linkItemList)
     for (var linkItem of linkItemList) {
       if (linkItem.childProjectId == this.projectId) {
         if (returnString != '') {
@@ -97,6 +113,16 @@ export class AskNeedTableComponent implements OnInit {
         })
       }
     })
+  }
+  onSelect({ selected }) {
+    console.log('Select Event', selected, this.selected);
+
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+  }
+
+  onActivate(event) {
+    console.log('Activate Event', event);
   }
 
   toggleExpandRow(row) {

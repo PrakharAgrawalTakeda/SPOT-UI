@@ -18,7 +18,7 @@
                     </mat-expansion-panel-header>
 
                     <app-ask-need-table [askNeedData]="linkDatum.askNeeds" [tableData]="linkDatum.askNeeds"
-                        [linksProblemCapture]="linkDatum.askNeedLinkProjectDetails" [links]="linkDatum.askNeedLink" [mode]="'Link'" [projectId]="linkDatum.projectUId">
+                        [linksProblemCapture]="linkDatum.askNeedLinkProjectDetails" [links]="linkDatum.askNeedLink" [mode]="'Link'" [projectId]="linkDatum.projectUId" [parentProjectId]="projectHubService.projectid" >
                     </app-ask-need-table>
                 </mat-expansion-panel>
             </div>
