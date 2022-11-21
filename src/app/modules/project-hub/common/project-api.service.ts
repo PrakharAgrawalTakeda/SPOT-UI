@@ -334,4 +334,11 @@ export class ProjectApiService {
       const response =  lastValueFrom(abc$)
       return response
     }
+
+    async milestoneGetLinkData(projectid: string){
+      var userid = GlobalVariables.apiurl+"Schedule/GetScheduleLinkData/"+ projectid
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
 }

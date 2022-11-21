@@ -313,10 +313,10 @@
 
           <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-              <div *ngIf="row.baselineLogId && value != '1'" class="logID">
+              <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
                 <a (click)="baselineLogDetails(row.baselineLogId)">{{value}}</a>
               </div>
-              <div *ngIf="value == '1'" class="logID1">
+              <div *ngIf="!checklogDetails(row.baselineLogId) || value == '1'" class="logID1">
                 <a>{{value}}</a>
               </div>
             </ng-template>
@@ -413,7 +413,7 @@
     </div>
 
   </div>
-  <div class="mx-4 mt-8 h-[79vh] overflow-hidden">
+  <div class="mx-4 mt-8 h-[78.5vh] overflow-hidden">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
       class="pr-2 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="logdetailsObj"
       [rowClass]="getRowClass">

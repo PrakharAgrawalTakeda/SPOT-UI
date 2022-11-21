@@ -213,7 +213,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       log.projectBaselineLog.sort((a, b) => {
         return b.baselineCount - a.baselineCount;
       })
-      this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
+
         this.apiService.getprojectTeams(this.id, this.msalService.instance.getActiveAccount().localAccountId).then((teamrole: any) => {
           this.apiService.getProjectBaseline(this.id).then((count: any) => {
             this.apiService.getprojectviewdata(this.id).then((res: any) => {
@@ -242,11 +242,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     this.userlist = log.users
                   }
                   console.log("Users List", this.userlist)
-                  console.log("Log Details", logDetails)
-                  if(logDetails.length != 0)
-                  {
-                    this.logdetails = logDetails
-                  }
+                  
                   
                   this.baselineCount = count
                   console.log("Baseline Count", this.baselineCount)
@@ -373,7 +369,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         })
       })
 
-    })
   }
 
   toggleSchedule(event: any) {
@@ -1513,7 +1508,13 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     // this.baselineLogForm = new FormArray([])
     console.log(this.baselineLogForm.getRawValue())
+    this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
     this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+      console.log("Log Details", logDetails)
+                  if(logDetails.length != 0)
+                  {
+                    this.logdetails = logDetails
+                  }
       console.log("Logs", logs)
       console.log("Users List", this.userlist)
       console.log(logs.projectBaselineLog.length)
@@ -1554,12 +1555,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
 
 
-
+    })
     })
 
 
   }
 
+  checklogDetails(baselinelogid: string) : boolean {
+    return this.logdetails.some(x=> x.baselineLogId == baselinelogid)
+  }
   //Baseline Log Form Changes
 
   // submitslipchart() {
@@ -1671,9 +1675,15 @@ console.log(this.currObj)
 //
       this.prevObj = this.projectbaselinelogDetailsprev.map(x=>x.scheduleUniqueId)
       this.currObj = this.projectbaselinelogDetailscurr.map(x=>x.scheduleUniqueId)
-// for(var a of this.projectbaselinelogDetailsprev)
+// for(var a of this.projectbaselinelogDetailscurr)
 //     {
-//       this.prevObj.map
+//       if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == a.scheduleUniqueId))
+//       {
+//         if(a.plannedFinish != this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == a.scheduleUniqueId).plannedFinish)
+//         {
+//           var notEqual = true
+//         }
+//       }
 //     }
 
 //     for(var b of this.projectbaselinelogDetailscurr)
@@ -1693,7 +1703,7 @@ console.log(this.currObj)
     {
       this.logdetailsObj.push({
         
-          milestone: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).milestone : '',
+          milestone: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).milestone : this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).milestone,
           currplannedFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedFinish  : '',
           currbaselineFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselineFinish : '',
           currcompletionDate: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).completionDate : '',
