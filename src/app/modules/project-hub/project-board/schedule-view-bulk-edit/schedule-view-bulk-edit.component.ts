@@ -41,6 +41,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   //@Input() scheduleData: any;
   @Input() schedulengxdata: any;
   @Input() baselineLogData: any;
+  @Input() projectbaselinelogDetailsprev: any;
+  @Input() projectbaselinelogDetailscurr: any;
+  myFinalArray: any = []
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -73,8 +76,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   baselineCount: any = {}
   baselinelogdetails: any = {}
   baselinelogdetailsprev: any = {}
-  projectbaselinelogDetailsprev: any = {}
-  projectbaselinelogDetailscurr: any = {}
   baselinelogdetailscurr: any = {}
   loglog: any = {}
   baselineLog: any = {}
@@ -110,6 +111,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   dbSchedule: any = []
   formValue: any = []
   logloglog: any;
+  logdetailsObj: any = []
+  currObj: any = []
+  prevObj: any = []
+  newArray: any = []
   // onResize(event){
   //   event.window.innerWidth; // window width
   // }
@@ -1635,6 +1640,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   baselineLogDetails(baselinelogid: string) {
+    this.logdetailsObj = []
+    this.prevObj = []
+    this.currObj = []
+    this.newArray = []
     
       var count = 1
       for (var i of this.logdetails) {
@@ -1649,15 +1658,65 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     this.baselinelogdetailsprev = this.baselineLogData.find(x=>x.logId == this.baselinelogdetails.logId -1)
     this.baselinelogdetailscurr = this.baselineLogData.find(x=>x.logId == this.baselinelogdetails.logId)
+    console.log(this.baselinelogdetails.logId)
+    
 
-    this.projectbaselinelogDetailsprev = this.logdetails.find(x => x.baselineLogId == this.baselinelogdetailsprev.baselineLogId)
-    this.projectbaselinelogDetailscurr = this.logdetails.find(x => x.baselineLogId == this.baselinelogdetailscurr.baselineLogId)
+    this.projectbaselinelogDetailsprev = this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailsprev.baselineLogId)
+    this.projectbaselinelogDetailscurr = this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailscurr.baselineLogId)
+    console.log(this.prevObj)
+console.log(this.currObj)
+
+    //this.newArray = this.projectbaselinelogDetailscurr.filter(({ milestone, plannedFinish, baselineFinish, completionDate, indicator}) => !this.projectbaselinelogDetailsprev.some((e) => e.milestone == milestone && e.plannedFinish == plannedFinish && e.baselineFinish == baselineFinish && e.completionDate == completionDate && e.indicator == indicator))
+// 
+//
+      this.prevObj = this.projectbaselinelogDetailsprev.map(x=>x.scheduleUniqueId)
+      this.currObj = this.projectbaselinelogDetailscurr.map(x=>x.scheduleUniqueId)
+// for(var a of this.projectbaselinelogDetailsprev)
+//     {
+//       this.prevObj.map
+//     }
+
+//     for(var b of this.projectbaselinelogDetailscurr)
+//     {
+//       this.currObj.push({
+//         //projectId: b.projectId,
+//         scheduleUniqueId: b.scheduleUniqueId
+//     })
+//     }
+console.log(this.prevObj)
+console.log(this.currObj)
+//console.log(this.newArray)
+    this.myFinalArray = [...this.currObj,...this.prevObj]
+    var unique = this.myFinalArray.filter((v, i, a) => a.indexOf(v) === i);
+
+    for(var i of unique)
+    {
+      this.logdetailsObj.push({
+        
+          milestone: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).milestone : '',
+          currplannedFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedFinish  : '',
+          currbaselineFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselineFinish : '',
+          currcompletionDate: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).completionDate : '',
+          currindicator: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).indicator : '',
+          prevplannedFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).plannedFinish : '',
+          prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).baselineFinish : '',
+          prevcompletionDate: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).completionDate : '',
+          previndicator: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).indicator : ''
+      })
+
+    }
+
+    //this.newArray = [...new Set([...this.logdetailsObj])]
+    
 
     console.log(this.logdetails)
     console.log(this.baselinelogdetailsprev)
     console.log(this.baselinelogdetailscurr)
-    console.log(this.projectbaselinelogDetailsprev)
-    console.log(this.projectbaselinelogDetailscurr)
+    console.log("PREVIOUS",this.projectbaselinelogDetailsprev)
+    console.log("CURRENT",this.projectbaselinelogDetailscurr)
+    console.log(this.myFinalArray)
+      console.log("Final Object",this.logdetailsObj)
+      console.log("Unique ARRAY", unique)
   
     this.viewContent = false
     this.viewBaseline = false
