@@ -270,7 +270,7 @@
       <a class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelJustification()">
         Cancel
       </a>
-      <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitjustification()">
+      <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="saveScheduleBulkEdit()">
         Submit
       </button>
     </div>
@@ -313,10 +313,10 @@
 
           <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-              <div *ngIf="row.baselineLogId && value != '1'" class="logID">
+              <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
                 <a (click)="baselineLogDetails(row.baselineLogId)">{{value}}</a>
               </div>
-              <div *ngIf="value == '1'" class="logID1">
+              <div *ngIf="!checklogDetails(row.baselineLogId) || value == '1'" class="logID1">
                 <a>{{value}}</a>
               </div>
             </ng-template>
@@ -413,64 +413,81 @@
     </div>
 
   </div>
-  <div class="overflow-x-auto mx-4 mt-8 h-[79vh] overflow-hidden">
+  <div class="mx-4 mt-8 h-[78.5vh] overflow-hidden">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-      class="pr-2 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [row]="logdetails"
+      class="pr-2 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="logdetailsObj"
       [rowClass]="getRowClass">
 
       <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.8">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailscurr.milestone}}</p>
+         <p>{{value}}</p>
+
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish" prop="plannedFinish"
+      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish" prop="prevplannedFinish"
         [flexGrow]="0.48">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailsprev.plannedFinish | date:'dd-MMM-yyyy'}}</p>
+
+          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+ 
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish" prop="plannedFinish"
+      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish" prop="currplannedFinish"
         [flexGrow]="0.48">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailscurr.plannedFinish | date:'dd-MMM-yyyy'}}</p>
+
+          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish" prop="baselineFinish"
+      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish" prop="prevbaselineFinish"
         [flexGrow]="0.48">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailsprev.baselineFinish | date:'dd-MMM-yyyy'}}</p>
+
+          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Baseline Finish" prop="baselineFinish"
+      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Baseline Finish" prop="currbaselineFinish"
         [flexGrow]="0.5">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailscurr.baselineFinish | date:'dd-MMM-yyyy'}}</p>
+
+          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Completion Date" prop="completionDate"
+      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Completion Date" prop="prevcompletionDate"
         [flexGrow]="0.55">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailsprev.completionDate | date:'dd-MMM-yyyy'}}</p>
+
+          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Completion Date" prop="completionDate"
+      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Completion Date" prop="currcompletionDate"
         [flexGrow]="0.55">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailscurr.completionDate | date:'dd-MMM-yyyy'}}</p>
+
+          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Indicator" prop="indicator" [flexGrow]="0.39">
+      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Indicator" prop="previndicator" [flexGrow]="0.39">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailsprev.indicator}}</p>
+
+          <p>{{value}}</p>
+
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="indicator" [flexGrow]="0.4">
+      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="currindicator" [flexGrow]="0.4">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{projectbaselinelogDetailscurr.indicator}}</p>
+
+          <p>{{value}}</p>
+
         </ng-template>
       </ngx-datatable-column>
 

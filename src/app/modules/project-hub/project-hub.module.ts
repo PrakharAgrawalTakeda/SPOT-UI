@@ -85,6 +85,7 @@ import {MessagesModule} from "../../layout/common/messages/messages.module";
 import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
 import {UserModule} from "../../layout/common/user/user.module";
 import { LinkMilestonesComponent } from './project-board/link-milestones/link-milestones.component';
+import { ScheduleComponent } from './project-board/schedule/schedule.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -228,7 +229,8 @@ export const projectRoutes: Route[] = [
     QualityRefBulkEditComponent,
     LinkProjectComponent,
     UpdateParentComponent,
-    LinkMilestonesComponent
+    LinkMilestonesComponent,
+    ScheduleComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
