@@ -24,8 +24,8 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     };
   };
   riskIssuesngxdata: any = []
-  isclosed: boolean = false
-  constructor(public projecthubservice: ProjectHubService, 
+  isclosed: boolean = false;
+  constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService,
     private apiService: ProjectApiService) { }
@@ -104,6 +104,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
       if (close == 'confirmed') {
         this.apiService.deleteRiskIssue(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
         })
       }
     })

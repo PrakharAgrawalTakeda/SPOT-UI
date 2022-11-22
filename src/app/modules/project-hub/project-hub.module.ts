@@ -91,6 +91,9 @@ import { ScheduleComponent } from './project-board/schedule/schedule.component';
 import { ScheduleLinkComponent } from './project-board/schedule/schedule-link/schedule-link.component';
 import { ScheduleSingleEditComponent } from './project-board/schedule/schedule-single-edit/schedule-single-edit.component';
 import { ScheduleBulkEditComponent } from './project-board/schedule/schedule-bulk-edit/schedule-bulk-edit.component';
+import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
+import { StateCheckComponent } from './common/state-check/state-check.component';
+import { RisIssueViewBulkEditComponent } from './project-board/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -238,7 +241,12 @@ export const projectRoutes: Route[] = [
     ScheduleComponent,
     ScheduleLinkComponent,
     ScheduleSingleEditComponent,
-    ScheduleBulkEditComponent
+    ScheduleBulkEditComponent,
+    LinkMilestonesComponent,
+    UpdateParentComponent,
+    PhaseStateComponent,
+    StateCheckComponent,
+    RisIssueViewBulkEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

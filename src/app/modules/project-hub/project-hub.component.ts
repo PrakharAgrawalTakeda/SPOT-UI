@@ -96,7 +96,6 @@ export class ProjectHubComponent implements OnInit {
     }
 
     getdata(): void {
-
         this.apiService.getProjectHubData(this.id).then((res: any) => {
             this.projectDetails = res.projectData
             this.portfolioDetails = res.portfolioCeterData
@@ -126,10 +125,11 @@ export class ProjectHubComponent implements OnInit {
             //
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
-            this.dataQualityPercentage = res * 100;
             if (res == null || res.phase == "Initiate") {
                 this.dataQualityPercentageString = "N/A";
+                this.dataQualityPercentage =null;
             } else {
+                this.dataQualityPercentage = res * 100;
                 this.dataQualityPercentageString =
                     (~~this.dataQualityPercentage).toString() + "%";
             }
@@ -149,7 +149,7 @@ export class ProjectHubComponent implements OnInit {
         this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
     }
     getColor(percentage: number) {
-        if (this.projectType == "Simple Project") {
+        if (this.projectType == "Simple Project" || percentage == null) {
             return '#4c9bcf';
         } else {
             if (percentage < this.lowerTargetPercentage) {
@@ -163,4 +163,7 @@ export class ProjectHubComponent implements OnInit {
             }
         }
       }
+    openPhaseStateDrawer() {
+        this.projecthubservice.toggleDrawerOpen('PhaseState', 'new', [], '1', false, true);
+    }
 }

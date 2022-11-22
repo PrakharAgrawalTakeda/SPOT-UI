@@ -205,6 +205,7 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
         console.log(mainObj)
         this.apiService.editAskNeed(mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
         })
       }
