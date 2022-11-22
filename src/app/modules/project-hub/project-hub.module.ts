@@ -85,6 +85,7 @@ import {MessagesModule} from "../../layout/common/messages/messages.module";
 import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
 import {UserModule} from "../../layout/common/user/user.module";
 import { LinkMilestonesComponent } from './project-board/link-milestones/link-milestones.component';
+import { ScheduleComponent } from './project-board/schedule/schedule.component';
 import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
 import { StateCheckComponent } from './common/state-check/state-check.component';
 import { RisIssueViewBulkEditComponent } from './project-board/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
@@ -231,6 +232,8 @@ export const projectRoutes: Route[] = [
     QualityRefBulkEditComponent,
     LinkProjectComponent,
     UpdateParentComponent,
+    LinkMilestonesComponent,
+    ScheduleComponent,
     LinkMilestonesComponent,
     UpdateParentComponent,
     PhaseStateComponent,
