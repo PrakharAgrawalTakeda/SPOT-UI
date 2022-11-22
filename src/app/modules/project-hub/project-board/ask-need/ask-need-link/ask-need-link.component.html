@@ -7,31 +7,35 @@
             </a>
         </div>
     </div>
-    <div class="overflow-x-auto mx-6">
-        <div class="flex justify-end items-center">
-            <form [formGroup]="localIncludedItems">
-                <mat-slide-toggle class="primary slider-adjust" formControlName="toggle" (change)="toggleClosedItems($event)">
-                    Include Closed Items
-                </mat-slide-toggle>
-            </form>
-        </div>
-        <mat-accordion multi>
-            <div *ngFor="let linkDatum of linkData;let i = index;">
-                <mat-expansion-panel class="my-6" [expanded]="true">
-                    <mat-expansion-panel-header class="pt-10 pb-10">
-                        <mat-panel-title class="font-bold">
-                            {{"&nbsp;".repeat(linkDatum.level*2)}}{{linkDatum.projectId}} - {{linkDatum.projectName}}
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <app-ask-need-table [tableIndex]="i" [askNeedData]="linkDatum.askNeeds"
-                        [tableData]="linkDatum.askNeeds" [linksProblemCapture]="linkDatum.askNeedLinkProjectDetails"
-                        [links]="linkDatum.askNeedLink" [mode]="'Link'" [projectId]="linkDatum.projectUId"
-                        [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleAskNeed($event)">
-                    </app-ask-need-table>
-                </mat-expansion-panel>
+    <div class="overflow-x-hidden h-[85vh] overflow-y-scroll">
+        <div class="mx-6">
+            <div class="flex justify-end items-center">
+                <form [formGroup]="localIncludedItems">
+                    <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
+                        (change)="toggleClosedItems($event)">
+                        Include Closed Items
+                    </mat-slide-toggle>
+                </form>
             </div>
-        </mat-accordion>
+            <mat-accordion multi>
+                <div *ngFor="let linkDatum of linkData;let i = index;">
+                    <mat-expansion-panel class="my-6" [expanded]="true">
+                        <mat-expansion-panel-header class="pt-10 pb-10">
+                            <mat-panel-title class="font-bold">
+                                {{"&nbsp;".repeat(linkDatum.level*2)}}{{linkDatum.projectId}} -
+                                {{linkDatum.projectName}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <app-ask-need-table [tableIndex]="i" [askNeedData]="linkDatum.askNeeds"
+                            [tableData]="linkDatum.askNeeds" [linksProblemCapture]="linkDatum.askNeedLinkProjectDetails"
+                            [links]="linkDatum.askNeedLink" [mode]="'Link'" [projectId]="linkDatum.projectUId"
+                            [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleAskNeed($event)">
+                        </app-ask-need-table>
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+        </div>
     </div>
     <div class="flex items-start justify-between mt-6 px-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"

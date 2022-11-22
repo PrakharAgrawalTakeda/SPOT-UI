@@ -5,7 +5,7 @@
         <div class="flex items-start justify-between">
             <div>
                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.askNeedEdit"
+                    *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.askNeedEdit && projectHubService.hasChildren"
                     (click)="projectHubService.toggleDrawerOpen('LinkAskNeeds', 'new', [], projectId, true)">
                     <mat-icon svgIcon="heroicons_solid:link"></mat-icon>&nbsp; Link Ask/Needs
                 </button>
