@@ -43,17 +43,15 @@ export class AskNeedTableComponent implements OnInit {
     var temp = []
     for (var item of this.links) {
       if (item.parentProjectId == this.parentProjectId && item.childProjectId == this.projectId) {
-        temp.push(this.askNeedData.find(x => x.askNeedUniqueId))
+        temp.push(this.askNeedData.find(x => x.askNeedUniqueId == item.linkItemId))
       }
     }
     if (temp.length > 0) {
-      if (this.projectHubService.includeClosedItems.askNeed.value) {
-        this.selected.push(...temp)
-        this.toggleChange.emit({
-          tableIndex: this.tableIndex,
-          selected: temp
-        })
-      }
+      this.selected.push(...temp.filter(x => x != null))
+      this.toggleChange.emit({
+        tableIndex: this.tableIndex,
+        selected: temp
+      })
     }
   }
   islink(uid: string): boolean {

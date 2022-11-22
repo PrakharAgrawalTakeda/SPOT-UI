@@ -290,6 +290,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async bulkeditAskNeedLinks(body,projectId){
+    var link = GlobalVariables.apiurl+"AskNeed/BulkEditAskNeedLinks/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   getProjectTree(projectId){
     var url = GlobalVariables.apiurl + "ProjectHubData/ProjectTree/"+ projectId
     const abc$ = this.http.get(url)
