@@ -84,11 +84,16 @@ import {ShortcutsModule} from "../../layout/common/shortcuts/shortcuts.module";
 import {MessagesModule} from "../../layout/common/messages/messages.module";
 import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
 import {UserModule} from "../../layout/common/user/user.module";
+//Delete Later
 import { LinkMilestonesComponent } from './project-board/link-milestones/link-milestones.component';
+// End Delete Later
 import { ScheduleComponent } from './project-board/schedule/schedule.component';
 import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
 import { StateCheckComponent } from './common/state-check/state-check.component';
 import { RisIssueViewBulkEditComponent } from './project-board/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
+import { ScheduleLinkComponent } from './project-board/schedule/schedule-link/schedule-link.component';
+import { ScheduleSingleEditComponent } from './project-board/schedule/schedule-single-edit/schedule-single-edit.component';
+import { ScheduleBulkEditComponent } from './project-board/schedule/schedule-bulk-edit/schedule-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -238,7 +243,10 @@ export const projectRoutes: Route[] = [
     UpdateParentComponent,
     PhaseStateComponent,
     StateCheckComponent,
-    RisIssueViewBulkEditComponent
+    RisIssueViewBulkEditComponent,
+    ScheduleLinkComponent,
+    ScheduleSingleEditComponent,
+    ScheduleBulkEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
