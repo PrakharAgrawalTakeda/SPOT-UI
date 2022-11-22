@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
@@ -18,6 +18,8 @@ export class AskNeedTableComponent implements OnInit {
   @Input() mode: 'Normal' | 'Link' = 'Normal'
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
+  @Input() tableIndex: number = 0
+  @Output() toggleChange = new EventEmitter();
   selected = [];
   SelectionType = SelectionType;
   getRowClass = (row) => {
@@ -45,7 +47,13 @@ export class AskNeedTableComponent implements OnInit {
       }
     }
     if (temp.length > 0) {
-      this.selected.push(...temp)
+      if (this.projectHubService.includeClosedItems.askNeed.value) {
+        this.selected.push(...temp)
+        this.toggleChange.emit({
+          tableIndex: this.tableIndex,
+          selected: temp
+        })
+      }
     }
   }
   islink(uid: string): boolean {
@@ -116,9 +124,13 @@ export class AskNeedTableComponent implements OnInit {
   }
   onSelect({ selected }) {
     console.log('Select Event', selected, this.selected);
-
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.toggleChange.emit({
+      tableIndex: this.tableIndex,
+      selected: this.selected
+    })
+    this.projectHubService.isFormChanged = true
   }
 
   onActivate(event) {

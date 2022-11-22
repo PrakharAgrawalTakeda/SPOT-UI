@@ -49,7 +49,8 @@
         [draggable]="false" [resizeable]="false">
         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
-            <mat-slide-toggle [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle> 
+            <mat-slide-toggle [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle> <br>
+            Link        
         </ng-template>
         <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">

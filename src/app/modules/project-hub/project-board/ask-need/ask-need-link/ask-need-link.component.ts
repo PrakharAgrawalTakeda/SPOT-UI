@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 
@@ -9,27 +11,90 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 })
 export class AskNeedLinkComponent implements OnInit {
 
-  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService) { }
+  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
+  }
   linkData: any = []
+  linkDBData: any = []
+  linkedAskNeeds: any = []
   viewContent: boolean = false
+  localIncludedItems = new FormGroup({
+    toggle: new FormControl(false)
+  })
+  toggleHelper: boolean = false
   ngOnInit(): void {
     this.dataloader()
   }
   dataloader() {
+    this.linkData = []
+    this.linkDBData = []
+    this.linkedAskNeeds = []
     this.apiService.askNeedGetLinkData(this.projectHubService.projectid).then(res => {
       console.log("Link Data:", res)
+      this.linkDBData = [...this.sortByLevel(res)]
       if (!this.projectHubService.includeClosedItems.askNeed.value) {
         this.linkData = this.sortByLevel(this.filterClosedItems(res))
+        for (var i in this.linkData) {
+          this.linkedAskNeeds.push([])
+        }
       }
       else {
         this.linkData = this.sortByLevel(res)
       }
-
+      console.log("Linked Ask Needs", this.linkData, this.linkDBData)
+      this.localIncludedItems.controls.toggle.patchValue(this.projectHubService.includeClosedItems.askNeed.value)
+      this.projectHubService.isFormChanged = false
       this.viewContent = true
     })
   }
+  toggleAskNeed(event: any) {
+    this.linkedAskNeeds[event.tableIndex] = [...event.selected]
+    console.log("Linked Ask Needs", this.linkedAskNeeds)
+  }
 
-
+  toggleClosedItems($event) {
+    if (this.viewContent) {
+      if (this.projectHubService.isFormChanged) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Are you sure you want to show/hide closed items, all unsaved data will be lost. ",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "OK",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+        askNeedAlert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.projectHubService.includeClosedItems.askNeed.next($event.checked)
+            this.dataloader()
+          }
+          else {
+            this.toggleHelper = false
+            this.localIncludedItems.controls.toggle.patchValue(!$event.checked)
+          }
+        })
+      }
+      else {
+        console.log("Event Value", $event.checked)
+        this.projectHubService.includeClosedItems.askNeed.next($event.checked)
+        this.dataloader()
+      }
+    }
+    this.localIncludedItems.controls.toggle.markAsPristine()
+  }
   filterClosedItems(array: any): any {
     var returnObject: any = []
     for (var item of array) {
@@ -45,6 +110,8 @@ export class AskNeedLinkComponent implements OnInit {
     }
     return returnObject
   }
+
+
   sortByLevel(array: any): any {
     return array.length > 1 ? array.sort((a, b) => {
       if (a.level === null) {
@@ -81,5 +148,42 @@ export class AskNeedLinkComponent implements OnInit {
   }
   numSequence(n: number): Array<number> {
     return Array(n);
+  }
+
+  submitANLink() {
+    this.projectHubService.isFormChanged = false
+    var mainObj: any = []
+    for (var index in this.linkedAskNeeds) {
+      if (this.linkedAskNeeds[index].length > 0) {
+        for (var item of this.linkedAskNeeds[index]) {
+          if (this.linkDBData[index].askNeedLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId)) {
+            mainObj.push(this.linkDBData[index].askNeedLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId))
+          }
+          else {
+            mainObj.push({
+              "programHubLinkUniqueId": "",
+              "parentProjectId": this.projectHubService.projectid,
+              "childProjectId": item.projectId,
+              "linkItemId": item.askNeedUniqueId,
+              "scheduleLink": null,
+              "riskIssueLink": null,
+              "askNeedLink": true,
+              "includeInReport": false,
+              "includeInCharter": null,
+              "linkLevel": this.linkDBData[index].level + 1
+            })
+          }
+        }
+      }
+      if (!this.projectHubService.includeClosedItems.askNeed.value) {
+        var temp = this.linkDBData[index].askNeedLink.filter(x => x.parentProjectId == this.projectHubService.projectid)
+        if (temp.length > 0) {
+          for (var i of temp) {
+            mainObj.push(i)
+          }
+        }
+      }
+    }
+    console.log(mainObj)
   }
 }
