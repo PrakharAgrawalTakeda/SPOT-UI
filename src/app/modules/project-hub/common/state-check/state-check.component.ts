@@ -13,7 +13,7 @@ import {AuthService} from "../../../../core/auth/auth.service";
     styleUrls: ['./state-check.component.scss']
 })
 export class StateCheckComponent implements OnInit {
-
+    scheduleFormValue: any = []
     constructor(
         public projectHubService: ProjectHubService,
         public fuseAlert: FuseConfirmationService,
@@ -42,6 +42,10 @@ export class StateCheckComponent implements OnInit {
     riTableEditStack = [];
     riskIssueForm = new FormArray([])
     askNeedForm = new FormArray([])
+    showMilestoneTable:boolean = false;
+    showRiskIssueTable:boolean = false;
+    showAskNeedsTable:boolean = false;
+    stateBody =[];
     getRowClass = (row) => {
         return {
             'row-color1': row.completionDate != null,
@@ -63,7 +67,16 @@ export class StateCheckComponent implements OnInit {
         this.apiService.getIncompleteItems(this.id).then((res: any) => {
             this.scheduleNgxData = res.milestones;
             this.riskIssuesNgxData = res.riskIssues;
-            this.askNeedsNgxData = res.askNeed;
+            this.askNeedsNgxData = res.askNeeds;
+            if(this.scheduleNgxData.length>0){
+                this.showMilestoneTable = true;
+            }
+            if(this.riskIssuesNgxData.length>0){
+                this.showRiskIssueTable = true;
+            }
+            if(this.askNeedsNgxData.length>0){
+                this.showAskNeedsTable = true;
+            }
             this.scheduledataDb = this.scheduleNgxData.map(x => {
                 return {
                     "scheduleUniqueId": x.scheduleUniqueId,
@@ -139,8 +152,8 @@ export class StateCheckComponent implements OnInit {
                 }
             }
             this.riskIssuesNgxData.length > 0 ? this.riFormIntializer() : ''
-            if (res.askNeed.length > 0) {
-                for (var i of res.askNeedData) {
+            if (res.askNeeds.length > 0) {
+                for (var i of res.askNeeds) {
                     this.dbAskNeeds.push({
                         askNeedUniqueId: i.askNeedUniqueId,
                         projectId: i.projectId,
@@ -279,7 +292,7 @@ export class StateCheckComponent implements OnInit {
         this.anDisabler()
     }
     riDisabler() {
-        this.submitPrep()
+        this.submitPrepRiskIssues()
         var formValue = this.dbRiskIssues
         if (formValue.length > 0) {
             if (formValue.filter(x => x.includeInReport == true).length < 1) {
@@ -297,7 +310,7 @@ export class StateCheckComponent implements OnInit {
         }
     }
     anDisabler() {
-        this.submitPrep()
+        this.submitPrepAskNeeds()
         var formValue = this.dbAskNeeds
         if (formValue.length > 0) {
             if (formValue.filter(x => x.includeInReport == true).length < 1) {
@@ -314,7 +327,7 @@ export class StateCheckComponent implements OnInit {
             }
         }
     }
-    submitPrep() {
+    submitPrepRiskIssues() {
         this.dbRiskIssues = []
         var formValue = this.riskIssueForm.getRawValue()
         if (!this.projectHubService.includeClosedItems.riskIssue.value) {
@@ -345,6 +358,28 @@ export class StateCheckComponent implements OnInit {
             })
         }
     }
+    submitPrepAskNeeds() {
+        this.dbAskNeeds = []
+        var formValue = this.askNeedForm.getRawValue()
+        if (!this.projectHubService.includeClosedItems.askNeed.value) {
+            this.dbAskNeeds = this.dbAskNeeds.length > 0 ? this.dbAskNeeds.filter(x => x.closeDate != null) : []
+        }
+        for (var i of formValue) {
+            this.dbAskNeeds.push({
+                askNeedUniqueId: i.askNeedUniqueId,
+                projectId: i.projectId,
+                askNeed1: i.askNeed1,
+                needFromId: Object.keys(i.needFrom).length > 0 ? i.needFrom.userAdid : null,
+                needFromName: Object.keys(i.needFrom).length > 0 ? i.needFrom.userDisplayName : null,
+                needByDate: i.needByDate ? moment(i.needByDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                comments: i.comments,
+                logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                includeInReport: i.includeInReport,
+                indicator: i.indicator
+            })
+        }
+    }
     sortByNeedByDate(array: any): any {
         return array.length > 1 ? array.sort((a, b) => {
             if (a.needByDate === null) {
@@ -363,10 +398,202 @@ export class StateCheckComponent implements OnInit {
         }) : array
     }
 
+    async onSubmit() {
+        var milestonePass =true;
+        var riskIssuesPass =true;
+        var askNeedsPass =true;
+        this.milestoneForm.controls.forEach(milestone => {
+            if(milestone.value.completionDate == null)
+                milestonePass = false;
+        });
+        this.riskIssueForm.controls.forEach(riskIssue => {
+            if(riskIssue.value.closeDate == null)
+                riskIssuesPass = false;
+        });
+        this.askNeedForm.controls.forEach(askNeed => {
+            if(askNeed.value.closeDate == null)
+                askNeedsPass = false;
+        });
+        var message = "Please enter values for ";
+        if(!milestonePass){
+            message  = message + "Completion Date for all the rows in the Incomplete Milestone Grid"
+            if(!riskIssuesPass || !askNeedsPass){
+                message = message +", ";
+            }
+        }
+        if(!riskIssuesPass && !askNeedsPass){
+            message = message +"Close Date for all the rows in Risk/Issue Grid and Ask/Need Grid";
+        }else{
+            if(!riskIssuesPass){
+                message = message +"Close Date for all the rows in Risk/Issue Grid";
+            }
+            if(!askNeedsPass){
+                message = message +"Close Date for all the rows in  Ask/Need Grid";
+            }
+        }
+        var comfirmConfig: FuseConfirmationConfig = {
+            "message": message,
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "primary"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "OK",
+                    "color": "primary"
+                },
+                "cancel": {
+                    "show": false,
+                }
+            },
+            "dismissible": true
+        }
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        if(!riskIssuesPass || !askNeedsPass || !milestonePass){
+            this.fuseAlert.open(comfirmConfig)
+        }else{
+            if(this.showMilestoneTable){
+                await this.saveScheduleBulkEdit()
+            }
+            if(this.showRiskIssueTable){
+                await this.submitRI();
+            }
+            if(this.showAskNeedsTable){
+                await this.submitAN();
+            }
+            await delay(1000);
+            this.apiService.postPhaseState(this.projectHubService.all)
+            this.projectHubService.toggleDrawerOpen('', '', [], '')
+        }
+
+    }
+    saveScheduleBulkEdit() {
+        if (this.scheduleData.length != 0) {
+            var formValue = this.milestoneForm.getRawValue()
+            if (!this.projectHubService.includeClosedItems.schedule.value) {
+                this.scheduleFormValue = this.scheduleData.length > 0 ? this.scheduleData.filter(x => x.completionDate != null) : []
+            }
+            for (var i of formValue) {
+                if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
+                    this.scheduleFormValue.push({
+                        scheduleUniqueId: i.scheduleUniqueId,
+                        projectId: i.projectId,
+                        milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+                        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        comments: i.comments,
+                        includeInReport: i.includeInReport,
+                        functionGroupId: i.function == null ? null : i.function.lookUpId,
+                        includeInCharter: i.includeInCharter,
+                        milestoneType: i.milestoneType,
+                        templateMilestoneId: i.templateMilestoneId,
+                        includeInCloseout: i.includeInCloseout,
+                        responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+                        indicator: i.indicator
+                    })
+                }
+                else {
+                    this.scheduleFormValue.push({
+                        scheduleUniqueId: i.scheduleUniqueId,
+                        projectId: i.projectId,
+                        milestone: (i.milestone),
+                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+                        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        comments: i.comments,
+                        includeInReport: i.includeInReport,
+                        functionGroupId: i.function == null ? null : i.function.lookUpId,
+                        includeInCharter: i.includeInCharter,
+                        milestoneType: i.milestoneType,
+                        templateMilestoneId: i.templateMilestoneId,
+                        includeInCloseout: i.includeInCloseout,
+                        responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+                        indicator: i.indicator
+                    })
+                }
+            }
+            this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
+                this.projectHubService.submitbutton.next(true)
+            })
+        }
+        // }
+        else {
+            var formValue = this.milestoneForm.getRawValue()
+            console.log(formValue)
+            console.log(formValue)
+            if (!this.projectHubService.includeClosedItems.schedule.value) {
+                this.scheduleFormValue = this.scheduleData > 0 ? this.scheduleData.filter(x => x.completionDate != null) : []
+            }
 
 
-
-    onSubmit() {
+            for (var i of formValue) {
+                console.log(i.function)
+                if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
+                    this.scheduleFormValue.push({
+                        scheduleUniqueId: i.scheduleUniqueId,
+                        projectId: i.projectId,
+                        milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
+                        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        comments: i.comments,
+                        includeInReport: i.includeInReport,
+                        functionGroupId: i.function == null ? null : i.function.lookUpId,
+                        includeInCharter: i.includeInCharter,
+                        milestoneType: i.milestoneType,
+                        templateMilestoneId: i.templateMilestoneId,
+                        includeInCloseout: i.includeInCloseout,
+                        responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
+                        indicator: i.indicator
+                    })
+                }
+                else {
+                    this.scheduleFormValue.push({
+                        scheduleUniqueId: i.scheduleUniqueId,
+                        projectId: i.projectId,
+                        milestone: (i.milestone),
+                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        responsiblePersonName: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userDisplayName,
+                        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        comments: i.comments,
+                        includeInReport: i.includeInReport,
+                        functionGroupId: i.function == null ? null : i.function.lookUpId,
+                        includeInCharter: i.includeInCharter,
+                        milestoneType: i.milestoneType,
+                        templateMilestoneId: i.templateMilestoneId,
+                        includeInCloseout: i.includeInCloseout,
+                        responsiblePersonId: Object.keys(i.responsiblePersonName).length == 0 ? null : i.responsiblePersonName.userAdid,
+                        indicator: i.indicator
+                    })
+                }
+            }
+            this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
+                this.projectHubService.submitbutton.next(true)
+            })
+        }
+    }
+    submitRI() {
+            this.submitPrepRiskIssues()
+            this.apiService.bulkeditRiskIssue(this.dbRiskIssues, this.id).then(res => {
+                    this.projectHubService.submitbutton.next(true)
+                    this.projectHubService.successSave.next(true)
+                }
+            )
+    }
+    submitAN() {
+            this.submitPrepAskNeeds()
+            this.apiService.bulkeditAskNeeds(this.dbAskNeeds,  this.id).then(res => {
+                    this.projectHubService.submitbutton.next(true)
+                    this.projectHubService.successSave.next(true)
+                }
+            )
     }
 
 

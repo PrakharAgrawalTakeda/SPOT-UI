@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="h-[85vh] pl-3">
-        <div class="w-full h-[35vh] overflow-hidden ">
+        <div *ngIf="showMilestoneTable" class="w-full h-[35vh] overflow-hidden ">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Milestone(s)
             </div>
@@ -127,7 +127,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="w-full mt-5">
+        <div *ngIf="showRiskIssueTable" class="w-full mt-5">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Risk/Issue(s)
             </div>
@@ -299,13 +299,13 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="w-full mt-5">
+        <div *ngIf="showAskNeedsTable" class="w-full mt-5">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Ask/Need
             </div>
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
-                           class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                           class="material datatable-state-check font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
                            [rows]="askNeedsNgxData" #askNeedTable [rowClass]="getRowClass">
                 <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
@@ -386,8 +386,7 @@
             Cancel
         </a>
         <button class="w-25" mat-flat-button [color]="'primary'" type="submit"
-                (click)="onSubmit()"
-                (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
+                (click)="onSubmit()">
             Submit
         </button>
     </div>

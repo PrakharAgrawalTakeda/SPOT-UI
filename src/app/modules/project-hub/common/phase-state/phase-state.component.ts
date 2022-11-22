@@ -64,15 +64,14 @@ export class PhaseStateComponent implements OnInit {
         this.phaseForm.controls["phase"]
             .valueChanges.subscribe((value) => {
                 this.changePhase(value);
-
         })
         this.apiService.getPhaseState(this.id).then((res: any) => {
             this.currentPhase = res.currentPhase;
             this.currentState = res.currentState;
             this.phaseRows = res.projectPhase.reverse();
             this.stateRows = res.projectStatus.reverse();
-            this.currentCapitalPhase = res.projectPhase[0].curCapitalPhaseName != "NA" ? res.projectPhase[0].curCapitalPhaseAbbreviation : "";
-            this.currentOEPhase = res.projectPhase[0].curOEPhaseName != "NA" ? res.projectPhase[0].curOEPhaseAbbreviation : "";
+            this.currentCapitalPhase = res.currentCapitalPhaseId;
+            this.currentOEPhase = res.currentOePhaseId;
             this.phaseForm.patchValue({
                 phase: res.currentPhase,
                 capitalPhase: res.currentCapitalPhaseId,
@@ -86,6 +85,7 @@ export class PhaseStateComponent implements OnInit {
     }
 
     onSubmit(){
+        var stateActive= false;
         if(this.phaseForm.get('phase').value != this.currentPhase || this.phaseForm.get('capitalPhase').value != this.currentCapitalPhase || this.phaseForm.get('oePhase').value != this.currentOEPhase){
             var phaseBody = {
                 projectId: this.id,
@@ -99,6 +99,7 @@ export class PhaseStateComponent implements OnInit {
             this.apiService.postPhaseState(phaseBody)
         }
         if(this.stateForm.get('state').value != this.currentState ){
+            stateActive = true;
             var stateBody = {
                 projectId: this.id,
                 phaseStateId: this.stateForm.get('state').value,
@@ -106,12 +107,17 @@ export class PhaseStateComponent implements OnInit {
                 modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
                 phaseComment: this.stateForm.get('stateComment').value
             }
-            this.apiService.postPhaseState(stateBody).catch(err => {
+            this.apiService.postPhaseState(stateBody).then(res=>{
+                this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
+            }).catch(err => {
                 if(err.status == 400){
                     this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-                    this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', [], '1', false, true);
+                    this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', stateBody, '', false, true);
                 }
             })
+        }
+        if(!stateActive){
+            this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
         }
 
     }
