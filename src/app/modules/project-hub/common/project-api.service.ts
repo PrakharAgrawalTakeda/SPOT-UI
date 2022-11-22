@@ -1,12 +1,11 @@
-
 import {HttpClient, HttpParams} from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { MsalService } from '@azure/msal-angular';
-import { GlobalVariables } from 'app/shared/global-variables';
-import { lastValueFrom } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {MsalService} from '@azure/msal-angular';
+import {GlobalVariables} from 'app/shared/global-variables';
+import {lastValueFrom} from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ProjectApiService {
 
@@ -204,6 +203,30 @@ export class ProjectApiService {
     const response =  lastValueFrom(abc$)
     return response
   }
+  getPhaseState(projectId){
+      var url = GlobalVariables.apiurl + "ProjectHubData/PhaseState/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  postPhaseState(body){
+      var url = GlobalVariables.apiurl + "ProjectHubData/PhaseState"
+      const abc$ = this.http.post(url,body)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  getCapitalPhase(){
+      var url = GlobalVariables.apiurl + "ProjectHubData/CapitalPhase"
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
+  getIncompleteItems(projectId){
+      var url = GlobalVariables.apiurl + "ProjectHubData/IncompleteItems/"+ projectId
+      const abc$ = this.http.get(url)
+      const response =  lastValueFrom(abc$)
+      return response
+  }
   getDataCompletenessPercent(projectId){
     var url = GlobalVariables.apiurl + "ProjectHubData/DataCompletenessPercent/"+ projectId
     const abc$ = this.http.get(url)
@@ -341,4 +364,11 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
     }
-}
+    async bulkeditRiskIssue(body,projectId){
+        var link = GlobalVariables.apiurl+"RiskIssue/BulkEdit/" + projectId
+        const abc$ = this.http.put(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+  }
+

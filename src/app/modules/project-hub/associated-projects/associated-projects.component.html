@@ -134,7 +134,7 @@
                     </ngx-datatable-column>
                     <ngx-datatable-column
                         name="PM Sponsor"
-                        prop="sponsor"
+                        prop="pm"
                         [flexGrow]="2"
                         [sortable]="false"
                     >
@@ -143,7 +143,25 @@
                             let-value="value"
                             ngx-datatable-cell-template
                         >
-                            {{ value }}
+                            {{ value }} <br> {{ row.sponsor }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column
+                        name="Overall status"
+                        prop="overallStatus"
+                        [headerClass]="getHeaderClass"
+                        [flexGrow]="1"
+                        [sortable]="false"
+                    >
+                        <ng-template
+                            let-row="row"
+                            let-value="value"
+                            ngx-datatable-cell-template
+                        >
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                            </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
@@ -159,8 +177,8 @@
                             ngx-datatable-cell-template
                         >
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                                svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
@@ -177,8 +195,8 @@
                             ngx-datatable-cell-template
                         >
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                                svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
@@ -195,8 +213,8 @@
                             ngx-datatable-cell-template
                         >
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                                svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
@@ -213,8 +231,8 @@
                             ngx-datatable-cell-template
                         >
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                                svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
@@ -231,8 +249,8 @@
                             ngx-datatable-cell-template
                         >
                             <mat-icon
-                                svgIcon="{{(indicator.getIndicators(value, '')).icontype}}"
-                                class="{{(indicator.getIndicators(value, '')).iconcolor}} ">
+                                svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>

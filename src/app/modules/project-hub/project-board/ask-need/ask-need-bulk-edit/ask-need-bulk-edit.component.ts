@@ -192,6 +192,7 @@ export class AskNeedBulkEditComponent implements OnInit {
       this.projectHubService.isFormChanged = false
       this.apiService.bulkeditAskNeeds(this.formValue, this.projectHubService.projectid).then(res => {
         this.projectHubService.toggleDrawerOpen('', '', [], '')
+        this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
       }
