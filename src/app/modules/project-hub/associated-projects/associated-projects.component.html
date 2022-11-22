@@ -147,6 +147,24 @@
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column
+                        name="Overall status"
+                        prop="overallStatus"
+                        [headerClass]="getHeaderClass"
+                        [flexGrow]="1"
+                        [sortable]="false"
+                    >
+                        <ng-template
+                            let-row="row"
+                            let-value="value"
+                            ngx-datatable-cell-template
+                        >
+                            <mat-icon
+                                svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                            </mat-icon>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column
                         name="Schedule"
                         prop="scheduleIndicator"
                         [headerClass]="getHeaderClass"

@@ -8,8 +8,8 @@
             </a>
         </div>
     </div>
-    <div class="h-[85vh] pl-3">
-        <div *ngIf="showMilestoneTable" class="w-full h-[35vh] overflow-hidden ">
+    <div class="h-[85vh] pl-3 mt-5">
+        <div *ngIf="showMilestoneTable" class="w-full overflow-hidden ">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Milestone(s)
             </div>
@@ -127,6 +127,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
+        <mat-divider></mat-divider>
         <div *ngIf="showRiskIssueTable" class="w-full mt-5">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Risk/Issue(s)
@@ -299,6 +300,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
+        <mat-divider></mat-divider>
         <div *ngIf="showAskNeedsTable" class="w-full mt-5">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Ask/Need
@@ -381,11 +383,11 @@
         </div>
     </div>
     <div class="flex items-start justify-between mt-6">
-        <a class="w-25" mat-flat-button [color]="'primary'"
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
            (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
-        <button class="w-25" mat-flat-button [color]="'primary'" type="submit"
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit"
                 (click)="onSubmit()">
             Submit
         </button>

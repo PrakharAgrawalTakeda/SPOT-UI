@@ -519,6 +519,7 @@ export class StateCheckComponent implements OnInit {
             }
             this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
                 this.projectHubService.submitbutton.next(true)
+                this.projectHubService.isNavChanged.next(true)
             })
         }
         // }
@@ -576,6 +577,7 @@ export class StateCheckComponent implements OnInit {
             }
             this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
                 this.projectHubService.submitbutton.next(true)
+                this.projectHubService.isNavChanged.next(true)
             })
         }
     }
@@ -584,6 +586,7 @@ export class StateCheckComponent implements OnInit {
             this.apiService.bulkeditRiskIssue(this.dbRiskIssues, this.id).then(res => {
                     this.projectHubService.submitbutton.next(true)
                     this.projectHubService.successSave.next(true)
+                    this.projectHubService.isNavChanged.next(true)
                 }
             )
     }
@@ -592,6 +595,7 @@ export class StateCheckComponent implements OnInit {
             this.apiService.bulkeditAskNeeds(this.dbAskNeeds,  this.id).then(res => {
                     this.projectHubService.submitbutton.next(true)
                     this.projectHubService.successSave.next(true)
+                    this.projectHubService.isNavChanged.next(true)
                 }
             )
     }

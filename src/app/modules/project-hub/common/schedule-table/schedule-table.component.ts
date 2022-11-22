@@ -42,7 +42,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
     public fuseAlert: FuseConfirmationService,
-    private _Activatedroute: ActivatedRoute) { 
+    private _Activatedroute: ActivatedRoute) {
       this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
         this.changeschedule(res)
       })
@@ -149,6 +149,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       if (close == 'confirmed') {
         this.apiService.deleteSchedule(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
         })
       }
     })

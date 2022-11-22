@@ -8,8 +8,8 @@
             </a>
         </div>
     </div>
-    <div class="grid grid-cols-5 ">
-        <div class="col-span-3 m-3 ">
+    <div class="grid grid-cols-9 ">
+        <div class="col-span-5 m-3 ">
             <form class="flex w-full " [formGroup]="phaseForm">
                 <div class="basis-1/4">
                     <div class="flex-auto mr-3">
@@ -68,7 +68,7 @@
                         </ng-template>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="To Phase" prop="current" [flexGrow]="1">
+                <ngx-datatable-column name="To Phase" prop="current" [flexGrow]="0.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <div *ngIf="row.current;then currentPhase else emptyCurrentPhase"></div>
                         <ng-template #currentPhase class="flex items-center justify-start gap-6">
@@ -79,7 +79,7 @@
                         </ng-template>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="1">
+                <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="0.7">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ row.modificationDate.split('T')[0] }}
                     </ng-template>
@@ -89,14 +89,14 @@
                         {{ row.modifiedByName }}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Comment" prop="currentComment" [flexGrow]="1">
+                <ngx-datatable-column name="Phase Comment" prop="currentComment" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ row.currentComment }}
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="col-span-2 m-3 ">
+        <div class="col-span-4 m-3 ">
             <form class="flex w-full" [formGroup]="stateForm">
                 <div class="basis-2/4">
                     <div class="flex-auto mr-3">
@@ -124,19 +124,19 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" columnMode="flex"
                            class="ml-3 datatable-ps material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
                            [rows]="stateRows">
-                <ngx-datatable-column name="From State" prop="previous" [flexGrow]="1">
+                <ngx-datatable-column name="From State" prop="previous" [flexGrow]="0.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <div class="flex items-center justify-start gap-6">
                             {{ value }}
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="To State" prop="current" [flexGrow]="1">
+                <ngx-datatable-column name="To State" prop="current" [flexGrow]="0.7">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value }}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="1">
+                <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="0.9">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value.split('T')[0] }}
                     </ng-template>
@@ -146,7 +146,7 @@
                         {{ value }}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Comment" prop="currentComment" [flexGrow]="1">
+                <ngx-datatable-column name="State Comment" prop="currentComment" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value }}
                     </ng-template>
@@ -155,11 +155,11 @@
         </div>
     </div>
     <div class="flex items-start justify-between mt-3 px-6">
-        <a class="w-25" mat-flat-button [color]="'primary'"
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
-        <button class="w-25" mat-flat-button [color]="'primary'" type="submit"
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit"
                 (click)="onSubmit()">
             Submit
         </button>

@@ -108,7 +108,7 @@ export class AssociatedProjectsComponent implements OnInit {
     }
     exportToExcel(): any {
         //To be changed once the power BI report is done
-        const url = 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae';
+        const url = 'https://app.powerbi.com/groups/b852fec1-9c8e-4224-a4cc-a2f0587c7f2c/reports/2971aba4-a0e6-49ca-97ca-37f5e94bf8f5/ReportSectiond4669b229488cd3d4112';
         window.open(url, '_blank');
     }
     onProgramReport(): any {
