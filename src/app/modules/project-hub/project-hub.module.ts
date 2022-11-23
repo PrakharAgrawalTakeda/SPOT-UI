@@ -88,12 +88,13 @@ import {UserModule} from "../../layout/common/user/user.module";
 import { LinkMilestonesComponent } from './project-board/link-milestones/link-milestones.component';
 // End Delete Later
 import { ScheduleComponent } from './project-board/schedule/schedule.component';
-import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
-import { StateCheckComponent } from './common/state-check/state-check.component';
-import { RisIssueViewBulkEditComponent } from './project-board/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
 import { ScheduleLinkComponent } from './project-board/schedule/schedule-link/schedule-link.component';
 import { ScheduleSingleEditComponent } from './project-board/schedule/schedule-single-edit/schedule-single-edit.component';
 import { ScheduleBulkEditComponent } from './project-board/schedule/schedule-bulk-edit/schedule-bulk-edit.component';
+import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
+import { StateCheckComponent } from './common/state-check/state-check.component';
+import { RisIssueViewBulkEditComponent } from './project-board/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
+import { SchedulesTableComponent } from './project-board/schedule/schedule-table/schedule-table.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -239,14 +240,15 @@ export const projectRoutes: Route[] = [
     UpdateParentComponent,
     LinkMilestonesComponent,
     ScheduleComponent,
+    ScheduleLinkComponent,
+    ScheduleSingleEditComponent,
+    ScheduleBulkEditComponent,
     LinkMilestonesComponent,
     UpdateParentComponent,
     PhaseStateComponent,
     StateCheckComponent,
     RisIssueViewBulkEditComponent,
-    ScheduleLinkComponent,
-    ScheduleSingleEditComponent,
-    ScheduleBulkEditComponent
+    SchedulesTableComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

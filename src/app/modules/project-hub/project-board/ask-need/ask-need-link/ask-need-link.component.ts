@@ -33,12 +33,12 @@ export class AskNeedLinkComponent implements OnInit {
       this.linkDBData = [...this.sortByLevel(res)]
       if (!this.projectHubService.includeClosedItems.askNeed.value) {
         this.linkData = this.sortByLevel(this.filterClosedItems(res))
-        for (var i in this.linkData) {
-          this.linkedAskNeeds.push([])
-        }
       }
       else {
         this.linkData = this.sortByLevel(res)
+      }
+      for (var i in this.linkData) {
+        this.linkedAskNeeds.push([])
       }
       console.log("Linked Ask Needs", this.linkData, this.linkDBData)
       this.localIncludedItems.controls.toggle.patchValue(this.projectHubService.includeClosedItems.askNeed.value)
@@ -179,11 +179,18 @@ export class AskNeedLinkComponent implements OnInit {
         var temp = this.linkDBData[index].askNeedLink.filter(x => x.parentProjectId == this.projectHubService.projectid)
         if (temp.length > 0) {
           for (var i of temp) {
-            mainObj.push(i)
+            if (this.linkDBData[index].askNeeds.find(x => x.askNeedUniqueId == i.linkItemId).closeDate != null) {
+              mainObj.push(i)
+            }
           }
         }
       }
     }
-    console.log(mainObj)
+    console.log("Submit Object",mainObj)
+    this.apiService.bulkeditAskNeedLinks(mainObj,this.projectHubService.projectid).then(res=>{
+      this.projectHubService.toggleDrawerOpen('', '', [], '')
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+    })
   }
 }
