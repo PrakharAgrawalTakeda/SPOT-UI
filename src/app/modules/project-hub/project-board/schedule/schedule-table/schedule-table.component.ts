@@ -26,8 +26,9 @@ export class SchedulesTableComponent implements OnInit {
   SelectionType = SelectionType;
   today = new Date()
   getRowClass = (row) => {
+    console.log(row)
     return {
-      'row-color1': row.closeDate != null,
+      'row-color1': row.completionDate != null,
     };
   };
   @ViewChild('scheduleTable') table: any;
