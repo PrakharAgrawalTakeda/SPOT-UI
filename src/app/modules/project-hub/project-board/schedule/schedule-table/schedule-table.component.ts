@@ -4,15 +4,17 @@ import { SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import moment from 'moment';
+
 
 @Component({
-  selector: 'app-ask-need-table',
-  templateUrl: './ask-need-table.component.html',
-  styleUrls: ['./ask-need-table.component.scss']
+  selector: 'schedule-table',
+  templateUrl: './schedule-table.component.html',
+  styleUrls: ['./schedule-table.component.scss']
 })
-export class AskNeedTableComponent implements OnInit {
+export class SchedulesTableComponent implements OnInit {
   @Input() tableData: any = []
-  @Input() askNeedData: any = []
+  @Input() scheduleData: any = []
   @Input() projectId: string = ''
   @Input() parentProjectId: string = ''
   @Input() mode: 'Normal' | 'Link' = 'Normal'
@@ -22,16 +24,16 @@ export class AskNeedTableComponent implements OnInit {
   @Output() toggleChange = new EventEmitter();
   selected = [];
   SelectionType = SelectionType;
+  today = new Date()
   getRowClass = (row) => {
+    console.log(row)
     return {
-      'row-color1': row.closeDate != null,
+      'row-color1': row.completionDate != null,
     };
   };
-  @ViewChild('askNeedTable') table: any;
+  @ViewChild('scheduleTable') table: any;
   constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService
-    , public fuseAlert: FuseConfirmationService) {
-
-  }
+    , public fuseAlert: FuseConfirmationService) { }
 
   ngOnInit(): void {
     console.log(this.tableData)
@@ -39,11 +41,53 @@ export class AskNeedTableComponent implements OnInit {
       this.dataloaderLink()
     }
   }
+
+  calculateVariance(array: any) :any {
+    for(var item of array)
+    {
+      var datetoday = new Date(moment(this.today).format('L'))
+      var datebaseline = new Date(moment(item.baselineFinish).format('L'))
+      var dateplanned = new Date(moment(item.plannedFinish).format('L'))
+      var datecompletion = new Date(moment(item.completionDate).format('L'))
+  
+  
+  
+      if (item.completionDate == null && item.baselineFinish != null && item.plannedFinish != null) {
+        if (moment(this.today) > moment(item.plannedFinish)) {
+          var Time1 = datetoday.getTime() - datebaseline.getTime();
+          var Days1 = Time1 / (1000 * 3600 * 24)
+  
+          var variance = Math.round(Days1)
+          item.variance = variance
+  
+  
+        }
+        else if (moment(this.today) < moment(item.plannedFinish)) {
+          var Time2 = dateplanned.getTime() - datebaseline.getTime();
+          var Days2 = Time2 / (1000 * 3600 * 24)
+          var variance = Math.round(Days2)
+          return variance.toString()
+        }
+      }
+      else if (item.completionDate != null && item.baselineFinish != null && item.plannedFinish != null) {
+        var Time3 = datecompletion.getTime() - datebaseline.getTime();
+        var Days3 = Time3 / (1000 * 3600 * 24)
+        var variance = Math.round(Days3)
+        item.variance = variance
+      }
+      else {
+        item.variance = "N/A"
+      }
+      console.log(item.variance)
+    }
+    
+    return array
+  }
   dataloaderLink() {
     var temp = []
     for (var item of this.links) {
       if (item.parentProjectId == this.parentProjectId && item.childProjectId == this.projectId) {
-        temp.push(this.askNeedData.find(x => x.askNeedUniqueId == item.linkItemId))
+        temp.push(this.scheduleData.find(x => x.scheduleUniqueId == item.linkItemId))
       }
     }
     if (temp.length > 0) {
@@ -53,20 +97,11 @@ export class AskNeedTableComponent implements OnInit {
         selected: temp
       })
     }
+
+    this.scheduleData = [...this.calculateVariance(this.scheduleData)]
   }
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
-  }
-  getlinkname2(uid: string): string {
-    let temp = this.links.find(x => x.linkItemId == uid)
-    temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
-    if (temp) {
-      return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
-    }
-    temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    if (temp) {
-      return "A link to this ask/need has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
-    }
   }
   getlinkname(uid: string): string {
     var linkItemList = this.links.filter(x => x.linkItemId == uid)
@@ -77,48 +112,17 @@ export class AskNeedTableComponent implements OnInit {
           returnString = returnString + '</br>'
         }
         var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-        returnString = returnString + "A link to this ask/need has been created in project(s): " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        returnString = returnString + "A link to this milestone has been created in project(s): " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
       }
       else if (linkItem.parentProjectId == this.projectId) {
         if (returnString != '') {
           returnString = returnString + '</br>'
         }
         var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.childProjectId)
-        returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+        returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
       }
     }
     return returnString
-  }
-  deleteAskNeed(id: string) {
-    var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Ask Need?",
-      "message": "Are you sure you want to remove this record permanently? ",
-      "icon": {
-        "show": true,
-        "name": "heroicons_outline:exclamation",
-        "color": "warn"
-      },
-      "actions": {
-        "confirm": {
-          "show": true,
-          "label": "Remove",
-          "color": "warn"
-        },
-        "cancel": {
-          "show": true,
-          "label": "Cancel"
-        }
-      },
-      "dismissible": true
-    }
-    const askNeedAlert = this.fuseAlert.open(comfirmConfig)
-    askNeedAlert.afterClosed().subscribe(close => {
-      if (close == 'confirmed') {
-        this.apiService.deleteAskNeed(id).then(res => {
-          this.projectHubService.submitbutton.next(true)
-        })
-      }
-    })
   }
   onSelect({ selected }) {
     console.log('Select Event', selected, this.selected);
@@ -134,7 +138,6 @@ export class AskNeedTableComponent implements OnInit {
   onActivate(event) {
     console.log('Activate Event', event);
   }
-
   toggleExpandRow(row) {
     this.table.rowDetail.toggleExpandRow(row);
   }

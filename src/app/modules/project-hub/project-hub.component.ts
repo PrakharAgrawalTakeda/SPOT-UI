@@ -98,6 +98,7 @@ export class ProjectHubComponent implements OnInit {
     getdata(): void {
         this.apiService.getProjectHubData(this.id).then((res: any) => {
             this.projectDetails = res.projectData
+            this.projecthubservice.hasChildren = res.hasChildren
             this.portfolioDetails = res.portfolioCeterData
             console.log(res.indicator)
             this.spotLightIndicator = res.indicators

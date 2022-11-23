@@ -5,17 +5,17 @@ import { ProjectApiService } from 'app/modules/project-hub/common/project-api.se
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 
 @Component({
-  selector: 'app-ask-need-link',
-  templateUrl: './ask-need-link.component.html',
-  styleUrls: ['./ask-need-link.component.scss']
+  selector: 'app-schedule-link',
+  templateUrl: './schedule-link.component.html',
+  styleUrls: ['./schedule-link.component.scss']
 })
-export class AskNeedLinkComponent implements OnInit {
+export class ScheduleLinkComponent implements OnInit {
 
-  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
-  }
+  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) { }
+
   linkData: any = []
   linkDBData: any = []
-  linkedAskNeeds: any = []
+  linkedSchedules: any = []
   viewContent: boolean = false
   localIncludedItems = new FormGroup({
     toggle: new FormControl(false)
@@ -27,30 +27,44 @@ export class AskNeedLinkComponent implements OnInit {
   dataloader() {
     this.linkData = []
     this.linkDBData = []
-    this.linkedAskNeeds = []
-    this.apiService.askNeedGetLinkData(this.projectHubService.projectid).then(res => {
-      console.log("Link Data:", res)
+    this.linkedSchedules = []
+    this.apiService.milestoneGetLinkData(this.projectHubService.projectid).then(res => {
+      console.log("Schedule Link", res)
       this.linkDBData = [...this.sortByLevel(res)]
-      if (!this.projectHubService.includeClosedItems.askNeed.value) {
+      if (!this.projectHubService.includeClosedItems.schedule.value) {
         this.linkData = this.sortByLevel(this.filterClosedItems(res))
       }
       else {
         this.linkData = this.sortByLevel(res)
       }
       for (var i in this.linkData) {
-        this.linkedAskNeeds.push([])
+        this.linkedSchedules.push([])
       }
-      console.log("Linked Ask Needs", this.linkData, this.linkDBData)
-      this.localIncludedItems.controls.toggle.patchValue(this.projectHubService.includeClosedItems.askNeed.value)
+      this.localIncludedItems.controls.toggle.patchValue(this.projectHubService.includeClosedItems.schedule.value)
       this.projectHubService.isFormChanged = false
       this.viewContent = true
     })
   }
-  toggleAskNeed(event: any) {
-    this.linkedAskNeeds[event.tableIndex] = [...event.selected]
-    console.log("Linked Ask Needs", this.linkedAskNeeds)
-  }
 
+  filterClosedItems(array: any): any {
+    var returnObject: any = []
+    for (var item of array) {
+      returnObject.push({
+        projectUId: item.projectUId,
+        projectId: item.projectId,
+        projectName: item.projectName,
+        level: item.level,
+        schedules: item.schedules.length > 0 ? this.sortByPlannedFinishDate(item.schedules.filter(x => x.completionDate == null)) : [],
+        schedulesLink: item.schedulesLink,
+        scheduleLinkProjectDetails: item.scheduleLinkProjectDetails
+      })
+    }
+    return returnObject
+  }
+  toggleSchedule(event: any) {
+    this.linkedSchedules[event.tableIndex] = [...event.selected]
+    console.log("Linked Schedules", this.linkedSchedules)
+  }
   toggleClosedItems($event) {
     if (this.viewContent) {
       if (this.projectHubService.isFormChanged) {
@@ -75,10 +89,10 @@ export class AskNeedLinkComponent implements OnInit {
           },
           "dismissible": true
         }
-        const askNeedAlert = this.fuseAlert.open(comfirmConfig)
-        askNeedAlert.afterClosed().subscribe(close => {
+        const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+        scheduleAlert.afterClosed().subscribe(close => {
           if (close == 'confirmed') {
-            this.projectHubService.includeClosedItems.askNeed.next($event.checked)
+            this.projectHubService.includeClosedItems.schedule.next($event.checked)
             this.dataloader()
           }
           else {
@@ -89,86 +103,64 @@ export class AskNeedLinkComponent implements OnInit {
       }
       else {
         console.log("Event Value", $event.checked)
-        this.projectHubService.includeClosedItems.askNeed.next($event.checked)
+        this.projectHubService.includeClosedItems.schedule.next($event.checked)
         this.dataloader()
       }
     }
     this.localIncludedItems.controls.toggle.markAsPristine()
   }
-  filterClosedItems(array: any): any {
-    var returnObject: any = []
-    for (var item of array) {
-      returnObject.push({
-        projectUId: item.projectUId,
-        projectId: item.projectId,
-        projectName: item.projectName,
-        level: item.level,
-        askNeeds: item.askNeeds.length > 0 ? this.sortByNeedByDate(item.askNeeds.filter(x => x.closeDate == null)) : [],
-        askNeedLink: item.askNeedLink,
-        askNeedLinkProjectDetails: item.askNeedLinkProjectDetails
-      })
-    }
-    return returnObject
-  }
-
 
   sortByLevel(array: any): any {
     return array.length > 1 ? array.sort((a, b) => {
       if (a.level === null) {
         return -1;
       }
-
       if (b.level === null) {
         return 1;
       }
-
       if (a.level === b.level) {
         return 0;
       }
-
       return a.level < b.level ? -1 : 1;
     }) : array
   }
-  sortByNeedByDate(array: any): any {
+  sortByPlannedFinishDate(array: any): any {
     return array.length > 1 ? array.sort((a, b) => {
-      if (a.needByDate === null) {
+      if (a.plannedFinish === null) {
         return -1;
       }
-
-      if (b.needByDate === null) {
+      if (b.plannedFinish === null) {
         return 1;
       }
-
-      if (a.needByDate === b.needByDate) {
+      if (a.plannedFinish === b.plannedFinish) {
         return 0;
       }
-
-      return a.needByDate < b.needByDate ? -1 : 1;
+      return a.plannedFinish < b.plannedFinish ? -1 : 1;
     }) : array
   }
   numSequence(n: number): Array<number> {
     return Array(n);
   }
 
-  submitANLink() {
+  submitScheduleLink() {
     this.projectHubService.isFormChanged = false
     var mainObj: any = []
-    for (var index in this.linkedAskNeeds) {
-      if (this.linkedAskNeeds[index].length > 0) {
-        for (var item of this.linkedAskNeeds[index]) {
+    for (var index in this.linkedSchedules) {
+      if (this.linkedSchedules[index].length > 0) {
+        for (var item of this.linkedSchedules[index]) {
           if (item != null) {
-            if (this.linkDBData[index].askNeedLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId)) {
-              mainObj.push(this.linkDBData[index].askNeedLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId))
+            if (this.linkDBData[index].schedulesLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.scheduleUniqueId)) {
+              mainObj.push(this.linkDBData[index].schedulesLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.scheduleUniqueId))
             }
             else {
               mainObj.push({
                 "programHubLinkUniqueId": "",
                 "parentProjectId": this.projectHubService.projectid,
                 "childProjectId": item.projectId,
-                "linkItemId": item.askNeedUniqueId,
-                "scheduleLink": null,
+                "linkItemId": item.scheduleUniqueId,
+                "scheduleLink": true,
                 "riskIssueLink": null,
-                "askNeedLink": true,
+                "askNeedLink": null,
                 "includeInReport": false,
                 "includeInCharter": null,
                 "linkLevel": this.linkDBData[index].level + 1
@@ -177,11 +169,11 @@ export class AskNeedLinkComponent implements OnInit {
           }
         }
       }
-      if (!this.projectHubService.includeClosedItems.askNeed.value) {
-        var temp = this.linkDBData[index].askNeedLink.filter(x => x.parentProjectId == this.projectHubService.projectid)
+      if (!this.projectHubService.includeClosedItems.schedule.value) {
+        var temp = this.linkDBData[index].schedulesLink.filter(x => x.parentProjectId == this.projectHubService.projectid)
         if (temp.length > 0) {
           for (var i of temp) {
-            if (this.linkDBData[index].askNeeds.find(x => x.askNeedUniqueId == i.linkItemId).closeDate != null) {
+            if (this.linkDBData[index].schedules.find(x => x.scheduleUniqueId == i.linkItemId).closeDate != null) {
               mainObj.push(i)
             }
           }
@@ -189,7 +181,7 @@ export class AskNeedLinkComponent implements OnInit {
       }
     }
     console.log("Submit Object", mainObj)
-    this.apiService.bulkeditAskNeedLinks(mainObj, this.projectHubService.projectid).then(res => {
+    this.apiService.bulkeditScheduleLinks(mainObj, this.projectHubService.projectid).then(res => {
       this.projectHubService.toggleDrawerOpen('', '', [], '')
       this.projectHubService.submitbutton.next(true)
       this.projectHubService.successSave.next(true)
