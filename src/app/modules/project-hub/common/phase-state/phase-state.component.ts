@@ -96,7 +96,11 @@ export class PhaseStateComponent implements OnInit {
                 oephaseId: this.phaseForm.get('oePhase').value,
                 phaseComment: this.phaseForm.get('phaseComment').value
             }
-            this.apiService.postPhaseState(phaseBody)
+            this.apiService.postPhaseState(phaseBody).then(res=>{
+                this.projecthubservice.isNavChanged.next(true)
+            })
+
+
         }
         if(this.stateForm.get('state').value != this.currentState ){
             stateActive = true;
@@ -109,6 +113,7 @@ export class PhaseStateComponent implements OnInit {
             }
             this.apiService.postPhaseState(stateBody).then(res=>{
                 this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
+                this.projecthubservice.isNavChanged.next(true)
             }).catch(err => {
                 if(err.status == 400){
                     this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
