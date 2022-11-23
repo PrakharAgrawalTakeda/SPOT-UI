@@ -156,22 +156,24 @@ export class AskNeedLinkComponent implements OnInit {
     for (var index in this.linkedAskNeeds) {
       if (this.linkedAskNeeds[index].length > 0) {
         for (var item of this.linkedAskNeeds[index]) {
-          if (this.linkDBData[index].askNeedLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId)) {
-            mainObj.push(this.linkDBData[index].askNeedLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId))
-          }
-          else {
-            mainObj.push({
-              "programHubLinkUniqueId": "",
-              "parentProjectId": this.projectHubService.projectid,
-              "childProjectId": item.projectId,
-              "linkItemId": item.askNeedUniqueId,
-              "scheduleLink": null,
-              "riskIssueLink": null,
-              "askNeedLink": true,
-              "includeInReport": false,
-              "includeInCharter": null,
-              "linkLevel": this.linkDBData[index].level + 1
-            })
+          if (item != null) {
+            if (this.linkDBData[index].askNeedLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId)) {
+              mainObj.push(this.linkDBData[index].askNeedLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.askNeedUniqueId))
+            }
+            else {
+              mainObj.push({
+                "programHubLinkUniqueId": "",
+                "parentProjectId": this.projectHubService.projectid,
+                "childProjectId": item.projectId,
+                "linkItemId": item.askNeedUniqueId,
+                "scheduleLink": null,
+                "riskIssueLink": null,
+                "askNeedLink": true,
+                "includeInReport": false,
+                "includeInCharter": null,
+                "linkLevel": this.linkDBData[index].level + 1
+              })
+            }
           }
         }
       }
@@ -186,11 +188,11 @@ export class AskNeedLinkComponent implements OnInit {
         }
       }
     }
-    console.log("Submit Object",mainObj)
-    this.apiService.bulkeditAskNeedLinks(mainObj,this.projectHubService.projectid).then(res=>{
+    console.log("Submit Object", mainObj)
+    this.apiService.bulkeditAskNeedLinks(mainObj, this.projectHubService.projectid).then(res => {
       this.projectHubService.toggleDrawerOpen('', '', [], '')
-        this.projectHubService.submitbutton.next(true)
-        this.projectHubService.successSave.next(true)
+      this.projectHubService.submitbutton.next(true)
+      this.projectHubService.successSave.next(true)
     })
   }
 }

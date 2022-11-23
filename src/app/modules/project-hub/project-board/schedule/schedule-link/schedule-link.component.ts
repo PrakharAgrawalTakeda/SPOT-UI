@@ -29,7 +29,7 @@ export class ScheduleLinkComponent implements OnInit {
     this.linkDBData = []
     this.linkedSchedules = []
     this.apiService.milestoneGetLinkData(this.projectHubService.projectid).then(res => {
-      console.log("Schedule Link",res)
+      console.log("Schedule Link", res)
       this.linkDBData = [...this.sortByLevel(res)]
       if (!this.projectHubService.includeClosedItems.schedule.value) {
         this.linkData = this.sortByLevel(this.filterClosedItems(res))
@@ -148,22 +148,24 @@ export class ScheduleLinkComponent implements OnInit {
     for (var index in this.linkedSchedules) {
       if (this.linkedSchedules[index].length > 0) {
         for (var item of this.linkedSchedules[index]) {
-          if (this.linkDBData[index].schedulesLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.scheduleUniqueId)) {
-            mainObj.push(this.linkDBData[index].schedulesLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.scheduleUniqueId))
-          }
-          else {
-            mainObj.push({
-              "programHubLinkUniqueId": "",
-              "parentProjectId": this.projectHubService.projectid,
-              "childProjectId": item.projectId,
-              "linkItemId": item.scheduleUniqueId,
-              "scheduleLink": true,
-              "riskIssueLink": null,
-              "askNeedLink": null,
-              "includeInReport": false,
-              "includeInCharter": null,
-              "linkLevel": this.linkDBData[index].level + 1
-            })
+          if (item != null) {
+            if (this.linkDBData[index].schedulesLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.scheduleUniqueId)) {
+              mainObj.push(this.linkDBData[index].schedulesLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.scheduleUniqueId))
+            }
+            else {
+              mainObj.push({
+                "programHubLinkUniqueId": "",
+                "parentProjectId": this.projectHubService.projectid,
+                "childProjectId": item.projectId,
+                "linkItemId": item.scheduleUniqueId,
+                "scheduleLink": true,
+                "riskIssueLink": null,
+                "askNeedLink": null,
+                "includeInReport": false,
+                "includeInCharter": null,
+                "linkLevel": this.linkDBData[index].level + 1
+              })
+            }
           }
         }
       }
@@ -178,11 +180,11 @@ export class ScheduleLinkComponent implements OnInit {
         }
       }
     }
-    console.log("Submit Object",mainObj)
-    /*this.apiService.bulkeditAskNeedLinks(mainObj,this.projectHubService.projectid).then(res=>{
+    console.log("Submit Object", mainObj)
+    this.apiService.bulkeditScheduleLinks(mainObj, this.projectHubService.projectid).then(res => {
       this.projectHubService.toggleDrawerOpen('', '', [], '')
-        this.projectHubService.submitbutton.next(true)
-        this.projectHubService.successSave.next(true)
-    })*/
+      this.projectHubService.submitbutton.next(true)
+      this.projectHubService.successSave.next(true)
+    })
   }
 }
