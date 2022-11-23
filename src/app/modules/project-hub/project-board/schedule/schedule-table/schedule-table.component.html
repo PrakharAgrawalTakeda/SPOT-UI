@@ -37,6 +37,11 @@
             <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
     </ngx-datatable-column>
+    <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.49">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p class = "variance" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
+        </ng-template>
+    </ngx-datatable-column>
     <ngx-datatable-column [flexGrow]="0.5" *ngIf="mode == 'Link'" [sortable]="false" [canAutoResize]="false"
         [draggable]="false" [resizeable]="false">
         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"

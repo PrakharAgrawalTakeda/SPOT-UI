@@ -4,6 +4,7 @@ import { SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import moment from 'moment';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class SchedulesTableComponent implements OnInit {
   @Output() toggleChange = new EventEmitter();
   selected = [];
   SelectionType = SelectionType;
+  today = new Date()
   getRowClass = (row) => {
     return {
       'row-color1': row.closeDate != null,
@@ -39,10 +41,46 @@ export class SchedulesTableComponent implements OnInit {
     }
   }
 
-  calculateVariance(array:any):any{
-    for(var item of array){
-      
+  calculateVariance(array: any) :any {
+    for(var item of array)
+    {
+      var datetoday = new Date(moment(this.today).format('L'))
+      var datebaseline = new Date(moment(item.baselineFinish).format('L'))
+      var dateplanned = new Date(moment(item.plannedFinish).format('L'))
+      var datecompletion = new Date(moment(item.completionDate).format('L'))
+  
+  
+  
+      if (item.completionDate == null && item.baselineFinish != null && item.plannedFinish != null) {
+        if (moment(this.today) > moment(item.plannedFinish)) {
+          var Time1 = datetoday.getTime() - datebaseline.getTime();
+          var Days1 = Time1 / (1000 * 3600 * 24)
+  
+          var variance = Math.round(Days1)
+          item.variance = variance
+  
+  
+        }
+        else if (moment(this.today) < moment(item.plannedFinish)) {
+          var Time2 = dateplanned.getTime() - datebaseline.getTime();
+          var Days2 = Time2 / (1000 * 3600 * 24)
+          var variance = Math.round(Days2)
+          return variance.toString()
+        }
+      }
+      else if (item.completionDate != null && item.baselineFinish != null && item.plannedFinish != null) {
+        var Time3 = datecompletion.getTime() - datebaseline.getTime();
+        var Days3 = Time3 / (1000 * 3600 * 24)
+        var variance = Math.round(Days3)
+        item.variance = variance
+      }
+      else {
+        item.variance = "N/A"
+      }
+      console.log(item.variance)
     }
+    
+    return array
   }
   dataloaderLink() {
     var temp = []
@@ -73,14 +111,14 @@ export class SchedulesTableComponent implements OnInit {
           returnString = returnString + '</br>'
         }
         var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-        returnString = returnString + "A link to this ask/need has been created in project(s): " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        returnString = returnString + "A link to this milestone has been created in project(s): " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
       }
       else if (linkItem.parentProjectId == this.projectId) {
         if (returnString != '') {
           returnString = returnString + '</br>'
         }
         var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.childProjectId)
-        returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+        returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
       }
     }
     return returnString
