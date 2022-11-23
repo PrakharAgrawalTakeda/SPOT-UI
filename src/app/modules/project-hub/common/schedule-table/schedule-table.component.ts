@@ -70,10 +70,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     //this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
-    console.log(this.scheduleData)
+    // console.log(this.scheduleData)
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-    console.log(this.scheduleData)
-    console.log(this.schedulengxdata)
+    // console.log(this.scheduleData)
+    // console.log(this.schedulengxdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
   }
 
@@ -157,17 +157,17 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   }
   changeschedule(event: any) {
 
-    console.log(this.scheduleData)
+    // console.log(this.scheduleData)
     if (event == true) {
       this.schedulengxdata = this.scheduleData
       this.isclosed = true
-      console.log(this.schedulengxdata)
+      // console.log(this.schedulengxdata)
 
     }
     else {
         this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
         this.isclosed = false
-        console.log(this.schedulengxdata)
+        // console.log(this.schedulengxdata)
       }
     this.localIncludedItems.controls.toggle.patchValue(event)
     this.localIncludedItems.controls.toggle.markAsPristine()
@@ -178,9 +178,9 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   }
   getlinkname(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
-    console.log(this.projectViewDetails.links)
-    console.log(this.projectViewDetails.linksProblemCapture)
-    console.log(this.projectViewDetails.scheduleData)
+    // console.log(this.projectViewDetails.links)
+    // console.log(this.projectViewDetails.linksProblemCapture)
+    // console.log(this.projectViewDetails.scheduleData)
 
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
     if (temp) {
@@ -194,10 +194,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   }
   onDetailToggle(event: any) {
-    console.log(event)
+    // console.log(event)
   }
   toggleExpandRow(row) {
-    console.log('Toggled Expand Row!', this.scheduleTable);
+    // console.log('Toggled Expand Row!', this.scheduleTable);
     this.scheduleTable.rowDetail.toggleExpandRow(row);
   }
 }

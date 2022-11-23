@@ -54,8 +54,36 @@ export class StateCheckComponent implements OnInit {
 
     ngOnInit(): void {
         this.getllookup()
+        this.apiService.getprojectviewdata(this.id).then((res: any) =>{
+            if(!res.portfolioCeterData.pm || res.portfolioCeterData.pm==""){
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "message": "The project does not have a portofolio owner assigned. Please assign one and try again",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "primary"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "OK",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": false,
+                        }
+                    },
+                    "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+                alert.afterClosed().subscribe(close => {
+                    this.projectHubService.toggleDrawerOpen('', '', [], '')
+                })
+            }
+        })
     }
     getllookup() {
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.auth.lookupMaster().then((resp: any) => {
             this.lookUpData = resp
             this.dataloader()
@@ -63,7 +91,6 @@ export class StateCheckComponent implements OnInit {
     }
 
     dataloader() {
-        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.apiService.getIncompleteItems(this.id).then((res: any) => {
             this.scheduleNgxData = res.milestones;
             this.riskIssuesNgxData = res.riskIssues;
@@ -465,6 +492,7 @@ export class StateCheckComponent implements OnInit {
             }
             await delay(1000);
             this.apiService.postPhaseState(this.projectHubService.all)
+            this.projectHubService.isNavChanged.next(true)
             this.projectHubService.toggleDrawerOpen('', '', [], '')
         }
 
@@ -525,15 +553,12 @@ export class StateCheckComponent implements OnInit {
         // }
         else {
             var formValue = this.milestoneForm.getRawValue()
-            console.log(formValue)
-            console.log(formValue)
             if (!this.projectHubService.includeClosedItems.schedule.value) {
                 this.scheduleFormValue = this.scheduleData > 0 ? this.scheduleData.filter(x => x.completionDate != null) : []
             }
 
 
             for (var i of formValue) {
-                console.log(i.function)
                 if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
                     this.scheduleFormValue.push({
                         scheduleUniqueId: i.scheduleUniqueId,

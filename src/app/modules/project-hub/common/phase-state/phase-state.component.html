@@ -81,7 +81,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="0.7">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ row.modificationDate.split('T')[0] }}
+                        {{ row.modificationDate.split('T')[0] | date:'dd-MMM-yyyy' }}
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Changed By" prop="modifiedByName" [flexGrow]="1">
@@ -138,7 +138,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Change Date" prop="modificationDate" [flexGrow]="0.9">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value.split('T')[0] }}
+                        {{ value.split('T')[0] | date:'dd-MMM-yyyy' }}
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Changed By" prop="modifiedByName" [flexGrow]="1">
@@ -154,7 +154,7 @@
             </ngx-datatable>
         </div>
     </div>
-    <div class="flex items-start justify-between mt-3 px-6">
+    <div class="pr-6 pl-6 flex justify-between items-center w-full mt-3 mb-3">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel

@@ -14,7 +14,7 @@ export class GlobalVariables {
 
         //Mannat
 
-        'https://spotapi-gateway-dev.azurewebsites.net/api/'
+        // 'https://spotapi-gateway-dev.azurewebsites.net/api/'
 
         //Nick&Toader
 
@@ -22,7 +22,7 @@ export class GlobalVariables {
 
         // Prakhar Local API
 
-        //'https://spot4api-dev.azurewebsites.net/api/'
+        'https://spot4api-dev.azurewebsites.net/api/'
 
         // 'https://localhost:5001/api/'
 
