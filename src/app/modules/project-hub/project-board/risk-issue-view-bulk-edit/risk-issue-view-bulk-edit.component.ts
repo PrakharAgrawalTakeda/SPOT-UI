@@ -317,7 +317,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         this.submitPrep()
         var formValue = this.formValue
         if (formValue.length > 0) {
-            if (formValue.filter(x => x.includeInReport == true).length < 1) {
+            if (formValue.filter(x => x.includeInReport == true).length < 3) {
                 for (var i of this.riskIssueForm.controls) {
                     i['controls']['includeInReport'].enable()
                 }
