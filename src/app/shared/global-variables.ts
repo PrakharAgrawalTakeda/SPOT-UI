@@ -18,11 +18,11 @@ export class GlobalVariables {
 
         //Nick&Toader
 
-        // 'https://localhost:7288/api/'
+        'https://localhost:7288/api/'
 
         // Prakhar Local API
 
-        'https://spot4api-dev.azurewebsites.net/api/'
+        // 'https://spot4api-dev.azurewebsites.net/api/'
 
         // 'https://localhost:5001/api/'
 
