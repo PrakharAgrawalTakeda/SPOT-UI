@@ -14,7 +14,7 @@
                 </button>
             </div>
             <div>
-                <mat-slide-toggle class="primary slider-adjust" (change)="changeriskissues($event)">
+                <mat-slide-toggle class="primary slider-adjust" (change)="changeriskissues($event)" (checked)="projecthubservice.includeClosedItems.askNeed.value">
                     Include Closed
                     Items</mat-slide-toggle>
             </div>
