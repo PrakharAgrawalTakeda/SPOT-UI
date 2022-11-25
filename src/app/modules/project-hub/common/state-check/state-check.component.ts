@@ -54,14 +54,14 @@ export class StateCheckComponent implements OnInit {
 
     ngOnInit(): void {
         this.getllookup()
-        this.apiService.getprojectviewdata(this.id).then((res: any) =>{
-            if(!res.portfolioCeterData.pm || res.portfolioCeterData.pm==""){
+        this.apiService.getGeneralInfoData(this.id).then((res: any) =>{
+            if(!res.portfolioOwner){
                 var comfirmConfig: FuseConfirmationConfig = {
                     "message": "The project does not have a portofolio owner assigned. Please assign one and try again",
                     "icon": {
                         "show": true,
                         "name": "heroicons_outline:exclamation",
-                        "color": "primary"
+                        "color": "warn"
                     },
                     "actions": {
                         "confirm": {
