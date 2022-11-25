@@ -23,7 +23,7 @@
         <div class="overflow-y-hidden h-[80vh] pl-3" id="askNeedTableDiv">
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
-                           class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                           class="material datatable-ri-70 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
                            [rows]="tableData" #riskIssueTable [rowClass]="getRowClass">
                 <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false"
                                       [flexGrow]="0.5" [draggable]="false">
@@ -46,6 +46,7 @@
                                [ngClass]="{'closed': row.closeDate != null}">Risk</p>
                             <p *ngIf="value == '2d9dbd40-14ec-47b3-badd-c5a63eb3dbd5'"
                                [ngClass]="{'closed': row.closeDate != null}">Issue</p>
+                            <p *ngIf="!value">&nbsp;</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="riskIssueTypeId" name="type" [placeholder]="'Type'"
@@ -97,7 +98,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="This is the result" prop="riskIssueResult" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [flexGrow]="1" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
