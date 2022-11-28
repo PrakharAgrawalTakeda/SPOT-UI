@@ -9,14 +9,16 @@
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
                 <button class="ml-4 text-primary bg-gray-200" *ngIf="editable" mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen('RiskIssue', 'new', [], projectid)">
+                    (click)="projecthubservice.toggleDrawerOpen('RiskIssue', '', [], projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
             <div>
-                <mat-slide-toggle class="primary slider-adjust" (change)="changeriskissues($event)" (checked)="projecthubservice.includeClosedItems.askNeed.value">
-                    Include Closed
-                    Items</mat-slide-toggle>
+                <form [formGroup]="localIncludedItems">
+                    <mat-slide-toggle class="primary slider-adjust" formControlName="toggle" (checked)="projecthubservice.includeClosedItems.riskIssue.value"  (change)="toggleRiskIssue($event)" >
+                        Include Closed
+                        Items</mat-slide-toggle>
+                </form>
             </div>
         </div>
     </div>

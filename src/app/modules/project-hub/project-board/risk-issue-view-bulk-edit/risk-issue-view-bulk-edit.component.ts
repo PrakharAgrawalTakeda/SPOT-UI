@@ -178,7 +178,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }, 100);
     }
     toggleRiskIssue(event: any) {
-        this.toggleHelper = true
         this.projectHubService.includeClosedItems.riskIssue.next(event.checked)
     }
     changeRiskIssue(event: any, initial: boolean = false) {
