@@ -57,7 +57,7 @@ export class StateCheckComponent implements OnInit {
         this.apiService.getGeneralInfoData(this.id).then((res: any) =>{
             if(!res.portfolioOwner){
                 var comfirmConfig: FuseConfirmationConfig = {
-                    "message": "The project does not have a portofolio owner assigned. Please assign one and try again",
+                    "message": "The project has no Portfolio Owner assigned. In order to change the project state to completed, please assign a portfolio owner- alternatively ask your Portfolio Manager for assistance. The project state has not been changed!",
                     "icon": {
                         "show": true,
                         "name": "heroicons_outline:exclamation",
