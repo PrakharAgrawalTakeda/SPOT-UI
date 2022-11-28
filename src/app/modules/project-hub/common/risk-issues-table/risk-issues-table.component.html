@@ -14,9 +14,11 @@
                 </button>
             </div>
             <div>
-                <mat-slide-toggle class="primary slider-adjust" (change)="changeriskissues($event)" (checked)="projecthubservice.includeClosedItems.askNeed.value">
-                    Include Closed
-                    Items</mat-slide-toggle>
+                <form [formGroup]="localIncludedItems">
+                    <mat-slide-toggle class="primary slider-adjust" formControlName="toggle" (checked)="projecthubservice.includeClosedItems.riskIssue.value"  (change)="toggleRiskIssue($event)" >
+                        Include Closed
+                        Items</mat-slide-toggle>
+                </form>
             </div>
         </div>
     </div>
