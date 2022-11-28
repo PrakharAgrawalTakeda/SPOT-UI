@@ -64,7 +64,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
 
   }
   changeriskissues(event: any) {
-    if (event.checked == true) {
+    if (event == true) {
       this.riskIssuesngxdata = this.riskIssuesData
       this.isclosed = true
     }

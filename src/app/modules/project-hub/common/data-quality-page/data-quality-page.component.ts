@@ -56,7 +56,10 @@ export class DataQualityPageComponent implements OnInit {
         window.dispatchEvent(new Event('resize'));
     }
     getColor(percentage: number) {
-        if (this.projectType == 'Simple Project' || percentage == null) {
+        if(percentage == null){
+            return '#808080';
+        }
+        if (this.projectType == 'Simple Project') {
             return '#4c9bcf';
         } else {
             if (percentage < this.lowerTargetPercentage) {
