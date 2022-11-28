@@ -201,7 +201,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Included In Project Dashboard (Max 3)" prop="includeInReport"
-                                      [flexGrow]="1" [draggable]="false" [resizeable]="false" [sortable]="false">
+                                       [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
                            (click)="riTableEditRow(rowIndex)">

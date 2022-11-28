@@ -67,6 +67,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         if (this.projectHubService.projectid) {
             this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
                 this.riskIssueData = res.riskIssuesData;
+                console.log("xxxxxxxxxxx", res.riskIssuesData);
                 if (res.riskIssuesData?.length > 0) {
                     for (var i of res.riskIssuesData) {
                         this.dbRiskIssues.push({
@@ -75,8 +76,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             functionGroupId: i.functionGroupId,
                             ifHappens: i.ifHappens,
                             impactId: i.impactId,
-                            includeInCharter: (i.includeInCharter == 'true'),
-                            includeInReport: (i.includeInReport== 'true'),
+                            includeInCharter: i.includeInCharter,
+                            includeInReport: i.includeInReport,
                             indicator: i.indicator,
                             logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                             mitigation: i.mitigation,
@@ -178,6 +179,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }, 100);
     }
     toggleRiskIssue(event: any) {
+        this.toggleHelper = true;
         this.projectHubService.includeClosedItems.riskIssue.next(event.checked)
     }
     changeRiskIssue(event: any, initial: boolean = false) {
@@ -295,8 +297,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 functionGroupId: new FormControl(x.functionGroupId),
                 ifHappens: new FormControl(x.ifHappens),
                 impactId: new FormControl(x.impactId),
-                includeInCharter: new FormControl((x.includeInCharter == 'true')),
-                includeInReport: new FormControl((x.includeInReport== 'true')),
+                includeInCharter: new FormControl(x.includeInCharter),
+                includeInReport: new FormControl(x.includeInReport),
                 indicator: new FormControl(x.indicator),
                 logDate: new FormControl(x.logDate),
                 mitigation: new FormControl(x.mitigation),
@@ -342,8 +344,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                 functionGroupId: i.functionGroupId,
                 ifHappens: i.ifHappens,
-                includeInCharter: (i.includeInCharter== 'true'),
-                includeInReport: (i.includeInReport== 'true'),
+                includeInCharter: i.includeInCharter,
+                includeInReport: i.includeInReport,
                 indicator: i.indicator,
                 logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                 mitigation: i.mitigation,

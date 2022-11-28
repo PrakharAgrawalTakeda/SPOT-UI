@@ -126,14 +126,9 @@ export class ProjectHubComponent implements OnInit {
             //
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
-            if (res == null || res.phase == "Initiate") {
-                this.dataQualityPercentageString = "N/A";
-                this.dataQualityPercentage =null;
-            } else {
                 this.dataQualityPercentage = res * 100;
                 this.dataQualityPercentageString =
                     (~~this.dataQualityPercentage).toString() + "%";
-            }
         })
     }
     toggleSideNav() {
@@ -192,6 +187,10 @@ export class ProjectHubComponent implements OnInit {
         return 'pointer-last-unselect';
     }
     getColor(percentage: number) {
+        if(this.portfolioDetails.phase == "Initiate"){
+            this.dataQualityPercentageString = "N/A";
+            return '#808080';
+        }
         if (this.projectType == "Simple Project" || percentage == null) {
             return '#4c9bcf';
         } else {
