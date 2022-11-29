@@ -18,6 +18,7 @@ export class ProjectBoard{
     public scheduleEdit: boolean = true
     public baselineedit: boolean = true
     public baselineproject: boolean = false
+    public phaseState:boolean = true
 }
 
 export class GeneralInfo{

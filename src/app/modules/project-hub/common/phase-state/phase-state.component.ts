@@ -86,48 +86,37 @@ export class PhaseStateComponent implements OnInit {
 
     onSubmit(){
         var stateActive= false;
+        var body = {
+            projectId: this.id,
+            phaseId: null,
+            stateId: null,
+            modificationDate: new Date(),
+            modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
+            capitalPhaseId: null,
+            oephaseId: null,
+            phaseComment: null,
+            stateComment: null
+        }
         if(this.phaseForm.get('phase').value != this.currentPhase || this.phaseForm.get('capitalPhase').value != this.currentCapitalPhase || this.phaseForm.get('oePhase').value != this.currentOEPhase){
-            var phaseBody = {
-                projectId: this.id,
-                phaseId: this.phaseForm.get('phase').value,
-                stateId: null,
-                modificationDate: new Date(),
-                modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
-                capitalPhaseId: this.phaseForm.get('capitalPhase').value,
-                oephaseId: this.phaseForm.get('oePhase').value,
-                phaseComment: this.phaseForm.get('phaseComment').value
-            }
-            this.apiService.postPhaseState(phaseBody).then(res=>{
-                this.projecthubservice.isNavChanged.next(true)
-            })
+            body.phaseId = this.phaseForm.get('phase').value;
+            body.capitalPhaseId= this.phaseForm.get('capitalPhase').value;
+            body.oephaseId = this.phaseForm.get('oePhase').value;
+            body.phaseComment =this.phaseForm.get('phaseComment').value;
         }
         if(this.stateForm.get('state').value != this.currentState ){
             stateActive = true;
-            var stateBody = {
-                projectId: this.id,
-                stateId: this.stateForm.get('state').value,
-                phaseId: null,
-                modificationDate: new Date(),
-                modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
-                stateComment: this.stateForm.get('stateComment').value,
-                capitalPhaseId: null,
-                oephaseId: null,
-                phaseComment: ""
-            }
-            this.apiService.postPhaseState(stateBody).then(res=>{
-                this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-                this.projecthubservice.isNavChanged.next(true)
-            }).catch(err => {
-                if(err.status == 400){
-                    this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-                    this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', stateBody, '', false, true);
-                }
-            })
+            body.stateId = this.stateForm.get('state').value;
+            body.stateComment = this.stateForm.get('stateComment').value;
         }
-        if(!stateActive){
+        this.apiService.postPhaseState(body).then(res=>{
             this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-        }
-
+            this.projecthubservice.isNavChanged.next(true)
+        }).catch(err => {
+            if(err.status == 400){
+                this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
+                this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', body, '', false, true);
+            }
+        })
     }
     changePhase(phaseId) {
         this.phaseForm.patchValue({
