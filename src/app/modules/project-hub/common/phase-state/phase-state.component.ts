@@ -89,7 +89,8 @@ export class PhaseStateComponent implements OnInit {
         if(this.phaseForm.get('phase').value != this.currentPhase || this.phaseForm.get('capitalPhase').value != this.currentCapitalPhase || this.phaseForm.get('oePhase').value != this.currentOEPhase){
             var phaseBody = {
                 projectId: this.id,
-                phaseStateId: this.phaseForm.get('phase').value,
+                phaseId: this.phaseForm.get('phase').value,
+                stateId: null,
                 modificationDate: new Date(),
                 modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
                 capitalPhaseId: this.phaseForm.get('capitalPhase').value,
@@ -99,17 +100,19 @@ export class PhaseStateComponent implements OnInit {
             this.apiService.postPhaseState(phaseBody).then(res=>{
                 this.projecthubservice.isNavChanged.next(true)
             })
-
-
         }
         if(this.stateForm.get('state').value != this.currentState ){
             stateActive = true;
             var stateBody = {
                 projectId: this.id,
-                phaseStateId: this.stateForm.get('state').value,
+                stateId: this.stateForm.get('state').value,
+                phaseId: null,
                 modificationDate: new Date(),
                 modifiedBy: this.msalService.instance.getActiveAccount().localAccountId,
-                phaseComment: this.stateForm.get('stateComment').value
+                stateComment: this.stateForm.get('stateComment').value,
+                capitalPhaseId: null,
+                oephaseId: null,
+                phaseComment: ""
             }
             this.apiService.postPhaseState(stateBody).then(res=>{
                 this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
