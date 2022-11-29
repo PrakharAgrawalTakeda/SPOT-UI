@@ -27,7 +27,7 @@ export class RoleService {
  SecurityGroupID='500ee862-3878-43d9-9378-53feb1832cef,C9F323D4-EF97-4C2A-B748-11DB5B8589D0'--Budget Admin and Portfolio Manager
  SecurityGroupID='0E83F6BE-79BE-426A-A316-F523FFAECC4F,F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'--Business Admin and Team Member
  SecurityGroupID='0E83F6BE-79BE-426A-A316-F523FFAECC4F,9E695295-DC5F-44A8-95F1-A329CD475203'--Business Admin and Project Manager
- SecurityGroupID='0E83F6BE-79BE-426A-A316-F523FFAECC4F,C9F323D4-EF97-4C2A-B748-11DB5B8589D0'--Business Admin and Portfolio Manager  
+ SecurityGroupID='0E83F6BE-79BE-426A-A316-F523FFAECC4F,C9F323D4-EF97-4C2A-B748-11DB5B8589D0'--Business Admin and Portfolio Manager
   */
 
   roleMaster: any = {}
@@ -46,7 +46,8 @@ export class RoleService {
           overallStatusEdit: false,
           scheduleEdit: false,
           baselineedit: false,
-          baselineproject: true
+          baselineproject: true,
+          phaseState: false
         }
         localroleController.projectTeam = false
         localroleController.projectBenefits = false

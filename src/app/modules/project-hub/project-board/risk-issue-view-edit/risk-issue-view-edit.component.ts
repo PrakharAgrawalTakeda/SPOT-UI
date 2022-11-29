@@ -127,9 +127,8 @@ export class RiskIssueViewEditComponent implements OnInit {
         })
         this.riskIssueForm.controls['logDate'].disable()
         if (res.functionGroupId != null) {
-          this.riskIssueForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId).lookUpName)
+          this.riskIssueForm.controls.function.patchValue(this.lookupdata?.find(x => x.lookUpId == res.functionGroupId)?.lookUpName)
         }
-
         if (this.projecthubservice.all != []) {
           if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 3) {
             if (this.riskIssueForm.value.includeInReport != true) {
@@ -260,6 +259,10 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (mainObjnew.logDate == "Invalid date") {
           mainObjnew.logDate = this.riskissue.logDate + ".000Z"
         }
+        if (this.riskIssueForm.controls['usersingleid'].value == "") {
+            mainObjnew.ownerName = null
+            mainObjnew.ownerId = null
+        }
 
         // if (this.riskIssueForm.controls['logDate'].value == null) {
         //   mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
@@ -305,6 +308,10 @@ export class RiskIssueViewEditComponent implements OnInit {
         console.log(this.riskIssueForm.controls['function'].value)
         if (this.riskIssueForm.controls['function'].value == "") {
           mainObj.functionGroupId = null
+        }
+        if (this.riskIssueForm.controls['usersingle'].value == "") {
+            mainObj.ownerName = null
+            mainObj.ownerId = null
         }
         //Log Date
         console.log(this.riskIssueForm.value.logDate)

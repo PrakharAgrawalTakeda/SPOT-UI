@@ -51,6 +51,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     localIncludedItems = new FormGroup({
         toggle: new FormControl(false)
     })
+    today = new Date();
     riskIssueData: any = []
     dbRiskIssues: any = []
     links: any = []
@@ -67,7 +68,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         if (this.projectHubService.projectid) {
             this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
                 this.riskIssueData = res.riskIssuesData;
-                console.log("xxxxxxxxxxx", res.riskIssuesData);
                 if (res.riskIssuesData?.length > 0) {
                     for (var i of res.riskIssuesData) {
                         this.dbRiskIssues.push({
@@ -133,7 +133,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             includeInCharter: new FormControl(false),
             includeInReport: new FormControl(false),
             indicator: new FormControl(""),
-            logDate: new FormControl(""),
+            logDate: new FormControl(this.today),
             mitigation: new FormControl(""),
             postMitigationComments: new FormControl(""),
             postMitigationImpact: new FormControl(""),
