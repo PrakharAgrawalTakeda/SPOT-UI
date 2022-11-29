@@ -1598,7 +1598,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
   baselineProject() {
     console.log(this.schedulengxdata)
-    debugger
+    //debugger
     console.log(this.flag)
     for (var i of this.milestoneForm.controls) {
       if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
