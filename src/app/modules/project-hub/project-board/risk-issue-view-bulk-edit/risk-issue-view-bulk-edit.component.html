@@ -23,7 +23,7 @@
         <div class="h-[80vh] pl-3" id="askNeedTableDiv">
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                            columnMode="force"
-                           class="material datatable-ri-70 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                           class="material datatable-ri-73 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
                            [rows]="tableData" #riskIssueTable [rowClass]="getRowClass">
                 <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false"
                                       [width]="75" [draggable]="false">
@@ -59,15 +59,11 @@
                 <ngx-datatable-column name="Date Initiated" prop="logDate" [width]="135" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
+                        <a [ngClass]="{'closed': row.closeDate != null}"
                            (click)="riTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value | date:'dd-MMM-yyyy'}}</p>
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="logDate" [showLabel]="false">
-                            </spot-input-date>
-                        </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="If This Happens" prop="ifHappens" [width]="300" [resizeable]="false"
@@ -230,11 +226,11 @@
             </ngx-datatable>
         </div>
         <div class="flex items-start justify-between mt-6 px-6">
-            <a class="w-1/6" mat-flat-button [color]="'primary'" type="button"
+            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
                (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
                 Cancel
             </a>
-            <button class="w-1/6" mat-flat-button [color]="'primary'" (click)="submitRI()" type="button">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitRI()" type="button">
                 Submit
             </button>
         </div>

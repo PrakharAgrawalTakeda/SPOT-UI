@@ -68,7 +68,7 @@
                         {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
                     </h2>
                     <div class=" flex items-center">
-                        <div class="w-full pr-3 text-right whitespace-pre cursor-pointer" (click)="openPhaseStateDrawer()">
+                        <div class="w-full pr-3 text-right whitespace-pre" [ngClass]="isCursorPointer()" (click)="openPhaseStateDrawer()">
                             <p>Project State</p>
                             <span [ngClass]="getStateClass(portfolioDetails.projStatus)">{{portfolioDetails.projStatus}}</span>
                         </div>

@@ -31,6 +31,7 @@ export class ProjectHubComponent implements OnInit {
     dataQualityPercentageString: string = '';
     targetPercentage = Constants.QUALITY_TARGET_PERCENTAGE;
     lowerTargetPercentage = Constants.QUALITY_LOWER_TARGET_PERCENTAGE;
+    phaseStatePermission: boolean = false;
     newmainnav: any = [
         {
             id: 'portfolio-center',
@@ -91,6 +92,7 @@ export class ProjectHubComponent implements OnInit {
         console.log("Project Hub Started")
         this.id = this._Activatedroute.snapshot.paramMap.get("id");
         this.projecthubservice.projectidInjector(this.id)
+        this.phaseStatePermission = this.projecthubservice.roleControllerControl.projectHub.projectBoard.phaseState;
         console.log(this.projecthubservice.roleControllerControl)
         this.getdata()
     }
@@ -151,45 +153,59 @@ export class ProjectHubComponent implements OnInit {
         return 'font-bold';
     }
     getPhaseClass(phase: string): any {
+        var className = 'pointer-unselect';
         if(this.portfolioDetails.projStatus == 'Completed') {
-            return 'pointer-completed';
+            className = 'pointer-completed';
         }
         if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == phase) {
-            return 'pointer-completed';
+            className = 'pointer-completed';
         }
         if(this.portfolioDetails.phase == phase){
-            return 'pointer';
+            className = 'pointer';
         }
-        return 'pointer-unselect';
+        if(this.phaseStatePermission) {
+            className = className + ' cursor-pointer'
+        }
+        return className;
     }
     getStartPhaseClass(): any {
+        var className = 'pointer-start-unselect';
         if(this.portfolioDetails.projStatus == 'Completed') {
-            return 'pointer-start-completed';
+            className = 'pointer-start-completed';
         }
         if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Hold')  && this.portfolioDetails.phase == 'Initiate') {
-            return 'pointer-start-completed';
+            className = 'pointer-start-completed';
         }
         if(this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Initiate'){
-            return 'pointer-start';
+            className = 'pointer-start';
         }
-        return 'pointer-start-unselect';
+        if(this.phaseStatePermission) {
+            className = className + ' cursor-pointer'
+        }
+        return className;
     }
     getEndPhaseClass(): any {
+        var className = 'pointer-last-unselect';
         if(this.portfolioDetails.projStatus == 'Completed') {
-            return 'pointer-last-completed';
+            className =  'pointer-last-completed';
         }
         if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == 'Track') {
-            return 'pointer-last-completed';
+            className = 'pointer-last-completed';
         }
         if(this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Track'){
-            return 'pointer-last';
+            className = 'pointer-last';
         }
-        return 'pointer-last-unselect';
+        if(this.phaseStatePermission) {
+            className = className + ' cursor-pointer'
+        }
+        return className;
     }
     getColor(percentage: number) {
         if(this.portfolioDetails.phase == "Initiate"){
             this.dataQualityPercentageString = "N/A";
             return '#808080';
+        }else{
+            this.dataQualityPercentageString = (~~this.dataQualityPercentage).toString() + "%";
         }
         if (this.projectType == "Simple Project" || percentage == null) {
             return '#4c9bcf';
@@ -206,6 +222,13 @@ export class ProjectHubComponent implements OnInit {
         }
       }
     openPhaseStateDrawer() {
-        this.projecthubservice.toggleDrawerOpen('PhaseState', 'new', [], '1', false, true);
+        if(this.phaseStatePermission){
+            this.projecthubservice.toggleDrawerOpen('PhaseState', '', [], '', false, true);
+        }
+    }
+    isCursorPointer(){
+        if(this.phaseStatePermission){
+            return 'cursor-pointer';
+        }
     }
 }
