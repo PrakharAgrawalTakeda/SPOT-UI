@@ -1089,7 +1089,7 @@ indicatorchange: boolean = false
 
 
   submitjustification() {
-debugger
+//debugger
     this.teamMemberAdId = this.msalService.instance.getActiveAccount().localAccountId
     console.log(this.teamMemberAdId)
     console.log(this.id)
@@ -1284,7 +1284,7 @@ debugger
   }
 
   saveScheduleBulkEdit() {
-    debugger
+    //debugger
     this.formValue = []
     if (this.scheduleData.scheduleData.length != 0) {
       // if (JSON.stringify(this.dbSchedule) != JSON.stringify(formValue)) {
@@ -1782,7 +1782,7 @@ var indicator2 = this.projectbaselinelogDetailscurr.map(x => {
 // {
 // for(var j of baselinedates2)
 // {
-  debugger
+  //debugger
   if(baselinedates != baselinedates2)
   {
     this.baselinechange = true
