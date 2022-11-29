@@ -85,6 +85,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   copyscheduledata = []
   milestonesSubmit = []
   flag: boolean = false
+baselinechange: boolean = false
+plannedchange: boolean = false
+ completionchange: boolean = false
+indicatorchange: boolean = false
   baselineLogForm = new FormArray([])
   baselinelogTableEditStack: any = []
   isclosed: boolean = false
@@ -1085,7 +1089,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
 
   submitjustification() {
-
+debugger
     this.teamMemberAdId = this.msalService.instance.getActiveAccount().localAccountId
     console.log(this.teamMemberAdId)
     console.log(this.id)
@@ -1280,7 +1284,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   saveScheduleBulkEdit() {
-    //debugger
+    debugger
     this.formValue = []
     if (this.scheduleData.scheduleData.length != 0) {
       // if (JSON.stringify(this.dbSchedule) != JSON.stringify(formValue)) {
@@ -1341,11 +1345,32 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
       }
       console.log(this.formValue)
-      this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-        this.submitjustification()
-        
-        this.projecthubservice.submitbutton.next(true)
+      console.log(this.schedulengxdata)
+      var baselines = this.schedulengxdata.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
       })
+      var baselines2 = this.formValue.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
+      })
+  
+      if (JSON.stringify(baselines) != JSON.stringify(baselines2))
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+        
+        
+          this.submitjustification()
+          this.projecthubservice.submitbutton.next(true)
+        })
+       
+      }
+      else
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+
     }
     // }
     else {
@@ -1404,12 +1429,48 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
       }
       console.log(this.formValue)
-      this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-        this.submitjustification()
-        
-        this.projecthubservice.submitbutton.next(true)
+      var baselinedates = this.schedulengxdata.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
       })
-    }
+      var baselinedates2 = this.formValue.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
+      })
+  
+      if (JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+        
+        
+          this.submitjustification()
+          this.projecthubservice.submitbutton.next(true)
+        })
+       
+      }
+      else
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+
+
+    // //   this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+    // //     var baselinedates = this.schedulengxdata.map(x => {
+    // //       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+    // //     })
+    // //     var baselinedates2 = this.formValue.map(x => {
+    // //       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+    // //     })
+    
+    // //     if (JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
+    // //     {
+    // //       this.submitjustification()
+    // //     }
+        
+    // //     this.projecthubservice.submitbutton.next(true)
+    // //   })
+     }
   }
 
   getUserName(adid: string): string {
@@ -1682,13 +1743,37 @@ console.log(this.currObj)
 // plannedFinish
 
 
-// var baselinedates = this.projectbaselinelogDetailsprev.map(x => {
-//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-// })
+var baselinedates = this.projectbaselinelogDetailsprev.map(x => {
+  return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+})
 
-// var baselinedates2 = this.projectbaselinelogDetailscurr.map(x => {
-//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-// })
+var baselinedates2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+})
+
+var planneddates = this.projectbaselinelogDetailsprev.map(x => {
+  return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+})
+
+var plannedates2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+})
+
+var completiondates = this.projectbaselinelogDetailsprev.map(x => {
+  return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+})
+
+var completiondates2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+})
+
+var indicator = this.projectbaselinelogDetailsprev.map(x => {
+  return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
+})
+
+var indicator2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
+})
 
 // console.log("Baseline prev", baselinedates)
 // console.log("Baseline curr", baselinedates2)
@@ -1697,10 +1782,26 @@ console.log(this.currObj)
 // {
 // for(var j of baselinedates2)
 // {
-//   if(i != j)
-//   {
-//     var change = true
-//   }
+  debugger
+  if(baselinedates != baselinedates2)
+  {
+    this.baselinechange = true
+  }
+ if(planneddates != plannedates2) {
+    this.plannedchange = true
+  }
+  if(completiondates != completiondates2) {
+    this.completionchange = true
+  }
+  if(indicator != indicator2) {
+    this.indicatorchange = true
+  }
+  else{
+    this.baselinechange = false
+    this.plannedchange = false
+    this.completionchange = false
+    this.indicatorchange = false
+  }
 // }
 // }
 
@@ -1771,7 +1872,7 @@ console.log(this.currObj)
   }
 
   submitschedule() {
-    //debugger
+   // debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 
