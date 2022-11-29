@@ -65,6 +65,7 @@ fuse-drawer .fuse-drawer-content {
     color: var(--fuse-on-primary);
     padding-left: 30px !important;
     border-radius: 20px 0 0 20px;
+    cursor: pointer;
 }
 
 .pointer-start:before {
@@ -97,6 +98,27 @@ fuse-drawer .fuse-drawer-content {
     width: 0;
     height: 0;
     border-left: 23px solid var(--fuse-primary-200);
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+}
+.pointer-start-completed {
+    margin-right: 5px;
+    position: relative;
+    background-color: #66748c;
+    color: var(--fuse-on-primary);
+    padding-left: 30px !important;
+    border-radius: 20px 0 0 20px;
+    cursor: pointer;
+}
+
+.pointer-start-completed:before {
+    content: "";
+    position: absolute;
+    right: -23px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 23px solid #66748c;
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
@@ -155,7 +177,7 @@ fuse-drawer .fuse-drawer-content {
     bottom: 0;
     width: 0;
     height: 0;
-    border-left: 23px solid var(--fuse-bg-default);
+    border-left: 23px solid #fff;
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
     cursor: pointer;
@@ -172,6 +194,41 @@ fuse-drawer .fuse-drawer-content {
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
+.pointer-completed {
+    margin-right: 5px;
+    position: relative;
+    background-color: #64748b;
+    color: var(--fuse-on-primary);
+    border-color: #4c9bcf;
+    padding-left: 30px !important;
+    cursor: pointer;
+}
+
+.pointer-completed:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 23px solid var(--fuse-bg-default);
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+    cursor: pointer;
+}
+
+.pointer-completed:before {
+    content: "";
+    position: absolute;
+    right: -23px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 23px solid #66748c;
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+}
+
 
 //END NORMAL POINTER
 
@@ -194,7 +251,7 @@ fuse-drawer .fuse-drawer-content {
     bottom: 0;
     width: 0;
     height: 0;
-    border-left: 23px solid var(--fuse-bg-default);
+    border-left: 23px solid #fff;;
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
@@ -220,11 +277,32 @@ fuse-drawer .fuse-drawer-content {
     bottom: 0;
     width: 0;
     height: 0;
-    border-left: 23px solid var(--fuse-bg-default);
+    border-left: 23px solid #fff;;
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+}
+.pointer-last-completed {
+    margin-right: 5px;
+    position: relative;
+    background-color: #66748c;
+    color: var(--fuse-on-primary);
+    border-color: #4c9bcf;
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+    border-radius: 0px 20px 20px 0;
+    cursor: pointer;
+}
+
+.pointer-last-completed:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 23px solid #fff;
     border-top: 23px solid transparent;
     border-bottom: 23px solid transparent;
 }
 
 
-
-// END LAST POINTER

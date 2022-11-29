@@ -8,7 +8,6 @@ import { ProjectHubService } from '../../project-hub.service';
   styleUrls: ['./ask-need.component.scss']
 })
 export class AskNeedComponent implements OnInit, OnChanges {
-
   constructor(public projectHubService: ProjectHubService) {
     this.projectHubService.includeClosedItems.askNeed.subscribe(res => {
       this.changeaskneed(res)

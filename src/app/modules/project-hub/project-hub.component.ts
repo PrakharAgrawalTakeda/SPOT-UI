@@ -126,14 +126,9 @@ export class ProjectHubComponent implements OnInit {
             //
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
-            if (res == null || res.phase == "Initiate") {
-                this.dataQualityPercentageString = "N/A";
-                this.dataQualityPercentage =null;
-            } else {
                 this.dataQualityPercentage = res * 100;
                 this.dataQualityPercentageString =
                     (~~this.dataQualityPercentage).toString() + "%";
-            }
         })
     }
     toggleSideNav() {
@@ -149,7 +144,53 @@ export class ProjectHubComponent implements OnInit {
     toggleNavigationAppearance(): void {
         this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
     }
+    getStateClass(state: string): any {
+        if(state == 'Active') {
+            return 'font-bold text-primary';
+        }
+        return 'font-bold';
+    }
+    getPhaseClass(phase: string): any {
+        if(this.portfolioDetails.projStatus == 'Completed') {
+            return 'pointer-completed';
+        }
+        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == phase) {
+            return 'pointer-completed';
+        }
+        if(this.portfolioDetails.phase == phase){
+            return 'pointer';
+        }
+        return 'pointer-unselect';
+    }
+    getStartPhaseClass(): any {
+        if(this.portfolioDetails.projStatus == 'Completed') {
+            return 'pointer-start-completed';
+        }
+        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Hold')  && this.portfolioDetails.phase == 'Initiate') {
+            return 'pointer-start-completed';
+        }
+        if(this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Initiate'){
+            return 'pointer-start';
+        }
+        return 'pointer-start-unselect';
+    }
+    getEndPhaseClass(): any {
+        if(this.portfolioDetails.projStatus == 'Completed') {
+            return 'pointer-last-completed';
+        }
+        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == 'Track') {
+            return 'pointer-last-completed';
+        }
+        if(this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Track'){
+            return 'pointer-last';
+        }
+        return 'pointer-last-unselect';
+    }
     getColor(percentage: number) {
+        if(this.portfolioDetails.phase == "Initiate"){
+            this.dataQualityPercentageString = "N/A";
+            return '#808080';
+        }
         if (this.projectType == "Simple Project" || percentage == null) {
             return '#4c9bcf';
         } else {

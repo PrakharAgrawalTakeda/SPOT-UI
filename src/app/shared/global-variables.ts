@@ -22,7 +22,7 @@ export class GlobalVariables {
 
         // Prakhar Local API
 
-        //'https://spot4api-dev.azurewebsites.net/api/'
+        // 'https://spot4api-dev.azurewebsites.net/api/'
 
         // 'https://localhost:5001/api/'
 

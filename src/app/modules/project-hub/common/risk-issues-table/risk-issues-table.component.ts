@@ -1,8 +1,19 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
-import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
-import { ProjectHubService } from '../../project-hub.service';
-import { ProjectApiService } from '../project-api.service';
+import {
+    ChangeDetectionStrategy,
+    Component, EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
+import {FuseConfirmationConfig, FuseConfirmationService} from '@fuse/services/confirmation';
+import {SpotlightIndicatorsService} from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import {ProjectHubService} from '../../project-hub.service';
+import {ProjectApiService} from '../project-api.service';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-risk-issues-table',
@@ -12,7 +23,7 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RiskIssuesTableComponent implements OnInit, OnChanges {
-  @Input() riskIssuesData: any;
+  @Input() riskIssuesData: any = []
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -28,7 +39,14 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService,
-    private apiService: ProjectApiService) { }
+    private apiService: ProjectApiService) {
+      this.projecthubservice.includeClosedItems.riskIssue.subscribe(res => {
+          this.changeriskissues(res)
+      })
+  }
+  localIncludedItems = new FormGroup({
+      toggle: new FormControl(false)
+  })
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
@@ -46,18 +64,16 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
 
   }
   changeriskissues(event: any) {
-    console.log(event)
-    if (event.checked == true) {
+    if (event == true) {
       this.riskIssuesngxdata = this.riskIssuesData
       this.isclosed = true
-      console.log(this.riskIssuesngxdata)
-
     }
     else {
       this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
       this.isclosed = false
-      console.log(this.riskIssuesngxdata)
     }
+      this.localIncludedItems.controls.toggle.patchValue(event)
+      this.localIncludedItems.controls.toggle.markAsPristine()
   }
   islink(uid: string): boolean {
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
@@ -75,7 +91,9 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     }
 
   }
-
+  toggleRiskIssue(event: any) {
+    this.projecthubservice.includeClosedItems.riskIssue.next(event.checked)
+  }
   deleteRiskIssue(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Remove Risk/Issue?",

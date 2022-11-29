@@ -70,21 +70,21 @@
                     <div class=" flex items-center">
                         <div class="w-full pr-3 text-right whitespace-pre cursor-pointer" (click)="openPhaseStateDrawer()">
                             <p>Project State</p>
-                            <span class="font-bold text-primary">{{portfolioDetails.projStatus}}</span>
+                            <span [ngClass]="getStateClass(portfolioDetails.projStatus)">{{portfolioDetails.projStatus}}</span>
                         </div>
                         <div class="p-3"
-                            [ngClass]="portfolioDetails.phase == 'Initiate'?'pointer-start':'pointer-start-unselect'"
+                            [ngClass]="getStartPhaseClass()"
                             style="z-index: 10;" (click)="openPhaseStateDrawer()">Initiate</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Define'?'pointer':'pointer-unselect'"
+                        <div class="p-3" [ngClass]="getPhaseClass('Define')"
                             style="z-index: 9;" (click)="openPhaseStateDrawer()">Define</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Plan'?'pointer':'pointer-unselect'"
+                        <div class="p-3" [ngClass]="getPhaseClass('Plan')"
                             style="z-index: 8;" (click)="openPhaseStateDrawer()">Plan</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Execute'?'pointer':'pointer-unselect'"
+                        <div class="p-3" [ngClass]="getPhaseClass('Execute')"
                             style="z-index: 7;" (click)="openPhaseStateDrawer()">Execute</div>
-                        <div class="p-3" [ngClass]="portfolioDetails.phase == 'Close'?'pointer':'pointer-unselect'"
+                        <div class="p-3" [ngClass]="getPhaseClass('Close')"
                             style="z-index: 6;" (click)="openPhaseStateDrawer()">Close</div>
                         <div class="p-3"
-                            [ngClass]="portfolioDetails.phase == 'Track'?'pointer-last':'pointer-last-unselect'"
+                            [ngClass]="getEndPhaseClass()"
                             style="z-index: 5;" (click)="openPhaseStateDrawer()">Track</div>
                     </div>
                 </div>
@@ -135,8 +135,8 @@
                         </div>
                     </div>
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '1',false,true)">
-                    <b>Data Quality:&nbsp;</b><a [ngStyle]="{'color':getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}</a>
+                    (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '',false,true)">
+                    <b>Data Quality:&nbsp;</b><a [ngStyle]="{color:getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}</a>
                 </button>
                 </div>
                 <div class="flex shrink-0 items-center justify-between sm:mt-0">

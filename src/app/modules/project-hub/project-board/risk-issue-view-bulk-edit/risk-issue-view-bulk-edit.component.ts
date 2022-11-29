@@ -32,6 +32,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         this.riskIssueForm.valueChanges.subscribe(res => {
             if (this.viewContent) {
                 this.submitPrep()
+                this.formValue = this.sortByDate(this.formValue)
                 this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
                 if (JSON.stringify(this.formValue) != JSON.stringify(this.dbRiskIssues)) {
                     this.projectHubService.isFormChanged = true
@@ -66,6 +67,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         if (this.projectHubService.projectid) {
             this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
                 this.riskIssueData = res.riskIssuesData;
+                console.log("xxxxxxxxxxx", res.riskIssuesData);
                 if (res.riskIssuesData?.length > 0) {
                     for (var i of res.riskIssuesData) {
                         this.dbRiskIssues.push({
@@ -91,17 +93,33 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             riskIssueUniqueId: i.riskIssueUniqueId,
                         })
                     }
+                    this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
                 }
                 this.links = res.links
                 this.linksProblemCapture = res.linksProblemCapture
                 this.changeRiskIssue(this.projectHubService.includeClosedItems.riskIssue.value)
+                this.tableData = this.sortByDate(this.tableData)
                 this.tableData.length > 0 ? this.formIntializer() : ''
                 this.viewContent = true
             })
         }
     }
     sortByDate(array: any): any {
-        return array
+        return array.length > 1 ? array.sort((a, b) => {
+            if (a.dueDate === null) {
+                return -1;
+            }
+
+            if (b.dueDate === null) {
+                return 1;
+            }
+
+            if (a.dueDate === b.dueDate) {
+                return 0;
+            }
+
+            return a.dueDate < b.dueDate ? -1 : 1;
+        }) : array
     }
 
     addRI() {
@@ -109,10 +127,10 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             owner: new FormControl( {}),
             closeDate: new FormControl(""),
             dueDate: new FormControl(""),
-            function: new FormControl( {}),
+            functionGroupId: new FormControl( ""),
             ifHappens: new FormControl(""),
-            impact: new FormControl( {}),
-            includeInCharter: new FormControl(""),
+            impactId: new FormControl( ""),
+            includeInCharter: new FormControl(false),
             includeInReport: new FormControl(false),
             indicator: new FormControl(""),
             logDate: new FormControl(""),
@@ -120,7 +138,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             postMitigationComments: new FormControl(""),
             postMitigationImpact: new FormControl(""),
             postMitigationProbability: new FormControl(""),
-            probability: new FormControl( {}),
+            probabilityId: new FormControl( ""),
             projectId: new FormControl(this.projectHubService.projectid),
             riskIssueResult: new FormControl(""),
             riskIssueTypeId: new FormControl(""),
@@ -132,8 +150,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             functionGroupId: '',
             ifHappens: '',
             impactId: '',
-            includeInCharter: '',
-            includeInReport: '',
+            includeInCharter: false,
+            includeInReport: false,
             indicator: '',
             logDate: null,
             mitigation: '',
@@ -161,7 +179,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }, 100);
     }
     toggleRiskIssue(event: any) {
-        this.toggleHelper = true
+        this.toggleHelper = true;
         this.projectHubService.includeClosedItems.riskIssue.next(event.checked)
     }
     changeRiskIssue(event: any, initial: boolean = false) {
@@ -300,7 +318,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         this.submitPrep()
         var formValue = this.formValue
         if (formValue.length > 0) {
-            if (formValue.filter(x => x.includeInReport == true).length < 1) {
+            if (formValue.filter(x => x.includeInReport == true).length < 3) {
                 for (var i of this.riskIssueForm.controls) {
                     i['controls']['includeInReport'].enable()
                 }

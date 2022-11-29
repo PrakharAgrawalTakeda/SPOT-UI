@@ -1,6 +1,6 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
-        <div class="text-on-primary" style="padding-top: 6px">Incomplete Milestone(s)/ask/Need(s)/Issue(s)</div>
+        <div class="text-on-primary" style="padding-top: 6px">Incomplete Milestone(s)/Ask/Need(s)/Issue(s)</div>
         <div style="padding-top: 2px">
             <a (click)="this.projectHubService.toggleDrawerOpen('', '', [], '')
                             " href="javascript:void(0)" title="Close">
@@ -8,8 +8,9 @@
             </a>
         </div>
     </div>
-    <div class="h-[85vh] pl-3 mt-5">
-        <div *ngIf="showMilestoneTable" class="w-full overflow-hidden ">
+    <div class="pl-3 mt-3 min-h-[88vh]">
+        <a style="color:red" > Before the project can be set to completed, all milestones, ask/needs and risk/issues need to be closed!</a>
+        <div *ngIf="showMilestoneTable" class="w-full overflow-hidden mt-3 max-h-[30vh]">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Milestone(s)
             </div>
@@ -127,8 +128,8 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <mat-divider></mat-divider>
-        <div *ngIf="showRiskIssueTable" class="w-full mt-5">
+        <mat-divider *ngIf="showMilestoneTable"></mat-divider>
+        <div *ngIf="showRiskIssueTable" class="w-full mt-7 max-h-[30vh]">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Risk/Issue(s)
             </div>
@@ -300,8 +301,8 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <mat-divider></mat-divider>
-        <div *ngIf="showAskNeedsTable" class="w-full mt-5">
+        <mat-divider *ngIf="showRiskIssueTable"></mat-divider>
+        <div *ngIf="showAskNeedsTable" class="w-full mt-7 max-h-[30vh]">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">
                 Incomplete Ask/Need
             </div>
@@ -382,7 +383,7 @@
             </ngx-datatable>
         </div>
     </div>
-    <div class="flex items-start justify-between mt-6">
+    <div class="pr-6 pl-6 flex justify-between items-center w-full mt-3 mb-3">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
            (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
             Cancel

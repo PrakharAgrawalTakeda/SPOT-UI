@@ -221,7 +221,6 @@ export class RiskIssueViewEditComponent implements OnInit {
 
   }
   submitriskissue() {
-    console.log(this.riskIssueForm.errors)
     this.projecthubservice.isFormChanged = false
 
     if (this.riskIssueForm.valid) {
@@ -253,7 +252,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         //Function when null
         if (this.riskIssueForm.controls['function'].value == "") {
           mainObjnew.functionGroupId = null
-        } 
+        }
         if (this.riskIssueForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
         }
@@ -306,7 +305,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         console.log(this.riskIssueForm.controls['function'].value)
         if (this.riskIssueForm.controls['function'].value == "") {
           mainObj.functionGroupId = null
-        } 
+        }
         //Log Date
         console.log(this.riskIssueForm.value.logDate)
         console.log(this.riskissue.logDate)
