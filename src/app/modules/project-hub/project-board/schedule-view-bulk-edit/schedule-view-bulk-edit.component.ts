@@ -1599,18 +1599,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   baselineProject() {
     console.log(this.schedulengxdata)
     //debugger
+    console.log(this.flag)
     for (var i of this.milestoneForm.controls) {
       if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         !this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
         i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
-        i['controls']['baselineFinish'].dirty()
+        //i['controls']['baselineFinish'].dirty()
         this.flag = true
 
       }
       else if (this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
         i['controls']['baselineFinish'].patchValue(i['controls']['plannedFinish'].value)
-        i['controls']['baselineFinish'].dirty()
+        //i['controls']['baselineFinish'].dirty()
       }
       else {
         this.flag = false
@@ -1620,12 +1621,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     for (var j of this.schedulengxdata) {
       if (!this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || !this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
         j.baselineFinish = j.plannedFinish
-        j.baselineFinish.dirty()
+        //j.baselineFinish.dirty()
         this.flag = true
       }
       else if (this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
         j.baselineFinish = j.plannedFinish
-        j.baselineFinish.dirty()
+        //j.baselineFinish.dirty()
       }
       else {
         this.flag = false
@@ -1638,6 +1639,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //  }
     //  else {
     this.schedulengxdata = [...this.schedulengxdata]
+    console.log(this.schedulengxdata)
     //}
 
 
@@ -1669,6 +1671,38 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     this.projectbaselinelogDetailscurr = this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailscurr.baselineLogId)
     console.log(this.prevObj)
 console.log(this.currObj)
+
+// baselineFinish
+
+// completionDate
+
+// indicator
+
+// milestone
+// plannedFinish
+
+
+// var baselinedates = this.projectbaselinelogDetailsprev.map(x => {
+//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+// })
+
+// var baselinedates2 = this.projectbaselinelogDetailscurr.map(x => {
+//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+// })
+
+// console.log("Baseline prev", baselinedates)
+// console.log("Baseline curr", baselinedates2)
+
+// for(var i of baselinedates)
+// {
+// for(var j of baselinedates2)
+// {
+//   if(i != j)
+//   {
+//     var change = true
+//   }
+// }
+// }
 
     //this.newArray = this.projectbaselinelogDetailscurr.filter(({ milestone, plannedFinish, baselineFinish, completionDate, indicator}) => !this.projectbaselinelogDetailsprev.some((e) => e.milestone == milestone && e.plannedFinish == plannedFinish && e.baselineFinish == baselineFinish && e.completionDate == completionDate && e.indicator == indicator))
 // 
