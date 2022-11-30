@@ -85,6 +85,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   copyscheduledata = []
   milestonesSubmit = []
   flag: boolean = false
+baselinechange: boolean = false
+plannedchange: boolean = false
+ completionchange: boolean = false
+indicatorchange: boolean = false
   baselineLogForm = new FormArray([])
   baselinelogTableEditStack: any = []
   isclosed: boolean = false
@@ -242,8 +246,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     this.userlist = log.users
                   }
                   console.log("Users List", this.userlist)
-                  
-                  
+
+
                   this.baselineCount = count
                   console.log("Baseline Count", this.baselineCount)
                   console.log('LookUp Data', lookup)
@@ -802,7 +806,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   //         this.localIncludedItems.controls.toggle.markAsPristine()
   //         this.milestoneTableEditStack = []
   //         this.milestoneForm = new FormArray([])
-  //         this.dataloader()  
+  //         this.dataloader()
   //       }
   //       else {
   //         this.localIncludedItems.controls.toggle.patchValue(!event)
@@ -823,7 +827,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   //           this.localIncludedItems.controls.toggle.markAsPristine()
   //         this.milestoneTableEditStack = []
   //         this.milestoneForm = new FormArray([])
-  //         this.dataloader()  
+  //         this.dataloader()
 
   //   }
   //   else if (event == false && (JSON.stringify(baselineall) != JSON.stringify(baselineall2) || JSON.stringify(plannedall) != JSON.stringify(plannedall2) || JSON.stringify(completionall) != JSON.stringify(completionall2) || JSON.stringify(commentsall) != JSON.stringify(commentsall2)
@@ -1085,7 +1089,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
 
   submitjustification() {
-
+//debugger
     this.teamMemberAdId = this.msalService.instance.getActiveAccount().localAccountId
     console.log(this.teamMemberAdId)
     console.log(this.id)
@@ -1139,6 +1143,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             //this.viewBaseline = false
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.isNavChanged.next(true)
             //this.saveScheduleBulkEdit()
           })
         })
@@ -1165,6 +1170,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
           //this.viewBaseline = false
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
          // this.saveScheduleBulkEdit()
         })
 
@@ -1192,6 +1198,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             // this.viewBaseline = false
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.isNavChanged.next(true)
             //this.saveScheduleBulkEdit()
           })
         }
@@ -1226,6 +1233,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
               //this.viewBaseline = false
               this.projecthubservice.toggleDrawerOpen('', '', [], '')
               this.projecthubservice.submitbutton.next(true)
+              this.projecthubservice.isNavChanged.next(true)
               //this.saveScheduleBulkEdit()
             })
           })
@@ -1263,6 +1271,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
               //this.viewBaseline = false
               this.projecthubservice.toggleDrawerOpen('', '', [], '')
               this.projecthubservice.submitbutton.next(true)
+              this.projecthubservice.isNavChanged.next(true)
               //this.saveScheduleBulkEdit()
             })
           })
@@ -1341,11 +1350,33 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
       }
       console.log(this.formValue)
-      this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-        this.submitjustification()
-        
-        this.projecthubservice.submitbutton.next(true)
+      console.log(this.schedulengxdata)
+      var baselines = this.schedulengxdata.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
       })
+      var baselines2 = this.formValue.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
+      })
+
+      if (JSON.stringify(baselines) != JSON.stringify(baselines2))
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+
+
+          this.submitjustification()
+          this.projecthubservice.submitbutton.next(true)
+        })
+
+      }
+      else
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
+        })
+      }
+
     }
     // }
     else {
@@ -1404,12 +1435,49 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
       }
       console.log(this.formValue)
-      this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-        this.submitjustification()
-        
-        this.projecthubservice.submitbutton.next(true)
+      var baselinedates = this.schedulengxdata.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
       })
-    }
+      var baselinedates2 = this.formValue.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
+      })
+
+      if (JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+
+
+          this.submitjustification()
+          this.projecthubservice.submitbutton.next(true)
+        })
+
+      }
+      else
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
+        })
+      }
+
+
+    // //   this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+    // //     var baselinedates = this.schedulengxdata.map(x => {
+    // //       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+    // //     })
+    // //     var baselinedates2 = this.formValue.map(x => {
+    // //       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+    // //     })
+
+    // //     if (JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
+    // //     {
+    // //       this.submitjustification()
+    // //     }
+
+    // //     this.projecthubservice.submitbutton.next(true)
+    // //   })
+     }
   }
 
   getUserName(adid: string): string {
@@ -1650,7 +1718,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     this.prevObj = []
     this.currObj = []
     this.newArray = []
-    
+
       var count = 1
       for (var i of this.logdetails) {
         i.logId = count
@@ -1665,7 +1733,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     this.baselinelogdetailsprev = this.baselineLogData.find(x=>x.logId == this.baselinelogdetails.logId -1)
     this.baselinelogdetailscurr = this.baselineLogData.find(x=>x.logId == this.baselinelogdetails.logId)
     console.log(this.baselinelogdetails.logId)
-    
+
 
     this.projectbaselinelogDetailsprev = this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailsprev.baselineLogId)
     this.projectbaselinelogDetailscurr = this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailscurr.baselineLogId)
@@ -1682,13 +1750,37 @@ console.log(this.currObj)
 // plannedFinish
 
 
-// var baselinedates = this.projectbaselinelogDetailsprev.map(x => {
-//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-// })
+var baselinedates = this.projectbaselinelogDetailsprev.map(x => {
+  return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+})
 
-// var baselinedates2 = this.projectbaselinelogDetailscurr.map(x => {
-//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-// })
+var baselinedates2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+})
+
+var planneddates = this.projectbaselinelogDetailsprev.map(x => {
+  return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+})
+
+var plannedates2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+})
+
+var completiondates = this.projectbaselinelogDetailsprev.map(x => {
+  return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+})
+
+var completiondates2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+})
+
+var indicator = this.projectbaselinelogDetailsprev.map(x => {
+  return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
+})
+
+var indicator2 = this.projectbaselinelogDetailscurr.map(x => {
+  return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
+})
 
 // console.log("Baseline prev", baselinedates)
 // console.log("Baseline curr", baselinedates2)
@@ -1697,15 +1789,31 @@ console.log(this.currObj)
 // {
 // for(var j of baselinedates2)
 // {
-//   if(i != j)
-//   {
-//     var change = true
-//   }
+  //debugger
+  if(baselinedates != baselinedates2)
+  {
+    this.baselinechange = true
+  }
+ if(planneddates != plannedates2) {
+    this.plannedchange = true
+  }
+  if(completiondates != completiondates2) {
+    this.completionchange = true
+  }
+  if(indicator != indicator2) {
+    this.indicatorchange = true
+  }
+  else{
+    this.baselinechange = false
+    this.plannedchange = false
+    this.completionchange = false
+    this.indicatorchange = false
+  }
 // }
 // }
 
     //this.newArray = this.projectbaselinelogDetailscurr.filter(({ milestone, plannedFinish, baselineFinish, completionDate, indicator}) => !this.projectbaselinelogDetailsprev.some((e) => e.milestone == milestone && e.plannedFinish == plannedFinish && e.baselineFinish == baselineFinish && e.completionDate == completionDate && e.indicator == indicator))
-// 
+//
 //
       this.prevObj = this.projectbaselinelogDetailsprev.map(x=>x.scheduleUniqueId)
       this.currObj = this.projectbaselinelogDetailscurr.map(x=>x.scheduleUniqueId)
@@ -1736,7 +1844,7 @@ console.log(this.currObj)
     for(var i of unique)
     {
       this.logdetailsObj.push({
-        
+
           milestone: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).milestone : this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).milestone,
           currplannedFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedFinish  : '',
           currbaselineFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselineFinish : '',
@@ -1751,7 +1859,7 @@ console.log(this.currObj)
     }
 
     //this.newArray = [...new Set([...this.logdetailsObj])]
-    
+
 
     console.log(this.logdetails)
     console.log(this.baselinelogdetailsprev)
@@ -1761,7 +1869,7 @@ console.log(this.currObj)
     console.log(this.myFinalArray)
       console.log("Final Object",this.logdetailsObj)
       console.log("Unique ARRAY", unique)
-  
+
     this.viewContent = false
     this.viewBaseline = false
     this.viewBaselineLogs = false
@@ -1771,7 +1879,7 @@ console.log(this.currObj)
   }
 
   submitschedule() {
-    //debugger
+   // debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 
