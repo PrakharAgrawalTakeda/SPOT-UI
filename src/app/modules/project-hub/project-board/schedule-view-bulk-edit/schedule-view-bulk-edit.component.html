@@ -435,10 +435,11 @@
       </ngx-datatable-column>
       <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish" prop="currplannedFinish"
         [flexGrow]="0.48">
+
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
+          <div *ngIf="plannedchange" class="plannedchange">
           <p>{{value | date:'dd-MMM-yyyy'}}</p>
-
+        </div>
         </ng-template>
       </ngx-datatable-column>
 
@@ -453,9 +454,9 @@
       <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Baseline Finish" prop="currbaselineFinish"
         [flexGrow]="0.5">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
+<div *ngIf="baselinechange" class="baselineChange">
           <p>{{value | date:'dd-MMM-yyyy'}}</p>
-
+        </div>
         </ng-template>
       </ngx-datatable-column>
 
@@ -470,9 +471,9 @@
       <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Completion Date" prop="currcompletionDate"
         [flexGrow]="0.55">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
+          <div *ngIf="completionchange" class="completionchange">
           <p>{{value | date:'dd-MMM-yyyy'}}</p>
-
+</div>
         </ng-template>
       </ngx-datatable-column>
 
@@ -485,9 +486,9 @@
       </ngx-datatable-column>
       <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Indicator" prop="currindicator" [flexGrow]="0.4">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
+          <div *ngIf="indicatorchange" class="indicatorchange">
           <p>{{value}}</p>
-
+</div>
         </ng-template>
       </ngx-datatable-column>
 
