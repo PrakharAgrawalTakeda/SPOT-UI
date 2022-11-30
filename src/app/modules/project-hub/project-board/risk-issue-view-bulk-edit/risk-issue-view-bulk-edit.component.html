@@ -37,7 +37,7 @@
                                   svgIcon="heroicons_outline:link"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Type" prop="riskIssueTypeId" [width]="75" [resizeable]="false"
+                <ngx-datatable-column name="Type" prop="riskIssueTypeId" [width]="100" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -75,7 +75,7 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="ifHappens" [showLabel]="false"></spot-textarea>
+                            <spot-textarea formControlName="ifHappens" [showLabel]="false" [maxLength]=1000></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -103,7 +103,7 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="riskIssueResult" [showLabel]="false"></spot-textarea>
+                            <spot-textarea formControlName="riskIssueResult" [showLabel]="false" [maxLength]=1000></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -133,7 +133,7 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="mitigation" [showLabel]="false"></spot-textarea>
+                            <spot-textarea formControlName="mitigation" [showLabel]="false" [maxLength]=1000></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>

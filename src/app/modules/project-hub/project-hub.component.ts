@@ -154,14 +154,14 @@ export class ProjectHubComponent implements OnInit {
     }
     getPhaseClass(phase: string): any {
         var className = 'pointer-unselect';
+        if(this.portfolioDetails.phase == phase){
+            className = 'pointer';
+        }
         if(this.portfolioDetails.projStatus == 'Completed') {
             className = 'pointer-completed';
         }
         if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == phase) {
             className = 'pointer-completed';
-        }
-        if(this.portfolioDetails.phase == phase){
-            className = 'pointer';
         }
         if(this.phaseStatePermission) {
             className = className + ' cursor-pointer'
@@ -173,7 +173,7 @@ export class ProjectHubComponent implements OnInit {
         if(this.portfolioDetails.projStatus == 'Completed') {
             className = 'pointer-start-completed';
         }
-        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Hold')  && this.portfolioDetails.phase == 'Initiate') {
+        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == 'Initiate') {
             className = 'pointer-start-completed';
         }
         if(this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Initiate'){
