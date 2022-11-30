@@ -208,15 +208,24 @@ export class AskNeedBulkEditComponent implements OnInit {
     return this.links.some(x => x.linkItemId == uid)
   }
   getlinkname(uid: string): string {
-    let temp = this.links.find(x => x.linkItemId == uid)
-    temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
-    if (temp) {
-      return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+    var linkItemList = this.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    if (linkItemList.some(x => x.parentProjectId == this.projectHubService.projectid)) {
+      var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectHubService.projectid).childProjectId)
+      returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
     }
-    temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    if (temp) {
-      return "A link to this ask/need has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
+    if(linkItemList.some(x => x.childProjectId == this.projectHubService.projectid)){
+      var projectName = ''
+      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectHubService.projectid)){
+        var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        projectName = parentProject == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      }
+      if(returnString != ''){
+        returnString = returnString + '\n'
+      }
+      returnString = returnString + "A link to this ask/need has been created in project(s): " + projectName
     }
+    return returnString
   }
   toggleAskNeed(event: any) {
     this.toggleHelper = true
