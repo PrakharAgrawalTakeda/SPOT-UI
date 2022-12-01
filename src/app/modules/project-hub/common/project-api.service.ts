@@ -149,14 +149,14 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async deleteAskNeed(id: string){
-    var link = GlobalVariables.apiurl+"AskNeed/"+id
+  async deleteAskNeed(projectId:string, id: string){
+    var link = GlobalVariables.apiurl+"AskNeed/"+projectId+"/"+id
     const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
   }
-  async deleteSchedule(id: string){
-    var link = GlobalVariables.apiurl+"Schedule/"+id
+  async deleteSchedule(projectId:string, id: string){
+    var link = GlobalVariables.apiurl+"Schedule/"+projectId+"/"+id
     const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response

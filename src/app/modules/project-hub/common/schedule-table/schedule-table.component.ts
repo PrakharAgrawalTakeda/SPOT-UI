@@ -147,7 +147,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
     scheduleAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.deleteSchedule(id).then(res => {
+        this.apiService.deleteSchedule(this.projectid,id).then(res => {
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)
         })

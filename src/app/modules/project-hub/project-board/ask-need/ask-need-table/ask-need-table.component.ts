@@ -71,21 +71,20 @@ export class AskNeedTableComponent implements OnInit {
   getlinkname(uid: string): string {
     var linkItemList = this.links.filter(x => x.linkItemId == uid)
     var returnString = ''
-    for (var linkItem of linkItemList) {
-      if (linkItem.childProjectId == this.projectId) {
-        if (returnString != '') {
-          returnString = returnString + '</br>'
-        }
+    if (linkItemList.some(x => x.parentProjectId == this.projectId)) {
+      var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectId).childProjectId)
+      returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+    }
+    if(linkItemList.some(x => x.childProjectId == this.projectId)){
+      var projectName = ''
+      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectId)){
         var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-        returnString = returnString + "A link to this ask/need has been created in project(s): " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        projectName = parentProject == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
       }
-      else if (linkItem.parentProjectId == this.projectId) {
-        if (returnString != '') {
-          returnString = returnString + '</br>'
-        }
-        var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.childProjectId)
-        returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+      if(returnString != ''){
+        returnString = returnString + '\n'
       }
+      returnString = returnString + "A link to this ask/need has been created in project(s): " + projectName
     }
     return returnString
   }
@@ -114,7 +113,7 @@ export class AskNeedTableComponent implements OnInit {
     const askNeedAlert = this.fuseAlert.open(comfirmConfig)
     askNeedAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.deleteAskNeed(id).then(res => {
+        this.apiService.deleteAskNeed(this.projectId,id).then(res => {
           this.projectHubService.submitbutton.next(true)
         })
       }
