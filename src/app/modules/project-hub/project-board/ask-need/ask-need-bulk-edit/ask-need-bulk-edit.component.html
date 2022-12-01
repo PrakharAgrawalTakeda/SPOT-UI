@@ -103,7 +103,7 @@
                             <p>{{value | date:'dd-MMM-yyyy'}}</p>
                         </a>
                         <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="closeDate" [showLabel]="false">
+                            <spot-input-date formControlName="closeDate" [showLabel]="false" [max]="'today'">
                             </spot-input-date>
                         </form>
                     </ng-template>

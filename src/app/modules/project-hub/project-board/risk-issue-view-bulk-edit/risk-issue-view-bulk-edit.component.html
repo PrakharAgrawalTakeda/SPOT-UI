@@ -191,7 +191,7 @@
                             <p>{{value | date:'dd-MMM-yyyy'}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="closeDate" [showLabel]="false">
+                            <spot-input-date formControlName="closeDate" [showLabel]="false" [max]="'today'">
                             </spot-input-date>
                         </form>
                     </ng-template>
