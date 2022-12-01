@@ -113,7 +113,7 @@ export class AskNeedTableComponent implements OnInit {
     const askNeedAlert = this.fuseAlert.open(comfirmConfig)
     askNeedAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.deleteAskNeed(id).then(res => {
+        this.apiService.deleteAskNeed(this.projectId,id).then(res => {
           this.projectHubService.submitbutton.next(true)
         })
       }
