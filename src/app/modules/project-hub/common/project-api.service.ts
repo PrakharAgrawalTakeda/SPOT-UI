@@ -58,8 +58,8 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async editAskNeed(body){
-    var link = GlobalVariables.apiurl+"AskNeed/" + body.askNeedUniqueId
+  async editAskNeed(projectId: string,body){
+    var link = GlobalVariables.apiurl+"AskNeed/"+projectId+"/" + body.askNeedUniqueId
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
