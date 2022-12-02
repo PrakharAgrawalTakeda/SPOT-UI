@@ -71,7 +71,7 @@ export class ProjectHubService {
           link: 'project-board'
         },
         {
-          title: 'Associated Project',
+          title: 'Associated Projects',
           type: 'basic',
           icon: 'heroicons_outline:link',
           link: 'associated-projects'

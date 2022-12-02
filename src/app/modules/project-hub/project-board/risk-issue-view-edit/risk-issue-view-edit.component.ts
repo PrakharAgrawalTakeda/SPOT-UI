@@ -279,6 +279,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         this.apiService.addRiskIssue(mainObjnew).then(() => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
         })
       }
       else {
@@ -339,7 +340,9 @@ export class RiskIssueViewEditComponent implements OnInit {
         this.apiService.editRiskIssue(mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
         })
+
       }
     }
   }

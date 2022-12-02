@@ -6,7 +6,7 @@
         (input)="onChange($event.target.value)"
         (blur)="onTouch()"
         [rows]="rows"
-        maxlength="maxLength"
+        [maxlength]="maxLength"
         matTextareaAutosize
         ></textarea>
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>

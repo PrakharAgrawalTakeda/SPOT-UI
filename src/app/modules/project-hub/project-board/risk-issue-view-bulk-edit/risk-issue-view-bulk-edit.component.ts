@@ -153,7 +153,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             includeInCharter: false,
             includeInReport: false,
             indicator: '',
-            logDate: null,
+            logDate: this.today,
             mitigation: '',
             ownerId: '',
             ownerName: '',
@@ -276,6 +276,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
                     this.projectHubService.toggleDrawerOpen('', '', [], '')
                     this.projectHubService.submitbutton.next(true)
+                    this.projectHubService.isNavChanged.next(true)
                     this.projectHubService.successSave.next(true)
                 }
             )
