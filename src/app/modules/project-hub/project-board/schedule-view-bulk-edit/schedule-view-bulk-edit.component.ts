@@ -252,13 +252,10 @@ indicatorchange: boolean = false
                     this.userlist = log.users
                   }
                   console.log("Users List", this.userlist)
-<<<<<<< HEAD
                   
                   //debugger
-=======
 
 
->>>>>>> main
                   this.baselineCount = count
                   console.log("Baseline Count", this.baselineCount)
                   console.log('LookUp Data', lookup)
