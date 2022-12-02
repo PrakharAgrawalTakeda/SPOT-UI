@@ -93,7 +93,7 @@ export class ScheduleViewEditComponent implements OnInit {
           this.scheduleForm.controls.function.patchValue(this.lookupdata.find(x => x.lookUpId == res.functionGroupId))
         }
 
-        if (this.projecthubservice.all != []) {
+        if (this.projecthubservice.all.length > 0) {
           if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
             if (this.scheduleForm.value.includeInReport != true) {
               this.scheduleForm.controls['includeInReport'].disable()
@@ -241,7 +241,7 @@ export class ScheduleViewEditComponent implements OnInit {
 
         console.log("final object")
         console.log(mainObj)
-        this.apiService.editSchedule(mainObj).then(res => {
+        this.apiService.editSchedule(this.projecthubservice.projectid,mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
         })

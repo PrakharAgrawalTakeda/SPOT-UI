@@ -131,8 +131,8 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async editSchedule(body){
-    var link = GlobalVariables.apiurl+"Schedule/" + body.scheduleUniqueId
+  async editSchedule(projectId: string,body){
+    var link = GlobalVariables.apiurl+"Schedule/"+projectId+"/" + body.scheduleUniqueId
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
