@@ -1445,16 +1445,13 @@ console.log(this.scheduleData.scheduleData)
       if (JSON.stringify(baselines) != JSON.stringify(baselines2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-<<<<<<< HEAD
         
           //  this.viewBaseline = true
           //  this.viewBaselineLogs = true
           //  this.compareBaselineLogs = false
           //  this.projecthubservice.isBulkEdit = false
-=======
 
 
->>>>>>> main
           this.submitjustification()
           //this.projecthubservice.submitbutton.next(true)
         })
@@ -1565,16 +1562,13 @@ console.log(this.scheduleData.scheduleData)
       if (JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-<<<<<<< HEAD
         
           // this.viewBaseline = true
           // this.viewBaselineLogs = true
           // this.compareBaselineLogs = false
           // this.projecthubservice.isBulkEdit = false
-=======
 
 
->>>>>>> main
           this.submitjustification()
           //this.projecthubservice.submitbutton.next(true)
         })
