@@ -277,7 +277,8 @@ indicatorchange: boolean = false
 
                   if (res.scheduleData.length != 0) {
                     for (var i of res.scheduleData) {
-                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+                      console.log(this.id)
+                      i.includeInReport = i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
            
                       this.dbSchedule.push({
                         scheduleUniqueId: i.scheduleUniqueId,
@@ -299,7 +300,7 @@ indicatorchange: boolean = false
                       })
                     }
                     this.scheduledataDb = this.schedulengxdata.map(x => {
-                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+                      i.includeInReport = i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
            
                       return {
                         "scheduleUniqueId": x.scheduleUniqueId,
@@ -337,7 +338,7 @@ indicatorchange: boolean = false
                         function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
                         completionDate: new FormControl(i.completionDate),
                         comments: new FormControl(i.comments),
-                        includeInReport: new FormControl(i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport),
+                        includeInReport: new FormControl(i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport),
                         includeInCharter: new FormControl(i.includeInCharter),
                         milestoneType: new FormControl(i.milestoneType),
                         templateMilestoneId: new FormControl(i.templateMilestoneId),
