@@ -52,7 +52,7 @@ import { ProjectCharterComponent } from './project-charter/project-charter.compo
 import { BusinessCaseComponent } from './business-case/business-case.component';
 import { ProjectProposalComponent } from './project-proposal/project-proposal.component';
 import { RiskIssuesTableComponent } from './common/risk-issues-table/risk-issues-table.component';
-import { RiskIssueViewEditComponent } from './project-board/risk-issue-view-edit/risk-issue-view-edit.component';
+import { RiskIssueViewEditComponent } from './project-board/risk-issue/risk-issue-view-edit/risk-issue-view-edit.component';
 import { ScheduleTableComponent } from './common/schedule-table/schedule-table.component';
 import { ScheduleViewEditComponent } from './project-board/schedule-view-edit/schedule-view-edit.component';
 import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
@@ -93,9 +93,9 @@ import { ScheduleSingleEditComponent } from './project-board/schedule/schedule-s
 import { ScheduleBulkEditComponent } from './project-board/schedule/schedule-bulk-edit/schedule-bulk-edit.component';
 import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
 import { StateCheckComponent } from './common/state-check/state-check.component';
-import { RisIssueViewBulkEditComponent } from './project-board/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
+import { RisIssueViewBulkEditComponent } from './project-board/risk-issue/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
 import { SchedulesTableComponent } from './project-board/schedule/schedule-table/schedule-table.component';
-import { RiskIssuesLinkComponent } from './project-board/risk-issues-link/risk-issues-link.component';
+import { RiskIssuesLinkComponent } from './project-board/risk-issue/risk-issues-link/risk-issues-link.component';
 import { RiskIssueTableComponent } from './project-board/risk-issue/risk-issue-table/risk-issue-table.component';
 
 export const projectRoutes: Route[] = [
