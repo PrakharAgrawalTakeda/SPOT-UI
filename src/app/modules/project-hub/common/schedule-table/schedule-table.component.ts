@@ -70,6 +70,9 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     //this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
+    for(var i of this.scheduleData){
+      i.includeInReport = i.projectId == this.projectid? i.includeInReport: this.projectViewDetails.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport 
+    }
     // console.log(this.scheduleData)
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
     // console.log(this.scheduleData)
@@ -176,7 +179,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   islink(uid: string): boolean {
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
-  getlinkname(uid: string): string {
+  getlinkname2(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     // console.log(this.projectViewDetails.links)
     // console.log(this.projectViewDetails.linksProblemCapture)
@@ -192,6 +195,27 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       return "A link to this milestone has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     }
 
+  }
+
+  getlinkname(uid: string): string {
+    var linkItemList = this.projectViewDetails.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    if (linkItemList.some(x => x.parentProjectId == this.projectid)) {
+      var childProject = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectid).childProjectId)
+      returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+    }
+    if(linkItemList.some(x => x.childProjectId == this.projectid)){
+      var projectName = ''
+      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectid)){
+        var parentProject = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      }
+      if(returnString != ''){
+        returnString = returnString + '\n'
+      }
+      returnString = returnString + "A link to this milestone has been created in project(s): " + projectName
+    }
+    return returnString
   }
   onDetailToggle(event: any) {
     // console.log(event)

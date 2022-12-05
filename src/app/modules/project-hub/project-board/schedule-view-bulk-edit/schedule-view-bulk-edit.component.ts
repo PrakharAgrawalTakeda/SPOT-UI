@@ -20,6 +20,7 @@ import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { MsalService } from '@azure/msal-angular';
 import { ViewportRuler } from '@angular/cdk/scrolling';
+import { J } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-schedule-view-bulk-edit',
@@ -85,6 +86,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   copyscheduledata = []
   milestonesSubmit = []
   flag: boolean = false
+  detailsflag: boolean = false
 baselinechange: boolean = false
 plannedchange: boolean = false
  completionchange: boolean = false
@@ -114,11 +116,13 @@ indicatorchange: boolean = false
   toggleHelper: boolean = false
   dbSchedule: any = []
   formValue: any = []
+  scheduledatanew: any = []
   logloglog: any;
   logdetailsObj: any = []
   currObj: any = []
   prevObj: any = []
   newArray: any = []
+  temp: any = []
   // onResize(event){
   //   event.window.innerWidth; // window width
   // }
@@ -133,7 +137,9 @@ indicatorchange: boolean = false
       if (this.viewContent == true) {
         if (this.toggleHelper == true) {
           console.log("contructor")
+          console.log("LINE !#&",this.scheduleData.scheduleData)
           this.changeschedule(res, true)
+          
         }
       }
     })
@@ -154,24 +160,24 @@ indicatorchange: boolean = false
       }
     })
     //Baseline Log Form changes
-    // this.baselineLogForm.valueChanges.subscribe(res => {
-    //   if (this.viewContent == false) {
-    //     //this.saveScheduleBulkEdit()
-    //     console.log("DB", this.baselineLogForm)
-    //     console.log("SUB", this.baselineLogObj)
-    //     for (let control of this.baselineLogObj) {
-    //       for (let i of this.baselineLogData.filter(x => x.baselineLogId == control.includedInSlipChart)) {
-    //         if (JSON.stringify(control.includedInSlipChart) != JSON.stringify(i.includeSlipChart)) {
+    this.baselineLogForm.valueChanges.subscribe(res => {
+      if (this.viewContent == false) {
+        //this.saveScheduleBulkEdit()
+        console.log("DB", this.baselineLogForm)
+        console.log("SUB", this.baselineLogObj)
+        for (let control of this.baselineLogObj) {
+          for (let i of this.baselineLogData.filter(x => x.baselineLogId == control.includedInSlipChart)) {
+            if (JSON.stringify(control.includedInSlipChart) != JSON.stringify(i.includeSlipChart)) {
 
-    //           this.projecthubservice.isFormChanged = true
-    //         }
-    //         else {
-    //           this.projecthubservice.isFormChanged = false
-    //         }
-    //       }
-    //     }
-    //   }
-    // })
+              this.projecthubservice.isFormChanged = true
+            }
+            else {
+              this.projecthubservice.isFormChanged = false
+            }
+          }
+        }
+      }
+    })
 
   }
 
@@ -211,7 +217,7 @@ indicatorchange: boolean = false
 
 
   dataloader() {
-
+//debugger
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getProjectBaselineLog(this.id).then((log: any) => {
       log.projectBaselineLog.sort((a, b) => {
@@ -246,6 +252,8 @@ indicatorchange: boolean = false
                     this.userlist = log.users
                   }
                   console.log("Users List", this.userlist)
+                  
+                  //debugger
 
 
                   this.baselineCount = count
@@ -264,10 +272,13 @@ indicatorchange: boolean = false
                     console.log("ngx", this.schedulengxdata)
                   }
                   this.scheduledataDB = res.scheduleData
+                  console.log(this.scheduledataDB)
                   console.log(this.projecthubservice.includeClosedItems.schedule.value)
 
                   if (res.scheduleData.length != 0) {
                     for (var i of res.scheduleData) {
+                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+           
                       this.dbSchedule.push({
                         scheduleUniqueId: i.scheduleUniqueId,
                         projectId: i.projectId,
@@ -288,6 +299,8 @@ indicatorchange: boolean = false
                       })
                     }
                     this.scheduledataDb = this.schedulengxdata.map(x => {
+                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+           
                       return {
                         "scheduleUniqueId": x.scheduleUniqueId,
                         "projectId": x.projectId,
@@ -324,7 +337,7 @@ indicatorchange: boolean = false
                         function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
                         completionDate: new FormControl(i.completionDate),
                         comments: new FormControl(i.comments),
-                        includeInReport: new FormControl(i.includeInReport),
+                        includeInReport: new FormControl(i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport),
                         includeInCharter: new FormControl(i.includeInCharter),
                         milestoneType: new FormControl(i.milestoneType),
                         templateMilestoneId: new FormControl(i.templateMilestoneId),
@@ -382,6 +395,7 @@ indicatorchange: boolean = false
 
   changeschedule(event: any, initial: boolean = false) {
     //debugger
+    console.log("Change Shedule", this.scheduleData.scheduleData)
     for (var i of this.scheduleData.scheduleData) {
 
       for (let control of this.milestoneForm.controls.filter(x => x.value.scheduleUniqueId == i.scheduleUniqueId)) {
@@ -500,7 +514,7 @@ indicatorchange: boolean = false
     var responsibleall2 = this.value.map(x => {
       return x.responsiblePersonId
     })
-
+console.log(this.scheduleData.scheduleData)
     if (initial) {
       if (event == true) {
         if ((JSON.stringify(baseline) != JSON.stringify(baseline2) || JSON.stringify(planned) != JSON.stringify(planned2) || JSON.stringify(completion) != JSON.stringify(completion2) || JSON.stringify(comments) != JSON.stringify(comments2)
@@ -536,6 +550,7 @@ indicatorchange: boolean = false
               //   this.isclosed = false
               //   this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
               // }
+              console.log(this.schedulengxdata)
               this.localIncludedItems.controls.toggle.patchValue(event)
               this.localIncludedItems.controls.toggle.markAsPristine()
               this.dbSchedule = []
@@ -556,7 +571,7 @@ indicatorchange: boolean = false
         else {
           this.isclosed = true
           this.schedulengxdata = this.scheduleData.scheduleData
-
+          console.log(this.schedulengxdata)
           this.localIncludedItems.controls.toggle.patchValue(event)
           this.localIncludedItems.controls.toggle.markAsPristine()
           this.dbSchedule = []
@@ -598,6 +613,7 @@ indicatorchange: boolean = false
             if (close == 'confirmed') {
               this.isclosed = false
               this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+              console.log(this.schedulengxdata)
               this.localIncludedItems.controls.toggle.patchValue(event)
               this.localIncludedItems.controls.toggle.markAsPristine()
               this.dbSchedule = []
@@ -617,6 +633,7 @@ indicatorchange: boolean = false
         else {
           this.isclosed = false
           this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+          console.log(this.schedulengxdata)
           this.localIncludedItems.controls.toggle.patchValue(event)
           this.localIncludedItems.controls.toggle.markAsPristine()
           this.dbSchedule = []
@@ -636,6 +653,8 @@ indicatorchange: boolean = false
       else {
         this.isclosed = false
         this.schedulengxdata = this.scheduleData.scheduleData.filter(row => row.closeDate == null)
+        console.log(this.schedulengxdata)
+        console.log(this.scheduleData.scheduleData)
       }
       this.localIncludedItems.controls.toggle.patchValue(event)
       this.localIncludedItems.controls.toggle.markAsPristine()
@@ -904,6 +923,7 @@ indicatorchange: boolean = false
         behavior: 'smooth'
       });
     }, 100);
+    this.apiService.getprojectviewdata(this.id).then((res: any) => {
     this.milestoneForm.push(new FormGroup({
       scheduleUniqueId: new FormControl(''),
       projectId: new FormControl(this.id),
@@ -955,9 +975,12 @@ indicatorchange: boolean = false
     }]
 
     this.schedulengxdata = [...this.schedulengxdata, ...j]
+    this.scheduleData.scheduleData = res.scheduleData
     console.log(this.scheduleData.scheduleData)
     console.log(this.milestoneTableEditStack)
     this.milestoneTableEditRow(this.schedulengxdata.length - 1)
+
+  })
   }
 
   //let index = this.datarows.indexOf(this.selected[0])
@@ -1067,7 +1090,7 @@ indicatorchange: boolean = false
   islink(uid: string): boolean {
     return this.scheduleData.links.some(x => x.linkItemId == uid)
   }
-  getlinkname(uid: string): string {
+  getlinkname2(uid: string): string {
     let temp = this.scheduleData.links.find(x => x.linkItemId == uid)
     temp = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
     if (temp) {
@@ -1079,6 +1102,27 @@ indicatorchange: boolean = false
       return "A link to this milestone has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     }
 
+  }
+
+  getlinkname(uid: string): string {
+    var linkItemList = this.scheduleData.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    if (linkItemList.some(x => x.parentProjectId == this.projecthubservice.projectid)) {
+      var childProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projecthubservice.projectid).childProjectId)
+      returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+    }
+    if(linkItemList.some(x => x.childProjectId == this.projecthubservice.projectid)){
+      var projectName = ''
+      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projecthubservice.projectid)){
+        var parentProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      }
+      if(returnString != ''){
+        returnString = returnString + '\n'
+      }
+      returnString = returnString + "A link to this milestone has been created in project(s): " + projectName
+    }
+    return returnString
   }
 
   baselineForm = new FormGroup({
@@ -1116,7 +1160,7 @@ indicatorchange: boolean = false
         this.baselineLogObj = ''
       }
       console.log(this.baselineLogObj)
-      // debugger
+       //debugger
       if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
         var justificationObjNew = {
@@ -1288,9 +1332,45 @@ indicatorchange: boolean = false
     //this.scheduleData.scheduleData = [...this.scheduleData.scheduleData]
   }
 
+  sortByScheduleUniqeIDs(array: any): any {
+
+    return array.length > 1 ? array.sort((a, b) => {
+
+      if (a.scheduleUniqueId === null) {
+
+        return -1;
+
+      }
+
+
+
+      if (b.scheduleUniqueId === null) {
+
+        return 1;
+
+      }
+
+
+
+      if (a.scheduleUniqueId === b.scheduleUniqueId) {
+
+        return 0;
+
+      }
+
+
+
+      return a.scheduleUniqueId < b.scheduleUniqueId ? -1 : 1;
+
+    }) : array
+
+  }
+
   saveScheduleBulkEdit() {
     //debugger
+    this.apiService.getprojectviewdata(this.id).then((res: any) => {
     this.formValue = []
+    this.scheduledatanew = []
     if (this.scheduleData.scheduleData.length != 0) {
       // if (JSON.stringify(this.dbSchedule) != JSON.stringify(formValue)) {
 
@@ -1302,8 +1382,31 @@ indicatorchange: boolean = false
       //this.scheduleObj = formValue
       console.log(this.dbSchedule)
       if (!this.projecthubservice.includeClosedItems.schedule.value) {
-        this.formValue = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
+        
+        var closeditems = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
+
         console.log(this.formValue)
+        for(var i of closeditems)
+        {
+          this.formValue.push({
+            scheduleUniqueId: i.scheduleUniqueId,
+            projectId: i.projectId,
+            milestone: (i.milestone),
+            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            comments: i.comments,
+            includeInReport: i.includeInReport,
+            functionGroupId: i.function == null ? null : i.function.lookUpId,
+            includeInCharter: i.includeInCharter,
+            milestoneType: i.milestoneType,
+            templateMilestoneId: i.templateMilestoneId,
+            includeInCloseout: i.includeInCloseout,
+            responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+            indicator: i.indicator
+          })
+        }
       }
 
       for (var i of formValue) {
@@ -1350,26 +1453,35 @@ indicatorchange: boolean = false
         }
       }
       console.log(this.formValue)
-      console.log(this.schedulengxdata)
-      var baselines = this.schedulengxdata.map(x => {
+      console.log(this.scheduleData.scheduleData)
+      this.scheduleData.scheduleData = res.scheduleData
+       var sortedbaselines = this.sortByScheduleUniqeIDs(this.scheduleData.scheduleData)
+       var sortedbaselines2 = this.sortByScheduleUniqeIDs(this.formValue)
+      var baselines = sortedbaselines.map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
       })
-      var baselines2 = this.formValue.map(x => {
+      var baselines2 = sortedbaselines2.map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
       })
 
       if (JSON.stringify(baselines) != JSON.stringify(baselines2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+        
+          //  this.viewBaseline = true
+          //  this.viewBaselineLogs = true
+          //  this.compareBaselineLogs = false
+          //  this.projecthubservice.isBulkEdit = false
 
 
           this.submitjustification()
-          this.projecthubservice.submitbutton.next(true)
+          //this.projecthubservice.submitbutton.next(true)
         })
 
       }
       else
       {
+        console.log("CHANGED PLANNED FINISH", this.formValue)
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
@@ -1387,7 +1499,31 @@ indicatorchange: boolean = false
       //this.scheduleObj = formValue
       console.log(formValue)
       if (!this.projecthubservice.includeClosedItems.schedule.value) {
-        this.formValue = this.scheduleData.scheduleData > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
+        
+        var closeditems = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
+
+        console.log(this.formValue)
+        for(var i of closeditems)
+        {
+          this.formValue.push({
+            scheduleUniqueId: i.scheduleUniqueId,
+            projectId: i.projectId,
+            milestone: (i.milestone),
+            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            comments: i.comments,
+            includeInReport: i.includeInReport,
+            functionGroupId: i.function == null ? null : i.function.lookUpId,
+            includeInCharter: i.includeInCharter,
+            milestoneType: i.milestoneType,
+            templateMilestoneId: i.templateMilestoneId,
+            includeInCloseout: i.includeInCloseout,
+            responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+            indicator: i.indicator
+          })
+        }
       }
 
 
@@ -1435,25 +1571,34 @@ indicatorchange: boolean = false
         }
       }
       console.log(this.formValue)
-      var baselinedates = this.schedulengxdata.map(x => {
+      this.scheduleData.scheduleData = res.scheduleData
+      var sortedbaselinedates = this.sortByScheduleUniqeIDs(this.scheduleData.scheduleData)
+      var sortedbaselinedates2 = this.sortByScheduleUniqeIDs(this.formValue)
+      var baselinedates = sortedbaselinedates.map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
       })
-      var baselinedates2 = this.formValue.map(x => {
+      var baselinedates2 = sortedbaselinedates2.map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
       })
 
       if (JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+        
+          // this.viewBaseline = true
+          // this.viewBaselineLogs = true
+          // this.compareBaselineLogs = false
+          // this.projecthubservice.isBulkEdit = false
 
 
           this.submitjustification()
-          this.projecthubservice.submitbutton.next(true)
+          //this.projecthubservice.submitbutton.next(true)
         })
 
       }
       else
       {
+        console.log("CHANGED PLANNED FINISH", this.formValue)
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
@@ -1478,6 +1623,7 @@ indicatorchange: boolean = false
     // //     this.projecthubservice.submitbutton.next(true)
     // //   })
      }
+    })
   }
 
   getUserName(adid: string): string {
@@ -1665,9 +1811,41 @@ indicatorchange: boolean = false
   // }
 
   baselineProject() {
+
     console.log(this.schedulengxdata)
-    //debugger
+    console.log(this.scheduledataDB)
+
     console.log(this.flag)
+    this.apiService.getprojectviewdata(this.id).then((res: any) => {
+      console.log(res)
+    // for(var x of this.schedulengxdata)
+    // {
+    //   this.temp.push(x)
+    // }
+    for (var j of this.schedulengxdata) {
+
+      if (!this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || !this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
+       
+        j.baselineFinish = j.plannedFinish
+        
+          this.scheduleData.scheduleData = res.scheduleData
+          
+        //console.log(j.baselineFinish = j.plannedFinish)
+        //j.baselineFinish.dirty()
+        console.log(this.scheduleData.scheduleData)
+      
+        this.flag = true
+      }
+      else if (this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
+        j.baselineFinish = j.plannedFinish
+        this.scheduleData.scheduleData = res.scheduleData
+        //j.baselineFinish.dirty()
+      }
+      else {
+        this.flag = false
+      }
+
+    }
     for (var i of this.milestoneForm.controls) {
       if (!this.flag && (i['controls']['completionDate'].value == null && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value) ||
         !this.flag && (i['controls']['completionDate'].value == '' && i['controls']['plannedFinish'].value != null && i['controls']['baselineFinish'].value != i['controls']['plannedFinish'].value)) {
@@ -1686,31 +1864,31 @@ indicatorchange: boolean = false
       }
 
     }
-    for (var j of this.schedulengxdata) {
-      if (!this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || !this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
-        j.baselineFinish = j.plannedFinish
-        //j.baselineFinish.dirty()
-        this.flag = true
-      }
-      else if (this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
-        j.baselineFinish = j.plannedFinish
-        //j.baselineFinish.dirty()
-      }
-      else {
-        this.flag = false
-      }
-
-    }
+    console.log("Inside BaselineProject",this.scheduleData.scheduleData)
+//     debugger
+//     var temp = []
+//     for(var x of this.schedulengxdata)
+//     {
+// temp.push(x)
+//     }
+    
+    
     console.log(this.scheduleData.scheduleData)
     //  if (this.projecthubservice.includeClosedItems.schedule.value) {
     //   this.schedulengxdata = [...this.scheduleData.scheduleData]
     //  }
     //  else {
+      // if (this.projecthubservice.includeClosedItems.schedule.value) {
+      //   this.schedulengxdata = [...this.scheduleData.scheduleData]
+      // }
+      // else {
+      //   this.schedulengxdata = [...this.schedulengxdata]
+      // }
     this.schedulengxdata = [...this.schedulengxdata]
     console.log(this.schedulengxdata)
     //}
 
-
+  })
   }
 
   baselineLogDetails(baselinelogid: string) {
@@ -1735,83 +1913,152 @@ indicatorchange: boolean = false
     console.log(this.baselinelogdetails.logId)
 
 
-    this.projectbaselinelogDetailsprev = this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailsprev.baselineLogId)
-    this.projectbaselinelogDetailscurr = this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailscurr.baselineLogId)
+    this.projectbaselinelogDetailsprev = this.sortByScheduleUniqeIDs(this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailsprev.baselineLogId))
+    this.projectbaselinelogDetailscurr = this.sortByScheduleUniqeIDs(this.logdetails.filter(x => x.baselineLogId == this.baselinelogdetailscurr.baselineLogId))
+    console.log("PREVIOUS",this.projectbaselinelogDetailsprev)
+    console.log("CURRENT",this.projectbaselinelogDetailscurr)
     console.log(this.prevObj)
 console.log(this.currObj)
+//debugger
 
-// baselineFinish
+console.log(this.projectbaselinelogDetailscurr)
+debugger
 
-// completionDate
-
-// indicator
-
-// milestone
-// plannedFinish
-
-
-var baselinedates = this.projectbaselinelogDetailsprev.map(x => {
-  return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-})
-
-var baselinedates2 = this.projectbaselinelogDetailscurr.map(x => {
-  return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-})
-
-var planneddates = this.projectbaselinelogDetailsprev.map(x => {
-  return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
-})
-
-var plannedates2 = this.projectbaselinelogDetailscurr.map(x => {
-  return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
-})
-
-var completiondates = this.projectbaselinelogDetailsprev.map(x => {
-  return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
-})
-
-var completiondates2 = this.projectbaselinelogDetailscurr.map(x => {
-  return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
-})
-
-var indicator = this.projectbaselinelogDetailsprev.map(x => {
-  return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
-})
-
-var indicator2 = this.projectbaselinelogDetailscurr.map(x => {
-  return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
-})
-
-// console.log("Baseline prev", baselinedates)
-// console.log("Baseline curr", baselinedates2)
-
-// for(var i of baselinedates)
-// {
-// for(var j of baselinedates2)
-// {
-  //debugger
-  if(baselinedates != baselinedates2)
+for(var m of this.projectbaselinelogDetailscurr)
+{
+  for(var x in this.projectbaselinelogDetailscurr)
   {
-    this.baselinechange = true
-  }
- if(planneddates != plannedates2) {
-    this.plannedchange = true
-  }
-  if(completiondates != completiondates2) {
-    this.completionchange = true
-  }
-  if(indicator != indicator2) {
-    this.indicatorchange = true
-  }
-  else{
-    this.baselinechange = false
-    this.plannedchange = false
-    this.completionchange = false
-    this.indicatorchange = false
-  }
-// }
-// }
 
+    if(this.projectbaselinelogDetailsprev.some(y=>y.scheduleUniqueId == m.scheduleUniqueId))
+{
+    if(this.projectbaselinelogDetailsprev[x].baselineFinish != this.projectbaselinelogDetailscurr[x].baselineFinish)
+    {
+      this.projectbaselinelogDetailscurr[x].baselinechange = true
+    }
+    // if(!this.projectbaselinelogDetailsprev[x].baselineFinish)
+    // {
+    //   this.projectbaselinelogDetailscurr[x].baselinechange = true
+    // }
+    if(this.projectbaselinelogDetailsprev[x].plannedFinish != this.projectbaselinelogDetailscurr[x].plannedFinish)
+    {
+      this.projectbaselinelogDetailscurr[x].plannedchange = true
+    }
+    // if(!this.projectbaselinelogDetailsprev[x].plannedFinish)
+    // {
+    //   this.projectbaselinelogDetailscurr[x].plannedchange = true
+    // }
+    if(this.projectbaselinelogDetailsprev[x].completionDate != this.projectbaselinelogDetailscurr[x].completionDate)
+    {
+      this.projectbaselinelogDetailscurr[x].completionchange = true
+    }
+    // if(!this.projectbaselinelogDetailsprev[x].completionDate)
+    // {
+    //   this.projectbaselinelogDetailscurr[x].completionchange = true
+    // }
+    if(this.projectbaselinelogDetailsprev[x].indicator != this.projectbaselinelogDetailscurr[x].indicator)
+    {
+      this.projectbaselinelogDetailscurr[x].indicatorchange = true
+    }
+    // if(!this.projectbaselinelogDetailsprev[x].indicator)
+    // {
+    //   this.projectbaselinelogDetailscurr[x].indicatorchange = true
+    // }
+  }
+}
+}
+
+console.log(this.projectbaselinelogDetailscurr)
+
+
+// var baselinedates = this.projectbaselinelogDetailsprev.map(x => {
+//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+// })
+
+// var baselinedates2 = this.projectbaselinelogDetailscurr.map(x => {
+//   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+// })
+
+// var planneddates = this.projectbaselinelogDetailsprev.map(x => {
+//   return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+// })
+
+// var plannedates2 = this.projectbaselinelogDetailscurr.map(x => {
+//   return x.plannedFinish && x.plannedFinish != '' ? moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss") : x.plannedFinish
+// })
+
+// var completiondates = this.projectbaselinelogDetailsprev.map(x => {
+//   return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+// })
+
+// var completiondates2 = this.projectbaselinelogDetailscurr.map(x => {
+//   return x.completionDate && x.completionDate != '' ? moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss") : x.completionDate
+// })
+
+// var indicator = this.projectbaselinelogDetailsprev.map(x => {
+//   return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
+// })
+
+// var indicator2 = this.projectbaselinelogDetailscurr.map(x => {
+//   return x.indicator && x.indicator != '' ? moment(x.indicator) : x.indicator
+// })
+
+
+//   debugger
+//   if(!this.baselinechange && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
+//   {
+//     for(var z in baselinedates)
+//     {
+//       if(baselinedates2[z] != baselinedates[z])
+//       {
+//         this.baselinechange = true
+//       }
+//       else
+//       {
+//         this.baselinechange = false
+//       }
+//     }
+    
+//   }
+//  if(!this.plannedchange && JSON.stringify(planneddates) != JSON.stringify(plannedates2)) {
+//   for(var z in planneddates)
+//   {
+//     if(plannedates2[z] != planneddates[z])
+//     {
+//       this.plannedchange = true
+//     }
+//     else
+//     {
+//       this.plannedchange = false
+//     }
+//   }
+//   }
+//   if(!this.completionchange && JSON.stringify(completiondates) != JSON.stringify(completiondates2)) {
+//     for(var z in completiondates)
+//   {
+//     if(completiondates2[z] != completiondates[z])
+//     {
+//       this.completionchange = true
+//     }
+//     else
+//     {
+//       this.completionchange = false
+//     }
+//   }
+//   }
+//   if(!this.indicatorchange && JSON.stringify(indicator) != JSON.stringify(indicator2)) {
+//     for(var z in indicator)
+//   {
+//     if(indicator2[z] != indicator[z])
+//     {
+//       this.indicatorchange = true
+//     }
+//     else
+//     {
+//       this.indicatorchange = false
+//     }
+//   }
+//   }
+  
     //this.newArray = this.projectbaselinelogDetailscurr.filter(({ milestone, plannedFinish, baselineFinish, completionDate, indicator}) => !this.projectbaselinelogDetailsprev.some((e) => e.milestone == milestone && e.plannedFinish == plannedFinish && e.baselineFinish == baselineFinish && e.completionDate == completionDate && e.indicator == indicator))
 //
 //
@@ -1843,20 +2090,27 @@ console.log(this.currObj)
 
     for(var i of unique)
     {
+      console.log(i)
       this.logdetailsObj.push({
 
           milestone: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).milestone : this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).milestone,
-          currplannedFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedFinish  : '',
-          currbaselineFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselineFinish : '',
-          currcompletionDate: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).completionDate : '',
-          currindicator: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).indicator : '',
+          currplannedFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedFinish  : 'empty',
+          currbaselineFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselineFinish : 'empty',
+          currcompletionDate: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).completionDate : 'empty',
+          currindicator: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).indicator : 'empty',
           prevplannedFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).plannedFinish : '',
           prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).baselineFinish : '',
           prevcompletionDate: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).completionDate : '',
-          previndicator: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).indicator : ''
+          previndicator: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).indicator : '',
+          baselinechange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselinechange  : '',
+          plannedchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedchange  : '',
+          completionchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).completionchange  : '',
+          indicatorchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).indicatorchange  : ''
       })
 
     }
+
+    
 
     //this.newArray = [...new Set([...this.logdetailsObj])]
 
@@ -1879,16 +2133,38 @@ console.log(this.currObj)
   }
 
   submitschedule() {
-   // debugger
+    debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
+console.log(this.scheduleData.scheduleData)
 
-    var baselinedates = this.schedulengxdata.map(x => {
-      return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-    })
-    var baselinedates2 = baselineFormValue.map(x => {
-      return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
-    })
+if(this.projecthubservice.includeClosedItems.schedule.value)
+{
+  var baselinedates = this.scheduleData.scheduleData.map(x => {
+    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+  })
+}
+else{
+  var baselinedates = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
+    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+  })
+}
+
+   for(var control of this.milestoneForm.controls)
+   {
+     if(control['controls']['scheduleUniqueId'].value != '')
+     {
+      var baselinedates2 = baselineFormValue.map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+      })
+     }
+     else{
+      var baselinedates2 = baselineFormValue.filter(x => x.scheduleUniqueId != '').map(x => {
+        return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+      })
+     }
+   }
+    
     console.log(this.flag)
 
     if (!this.flag && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {

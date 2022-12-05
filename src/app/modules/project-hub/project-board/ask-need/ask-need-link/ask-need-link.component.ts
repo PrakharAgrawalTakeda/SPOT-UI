@@ -192,6 +192,7 @@ export class AskNeedLinkComponent implements OnInit {
     this.apiService.bulkeditAskNeedLinks(mainObj, this.projectHubService.projectid).then(res => {
       this.projectHubService.toggleDrawerOpen('', '', [], '')
       this.projectHubService.submitbutton.next(true)
+      this.projectHubService.isNavChanged.next(true)
       this.projectHubService.successSave.next(true)
     })
   }

@@ -29,6 +29,7 @@ export class ScheduleLinkComponent implements OnInit {
     this.linkDBData = []
     this.linkedSchedules = []
     this.apiService.milestoneGetLinkData(this.projectHubService.projectid).then(res => {
+
       console.log("Schedule Link", res)
       this.linkDBData = [...this.sortByLevel(res)]
       if (!this.projectHubService.includeClosedItems.schedule.value) {

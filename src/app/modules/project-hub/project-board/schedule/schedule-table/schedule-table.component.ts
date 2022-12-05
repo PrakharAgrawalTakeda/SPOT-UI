@@ -103,7 +103,7 @@ export class SchedulesTableComponent implements OnInit {
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
   }
-  getlinkname(uid: string): string {
+  getlinkname2(uid: string): string {
     var linkItemList = this.links.filter(x => x.linkItemId == uid)
     var returnString = ''
     for (var linkItem of linkItemList) {
@@ -121,6 +121,27 @@ export class SchedulesTableComponent implements OnInit {
         var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.childProjectId)
         returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
       }
+    }
+    return returnString
+  }
+
+  getlinkname(uid: string): string {
+    var linkItemList = this.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    if (linkItemList.some(x => x.parentProjectId == this.projectId)) {
+      var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectId).childProjectId)
+      returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+    }
+    if(linkItemList.some(x => x.childProjectId == this.projectId)){
+      var projectName = ''
+      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectId)){
+        var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      }
+      if(returnString != ''){
+        returnString = returnString + '\n'
+      }
+      returnString = returnString + "A link to this milestone has been created in project(s): " + projectName
     }
     return returnString
   }

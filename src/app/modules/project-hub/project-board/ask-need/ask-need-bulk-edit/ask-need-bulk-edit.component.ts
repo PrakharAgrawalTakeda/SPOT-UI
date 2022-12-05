@@ -25,8 +25,8 @@ export class AskNeedBulkEditComponent implements OnInit {
     this.askNeedForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.submitPrep()
-        this.formValue = this.sortByNeedByDate(this.formValue)
-        this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
+        this.formValue = this.sortByName(this.formValue)
+        this.dbAskNeeds = this.sortByName(this.dbAskNeeds)
         if (JSON.stringify(this.formValue) != JSON.stringify(this.dbAskNeeds)) {
           console.log("DB VALUE", this.dbAskNeeds)
           console.log("FORM VALUE", this.formValue)
@@ -68,8 +68,11 @@ export class AskNeedBulkEditComponent implements OnInit {
     if (this.projectHubService.projectid) {
       this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
         this.askNeedData = res.askNeedData
+        this.links = res.links
+        this.linksProblemCapture = res.linksProblemCapture
         if (res.askNeedData.length > 0) {
           for (var i of res.askNeedData) {
+            i.includeInReport = i.projectId == this.projectHubService.projectid? i.includeInReport: this.links.find(t=>t.linkItemId == i.askNeedUniqueId).includeInReport
             this.dbAskNeeds.push({
               askNeedUniqueId: i.askNeedUniqueId,
               projectId: i.projectId,
@@ -83,12 +86,11 @@ export class AskNeedBulkEditComponent implements OnInit {
               includeInReport: i.includeInReport,
               indicator: i.indicator
             })
+            console.log(this.dbAskNeeds)
           }
           this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
         }
-        this.links = res.links
-        this.linksProblemCapture = res.linksProblemCapture
-        this.changeaskneed(this.projectHubService.includeClosedItems.askNeed.value)
+       this.changeaskneed(this.projectHubService.includeClosedItems.askNeed.value)
         this.tableData = this.sortByNeedByDate(this.tableData)
         console.log(this.tableData)
         this.tableData.length > 0 ? this.formIntializer() : ''
@@ -108,6 +110,7 @@ export class AskNeedBulkEditComponent implements OnInit {
   }
   formIntializer() {
     for (var x of this.tableData) {
+      //console.log(this.links.some(x=>x.linkItemId == ))
       this.askNeedForm.push(new FormGroup({
         askNeedUniqueId: new FormControl(x.askNeedUniqueId),
         projectId: new FormControl(x.projectId),
@@ -120,7 +123,7 @@ export class AskNeedBulkEditComponent implements OnInit {
         comments: new FormControl(x.comments),
         logDate: new FormControl(x.logDate),
         closeDate: new FormControl(x.closeDate),
-        includeInReport: new FormControl(x.includeInReport),
+        includeInReport: new FormControl(x.projectId == this.projectHubService.projectid? x.includeInReport: this.links.find(t=>t.linkItemId == x.askNeedUniqueId).includeInReport),
         indicator: new FormControl(x.indicator)
       }))
     }
@@ -166,7 +169,23 @@ export class AskNeedBulkEditComponent implements OnInit {
       return a.needByDate < b.needByDate ? -1 : 1;
     }) : array
   }
+  sortByName(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.askNeed1 === null) {
+        return -1;
+      }
 
+      if (b.askNeed1 === null) {
+        return 1;
+      }
+
+      if (a.askNeed1 === b.askNeed1) {
+        return 0;
+      }
+
+      return a.askNeed1 < b.askNeed1 ? -1 : 1;
+    }) : array
+  }
   disabler() {
     this.submitPrep()
     var formValue = this.formValue
@@ -218,7 +237,7 @@ export class AskNeedBulkEditComponent implements OnInit {
       var projectName = ''
       for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectHubService.projectid)){
         var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-        projectName = parentProject == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
       }
       if(returnString != ''){
         returnString = returnString + '\n'

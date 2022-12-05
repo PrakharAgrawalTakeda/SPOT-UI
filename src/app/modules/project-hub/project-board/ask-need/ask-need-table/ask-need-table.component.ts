@@ -79,7 +79,7 @@ export class AskNeedTableComponent implements OnInit {
       var projectName = ''
       for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectId)){
         var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-        projectName = parentProject == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
       }
       if(returnString != ''){
         returnString = returnString + '\n'
