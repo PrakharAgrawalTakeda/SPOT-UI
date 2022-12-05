@@ -95,6 +95,8 @@ import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
 import { StateCheckComponent } from './common/state-check/state-check.component';
 import { RisIssueViewBulkEditComponent } from './project-board/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
 import { SchedulesTableComponent } from './project-board/schedule/schedule-table/schedule-table.component';
+import { RiskIssuesLinkComponent } from './project-board/risk-issues-link/risk-issues-link.component';
+import { RiskIssueTableComponent } from './project-board/risk-issue/risk-issue-table/risk-issue-table.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -248,7 +250,9 @@ export const projectRoutes: Route[] = [
     PhaseStateComponent,
     StateCheckComponent,
     RisIssueViewBulkEditComponent,
-    SchedulesTableComponent
+    SchedulesTableComponent,
+    RiskIssuesLinkComponent,
+    RiskIssueTableComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

@@ -4,6 +4,11 @@
     <div class="text-primary">
         <div class="flex items-start justify-between">
             <div style="padding-right: 5px;">
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit && projecthubservice.hasChildren"
+                        (click)="projecthubservice.toggleDrawerOpen('LinkRiskIssues', 'new', [], projectid, true)">
+                    <mat-icon svgIcon="heroicons_solid:link"></mat-icon>&nbsp; Link Risk/Issues
+                </button>
                 <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                         (click)="projecthubservice.toggleDrawerOpen('RiskIssuesBulkEdit', 'new', [], projectid, true)">
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit

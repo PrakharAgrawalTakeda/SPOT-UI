@@ -58,6 +58,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async riskIssueGetLinkData(projectid: string){
+      var userid = GlobalVariables.apiurl+"AskNeed/GetAskNeedLinkData/"+projectid
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async editAskNeed(body){
     var link = GlobalVariables.apiurl+"AskNeed/" + body.askNeedUniqueId
     const abc$ = this.http.put(link,body)
@@ -318,6 +324,12 @@ export class ProjectApiService {
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async bulkeditRiskIssueLinks(body,projectId){
+      var link = GlobalVariables.apiurl+"AskNeed/BulkEditAskNeedLinks/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async bulkeditScheduleLinks(body,projectId){
     var link = GlobalVariables.apiurl+"Schedule/BulkEditScheduleLinks/" + projectId
