@@ -377,7 +377,7 @@
     </div>
   </div>
 
-  <div class="flex justify-start gap-64 items-center">
+  <div class="flex justify-start gap-40 items-center">
     <div class="font-medium text-secondary text-md italic mt-2">
       <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
         Log ID : {{baselinelogdetails.logId}}
@@ -413,7 +413,9 @@
     </div>
 
   </div>
-  <div class="mx-4 mt-8 h-[78.5vh] overflow-hidden">
+  <div class="overflow-y-hidden">
+    <!-- <div class="mt-3 h-[85vh] overflow-hidden"> -->
+  <div class="mx-4 mt-8 h-[78.5vh] overflow-y-scroll">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
       class="pr-2 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="logdetailsObj"
       [rowClass]="getRowClass">
@@ -524,6 +526,7 @@
       </ngx-datatable-column>
 
     </ngx-datatable>
+  </div>
   </div>
   <div class="mt-7 pr-6 pl-6 flex justify-end items-center w-full">
     <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">

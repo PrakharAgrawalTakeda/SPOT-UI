@@ -1923,50 +1923,84 @@ console.log(this.currObj)
 //debugger
 
 console.log(this.projectbaselinelogDetailscurr)
-debugger
+//debugger
+
+// if(this.projectbaselinelogDetailscurr.length >= this.projectbaselinelogDetailsprev.length)
+// {
+
 
 for(var m of this.projectbaselinelogDetailscurr)
 {
-  for(var x in this.projectbaselinelogDetailscurr)
-  {
+  // for(var x in this.projectbaselinelogDetailscurr)
+  // {
 
     if(this.projectbaselinelogDetailsprev.some(y=>y.scheduleUniqueId == m.scheduleUniqueId))
 {
-    if(this.projectbaselinelogDetailsprev[x].baselineFinish != this.projectbaselinelogDetailscurr[x].baselineFinish)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).baselineFinish != m.baselineFinish)
     {
-      this.projectbaselinelogDetailscurr[x].baselinechange = true
+      m.baselinechange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].baselineFinish)
     // {
     //   this.projectbaselinelogDetailscurr[x].baselinechange = true
     // }
-    if(this.projectbaselinelogDetailsprev[x].plannedFinish != this.projectbaselinelogDetailscurr[x].plannedFinish)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).plannedFinish != m.plannedFinish)
     {
-      this.projectbaselinelogDetailscurr[x].plannedchange = true
+      m.plannedchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].plannedFinish)
     // {
     //   this.projectbaselinelogDetailscurr[x].plannedchange = true
     // }
-    if(this.projectbaselinelogDetailsprev[x].completionDate != this.projectbaselinelogDetailscurr[x].completionDate)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).completionDate != m.completionDate)
     {
-      this.projectbaselinelogDetailscurr[x].completionchange = true
+      m.completionchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].completionDate)
     // {
     //   this.projectbaselinelogDetailscurr[x].completionchange = true
     // }
-    if(this.projectbaselinelogDetailsprev[x].indicator != this.projectbaselinelogDetailscurr[x].indicator)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).indicator != m.indicator)
     {
-      this.projectbaselinelogDetailscurr[x].indicatorchange = true
+      m.indicatorchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].indicator)
     // {
     //   this.projectbaselinelogDetailscurr[x].indicatorchange = true
     // }
   }
+  else 
+  {
+    if( m.baselineFinish != '')
+  {
+    m.baselinechange = true
+  }
+   if( m.plannedFinish != '')
+  {
+    m.plannedchange = true
+  }
+   if( m.completionDate != '')
+  {
+    m.completionchange = true
+  }
+   if( m.indicator != '')
+  {
+    m.indicatorchange = true
+  }
 }
+//}
 }
+//}
+
+// else{
+//   for(var m of this.projectbaselinelogDetailsprev)
+// {
+//   if(!this.projectbaselinelogDetailscurr.some(y=>y.scheduleUniqueId == m.scheduleUniqueId))
+//   {
+
+//   }
+// }
+// }
 
 console.log(this.projectbaselinelogDetailscurr)
 
