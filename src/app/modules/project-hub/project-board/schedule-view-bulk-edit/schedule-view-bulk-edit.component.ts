@@ -277,6 +277,8 @@ indicatorchange: boolean = false
 
                   if (res.scheduleData.length != 0) {
                     for (var i of res.scheduleData) {
+                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+           
                       this.dbSchedule.push({
                         scheduleUniqueId: i.scheduleUniqueId,
                         projectId: i.projectId,
@@ -297,6 +299,8 @@ indicatorchange: boolean = false
                       })
                     }
                     this.scheduledataDb = this.schedulengxdata.map(x => {
+                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+           
                       return {
                         "scheduleUniqueId": x.scheduleUniqueId,
                         "projectId": x.projectId,
@@ -333,7 +337,7 @@ indicatorchange: boolean = false
                         function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
                         completionDate: new FormControl(i.completionDate),
                         comments: new FormControl(i.comments),
-                        includeInReport: new FormControl(i.includeInReport),
+                        includeInReport: new FormControl(i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport),
                         includeInCharter: new FormControl(i.includeInCharter),
                         milestoneType: new FormControl(i.milestoneType),
                         templateMilestoneId: new FormControl(i.templateMilestoneId),
@@ -1086,7 +1090,7 @@ console.log(this.scheduleData.scheduleData)
   islink(uid: string): boolean {
     return this.scheduleData.links.some(x => x.linkItemId == uid)
   }
-  getlinkname(uid: string): string {
+  getlinkname2(uid: string): string {
     let temp = this.scheduleData.links.find(x => x.linkItemId == uid)
     temp = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
     if (temp) {
@@ -1098,6 +1102,27 @@ console.log(this.scheduleData.scheduleData)
       return "A link to this milestone has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     }
 
+  }
+
+  getlinkname(uid: string): string {
+    var linkItemList = this.scheduleData.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    if (linkItemList.some(x => x.parentProjectId == this.projecthubservice.projectid)) {
+      var childProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projecthubservice.projectid).childProjectId)
+      returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+    }
+    if(linkItemList.some(x => x.childProjectId == this.projecthubservice.projectid)){
+      var projectName = ''
+      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projecthubservice.projectid)){
+        var parentProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      }
+      if(returnString != ''){
+        returnString = returnString + '\n'
+      }
+      returnString = returnString + "A link to this milestone has been created in project(s): " + projectName
+    }
+    return returnString
   }
 
   baselineForm = new FormGroup({
