@@ -11,7 +11,7 @@
             </mat-icon>
             &nbsp;
             &nbsp;
-            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+            <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId) && mode != 'Link'"
                 svgIcon="heroicons_outline:link"></mat-icon>
         </ng-template>
     </ngx-datatable-column>
