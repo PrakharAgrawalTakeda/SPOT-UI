@@ -153,6 +153,7 @@ indicatorchange: boolean = false
         console.log("SUB", this.scheduleObj)
         if (JSON.stringify(this.scheduledataDb) != JSON.stringify(this.scheduleObj)) {
           this.projecthubservice.isFormChanged = true
+
         }
         else {
           this.projecthubservice.isFormChanged = false
@@ -958,7 +959,7 @@ console.log(this.scheduleData.scheduleData)
 
     var j = [{
       scheduleUniqueId: "new",
-      baselineFinish: '',
+      baselineFinish: null,
       comments: null,
       completionDate: null,
       functionGroupId: null,
@@ -1464,8 +1465,8 @@ console.log(this.scheduleData.scheduleData)
       var baselines2 = sortedbaselines2.map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
       })
-
-      if (JSON.stringify(baselines) != JSON.stringify(baselines2))
+//debugger
+      if (baselines.length == baselines2.length && JSON.stringify(baselines) != JSON.stringify(baselines2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
         
@@ -1474,11 +1475,20 @@ console.log(this.scheduleData.scheduleData)
           //  this.compareBaselineLogs = false
           //  this.projecthubservice.isBulkEdit = false
 
-
-          this.submitjustification()
+console.log(this.formValue)
+this.submitjustification() 
           //this.projecthubservice.submitbutton.next(true)
         })
+        
 
+      }
+      else if(this.formValue.length < this.scheduleData.scheduleData.length)
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
+        })
       }
       else
       {
@@ -1582,7 +1592,7 @@ console.log(this.scheduleData.scheduleData)
         return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
       })
 
-      if (JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
+      if (baselinedates.length == baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
         
@@ -1595,7 +1605,16 @@ console.log(this.scheduleData.scheduleData)
           this.submitjustification()
           //this.projecthubservice.submitbutton.next(true)
         })
+        
 
+      }
+      else if(this.formValue.length < this.scheduleData.scheduleData.length)
+      {
+        this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
+        })
       }
       else
       {
@@ -1624,7 +1643,9 @@ console.log(this.scheduleData.scheduleData)
     // //     this.projecthubservice.submitbutton.next(true)
     // //   })
      }
+     console.log(res.scheduleData)
     })
+    console.log(this.scheduleData.scheduleData)
   }
 
   getUserName(adid: string): string {
@@ -2168,7 +2189,7 @@ console.log(this.currObj)
   }
 
   submitschedule() {
-   // debugger
+    //debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 console.log(this.scheduleData.scheduleData)
@@ -2193,19 +2214,37 @@ else{
         return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
       })
      }
-     else{
+     else {
       var baselinedates2 = baselineFormValue.filter(x => x.scheduleUniqueId != '').map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
       })
      }
+     var baselinedates3 = baselineFormValue.map(x => {
+      return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+     })
    }
     
     console.log(this.flag)
+// if(this.flag != true)
+// {
 
-    if (!this.flag && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
+// }
+  // if(baselineFormValue.length < this.scheduleData.scheduleData.length)
+  //    {
+  //     this.saveScheduleBulkEdit()
+  //    }
+
+
+    if (!this.flag && baselinedates.length == baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
       this.flag = true
     }
-    //}
+
+//     if(!this.flag && baselinedates.length < baselinedates3.length)
+// {
+//     this.flag = false
+//     this.
+// }
+    
 
     console.log(baselinedates)
     console.log(baselinedates2)
