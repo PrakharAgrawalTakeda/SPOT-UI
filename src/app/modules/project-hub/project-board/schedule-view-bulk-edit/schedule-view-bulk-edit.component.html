@@ -81,7 +81,7 @@
             &nbsp;
             &nbsp;
             <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
-              svgIcon="heroicons_outline:link"></mat-icon>
+            svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
           </ng-template>
         </ngx-datatable-column>
 

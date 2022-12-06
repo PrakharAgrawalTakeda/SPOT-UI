@@ -179,6 +179,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   islink(uid: string): boolean {
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
+
+  getLinkType(projectId: string): string {
+    return projectId == this.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
+  } 
   getlinkname2(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     // console.log(this.projectViewDetails.links)
