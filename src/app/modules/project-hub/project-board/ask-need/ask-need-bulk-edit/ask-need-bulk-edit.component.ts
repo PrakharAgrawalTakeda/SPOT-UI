@@ -226,6 +226,9 @@ export class AskNeedBulkEditComponent implements OnInit {
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
   }
+  getLinkType(projectId: string): string{
+    return projectId == this.projectHubService.projectid ? 'mat_solid:link': 'heroicons_outline:link'  
+  }
   getlinkname(uid: string): string {
     var linkItemList = this.links.filter(x => x.linkItemId == uid)
     var returnString = ''

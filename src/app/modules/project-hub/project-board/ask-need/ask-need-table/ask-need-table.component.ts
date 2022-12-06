@@ -57,16 +57,8 @@ export class AskNeedTableComponent implements OnInit {
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
   }
-  getlinkname2(uid: string): string {
-    let temp = this.links.find(x => x.linkItemId == uid)
-    temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
-    if (temp) {
-      return "This ask/need is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
-    }
-    temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    if (temp) {
-      return "A link to this ask/need has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
-    }
+  getLinkType(projectId: string): string{
+    return projectId == this.projectId ? 'mat_solid:link': 'heroicons_outline:link'  
   }
   getlinkname(uid: string): string {
     var linkItemList = this.links.filter(x => x.linkItemId == uid)
