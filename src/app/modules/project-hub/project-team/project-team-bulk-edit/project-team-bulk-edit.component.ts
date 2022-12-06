@@ -190,12 +190,14 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
         })
       }
     }
     else {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      this.projecthubservice.isNavChanged.next(true)
     }
   }
   deleteShowLogic(rowIndex: number): boolean {

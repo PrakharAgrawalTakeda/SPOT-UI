@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {ProjectHubService} from "../../project-hub.service";
+import {ProjectHubService} from "../../../project-hub.service";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {ProjectApiService} from "../../common/project-api.service";
-import {SpotlightIndicatorsService} from "../../../../core/spotlight-indicators/spotlight-indicators.service";
+import {ProjectApiService} from "../../../common/project-api.service";
+import {SpotlightIndicatorsService} from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
 import * as moment from "moment";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import {AuthService} from "../../../../core/auth/auth.service";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
+import {AuthService} from "../../../../../core/auth/auth.service";
 
 @Component({
     selector: 'app-risk-issue-view-bulk-edit',

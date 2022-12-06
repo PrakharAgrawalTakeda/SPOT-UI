@@ -118,7 +118,7 @@
                             <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
                                 <spot-select formControlName="impactId" name="impact" [placeholder]="'Impact'"
                                              [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"
-                                             [valuePointer]="'lookUpName'">
+                                             [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                                 </spot-select>
                             </form>
                         </form>

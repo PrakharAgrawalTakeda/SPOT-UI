@@ -25,6 +25,7 @@
         <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
         <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
         <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>
+        <app-risk-issues-link *ngIf="projecthubservice.itemtype == 'LinkRiskIssues'"></app-risk-issues-link>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
