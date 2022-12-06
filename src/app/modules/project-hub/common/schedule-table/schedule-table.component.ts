@@ -43,10 +43,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     private apiService: ProjectApiService,
     public fuseAlert: FuseConfirmationService,
     private _Activatedroute: ActivatedRoute) {
-      this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
-        this.changeschedule(res)
-      })
-    }
+    this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
+      this.changeschedule(res)
+    })
+  }
 
 
 
@@ -70,8 +70,8 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     //this.getCount()
     this.scheduleData = this.projectViewDetails.scheduleData
-    for(var i of this.scheduleData){
-      i.includeInReport = i.projectId == this.projectid? i.includeInReport: this.projectViewDetails.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport 
+    for (var i of this.scheduleData) {
+      i.includeInReport = i.projectId == this.projectid ? i.includeInReport : this.projectViewDetails.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
     }
     // console.log(this.scheduleData)
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
@@ -150,7 +150,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
     scheduleAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.deleteSchedule(this.projectid,id).then(res => {
+        this.apiService.deleteSchedule(this.projectid, id).then(res => {
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)
         })
@@ -168,10 +168,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
     }
     else {
-        this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-        this.isclosed = false
-        // console.log(this.schedulengxdata)
-      }
+      this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+      this.isclosed = false
+      // console.log(this.schedulengxdata)
+    }
     this.localIncludedItems.controls.toggle.patchValue(event)
     this.localIncludedItems.controls.toggle.markAsPristine()
   }
@@ -191,7 +191,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     }
     temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    if(temp){
+    if (temp) {
       return "A link to this milestone has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     }
 
@@ -202,15 +202,19 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     var returnString = ''
     if (linkItemList.some(x => x.parentProjectId == this.projectid)) {
       var childProject = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectid).childProjectId)
-      returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
-    }
-    if(linkItemList.some(x => x.childProjectId == this.projectid)){
-      var projectName = ''
-      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectid)){
-        var parentProject = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      if (childProject != null) {
+        returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
       }
-      if(returnString != ''){
+    }
+    if (linkItemList.some(x => x.childProjectId == this.projectid)) {
+      var projectName = ''
+      for (var linkItem of linkItemList.filter(x => x.childProjectId == this.projectid)) {
+        var parentProject = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        if (parentProject != null) {
+          projectName = projectName == '' ? projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle : projectName += " , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        }
+      }
+      if (returnString != '') {
         returnString = returnString + '\n'
       }
       returnString = returnString + "A link to this milestone has been created in project(s): " + projectName
