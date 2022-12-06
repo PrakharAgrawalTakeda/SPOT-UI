@@ -277,7 +277,8 @@ indicatorchange: boolean = false
 
                   if (res.scheduleData.length != 0) {
                     for (var i of res.scheduleData) {
-                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+                      console.log(this.id)
+                      i.includeInReport = i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
            
                       this.dbSchedule.push({
                         scheduleUniqueId: i.scheduleUniqueId,
@@ -299,7 +300,7 @@ indicatorchange: boolean = false
                       })
                     }
                     this.scheduledataDb = this.schedulengxdata.map(x => {
-                      i.includeInReport = i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
+                      i.includeInReport = i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
            
                       return {
                         "scheduleUniqueId": x.scheduleUniqueId,
@@ -337,7 +338,7 @@ indicatorchange: boolean = false
                         function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
                         completionDate: new FormControl(i.completionDate),
                         comments: new FormControl(i.comments),
-                        includeInReport: new FormControl(i.projectId == this.projecthubservice.projectid? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport),
+                        includeInReport: new FormControl(i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport),
                         includeInCharter: new FormControl(i.includeInCharter),
                         milestoneType: new FormControl(i.milestoneType),
                         templateMilestoneId: new FormControl(i.templateMilestoneId),
@@ -1922,50 +1923,84 @@ console.log(this.currObj)
 //debugger
 
 console.log(this.projectbaselinelogDetailscurr)
-debugger
+//debugger
+
+// if(this.projectbaselinelogDetailscurr.length >= this.projectbaselinelogDetailsprev.length)
+// {
+
 
 for(var m of this.projectbaselinelogDetailscurr)
 {
-  for(var x in this.projectbaselinelogDetailscurr)
-  {
+  // for(var x in this.projectbaselinelogDetailscurr)
+  // {
 
     if(this.projectbaselinelogDetailsprev.some(y=>y.scheduleUniqueId == m.scheduleUniqueId))
 {
-    if(this.projectbaselinelogDetailsprev[x].baselineFinish != this.projectbaselinelogDetailscurr[x].baselineFinish)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).baselineFinish != m.baselineFinish)
     {
-      this.projectbaselinelogDetailscurr[x].baselinechange = true
+      m.baselinechange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].baselineFinish)
     // {
     //   this.projectbaselinelogDetailscurr[x].baselinechange = true
     // }
-    if(this.projectbaselinelogDetailsprev[x].plannedFinish != this.projectbaselinelogDetailscurr[x].plannedFinish)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).plannedFinish != m.plannedFinish)
     {
-      this.projectbaselinelogDetailscurr[x].plannedchange = true
+      m.plannedchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].plannedFinish)
     // {
     //   this.projectbaselinelogDetailscurr[x].plannedchange = true
     // }
-    if(this.projectbaselinelogDetailsprev[x].completionDate != this.projectbaselinelogDetailscurr[x].completionDate)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).completionDate != m.completionDate)
     {
-      this.projectbaselinelogDetailscurr[x].completionchange = true
+      m.completionchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].completionDate)
     // {
     //   this.projectbaselinelogDetailscurr[x].completionchange = true
     // }
-    if(this.projectbaselinelogDetailsprev[x].indicator != this.projectbaselinelogDetailscurr[x].indicator)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).indicator != m.indicator)
     {
-      this.projectbaselinelogDetailscurr[x].indicatorchange = true
+      m.indicatorchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].indicator)
     // {
     //   this.projectbaselinelogDetailscurr[x].indicatorchange = true
     // }
   }
+  else 
+  {
+    if( m.baselineFinish != '')
+  {
+    m.baselinechange = true
+  }
+   if( m.plannedFinish != '')
+  {
+    m.plannedchange = true
+  }
+   if( m.completionDate != '')
+  {
+    m.completionchange = true
+  }
+   if( m.indicator != '')
+  {
+    m.indicatorchange = true
+  }
 }
+//}
 }
+//}
+
+// else{
+//   for(var m of this.projectbaselinelogDetailsprev)
+// {
+//   if(!this.projectbaselinelogDetailscurr.some(y=>y.scheduleUniqueId == m.scheduleUniqueId))
+//   {
+
+//   }
+// }
+// }
 
 console.log(this.projectbaselinelogDetailscurr)
 
@@ -2133,7 +2168,7 @@ console.log(this.currObj)
   }
 
   submitschedule() {
-    debugger
+   // debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 console.log(this.scheduleData.scheduleData)
