@@ -1106,24 +1106,25 @@ console.log(this.scheduleData.scheduleData)
 
   }
   getLinkType(projectId: string): string {
-    return projectId == this.projecthubservice.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
+    return projectId == this.id ? 'mat_solid:link' : 'heroicons_outline:link'
   }
 
   getlinkname(uid: string): string {
+    //debugger
     var linkItemList = this.scheduleData.links.filter(x => x.linkItemId == uid)
     var returnString = ''
-    if (linkItemList.some(x => x.parentProjectId == this.projecthubservice.projectid)) {
-      var childProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projecthubservice.projectid).childProjectId)
+    if (linkItemList.some(x => x.parentProjectId == this.id)) {
+      var childProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.id).childProjectId)
       if (childProject != null) {
       returnString = returnString + "This milestone is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
     }
   }
-    if(linkItemList.some(x => x.childProjectId == this.projecthubservice.projectid)){
+    if(linkItemList.some(x => x.childProjectId == this.id)){
       var projectName = ''
-      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projecthubservice.projectid)){
+      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.id)){
         var parentProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
         if (parentProject != null) {
-        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        projectName = projectName == '' ? projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
      
        } }
       if(returnString != ''){
