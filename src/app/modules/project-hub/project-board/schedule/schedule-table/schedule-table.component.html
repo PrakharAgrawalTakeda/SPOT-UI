@@ -17,9 +17,9 @@
     </ngx-datatable-column>
     <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="5.5">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
-            <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong>
-          <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
+            <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
+            <!-- <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong>
+          <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
         </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="0.9">
