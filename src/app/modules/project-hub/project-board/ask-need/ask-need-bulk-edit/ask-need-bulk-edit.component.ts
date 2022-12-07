@@ -72,7 +72,7 @@ export class AskNeedBulkEditComponent implements OnInit {
         this.linksProblemCapture = res.linksProblemCapture
         if (res.askNeedData.length > 0) {
           for (var i of res.askNeedData) {
-            i.includeInReport = i.projectId == this.projectHubService.projectid? i.includeInReport: this.links.find(t=>t.linkItemId == i.askNeedUniqueId).includeInReport
+            i.includeInReport = i.projectId == this.projectHubService.projectid ? i.includeInReport : this.links.find(t => t.linkItemId == i.askNeedUniqueId).includeInReport
             this.dbAskNeeds.push({
               askNeedUniqueId: i.askNeedUniqueId,
               projectId: i.projectId,
@@ -90,7 +90,7 @@ export class AskNeedBulkEditComponent implements OnInit {
           }
           this.dbAskNeeds = this.sortByNeedByDate(this.dbAskNeeds)
         }
-       this.changeaskneed(this.projectHubService.includeClosedItems.askNeed.value)
+        this.changeaskneed(this.projectHubService.includeClosedItems.askNeed.value)
         this.tableData = this.sortByNeedByDate(this.tableData)
         console.log(this.tableData)
         this.tableData.length > 0 ? this.formIntializer() : ''
@@ -123,7 +123,7 @@ export class AskNeedBulkEditComponent implements OnInit {
         comments: new FormControl(x.comments),
         logDate: new FormControl(x.logDate),
         closeDate: new FormControl(x.closeDate),
-        includeInReport: new FormControl(x.projectId == this.projectHubService.projectid? x.includeInReport: this.links.find(t=>t.linkItemId == x.askNeedUniqueId).includeInReport),
+        includeInReport: new FormControl(x.projectId == this.projectHubService.projectid ? x.includeInReport : this.links.find(t => t.linkItemId == x.askNeedUniqueId).includeInReport),
         indicator: new FormControl(x.indicator)
       }))
     }
@@ -226,20 +226,27 @@ export class AskNeedBulkEditComponent implements OnInit {
   islink(uid: string): boolean {
     return this.links.some(x => x.linkItemId == uid)
   }
+  getLinkType(projectId: string): string {
+    return projectId == this.projectHubService.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
+  }
   getlinkname(uid: string): string {
     var linkItemList = this.links.filter(x => x.linkItemId == uid)
     var returnString = ''
     if (linkItemList.some(x => x.parentProjectId == this.projectHubService.projectid)) {
       var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectHubService.projectid).childProjectId)
-      returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
-    }
-    if(linkItemList.some(x => x.childProjectId == this.projectHubService.projectid)){
-      var projectName = ''
-      for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectHubService.projectid)){
-        var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-        projectName = projectName == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+      if (childProject != null) {
+        returnString = returnString + "This ask/need is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
       }
-      if(returnString != ''){
+    }
+    if (linkItemList.some(x => x.childProjectId == this.projectHubService.projectid)) {
+      var projectName = ''
+      for (var linkItem of linkItemList.filter(x => x.childProjectId == this.projectHubService.projectid)) {
+        var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+        if (parentProject != null) {
+          projectName = projectName == '' ? projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle : projectName += " , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+        }
+      }
+      if (returnString != '') {
         returnString = returnString + '\n'
       }
       returnString = returnString + "A link to this ask/need has been created in project(s): " + projectName

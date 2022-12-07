@@ -70,7 +70,7 @@
 
 
     <div class="mt-3 pl-3 h-[78vh] overflow-hidden" #target id="scheduleTableDiv">
-      <ngx-datatable class="datatable-schedule-74 material font-medium text-sm text-secondary whitespace-nowrap"
+      <ngx-datatable class="datatable-schedule-74 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
         [scrollbarV]="false" [rowClass]="getRowClass">
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3">
@@ -81,7 +81,7 @@
             &nbsp;
             &nbsp;
             <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
-              svgIcon="heroicons_outline:link"></mat-icon>
+            svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
           </ng-template>
         </ngx-datatable-column>
 
@@ -217,7 +217,7 @@
 
             <div class="flex items-center justify-start gap-6">
               <a href="javascript:void(0)" title="Delete" (click)="deleteSchedule(row.scheduleUniqueId, row, rowIndex)"
-                *ngIf="row.milestoneType?!row.milestoneType >=1:true">
+                *ngIf="(row.milestoneType?!row.milestoneType >=1:true && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)">
                 <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
               </a>
             </div>

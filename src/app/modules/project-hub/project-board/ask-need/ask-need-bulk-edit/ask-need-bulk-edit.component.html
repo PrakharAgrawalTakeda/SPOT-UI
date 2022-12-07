@@ -35,7 +35,7 @@
                         &nbsp;
                         &nbsp;
                         <mat-icon [matTooltip]="getlinkname(row.askNeedUniqueId)" *ngIf="islink(row.askNeedUniqueId)"
-                            svgIcon="heroicons_outline:link"></mat-icon>
+                            svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Ask Or Need" prop="askNeed1" [flexGrow]="1" [resizeable]="false"
