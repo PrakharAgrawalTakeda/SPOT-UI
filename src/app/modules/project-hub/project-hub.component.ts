@@ -213,7 +213,7 @@ export class ProjectHubComponent implements OnInit {
             if (percentage < this.lowerTargetPercentage) {
                 return "red";
             }
-            if (this.targetPercentage > percentage && percentage > this.lowerTargetPercentage) {
+            if (this.targetPercentage > percentage && percentage >= this.lowerTargetPercentage) {
                 return "orange";
             }
             if (this.targetPercentage < percentage) {
