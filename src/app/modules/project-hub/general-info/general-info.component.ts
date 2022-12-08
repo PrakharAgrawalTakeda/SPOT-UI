@@ -47,7 +47,8 @@ export class GeneralInfoComponent implements OnInit {
     campaignPhaseId: new FormControl(''),
     campaignTypeId: new FormControl(''),
     isQualityRef: new FormControl(false),
-    isArchived: new FormControl(false)
+    isArchived: new FormControl(false),
+    owningOrganization: new FormControl(''),
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -107,7 +108,8 @@ export class GeneralInfoComponent implements OnInit {
             campaignPhaseId: res.projectData.campaignPhaseId,
             campaignTypeId: res.projectData.campaignTypeId,
             isQualityRef: res.qualityReferences.length != 0,
-            isArchived: res.projectData.isArchived
+            isArchived: res.projectData.isArchived,
+            owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
           })
           this.viewContent = true
         })
@@ -137,6 +139,9 @@ export class GeneralInfoComponent implements OnInit {
   }
   getQRType(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
+  }
+  getOwningOrganization(): any {
+      return this.generalInfoData.defaultOwningOrganizations;
   }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''

@@ -299,11 +299,19 @@
                                 [dataLabels]="{ enabled: false}"
                                 [xaxis]="{ labels:{ show:false} }"
                                 [yaxis]="{ labels:{ show:false}, max: row.totalMilestone ?  row.totalMilestone : row.targetToComplete }"
+                                [tooltip]="{
+                                    x: {
+                                        show:false
+                                    },
+                                    y:{
+                                        formatter: tootlipFormatter
+                                    }
+                                }"
                                 [plotOptions]="{
                                     bar: {
                                         horizontal: true
-                                    }
-                                }"
+                                        }
+                                        }"
                             ></apx-chart>
                         </ng-template>
                     </ngx-datatable-column>

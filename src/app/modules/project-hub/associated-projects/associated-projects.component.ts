@@ -5,7 +5,6 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
-import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { MsalService } from '@azure/msal-angular';
 @Component({
     selector: 'app-associated-projects',
@@ -70,6 +69,7 @@ export class AssociatedProjectsComponent implements OnInit {
             this.projecthubservice.projects = projects;
             this.rows = this.projecthubservice.projects;
         });
+
         this.viewContent = true;
     }
     getHeaderClass(): any {
@@ -149,6 +149,9 @@ export class AssociatedProjectsComponent implements OnInit {
             }
         })
     }
+    tootlipFormatter(value, series) {
+        return value.toString();
+    }
 }
 function percentTickFormatting(val: any) {
     return val.toLocaleString() + '%';
@@ -163,3 +166,4 @@ function formatDate(date) {
 function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
 }
+

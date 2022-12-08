@@ -45,6 +45,12 @@
           [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
         </spot-multiselect-autocomplete>
       </div>
+      <div class="flex justify-between items-start gap-6">
+          <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization" [label]="'Owning Organization'" [showHint]="true"
+                      [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+          </spot-input>
+          <div class="w-full"></div>
+        </div>
       <div class="flex justify-between items-center gap-6">
         <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
           [label]="'Environmental Portfolio'" [showHint]="true"

@@ -201,7 +201,7 @@ export class ProjectHubComponent implements OnInit {
         return className;
     }
     getColor(percentage: number) {
-        if(this.portfolioDetails.phase == "Initiate"){
+        if(this.portfolioDetails.phase == "Initiate" || this.portfolioDetails.projStatus == 'Cancelled' || this.portfolioDetails.projStatus == 'Hold'){
             this.dataQualityPercentageString = "N/A";
             return '#808080';
         }else{
@@ -213,7 +213,7 @@ export class ProjectHubComponent implements OnInit {
             if (percentage < this.lowerTargetPercentage) {
                 return "red";
             }
-            if (this.targetPercentage > percentage && percentage > this.lowerTargetPercentage) {
+            if (this.targetPercentage > percentage && percentage >= this.lowerTargetPercentage) {
                 return "orange";
             }
             if (this.targetPercentage < percentage) {

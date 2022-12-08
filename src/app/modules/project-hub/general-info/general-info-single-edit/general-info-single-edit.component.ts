@@ -13,6 +13,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   filterCriteria: any = {}
   generalInfo: any = {}
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
+  owningOrganizationValues = []
   viewContent = false
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
@@ -26,7 +27,8 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     excecutionScope: new FormControl([]),
     enviornmentalPortfolio: new FormControl({}),
     isArchived: new FormControl(false),
-    isCapsProject: new FormControl(false)
+    isCapsProject: new FormControl(false),
+    owningOrganization: new FormControl('')
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -37,6 +39,11 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         this.projectHubService.isFormChanged = true
       }
     })
+    if(!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner){
+        this.generalInfoForm.controls.owningOrganization.disable()
+    }else{
+        this.generalInfoForm.controls.owningOrganization.enable()
+    }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res=>{
       if(this.viewContent){
         if(res == 'Standard Project / Program'){
@@ -67,9 +74,12 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         excecutionScope: res.excecutionScope ? res.excecutionScope : [],
         enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
         isArchived: res.projectData.isArchived,
-        isCapsProject: res.projectData.isCapsProject
-      })
+        isCapsProject: res.projectData.isCapsProject,
+        owningOrganization: res.projectData.defaultOwningOrganizationId,
+      });
+      this.owningOrganizationValues= res.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner  ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true
     })
   }
@@ -140,6 +150,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
+    mainObj.defaultOwningOrganizationId = formValue.owningOrganization
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)
