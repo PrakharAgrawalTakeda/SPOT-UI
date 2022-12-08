@@ -290,7 +290,7 @@
     <div class="overflow-x-auto">
       <div class="mt-3 h-[85vh] overflow-hidden">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-          class="pl-3 datatable-bl-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+          class="pl-3 datatable-bl-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
           [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
 
           <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
@@ -314,7 +314,7 @@
           <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
               <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
-                <a (click)="baselineLogDetails(row.baselineLogId)">{{value}}</a>
+                <a (click)="baselineLogDetails(row.baselineLogId)" class="cursor-pointer">{{value}}</a>
               </div>
               <div *ngIf="!checklogDetails(row.baselineLogId) || value == '1'" class="logID1">
                 <a>{{value}}</a>
