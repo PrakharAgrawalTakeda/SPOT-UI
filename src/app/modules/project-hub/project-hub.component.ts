@@ -201,7 +201,7 @@ export class ProjectHubComponent implements OnInit {
         return className;
     }
     getColor(percentage: number) {
-        if(this.portfolioDetails.phase == "Initiate"){
+        if(this.portfolioDetails.phase == "Initiate" || this.portfolioDetails.projStatus == 'Cancelled' || this.portfolioDetails.projStatus == 'Hold'){
             this.dataQualityPercentageString = "N/A";
             return '#808080';
         }else{
