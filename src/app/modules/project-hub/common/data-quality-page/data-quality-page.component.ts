@@ -87,7 +87,7 @@ export class DataQualityPageComponent implements OnInit {
             this.rows = res.rows;
             this.spotId = res.spotId!=0 ? res.spotId : this.projecthubservice.currentSpotId;
             this.projectName = res.projectName;
-            if (res.phase == 'Initiate') {
+            if (res.phase == 'Initiate' || res.state == 'Cancelled' || res.state == 'Hold') {
                 this.dataQualityPercentage =null;
                 this.dataQualityPercentageString = 'N/A';
             } else {
