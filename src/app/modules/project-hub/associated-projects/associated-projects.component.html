@@ -290,6 +290,12 @@
                                                         value: row.targetToComplete,
                                                         strokeWidth: 5,
                                                         strokeColor: '#775DD0'
+                                                    },
+                                                    {
+                                                        name: 'Total',
+                                                        value: row.totalMilestone,
+                                                        strokeWidth: 5,
+                                                        strokeColor: 'rgba(255,255,255,0)'
                                                     }
                                                 ]
                                             }
@@ -297,8 +303,8 @@
                                     }
                                 ]"
                                 [dataLabels]="{ enabled: false}"
-                                [xaxis]="{ labels:{ show:false} }"
-                                [yaxis]="{ labels:{ show:false}, max: row.totalMilestone ?  row.totalMilestone : row.targetToComplete }"
+                                [xaxis]="{ labels:{ show:false}, max: row.totalMilestone ?  row.totalMilestone : row.targetToComplete }"
+                                [yaxis]="{ labels:{ show:true}}"
                                 [tooltip]="{
                                     x: {
                                         show:false
