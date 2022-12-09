@@ -3,7 +3,7 @@
                [sorts]="[{ prop: 'needByDate', dir: 'asc' }]" #riskIssueTable [rowClass]="getRowClass" [selected]="selected"
                [selectionType]="SelectionType.checkbox" [selectAllRowsOnPage]="false" (activate)="onActivate($event)"
                (select)="onSelect($event)">
-    <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="mode == 'Normal'?0.5:0.7" [resizeable]="false"
+    <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="1" [resizeable]="false"
                           [sortable]="false" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
@@ -15,37 +15,76 @@
                       svgIcon="heroicons_outline:link"></mat-icon>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Ask Or Need" prop="riskIssue1" [flexGrow]="5" [resizeable]="false"
+    <ngx-datatable-column name="Risk / Issue" prop="riskIssueTypeId" [flexGrow]="0.7" [resizeable]="false"
                           [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
+            <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
+               [ngClass]="{'closed': row.closeDate != null}">Risk</p>
+            <p *ngIf="value == '2d9dbd40-14ec-47b3-badd-c5a63eb3dbd5'"
+               [ngClass]="{'closed': row.closeDate != null}">Issue</p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Need From" prop="needFromName" [flexGrow]="2" [resizeable]="false"
-                          [sortable]="mode == 'Normal'" [draggable]="false">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
-        </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Need Date" prop="needByDate" [flexGrow]="1" [resizeable]="false"
+    <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1" [resizeable]="false"
                           [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column *ngIf="mode == 'Link'" name="Comments" prop="comments" [flexGrow]="2" [resizeable]="false"
+    <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="2" [resizeable]="false"
                           [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column *ngIf="mode == 'Link'" name="Close Date" prop="closeDate" [flexGrow]="1" [resizeable]="false"
+    <ngx-datatable-column name="Probability" prop="probabilityId" [flexGrow]="1.3" [resizeable]="false"
+                          [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value)}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="This is the result" prop="riskIssueResult" [flexGrow]="2" [resizeable]="false"
+                          [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value }}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Impact" prop="impactId" [flexGrow]="1" [resizeable]="false"
+                          [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value) }}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="2" [resizeable]="false"
+                          [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value }}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Owner" prop="ownerName" [flexGrow]="1" [resizeable]="false"
+                          [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value }}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Function Owner" prop="functionGroup" [flexGrow]="1" [resizeable]="false"
+                          [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value }}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" [resizeable]="false"
                           [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column [flexGrow]="0.5" *ngIf="mode == 'Link'" [sortable]="false" [canAutoResize]="false"
+    <ngx-datatable-column name="Close Date" prop="closeDate" [flexGrow]="1" [resizeable]="false"
+                          [sortable]="mode == 'Normal'" [draggable]="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column [flexGrow]="0.5"  [sortable]="false" [canAutoResize]="false"
                           [draggable]="false" [resizeable]="false">
         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
                      let-selectFn="selectFn">

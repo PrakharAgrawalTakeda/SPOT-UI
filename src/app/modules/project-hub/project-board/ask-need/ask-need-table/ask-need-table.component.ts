@@ -34,7 +34,6 @@ export class AskNeedTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.tableData)
     if (this.mode == 'Link') {
       this.dataloaderLink()
     }

@@ -4,6 +4,7 @@ import {ProjectApiService} from "../../../common/project-api.service";
 import {SpotlightIndicatorsService} from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import { SelectionType } from '@swimlane/ngx-datatable';
+import {AuthService} from "../../../../../core/auth/auth.service";
 
 @Component({
   selector: 'app-risk-issue-table',
@@ -11,7 +12,6 @@ import { SelectionType } from '@swimlane/ngx-datatable';
   styleUrls: ['./risk-issue-table.component.scss']
 })
 export class RiskIssueTableComponent implements OnInit {
-
     @Input() tableData: any = []
     @Input() riskIssueData: any = []
     @Input() projectId: string = ''
@@ -21,6 +21,7 @@ export class RiskIssueTableComponent implements OnInit {
     @Input() linksProblemCapture: any = []
     @Input() tableIndex: number = 0
     @Output() toggleChange = new EventEmitter();
+    lookupdata: any = []
     selected = [];
     SelectionType = SelectionType;
     getRowClass = (row) => {
@@ -29,18 +30,26 @@ export class RiskIssueTableComponent implements OnInit {
         };
     };
     @ViewChild('riskIssueTable') table: any;
-    constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService
+    constructor(public projectHubService: ProjectHubService,public auth: AuthService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService
         , public fuseAlert: FuseConfirmationService) {
 
     }
 
     ngOnInit(): void {
-        console.log(this.tableData)
         if (this.mode == 'Link') {
-            this.dataloaderLink()
+            this.getllookup()
         }
     }
+    getllookup() {
+        this.auth.lookupMaster().then((resp: any) => {
+            this.lookupdata = resp
+            this.dataloaderLink()
+        })
+    }
     dataloaderLink() {
+        if(!this.links){
+            this.links= [];
+        }
         var temp = []
         for (var item of this.links) {
             if (item.parentProjectId == this.parentProjectId && item.childProjectId == this.projectId) {
@@ -56,6 +65,9 @@ export class RiskIssueTableComponent implements OnInit {
         }
     }
     islink(uid: string): boolean {
+        if(!this.links){
+            this.links= [];
+        }
         return this.links.some(x => x.linkItemId == uid)
     }
     // getlinkname2(uid: string): string {
@@ -121,7 +133,6 @@ export class RiskIssueTableComponent implements OnInit {
         })
     }
     onSelect({ selected }) {
-        console.log('Select Event', selected, this.selected);
         this.selected.splice(0, this.selected.length);
         this.selected.push(...selected);
         this.toggleChange.emit({
@@ -137,5 +148,8 @@ export class RiskIssueTableComponent implements OnInit {
 
     toggleExpandRow(row) {
         this.table.rowDetail.toggleExpandRow(row);
+    }
+    getLookUpName(id: string): string {
+        return id && id != '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == id).lookUpName : ''
     }
 }
