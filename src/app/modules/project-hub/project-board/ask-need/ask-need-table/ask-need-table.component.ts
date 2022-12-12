@@ -110,6 +110,7 @@ export class AskNeedTableComponent implements OnInit {
       if (close == 'confirmed') {
         this.apiService.deleteAskNeed(this.projectId, id).then(res => {
           this.projectHubService.submitbutton.next(true)
+          this.projectHubService.isNavChanged.next(true)
         })
       }
     })
