@@ -78,7 +78,11 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   islink(uid: string): boolean {
     return this.projectViewDetails.links.some(x => x.linkItemId == uid)
   }
-    getlinkname(uid: string): string {
+
+  getLinkType(projectId: string): string {
+    return projectId == this.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
+  }
+/*     getlinkname2(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
     if (temp) {
@@ -89,8 +93,32 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     if(temp){
       return "A link to this risk/issue has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     }
+  } */
 
-  }
+  getlinkname(uid: string): string {
+    var linkItemList = this.projectViewDetails.links.filter(x => x.linkItemId == uid)
+    var returnString = ''
+    if (linkItemList.some(x => x.parentProjectId == this.projectid)) {
+        var childProject = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectid).childProjectId)
+        if (childProject != null) {
+            returnString = returnString + "This risk/issue is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+        }
+    }
+    if (linkItemList.some(x => x.childProjectId == this.projectid)) {
+        var projectName = ''
+        for (var linkItem of linkItemList.filter(x => x.childProjectId == this.projectid)) {
+            var parentProject = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+            if (parentProject != null) {
+                projectName = projectName == '' ? projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle : projectName += " , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+            }
+        }
+        if (returnString != '') {
+            returnString = returnString + '\n'
+        }
+        returnString = returnString + "A link to this risk/issue has been created in project(s): " + projectName
+    }
+    return returnString
+}
   toggleRiskIssue(event: any) {
     this.projecthubservice.includeClosedItems.riskIssue.next(event.checked)
   }

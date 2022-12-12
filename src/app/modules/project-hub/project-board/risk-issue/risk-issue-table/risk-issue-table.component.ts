@@ -1,15 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {ProjectHubService} from "../../../project-hub.service";
-import {ProjectApiService} from "../../../common/project-api.service";
-import {SpotlightIndicatorsService} from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ProjectHubService } from "../../../project-hub.service";
+import { ProjectApiService } from "../../../common/project-api.service";
+import { SpotlightIndicatorsService } from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../../@fuse/services/confirmation";
 import { SelectionType } from '@swimlane/ngx-datatable';
-import {AuthService} from "../../../../../core/auth/auth.service";
+import { AuthService } from "../../../../../core/auth/auth.service";
 
 @Component({
-  selector: 'app-risk-issue-table',
-  templateUrl: './risk-issue-table.component.html',
-  styleUrls: ['./risk-issue-table.component.scss']
+    selector: 'app-risk-issue-table',
+    templateUrl: './risk-issue-table.component.html',
+    styleUrls: ['./risk-issue-table.component.scss']
 })
 export class RiskIssueTableComponent implements OnInit {
     @Input() tableData: any = []
@@ -30,7 +30,7 @@ export class RiskIssueTableComponent implements OnInit {
         };
     };
     @ViewChild('riskIssueTable') table: any;
-    constructor(public projectHubService: ProjectHubService,public auth: AuthService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService
+    constructor(public projectHubService: ProjectHubService, public auth: AuthService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService
         , public fuseAlert: FuseConfirmationService) {
 
     }
@@ -47,8 +47,8 @@ export class RiskIssueTableComponent implements OnInit {
         })
     }
     dataloaderLink() {
-        if(!this.links){
-            this.links= [];
+        if (!this.links) {
+            this.links = [];
         }
         var temp = []
         for (var item of this.links) {
@@ -65,8 +65,8 @@ export class RiskIssueTableComponent implements OnInit {
         }
     }
     islink(uid: string): boolean {
-        if(!this.links){
-            this.links= [];
+        if (!this.links) {
+            this.links = [];
         }
         return this.links.some(x => x.linkItemId == uid)
     }
@@ -81,20 +81,27 @@ export class RiskIssueTableComponent implements OnInit {
     //         return "A link to this risk/issue has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
     //     }
     // }
+    getLinkType(projectId: string): string {
+        return projectId == this.projectId ? 'mat_solid:link' : 'heroicons_outline:link'
+      }
     getlinkname(uid: string): string {
         var linkItemList = this.links.filter(x => x.linkItemId == uid)
         var returnString = ''
         if (linkItemList.some(x => x.parentProjectId == this.projectId)) {
             var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectId).childProjectId)
-            returnString = returnString + "This risk/issue is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
-        }
-        if(linkItemList.some(x => x.childProjectId == this.projectId)){
-            var projectName = ''
-            for(var linkItem of linkItemList.filter(x=>x.childProjectId == this.projectId)){
-                var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
-                projectName = parentProject == ''?projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+            if (childProject != null) {
+                returnString = returnString + "This risk/issue is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
             }
-            if(returnString != ''){
+        }
+        if (linkItemList.some(x => x.childProjectId == this.projectId)) {
+            var projectName = ''
+            for (var linkItem of linkItemList.filter(x => x.childProjectId == this.projectId)) {
+                var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+                if (parentProject != null) {
+                    projectName = projectName == '' ? projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle : projectName += " , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+                }
+            }
+            if (returnString != '') {
                 returnString = returnString + '\n'
             }
             returnString = returnString + "A link to this risk/issue has been created in project(s): " + projectName
