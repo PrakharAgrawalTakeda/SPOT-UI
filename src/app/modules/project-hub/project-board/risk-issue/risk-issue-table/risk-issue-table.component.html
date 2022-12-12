@@ -11,7 +11,7 @@
             </mat-icon>
             &nbsp;
             &nbsp;
-            <mat-icon [matTooltip]="getlinkname(row.riskIssueUniqueId)" *ngIf="islink(row.riskIssueUniqueId)"
+            <mat-icon [matTooltip]="getlinkname(row.riskIssueUniqueId)" *ngIf="islink(row.riskIssueUniqueId) && mode == 'Normal'"
                       svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
         </ng-template>
     </ngx-datatable-column>
