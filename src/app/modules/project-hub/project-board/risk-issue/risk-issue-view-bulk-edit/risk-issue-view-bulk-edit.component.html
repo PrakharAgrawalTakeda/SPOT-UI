@@ -33,8 +33,8 @@
                         </mat-icon>
                         &nbsp;
                         &nbsp;
-                        <mat-icon [matTooltip]="getlinkname(row.askNeedUniqueId)" *ngIf="islink(row.askNeedUniqueId)"
-                                  svgIcon="heroicons_outline:link"></mat-icon>
+                        <mat-icon [matTooltip]="getlinkname(row.riskIssueUniqueId)" *ngIf="islink(row.riskIssueUniqueId)"
+                                  svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Type" prop="riskIssueTypeId" [width]="100" [resizeable]="false"
