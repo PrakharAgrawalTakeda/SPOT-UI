@@ -192,6 +192,7 @@ export class ScheduleViewEditComponent implements OnInit {
         this.apiService.addSchedule(mainObjnew).then(() => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
         })
       }
       else {
@@ -244,6 +245,7 @@ export class ScheduleViewEditComponent implements OnInit {
         this.apiService.editSchedule(this.projecthubservice.projectid,mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
         })
       }
     }

@@ -337,7 +337,7 @@ export class RiskIssueViewEditComponent implements OnInit {
 
         console.log("final object")
         console.log(mainObj)
-        this.apiService.editRiskIssue(mainObj).then(res => {
+        this.apiService.editRiskIssue(this.projecthubservice.projectid,mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)

@@ -15,19 +15,13 @@
                       svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Risk / Issue" prop="riskIssueTypeId" [flexGrow]="0.7" [resizeable]="false"
+    <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="0.7" [resizeable]="false"
                           [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
                [ngClass]="{'closed': row.closeDate != null}">Risk</p>
             <p *ngIf="value == '2d9dbd40-14ec-47b3-badd-c5a63eb3dbd5'"
                [ngClass]="{'closed': row.closeDate != null}">Issue</p>
-        </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1" [resizeable]="false"
-                          [sortable]="mode == 'Normal'" [draggable]="false">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
         </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="2" [resizeable]="false"
@@ -61,12 +55,6 @@
         </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column name="Owner" prop="ownerName" [flexGrow]="1" [resizeable]="false"
-                          [sortable]="mode == 'Normal'" [draggable]="false">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <p [ngClass]="{'closed': row.closeDate != null}">{{value }}</p>
-        </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Function Owner" prop="functionGroup" [flexGrow]="1" [resizeable]="false"
                           [sortable]="mode == 'Normal'" [draggable]="false">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p [ngClass]="{'closed': row.closeDate != null}">{{value }}</p>

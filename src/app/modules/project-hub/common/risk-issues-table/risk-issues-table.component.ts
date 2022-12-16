@@ -148,7 +148,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
 
     riskIssueAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.deleteRiskIssue(id).then(res => {
+        this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)
         })

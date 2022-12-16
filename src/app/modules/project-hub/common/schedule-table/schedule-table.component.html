@@ -2,30 +2,26 @@
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Schedule</div>
     <div class="text-primary">
         <div class="flex items-start justify-between">
-            <div style="padding-right: 0px">
-                <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && projecthubservice.hasChildren"
+            <div>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && projecthubservice.hasChildren"
                     (click)=" projecthubservice.toggleDrawerOpen('LinkMilestones', 'new', [], projectid, true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <!-- <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon> -->
                     <mat-icon svgIcon="heroicons_solid:link"></mat-icon>&nbsp; Link Milestones
                 </button>
-            </div>
-            <div style="padding-right: 5px">
-                <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable"
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
-            </div>
-            <div style="padding-right: 5px;">
-                <button class="min-w-26 ml-4 text-primary bg-gray-200" *ngIf="editable" mat-flat-button [color]="'primary-200'"
+                <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('Schedule', 'new', [], projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
-            <div style="padding-right: 5px;">
+            <div >
                 <form [formGroup]="localIncludedItems">
                 <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
                 (checked)="projecthubservice.includeClosedItems.schedule.value" (change)="toggleSchedule($event)">
@@ -113,20 +109,20 @@
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
                     </a>
-                    <a href="javascript:void(0)" title="Delete Single" *ngIf="(row.milestoneType?!row.milestoneType >=1:true && editable && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)"                  
+                    <a href="javascript:void(0)" title="Delete Single" *ngIf="(row.milestoneType?!row.milestoneType >=1:true && editable && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)"
                         (click)="deleteSchedule(row.scheduleUniqueId)">
                         <!-- && " -->
                         <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                     </a>
                         <!-- <ng-template #null *ngIf="(editable && islink(row.scheduleUniqueId))" >
-                            <a href="javascript:void(0)" title="Delete Single"                  
+                            <a href="javascript:void(0)" title="Delete Single"
                         (click)="deleteSchedule(row.scheduleUniqueId)">
-                      
+
                         <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                     </a>
                         </ng-template> -->
-                   
-                    
+
+
                 </div>
             </ng-template>
         </ngx-datatable-column>

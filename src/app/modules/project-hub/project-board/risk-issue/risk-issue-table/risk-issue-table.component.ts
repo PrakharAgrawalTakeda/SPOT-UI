@@ -133,7 +133,7 @@ export class RiskIssueTableComponent implements OnInit {
         const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
         riskIssueAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                this.apiService.deleteRiskIssue(this.projectId).then(res => {
+                this.apiService.deleteRiskIssue(this.projectId, id).then(res => {
                     this.projectHubService.submitbutton.next(true)
                 })
             }
