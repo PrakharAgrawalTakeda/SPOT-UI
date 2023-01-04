@@ -7,6 +7,7 @@ import { AuthService } from '../../../../../core/auth/auth.service'
 import * as moment from 'moment';
 import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../../common/project-api.service';
+import {ActivatedRoute} from "@angular/router";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -44,7 +45,8 @@ export class RiskIssueViewEditComponent implements OnInit {
   today = new Date();
   item: any = {}
   functionSets: any = []
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService,private _elementRef: ElementRef) {
+  id: string = ''
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService,private _elementRef: ElementRef) {
 
     this.functionSets = this.riskIssueForm.controls['function'].valueChanges.pipe(
       startWith(''),
@@ -96,7 +98,8 @@ export class RiskIssueViewEditComponent implements OnInit {
     postMitigationComments: new FormControl('')
   })
   ngOnInit(): void {
-    this.getllookup()
+    this.getllookup();
+
     //this.dataloader()
   }
 
@@ -175,6 +178,7 @@ export class RiskIssueViewEditComponent implements OnInit {
   }
 
   getllookup() {
+    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.dataloader()
@@ -337,7 +341,7 @@ export class RiskIssueViewEditComponent implements OnInit {
 
         console.log("final object")
         console.log(mainObj)
-        this.apiService.editRiskIssue(this.projecthubservice.projectid,mainObj).then(res => {
+        this.apiService.editRiskIssue(this.id,mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)
