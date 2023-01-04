@@ -39,19 +39,19 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         this.projectHubService.isFormChanged = true
       }
     })
-    if(!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner){
-        this.generalInfoForm.controls.owningOrganization.disable()
-    }else{
-        this.generalInfoForm.controls.owningOrganization.enable()
+    if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
+      this.generalInfoForm.controls.owningOrganization.disable()
+    } else {
+      this.generalInfoForm.controls.owningOrganization.enable()
     }
-    this.generalInfoForm.controls.problemType.valueChanges.subscribe(res=>{
-      if(this.viewContent){
-        if(res == 'Standard Project / Program'){
-          if(!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner){
+    this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == 'Standard Project / Program') {
+          if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
             this.generalInfoForm.controls.portfolioOwner.disable()
           }
         }
-        else{
+        else {
           this.generalInfoForm.controls.portfolioOwner.enable()
         }
       }
@@ -77,9 +77,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         isCapsProject: res.projectData.isCapsProject,
         owningOrganization: res.projectData.defaultOwningOrganizationId,
       });
-      this.owningOrganizationValues= res.defaultOwningOrganizations
+      this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner  ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true
     })
   }
