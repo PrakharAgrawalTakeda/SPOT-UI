@@ -30,6 +30,7 @@ export class RiskIssuesLinkComponent implements OnInit {
         this.linkDBData = []
         this.linkedRiskIssues = []
         this.apiService.riskIssueGetLinkData(this.projectHubService.projectid).then(res => {
+            console.log("Link Data:", res)
             this.linkDBData = [...this.sortByLevel(res)]
             if (!this.projectHubService.includeClosedItems.riskIssue.value) {
                 this.linkData = this.sortByLevel(this.filterClosedItems(res))
@@ -40,10 +41,12 @@ export class RiskIssuesLinkComponent implements OnInit {
             for (var i in this.linkData) {
                 this.linkedRiskIssues.push([])
             }
+            console.log("Linked RiskIssues", this.linkData, this.linkDBData)
             this.localIncludedItems.controls.toggle.patchValue(this.projectHubService.includeClosedItems.riskIssue.value)
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
+
     }
     toggleClosedItems($event) {
         if (this.viewContent) {
@@ -114,8 +117,8 @@ export class RiskIssuesLinkComponent implements OnInit {
                 projectName: item.projectName,
                 level: item.level,
                 riskIssues: item.riskIssues.length > 0 ? this.sortByNeedByDate(item.riskIssues.filter(x => x.closeDate == null)) : [],
-                riskIssueLink: item.riskIssueLink,
-                riskIssueLinkProjectDetails: item.riskIssueLinkProjectDetails
+                riskIssuesLink: item.riskIssuesLink,
+                riskIssuesLinkProjectDetails: item.riskIssuesLinkProjectDetails
             })
         }
         return returnObject
@@ -140,25 +143,26 @@ export class RiskIssuesLinkComponent implements OnInit {
     toggleRiskIssue(event: any) {
         this.linkedRiskIssues[event.tableIndex] = [...event.selected]
     }
-    submitANLink() {
+    submitRILink() {
         this.projectHubService.isFormChanged = false
         var mainObj: any = []
         for (var index in this.linkedRiskIssues) {
             if (this.linkedRiskIssues[index].length > 0) {
                 for (var item of this.linkedRiskIssues[index]) {
                     if (item != null) {
-                        if (this.linkDBData[index].riskIssueLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.riskIssueUniqueId)) {
-                            mainObj.push(this.linkDBData[index].riskIssueLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.riskIssueUniqueId))
+                        if (this.linkDBData[index].riskIssuesLink.some(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.riskIssueUniqueId)) {
+                            mainObj.push(this.linkDBData[index].riskIssuesLink.find(x => x.parentProjectId == this.projectHubService.projectid && x.linkItemId == item.riskIssueUniqueId))
                         }
                         else {
+
                             mainObj.push({
                                 "programHubLinkUniqueId": "",
                                 "parentProjectId": this.projectHubService.projectid,
                                 "childProjectId": item.projectId,
-                                "linkItemId": item.riskIsssueUniqueId,
+                                "linkItemId": item.riskIssueUniqueId,
                                 "scheduleLink": null,
-                                "riskIssueLink": null,
-                                "askNeedLink": true,
+                                "riskIssueLink": true,
+                                "askNeedLink": null,
                                 "includeInReport": false,
                                 "includeInCharter": null,
                                 "linkLevel": this.linkDBData[index].level + 1
@@ -167,11 +171,12 @@ export class RiskIssuesLinkComponent implements OnInit {
                     }
                 }
             }
+
             if (!this.projectHubService.includeClosedItems.riskIssue.value) {
-                var temp = this.linkDBData[index].riskIssueLink.filter(x => x.parentProjectId == this.projectHubService.projectid)
+                var temp = this.linkDBData[index].riskIssuesLink.filter(x => x.parentProjectId == this.projectHubService.projectid)
                 if (temp.length > 0) {
                     for (var i of temp) {
-                        if (this.linkDBData[index].riskIssues.find(x => x.riskIssueUniqueId == i.linkItemId).closeDate != null) {
+                        if (this.linkDBData[index].riskIssues.find(x => x.riskIssueUniqueId == i.linkItemId)?.closeDate != null) {
                             mainObj.push(i)
                         }
                     }

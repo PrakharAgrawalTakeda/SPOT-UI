@@ -28,8 +28,8 @@
                         </mat-expansion-panel-header>
 
                         <app-risk-issue-table [tableIndex]="i" [riskIssueData]="linkDatum.riskIssues"
-                                            [tableData]="linkDatum.riskIssues" [linksProblemCapture]="linkDatum.riskIssueLinkProjectDetails"
-                                            [links]="linkDatum.riskIssueLink" [mode]="'Link'" [projectId]="linkDatum.projectUId"
+                                            [tableData]="linkDatum.riskIssues" [linksProblemCapture]="linkDatum.riskIssuesLinkProjectDetails"
+                                            [links]="linkDatum.riskIssuesLink" [mode]="'Link'" [projectId]="linkDatum.projectUId"
                                             [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleRiskIssue($event)">
                         </app-risk-issue-table>
                     </mat-expansion-panel>
@@ -42,7 +42,7 @@
            (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
             Cancel
         </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitANLink()" type="button">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitRILink()" type="button">
             Submit
         </button>
     </div>

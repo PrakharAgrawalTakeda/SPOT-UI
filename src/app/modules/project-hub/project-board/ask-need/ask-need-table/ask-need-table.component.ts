@@ -34,7 +34,6 @@ export class AskNeedTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.tableData)
     if (this.mode == 'Link') {
       this.dataloaderLink()
     }
@@ -111,6 +110,7 @@ export class AskNeedTableComponent implements OnInit {
       if (close == 'confirmed') {
         this.apiService.deleteAskNeed(this.projectId, id).then(res => {
           this.projectHubService.submitbutton.next(true)
+          this.projectHubService.isNavChanged.next(true)
         })
       }
     })

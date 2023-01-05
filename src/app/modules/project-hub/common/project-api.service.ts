@@ -59,7 +59,7 @@ export class ProjectApiService {
     return response
   }
   async riskIssueGetLinkData(projectid: string){
-      var userid = GlobalVariables.apiurl+"AskNeed/GetAskNeedLinkData/"+projectid
+      var userid = GlobalVariables.apiurl+"RiskIssue/GetRiskIssuesLinkData/"+projectid
       const abc$ = this.http.get(userid)
       const response = await lastValueFrom(abc$)
       return response
@@ -118,9 +118,9 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async editRiskIssue(body){
-    var link = GlobalVariables.apiurl+"RiskIssue/" + body.riskIssueUniqueId
-    const abc$ = this.http.put(link,body)
+  async editRiskIssue(projectId: string,body){
+    var link = GlobalVariables.apiurl+"RiskIssue/"+projectId+"/" + body.riskIssueUniqueId
+    var abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
   }
@@ -167,8 +167,8 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async deleteRiskIssue(id: string){
-    var link = GlobalVariables.apiurl+"RiskIssue/"+id
+  async deleteRiskIssue(projectId:string, id: string){
+    var link = GlobalVariables.apiurl+"RiskIssue/"+projectId+"/"+id
     const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
@@ -326,7 +326,7 @@ export class ProjectApiService {
     return response
   }
   async bulkeditRiskIssueLinks(body,projectId){
-      var link = GlobalVariables.apiurl+"AskNeed/BulkEditAskNeedLinks/" + projectId
+      var link = GlobalVariables.apiurl+"RiskIssue/BulkEditRiskIssuesLinks/" + projectId
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response

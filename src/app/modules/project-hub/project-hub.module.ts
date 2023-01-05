@@ -97,6 +97,7 @@ import { RisIssueViewBulkEditComponent } from './project-board/risk-issue/risk-i
 import { SchedulesTableComponent } from './project-board/schedule/schedule-table/schedule-table.component';
 import { RiskIssuesLinkComponent } from './project-board/risk-issue/risk-issues-link/risk-issues-link.component';
 import { RiskIssueTableComponent } from './project-board/risk-issue/risk-issue-table/risk-issue-table.component';
+import { StrategicDriversComponent } from './general-info/strategic-drivers/strategic-drivers.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -252,7 +253,8 @@ export const projectRoutes: Route[] = [
     RisIssueViewBulkEditComponent,
     SchedulesTableComponent,
     RiskIssuesLinkComponent,
-    RiskIssueTableComponent
+    RiskIssueTableComponent,
+    StrategicDriversComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

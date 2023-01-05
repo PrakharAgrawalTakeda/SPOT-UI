@@ -365,16 +365,32 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }
     }
     getlinkname(uid: string): string {
-        let temp = this.links.find(x => x.linkItemId == uid)
-        temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
-        if (temp) {
-            return "This risk/Issue is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
+        var linkItemList = this.links.filter(x => x.linkItemId == uid)
+        var returnString = ''
+        if (linkItemList.some(x => x.parentProjectId == this.projectHubService.projectid)) {
+            var childProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItemList.find(x => x.parentProjectId == this.projectHubService.projectid).childProjectId)
+            if (childProject != null) {
+                returnString = returnString + "This risk/issue is sourced (linked) from " + childProject.problemId.toString() + " - " + childProject.problemTitle
+            }
         }
-        temp = this.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-        if (temp) {
-            return "A link to this risk/Issue has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
+        if (linkItemList.some(x => x.childProjectId == this.projectHubService.projectid)) {
+            var projectName = ''
+            for (var linkItem of linkItemList.filter(x => x.childProjectId == this.projectHubService.projectid)) {
+                var parentProject = this.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
+                if (parentProject != null) {
+                    projectName = projectName == '' ? projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle : projectName += " , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
+                }
+            }
+            if (returnString != '') {
+                returnString = returnString + '\n'
+            }
+            returnString = returnString + "A link to this risk/issue has been created in project(s): " + projectName
         }
+        return returnString
     }
+    getLinkType(projectId: string): string {
+        return projectId == this.projectHubService.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
+      }
     riTableEditRow(rowIndex) {
         if (!this.riTableEditStack.includes(rowIndex)) {
             this.riTableEditStack.push(rowIndex)
