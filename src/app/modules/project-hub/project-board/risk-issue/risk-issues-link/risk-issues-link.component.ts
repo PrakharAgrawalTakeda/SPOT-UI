@@ -141,9 +141,7 @@ export class RiskIssuesLinkComponent implements OnInit {
         }) : array
     }
     toggleRiskIssue(event: any) {
-        console.log("aaaaaaaaaaaaa",event.selected)
         this.linkedRiskIssues[event.tableIndex] = [...event.selected]
-        console.log("Linked Risk Issues", this.linkedRiskIssues)
     }
     submitRILink() {
         this.projectHubService.isFormChanged = false
@@ -178,7 +176,7 @@ export class RiskIssuesLinkComponent implements OnInit {
                 var temp = this.linkDBData[index].riskIssuesLink.filter(x => x.parentProjectId == this.projectHubService.projectid)
                 if (temp.length > 0) {
                     for (var i of temp) {
-                        if (this.linkDBData[index].riskIssues.find(x => x.riskIssueUniqueId == i.linkItemId).closeDate != null) {
+                        if (this.linkDBData[index].riskIssues.find(x => x.riskIssueUniqueId == i.linkItemId)?.closeDate != null) {
                             mainObj.push(i)
                         }
                     }

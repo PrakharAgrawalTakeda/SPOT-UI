@@ -23,6 +23,7 @@ export class RiskIssueTableComponent implements OnInit {
     @Output() toggleChange = new EventEmitter();
     lookupdata: any = []
     selected = [];
+    viewContent =false;
     SelectionType = SelectionType;
     getRowClass = (row) => {
         return {
@@ -44,6 +45,7 @@ export class RiskIssueTableComponent implements OnInit {
         this.auth.lookupMaster().then((resp: any) => {
             this.lookupdata = resp
             this.dataloaderLink()
+            this.viewContent = true
         })
     }
     dataloaderLink() {
