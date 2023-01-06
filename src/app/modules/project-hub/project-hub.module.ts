@@ -98,6 +98,8 @@ import { SchedulesTableComponent } from './project-board/schedule/schedule-table
 import { RiskIssuesLinkComponent } from './project-board/risk-issue/risk-issues-link/risk-issues-link.component';
 import { RiskIssueTableComponent } from './project-board/risk-issue/risk-issue-table/risk-issue-table.component';
 import { StrategicDriversComponent } from './general-info/strategic-drivers/strategic-drivers.component';
+import { PlanningTeamComponent } from './project-proposal/planning-team/planning-team.component';
+import { PlanningTeamBulkEditComponent } from './project-proposal/planning-team/planning-team-bulk-edit/planning-team-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -187,6 +189,11 @@ export const projectRoutes: Route[] = [
       path: 'close-out',
       component: CloseOutComponent,
       pathMatch: 'full'
+    },
+    {
+      path: 'planning-team',
+      component: PlanningTeamComponent,
+      pathMatch: 'full'
     }
 
     ]
@@ -254,7 +261,9 @@ export const projectRoutes: Route[] = [
     SchedulesTableComponent,
     RiskIssuesLinkComponent,
     RiskIssueTableComponent,
-    StrategicDriversComponent
+    StrategicDriversComponent,
+    PlanningTeamComponent,
+    PlanningTeamBulkEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
