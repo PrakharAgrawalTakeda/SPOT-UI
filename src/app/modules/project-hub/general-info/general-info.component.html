@@ -20,7 +20,8 @@
         <div class="flex justify-start gap-3 items-center">
           Is Archived?
           <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
-          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isArchived.value">
+          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+            *ngIf="generalInfoForm.controls.isArchived.value">
           </mat-icon>
 
         </div>
@@ -46,11 +47,12 @@
         </spot-multiselect-autocomplete>
       </div>
       <div class="flex justify-between items-start gap-6">
-          <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization" [label]="'Owning Organization'" [showHint]="true"
-                      [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
-          </spot-input>
-          <div class="w-full"></div>
-        </div>
+        <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization"
+          [label]="'Owning Organization'" [showHint]="true"
+          [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+        </spot-input>
+        <div class="w-full"></div>
+      </div>
       <div class="flex justify-between items-center gap-6">
         <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
           [label]="'Environmental Portfolio'" [showHint]="true"
@@ -66,7 +68,8 @@
 
           <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
           </mat-icon>
-          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isCapsProject.value">
+          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+            *ngIf="generalInfoForm.controls.isCapsProject.value">
           </mat-icon>
 
         </div>
@@ -108,7 +111,8 @@
             OE Project
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isOeproject.value">
             </mat-icon>
-            <mat-icon  class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isOeproject.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isOeproject.value">
             </mat-icon>
           </div>
           <div class="flex items-center">
@@ -138,7 +142,8 @@
             Tech Transfer
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isTechTransfer.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isTechTransfer.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isTechTransfer.value">
             </mat-icon>
           </div>
           <div class="flex items-center">
@@ -173,7 +178,8 @@
             Quality Reference #
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isQualityRef.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isQualityRef.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isQualityRef.value">
             </mat-icon>
           </div>
           <div class="flex justify-between items-center gap-3">
@@ -215,6 +221,100 @@
         </spot-input>
       </div>
     </div>
+
+    <div class="flex justify-between items-start gap-6">
+      <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center">
+          <div class="flex justify-start items-center gap-3">
+            Strategic Drivers
+          </div>
+          <div class="flex justify-between items-center gap-3">
+            <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+              *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
+              (click)="projectHubService.toggleDrawerOpen('StrategicDriversBulkEdit', 'new', [], id)">
+              <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-between items-center gap-6">
+          <spot-input class="w-full read-only" name="primaryKpi"
+          [label]="'Primary KPI'">
+        </spot-input>
+          <!-- <spot-singleselect-autocomplete name="primaryKpi" [label]="'Primary KPI'"
+            [placeholder]="'Primary KPI'" class="w-full">-->
+            <!-- [valuePointer]="'kpiname'"
+                      formControlName="primaryKpi"
+                    [dropDownArray]="kpiMasters" -->
+         <!-- </spot-singleselect-autocomplete>-->
+
+        </div>
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            AGILE Project
+            <mat-icon svgIcon="heroicons_outline:x-circle">
+              <!-- *ngIf="!generalInfoForm.controls.isAgileProject.value" -->
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+              <!-- *ngIf="generalInfoForm.controls.isAgileProject.value"> -->
+            </mat-icon>
+          </div>
+        <!--   <div class="mt-6" *ngIf="generalInfoForm.controls['isAgileproject'].value" >
+            
+            <spot-singleselect-autocomplete name="agileprimaryWorkstream"
+                [label]="'AGILE Primary Workstream'" [placeholder]="'AGILE Primary Workstream'" 
+                 formControlName="agileprimaryWorkstream"[valuePointer]="'lookUpName'"
+                [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'"
+                [dropDownArray]="getagileprimaryWorkstream()" >
+               
+            </spot-singleselect-autocomplete>
+        </div>-->
+        </div>
+
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            POBOS
+            <mat-icon svgIcon="heroicons_outline:x-circle">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            </mat-icon>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            Strategic Deployment Annual Initiative
+            <mat-icon svgIcon="heroicons_outline:x-circle">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            </mat-icon>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            Site Assessment
+            <mat-icon svgIcon="heroicons_outline:x-circle">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            </mat-icon>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            Good Practice
+            <mat-icon svgIcon="heroicons_outline:x-circle">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            </mat-icon>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </form>
 
 </div>
