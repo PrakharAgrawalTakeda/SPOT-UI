@@ -212,9 +212,40 @@ export class ProjectHubService {
         },
         {
           title: 'Close Out Report',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:flag',
-          link: 'close-out'
+          children: [
+            {
+              title: 'General Info',
+              type: 'basic',
+              link: 'close-out/general-info'
+            },
+            {
+              title: 'Outcomes',
+              type: 'basic',
+              link: 'close-out/outcomes'
+            },
+            {
+              title: 'Milestone Variance',
+              type: 'basic',
+              link: 'close-out/milestone-variance'
+            },
+            {
+              title: 'Schedule Baseline',
+              type: 'basic',
+              link: 'close-out/scheule-baseline'
+            },
+            {
+              title: 'Budget Performance',
+              type: 'basic',
+              link: 'close-out/budget-performance'
+            },
+            {
+              title: 'Lessons Learned',
+              type: 'basic',
+              link: 'close-out/lessons-learned'
+            },
+          ]
         },
       ]
     },

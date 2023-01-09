@@ -101,6 +101,12 @@ import { StrategicDriversComponent } from './general-info/strategic-drivers/stra
 import { ProjectProposalGeneralInfoComponent } from './project-proposal/project-proposal-general-info/project-proposal-general-info.component';
 import { ProjectProposalBenefitsComponent } from './project-proposal/project-proposal-benefits/project-proposal-benefits.component';
 import { ProjectProposalPlanningTeamComponent } from './project-proposal/project-proposal-planning-team/project-proposal-planning-team.component';
+import { CloseOutGeneralInfoComponent } from './close-out/close-out-general-info/close-out-general-info.component';
+import { CloseOutOutcomesComponent } from './close-out/close-out-outcomes/close-out-outcomes.component';
+import { CloseOutMilestoneVarianceComponent } from './close-out/close-out-milestone-variance/close-out-milestone-variance.component';
+import { CloseOutBudgetPerformanceComponent } from './close-out/close-out-budget-performance/close-out-budget-performance.component';
+import { CloseOutLessonsLearnedComponent } from './close-out/close-out-lessons-learned/close-out-lessons-learned.component';
+import { CloseOutScheduleBaselineComponent } from './close-out/close-out-schedule-baseline/close-out-schedule-baseline.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -202,7 +208,32 @@ export const projectRoutes: Route[] = [
     {
       path: 'close-out',
       component: CloseOutComponent,
-      pathMatch: 'full'
+      children:[
+        {
+          path: 'general-info',
+          component: CloseOutGeneralInfoComponent,
+        },
+        {
+          path: 'outcomes',
+          component: CloseOutOutcomesComponent,
+        },
+        {
+          path: 'milestone-variance',
+          component: CloseOutMilestoneVarianceComponent,
+        },
+        {
+          path: 'scheule-baseline',
+          component: CloseOutScheduleBaselineComponent,
+        },
+        {
+          path: 'budget-performance',
+          component: CloseOutBudgetPerformanceComponent,
+        },
+        {
+          path: 'lessons-learned',
+          component: CloseOutLessonsLearnedComponent,
+        }
+      ]
     }
 
     ]
@@ -273,7 +304,13 @@ export const projectRoutes: Route[] = [
     StrategicDriversComponent,
     ProjectProposalGeneralInfoComponent,
     ProjectProposalBenefitsComponent,
-    ProjectProposalPlanningTeamComponent
+    ProjectProposalPlanningTeamComponent,
+    CloseOutGeneralInfoComponent,
+    CloseOutOutcomesComponent,
+    CloseOutMilestoneVarianceComponent,
+    CloseOutBudgetPerformanceComponent,
+    CloseOutLessonsLearnedComponent,
+    CloseOutScheduleBaselineComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
