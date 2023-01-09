@@ -107,7 +107,13 @@ import { CloseOutMilestoneVarianceComponent } from './close-out/close-out-milest
 import { CloseOutBudgetPerformanceComponent } from './close-out/close-out-budget-performance/close-out-budget-performance.component';
 import { CloseOutLessonsLearnedComponent } from './close-out/close-out-lessons-learned/close-out-lessons-learned.component';
 import { CloseOutScheduleBaselineComponent } from './close-out/close-out-schedule-baseline/close-out-schedule-baseline.component';
-
+import { ProjectCharterGeneralInfoComponent } from './project-charter/project-charter-general-info/project-charter-general-info.component';
+import { ProjectCharterScopeComponent } from './project-charter/project-charter-scope/project-charter-scope.component';
+import { ProjectCharterMilestonesComponent } from './project-charter/project-charter-milestones/project-charter-milestones.component';
+import { ProjectCharterProjectTeamComponent } from './project-charter/project-charter-project-team/project-charter-project-team.component';
+import { ProjectCharterRiskIssuesComponent } from './project-charter/project-charter-risk-issues/project-charter-risk-issues.component';
+import { ProjectCharterCostFundingComponent } from './project-charter/project-charter-cost-funding/project-charter-cost-funding.component';
+import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -203,7 +209,36 @@ export const projectRoutes: Route[] = [
     {
       path: 'project-charter',
       component: ProjectCharterComponent,
-      pathMatch: 'full'
+      children:[
+        {
+          path: 'general-info',
+          component: ProjectCharterGeneralInfoComponent,
+        },
+        {
+          path: 'scope',
+          component: ProjectCharterScopeComponent,
+        },
+        {
+          path: 'milestones',
+          component: ProjectCharterMilestonesComponent,
+        },
+        {
+          path: 'project-team',
+          component: ProjectCharterProjectTeamComponent,
+        },
+        {
+          path: 'risks',
+          component: ProjectCharterRiskIssuesComponent,
+        },
+        {
+          path: 'budget',
+          component: ProjectCharterCostFundingComponent,
+        },
+        {
+          path: 'caps',
+          component: ProjectCharterCapsComponent,
+        }
+      ]
     },
     {
       path: 'close-out',
@@ -310,7 +345,14 @@ export const projectRoutes: Route[] = [
     CloseOutMilestoneVarianceComponent,
     CloseOutBudgetPerformanceComponent,
     CloseOutLessonsLearnedComponent,
-    CloseOutScheduleBaselineComponent
+    CloseOutScheduleBaselineComponent,
+    ProjectCharterGeneralInfoComponent,
+    ProjectCharterScopeComponent,
+    ProjectCharterMilestonesComponent,
+    ProjectCharterProjectTeamComponent,
+    ProjectCharterRiskIssuesComponent,
+    ProjectCharterCostFundingComponent,
+    ProjectCharterCapsComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

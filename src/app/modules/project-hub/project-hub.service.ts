@@ -186,9 +186,45 @@ export class ProjectHubService {
         },
         {
           title: 'Project Charter',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:clipboard-check',
-          link: 'project-charter'
+          children: [
+            {
+              title: 'General Info',
+              type: 'basic',
+              link: 'project-charter/general-info'
+            },
+            {
+              title: 'Scope',
+              type: 'basic',
+              link: 'project-charter/scope'
+            },
+            {
+              title: 'Milestones',
+              type: 'basic',
+              link: 'project-charter/milestones'
+            },
+            {
+              title: 'Project Team',
+              type: 'basic',
+              link: 'project-charter/project-team'
+            },
+            {
+              title: 'Risks / Assumptions',
+              type: 'basic',
+              link: 'project-charter/risks'
+            },
+            {
+              title: 'Cost / Funding',
+              type: 'basic',
+              link: 'project-charter/budget'
+            },
+            {
+              title: 'CAPS',
+              type: 'basic',
+              link: 'project-charter/caps'
+            },
+          ]
         },
         {
           title: 'Project Dashboards',
