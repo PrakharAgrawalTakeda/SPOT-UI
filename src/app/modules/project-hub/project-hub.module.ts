@@ -99,6 +99,8 @@ import { RiskIssuesLinkComponent } from './project-board/risk-issue/risk-issues-
 import { RiskIssueTableComponent } from './project-board/risk-issue/risk-issue-table/risk-issue-table.component';
 import { StrategicDriversComponent } from './general-info/strategic-drivers/strategic-drivers.component';
 import { ProjectProposalGeneralInfoComponent } from './project-proposal/project-proposal-general-info/project-proposal-general-info.component';
+import { ProjectProposalBenefitsComponent } from './project-proposal/project-proposal-benefits/project-proposal-benefits.component';
+import { ProjectProposalPlanningTeamComponent } from './project-proposal/project-proposal-planning-team/project-proposal-planning-team.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -176,6 +178,14 @@ export const projectRoutes: Route[] = [
         {
           path: 'general-info',
           component: ProjectProposalGeneralInfoComponent,
+        },
+        {
+          path: 'benefits',
+          component: ProjectProposalBenefitsComponent,
+        },
+        {
+          path: 'planning-team',
+          component: ProjectProposalPlanningTeamComponent,
         }
       ]
     },
@@ -261,7 +271,9 @@ export const projectRoutes: Route[] = [
     RiskIssuesLinkComponent,
     RiskIssueTableComponent,
     StrategicDriversComponent,
-    ProjectProposalGeneralInfoComponent
+    ProjectProposalGeneralInfoComponent,
+    ProjectProposalBenefitsComponent,
+    ProjectProposalPlanningTeamComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

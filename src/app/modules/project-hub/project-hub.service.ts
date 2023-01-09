@@ -144,9 +144,25 @@ export class ProjectHubService {
       children: [
         {
           title: 'Project Proposal',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:light-bulb',
-          link: 'project-proposal'
+          children: [
+            {
+              title: 'General Info',
+              type: 'basic',
+              link: 'project-proposal/general-info'
+            },
+            {
+              title: 'Benefits and Requirements',
+              type: 'basic',
+              link: 'project-proposal/benefits'
+            },
+            {
+              title: 'Planning Team',
+              type: 'basic',
+              link: 'project-proposal/planning-team'
+            },
+          ]
         },
         {
           title: 'Business Case',
