@@ -101,6 +101,8 @@ import { StrategicDriversComponent } from './general-info/strategic-drivers/stra
 import { PlanningTeamComponent } from './project-proposal/planning-team/planning-team.component';
 import { PlanningTeamBulkEditComponent } from './project-proposal/planning-team/planning-team-bulk-edit/planning-team-bulk-edit.component';
 import { PlanningTeamAddSingleComponent } from './project-proposal/planning-team/planning-team-add-single/planning-team-add-single.component';
+import {CloseOutGeneralInfoComponent} from "./close-out/clolse-out-general-info/close-out-general-info.component";
+import { CoGeneralInfoEditComponent } from './close-out/co-general-info-edit/co-general-info-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -139,6 +141,11 @@ export const projectRoutes: Route[] = [
     {
       path: 'general-info',
       component: GeneralInfoComponent,
+      pathMatch: 'full'
+    },
+    {
+      path: 'close-out-general-info',
+      component: CloseOutGeneralInfoComponent,
       pathMatch: 'full'
     },
     {
@@ -265,6 +272,8 @@ export const projectRoutes: Route[] = [
     PlanningTeamComponent,
     PlanningTeamBulkEditComponent,
     PlanningTeamAddSingleComponent,
+    CloseOutGeneralInfoComponent,
+    CoGeneralInfoEditComponent,
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

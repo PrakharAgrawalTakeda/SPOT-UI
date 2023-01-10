@@ -208,8 +208,35 @@ export class ProjectHubService {
         },
         {
           title: 'Close Out Report',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:flag',
+          children: [
+              {
+                  title: 'General Info',
+                  type: 'basic',
+                  link: 'close-out-general-info'
+              },
+              {
+                  title: 'Outcomes',
+                  type: 'basic',
+              },
+              {
+                  title: 'Outcomes',
+                  type: 'basic',
+              },
+              {
+                  title: 'Milestone Variance',
+                  type: 'basic',
+              },
+              {
+                  title: 'Schedule Baseline',
+                  type: 'basic',
+              },
+              {
+                  title: 'Lessons Learned',
+                  type: 'basic',
+              },
+          ],
           link: 'close-out'
         },
       ]
