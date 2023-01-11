@@ -49,6 +49,20 @@ export class GeneralInfoComponent implements OnInit {
     isQualityRef: new FormControl(false),
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
+    //Stategic Drivers
+    primaryKPI: new FormControl(''),
+    isAgile: new FormControl(false),
+    agilePrimaryWorkstream: new FormControl(''),
+    agileSecondaryWorkstream: new FormControl([]),
+    agileWave: new FormControl(''),
+    isPobos: new FormControl(false),
+    pobosCategory: new FormControl([]),
+    isGmsgqltannualMustWin: new FormControl(false),
+    strategicYear: new FormControl(''),
+    annualMustWinID: new FormControl(''),
+    isSiteAssessment: new FormControl(false),
+    siteAssessmentCategory: new FormControl([]),
+    isGoodPractise: new FormControl(false)
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -95,7 +109,7 @@ export class GeneralInfoComponent implements OnInit {
             projectManager: res.portfolioCenterData.pm,
             sponsor: res.portfolioCenterData.sponsor,
             projectDescription: res.projectData.projectDescription,
-            primaryProduct: res.primaryProduct?res.primaryProduct.fullProductName:'',
+            primaryProduct: res.primaryProduct ? res.primaryProduct.fullProductName : '',
             otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
             portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
             excecutionScope: res.excecutionScope ? res.excecutionScope : [],
@@ -110,6 +124,20 @@ export class GeneralInfoComponent implements OnInit {
             isQualityRef: res.qualityReferences.length != 0,
             isArchived: res.projectData.isArchived,
             owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
+            //Stategic Drivers
+            primaryKPI: new FormControl(''),
+            isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream.length > 0,
+            agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
+            agileSecondaryWorkstream: res.agileSecondaryWorkstream,
+            agileWave: res.agileWave ? res.agileWave.lookUpName : '',
+            isPobos: res.projectData.isPobos,
+            pobosCategory: res.pobosCategory,
+            isGmsgqltannualMustWin: res.projectData.isGmsgqltannualMustWin,
+            strategicYear: res.strategicYearID ? res.strategicYearID.lookUpName : '',
+            annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
+            isSiteAssessment: res.projectData.isSiteAssessment,
+            siteAssessmentCategory: res.siteAssessmentCategory,
+            isGoodPractise: res.projectData.isGoodPractise
           })
           this.viewContent = true
         })
@@ -141,7 +169,7 @@ export class GeneralInfoComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
   }
   getOwningOrganization(): any {
-      return this.generalInfoData.defaultOwningOrganizations;
+    return this.generalInfoData.defaultOwningOrganizations;
   }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''

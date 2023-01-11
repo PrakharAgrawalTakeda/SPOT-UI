@@ -221,12 +221,15 @@
         </spot-input>
       </div>
     </div>
-
+    
+    <!--STRATEGIC DRIVERS-->
+    <div class="pt-6 pl-2 font-medium tracking-tight leading-6 truncate ">
+      <h3 class="text-xl text-primary">Strategic Drivers</h3>
+    </div>
     <div class="flex justify-between items-start gap-6">
       <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
         <div class="flex justify-between items-center">
           <div class="flex justify-start items-center gap-3">
-            Strategic Drivers
           </div>
           <div class="flex justify-between items-center gap-3">
             <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
@@ -251,62 +254,81 @@
         <div class="flex justify-between items-center gap-6 pb-3">
           <div class="flex justify-start items-center gap-3">
             AGILE Project
-            <mat-icon svgIcon="heroicons_outline:x-circle">
-              <!-- *ngIf="!generalInfoForm.controls.isAgileProject.value" -->
+            <mat-icon svgIcon="heroicons_outline:x-circle"
+              *ngIf="!generalInfoForm.controls.isAgile.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
-              <!-- *ngIf="generalInfoForm.controls.isAgileProject.value"> -->
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+               *ngIf="generalInfoForm.controls.isAgile.value">
             </mat-icon>
           </div>
-        <!--   <div class="mt-6" *ngIf="generalInfoForm.controls['isAgileproject'].value" >
-            
-            <spot-singleselect-autocomplete name="agileprimaryWorkstream"
-                [label]="'AGILE Primary Workstream'" [placeholder]="'AGILE Primary Workstream'" 
-                 formControlName="agileprimaryWorkstream"[valuePointer]="'lookUpName'"
-                [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'" [sortByType]="'custom'"
-                [dropDownArray]="getagileprimaryWorkstream()" >
-               
-            </spot-singleselect-autocomplete>
-        </div>-->
+        </div>
+        <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isAgile'].value" >
+          <spot-input class="w-full read-only" formControlName="agilePrimaryWorkstream" name="agilePrimaryWorkstream" [label]="'AGILE Primary Workstream'">
+          </spot-input>
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="agileSecondaryWorkstream" name="agileSecondaryWorkstream"
+          [label]="'AGILE Secondary Workstream'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+          [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+        </spot-multiselect-autocomplete>
+          <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'AGILE Wave'">
+          </spot-input>
         </div>
 
 
-        <div class="flex justify-between items-center gap-6 pb-3">
+        <div class="flex justify-between items-center gap-6">
           <div class="flex justify-start items-center gap-3">
             POBOS
-            <mat-icon svgIcon="heroicons_outline:x-circle">
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isPobos.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isPobos.value">
             </mat-icon>
           </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isPobos'].value" >
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="pobosCategory" name="pobosCategory"
+          [showLabel]="false" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+          [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+        </spot-multiselect-autocomplete>
         </div>
 
         <div class="flex justify-between items-center gap-6 pb-3">
           <div class="flex justify-start items-center gap-3">
             Strategic Deployment Annual Initiative
-            <mat-icon svgIcon="heroicons_outline:x-circle">
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isGmsgqltannualMustWin.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isGmsgqltannualMustWin.value">
             </mat-icon>
           </div>
         </div>
+        <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isGmsgqltannualMustWin'].value" >
+          <spot-input class="w-full read-only" formControlName="strategicYear" name="strategicYear" [label]="'Strategic Year'">
+          </spot-input>
+          <spot-input class="w-full read-only" formControlName="annualMustWinID" name="annualMustWinID" [label]="'GMSGQ LT Annual Must Win?'" [showHint]="true" 
+          [hint]="'Select from this drop down if your project is associated with one of the GMSGQLT Annual Must Wins'">
+          </spot-input>
+        </div>
 
-        <div class="flex justify-between items-center gap-6 pb-3">
+        <div class="flex justify-between items-center gap-6">
           <div class="flex justify-start items-center gap-3">
             Site Assessment
-            <mat-icon svgIcon="heroicons_outline:x-circle">
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isSiteAssessment.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isSiteAssessment.value">
             </mat-icon>
           </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isSiteAssessment'].value" >
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="siteAssessmentCategory" name="siteAssessmentCategory"
+          [showLabel]="false" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+          [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+        </spot-multiselect-autocomplete>
         </div>
 
         <div class="flex justify-between items-center gap-6 pb-3">
           <div class="flex justify-start items-center gap-3">
             Good Practice
-            <mat-icon svgIcon="heroicons_outline:x-circle">
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isGoodPractise.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isGoodPractise.value">
             </mat-icon>
           </div>
         </div>
