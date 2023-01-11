@@ -144,9 +144,25 @@ export class ProjectHubService {
       children: [
         {
           title: 'Project Proposal',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:light-bulb',
-          link: 'project-proposal'
+          children: [
+            {
+              title: 'General Info',
+              type: 'basic',
+              link: 'project-proposal/general-info'
+            },
+            {
+              title: 'Benefits and Requirements',
+              type: 'basic',
+              link: 'project-proposal/benefits'
+            },
+            {
+              title: 'Planning Team',
+              type: 'basic',
+              link: 'project-proposal/planning-team'
+            },
+          ]
         },
         {
           title: 'Business Case',
@@ -170,9 +186,45 @@ export class ProjectHubService {
         },
         {
           title: 'Project Charter',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:clipboard-check',
-          link: 'project-charter'
+          children: [
+            {
+              title: 'General Info',
+              type: 'basic',
+              link: 'project-charter/general-info'
+            },
+            {
+              title: 'Scope',
+              type: 'basic',
+              link: 'project-charter/scope'
+            },
+            {
+              title: 'Milestones',
+              type: 'basic',
+              link: 'project-charter/milestones'
+            },
+            {
+              title: 'Project Team',
+              type: 'basic',
+              link: 'project-charter/project-team'
+            },
+            {
+              title: 'Risks / Assumptions',
+              type: 'basic',
+              link: 'project-charter/risks'
+            },
+            {
+              title: 'Cost / Funding',
+              type: 'basic',
+              link: 'project-charter/budget'
+            },
+            {
+              title: 'CAPS',
+              type: 'basic',
+              link: 'project-charter/caps'
+            },
+          ]
         },
         {
           title: 'Project Dashboards',
@@ -196,9 +248,40 @@ export class ProjectHubService {
         },
         {
           title: 'Close Out Report',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:flag',
-          link: 'close-out'
+          children: [
+            {
+              title: 'General Info',
+              type: 'basic',
+              link: 'close-out/general-info'
+            },
+            {
+              title: 'Outcomes',
+              type: 'basic',
+              link: 'close-out/outcomes'
+            },
+            {
+              title: 'Milestone Variance',
+              type: 'basic',
+              link: 'close-out/milestone-variance'
+            },
+            {
+              title: 'Schedule Baseline',
+              type: 'basic',
+              link: 'close-out/scheule-baseline'
+            },
+            {
+              title: 'Budget Performance',
+              type: 'basic',
+              link: 'close-out/budget-performance'
+            },
+            {
+              title: 'Lessons Learned',
+              type: 'basic',
+              link: 'close-out/lessons-learned'
+            },
+          ]
         },
       ]
     },
