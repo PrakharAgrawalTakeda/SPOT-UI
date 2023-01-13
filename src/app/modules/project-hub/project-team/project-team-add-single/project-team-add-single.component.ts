@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-team-add-single',
@@ -13,13 +14,19 @@ import { ProjectHubService } from '../../project-hub.service';
 })
 export class ProjectTeamAddSingleComponent implements OnInit {
   lookUpData: any = []
+  Urlval: any;
+  charterCount: number;
+
   projectTeamAddForm = new FormGroup({
     role: new FormControl({}),
     permission: new FormControl('BCEBDFAC-DB73-40D3-8EF0-166411B5322C'),
     usersingle: new FormControl({}),
+    percentTime: new FormControl(),
+    duration: new FormControl(),
+    includeInCharter: new FormControl(false),
   })
   formInital: boolean = false
-  constructor(public projecthubservice: ProjectHubService, public auth: AuthService, public role: RoleService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
+  constructor(private Router: Router, public projecthubservice: ProjectHubService, public auth: AuthService, public role: RoleService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
     this.projectTeamAddForm.valueChanges.subscribe(res => {
       if (this.formInital == true) {
         this.projecthubservice.isFormChanged = true
@@ -48,10 +55,13 @@ export class ProjectTeamAddSingleComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const url = this.Router.url;
+    this.Urlval = url.substring(url.lastIndexOf('/') + 1);
     this.auth.lookupMaster().then((resp: any) => {
       this.lookUpData = resp
       this.formInital = true
     })
+    this.charterCount = parseInt(localStorage.getItem('chartercount'));
   }
   getRoles(): any {
     var j = this.projecthubservice.all
@@ -70,9 +80,12 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "474EE4AC-7A6C-4D30-B6EA-12A0D0F4BC2C" && x.lookUpId != "87DA989B-0BBA-406F-99C1-99E1E80EE9FE")
   }
   submitProjectTeam() {
+    var projectTeam = this.projectTeamAddForm.getRawValue();  
+    if (projectTeam.includeInCharter === false) {
     if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
       this.projecthubservice.isFormChanged = false
-      var projectTeam = this.projectTeamAddForm.getRawValue();
+      var projectDuration = this.Urlval == 'project-charter-project-teams' ? projectTeam.duration.replaceAll(',', '') : 0;
+      // var projectTeam = this.projectTeamAddForm.getRawValue();
       var mainObj = {
         projectTeamUniqueId: "",
         problemUniqueId: this.projecthubservice.projectid,
@@ -80,9 +93,9 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
         teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
         teamPermissionId: projectTeam.permission,
-        percentTime: 0,
-        duration: 0,
-        includeInCharter: false,
+        percentTime: this.Urlval == 'project-charter-project-teams' ? projectTeam.percentTime : 0,
+        duration: this.Urlval == 'project-charter-project-teams' ? projectDuration : 0,
+        includeInCharter: this.Urlval == 'project-charter-project-teams' ? projectTeam.includeInCharter : false,
         includeInProposal: false
       }
       this.apiService.addProjectTeam(mainObj).then(res => {
@@ -114,5 +127,60 @@ export class ProjectTeamAddSingleComponent implements OnInit {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
+  }
+    else if (this.charterCount < 10) {
+      if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
+
+        this.projecthubservice.isFormChanged = false
+
+        var projectDuration = this.Urlval == 'project-charter-project-teams' ? projectTeam.duration.replaceAll(',', '') : 0;
+
+        var mainObj = {
+          projectTeamUniqueId: "",
+          problemUniqueId: this.projecthubservice.projectid,
+          roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
+          teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
+          teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
+          teamPermissionId: projectTeam.permission,
+          percentTime: this.Urlval == 'project-charter-project-teams' ? projectTeam.percentTime : 0,
+          duration: this.Urlval == 'project-charter-project-teams' ? projectDuration : 0,
+          includeInCharter: this.Urlval == 'project-charter-project-teams' ? projectTeam.includeInCharter : false,
+          includeInProposal: false
+        }
+        this.apiService.addProjectTeam(mainObj).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        })
+      }
+    }
+    else {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Only 10 can be selected at a time for Team Charter slide display.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+  }
+
+  processMyValue(event): void {
+    let numberVal = parseInt(event.target.value).toLocaleString();
+    this.projectTeamAddForm.controls.duration.patchValue(numberVal);
   }
 }

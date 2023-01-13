@@ -170,9 +170,16 @@ export class ProjectHubService {
         },
         {
           title: 'Project Charter',
-          type: 'basic',
+          type: 'collapsable',
           icon: 'heroicons_outline:clipboard-check',
-          link: 'project-charter'
+          link: 'project-charter',
+          children: [
+            {
+              title: 'Project Team',
+              type: 'basic',
+              link: 'project-charter/project-charter-project-teams'
+            }
+          ]
         },
         {
           title: 'Project Dashboards',

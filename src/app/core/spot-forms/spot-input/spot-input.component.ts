@@ -20,6 +20,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() showHint: boolean = false 
   @Input() hint: string = ''
   @Input() hintPostion: 'tooltip'|'mat-hint' = 'tooltip'
+  @Input() Required: boolean = false;
   
   
 
@@ -28,10 +29,13 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   onChange: any = () => { };
   form: FormGroup;
   disabled = false;
+  @Input() max=false;
+  @Input() len = 3;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    console.log("Length", this.len , this.max)
     this.form = this.fb.group({
       control: '',
     })

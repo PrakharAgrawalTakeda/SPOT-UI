@@ -19,8 +19,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     @Input() debounce: number = 300;
     @Input() minLength: number = 4;
     @Output() search: EventEmitter<any> = new EventEmitter<any>();
+    @Input() opened: boolean = false;
+    @Input() calledFrom: string = "";
 
-    opened: boolean = false;
+    // opened: boolean = false;
     resultSets: any[];
     budget: any = [];
     searchControl: FormControl = new FormControl();
@@ -224,6 +226,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      */
     close(): void
     {
+        if (this.calledFrom == "Copy") {
+            this.searchControl.setValue('');
+        }
+        else {
         // Return if it's already closed
         if ( !this.opened )
         {
@@ -235,6 +241,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
 
         // Close the search
         this.opened = false;
+    }
     }
 
     /**

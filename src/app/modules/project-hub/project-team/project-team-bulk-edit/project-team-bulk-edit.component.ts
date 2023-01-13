@@ -5,6 +5,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-team-bulk-edit',
@@ -13,7 +14,7 @@ import { ProjectHubService } from '../../project-hub.service';
 })
 export class ProjectTeamBulkEditComponent implements OnInit {
 
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService, public fuseAlert: FuseConfirmationService) {
+  constructor(private Router: Router, public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.projectTeamForm.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
         this.formValue()
@@ -34,8 +35,12 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   viewContent: boolean = false
   lookupdata: any[]
   ptTableEditStack = []
+  Urlval: any;
+  charterCount: number;
   projectTeamForm = new FormArray([])
   ngOnInit(): void {
+    const url = this.Router.url;
+    this.Urlval = url.substring(url.lastIndexOf('/') + 1);
     this.dataloader()
   }
   dataloader() {
@@ -136,6 +141,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
           "includeInProposal": i.includeInProposal
         })
       }
+      this.charterCount = this.teamMembersSubmit.filter(x => x.includeInCharter == true).length;
     }
     else {
       this.teamMembersSubmit = []
@@ -158,6 +164,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
 
   submitProjectTeams() {
     this.formValue()
+    if (this.charterCount <= 10) {
     if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
       console.log(this.teamMembersSubmit)
       this.projecthubservice.isFormChanged = false
@@ -198,6 +205,31 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
       this.projecthubservice.isNavChanged.next(true)
+    }
+  }
+    else {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Only 10 can be selected at a time for Team Charter slide display.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
     }
   }
   deleteShowLogic(rowIndex: number): boolean {
@@ -292,4 +324,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     }
   }
 
+  numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
 }

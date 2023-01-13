@@ -1,4 +1,4 @@
-import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { map, Observable, startWith, timeout } from 'rxjs';
 @Component({
@@ -27,7 +27,8 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
   //@Input() idPointer: string = ''
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
-
+  @Input() Required: boolean = false
+  onFocusout: any = () => {console.log("fdg") ; this.childEmitter.emit()}
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
   filteredDropDownValues: Observable<any>
@@ -39,7 +40,7 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
     control: new FormControl('')
   });
   disabled = false;
-
+@Output() childEmitter = new EventEmitter();
   constructor(private fb: FormBuilder) {
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {

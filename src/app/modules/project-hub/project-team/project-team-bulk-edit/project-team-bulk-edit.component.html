@@ -70,6 +70,53 @@
                     </ng-template>
                 </ngx-datatable-column>
 
+                <ngx-datatable-column *ngIf="Urlval === 'project-charter-project-teams'" style="height: 112px" [sortable]="false"
+                    name="percentTime" prop="percentTime" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="percentTime" [max]="3" name="percentTime"
+                                maxlength="3" [placeholder]="'Time'"
+                                oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                
+                
+                <ngx-datatable-column *ngIf="Urlval === 'project-charter-project-teams'" [sortable]="false" name="duration"
+                    prop="duration" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="duration" name="duration" [placeholder]="'Duration'"
+                                oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                
+                
+                <ngx-datatable-column *ngIf="Urlval === 'project-charter-project-teams'" [sortable]="false" name="includeInCharter"
+                    prop="includeInCharter" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)">
+                            <mat-slide-toggle class="w-full" formControlName="includeInCharter"></mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
                 <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                         ngx-datatable-cell-template>

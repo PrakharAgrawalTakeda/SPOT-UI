@@ -1,5 +1,5 @@
 <div *ngIf="viewContent">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div *ngIf = "mode != 'GeneralInfo'" class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Quality Reference Bulk Edit</div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
                 href="javascript:void(0)" title="Close">
@@ -59,7 +59,7 @@
             </ngx-datatable>
         </div>
     </div>
-    <div class="flex items-start justify-between mt-6 px-3">
+    <div *ngIf = "mode != 'GeneralInfo'" class="flex items-start justify-between mt-6 px-3">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
             (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
             Cancel

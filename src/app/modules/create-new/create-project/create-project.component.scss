@@ -1,0 +1,110 @@
+.example-button-toggle-label {
+    display: inline-block;
+    margin: 16px;
+}
+
+.mat-stepper-horizontal {
+    margin-top: 8px;
+}
+
+.mat-mdc-form-field {
+    margin-top: 16px;
+}
+
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.mat-form-field {
+    display: grid;
+    position: relative;
+    text-align: left;
+}
+
+.valuefill {
+    color: #ff0202c2;
+    margin-left: 6px;
+    font-size: 14px;
+    margin-top: -10px;
+    padding-bottom: 10px;
+}
+
+.custLabel {
+    top: -25px;
+    font-weight: 500;
+    height: auto;
+    padding-top: 0;
+    overflow: visible;
+    pointer-events: auto;
+}
+
+.btnclas {
+    width: 130px;
+    height: 33px;
+    background: 59a2d2;
+    border: 4c8fbb;
+    font: 16pt;
+    background-color: rgb(76, 155, 207);
+}
+
+.mat-step-header .mat-step-label .mat-step-text-label {
+    font-size: 15px;
+}
+
+.mat-step-icon {
+    border-radius: 50%;
+    height: 40px !important;
+    width: 40px !important;
+    flex-shrink: 0;
+    position: relative;
+    margin-left: 10px !important;
+    margin-top: 15px !important;
+}
+
+.mat-horizontal-stepper-header {
+    display: grid !important;
+    height: 70px;
+    /* overflow: hidden; */
+    align-items: center;
+    padding: 0 24px;
+}
+#cdk-step-content-0-0{
+    display: flex !important;
+    justify-content: center !important;
+}
+#cdk-step-content-0-1 {
+    display: flex !important;
+    justify-content: center !important;
+}
+#cdk-step-content-0-2 {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.CreateForm{
+        width: 52%;
+}
+
+// .reviewLabel {
+//     margin-left: 20px;
+// }
+
+.test {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+// .ng-star-inserted {
+//     width: 100%
+// }
+
+.child {
+    width: 50%;
+}

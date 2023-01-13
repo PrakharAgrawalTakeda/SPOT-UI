@@ -98,6 +98,7 @@ import { SchedulesTableComponent } from './project-board/schedule/schedule-table
 import { RiskIssuesLinkComponent } from './project-board/risk-issue/risk-issues-link/risk-issues-link.component';
 import { RiskIssueTableComponent } from './project-board/risk-issue/risk-issue-table/risk-issue-table.component';
 import { StrategicDriversComponent } from './general-info/strategic-drivers/strategic-drivers.component';
+import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -184,6 +185,12 @@ export const projectRoutes: Route[] = [
       pathMatch: 'full'
     },
     {
+      path: 'project-charter/project-charter-project-teams',
+      component: ProjectCharterProjectTeamsComponent,
+      pathMatch: 'full'
+
+    },
+    {
       path: 'close-out',
       component: CloseOutComponent,
       pathMatch: 'full'
@@ -254,7 +261,8 @@ export const projectRoutes: Route[] = [
     SchedulesTableComponent,
     RiskIssuesLinkComponent,
     RiskIssueTableComponent,
-    StrategicDriversComponent
+    StrategicDriversComponent,
+    ProjectCharterProjectTeamsComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
@@ -297,6 +305,9 @@ export const projectRoutes: Route[] = [
         MessagesModule,
         NotificationsModule,
         UserModule
-    ]
+  ], exports: [
+    GeneralInfoSingleEditComponent,
+      QualityRefBulkEditComponent
+  ]
 })
 export class ProjectHubModule { }

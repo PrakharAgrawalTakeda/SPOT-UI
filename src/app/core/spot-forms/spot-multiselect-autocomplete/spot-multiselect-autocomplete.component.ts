@@ -27,6 +27,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   @Input() idPointer: string = ''
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
+  @Input() Required: boolean = false
 
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
@@ -45,7 +46,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {
         //this.onChange({})
-        //this.selectedOption = {}
+        //this.selectedOption = {}  
       }
 
     })

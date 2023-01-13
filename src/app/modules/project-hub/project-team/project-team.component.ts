@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation, Output, Input, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
+import { EventType } from '@azure/msal-browser';
 
 
 @Component({
@@ -15,7 +16,11 @@ export class ProjectTeamComponent implements OnInit {
   teamMembers: any = []
   id: string = ''
   isGrid: boolean = false
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
+  Urlval: any;
+  chartercount: string;
+  @Output() eventName = new EventEmitter<EventType>();
+  @Input() mode: 'Project-Teams' | 'project-charter-project-teams' = 'Project-Teams';
+  constructor(private Router: Router, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.dataloader()
@@ -24,6 +29,8 @@ export class ProjectTeamComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    const url = this.Router.url;
+    this.Urlval = url.substring(url.lastIndexOf('/') + 1);
     this.dataloader()
   }
   dataloader(){
@@ -31,6 +38,13 @@ export class ProjectTeamComponent implements OnInit {
     this.apiService.getmembersbyproject(this.id).then((res) => {
       console.log(res)
       this.teamMembers = res
+      this.chartercount = this.teamMembers.filter(x => x.includeInCharter == true).length;
+      localStorage.setItem('chartercount', this.chartercount);
+      for (let i = 0; i < this.teamMembers.length; i++) {
+        if (this.teamMembers[i].includeInCharter === null) {
+          this.teamMembers[i].includeInCharter = false;
+        }
+      }
     })
   }
 
