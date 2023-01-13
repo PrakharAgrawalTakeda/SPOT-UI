@@ -20,7 +20,8 @@
         <div class="flex justify-start gap-3 items-center">
           Is Archived?
           <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
-          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isArchived.value">
+          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+            *ngIf="generalInfoForm.controls.isArchived.value">
           </mat-icon>
 
         </div>
@@ -46,11 +47,12 @@
         </spot-multiselect-autocomplete>
       </div>
       <div class="flex justify-between items-start gap-6">
-          <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization" [label]="'Owning Organization'" [showHint]="true"
-                      [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
-          </spot-input>
-          <div class="w-full"></div>
-        </div>
+        <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization"
+          [label]="'Owning Organization'" [showHint]="true"
+          [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+        </spot-input>
+        <div class="w-full"></div>
+      </div>
       <div class="flex justify-between items-center gap-6">
         <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
           [label]="'Environmental Portfolio'" [showHint]="true"
@@ -66,7 +68,8 @@
 
           <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
           </mat-icon>
-          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isCapsProject.value">
+          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+            *ngIf="generalInfoForm.controls.isCapsProject.value">
           </mat-icon>
 
         </div>
@@ -108,7 +111,8 @@
             OE Project
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isOeproject.value">
             </mat-icon>
-            <mat-icon  class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isOeproject.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isOeproject.value">
             </mat-icon>
           </div>
           <div class="flex items-center">
@@ -138,7 +142,8 @@
             Tech Transfer
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isTechTransfer.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isTechTransfer.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isTechTransfer.value">
             </mat-icon>
           </div>
           <div class="flex items-center">
@@ -173,7 +178,8 @@
             Quality Reference #
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isQualityRef.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isQualityRef.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isQualityRef.value">
             </mat-icon>
           </div>
           <div class="flex justify-between items-center gap-3">
@@ -215,6 +221,121 @@
         </spot-input>
       </div>
     </div>
+    
+    <!--STRATEGIC DRIVERS-->
+    <div class="pt-6 pl-2 font-medium tracking-tight leading-6 truncate ">
+      <h3 class="text-xl text-primary">Strategic Drivers</h3>
+    </div>
+    <div class="flex justify-between items-start gap-6">
+      <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center">
+          <div class="flex justify-start items-center gap-3">
+          </div>
+          <div class="flex justify-between items-center gap-3">
+            <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+              *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
+              (click)="projectHubService.toggleDrawerOpen('StrategicDriversBulkEdit', 'new', [], id)">
+              <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-between items-center gap-6">
+          <spot-input class="w-full read-only" formControlName="primaryKPI" name="primaryKPI" [label]="'Primary KPI'">
+          </spot-input>
+          <!-- <spot-singleselect-autocomplete name="primaryKpi" [label]="'Primary KPI'"
+            [placeholder]="'Primary KPI'" class="w-full">-->
+            <!-- [valuePointer]="'kpiname'"
+                      formControlName="primaryKpi"
+                    [dropDownArray]="kpiMasters" -->
+         <!-- </spot-singleselect-autocomplete>-->
+
+        </div>
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            AGILE Project
+            <mat-icon svgIcon="heroicons_outline:x-circle"
+              *ngIf="!generalInfoForm.controls.isAgile.value">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+               *ngIf="generalInfoForm.controls.isAgile.value">
+            </mat-icon>
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isAgile'].value" >
+          <spot-input class="w-full read-only" formControlName="agilePrimaryWorkstream" name="agilePrimaryWorkstream" [label]="'AGILE Primary Workstream'">
+          </spot-input>
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="agileSecondaryWorkstream" name="agileSecondaryWorkstream"
+          [label]="'AGILE Secondary Workstream'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+          [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+        </spot-multiselect-autocomplete>
+          <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'AGILE Wave'">
+          </spot-input>
+        </div>
+
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            POBOS
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isPobos.value">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isPobos.value">
+            </mat-icon>
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isPobos'].value" >
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="pobosCategory" name="pobosCategory"
+          [showLabel]="false" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+          [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+        </spot-multiselect-autocomplete>
+        </div>
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            Strategic Deployment Annual Initiative
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isGmsgqltannualMustWin.value">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isGmsgqltannualMustWin.value">
+            </mat-icon>
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isGmsgqltannualMustWin'].value" >
+          <spot-input class="w-full read-only" formControlName="strategicYear" name="strategicYear" [label]="'Strategic Year'">
+          </spot-input>
+          <spot-input class="w-full read-only" formControlName="annualMustWinID" name="annualMustWinID" [label]="'GMSGQ LT Annual Must Win?'" [showHint]="true" 
+          [hint]="'Select from this drop down if your project is associated with one of the GMSGQLT Annual Must Wins'">
+          </spot-input>
+        </div>
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            Site Assessment
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isSiteAssessment.value">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isSiteAssessment.value">
+            </mat-icon>
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isSiteAssessment'].value" >
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="siteAssessmentCategory" name="siteAssessmentCategory"
+          [showLabel]="false" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+          [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+        </spot-multiselect-autocomplete>
+        </div>
+
+        <div class="flex justify-between items-center gap-6 pb-3">
+          <div class="flex justify-start items-center gap-3">
+            Good Practice
+            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isGoodPractise.value">
+            </mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isGoodPractise.value">
+            </mat-icon>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </form>
 
 </div>
