@@ -116,8 +116,8 @@ import { ProjectCharterCapsComponent } from './project-charter/project-charter-c
 import { PlanningTeamComponent } from './project-proposal/planning-team/planning-team.component';
 import { PlanningTeamBulkEditComponent } from './project-proposal/planning-team/planning-team-bulk-edit/planning-team-bulk-edit.component';
 import { PlanningTeamAddSingleComponent } from './project-proposal/planning-team/planning-team-add-single/planning-team-add-single.component';
-import {CloseOutGeneralInfoComponent} from "./close-out/clolse-out-general-info/close-out-general-info.component";
 import { CoGeneralInfoEditComponent } from './close-out/co-general-info-edit/co-general-info-edit.component';
+import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/close-out-general-info.component";
 
 export const projectRoutes: Route[] = [
   {

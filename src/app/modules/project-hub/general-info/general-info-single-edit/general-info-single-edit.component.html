@@ -9,7 +9,7 @@
     </div>
     <form class="pl-3 w-full overflow-hidden" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
         <div class="overflow-y-scroll overflow-x-hidden h-[86.5vh] pr-3">
-        <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner"
+        <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner || mode != 'Close-Out'"
             class="flex justify-between items-center mt-6 mb-6">
             <div class="flex justify-start gap-1 items-center">Is Archived?
             </div>
@@ -17,9 +17,25 @@
                 <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
             </div>
         </div>
+        <div *ngIf="mode == 'Close-Out'" class="mb-4"></div>
         <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
             [placeholder]="'Project Name'">
         </spot-input>
+        <spot-input class="w-full" formControlName="projectId" name="projectId" [label]="'Project ID'"
+                    [placeholder]="'Project ID'">
+        </spot-input>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Date Approved</mat-label>
+            <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="approveDate"
+                   name="approveDate">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+        <spot-singleselect-autocomplete formControlName="opU" class="w-full" name="opU"
+                                        [label]="'OpU'" [valuePointer]="'opU'"
+                                        [dropDownArray]="getOpU()"  [sortByType]="'custom'" [customSortPointer]="'pfid'"
+                                        >
+        </spot-singleselect-autocomplete>
         <app-project-single-dropdown class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'"
             [showHint]="true"
             [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
@@ -40,20 +56,24 @@
              [dropDownArray]="owningOrganizationValues" [showHint]="true"
              [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
         </spot-select>
-        <spot-singleselect-autocomplete class="w-full" formControlName="enviornmentalPortfolio"
-            name="enviornmentalPortfolio" [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'"
-            [valuePointer]="'portfolioOwner'" [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true"
-            [sortByType]="'custom'" [customSortPointer]="'pfid'"
-            [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
-        </spot-singleselect-autocomplete>
-        <div class="flex justify-between items-center w-full pt-4 pb-6">
-            <div class="flex justify-start gap-1 items-center">CAPS Project <mat-icon class="pe icon-size-4"
-                    matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
-            CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-                    help</mat-icon>
-            </div>
-            <div>
-                <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
+        <div *ngIf="mode != 'Close-Out'">
+            <spot-singleselect-autocomplete class="w-full" formControlName="enviornmentalPortfolio"
+                name="enviornmentalPortfolio" [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'"
+                [valuePointer]="'portfolioOwner'" [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true"
+                [sortByType]="'custom'" [customSortPointer]="'pfid'"
+                [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+            </spot-singleselect-autocomplete>
+        </div>
+        <div *ngIf="mode != 'Close-Out'">
+            <div class="flex justify-between items-center w-full pt-4 pb-6">
+                <div class="flex justify-start gap-1 items-center">CAPS Project <mat-icon class="pe icon-size-4"
+                        matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+                CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
+                        help</mat-icon>
+                </div>
+                <div>
+                    <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
+                </div>
             </div>
         </div>
         <spot-singleselect-autocomplete class="w-full" formControlName="primaryProduct" name="primaryProduct"
@@ -66,14 +86,24 @@
             [valuePointer]="'fullProductName'" [idPointer]="'productId'" [dropDownArray]="filterCriteria.products"
             [showHint]="true" [hint]="'Any additional products which are impacted by the project execution'">
         </spot-multiselect-autocomplete>
-        <spot-select class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
-            [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-            [dropDownArray]="projectTypeDropDrownValues">
-        </spot-select>
-        <spot-textarea formControlName="projectDescription" name="projectDescription"
-            [label]="'Problem Description / Present Situation / Submission Description'"
-            [placeholder]="'Problem Description / Present Situation / Submission Description'">
-        </spot-textarea>
+        <div *ngIf="mode != 'Close-Out'">
+            <spot-select class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
+                [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+                [dropDownArray]="projectTypeDropDrownValues">
+            </spot-select>
+            <spot-textarea formControlName="projectDescription" name="projectDescription"
+                [label]="'Problem Description / Present Situation / Submission Description'"
+                [placeholder]="'Problem Description / Present Situation / Submission Description'">
+            </spot-textarea>
+        </div>
+        <div *ngIf="mode == 'Close-Out'"
+             class="flex justify-between items-center mt-6 mb-6">
+             <div class="flex justify-start gap-1 items-center">Good Practice?
+             </div>
+             <div>
+                 <mat-slide-toggle formControlName="isGoodPractice"></mat-slide-toggle>
+             </div>
+        </div>
     </div>
         <div class="pr-3 flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"
