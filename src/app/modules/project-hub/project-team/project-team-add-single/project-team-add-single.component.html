@@ -20,6 +20,32 @@
         [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
         [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getPermissions()">
     </spot-select>
+    <div *ngIf="mode == 'Project-Proposal'">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>% Time</mat-label>
+            <input matInput
+                   formControlName="percentTime"
+                   type="number"
+                   max="150" min="0" placeholder="0"
+                   pattern="\d*"
+            />
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Duration (Months)</mat-label>
+            <input matInput
+                   formControlName="duration"
+                   type="number"
+                   max="150" min="0" placeholder="0"
+                   pattern="\d*"
+            />
+        </mat-form-field>
+        <div class="flex items-start justify-between incuded-in-dash">
+            <mat-slide-toggle
+                [matTooltip]="this.projectTeamAddForm.controls['includeInProposal'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
+                formControlName="includeInProposal">Include in Proposal</mat-slide-toggle>
+        </div>
+
+    </div>
     <div class="flex items-start justify-between mt-6">
         <a class="w-25" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">

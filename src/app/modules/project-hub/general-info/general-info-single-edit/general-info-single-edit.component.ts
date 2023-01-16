@@ -100,7 +100,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
   }
   getOpU(): any {
-
      return this.filterCriteria.portfolioOwner.filter(x => x.isOpu == true)
   }
   getEnviornmentPortfolio(): any {

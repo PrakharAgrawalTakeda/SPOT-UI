@@ -113,9 +113,6 @@ import { ProjectCharterProjectTeamComponent } from './project-charter/project-ch
 import { ProjectCharterRiskIssuesComponent } from './project-charter/project-charter-risk-issues/project-charter-risk-issues.component';
 import { ProjectCharterCostFundingComponent } from './project-charter/project-charter-cost-funding/project-charter-cost-funding.component';
 import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
-import { PlanningTeamComponent } from './project-proposal/planning-team/planning-team.component';
-import { PlanningTeamBulkEditComponent } from './project-proposal/planning-team/planning-team-bulk-edit/planning-team-bulk-edit.component';
-import { PlanningTeamAddSingleComponent } from './project-proposal/planning-team/planning-team-add-single/planning-team-add-single.component';
 import { CoGeneralInfoEditComponent } from './close-out/co-general-info-edit/co-general-info-edit.component';
 import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/close-out-general-info.component";
 
@@ -347,9 +344,6 @@ export const projectRoutes: Route[] = [
     RiskIssuesLinkComponent,
     RiskIssueTableComponent,
     StrategicDriversComponent,
-    PlanningTeamComponent,
-    PlanningTeamBulkEditComponent,
-    PlanningTeamAddSingleComponent,
     CloseOutGeneralInfoComponent,
     CoGeneralInfoEditComponent,
     StrategicDriversComponent,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -12,11 +12,15 @@ import { ProjectHubService } from '../../project-hub.service';
   styleUrls: ['./project-team-add-single.component.scss']
 })
 export class ProjectTeamAddSingleComponent implements OnInit {
+  @Input() mode: string;
   lookUpData: any = []
   projectTeamAddForm = new FormGroup({
     role: new FormControl({}),
     permission: new FormControl('BCEBDFAC-DB73-40D3-8EF0-166411B5322C'),
     usersingle: new FormControl({}),
+    percentTime: new FormControl(''),
+    duration: new FormControl(''),
+    includeInProposal: new FormControl(false),
   })
   formInital: boolean = false
   constructor(public projecthubservice: ProjectHubService, public auth: AuthService, public role: RoleService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
@@ -51,6 +55,13 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookUpData = resp
       this.formInital = true
+      if (this.projecthubservice.all != []) {
+         if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 5) {
+            if (this.projectTeamAddForm.value.includeInProposal != true) {
+                 this.projectTeamAddForm.controls['includeInProposal'].disable()
+            }
+         }
+      }
     })
   }
   getRoles(): any {
@@ -79,11 +90,11 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
         teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
         teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
-        teamPermissionId: projectTeam.permission,
-        percentTime: 0,
-        duration: 0,
+         teamPermissionId: projectTeam.permission,
+        percentTime: projectTeam.percentTime== "" ?  0 : projectTeam.percentTime,
+        duration: projectTeam.duration== "" ?  0 : projectTeam.duration,
         includeInCharter: false,
-        includeInProposal: false
+        includeInProposal: projectTeam.includeInProposal
       }
       this.apiService.addProjectTeam(mainObj).then(res => {
         this.projecthubservice.submitbutton.next(true)
