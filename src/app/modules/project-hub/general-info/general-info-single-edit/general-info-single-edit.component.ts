@@ -31,7 +31,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     isArchived: new FormControl(false),
     isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
-    opU: new FormControl(''),
     isGoodPractice: new FormControl(false),
     approveDate: new FormControl(''),
   })
@@ -47,11 +46,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       this.generalInfoForm.controls.owningOrganization.disable()
       this.generalInfoForm.controls.projectId.disable()
-     this.generalInfoForm.controls.opU.disable()
     } else {
       this.generalInfoForm.controls.owningOrganization.enable()
       this.generalInfoForm.controls.projectId.enable()
-      this.generalInfoForm.controls.opU.enable()
     }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -87,7 +84,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         isGoodPractice: res.projectData.isGoodPractise,
         isCapsProject: res.projectData.isCapsProject,
         owningOrganization: res.projectData.defaultOwningOrganizationId,
-        opU: res.portfolioOwner.opU.toLowerCase(),
         approveDate: res.portfolioCenterData.definitiveCrapprovalDate
       });
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
@@ -99,16 +95,12 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
   }
-  getOpU(): any {
-     return this.filterCriteria.opuMasters;
-  }
   getEnviornmentPortfolio(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
   }
-
 
   submitGI() {
     var formValue = this.generalInfoForm.getRawValue()
@@ -169,7 +161,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
-    mainObj.opU = formValue.opU
     mainObj.definitiveCrapprovalDate = formValue.approveDate
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)

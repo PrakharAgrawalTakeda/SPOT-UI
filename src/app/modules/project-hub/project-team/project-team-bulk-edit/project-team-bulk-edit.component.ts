@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -12,13 +12,11 @@ import { ProjectHubService } from '../../project-hub.service';
   styleUrls: ['./project-team-bulk-edit.component.scss']
 })
 export class ProjectTeamBulkEditComponent implements OnInit {
-
+    @Input() mode: string;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.projectTeamForm.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
         this.formValue()
-        console.log("DB", this.teamMembersDb)
-        console.log("SUB", this.teamMembersSubmit)
         if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
           this.projecthubservice.isFormChanged = true
         }
@@ -82,6 +80,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
 
         }
         console.log(this.projectTeamForm.value)
+        this.disabler()
         //enable Table
         this.viewContent = true
       })
@@ -187,11 +186,38 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         const alert = this.fuseAlert.open(comfirmConfig)
       }
       else {
-        this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          this.projecthubservice.isNavChanged.next(true)
-        })
+          if (this.teamMembersSubmit.some(x => x.percentTime >150 ||  x.duration > 150)) {
+              var comfirmConfig: FuseConfirmationConfig = {
+                  "title": "Duration and Percent time values cannot be higher than 150",
+                  "message": "",
+                  "icon": {
+                      "show": true,
+                      "name": "heroicons_outline:exclamation",
+                      "color": "warning"
+                  },
+                  "actions": {
+                      "confirm": {
+                          "show": true,
+                          "label": "Okay",
+                          "color": "primary"
+                      },
+                      "cancel": {
+                          "show": false,
+                          "label": "Cancel"
+                      }
+                  },
+                  "dismissible": true
+              }
+              const alert = this.fuseAlert.open(comfirmConfig)
+          }else{
+              {
+                  this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      this.projecthubservice.isNavChanged.next(true)
+                  })
+              }
+          }
       }
     }
     else {
@@ -207,6 +233,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         return false
       }
     }
+    this.disabler()
     return true
   }
   //Table Controls
@@ -223,6 +250,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       roleId: '',
       roleName: ''
     }]
+    this.disabler()
     this.projectTeamForm.push(new FormGroup({
       projectTeamUniqueId: new FormControl(''),
       user: new FormControl({}),
@@ -290,6 +318,21 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       }
       this.ptTableEditStack.push(row)
     }
+    this.disabler()
   }
+    disabler() {
+        if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length < 5) {
+            for (var i of this.projectTeamForm.controls) {
+                i['controls']['includeInProposal'].enable()
+                }
+            }
+        else {
+            for (var i of this.projectTeamForm.controls) {
+                if (i['controls']['includeInProposal'].value != true) {
+                    i['controls']['includeInProposal'].disable()
+                }
+            }
+         }
+    }
 
 }

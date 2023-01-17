@@ -11,7 +11,7 @@
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
         <app-schedule-link *ngIf="projecthubservice.itemtype == 'LinkMilestones'"></app-schedule-link>
         <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'" [mode]=projecthubservice.itemid></app-project-team-add-single>
-        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'"></app-project-team-bulk-edit>
+        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'" [mode]=projecthubservice.itemid></app-project-team-bulk-edit>
         <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
