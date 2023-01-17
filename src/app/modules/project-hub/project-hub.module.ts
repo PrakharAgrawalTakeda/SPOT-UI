@@ -113,7 +113,6 @@ import { ProjectCharterProjectTeamComponent } from './project-charter/project-ch
 import { ProjectCharterRiskIssuesComponent } from './project-charter/project-charter-risk-issues/project-charter-risk-issues.component';
 import { ProjectCharterCostFundingComponent } from './project-charter/project-charter-cost-funding/project-charter-cost-funding.component';
 import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
-import { CoGeneralInfoEditComponent } from './close-out/co-general-info-edit/co-general-info-edit.component';
 import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/close-out-general-info.component";
 
 export const projectRoutes: Route[] = [
@@ -345,7 +344,6 @@ export const projectRoutes: Route[] = [
     RiskIssueTableComponent,
     StrategicDriversComponent,
     CloseOutGeneralInfoComponent,
-    CoGeneralInfoEditComponent,
     StrategicDriversComponent,
     ProjectProposalGeneralInfoComponent,
     ProjectProposalBenefitsComponent,

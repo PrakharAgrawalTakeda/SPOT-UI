@@ -87,7 +87,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         isGoodPractice: res.projectData.isGoodPractise,
         isCapsProject: res.projectData.isCapsProject,
         owningOrganization: res.projectData.defaultOwningOrganizationId,
-        opU: res.portfolioOwner.opU,
+        opU: res.portfolioOwner.opU.toLowerCase(),
         approveDate: res.portfolioCenterData.definitiveCrapprovalDate
       });
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
@@ -100,7 +100,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
   }
   getOpU(): any {
-     return this.filterCriteria.portfolioOwner.filter(x => x.isOpu == true)
+     return this.filterCriteria.opuMasters;
   }
   getEnviornmentPortfolio(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)

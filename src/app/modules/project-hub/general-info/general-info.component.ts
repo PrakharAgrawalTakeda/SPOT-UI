@@ -137,7 +137,7 @@ export class GeneralInfoComponent implements OnInit {
               isArchived: res.projectData.isArchived,
               owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
               projectId: res.projectData.problemId,
-              opU: res.portfolioOwner.opU,
+              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName ,
               isGoodPractise: res.projectData.isGoodPractise,
               approveDate: res.portfolioCenterData.definitiveCrapprovalDate  ,
               //Stategic Drivers
