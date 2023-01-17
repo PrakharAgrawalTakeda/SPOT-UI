@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../../common/project-api.service';
@@ -13,6 +13,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   filterCriteria: any = {}
   generalInfo: any = {}
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
+  @Input() viewType: 'SidePanel'| 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub'| 'CreateNew' |'CopyProject' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived","problemTitle","parentProject","portfolioOwner","excecutionScope", "owningOrganization","enviornmentalPortfolio","isCapsProject","primaryProduct","otherImpactedProducts","problemType","projectDescription"]
   owningOrganizationValues = []
   viewContent = false
   generalInfoForm = new FormGroup({
@@ -92,7 +95,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
   }
-
+  viewElementChecker(element: string):boolean{
+    return this.viewElements.some(x=>x==element)
+  }
 
   submitGI() {
     var formValue = this.generalInfoForm.getRawValue()
