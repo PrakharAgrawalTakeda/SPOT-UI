@@ -51,7 +51,7 @@ export class GeneralInfoComponent implements OnInit {
     isQualityRef: new FormControl(false),
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
-    approveDate: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
     opU: new FormControl(''),
     projectId: new FormControl(''),
     //Stategic Drivers
@@ -93,7 +93,7 @@ export class GeneralInfoComponent implements OnInit {
   }
   dataloader(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if(this.mode == 'Close-Out'){
+    if(this.mode != 'Normal'){
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
     this.portApiService.getfilterlist().then(filterres => {
@@ -139,7 +139,7 @@ export class GeneralInfoComponent implements OnInit {
               projectId: res.projectData.problemId,
               opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName ,
               isGoodPractise: res.projectData.isGoodPractise,
-              approveDate: res.portfolioCenterData.definitiveCrapprovalDate  ,
+              closeOutApprovedDate: res.portfolioCenterData.closeOutApprovedDate,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,

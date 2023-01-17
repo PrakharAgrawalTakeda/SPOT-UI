@@ -32,7 +32,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
     isGoodPractice: new FormControl(false),
-    approveDate: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -84,7 +84,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         isGoodPractice: res.projectData.isGoodPractise,
         isCapsProject: res.projectData.isCapsProject,
         owningOrganization: res.projectData.defaultOwningOrganizationId,
-        approveDate: res.portfolioCenterData.definitiveCrapprovalDate
+        closeOutApprovedDate: res.portfolioCenterData.closeOutApprovedDate
       });
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
@@ -161,7 +161,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
-    mainObj.definitiveCrapprovalDate = formValue.approveDate
+    mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)
