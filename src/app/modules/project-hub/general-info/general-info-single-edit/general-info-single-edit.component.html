@@ -62,11 +62,13 @@
                     <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
                 </div>
             </div>-->
-            <spot-toggle class="w-full" formControlName="isCapsProject" [mode]="'toggle'" [label]="'CAPS Project '"
-                [showHint]="true"
-                [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+            <div class="w-full mt-4 mb-6">
+                <spot-toggle class="w-full" formControlName="isCapsProject" [mode]="'toggle'"
+                    [label]="'CAPS Project '" [showHint]="true"
+                    [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
                 CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-            </spot-toggle>
+                </spot-toggle>
+            </div>
             <spot-singleselect-autocomplete class="w-full" formControlName="primaryProduct" name="primaryProduct"
                 [label]="'Primary Product'" [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
                 [dropDownArray]="filterCriteria.products" [showHint]="true"
