@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../../common/project-api.service';
@@ -13,9 +13,10 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   filterCriteria: any = {}
   generalInfo: any = {}
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
-  @Input() viewType: 'SidePanel'| 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub'| 'CreateNew' |'CopyProject' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived","problemTitle","parentProject","portfolioOwner","excecutionScope", "owningOrganization","enviornmentalPortfolio","isCapsProject","primaryProduct","otherImpactedProducts","problemType","projectDescription"]
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  @Output() formValue = new EventEmitter();
   owningOrganizationValues = []
   viewContent = false
   generalInfoForm = new FormGroup({
@@ -39,7 +40,12 @@ export class GeneralInfoSingleEditComponent implements OnInit {
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        this.projectHubService.isFormChanged = true
+        if (this.callLocation == 'ProjectHub') {
+          this.projectHubService.isFormChanged = true
+        }
+        else{
+          this.formValue.emit(this.generalInfo.getRawValue())
+        }
       }
     })
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
@@ -95,8 +101,8 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
   }
-  viewElementChecker(element: string):boolean{
-    return this.viewElements.some(x=>x==element)
+  viewElementChecker(element: string): boolean {
+    return this.viewElements.some(x => x == element)
   }
 
   submitGI() {
