@@ -1,0 +1,26 @@
+<form [formGroup]="form" class="form w-full">
+    <div class="flex justify-between items-center w-full pt-4 pb-6" *ngIf="mode=='toggle'">
+        <div class="flex justify-start gap-1 items-center" *ngIf="showLabel">{{label}} <mat-icon *ngIf="showHint" class="pe icon-size-4"
+                matTooltip="{{hint}}">
+                help</mat-icon>
+        </div>
+        <div>
+            <mat-slide-toggle formControlName="control" (change)="onChange($event.checked)"></mat-slide-toggle>
+        </div>
+    </div>
+
+
+
+
+
+    <mat-form-field [ngClass]="formFieldHelpers" *ngIf="mode=='dropDown'" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
+        <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
+                *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
+        </mat-label>
+        <mat-select formControlName="control" [placeholder]="placeholder" (selectionChange)="optionSelect($event.value)"
+            (closed)="onTouch()">
+            <mat-option *ngFor="let singleValue of dropDownArray" value="{{singleValue}}">{{singleValue}}</mat-option>
+        </mat-select>
+        <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
+    </mat-form-field>
+</form>
