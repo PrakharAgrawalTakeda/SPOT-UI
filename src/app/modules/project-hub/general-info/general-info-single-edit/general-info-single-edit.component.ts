@@ -43,8 +43,8 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         if (this.callLocation == 'ProjectHub') {
           this.projectHubService.isFormChanged = true
         }
-        else{
-          this.formValue.emit(this.generalInfo.getRawValue())
+        else {
+          this.formValue.emit(this.generalInfoForm.getRawValue())
         }
       }
     })
@@ -68,29 +68,38 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
-      this.generalInfo = res
-      this.filterCriteria = this.projectHubService.all
-      this.generalInfoForm.patchValue({
-        problemTitle: res.projectData.problemTitle,
-        problemType: res.projectData.problemType,
-        projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-        projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-        projectDescription: res.projectData.projectDescription,
-        primaryProduct: res.primaryProduct ? res.primaryProduct : {},
-        otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-        portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
-        excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-        enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
-        isArchived: res.projectData.isArchived,
-        isCapsProject: res.projectData.isCapsProject,
-        owningOrganization: res.projectData.defaultOwningOrganizationId,
-      });
-      this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.viewContent = true
-    })
+    if (this.callLocation == 'ProjectHub') {
+      this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
+        this.generalInfo = res
+        this.filterCriteria = this.projectHubService.all
+        this.generalInfoForm.patchValue({
+          problemTitle: res.projectData.problemTitle,
+          problemType: res.projectData.problemType,
+          projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+          projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+          projectDescription: res.projectData.projectDescription,
+          primaryProduct: res.primaryProduct ? res.primaryProduct : {},
+          otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+          portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+          excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+          enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+          isArchived: res.projectData.isArchived,
+          isCapsProject: res.projectData.isCapsProject,
+          owningOrganization: res.projectData.defaultOwningOrganizationId,
+        });
+        this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+        this.viewContent = true
+      })
+    }
+    else{
+      this.apiService.getfilterlist().then(res=>{
+        this.filterCriteria = res
+        this.formValue.emit(this.generalInfoForm.getRawValue())
+        this.viewContent = true
+      })
+    }
   }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)

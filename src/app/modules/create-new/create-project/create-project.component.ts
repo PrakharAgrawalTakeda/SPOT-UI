@@ -21,7 +21,12 @@ import { EventType } from '@azure/msal-browser';
 })
 export class CreateProjectComponent implements OnInit {
   constructor() { }
-
+  capturedValues = ['','']
   ngOnInit(): void {
+  }
+
+  captureValue(index: number,event:any){
+    this.capturedValues[index] = event
+    console.log(this.capturedValues)
   }
   }

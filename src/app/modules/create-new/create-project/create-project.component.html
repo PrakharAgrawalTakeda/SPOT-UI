@@ -1,2 +1,3 @@
 <p>create new works</p>
-<app-general-info-single-edit></app-general-info-single-edit>
+<app-general-info-single-edit [callLocation] = "'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)"></app-general-info-single-edit>
+<app-general-info-single-edit [callLocation] = "'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"></app-general-info-single-edit>
