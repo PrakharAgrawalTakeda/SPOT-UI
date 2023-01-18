@@ -16,6 +16,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
   viewContent = false
+  kpiMasters = []
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectId: new FormControl(''),
@@ -32,7 +33,14 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
     isGoodPractice: new FormControl(false),
+    isAgile: new FormControl(false),
     closeOutApprovedDate: new FormControl(''),
+    projectProposalApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
+    primaryKpi: new FormControl(''),
+    agilePrimaryWorkstream: new FormControl(''),
+    agileSecondaryWorkstream: new FormControl([]),
+    agileWave: new FormControl(''),
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -82,15 +90,23 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
         isArchived: res.projectData.isArchived,
         isGoodPractice: res.projectData.isGoodPractise,
+        isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
         isCapsProject: res.projectData.isCapsProject,
         owningOrganization: res.projectData.defaultOwningOrganizationId,
-        closeOutApprovedDate: res.portfolioCenterData.closeOutApprovedDate
+        closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+        projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+        approvedDate: res.projectData.approvedDate,
+        primaryKpi : res.projectData.primaryKpi || res.projectData.primaryKpi != ''? this.projectHubService.kpiMasters.find(x=>x.kpiid == res.projectData.primaryKpi).kpiid:'',
+        agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
+        agileSecondaryWorkstream: res.agileSecondaryWorkstream,
+        agileWave: res.agileWave ? res.agileWave.lookUpName : '',
       });
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true
     })
+
   }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
@@ -162,6 +178,12 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
     mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate
+    mainObj.projectProposalApprovedDate = formValue.projectProposalApprovedDate
+    mainObj.approvedDate = formValue.approvedDate
+    mainObj.agilePrimaryWorkstream = formValue.agilePrimaryWorkstream
+    mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream
+    mainObj.agileWave = formValue.agileWave
+
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)
