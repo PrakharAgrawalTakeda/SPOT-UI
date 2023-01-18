@@ -395,6 +395,9 @@ export const projectRoutes: Route[] = [
         MessagesModule,
         NotificationsModule,
         UserModule
+    ],
+    exports:[
+      GeneralInfoSingleEditComponent
     ]
 })
 export class ProjectHubModule { }
