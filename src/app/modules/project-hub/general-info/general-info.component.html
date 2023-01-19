@@ -114,6 +114,7 @@
               [hint]="'Any additional products which are impacted by the project execution'">
             </spot-multiselect-autocomplete>
           </div>
+          <!---FIX REQ START-->
           <div class="flex justify-between items-center gap-6" *ngIf="mode == 'Project-Charter'">
               <spot-input class="w-full read-only" formControlName="primaryKPI" name="primaryKPI" [label]="'Primary KPI'">
               </spot-input>
@@ -142,6 +143,7 @@
               </spot-input>
               <div class="w-full" ></div>
           </div>
+          <!--FIX REQ END-->
           <div class="flex justify-between items-start gap-6" *ngIf="mode == 'Normal'">
             <spot-input class="w-full read-only" formControlName="problemType" name="problemType" [label]="'Project Type'">
             </spot-input>
