@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 
@@ -41,6 +41,163 @@ export class StrategicDriversComponent implements OnInit {
       if (this.viewContent) {
         if (this.callLocation == 'ProjectHub') {
           this.projectHubService.isFormChanged = true
+        }
+      }
+    })
+
+    //confirmation pop ups
+    this.strategicDriversForm.controls.isAgile.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the Agile Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.strategicDriversForm.patchValue({
+                agilePrimaryWorkstream: {},
+                agileSecondaryWorkstream: [],
+                agileWave: {},
+              })
+            }
+            else {
+              this.strategicDriversForm.controls.isAgile.patchValue(true)
+            }
+          })
+        }
+      }
+    })
+    this.strategicDriversForm.controls.isPobos.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the POBOS Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.strategicDriversForm.patchValue({
+                pobosCategory: []
+              })
+            }
+            else {
+              this.strategicDriversForm.controls.isPobos.patchValue(true)
+            }
+          })
+        }
+      }
+    })
+    this.strategicDriversForm.controls.isGmsgqltannualMustWin.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the Annual Must Win and Strategic Year?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.strategicDriversForm.patchValue({
+                strategicYear: {},
+                annualMustWinID: {}
+              })
+            }
+            else {
+              this.strategicDriversForm.controls.isGmsgqltannualMustWin.patchValue(true)
+            }
+          })
+        }
+      }
+    })
+    this.strategicDriversForm.controls.isSiteAssessment.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the Site Assessment Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.strategicDriversForm.patchValue({
+                siteAssessmentCategory: []
+              })
+            }
+            else {
+              this.strategicDriversForm.controls.isSiteAssessment.patchValue(true)
+            }
+          })
         }
       }
     })
