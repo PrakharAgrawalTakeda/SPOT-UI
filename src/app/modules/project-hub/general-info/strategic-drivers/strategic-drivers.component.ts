@@ -37,7 +37,13 @@ export class StrategicDriversComponent implements OnInit {
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService) {
-
+    this.strategicDriversForm.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (this.callLocation == 'ProjectHub') {
+          this.projectHubService.isFormChanged = true
+        }
+      }
+    })
   }
 
   ngOnInit(): void {
