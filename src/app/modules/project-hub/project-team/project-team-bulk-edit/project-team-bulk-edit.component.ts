@@ -186,9 +186,9 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         const alert = this.fuseAlert.open(comfirmConfig)
       }
       else {
-          if (this.teamMembersSubmit.some(x => x.percentTime >150 ||  x.duration > 150)) {
+          if (this.teamMembersSubmit.some(x => x.percentTime >100 || x.percentTime < 0)) {
               var comfirmConfig: FuseConfirmationConfig = {
-                  "title": "Duration and Percent time values cannot be higher than 150",
+                  "title": "Percent time value cannot be greater than 100 or smaller than 0",
                   "message": "",
                   "icon": {
                       "show": true,
@@ -210,13 +210,37 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               }
               const alert = this.fuseAlert.open(comfirmConfig)
           }else{
-              {
+              if (this.teamMembersSubmit.some(x =>  x.duration < 0)) {
+                  var comfirmConfig: FuseConfirmationConfig = {
+                      "title": "Duration value cannot be smaller than 0",
+                      "message": "",
+                      "icon": {
+                          "show": true,
+                          "name": "heroicons_outline:exclamation",
+                          "color": "warning"
+                      },
+                      "actions": {
+                          "confirm": {
+                              "show": true,
+                              "label": "Okay",
+                              "color": "primary"
+                          },
+                          "cancel": {
+                              "show": false,
+                              "label": "Cancel"
+                          }
+                      },
+                      "dismissible": true
+                  }
+                  const alert = this.fuseAlert.open(comfirmConfig)
+              }else{
                   this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
                       this.projecthubservice.submitbutton.next(true)
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                       this.projecthubservice.isNavChanged.next(true)
                   })
               }
+
           }
       }
     }

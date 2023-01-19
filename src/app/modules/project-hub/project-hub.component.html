@@ -21,6 +21,7 @@
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate']"></app-general-info-single-edit>
         <app-quality-ref-bulk-edit *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
         <app-oe-project-single-edit *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
         <app-tech-transfer-single-edit *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>

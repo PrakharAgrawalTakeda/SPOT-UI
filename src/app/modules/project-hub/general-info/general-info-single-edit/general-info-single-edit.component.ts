@@ -15,7 +15,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   @Input() viewType: 'SidePanel'| 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub'| 'CreateNew' |'CopyProject' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived","problemTitle","parentProject","portfolioOwner","excecutionScope", "owningOrganization","enviornmentalPortfolio","isCapsProject","primaryProduct","otherImpactedProducts","problemType","projectDescription"]
+  @Input() viewElements: any = ["isArchived","problemTitle","parentProject","portfolioOwner","excecutionScope", "owningOrganization","enviornmentalPortfolio","isCapsProject","primaryProduct","otherImpactedProducts","problemType","projectDescription","closeOutApprovedDate","projectProposalApprovedDate","approvedDate"]
   owningOrganizationValues = []
   viewContent = false
   generalInfoForm = new FormGroup({

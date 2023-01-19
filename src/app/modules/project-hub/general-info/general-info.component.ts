@@ -20,6 +20,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 })
 export class GeneralInfoComponent implements OnInit {
   @Input() mode: 'Normal' | 'Close-Out' | 'Project-Proposal' | 'Project-Charter' = 'Normal'
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' = 'GeneralInfoSingleEdit'
   viewContent: boolean = false
   lookUpData: any = []
   kpiData:any = []
@@ -97,6 +98,9 @@ export class GeneralInfoComponent implements OnInit {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     if(this.mode != 'Normal'){
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
+    if(this.mode == 'Close-Out'){
+        this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
     }
     this.portApiService.getfilterlist().then(filterres => {
       this.authService.lookupMaster().then((lookup: any) => {
