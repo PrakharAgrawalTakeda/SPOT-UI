@@ -150,8 +150,7 @@ export class GeneralInfoComponent implements OnInit {
               approvedDate: res.projectData.approvedDate,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
-              // isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
-                isAgile: true,
+              isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
               agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
               agileSecondaryWorkstream: res.agileSecondaryWorkstream,
               agileWave: res.agileWave ? res.agileWave.lookUpName : '',
