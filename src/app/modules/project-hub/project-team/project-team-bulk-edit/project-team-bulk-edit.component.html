@@ -69,7 +69,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="% Time" prop="percentTime" [flexGrow]="0.25">
+                <ngx-datatable-column [sortable]="false" name="% Time" prop="percentTime" [flexGrow]="0.25" *ngIf="mode == 'Project-Proposal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
@@ -88,7 +88,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="0.25">
+                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="0.25" *ngIf="mode == 'Project-Proposal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>

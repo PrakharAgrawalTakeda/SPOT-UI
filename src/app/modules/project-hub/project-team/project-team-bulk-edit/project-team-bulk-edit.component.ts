@@ -12,7 +12,7 @@ import { ProjectHubService } from '../../project-hub.service';
   styleUrls: ['./project-team-bulk-edit.component.scss']
 })
 export class ProjectTeamBulkEditComponent implements OnInit {
-    @Input() mode: string;
+  @Input() mode: 'Normal' | 'Close-Out' | 'Project-Proposal' | 'Project-Charter' = 'Normal'
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.projectTeamForm.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
