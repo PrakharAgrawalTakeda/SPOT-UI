@@ -16,7 +16,8 @@ export class ProjectTeamComponent implements OnInit {
   teamMembers: any = []
   id: string = ''
   isGrid: boolean = false
-  bulkEditType: string ='ProjectTeamBulkEdit' ;
+  bulkEditType: string ='ProjectTeamBulkEdit';
+  addSingle: string ='ProjectTeamAddSingle';
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
@@ -34,7 +35,8 @@ export class ProjectTeamComponent implements OnInit {
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
     if(this.mode == 'Project-Proposal'){
-        this.bulkEditType = 'ProjectTeamBulkEditProjectProposal'
+        this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
+        this.addSingle = 'ProjectTeamAddSingleProjectProposal'
     }
     this.apiService.getmembersbyproject(this.id).then((res) => {
       this.teamMembers = res

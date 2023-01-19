@@ -10,7 +10,8 @@
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
         <app-schedule-link *ngIf="projecthubservice.itemtype == 'LinkMilestones'"></app-schedule-link>
-        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'" [mode]=projecthubservice.itemid></app-project-team-add-single>
+        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
+        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingleProjectProposal'" [mode]="'Project-Proposal'"></app-project-team-add-single>
         <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'"></app-project-team-bulk-edit>
         <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEditProjectProposal'" [mode]="'Project-Proposal'"></app-project-team-bulk-edit>
         <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
