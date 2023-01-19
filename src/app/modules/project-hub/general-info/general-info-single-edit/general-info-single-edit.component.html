@@ -62,7 +62,7 @@
                     <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
                 </div>
             </div>-->
-            <div class="w-full mt-4 mb-6">
+            <div class="w-full mt-4 mb-6" *ngIf="viewElementChecker('isCapsProject')">
                 <spot-toggle class="w-full" formControlName="isCapsProject" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
                     [label]="'CAPS Project '" [showHint]="true"
                     [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
