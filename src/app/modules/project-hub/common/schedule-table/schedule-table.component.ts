@@ -22,6 +22,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() baselineLog: any = {}
   @Input() lookup: any
   @Input() editable: boolean
+  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
   @ViewChild('scheduleTable') scheduleTable: any;
   getRowClass = (row) => {
     return {
