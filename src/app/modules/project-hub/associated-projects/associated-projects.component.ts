@@ -47,13 +47,14 @@ export class AssociatedProjectsComponent implements OnInit {
                 if (project.parentId == this.id) {
                     children.push(project)
                 }
+
                 project.projectName =
                     project.problemId + ' - ' + project.problemTitle;
                 project.projectCapitalOe =
                     project.phase +
                     ' - ' +
-                    (project.capitalPhaseName
-                        ? project.capitalPhaseName
+                    (project.capitalPhaseAbbreviation
+                        ? project.capitalPhaseAbbreviation
                         : 'NA') +
                     ' - ' +
                     (project.oePhaseAbbreviation

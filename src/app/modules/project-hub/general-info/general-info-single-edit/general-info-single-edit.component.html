@@ -20,6 +20,33 @@
             <spot-input class="w-full" formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
                 [placeholder]="'Project Name'" *ngIf="viewElementChecker('problemTitle')">
             </spot-input>
+            <div  *ngIf="viewElementChecker('approvedDate')">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                    <mat-label>Date Approved</mat-label>
+                    <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="approvedDate"
+                           name="approvedDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div *ngIf="viewElementChecker('closeOutApprovedDate')">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                    <mat-label>Date Approved</mat-label>
+                    <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="closeOutApprovedDate"
+                           name="closeOutApprovedDate" >
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div *ngIf="viewElementChecker('projectProposalApprovedDate')">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                    <mat-label>Date Approved</mat-label>
+                    <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="projectProposalApprovedDate"
+                           name="projectProposalApprovedDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
             <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')" class="w-full"
                 [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
                 [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">

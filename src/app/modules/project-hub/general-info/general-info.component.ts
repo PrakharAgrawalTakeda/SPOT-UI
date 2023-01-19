@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as moment from 'moment';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -19,6 +19,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   providers: [],
 })
 export class GeneralInfoComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Close-Out' | 'Project-Proposal' | 'Project-Charter' = 'Normal'
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' = 'GeneralInfoSingleEdit'
   viewContent: boolean = false
   lookUpData: any = []
   kpiData:any = []
@@ -50,6 +52,11 @@ export class GeneralInfoComponent implements OnInit {
     isQualityRef: new FormControl(false),
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
+    projectProposalApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
+    opU: new FormControl(''),
+    projectId: new FormControl(''),
     //Stategic Drivers
     primaryKPI: new FormControl(''),
     isAgile: new FormControl(false),
@@ -89,6 +96,12 @@ export class GeneralInfoComponent implements OnInit {
   }
   dataloader(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    if(this.mode != 'Normal'){
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
+    if(this.mode == 'Close-Out'){
+        this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
+    }
     this.portApiService.getfilterlist().then(filterres => {
       this.authService.lookupMaster().then((lookup: any) => {
         this.authService.KPIMaster().then((kpi:any)=>{
@@ -129,9 +142,16 @@ export class GeneralInfoComponent implements OnInit {
               isQualityRef: res.qualityReferences.length != 0,
               isArchived: res.projectData.isArchived,
               owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
+              projectId: res.projectData.problemId,
+              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName ,
+              isGoodPractise: res.projectData.isGoodPractise,
+              closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+              projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+              approvedDate: res.projectData.approvedDate,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
-              isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
+              // isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
+                isAgile: true,
               agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
               agileSecondaryWorkstream: res.agileSecondaryWorkstream,
               agileWave: res.agileWave ? res.agileWave.lookUpName : '',
@@ -142,7 +162,6 @@ export class GeneralInfoComponent implements OnInit {
               annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
               isSiteAssessment: res.projectData.isSiteAssessment,
               siteAssessmentCategory: res.siteAssessmentCategory,
-              isGoodPractise: res.projectData.isGoodPractise
             })
             this.viewContent = true
         })

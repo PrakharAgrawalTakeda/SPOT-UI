@@ -32,7 +32,10 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     enviornmentalPortfolio: new FormControl({}),
     isArchived: new FormControl(false),
     isCapsProject: new FormControl(false),
-    owningOrganization: new FormControl('')
+    owningOrganization: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
+    projectProposalApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -86,6 +89,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
           isArchived: res.projectData.isArchived,
           isCapsProject: res.projectData.isCapsProject,
           owningOrganization: res.projectData.defaultOwningOrganizationId,
+        closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+        projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+        approvedDate: res.projectData.approvedDate,
         });
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
@@ -171,6 +177,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
+    mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate
+    mainObj.projectProposalApprovedDate = formValue.projectProposalApprovedDate
+    mainObj.approvedDate = formValue.approvedDate
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)

@@ -101,7 +101,6 @@ import { StrategicDriversComponent } from './general-info/strategic-drivers/stra
 import { ProjectProposalGeneralInfoComponent } from './project-proposal/project-proposal-general-info/project-proposal-general-info.component';
 import { ProjectProposalBenefitsComponent } from './project-proposal/project-proposal-benefits/project-proposal-benefits.component';
 import { ProjectProposalPlanningTeamComponent } from './project-proposal/project-proposal-planning-team/project-proposal-planning-team.component';
-import { CloseOutGeneralInfoComponent } from './close-out/close-out-general-info/close-out-general-info.component';
 import { CloseOutOutcomesComponent } from './close-out/close-out-outcomes/close-out-outcomes.component';
 import { CloseOutMilestoneVarianceComponent } from './close-out/close-out-milestone-variance/close-out-milestone-variance.component';
 import { CloseOutBudgetPerformanceComponent } from './close-out/close-out-budget-performance/close-out-budget-performance.component';
@@ -114,6 +113,8 @@ import { ProjectCharterProjectTeamComponent } from './project-charter/project-ch
 import { ProjectCharterRiskIssuesComponent } from './project-charter/project-charter-risk-issues/project-charter-risk-issues.component';
 import { ProjectCharterCostFundingComponent } from './project-charter/project-charter-cost-funding/project-charter-cost-funding.component';
 import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
+import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/close-out-general-info.component";
+
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -151,6 +152,11 @@ export const projectRoutes: Route[] = [
     {
       path: 'general-info',
       component: GeneralInfoComponent,
+      pathMatch: 'full'
+    },
+    {
+      path: 'close-out-general-info',
+      component: CloseOutGeneralInfoComponent,
       pathMatch: 'full'
     },
     {
@@ -336,6 +342,8 @@ export const projectRoutes: Route[] = [
     SchedulesTableComponent,
     RiskIssuesLinkComponent,
     RiskIssueTableComponent,
+    StrategicDriversComponent,
+    CloseOutGeneralInfoComponent,
     StrategicDriversComponent,
     ProjectProposalGeneralInfoComponent,
     ProjectProposalBenefitsComponent,
