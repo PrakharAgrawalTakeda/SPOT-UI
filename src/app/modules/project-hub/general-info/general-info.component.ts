@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as moment from 'moment';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -19,8 +19,11 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   providers: [],
 })
 export class GeneralInfoComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Close-Out' | 'Project-Proposal' | 'Project-Charter' = 'Normal'
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' = 'GeneralInfoSingleEdit'
   viewContent: boolean = false
   lookUpData: any = []
+  kpiData:any = []
   id: string = ""
   generalInfoData: any = {}
   filterCriteria: any = {}
@@ -49,6 +52,25 @@ export class GeneralInfoComponent implements OnInit {
     isQualityRef: new FormControl(false),
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
+    projectProposalApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
+    opU: new FormControl(''),
+    projectId: new FormControl(''),
+    //Stategic Drivers
+    primaryKPI: new FormControl(''),
+    isAgile: new FormControl(false),
+    agilePrimaryWorkstream: new FormControl(''),
+    agileSecondaryWorkstream: new FormControl([]),
+    agileWave: new FormControl(''),
+    isPobos: new FormControl(false),
+    pobosCategory: new FormControl([]),
+    isGmsgqltannualMustWin: new FormControl(false),
+    strategicYear: new FormControl(''),
+    annualMustWinID: new FormControl(''),
+    isSiteAssessment: new FormControl(false),
+    siteAssessmentCategory: new FormControl([]),
+    isGoodPractise: new FormControl(false)
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -74,47 +96,77 @@ export class GeneralInfoComponent implements OnInit {
   }
   dataloader(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.apiService.getGeneralInfoData(this.id).then((res: any) => {
-      this.portApiService.getfilterlist().then(filterres => {
-        this.authService.lookupMaster().then((lookup: any) => {
+    if(this.mode != 'Normal'){
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
+    if(this.mode == 'Close-Out'){
+        this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
+    }
+    this.portApiService.getfilterlist().then(filterres => {
+      this.authService.lookupMaster().then((lookup: any) => {
+        this.authService.KPIMaster().then((kpi:any)=>{
           console.log('LookUp Data', lookup)
           this.lookUpData = lookup
           this.projectHubService.lookUpMaster = lookup
           console.log('Filter Criteria:', filterres)
           this.filterCriteria = filterres
-          console.log("General Info:", res)
-          this.generalInfoData = res
-          var oeprojectypelist = res.projectData.oeprojectType && res.projectData.oeprojectType != '' ? res.projectData.oeprojectType.split(',') : []
-          this.generalInfoForm.patchValue({
-            problemTitle: res.projectData.problemTitle,
-            problemType: res.projectData.problemType,
-            topsGroup: res.topsData ? res.topsData.topsgroup : '',
-            recordCreationDate: res.projectData.createdDate,
-            parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
-            submittedBy: res.projectData.problemOwnerName,
-            projectManager: res.portfolioCenterData.pm,
-            sponsor: res.portfolioCenterData.sponsor,
-            projectDescription: res.projectData.projectDescription,
-            primaryProduct: res.primaryProduct?res.primaryProduct.fullProductName:'',
-            otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-            portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
-            excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-            enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
-            isOeproject: res.projectData.isOeproject,
-            oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => res.projectData.oeprojectType.includes(x.lookUpId)) : [],
-            isCapsProject: res.projectData.isCapsProject,
-            isTechTransfer: res.projectData.isTechTransfer,
-            productionStepId: res.projectData.productionStepId,
-            campaignPhaseId: res.projectData.campaignPhaseId,
-            campaignTypeId: res.projectData.campaignTypeId,
-            isQualityRef: res.qualityReferences.length != 0,
-            isArchived: res.projectData.isArchived,
-            owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
-          })
-          this.viewContent = true
+          this.kpiData = kpi
+          this.projectHubService.kpiMasters = kpi
+          console.log('KPI Masters', kpi)
+          this.apiService.getGeneralInfoData(this.id).then((res: any) => {
+            console.log("General Info:", res)
+            this.generalInfoData = res
+            var oeprojectypelist = res.projectData.oeprojectType && res.projectData.oeprojectType != '' ? res.projectData.oeprojectType.split(',') : []
+            this.generalInfoForm.patchValue({
+              problemTitle: res.projectData.problemTitle,
+              problemType: res.projectData.problemType,
+              topsGroup: res.topsData ? res.topsData.topsgroup : '',
+              recordCreationDate: res.projectData.createdDate,
+              parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
+              submittedBy: res.projectData.problemOwnerName,
+              projectManager: res.portfolioCenterData.pm,
+              sponsor: res.portfolioCenterData.sponsor,
+              projectDescription: res.projectData.projectDescription,
+              primaryProduct: res.primaryProduct ? res.primaryProduct.fullProductName : '',
+              otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+              portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
+              excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+              enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
+              isOeproject: res.projectData.isOeproject,
+              oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => res.projectData.oeprojectType.includes(x.lookUpId)) : [],
+              isCapsProject: res.projectData.isCapsProject,
+              isTechTransfer: res.projectData.isTechTransfer,
+              productionStepId: res.projectData.productionStepId,
+              campaignPhaseId: res.projectData.campaignPhaseId,
+              campaignTypeId: res.projectData.campaignTypeId,
+              isQualityRef: res.qualityReferences.length != 0,
+              isArchived: res.projectData.isArchived,
+              owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
+              projectId: res.projectData.problemId,
+              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName ,
+              isGoodPractise: res.projectData.isGoodPractise,
+              closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+              projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+              approvedDate: res.projectData.approvedDate,
+              //Stategic Drivers
+              primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
+              isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
+              agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
+              agileSecondaryWorkstream: res.agileSecondaryWorkstream,
+              agileWave: res.agileWave ? res.agileWave.lookUpName : '',
+              isPobos: res.projectData.isPobos,
+              pobosCategory: res.pobosCategory,
+              isGmsgqltannualMustWin: res.projectData.isGmsgqltannualMustWin,
+              strategicYear: res.strategicYearID ? res.strategicYearID.lookUpName : '',
+              annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
+              isSiteAssessment: res.projectData.isSiteAssessment,
+              siteAssessmentCategory: res.siteAssessmentCategory,
+            })
+            this.viewContent = true
         })
       })
     })
+  })
     this.disabler()
   }
 
@@ -141,7 +193,7 @@ export class GeneralInfoComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "A4C55F7E-C213-401E-A777-3BA741FF5802")
   }
   getOwningOrganization(): any {
-      return this.generalInfoData.defaultOwningOrganizations;
+    return this.generalInfoData.defaultOwningOrganizations;
   }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''

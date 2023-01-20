@@ -13,10 +13,13 @@ import { EventType } from '@azure/msal-browser';
   encapsulation: ViewEncapsulation.None
 })
 export class ProjectTeamComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Project-Proposal' | 'Project-Charter' | 'Project-Dashboards' = 'Normal'
   teamMembers: any = []
   id: string = ''
   isGrid: boolean = false
   Urlval: any;
+  bulkEditType: string = 'ProjectTeamBulkEdit';
+  addSingle: string = 'ProjectTeamAddSingle';
   chartercount: string;
   @Output() eventName = new EventEmitter<EventType>();
   @Input() mode: 'Project-Teams' | 'project-charter-project-teams' = 'Project-Teams';
@@ -35,8 +38,14 @@ export class ProjectTeamComponent implements OnInit {
   }
   dataloader(){
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    if(this.mode != 'Normal'){
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
+    if(this.mode == 'Project-Proposal'){
+        this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
+        this.addSingle = 'ProjectTeamAddSingleProjectProposal'
+    }
     this.apiService.getmembersbyproject(this.id).then((res) => {
-      console.log(res)
       this.teamMembers = res
       this.chartercount = this.teamMembers.filter(x => x.includeInCharter == true).length;
       localStorage.setItem('chartercount', this.chartercount);

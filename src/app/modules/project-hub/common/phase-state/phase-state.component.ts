@@ -111,6 +111,7 @@ export class PhaseStateComponent implements OnInit {
         this.apiService.postPhaseState(body).then(res=>{
             this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
             this.projecthubservice.isNavChanged.next(true)
+            this.projecthubservice.submitbutton.next(true)
         }).catch(err => {
             if(err.status == 400){
                 this.projecthubservice.toggleDrawerOpen('', '', [] ,'')

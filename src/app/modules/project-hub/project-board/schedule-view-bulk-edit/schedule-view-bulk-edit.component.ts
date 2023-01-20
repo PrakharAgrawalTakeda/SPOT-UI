@@ -124,7 +124,7 @@ indicatorchange: boolean = false
   prevObj: any = []
   newArray: any = []
   temp: any = []
-  Urlval: any;
+  insertarray : any = []
   // onResize(event){
   //   event.window.innerWidth; // window width
   // }
@@ -147,6 +147,18 @@ indicatorchange: boolean = false
     })
     //this.setSize();
     this.milestoneForm.valueChanges.subscribe(res => {
+      debugger
+      for(let control of this.milestoneForm.controls)
+      {
+        console.log(control['controls']['baselineFinish'].value)
+        console.log(this.scheduleData.scheduleData)
+        console.log(control['value']['scheduleUniqueId'])
+        console.log(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
+        if(control['controls']['baselineFinish'].value != moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
+        {
+          this.insertArray(control['controls']['projectId'].value)
+        }
+      }
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
       console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
       if (this.viewContent == true) {
@@ -214,7 +226,17 @@ indicatorchange: boolean = false
 
   }
 
+  insertArray(projectId: string): void {
+    debugger
+if(this.insertarray.length == 0)
+{
+this.insertarray.push(this._Activatedroute.parent.snapshot.paramMap.get("id"))
+}
+else if(!this.insertarray.contains(projectId)){
+  this.insertarray.push(projectId)
+}
 
+  }
 
   getFunctionOwner(): any {
     return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")

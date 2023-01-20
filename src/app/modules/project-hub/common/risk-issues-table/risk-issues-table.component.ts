@@ -28,6 +28,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() editable: boolean
+  @Input() mode: 'Normal' | 'Project-Charter' = 'Normal'
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
   getRowClass = (row) => {
     return {
@@ -36,6 +37,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   };
   riskIssuesngxdata: any = []
   isclosed: boolean = false;
+  viewContent: boolean = false
   constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService,
@@ -61,6 +63,8 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
     this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+    this.viewContent = true
+      console.log("Aaaaaaaaaaaaaa",this.riskIssuesData)
 
   }
   changeriskissues(event: any) {

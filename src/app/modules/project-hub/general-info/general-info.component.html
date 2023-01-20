@@ -1,132 +1,201 @@
-<div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
-  <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate ">
-    <h3 class="text-xl text-primary">General Info</h3>
-  </div>
-  <!-- Enter Content here-->
-  <form class="w-full" [formGroup]="generalInfoForm">
-    <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden">
-      <div class="flex justify-end items-end">
-        <div></div>
-        <div>
-          <button class="ml-4 text-primary bg-gray-200"
-            *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
-            [color]="'primary-200'"
-            (click)="projectHubService.toggleDrawerOpen('GeneralInfoSingleEdit', '', filterCriteria , id)">
-            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-          </button>
-        </div>
+<ng-container *ngIf="viewContent">
+    <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
+      <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate ">
+        <h3 class="text-xl text-primary">General Info</h3>
       </div>
-      <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner" class="mt-6 mb-6">
-        <div class="flex justify-start gap-3 items-center">
-          Is Archived?
-          <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
-          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isArchived.value">
-          </mat-icon>
+      <!-- Enter Content here-->
+      <form class="w-full" [formGroup]="generalInfoForm">
+        <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden">
+          <div class="flex justify-end items-end">
+            <div></div>
+            <div>
+              <button class="ml-4 text-primary bg-gray-200"
+                *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                [color]="'primary-200'"
+                (click)="projectHubService.toggleDrawerOpen(generalInfoType, '', filterCriteria , id)">
+                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+              </button>
+            </div>
+          </div>
+          <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && mode == 'Normal'" class="mt-6 mb-6">
+            <div class="flex justify-start gap-3 items-center">
+              Is Archived?
+              <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
+              <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                *ngIf="generalInfoForm.controls.isArchived.value">
+              </mat-icon>
 
-        </div>
-      </div>
-      <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
-          [label]="'Project Name'">
-        </spot-input>
-        <spot-input class="w-full read-only" formControlName="parentProgram" name="problemTitle"
-          [label]="'Parent Program'" [showHint]="true"
-          [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
-        </spot-input>
-      </div>
-      <div class="flex justify-between items-start gap-6">
-        <spot-input formControlName="portfolioOwner" class="w-full read-only" name="portfolioOwner"
-          [label]="'Portfolio Owner'" [showHint]="true"
-          [hint]="'The group which is responsible for the oversight and process adherence of the record'">
-        </spot-input>
-        <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full read-only" name="excecutionScope"
-          [label]="'Execution Scope'" [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
-          [dropDownArray]="getExcecutionScope()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
-          [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
-        </spot-multiselect-autocomplete>
-      </div>
-      <div class="flex justify-between items-start gap-6">
-          <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization" [label]="'Owning Organization'" [showHint]="true"
-                      [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
-          </spot-input>
-          <div class="w-full"></div>
-        </div>
-      <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
-          [label]="'Environmental Portfolio'" [showHint]="true"
-          [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
-        </spot-input>
-        <div class="flex justify-start gap-3 items-center w-full pt-2">
-          <div class="flex justify-start gap-1 items-center">
-            CAPS Project <mat-icon class="pe icon-size-4"
-              matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
-          CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-              help</mat-icon>
+            </div>
+          </div>
+          <div class="flex justify-between items-center gap-6">
+            <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
+              [label]="'Project Name'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" name="parentProgram"
+              [label]="'Parent Program'" [showHint]="true"
+              [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
+            </spot-input>
+          </div>
+          <div class="flex justify-between items-start gap-6">
+            <div class="w-full read-only">
+                <spot-input formControlName="portfolioOwner"  name="portfolioOwner"
+                  [label]="'Portfolio Owner'" [showHint]="true"
+                  [hint]="'The group which is responsible for the oversight and process adherence of the record'">
+                </spot-input>
+            </div>
+            <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full read-only" name="excecutionScope"
+              [label]="'Execution Scope'" [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
+              [dropDownArray]="getExcecutionScope()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
+              [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+            </spot-multiselect-autocomplete>
+          </div>
+          <div class="flex justify-between items-start gap-6" *ngIf="mode == 'Close-Out' || mode =='Project-Charter' ">
+              <div class="w-full" *ngIf="mode == 'Close-Out'">
+                  <spot-input-date class="w-full read-only" formControlName="closeOutApprovedDate" name="closeOutApprovedDate"
+                                   [label]="'Date Approved'"></spot-input-date>
+              </div>
+              <div *ngIf="mode =='Project-Charter' " class="w-full">
+                  <spot-input-date class="w-full read-only" formControlName="approvedDate" name="approvedDate"
+                                   [label]="'Date Approved'"></spot-input-date>
+              </div>
+              <spot-input formControlName="opU" class="w-full read-only" name="opU"
+                          [label]="'OpU'">
+              </spot-input>
           </div>
 
-          <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
-          </mat-icon>
-          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isCapsProject.value">
-          </mat-icon>
-
-        </div>
-      </div>
-      <div class="flex justify-between items-center gap-6">
-        <spot-input class="w-full read-only" formControlName="projectManager" name="projectManager"
-          [label]="'Project Manager'">
-        </spot-input>
-        <spot-input class="w-full read-only" formControlName="sponsor" name="sponsor" [label]="'Sponsor'">
-        </spot-input>
-      </div>
-      <div class="flex justify-between items-start gap-6">
-        <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
-          [label]="'Primary Product'" [showHint]="true"
-          [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
-        </spot-input>
-        <spot-multiselect-autocomplete class="w-full read-only" formControlName="otherImpactedProducts"
-          name="otherImpactedProducts" [label]="'Other Impacted Products'" [valuePointer]="'fullProductName'"
-          [idPointer]="'productId'" [dropDownArray]="filterCriteria.products" [showHint]="true"
-          [hint]="'Any additional products which are impacted by the project execution'">
-        </spot-multiselect-autocomplete>
-      </div>
-      <div class="flex justify-between items-start gap-6">
-        <spot-input class="w-full read-only" formControlName="problemType" name="problemType" [label]="'Project Type'">
-        </spot-input>
-        <spot-input class="w-full read-only" formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'">
-        </spot-input>
-      </div>
-      <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
-        [label]="'Problem Description / Present Situation / Submission Description'">
-      </spot-textarea>
-    </div>
-
-
-    <div class="flex justify-between items-start gap-6">
-      <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
-        <div class="flex justify-between items-center">
-          <div class="flex justify-start items-center gap-3">
-            OE Project
-            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isOeproject.value">
-            </mat-icon>
-            <mat-icon  class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isOeproject.value">
-            </mat-icon>
+          <div class="flex justify-between items-start gap-6">
+            <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization"
+              [label]="'Owning Organization'" [showHint]="true"
+              [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+            </spot-input>
+            <div class="w-full" *ngIf="mode == 'Normal'" ></div>
+            <div class="w-full read-only" *ngIf="mode == 'Close-Out' || mode =='Project-Charter' ">
+                <spot-input formControlName="projectId"  name="projectId"
+                           [label]="'Project ID'">
+                </spot-input>
+            </div>
           </div>
-          <div class="flex items-center">
-            <button class="ml-4 text-primary bg-gray-200"
-              *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
-              [color]="'primary-200'" (click)="projectHubService.toggleDrawerOpen('OEProjectSingleEdit', '', [] , id)">
-              <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-            </button>
+          <div class="flex justify-between items-center gap-6" *ngIf="mode == 'Normal'">
+            <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+              [label]="'Environmental Portfolio'" [showHint]="true"
+              [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+            </spot-input>
+            <div class="flex justify-start gap-3 items-center w-full pt-2">
+              <div class="flex justify-start gap-1 items-center">
+                CAPS Project <mat-icon class="pe icon-size-4"
+                  matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+              CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
+                  help</mat-icon>
+              </div>
+
+              <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
+              </mat-icon>
+              <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                *ngIf="generalInfoForm.controls.isCapsProject.value">
+              </mat-icon>
+
+            </div>
           </div>
+          <div class="flex justify-between items-center gap-6">
+            <spot-input class="w-full read-only" formControlName="projectManager" name="projectManager"
+              [label]="'Project Manager'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="sponsor" name="sponsor" [label]="'Sponsor'">
+            </spot-input>
+          </div>
+          <div class="flex justify-between items-start gap-6">
+            <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
+              [label]="'Primary Product'" [showHint]="true"
+              [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
+            </spot-input>
+            <spot-multiselect-autocomplete class="w-full read-only" formControlName="otherImpactedProducts"
+              name="otherImpactedProducts" [label]="'Other Impacted Products'" [valuePointer]="'fullProductName'"
+              [idPointer]="'productId'" [dropDownArray]="filterCriteria.products" [showHint]="true"
+              [hint]="'Any additional products which are impacted by the project execution'">
+            </spot-multiselect-autocomplete>
+          </div>
+          <!---FIX REQ START-->
+          <div class="flex justify-between items-center gap-6" *ngIf="mode == 'Project-Charter'">
+              <spot-input class="w-full read-only" formControlName="primaryKPI" name="primaryKPI" [label]="'Primary KPI'">
+              </spot-input>
+              <div class="flex justify-start gap-3 items-center w-full pt-2">
+                  <div class="flex justify-start gap-1 items-center">
+                      AGILE Project
+                  </div>
+                  <mat-icon svgIcon="heroicons_outline:x-circle"
+                            *ngIf="!generalInfoForm.controls.isAgile.value">
+                  </mat-icon>
+                  <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                            *ngIf="generalInfoForm.controls.isAgile.value">
+                  </mat-icon>
+              </div>
+          </div>
+          <div class="flex justify-between items-center gap-6" *ngIf="mode =='Project-Charter' && generalInfoForm.controls.isAgile.value ">
+              <spot-input class="w-full read-only" formControlName="agilePrimaryWorkstream" name="agilePrimaryWorkstream" [label]="'AGILE Primary Workstream'">
+              </spot-input>
+              <spot-multiselect-autocomplete class="w-full read-only" formControlName="agileSecondaryWorkstream" name="agileSecondaryWorkstream"
+                                             [label]="'AGILE Secondary Workstream'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                             [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+              </spot-multiselect-autocomplete>
+          </div>
+          <div class="flex justify-between items-center gap-6" *ngIf="mode == 'Project-Charter' && generalInfoForm.controls.isAgile.value " >
+              <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'AGILE Wave'">
+              </spot-input>
+              <div class="w-full" ></div>
+          </div>
+          <!--FIX REQ END-->
+          <div class="flex justify-between items-start gap-6" *ngIf="mode == 'Normal'">
+            <spot-input class="w-full read-only" formControlName="problemType" name="problemType" [label]="'Project Type'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'">
+            </spot-input>
+          </div>
+          <div class="flex justify-between items-start gap-6" *ngIf="mode == 'Close-Out' ">
+              <div class="flex justify-start gap-3 items-center w-full pt-2">
+                  <div class="flex justify-start gap-1 items-center">
+                      Good Practice ?
+                  </div>
+                  <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isGoodPractise.value">
+                  </mat-icon>
+                  <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                            *ngIf="generalInfoForm.controls.isGoodPractise.value">
+                  </mat-icon>
+              </div>
+             <div class="w-full"></div>
+          </div>
+          <spot-textarea *ngIf="mode == 'Normal'" class="w-full read-only" formControlName="projectDescription" name="projectDescription"
+            [label]="'Problem Description / Present Situation / Submission Description'">
+          </spot-textarea>
         </div>
-        <div class="mt-3" *ngIf="generalInfoForm.controls['isOeproject'].value">
-          <spot-multiselect-autocomplete class="w-full read-only" formControlName="oeprojectType" name="oeprojectType"
-            [label]="'OE Project Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
-            [customSortPointer]="'lookUpOrder'" [dropDownArray]="getoeprojectType()" [sortByType]="'custom'">
-          </spot-multiselect-autocomplete>
-        </div>
-      </div>
-    </div>
+
+          <div>
+            <div class="flex justify-between items-start gap-6">
+              <div class="flex flex-col w-2/5 flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+                <div class="flex justify-between items-center">
+                  <div class="flex justify-start items-center gap-3">
+                    OE Project
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isOeproject.value">
+                    </mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                      *ngIf="generalInfoForm.controls.isOeproject.value">
+                    </mat-icon>
+                  </div>
+                  <div class="flex items-center">
+                    <button class="ml-4 text-primary bg-gray-200"
+                      *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                      [color]="'primary-200'" (click)="projectHubService.toggleDrawerOpen('OEProjectSingleEdit', '', [] , id)">
+                      <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    </button>
+                  </div>
+                </div>
+                <div class="mt-3" *ngIf="generalInfoForm.controls['isOeproject'].value">
+                  <spot-multiselect-autocomplete class="w-full read-only" formControlName="oeprojectType" name="oeprojectType"
+                    [label]="'OE Project Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                    [customSortPointer]="'lookUpOrder'" [dropDownArray]="getoeprojectType()" [sortByType]="'custom'">
+                  </spot-multiselect-autocomplete>
+                </div>
+              </div>
+            </div>
 
 
 
@@ -138,7 +207,8 @@
             Tech Transfer
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isTechTransfer.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isTechTransfer.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isTechTransfer.value">
             </mat-icon>
           </div>
           <div class="flex items-center">
@@ -173,7 +243,8 @@
             Quality Reference #
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isQualityRef.value">
             </mat-icon>
-            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isQualityRef.value">
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isQualityRef.value">
             </mat-icon>
           </div>
           <div class="flex justify-between items-center gap-3">
@@ -215,6 +286,123 @@
         </spot-input>
       </div>
     </div>
-  </form>
+    
+    <!--STRATEGIC DRIVERS-->
+    <div class="pt-6 pl-2 font-medium tracking-tight leading-6 truncate ">
+      <h3 class="text-xl text-primary">Strategic Drivers</h3>
+    </div>
+    <div class="flex justify-between items-start gap-6">
+      <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center">
+          <div class="flex justify-start items-center gap-3">
+          </div>
+          <div class="flex justify-between items-center gap-3">
+            <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+              *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
+              (click)="projectHubService.toggleDrawerOpen('StrategicDriverSingleEdit', '', filterCriteria , id)">
+              <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-between items-center gap-6">
+          <spot-input class="w-full read-only" formControlName="primaryKPI" name="primaryKPI" [label]="'Primary KPI'">
+          </spot-input>
+          <!-- <spot-singleselect-autocomplete name="primaryKpi" [label]="'Primary KPI'"
+            [placeholder]="'Primary KPI'" class="w-full">-->
+            <!-- [valuePointer]="'kpiname'"
+                      formControlName="primaryKpi"
+                    [dropDownArray]="kpiMasters" -->
+         <!-- </spot-singleselect-autocomplete>-->
 
-</div>
+                </div>
+                <div class="flex justify-between items-center gap-6 pb-3">
+                  <div class="flex justify-start items-center gap-3">
+                    AGILE Project
+                    <mat-icon svgIcon="heroicons_outline:x-circle"
+                      *ngIf="!generalInfoForm.controls.isAgile.value">
+                    </mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                       *ngIf="generalInfoForm.controls.isAgile.value">
+                    </mat-icon>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isAgile'].value" >
+                  <spot-input class="w-full read-only" formControlName="agilePrimaryWorkstream" name="agilePrimaryWorkstream" [label]="'AGILE Primary Workstream'">
+                  </spot-input>
+                  <spot-multiselect-autocomplete class="w-full read-only" formControlName="agileSecondaryWorkstream" name="agileSecondaryWorkstream"
+                  [label]="'AGILE Secondary Workstream'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                  [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+                </spot-multiselect-autocomplete>
+                  <spot-input class="w-full read-only" formControlName="agileWave" name="agileWave" [label]="'AGILE Wave'">
+                  </spot-input>
+                </div>
+
+
+                <div class="flex justify-between items-center gap-6 pb-3">
+                  <div class="flex justify-start items-center gap-3">
+                    POBOS
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isPobos.value">
+                    </mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isPobos.value">
+                    </mat-icon>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isPobos'].value" >
+                  <spot-multiselect-autocomplete class="w-full read-only" formControlName="pobosCategory" name="pobosCategory"
+                  [showLabel]="false" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                  [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+                </spot-multiselect-autocomplete>
+                </div>
+
+                <div class="flex justify-between items-center gap-6 pb-3">
+                  <div class="flex justify-start items-center gap-3">
+                    Strategic Deployment Annual Initiative
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isGmsgqltannualMustWin.value">
+                    </mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isGmsgqltannualMustWin.value">
+                    </mat-icon>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isGmsgqltannualMustWin'].value" >
+                  <spot-input class="w-full read-only" formControlName="strategicYear" name="strategicYear" [label]="'Strategic Year'">
+                  </spot-input>
+                  <spot-input class="w-full read-only" formControlName="annualMustWinID" name="annualMustWinID" [label]="'GMSGQ LT Annual Must Win?'" [showHint]="true"
+                  [hint]="'Select from this drop down if your project is associated with one of the GMSGQLT Annual Must Wins'">
+                  </spot-input>
+                </div>
+
+                <div class="flex justify-between items-center gap-6 pb-3">
+                  <div class="flex justify-start items-center gap-3">
+                    Site Assessment
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isSiteAssessment.value">
+                    </mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isSiteAssessment.value">
+                    </mat-icon>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between gap-6" *ngIf="generalInfoForm.controls['isSiteAssessment'].value" >
+                  <spot-multiselect-autocomplete class="w-full read-only" formControlName="siteAssessmentCategory" name="siteAssessmentCategory"
+                  [showLabel]="false" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                  [customSortPointer]="'lookUpOrder'" [dropDownArray]="[]" [sortByType]="'custom'">
+                </spot-multiselect-autocomplete>
+                </div>
+
+                <div class="flex justify-between items-center gap-6 pb-3">
+                  <div class="flex justify-start items-center gap-3">
+                    Good Practice
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isGoodPractise.value">
+                    </mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="generalInfoForm.controls.isGoodPractise.value">
+                    </mat-icon>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+        </div>
+
+      </form>
+
+    </div>
+</ng-container>

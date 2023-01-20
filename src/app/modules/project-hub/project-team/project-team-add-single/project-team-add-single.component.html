@@ -20,21 +20,25 @@
         [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
         [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getPermissions()">
     </spot-select>
-
-    <div *ngIf="Urlval === 'project-charter-project-teams'">
-        <spot-input class="w-full" formControlName="percentTime" [max]="true" [len]="3" name="percentTime"
-            [label]="'%Time'" [placeholder]="'Time'"
-            onInput="event.target.value = event.target.value.replace(/[^0-9]*/g,'')">
-        </spot-input>
-    
-    
-        <spot-input class="w-full" formControlName="duration" (change)="processMyValue($event)" name="duration"
-            [label]="'Duration'" [placeholder]="'Duration'"
-            onInput="event.target.value = event.target.value.replace(/[^0-9]*/g,'')"
-            >
-        </spot-input>
-    
-    
+    <div *ngIf="mode == 'Project-Proposal'">
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>% Time</mat-label>
+            <input matInput
+                   formControlName="percentTime"
+                   type="number"
+                   max="100" min="0" placeholder="0"
+                   pattern="\d*"
+            />
+        </mat-form-field>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <mat-label>Duration (Months)</mat-label>
+            <input matInput
+                   formControlName="duration"
+                   type="number"
+                   min="0" placeholder="0"
+                   pattern="\d*"
+            />
+        </mat-form-field>
         <div class="flex justify-between items-center w-full pt-4 pb-6">
             <div class="flex justify-start gap-1 items-center">Include in Charter(Max-10)
                 <!-- <mat-icon class="pe icon-size-4">help</mat-icon> -->
@@ -43,8 +47,13 @@
                 <mat-slide-toggle formControlName="includeInCharter"></mat-slide-toggle>
             </div>
         </div>
-    </div>
+        <div class="flex items-start justify-between incuded-in-dash">
+            <mat-slide-toggle
+                [matTooltip]="this.projectTeamAddForm.controls['includeInProposal'].disabled ? 'Only 5 can be selected at a time for the proposal' : null"
+                formControlName="includeInProposal">Include in Proposal</mat-slide-toggle>
+        </div>
 
+    </div>
     <div class="flex items-start justify-between mt-6">
         <a class="w-25" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">

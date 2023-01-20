@@ -44,11 +44,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   // AnnualMustWin: any = [];
   // qrTableEditStack = []
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
-  OEDropDrownValues = ["Yes", "No"]
-  viewContent = false
-  index = 0;
-  // tableData: any = []
-  // qualityForm = new FormArray([])
   owningOrganizationValues = []
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
@@ -62,31 +57,11 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     excecutionScope: new FormControl([]),
     enviornmentalPortfolio: new FormControl({}),
     isArchived: new FormControl(false),
-    isCapsProject: new FormControl(false), 
+    isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
-    localCurrency: new FormControl(''),
-    SubmittedBy: new FormControl(''),
-    targetGoalSituation: new FormControl(''),
-    qualityReference: new FormControl(''),
-    // oeProject: new FormControl(''),
-    // techTransfer: new FormControl(''),
-    // primaryKPI: new FormControl(''),
-    // AgileProject: new FormControl(''),
-    // siteAssignment: new FormControl(''),
-    // POBOS: new FormControl(''),
-    // oeProjectType: new FormControl(''),
-    // campaignPhase: new FormControl(''),
-    // productionSteps: new FormControl(''),
-    // campaignType: new FormControl(''),
-    // agilePrimaryWorkstream: new FormControl(''),
-    // agileSecondaryWorkstream: new FormControl(''),
-    // agileWave: new FormControl(''),
-    // POBOSType: new FormControl(''),
-    // siteAssessmentType: new FormControl(''),
-    // quality: new FormControl(new FormArray([])),
-    // StrategicDeployment: new FormControl(''),
-    // StrategicYear: new FormControl(''),
-    // AnnualMustWin: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
+    projectProposalApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
   })
 
   @Output() formValue = new EventEmitter<FormGroup>();
@@ -94,94 +69,59 @@ export class GeneralInfoSingleEditComponent implements OnInit{
 
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
-    public fuseAlert: FuseConfirmationService, private apiService2: PortfolioApiService, public auth: AuthService) {
-    // if (this.callLocation == 'CreateNew') {
-      this.generalInfoForm.valueChanges.subscribe(res => {
-        if (this.viewContent) {
-          if (this.callLocation == 'ProjectHub') {
-          this.projectHubService.isFormChanged = true
-          }
-          else {
-            // if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable && this.index == 0) {
-            //   this.index = 1;
-            //   this.generalInfoForm.controls.localCurrency.enable()
-            // }
-            this.formValue.emit(this.generalInfoForm.getRawValue())
-          }
-        } 
-      })
-      if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
-        this.generalInfoForm.controls.owningOrganization.disable()
-        this.generalInfoForm.controls.localCurrency.disable()
-      } else {
-        this.generalInfoForm.controls.owningOrganization.enable()
-        this.generalInfoForm.controls.localCurrency.disable()
+    public fuseAlert: FuseConfirmationService) {
+
+    this.generalInfoForm.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        this.projectHubService.isFormChanged = true
       }
-      this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
-        if (this.viewContent) {
-          if (res == 'Standard Project / Program') {
-            if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
-              this.generalInfoForm.controls.portfolioOwner.disable()
-            }
-          }
-          else {
-            this.generalInfoForm.controls.portfolioOwner.enable()
+    })
+    if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
+      this.generalInfoForm.controls.owningOrganization.disable()
+    } else {
+      this.generalInfoForm.controls.owningOrganization.enable()
+    }
+    this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == 'Standard Project / Program') {
+          if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
+            this.generalInfoForm.controls.portfolioOwner.disable()
           }
         }
-      })
-  }
-  
-  async ngOnInit(): Promise<void> {
-debugger;
-    console.log("From general info " + history.state, this.generalInfoForm);
-    this.auth.KPIMaster().then((kpis: any) => {
-      this.KPIlookupdata = kpis;
-    })
-    if (this.callLocation == 'ProjectHub') {
-        this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
-          this.generalInfo = res
-          this.filterCriteria = this.projectHubService.all
-          this.generalInfoForm.patchValue({
-            problemTitle: res.projectData.problemTitle,
-            problemType: res.projectData.problemType,
-            projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-            projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-            projectDescription: res.projectData.projectDescription,
-            primaryProduct: res.primaryProduct ? res.primaryProduct : {},
-            otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-            portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
-            excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-            enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
-            isArchived: res.projectData.isArchived,
-            isCapsProject: res.projectData.isCapsProject,
-            owningOrganization: res.projectData.defaultOwningOrganizationId,
-          })
-          this.apiService.getLocalCurrency().then(data => {
-            this.localCurrencyList = data
-          })
-          this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-          this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-          this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-          this.viewContent = true
-        })
+        else {
+          this.generalInfoForm.controls.portfolioOwner.enable()
+        }
       }
-    else {
-      // this.apiService.getfilterlist().then(res => {
-      //   this.filterCriteria = res
-      //   this.formValue.emit(this.generalInfoForm.getRawValue())
-      //   this.viewContent = true
-      // })
-      this.apiService.getfilterlistToBeDeleted().then(res => {
-        this.filterCriteria = res
-        this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
-        this.apiService.getLocalCurrency().then(data => {
-          this.localCurrencyList = data
-        this.formValue.emit(this.generalInfoForm.getRawValue())
-        this.viewContent = true
-        })
-      })
-    }
-    // }
+    })
+  }
+
+  ngOnInit(): void {
+    this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
+      this.generalInfo = res
+      this.filterCriteria = this.projectHubService.all
+      this.generalInfoForm.patchValue({
+        problemTitle: res.projectData.problemTitle,
+        problemType: res.projectData.problemType,
+        projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+        projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+        projectDescription: res.projectData.projectDescription,
+        primaryProduct: res.primaryProduct ? res.primaryProduct : {},
+        otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+        portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+        excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+        enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+        isArchived: res.projectData.isArchived,
+        isCapsProject: res.projectData.isCapsProject,
+        owningOrganization: res.projectData.defaultOwningOrganizationId,
+        closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+        projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+        approvedDate: res.projectData.approvedDate,
+      });
+      this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
+      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+      this.viewContent = true
+    })
   }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
@@ -235,9 +175,6 @@ debugger;
     }
   }
 
-  viewElementChecker(element: string): boolean {
-    return this.viewElements.some(x => x == element)
-  }
 
   submitGI() {
     var formValue = this.generalInfoForm.getRawValue()
@@ -297,12 +234,15 @@ debugger;
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
-      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-        this.projectHubService.isNavChanged.next(true)
-        this.projectHubService.submitbutton.next(true)
-        this.projectHubService.successSave.next(true)
-        this.projectHubService.toggleDrawerOpen('', '', [], '')
-      })
+    mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate
+    mainObj.projectProposalApprovedDate = formValue.projectProposalApprovedDate
+    mainObj.approvedDate = formValue.approvedDate
+    this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+      this.projectHubService.isNavChanged.next(true)
+      this.projectHubService.submitbutton.next(true)
+      this.projectHubService.successSave.next(true)
+      this.projectHubService.toggleDrawerOpen('', '', [], '')
+    })
   }
 
   GetPortfolioOwnerSelected(){
