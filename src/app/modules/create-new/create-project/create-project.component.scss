@@ -74,18 +74,18 @@
     align-items: center;
     padding: 0 24px;
 }
-#cdk-step-content-0-0{
-    display: flex !important;
-    justify-content: center !important;
-}
-#cdk-step-content-0-1 {
-    display: flex !important;
-    justify-content: center !important;
-}
-#cdk-step-content-0-2 {
-    display: flex !important;
-    justify-content: center !important;
-}
+// #cdk-step-content-0-0{
+//     display: flex !important;
+//     justify-content: center !important;
+// }
+// #cdk-step-content-0-1 {
+//     display: flex !important;
+//     justify-content: center !important;
+// }
+// #cdk-step-content-0-2 {
+//     display: flex !important;
+//     justify-content: center !important;
+// }
 
 .CreateForm{
         width: 52%;
@@ -107,4 +107,10 @@
 
 .child {
     width: 50%;
+}
+
+.ngx-datatable.datatable-qr-80 {
+    height: 33vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
 }

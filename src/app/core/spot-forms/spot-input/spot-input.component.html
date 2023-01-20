@@ -5,7 +5,7 @@
             <input *ngIf="Required" matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
                 (blur)="onTouch()" required="true" (focusout)="onChange($event.target.value)">
             <input *ngIf="max" maxlength = {{len}} matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
-                    (blur)="onTouch()">
+                    (blur)="onTouch()" (keyup) = "Validate($event)">
             <input *ngIf="!Required && !max" matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
                 (blur)="onTouch()">
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>

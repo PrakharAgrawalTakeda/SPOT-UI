@@ -60,4 +60,14 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     isDisabled == true ? this.control.disable() : this.control.enable()
   }
+
+  Validate(data){
+    debugger;
+    if (data.target.value > 100){
+      data.target.value = 100
+    }
+    console.log(data);
+  }
+
+   
 }

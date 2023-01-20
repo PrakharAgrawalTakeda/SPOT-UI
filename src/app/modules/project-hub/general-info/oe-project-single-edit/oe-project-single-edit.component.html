@@ -1,5 +1,5 @@
 <div *ngIf="viewContent">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">OE Project Edit</div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
                 href="javascript:void(0)" title="Close">
@@ -21,7 +21,7 @@
             </spot-multiselect-autocomplete>
         </div>
     </div>
-        <div class="flex items-start justify-between mt-6">
+        <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"
                 (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
                 Cancel

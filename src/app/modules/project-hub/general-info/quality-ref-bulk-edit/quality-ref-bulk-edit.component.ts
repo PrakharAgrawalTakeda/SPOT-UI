@@ -14,18 +14,22 @@ export class QualityRefBulkEditComponent implements OnInit {
   formFieldHelpers: any
   viewContent = false
   generalInfoData: any = {}
-  qrTableEditStack: any = []
+  qrTableEditStack: any = []  
   formValue = []
   dbvalue = []
-  @Input() mode: string = ""
+  // @Input() mode: string = ""
   @Input() qualityType: any = [];
-  @Input() qualityForm= new FormArray([]);
+  // @Input() qualityForm= new FormArray([]);
 
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Output() formValueQuality = new EventEmitter<FormArray>();
   constructor(private apiService: ProjectApiService,
     private projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService) {
     this.qualityRefForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
+        if (this.callLocation == 'ProjectHub') {
         this.dataprep()
         console.log("formValue", this.formValue)
         console.log("Db", this.dbvalue)
@@ -36,14 +40,16 @@ export class QualityRefBulkEditComponent implements OnInit {
           this.projectHubService.isFormChanged = false
         }
       }
+      else{
+          this.formValueQuality.emit(this.qualityRefForm)
+      }
+    }
     })
   }
 
   ngOnInit(): void {
-    if (this.mode ='GeneralInfo'){
+    if (this.callLocation =='CreateNew'){
 debugger
-      this.qualityRefForm=this.qualityForm;
-   
       this.generalInfoData={
         agilePrimaryWorkstream:null,
         agileSecondaryWorkstream:null,
@@ -52,69 +58,7 @@ debugger
         enviornmentalPortfolio:null,
         excecutionScope: null,
         otherImpactedProducts: null,
-        parentProject: {
-          agilePrimaryWorkstream:null,
-          agileSecondaryWorkstream:null,
-          agileWave: null,
-          annualMustWinId: null,
-          archiveredBy:null,
-          archiveredOn:null,
-          benefitsRealizedOutcome:null,
-          calculatedEmissionsImpact:null,
-          campaignPhaseId:null,
-          campaignTypeId:null,
-          createdById:null,
-          createdDate:null,
-          dataMigrationInfo:null,
-          defaultOwningOrganizationId:null,
-          emissionPortfolioId:null,
-          emissionsImpactRealizationDate:null,
-          energyCostImpactPerYear:null,
-          energyCostImpactPerYearFxconv:null,
-          energyImpact:null,
-          executionScope:null,
-          isArchived:false,
-          isCapsProject:false,
-          isConfidential:false,
-          isGmsgqltannualMustWin:null,
-          isGoodPractise:null,
-          isManualArchive:null,
-          isOeproject:false,
-          isPobos:null,
-          isSiteAssessment:null,
-          isTechTransfer:false,
-          keyTakeaways:null,
-          legacyPpmprojectId: null,
-          legacyPpmsystem: null,
-          noCarbonImpact:null,
-          oeprojectType:null,
-          otherImpactedProducts:null,
-          parentProgramId:null,
-          poboscategory: null,
-          portfolioOwnerId:null,
-          primaryKpi:null,
-          primaryProductId:null,
-          problemId:null,
-          problemOwnerId:null,
-          problemOwnerName:null,
-          problemTitle:null,
-          problemType:null,
-          problemUniqueId:null,
-          productionStepId:null,
-          projectClassificationId:null,
-          projectDescription:null,
-          projectSiteUrl:null,
-          siteAssessmentCategory:null,
-          strategicRationale:null,
-          strategicYearId :null,
-          svpelementTypeId:null,
-          targetEndState:null,
-          wasteImpactCost:null,
-          wasteImpactUnits:null,
-          wasteLandfillImpactUnits:null,
-          waterImpactCost:null,
-          waterImpactUnits:null,
-        },
+        parentProject: null,
         pobosCategory:null,
         portfolioCenterData:null,
         portfolioOwner: null,
@@ -126,6 +70,7 @@ debugger
         strategicYearID:null,
         topsData:null,
       }
+      this.formValueQuality.emit(this.qualityRefForm)
       this.viewContent = true
     }
     else{
@@ -153,7 +98,7 @@ debugger
   }
 
   getQRType(): any {
-    if (this.mode == 'GeneralInfo'){
+    if (this.callLocation == 'CreateNew'){
     return this.qualityType.sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
     })
@@ -164,7 +109,7 @@ debugger
   }
 
   getLookUpName(id: string): string {
-    if (this.mode == 'GeneralInfo'){
+    if (this.callLocation == 'CreateNew'){
       return id && id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
     }
     else{

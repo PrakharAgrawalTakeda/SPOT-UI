@@ -6,6 +6,7 @@ import {SpotlightIndicatorsService} from "../../../../../core/spotlight-indicato
 import * as moment from "moment";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {AuthService} from "../../../../../core/auth/auth.service";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-risk-issue-view-bulk-edit',
@@ -20,7 +21,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         public apiService: ProjectApiService,
         public indicator: SpotlightIndicatorsService,
         public fuseAlert: FuseConfirmationService,
-        public auth: AuthService
+        public auth: AuthService, private Router: Router
     ) {
         this.projectHubService.includeClosedItems.riskIssue.subscribe(res => {
             if (this.viewContent) {
@@ -60,7 +61,10 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     riTableEditStack = []
     isclosedriskissuetoggle: boolean = false;
     lookupdata: any = []
+    Urlval: any;
     ngOnInit(): void {
+        const url = this.Router.url;
+        this.Urlval = url.substring(url.lastIndexOf('/') + 1);
         this.getllookup()
     }
     dataloader() {
@@ -272,14 +276,41 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     submitRI() {
         if (this.projectHubService.isFormChanged) {
             this.submitPrep()
-            this.projectHubService.isFormChanged = false
-            this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
-                    this.projectHubService.toggleDrawerOpen('', '', [], '')
-                    this.projectHubService.submitbutton.next(true)
-                    this.projectHubService.isNavChanged.next(true)
-                    this.projectHubService.successSave.next(true)
+            if (this.formValue.filter(x => x.includeInCharter == true).length > 5 && this.Urlval == 'project-charter-risk-assumption') {
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "Only 5 risk/issues can be included in project charter",
+                    "message": "",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "OK",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": false,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
                 }
-            )
+                const alert = this.fuseAlert.open(comfirmConfig)
+                this.projectHubService.isBulkEdit = true
+            }
+            else{
+                this.projectHubService.isFormChanged = false
+                this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
+                        this.projectHubService.toggleDrawerOpen('', '', [], '')
+                        this.projectHubService.submitbutton.next(true)
+                        this.projectHubService.isNavChanged.next(true)
+                        this.projectHubService.successSave.next(true)
+                    }
+                )
+            }
         }
         else {
             this.projectHubService.toggleDrawerOpen('', '', [], '')

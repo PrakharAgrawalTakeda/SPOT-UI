@@ -72,7 +72,7 @@ export class CopyProjectComponent implements OnInit {
         console.log(quality);
         console.log(res);
         if (res != "") {
-          this.router.navigateByUrl('/create-project/create-new-project', { state: { id: 1, name: 'Angular' } });
+          this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, name: 'Copy', copytemplateId: this.projectid, lookupString: this.finalData.toString() } });
         }
       })
     })

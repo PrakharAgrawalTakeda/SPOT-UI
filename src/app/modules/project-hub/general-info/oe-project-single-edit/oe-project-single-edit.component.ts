@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { I } from '@angular/cdk/keycodes';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 
@@ -16,13 +18,24 @@ export class OeProjectSingleEditComponent implements OnInit {
     isOeproject: new FormControl(false),
     oeprojectType: new FormControl([]),
   })
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Output() formValueOE = new EventEmitter<FormGroup>();
+  oeProjectType: any = [];
+  lookupdata: any = [];
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
-    public fuseAlert: FuseConfirmationService) {
+    public fuseAlert: FuseConfirmationService,
+    public auth: AuthService) {
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
+        if (this.callLocation == 'ProjectHub') {
         this.projectHubService.isFormChanged = true
       }
+      else {
+          this.formValueOE.emit(this.generalInfoForm.getRawValue())
+      }
+    }
     })
     this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -67,7 +80,16 @@ export class OeProjectSingleEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataloader()
+    if (this.callLocation == 'CreateNew') {
+      this.auth.lookupMaster().then(res => {
+        this.lookupdata = res;
+        this.formValueOE.emit(this.generalInfoForm.getRawValue())
+        this.viewContent = true
+      })  
+    }
+    else {
+      this.dataloader()
+    }
   }
   dataloader() {
     this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
@@ -81,7 +103,16 @@ export class OeProjectSingleEditComponent implements OnInit {
     })
   }
   getoeprojectType(): any {
-    return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
+    if(this.callLocation == 'CreateNew'){
+      this.oeProjectType = this.lookupdata.filter(x => x.lookUpParentId == '04D143E7-CAA7-4D8D-88C3-A6CB575890A3');
+      this.oeProjectType.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
+      return this.oeProjectType;
+    }
+    else {
+      return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == "04D143E7-CAA7-4D8D-88C3-A6CB575890A3")
+    }
   }
   OE() {
     this.projectHubService.isFormChanged = false

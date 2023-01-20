@@ -1,20 +1,12 @@
-import { Component, OnInit, ElementRef, EventEmitter, Output, Input, ViewEncapsulation, AfterViewInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { Component, OnInit, EventEmitter, Output, Input, ViewEncapsulation, ViewChild } from '@angular/core';
 import { PortfolioApiService } from './../../portfolio-center/portfolio-api.service';
 import { Router } from '@angular/router';
-import { SpotlightIndicatorsService } from './../../../core/spotlight-indicators/spotlight-indicators.service';
 import { MsalService } from '@azure/msal-angular';
 import { AuthService } from './../../../core/auth/auth.service';
-import { FuseNavigationService } from './../../../../@fuse/components/navigation/navigation.service';
 import { Title } from '@angular/platform-browser';
 import $ from "jquery";
-import { FormBuilder, Validators, FormGroup, FormControl, FormArray} from '@angular/forms';
-import { TooltipPosition } from '@angular/material/tooltip';
-// import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { ProjectHubService } from './../../project-hub/project-hub.service';
-import { GeneralInfoComponent } from './../../project-hub/general-info/general-info.component';
+import { FormGroup, FormControl, FormArray} from '@angular/forms';
 import { EventType } from '@azure/msal-browser';
-import { guideCategories } from 'app/mock-api/apps/help-center/data';
 import * as uuid from "uuid";
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { QualityRefBulkEditComponent } from 'app/modules/project-hub/general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
@@ -41,6 +33,17 @@ export class CreateProjectComponent implements OnInit {
   qualityValue = false;
   qualityForm = new FormArray([])
   activeaccount: any;
+  oeProjectType: any = [];
+  campaignPhase: any = [];
+  productionSteps: any = [];
+  campaignType: any = [];
+  primWorkstream: any = [];
+  agileWave: any = [];
+  POBOSType: any = [];
+  localCurrencyList: any = [];
+  siteAssessmentType: any = [];
+  startegicYear: any = [];
+  AnnualMustWin: any = [];
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -77,21 +80,16 @@ export class CreateProjectComponent implements OnInit {
     StrategicDeployment: new FormControl(''),
     StrategicYear: new FormControl(''),
     AnnualMustWin: new FormControl(''),
+    localCurrency: new FormControl('')
   })
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService) {
+  capturedValues = ['', '']
+
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, private apiProjectService: ProjectApiService) {
   }
 
-  // ngAfterViewInit(): void {
-  //   this.createProjectForm.patchValue({
-  //     quality: this.child.qualityRefForm
-  //   })
-  // }
   
   ngOnInit(): void {
-    this.activeaccount = this.authService.instance.getActiveAccount();
-    console.log("From Create project " + history.state);
-    this.titleService.setTitle("Create New Project")
     this.auth.lookupMaster().then(res => {
       this.lookupdata = res;
       this.qualityType = this.lookupdata.filter(x => x.lookUpParentId == 'A4C55F7E-C213-401E-A777-3BA741FF5802');
@@ -99,7 +97,41 @@ export class CreateProjectComponent implements OnInit {
         return a.lookUpOrder - b.lookUpOrder;
       })
     })
+    this.activeaccount = this.authService.instance.getActiveAccount();
+    console.log("From Create project " + history.state);
+    
+    this.titleService.setTitle("Create New Project")
+    
 
+  }
+
+  captureValue(index: number, event: any) {
+    this.capturedValues[index] = event
+    // this.createProjectForm.patchValue = event
+    this.createProjectForm.patchValue({
+      problemTitle: event.problemTitle,
+      problemType: event.problemType,
+      projectsingle: event.parentProject ? event.parentProject.problemTitle : '',
+      projectsingleid: event.parentProject ? event.parentProject.problemUniqueId : '',
+      projectDescription: event.projectDescription,
+      primaryProduct: event.primaryProduct ? event.primaryProduct : {},
+      otherImpactedProducts: event.otherImpactedProducts ? event.otherImpactedProducts : [],
+      portfolioOwner: event.portfolioOwner ? event.portfolioOwner : {},
+      excecutionScope: event.excecutionScope ? event.excecutionScope : [],
+      enviornmentalPortfolio: event.enviornmentalPortfolio ? event.enviornmentalPortfolio : {},
+      isArchived: event.isArchived,
+      isCapsProject: event.isCapsProject,
+      owningOrganization: event.defaultOwningOrganizationId,
+    })
+    console.log(this.capturedValues)
+    console.log(this.createProjectForm)
+  }
+
+  captureValueQuality(index: number, event: any) {
+    debugger;
+    this.capturedValues[index] = event
+    this.qualityForm = event.value;
+    console.log(this.capturedValues)
   }
 
   RouteBack() {
@@ -116,10 +148,11 @@ export class CreateProjectComponent implements OnInit {
 
   createProject() {
     debugger;
+    console.log(history.state);
     console.log(this.qualityForm);
-    this.createProjectForm.patchValue({
-      quality: this.child.qualityRefForm
-    })
+    // this.createProjectForm.patchValue({
+    //   quality: this.child.qualityRefForm
+    // })
     var hubSettings = [{
       hubSettingId: "",
       projectId: "",
@@ -181,6 +214,8 @@ export class CreateProjectComponent implements OnInit {
     mainObj[0].ProjectDescription = formValue.projectDescription
     mainObj[0].TargetEndState = formValue.targetGoalSituation
     mainObj[0].ProblemType = formValue.problemType
+    mainObj[0].DefaultOwningOrganizationID = formValue.owningOrganization
+    mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? formValue.localCurrency.localCurrencyId : ''
     mainObj[0].IsOEProject = formValue.oeProject == "Yes" ? true : false
     if (mainObj[0].IsOEProject) {
       mainObj[0].OEProjectType = formValue.oeProjectType != "" ? formValue.oeProjectType.lookUpId : ''
@@ -207,12 +242,23 @@ export class CreateProjectComponent implements OnInit {
       mainObj[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
       mainObj[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
     }
-    var dataToSend = {
-      "projectCaptures": mainObj,
-      "hubSettings": hubSettings,
-      "projectIDTemplate": projectIDTemplate,
-      "copyProjectParameter": copyProjectParameter
-    }
+    var dataToSend = {}
+    if (history.state.data != undefined){
+      dataToSend = {
+        "projectCaptures": mainObj,
+        "hubSettings": hubSettings,
+        "projectIDTemplate": history.state.copytemplateId,
+        "copyProjectParameter": history.state.lookupString
+      }
+  }
+  else{
+      dataToSend = {
+        "projectCaptures": mainObj,
+        "hubSettings": hubSettings,
+        "projectIDTemplate": projectIDTemplate,
+        "copyProjectParameter": copyProjectParameter
+      }
+  }
     if (formValue.qualityReference == "Yes"){
       this.qualityValue = true;
       this.qualityformValue = []
@@ -227,7 +273,7 @@ export class CreateProjectComponent implements OnInit {
       }
   }
     this.apiService.createProject(dataToSend).then(res => {
-      if (this.qualityValue == true)
+      if (this.qualityValue == true){
         this.apiService2.bulkeditQualityReference(this.qualityformValue, this.projectid).then(quality => {
           console.log(quality);
           console.log(res);
@@ -235,6 +281,15 @@ export class CreateProjectComponent implements OnInit {
             window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
           }
       })
+    }
+    else{
+        window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+    }
     })
+  }
+
+  getLookUpName(id: string): string {
+    debugger;
+      return id && id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
   }
 }

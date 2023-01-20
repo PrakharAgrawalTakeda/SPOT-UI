@@ -175,9 +175,24 @@ export class ProjectHubService {
           link: 'project-charter',
           children: [
             {
+              title: 'General Info',
+              type: 'basic',
+              link: 'project-charter/project-charter-general-info'
+            },
+            {
+              title: 'Schedule',
+              type: 'basic',
+              link: 'project-charter/project-charter-schedule'
+            },
+            {
               title: 'Project Team',
               type: 'basic',
               link: 'project-charter/project-charter-project-teams'
+            },
+            {
+              title: 'Risks / Assumptions',
+              type: 'basic',
+              link: 'project-charter/project-charter-risk-assumption'
             }
           ]
         },

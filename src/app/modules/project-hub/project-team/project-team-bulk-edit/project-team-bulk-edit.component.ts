@@ -140,9 +140,9 @@ export class ProjectTeamBulkEditComponent implements OnInit {
           "includeInCharter": i.includeInCharter,
           "includeInProposal": i.includeInProposal
         })
-      }
-      this.charterCount = this.teamMembersSubmit.filter(x => x.includeInCharter == true).length;
+      // this.charterCount = this.teamMembersSubmit.filter(x => x.includeInCharter == true).length;
     }
+  }
     else {
       this.teamMembersSubmit = []
     }
@@ -163,8 +163,32 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
 
   submitProjectTeams() {
-    this.formValue()
-    if (this.charterCount <= 10) {
+    this.formValue() 
+    if (this.teamMembersSubmit.filter(x => x.includeInCharter == true).length > 10 && this.Urlval=="project-charter-project-teams") {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Only 10 can be selected at a time for Team Charter slide display.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else{
     if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
       console.log(this.teamMembersSubmit)
       this.projecthubservice.isFormChanged = false
@@ -207,30 +231,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.projecthubservice.isNavChanged.next(true)
     }
   }
-    else {
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Only 10 can be selected at a time for Team Charter slide display.",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-    }
+  
   }
   deleteShowLogic(rowIndex: number): boolean {
     var j = this.projectTeamForm.controls[rowIndex]['controls']['role'].value

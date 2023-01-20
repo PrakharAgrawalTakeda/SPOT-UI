@@ -195,7 +195,7 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
+        <ngx-datatable-column *ngIf="Urlval==''" name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
           [resizeable]="false" [flexGrow]="0.40">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
@@ -207,6 +207,23 @@
               class="p-2 overflow-hidden">
               <div class="flex items-center justify-between">
                 <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
+                </mat-slide-toggle>
+              </div>
+            </form>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column *ngIf="Urlval=='project-charter-schedule'" name="Include in Charter (Max 10)" prop="includeInCharter" [sortable]="false" [resizeable]="false"
+          [flexGrow]="0.40">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+              [ngClass]="{'closed': row.completionDate != null}">
+              <p *ngIf="!value">&nbsp;</p>
+              <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+            </a>
+            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
+              class="p-2 overflow-hidden">
+              <div class="flex items-center justify-between">
+                <mat-slide-toggle name="includeInCharter" [showLabel]="false" formControlName="includeInCharter">
                 </mat-slide-toggle>
               </div>
             </form>

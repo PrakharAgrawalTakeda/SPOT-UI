@@ -100,6 +100,7 @@ import { RiskIssueTableComponent } from './project-board/risk-issue/risk-issue-t
 import { StrategicDriversComponent } from './general-info/strategic-drivers/strategic-drivers.component';
 import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
 
+
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -189,7 +190,7 @@ export const projectRoutes: Route[] = [
       component: ProjectCharterProjectTeamsComponent,
       pathMatch: 'full'
 
-    },
+      },
     {
       path: 'close-out',
       component: CloseOutComponent,
@@ -307,7 +308,8 @@ export const projectRoutes: Route[] = [
         UserModule
   ], exports: [
     GeneralInfoSingleEditComponent,
-      QualityRefBulkEditComponent
+      QualityRefBulkEditComponent,
+      OeProjectSingleEditComponent
   ]
 })
 export class ProjectHubModule { }

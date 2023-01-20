@@ -49,6 +49,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() editable: boolean
+  @Input() CalledFrom: string = ''
   @ViewChild('scheduleTable') scheduleTable: any;
   @ViewChild('target') private myScrollContainer: ElementRef;
   editing = {};
@@ -123,6 +124,7 @@ indicatorchange: boolean = false
   prevObj: any = []
   newArray: any = []
   temp: any = []
+  Urlval: any;
   // onResize(event){
   //   event.window.innerWidth; // window width
   // }
@@ -132,7 +134,7 @@ indicatorchange: boolean = false
     private authService: AuthService, private _elementRef: ElementRef, private indicator: SpotlightIndicatorsService,
     private router: Router, private _Activatedroute: ActivatedRoute, public fuseAlert: FuseConfirmationService, private changeDetectorRef: ChangeDetectorRef,
     private msalService: MsalService, private readonly viewportRuler: ViewportRuler,
-    private readonly ngZone: NgZone) {
+    private readonly ngZone: NgZone, private Router: Router) {
     this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
       if (this.viewContent == true) {
         if (this.toggleHelper == true) {
@@ -206,6 +208,8 @@ indicatorchange: boolean = false
   // }
 
   ngOnInit(): void {
+    const url = this.Router.url;
+    this.Urlval = url.substring(url.lastIndexOf('/') + 1);
     this.dataloader()
 
   }
@@ -2204,7 +2208,7 @@ console.log(this.scheduleData.scheduleData)
 
 if(this.projecthubservice.includeClosedItems.schedule.value)
 {
-  var baselinedates = this.scheduleData.scheduleData.map(x => {
+  var baselinedates = this.scheduleData.scheduleData.map(x => { 
     return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
   })
 }
@@ -2257,7 +2261,7 @@ else{
     console.log(baselinedates)
     console.log(baselinedates2)
     console.log(this.flag)
-    if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length <= 8) {
+      if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length <= 8 && this.Urlval == '') {
       this.viewBaseline = true
       this.viewBaselineLogs = true
       this.compareBaselineLogs = false
@@ -2267,7 +2271,7 @@ else{
       //this.saveScheduleBulkEdit()
     }
 
-    else if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length > 8) {
+      else if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length > 8 && this.Urlval == '') {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Only 8 milestones can be included in project dashboard",
         "message": "",
@@ -2293,7 +2297,7 @@ else{
       this.projecthubservice.isBulkEdit = true
     }
 
-    else if (!this.flag && baselineFormValue.filter(x => x.includeInReport == true).length > 8) {
+      else if (!this.flag && baselineFormValue.filter(x => x.includeInReport == true).length > 8 && this.Urlval == '') {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Only 8 milestones can be included in project dashboard",
         "message": "",
@@ -2318,6 +2322,65 @@ else{
       const alert = this.fuseAlert.open(comfirmConfig)
       this.projecthubservice.isBulkEdit = true
     }
+      else if (this.flag && baselineFormValue.filter(x => x.includeInCharter == true).length <= 10 && this.Urlval == 'project-charter-schedule') {
+        this.viewBaseline = true
+        this.viewBaselineLogs = true
+        this.compareBaselineLogs = false
+        this.projecthubservice.isBulkEdit = false
+
+        console.log("hello")
+        //this.saveScheduleBulkEdit()
+      }
+      else if (this.flag && baselineFormValue.filter(x => x.includeInCharter == true).length > 10 && this.Urlval == 'project-charter-schedule') {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Only 10 milestones can be included in project charter",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "OK",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        this.projecthubservice.isBulkEdit = true
+      }
+      else if (!this.flag && baselineFormValue.filter(x => x.includeInCharter == true).length > 10 && this.Urlval == 'project-charter-schedule') {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Only 10 milestones can be included in project charter",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "OK",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        this.projecthubservice.isBulkEdit = true
+      }
     else {
 
       this.saveScheduleBulkEdit()

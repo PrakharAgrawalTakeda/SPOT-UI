@@ -42,6 +42,7 @@ import { ShortcutsModule } from 'app/layout/common/shortcuts/shortcuts.module';
 import { UserModule } from 'app/layout/common/user/user.module';
 import { NotificationsModule } from 'app/layout/common/notifications/notifications.module';
 import { MessagesModule } from 'app/layout/common/messages/messages.module';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 
@@ -95,7 +96,7 @@ export const projectRoutes: Routes = [
     MatChipsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    // NgMultiSelectDropDownModule,
+    NgxDatatableModule,
     SearchModule,
     FuseFullscreenModule,
     LanguagesModule,

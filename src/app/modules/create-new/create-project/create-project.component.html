@@ -19,9 +19,7 @@
                                 <form [formGroup]="createProjectForm">
                                     <ng-template style="width: 50px;height: 50px" ;
                                         matStepLabel><span>Basics</span></ng-template>
-                                    <app-general-info-single-edit [mode]="'General-Info'"
-                                        [CreateForm]="createProjectForm" [calledFrom]="'Create'"
-                                        [BasicsForm]="'BasicsForm'"></app-general-info-single-edit>
+                                    <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'parentProject', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency']"></app-general-info-single-edit>
 
                                     <p>*Required</p>
                                     <div style="text-align: right;">
@@ -39,13 +37,8 @@
                                 <form>
                                     <ng-template matStepLabel>Details</ng-template>
                                     <h2><b>Project Details</b></h2>
-                                    <app-general-info-single-edit [mode]="'General-Info'"
-                                        [CreateForm]="createProjectForm" [calledFrom]="'Create'"
-                                        [DetailsForm]="'DetailsForm'"></app-general-info-single-edit>
-                                    <app-quality-ref-bulk-edit *ngIf="createProjectForm.value.qualityReference == 'Yes'" [qualityForm]="qualityForm"
-                                            [mode]="'GeneralInfo'" [qualityType]="qualityType"></app-quality-ref-bulk-edit>
-                                    <app-general-info-single-edit [mode]="'General-Info'" [CreateForm]="createProjectForm" [calledFrom]="'Create'"
-                                                [DetailsForm2]="'DetailsForm2'"></app-general-info-single-edit>
+                                    <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(1,$event)"></app-oe-project-single-edit>
+                                    <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueQuality)="captureValueQuality(2,$event)"></app-quality-ref-bulk-edit>
                                     <p>*Required</p>
                                     <div style="text-align: right;">
                                         <label (click)="RouteBack()"
@@ -241,24 +234,31 @@
                                                 <label class="reviewText">{{this.createProjectForm.value.qualityReference}}</label>
                                             </div>
                                         </div>
-                                        <div class="test">
-                                            <table>
-                                                <tr>
-                                                    <th>Quality Refernce Type</th>
-                                                    <th>Quality Reference #</th>
-                                                </tr>
-                                                <div class="child">
-                                                    <span *ngFor="let item of qualityForm; let i = index">
-                                                        <tr>
-                                                            <td>{{item.qualityReference1}}</td>
-                                                            <!-- <td>$100</td> -->
-                                                        </tr>
-                                                        <!-- <label class="reviewText" *ngIf="i > 0 && i<this.createProjectForm.value.oeProjectType.length">,</label>
-                                                        <label class="reviewText">{{item.lookUpName}}</label> -->
-                                                    </span>
-                                                </div>
-                                            </table>
+                                        
+                                        <div class="flex justify-between items-start gap-6">
+                                            <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+                                        <div class="mt-3">
+                                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                                                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
+                                                [rows]="qualityForm" >
+                                                <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
+                                                    [sortable]="false" [flexGrow]="1">
+                                                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                                                        <p>{{value.lookUpName}}</p>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                                <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
+                                                    [sortable]="false" [flexGrow]="1">
+                                                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                                                        <p>&nbsp;</p>
+                                                        <p>{{value}}</p>
+                                                    </ng-template>
+                                                </ngx-datatable-column>
+                                            </ngx-datatable>
                                         </div>
+                                        </div>
+                                        </div>
+
                                         <br />
                                         <label><b>Strategic Drivers</b></label>
                                         <br /><br />

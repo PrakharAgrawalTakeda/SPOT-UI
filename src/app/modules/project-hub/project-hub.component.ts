@@ -91,11 +91,13 @@ export class ProjectHubComponent implements OnInit {
         private titleService: Title,
         private snack: MatSnackBar) {
         this.projecthubservice.isNavChanged.subscribe(res => {
+            debugger;
             if (res == true) {
                 this.getdata()
             }
         })
         this.projecthubservice.successSave.subscribe(res => {
+            debugger;
             if (res == true) {
                 this.snack.open("The information has been saved successfully", "", {
                     duration: 2000,
@@ -107,6 +109,7 @@ export class ProjectHubComponent implements OnInit {
 
 
     ngOnInit(): void {
+        debugger;
         console.log("Project Hub Started")
         this.id = this._Activatedroute.snapshot.paramMap.get("id");
         this.projecthubservice.projectidInjector(this.id)

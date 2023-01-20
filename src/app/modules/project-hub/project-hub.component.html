@@ -26,6 +26,8 @@
         <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
         <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>
         <app-risk-issues-link *ngIf="projecthubservice.itemtype == 'LinkRiskIssues'"></app-risk-issues-link>
+        <app-key-assumption-view-bulk-edit *ngIf="projecthubservice.itemtype == 'KeyAssumptionBulkEdit'"></app-key-assumption-view-bulk-edit>
+        <app-key-assumption-view-edit *ngIf="projecthubservice.itemtype == 'KeyAssumption'"></app-key-assumption-view-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
