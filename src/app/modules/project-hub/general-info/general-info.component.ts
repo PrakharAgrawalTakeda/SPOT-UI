@@ -19,7 +19,9 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   providers: [],
 })
 export class GeneralInfoComponent implements OnInit {
-  @Input() mode: 'Normal' | 'Close-Out' | 'Project-Proposal' | 'Project-Charter' = 'Normal'
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' = 'GeneralInfoSingleEdit'
   viewContent: boolean = false
   lookUpData: any = []
@@ -96,10 +98,8 @@ export class GeneralInfoComponent implements OnInit {
   }
   dataloader(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if(this.mode != 'Normal'){
+    if(this.viewElementChecker('close-out')){
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    }
-    if(this.mode == 'Close-Out'){
         this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
     }
     this.portApiService.getfilterlist().then(filterres => {
@@ -145,9 +145,7 @@ export class GeneralInfoComponent implements OnInit {
               projectId: res.projectData.problemId,
               opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName ,
               isGoodPractise: res.projectData.isGoodPractise,
-              closeOutApprovedDate: res.projectData.closeOutApprovedDate,
-              projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-              approvedDate: res.projectData.approvedDate,
+              approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
@@ -197,5 +195,8 @@ export class GeneralInfoComponent implements OnInit {
   }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
+  }
+  viewElementChecker(element: string): boolean {
+      return this.viewElements.some(x => x == element)
   }
 }
