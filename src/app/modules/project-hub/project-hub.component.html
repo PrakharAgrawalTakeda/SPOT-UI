@@ -25,7 +25,8 @@
         <app-quality-ref-bulk-edit *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
         <app-oe-project-single-edit *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
         <app-tech-transfer-single-edit *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>
-        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriverSingleEdit'"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEdit'" [viewElements]="['primaryKPI', 'isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave','isPobos','pobosCategory','isGmsgqltannualMustWin','strategicYear','annualMustWinID', 'isSiteAssessment', 'siteAssessmentCategory', 'isGoodPractise']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOut'" [viewElements]="['isGoodPractise']"></app-strategic-drivers>
         <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
         <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
         <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>
