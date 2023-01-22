@@ -147,7 +147,7 @@ export class GeneralInfoComponent implements OnInit {
               isGoodPractise: res.projectData.isGoodPractise,
               approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
               //Stategic Drivers
-              primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
+              primaryKPI: res.projectData.primaryKpi?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
               agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
               agileSecondaryWorkstream: res.agileSecondaryWorkstream,
