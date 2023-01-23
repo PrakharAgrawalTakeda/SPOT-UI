@@ -82,22 +82,26 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     //this.getCount()
     console.log(this.mode)
     console.log( this.projecthubservice.includeClosedItems.schedule.value )
-    if(this.mode == 'Project-Close-Out' )
+    if(this.mode == 'Project-Close-Out')
     {
       //event == true
+      this.schedulengxdata = this.scheduleData
     }
     this.scheduleData = this.projectViewDetails.scheduleData
     for (var i of this.scheduleData) {
       i.includeInReport = i.projectId == this.projectid ? i.includeInReport : this.projectViewDetails.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
     }
     // console.log(this.scheduleData)
+    if(this.mode == 'Normal')
+    {
     this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+    }
     // console.log(this.scheduleData)
     // console.log(this.schedulengxdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     for (var i of this.scheduleData) {
     this.milestoneForm.push(new FormGroup({
-         comment: new FormControl(i.comments),
+         comment: new FormControl(i.comments == null ? false : i.comments),
          includeInReport: new FormControl(i.includeInReport == null ? false : i.includeInReport)
        }))
       }
@@ -110,6 +114,11 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   toggleSchedule(event: any) {
     this.projecthubservice.includeClosedItems.schedule.next(event.checked)
+  }
+
+  submitvariance()
+  {
+
   }
 
   calculateVariance(row: any): string {
