@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as moment from 'moment';
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -19,11 +19,13 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   providers: [],
 })
 export class GeneralInfoComponent implements OnInit {
-  @Input() mode: 'Normal' | 'Close-Out' | 'Project-Proposal' | 'Project-Charter' = 'Normal'
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' = 'GeneralInfoSingleEdit'
   viewContent: boolean = false
   lookUpData: any = []
-  kpiData:any = []
+  kpiData: any = []
   id: string = ""
   generalInfoData: any = {}
   filterCriteria: any = {}
@@ -96,15 +98,13 @@ export class GeneralInfoComponent implements OnInit {
   }
   dataloader(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if(this.mode != 'Normal'){
-        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    }
-    if(this.mode == 'Close-Out'){
-        this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
+    if (this.viewElementChecker('close-out')) {
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
     }
     this.portApiService.getfilterlist().then(filterres => {
       this.authService.lookupMaster().then((lookup: any) => {
-        this.authService.KPIMaster().then((kpi:any)=>{
+        this.authService.KPIMaster().then((kpi: any) => {
           console.log('LookUp Data', lookup)
           this.lookUpData = lookup
           this.projectHubService.lookUpMaster = lookup
@@ -143,30 +143,28 @@ export class GeneralInfoComponent implements OnInit {
               isArchived: res.projectData.isArchived,
               owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
               projectId: res.projectData.problemId,
-              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName ,
+              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName,
               isGoodPractise: res.projectData.isGoodPractise,
-              closeOutApprovedDate: res.projectData.closeOutApprovedDate,
-              projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-              approvedDate: res.projectData.approvedDate,
+              approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
               //Stategic Drivers
-              primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
+              primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
               agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
-              agileSecondaryWorkstream: res.agileSecondaryWorkstream,
+              agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
               agileWave: res.agileWave ? res.agileWave.lookUpName : '',
               isPobos: res.projectData.isPobos,
-              pobosCategory: res.pobosCategory,
+              pobosCategory: res.pobosCategory ? res.pobosCategory : [],
               isGmsgqltannualMustWin: res.projectData.isGmsgqltannualMustWin,
               strategicYear: res.strategicYearID ? res.strategicYearID.lookUpName : '',
               annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
               isSiteAssessment: res.projectData.isSiteAssessment,
-              siteAssessmentCategory: res.siteAssessmentCategory,
+              siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
             })
             this.viewContent = true
+          })
         })
       })
     })
-  })
     this.disabler()
   }
 
@@ -197,5 +195,8 @@ export class GeneralInfoComponent implements OnInit {
   }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
+  }
+  viewElementChecker(element: string): boolean {
+    return this.viewElements.some(x => x == element)
   }
 }
