@@ -8,28 +8,51 @@
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
-        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
         <app-schedule-link *ngIf="projecthubservice.itemtype == 'LinkMilestones'"></app-schedule-link>
-        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
-        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingleProjectProposal'" [mode]="'Project-Proposal'"></app-project-team-add-single>
-        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'"></app-project-team-bulk-edit>
-        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEditProjectProposal'" [mode]="'Project-Proposal'"></app-project-team-bulk-edit>
-        <app-operational-performance-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+        <app-project-team-add-single
+            *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
+        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingleProjectProposal'"
+            [mode]="'Project-Proposal'"></app-project-team-add-single>
+        <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingleProjectCharter'"
+            [mode]="'Project-Charter'"></app-project-team-add-single>
+        <app-project-team-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEdit'"></app-project-team-bulk-edit>
+        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEditProjectProposal'"
+            [mode]="'Project-Proposal'"></app-project-team-bulk-edit>
+        <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEditProjectCharter'"
+            [mode]="'Project-Charter'"></app-project-team-bulk-edit>
+        <app-operational-performance-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
-        <app-operational-performance-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
-        <app-primary-kpi-single-edit *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
+        <app-operational-performance-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
+        <app-primary-kpi-single-edit
+            *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
-        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
-        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate']"></app-general-info-single-edit>
-        <app-quality-ref-bulk-edit *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
-        <app-oe-project-single-edit *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
-        <app-tech-transfer-single-edit *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>
-        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriverSingleEdit'"></app-strategic-drivers>
+        <app-general-info-single-edit
+            *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'"
+            [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate']"></app-general-info-single-edit>
+        <app-quality-ref-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
+        <app-oe-project-single-edit
+            *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
+        <app-tech-transfer-single-edit
+            *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>
+        <app-strategic-drivers
+            *ngIf="projecthubservice.itemtype == 'StrategicDriverSingleEdit'"></app-strategic-drivers>
         <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
         <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
-        <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>
+        <app-risk-issue-view-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>
         <app-risk-issues-link *ngIf="projecthubservice.itemtype == 'LinkRiskIssues'"></app-risk-issues-link>
+        <app-key-assumption-view-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'KeyAssumptionBulkEdit'"></app-key-assumption-view-bulk-edit>
+        <app-key-assumption-view-edit
+            *ngIf="projecthubservice.itemtype == 'KeyAssumption'"></app-key-assumption-view-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
@@ -73,24 +96,24 @@
                         {{projectDetails.problemId}} - {{projectDetails.problemTitle}}
                     </h2>
                     <div class=" flex items-center">
-                        <div class="w-full pr-3 text-right whitespace-pre" [ngClass]="isCursorPointer()" (click)="openPhaseStateDrawer()">
+                        <div class="w-full pr-3 text-right whitespace-pre" [ngClass]="isCursorPointer()"
+                            (click)="openPhaseStateDrawer()">
                             <p>Project State</p>
-                            <span [ngClass]="getStateClass(portfolioDetails.projStatus)">{{portfolioDetails.projStatus}}</span>
+                            <span
+                                [ngClass]="getStateClass(portfolioDetails.projStatus)">{{portfolioDetails.projStatus}}</span>
                         </div>
-                        <div class="p-3"
-                            [ngClass]="getStartPhaseClass()"
-                            style="z-index: 10;" (click)="openPhaseStateDrawer()">Initiate</div>
-                        <div class="p-3" [ngClass]="getPhaseClass('Define')"
-                            style="z-index: 9;" (click)="openPhaseStateDrawer()">Define</div>
-                        <div class="p-3" [ngClass]="getPhaseClass('Plan')"
-                            style="z-index: 8;" (click)="openPhaseStateDrawer()">Plan</div>
-                        <div class="p-3" [ngClass]="getPhaseClass('Execute')"
-                            style="z-index: 7;" (click)="openPhaseStateDrawer()">Execute</div>
-                        <div class="p-3" [ngClass]="getPhaseClass('Close')"
-                            style="z-index: 6;" (click)="openPhaseStateDrawer()">Close</div>
-                        <div class="p-3"
-                            [ngClass]="getEndPhaseClass()"
-                            style="z-index: 5;" (click)="openPhaseStateDrawer()">Track</div>
+                        <div class="p-3" [ngClass]="getStartPhaseClass()" style="z-index: 10;"
+                            (click)="openPhaseStateDrawer()">Initiate</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Define')" style="z-index: 9;"
+                            (click)="openPhaseStateDrawer()">Define</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Plan')" style="z-index: 8;"
+                            (click)="openPhaseStateDrawer()">Plan</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Execute')" style="z-index: 7;"
+                            (click)="openPhaseStateDrawer()">Execute</div>
+                        <div class="p-3" [ngClass]="getPhaseClass('Close')" style="z-index: 6;"
+                            (click)="openPhaseStateDrawer()">Close</div>
+                        <div class="p-3" [ngClass]="getEndPhaseClass()" style="z-index: 5;"
+                            (click)="openPhaseStateDrawer()">Track</div>
                     </div>
                 </div>
                 <!-- Actions -->
@@ -140,9 +163,10 @@
                         </div>
                     </div>
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '',false,true)">
-                    <b>Data Quality:&nbsp;</b><a [ngStyle]="{color:getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}</a>
-                </button>
+                        (click)="projecthubservice.toggleDrawerOpen('DataQuality', 'new', [] , '',false,true)">
+                        <b>Data Quality:&nbsp;</b><a
+                            [ngStyle]="{color:getColor(dataQualityPercentage)}">{{dataQualityPercentageString}}</a>
+                    </button>
                 </div>
                 <div class="flex shrink-0 items-center justify-between sm:mt-0">
 

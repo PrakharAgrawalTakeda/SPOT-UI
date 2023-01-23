@@ -1,8 +1,9 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation, Output, Input, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
+import { EventType } from '@azure/msal-browser';
 
 
 @Component({
@@ -16,30 +17,46 @@ export class ProjectTeamComponent implements OnInit {
   teamMembers: any = []
   id: string = ''
   isGrid: boolean = false
-  bulkEditType: string ='ProjectTeamBulkEdit';
-  addSingle: string ='ProjectTeamAddSingle';
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
+  Urlval: any;
+  bulkEditType: string = 'ProjectTeamBulkEdit';
+  addSingle: string = 'ProjectTeamAddSingle';
+  chartercount: string;
+  @Output() eventName = new EventEmitter<EventType>();
+  constructor(private Router: Router, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.dataloader()
       }
     })
-   }
+  }
 
   ngOnInit(): void {
+    const url = this.Router.url;
+    this.Urlval = url.substring(url.lastIndexOf('/') + 1);
     this.dataloader()
   }
-  dataloader(){
+  dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if(this.mode != 'Normal'){
-        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    if (this.mode != 'Normal') {
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
-    if(this.mode == 'Project-Proposal'){
-        this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
-        this.addSingle = 'ProjectTeamAddSingleProjectProposal'
+    if (this.mode == 'Project-Proposal') {
+      this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
+      this.addSingle = 'ProjectTeamAddSingleProjectProposal'
+    }
+    if (this.mode == 'Project-Charter') {
+      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
+      this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
     this.apiService.getmembersbyproject(this.id).then((res) => {
       this.teamMembers = res
+      this.chartercount = this.teamMembers.filter(x => x.includeInCharter == true).length;
+      localStorage.setItem('chartercount', this.chartercount);
+      for (let i = 0; i < this.teamMembers.length; i++) {
+        if (this.teamMembers[i].includeInCharter === null) {
+          this.teamMembers[i].includeInCharter = false;
+        }
+      }
     })
   }
 
