@@ -146,7 +146,7 @@ indicatorchange: boolean = false
     })
     //this.setSize();
     this.milestoneForm.valueChanges.subscribe(res => {
-      debugger
+      //debugger
       for(let control of this.milestoneForm.controls)
       {
         console.log(control['controls']['baselineFinish'].value)
@@ -224,12 +224,12 @@ indicatorchange: boolean = false
   }
 
   insertArray(projectId: string): void {
-    debugger
+    //debugger
 if(this.insertarray.length == 0)
 {
 this.insertarray.push(this._Activatedroute.parent.snapshot.paramMap.get("id"))
 }
-else if(!this.insertarray.contains(projectId)){
+else if(!this.insertarray.includes(projectId)){
   this.insertarray.push(projectId)
 }
 

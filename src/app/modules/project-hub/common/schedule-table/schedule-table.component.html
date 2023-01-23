@@ -138,13 +138,16 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Include in Report (Max 20)" prop="includeInReport" [sortable]="false"
+        <!-- <ngx-datatable-column name="Include in Report (Max 20)" prop="includeInReport" [sortable]="false"
         [resizeable]="false" [flexGrow]="0.40" *ngIf="mode== 'Project-Close-Out'">
-         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template> -->
+
           <!--<a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
             [ngClass]="{'closed': row.completionDate != null}"> -->
-            <p *ngIf="!value">&nbsp;</p>
-            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+
+            <!-- <p *ngIf="!value">&nbsp;</p>
+            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon> -->
+
           <!-- </a>
           <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
             class="p-2 overflow-hidden">
@@ -153,8 +156,26 @@
               </mat-slide-toggle>
             </div>
           </form> -->
-        </ng-template>
-      </ngx-datatable-column>
+
+        <!-- </ng-template>
+      </ngx-datatable-column> -->
+
+      <ngx-datatable-column name="Include in Report (Max 20)" prop="includeInReport" [sortable]="false"
+            [resizeable]="false" [flexGrow]="0.6" *ngIf="mode== 'Project-Close-Out'">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)">
+                <p *ngIf="!value">&nbsp;</p>
+                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+              </a>
+              <form [formGroup]="milestoneForm.controls[rowIndex]" class="p-2 overflow-hidden"
+                *ngIf="baselinelogTableEditStack.includes(rowIndex)">
+                <div class="flex items-center justify-between p-2 overflow-hidden">
+                  <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
+                  </mat-slide-toggle>
+                </div>
+              </form>
+            </ng-template>
+          </ngx-datatable-column>
 
         <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
