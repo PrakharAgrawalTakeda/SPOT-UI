@@ -39,6 +39,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   isclosed: boolean = false;
   viewContent: boolean = false
   riskIssueViewEditType: string = "RiskIssue";
+  riskIssueBulkEditType: string = "RiskIssuesBulkEdit";
   constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService,
@@ -65,6 +66,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
     if(this.mode == 'Project-Charter'){
         this.riskIssueViewEditType = "ProjectCharterRiskIssueViewEdit"
+        this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
     }
     this.viewContent = true
   }
