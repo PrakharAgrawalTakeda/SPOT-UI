@@ -11,8 +11,7 @@
         <div class="overflow-x-hidden  pr-3" [ngClass]="{'overflow-y-scroll h-[86.5vh]': viewType == 'SidePanel'}">
             <spot-singleselect-autocomplete *ngIf="viewElementChecker('primaryKPI')" formControlName="primaryKPI"
                 class="w-full" name="primaryKPI" [label]="'Primary KPI'" [placeholder]="'Primary KPI'"
-                [valuePointer]="'kpiname'" [dropDownArray]="kpiMasters" [sortByType]="'custom'"
-                [customSortPointer]="'kpiorder'">
+                [valuePointer]="'kpiname'" [dropDownArray]="kpiMasters">
             </spot-singleselect-autocomplete>
             <!--AGILE START-->
             <div class="w-full mt-4 mb-6">
