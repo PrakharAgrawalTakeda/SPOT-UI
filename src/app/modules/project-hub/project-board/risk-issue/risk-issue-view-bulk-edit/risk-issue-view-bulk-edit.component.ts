@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {ProjectHubService} from "../../../project-hub.service";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {ProjectApiService} from "../../../common/project-api.service";

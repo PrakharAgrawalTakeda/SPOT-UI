@@ -9,7 +9,7 @@
 <form class="w-full overflow-hidden" [formGroup]="riskIssueForm" (ngSubmit)="submitriskissue()">
     <div class=" form-ask-need h-[87vh] overflow-y-scroll">
         <div class="flex items-start justify-between">
-            <div class="w-25">
+            <div class="w-25" *ngIf="viewElementChecker('type')">
                 <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3"
                     [floatLabel]="'always'">
                     <mat-label>Type</mat-label>
@@ -21,7 +21,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="w-25">
+            <div class="w-25" *ngIf="viewElementChecker('logDate')">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Log Date</mat-label>
                     <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
@@ -31,13 +31,13 @@
                 </mat-form-field>
             </div>
         </div>
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('ifThisHappens')">
             <mat-label>If This Happens</mat-label>
             <textarea matInput [rows]="5" [placeholder]="'If This Happens'" formControlName="ifThisHappens"
                 name="ifThisHappens"></textarea>
         </mat-form-field>
 
-        <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
+        <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'" *ngIf="viewElementChecker('probability')">
             <mat-label>Probability</mat-label>
             <mat-select [placeholder]="'Probability'" formControlName="probability" name="probability">
                 <mat-option value="">None</mat-option>
@@ -46,7 +46,7 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('thisIsTheResult')">
             <mat-label>This Is The Result</mat-label>
             <textarea matInput [rows]="5" [placeholder]="'This Is The Result'" formControlName="thisIsTheResult"
                 name="thisIsTheResult"></textarea>
@@ -60,20 +60,22 @@
             </mat-option>
         </mat-select>
     </mat-form-field>-->
+        <div *ngIf="viewElementChecker('impact')">
+            <spot-select formControlName="impact" name="impact" [label]="'Impact'" [placeholder]="'Impact'"
+                         [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"
+                         [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-select>
+        </div>
 
-        <spot-select formControlName="impact" name="impact" [label]="'Impact'" [placeholder]="'Impact'"
-            [dropDownArrayType]="'object'" [dropDownArray]="getimpact()" [idPointer]="'lookUpId'"
-            [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-        </spot-select>
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('mitigation')">
             <mat-label>Mitigation</mat-label>
             <textarea matInput [rows]="5" [placeholder]="'Mitigation'" formControlName="mitigation"
                 name="mitigation"></textarea>
         </mat-form-field>
-
-        <app-user-single-dropdown [formgroup]="riskIssueForm" [label]="'Owner'"></app-user-single-dropdown>
-
-        <mat-form-field class="w-full" [floatLabel]="'always'">
+        <div  *ngIf="viewElementChecker('owner')">
+            <app-user-single-dropdown [formgroup]="riskIssueForm" [label]="'Owner'"></app-user-single-dropdown>
+        </div>
+        <mat-form-field class="w-full" [floatLabel]="'always'"  *ngIf="viewElementChecker('function')">
             <mat-label>Function</mat-label>
             <input matInput [placeholder]="'Function'" formControlName="function" name="function"
                 [matAutocomplete]="function">
@@ -86,7 +88,7 @@
         </mat-form-field>
 
 
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('dueDate')">
             <mat-label>Due Date</mat-label>
             <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="dueDate"
                 name="dueDate">
@@ -94,7 +96,7 @@
             <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('closeDate')">
             <mat-label>Close Date</mat-label>
             <input matInput [matDatepicker]="picker3" [max]="today" [placeholder]="'Choose a date'"
                 formControlName="closeDate" name="closeDate">
@@ -102,13 +104,17 @@
             <mat-datepicker #picker3></mat-datepicker>
         </mat-form-field>
 
-        <div class="flex items-start justify-between incuded-in-dash">
+        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInReport')">
             <mat-slide-toggle
                 [matTooltip]="this.riskIssueForm.controls['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
                 formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
         </div>
-
-        <mat-accordion class="h-120" multi>
+        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInReport')">
+            <mat-slide-toggle
+                [matTooltip]="this.riskIssueForm.controls['includeInCharter'].disabled ? 'Only 5 can be selected at a time for dashboard report display' : null"
+                formControlName="includeInReport">Include in Charter</mat-slide-toggle>
+        </div>
+        <mat-accordion class="h-120" multi *ngIf="viewElementChecker('postMitigation')">
             <mat-expansion-panel [expanded]="false">
                 <mat-expansion-panel-header class="pt-10 pb-10">
                     <mat-panel-title class="font-bold">
