@@ -8,7 +8,7 @@
         </div>
     </div>
     <form class="pl-3 w-full overflow-hidden" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
-        <div class="overflow-x-hidden  pr-3" [ngClass]="{'overflow-y-scroll h-[86.5vh]': viewType == 'SidePanel'}">
+        <div class="overflow-x-hidden  pr-3" [ngClass]="{'overflow-y-scroll h-[86.5vh] pt-3': viewType == 'SidePanel'}">
             <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
                 class="flex justify-between items-center mt-6 mb-6">
                 <div class="flex justify-start gap-1 items-center">Is Archived?
