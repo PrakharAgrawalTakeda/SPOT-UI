@@ -28,6 +28,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getKeyAssumptionsByProject(projectid) {
+      var url = GlobalVariables.apiurl + "KeyAssumption/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getportfolioData(projectid) {
     var url = GlobalVariables.apiurl + "PortfolioCenterData/" + projectid
     const abc$ = this.http.get(url)
@@ -244,6 +250,12 @@ export class ProjectApiService {
     const abc$ = this.http.post(link,body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async addKeyAssumption(body){
+      var link = GlobalVariables.apiurl+"KeyAssumption"
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async bulkeditQualityReference(body,projectId){
     var link = GlobalVariables.apiurl+"QualityReference/BulkEditQualityRef/" + projectId

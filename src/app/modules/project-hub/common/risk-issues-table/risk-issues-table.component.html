@@ -102,7 +102,7 @@
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-row-detail [rowHeight]="'auto'" #riskIssueRowDetail (toggle)="onDetailToggle($event)">
-            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template  *ngIf="mode== 'Normal'">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template >
 
                 <div style="padding: 10px 0 0 0;">
                     <div class="flex items-start justify-between">
