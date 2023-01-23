@@ -166,7 +166,7 @@
         <!-- </ng-template>
       </ngx-datatable-column> -->
 
-      <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7">
+      <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Project-Close-Out'">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)"
             [ngClass]="{'closed': row.completionDate != null}">
