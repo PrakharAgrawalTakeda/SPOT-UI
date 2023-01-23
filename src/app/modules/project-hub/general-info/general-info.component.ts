@@ -22,8 +22,10 @@ export class GeneralInfoComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
-  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' = 'GeneralInfoSingleEdit'
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
+  strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
+  isWizzard: boolean = false
   lookUpData: any = []
   kpiData: any = []
   id: string = ""
@@ -97,10 +99,23 @@ export class GeneralInfoComponent implements OnInit {
     this.dataloader()
   }
   dataloader(): void {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if (this.viewElementChecker('close-out')) {
-      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
+    if(this.viewElementChecker('closeOutApprovedDate') || this.viewElementChecker('approvedDate') || this.viewElementChecker('projectProposalApprovedDate')){
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+        this.isWizzard= true;
+        if(this.viewElementChecker('closeOutApprovedDate')){
+            this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
+            this.strategicDriversType = 'StrategicDriversSingleEditCloseOut'
+        }
+        if(this.viewElementChecker('approvedDate')){
+            this.generalInfoType = 'GeneralInfoSingleEditProjectCharter';
+            this.strategicDriversType = 'StrategicDriversSingleEditProjectCharter'
+        }
+        if(this.viewElementChecker('projectProposalApprovedDate')){
+            this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
+            this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
+        }
+    }else{
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     }
     this.portApiService.getfilterlist().then(filterres => {
       this.authService.lookupMaster().then((lookup: any) => {
