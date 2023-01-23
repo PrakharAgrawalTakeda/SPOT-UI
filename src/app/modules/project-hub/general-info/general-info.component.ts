@@ -99,8 +99,7 @@ export class GeneralInfoComponent implements OnInit {
     this.dataloader()
   }
   dataloader(): void {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if(this.viewElementChecker('closeOutApprovedDate' || 'approvedDate' || 'projectProposalApprovedDate')){
+    if(this.viewElementChecker('closeOutApprovedDate') || this.viewElementChecker('approvedDate') || this.viewElementChecker('projectProposalApprovedDate')){
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
         this.isWizzard= true;
         if(this.viewElementChecker('closeOutApprovedDate')){
@@ -115,6 +114,8 @@ export class GeneralInfoComponent implements OnInit {
             this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
             this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
         }
+    }else{
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     }
     this.portApiService.getfilterlist().then(filterres => {
       this.authService.lookupMaster().then((lookup: any) => {
