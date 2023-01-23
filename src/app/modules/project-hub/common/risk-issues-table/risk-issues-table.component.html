@@ -1,3 +1,4 @@
+<div *ngIf="viewContent">
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Risks/Issues</div>
 
@@ -18,7 +19,7 @@
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
-            <div>
+            <div *ngIf="mode== 'Normal'">
                 <form [formGroup]="localIncludedItems">
                     <mat-slide-toggle class="primary slider-adjust" formControlName="toggle" (checked)="projecthubservice.includeClosedItems.riskIssue.value"  (change)="toggleRiskIssue($event)" >
                         Include Closed Items</mat-slide-toggle>
@@ -52,27 +53,33 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1">
+        <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1"  *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
-
-
-
         <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="6">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-
-        <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1">
+        <ngx-datatable-column name="This is the result" prop="riskIssueResult" [flexGrow]="6" *ngIf="mode== 'Project-Charter'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{value}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="2" *ngIf="mode== 'Project-Charter'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{value}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
+        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"  *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                 <div class="flex items-center justify-start gap-6">
@@ -95,7 +102,7 @@
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-row-detail [rowHeight]="'auto'" #riskIssueRowDetail (toggle)="onDetailToggle($event)">
-            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template  *ngIf="mode== 'Normal'">
 
                 <div style="padding: 10px 0 0 0;">
                     <div class="flex items-start justify-between">
@@ -142,4 +149,5 @@
         </ngx-datatable-row-detail>
 
     </ngx-datatable>
+</div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../../common/project-api.service';
@@ -13,6 +13,10 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   filterCriteria: any = {}
   generalInfo: any = {}
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  @Output() formValue = new EventEmitter();
   owningOrganizationValues = []
   viewContent = false
   generalInfoForm = new FormGroup({
@@ -28,7 +32,10 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     enviornmentalPortfolio: new FormControl({}),
     isArchived: new FormControl(false),
     isCapsProject: new FormControl(false),
-    owningOrganization: new FormControl('')
+    owningOrganization: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
+    projectProposalApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -36,7 +43,12 @@ export class GeneralInfoSingleEditComponent implements OnInit {
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        this.projectHubService.isFormChanged = true
+        if (this.callLocation == 'ProjectHub') {
+          this.projectHubService.isFormChanged = true
+        }
+        else {
+          this.formValue.emit(this.generalInfoForm.getRawValue())
+        }
       }
     })
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
@@ -59,29 +71,41 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
-      this.generalInfo = res
-      this.filterCriteria = this.projectHubService.all
-      this.generalInfoForm.patchValue({
-        problemTitle: res.projectData.problemTitle,
-        problemType: res.projectData.problemType,
-        projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-        projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-        projectDescription: res.projectData.projectDescription,
-        primaryProduct: res.primaryProduct ? res.primaryProduct : {},
-        otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-        portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
-        excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-        enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
-        isArchived: res.projectData.isArchived,
-        isCapsProject: res.projectData.isCapsProject,
-        owningOrganization: res.projectData.defaultOwningOrganizationId,
-      });
-      this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.viewContent = true
-    })
+    if (this.callLocation == 'ProjectHub') {
+      this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
+        this.generalInfo = res
+        this.filterCriteria = this.projectHubService.all
+        this.generalInfoForm.patchValue({
+          problemTitle: res.projectData.problemTitle,
+          problemType: res.projectData.problemType,
+          projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+          projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+          projectDescription: res.projectData.projectDescription,
+          primaryProduct: res.primaryProduct ? res.primaryProduct : {},
+          otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+          portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+          excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+          enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+          isArchived: res.projectData.isArchived,
+          isCapsProject: res.projectData.isCapsProject,
+          owningOrganization: res.projectData.defaultOwningOrganizationId,
+        closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+        projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+        approvedDate: res.projectData.approvedDate,
+        });
+        this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+        this.viewContent = true
+      })
+    }
+    else{
+      this.apiService.getfilterlist().then(res=>{
+        this.filterCriteria = res
+        this.formValue.emit(this.generalInfoForm.getRawValue())
+        this.viewContent = true
+      })
+    }
   }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
@@ -92,7 +116,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
   }
-
+  viewElementChecker(element: string): boolean {
+    return this.viewElements.some(x => x == element)
+  }
 
   submitGI() {
     var formValue = this.generalInfoForm.getRawValue()
@@ -151,6 +177,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
+    mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate
+    mainObj.projectProposalApprovedDate = formValue.projectProposalApprovedDate
+    mainObj.approvedDate = formValue.approvedDate
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)

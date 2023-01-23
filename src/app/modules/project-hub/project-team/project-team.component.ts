@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 import { ProjectApiService } from '../common/project-api.service';
@@ -12,9 +12,12 @@ import { ProjectHubService } from '../project-hub.service';
   encapsulation: ViewEncapsulation.None
 })
 export class ProjectTeamComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Project-Proposal' | 'Project-Charter' | 'Project-Dashboards' = 'Normal'
   teamMembers: any = []
   id: string = ''
   isGrid: boolean = false
+  bulkEditType: string ='ProjectTeamBulkEdit';
+  addSingle: string ='ProjectTeamAddSingle';
   constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
@@ -28,8 +31,14 @@ export class ProjectTeamComponent implements OnInit {
   }
   dataloader(){
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    if(this.mode != 'Normal'){
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
+    if(this.mode == 'Project-Proposal'){
+        this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
+        this.addSingle = 'ProjectTeamAddSingleProjectProposal'
+    }
     this.apiService.getmembersbyproject(this.id).then((res) => {
-      console.log(res)
       this.teamMembers = res
     })
   }

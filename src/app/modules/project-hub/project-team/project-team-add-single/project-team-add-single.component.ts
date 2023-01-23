@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -12,11 +12,15 @@ import { ProjectHubService } from '../../project-hub.service';
   styleUrls: ['./project-team-add-single.component.scss']
 })
 export class ProjectTeamAddSingleComponent implements OnInit {
+  @Input() mode: string;
   lookUpData: any = []
   projectTeamAddForm = new FormGroup({
     role: new FormControl({}),
     permission: new FormControl('BCEBDFAC-DB73-40D3-8EF0-166411B5322C'),
     usersingle: new FormControl({}),
+    percentTime: new FormControl(''),
+    duration: new FormControl(''),
+    includeInProposal: new FormControl(false),
   })
   formInital: boolean = false
   constructor(public projecthubservice: ProjectHubService, public auth: AuthService, public role: RoleService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
@@ -51,6 +55,13 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookUpData = resp
       this.formInital = true
+      if (this.projecthubservice.all != []) {
+         if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 5) {
+            if (this.projectTeamAddForm.value.includeInProposal != true) {
+                 this.projectTeamAddForm.controls['includeInProposal'].disable()
+            }
+         }
+      }
     })
   }
   getRoles(): any {
@@ -71,24 +82,75 @@ export class ProjectTeamAddSingleComponent implements OnInit {
   }
   submitProjectTeam() {
     if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
-      this.projecthubservice.isFormChanged = false
-      var projectTeam = this.projectTeamAddForm.getRawValue();
-      var mainObj = {
-        projectTeamUniqueId: "",
-        problemUniqueId: this.projecthubservice.projectid,
-        roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
-        teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
-        teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
-        teamPermissionId: projectTeam.permission,
-        percentTime: 0,
-        duration: 0,
-        includeInCharter: false,
-        includeInProposal: false
-      }
-      this.apiService.addProjectTeam(mainObj).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      })
+        if (this.projectTeamAddForm.controls.percentTime.value < 0 || this.projectTeamAddForm.controls.percentTime.value > 100) {
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "Percent time value cannot be greater than 100 or smaller than 0",
+                "message": "",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warning"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "Okay",
+                        "color": "primary"
+                    },
+                    "cancel": {
+                        "show": false,
+                        "label": "Cancel"
+                    }
+                },
+                "dismissible": true
+            }
+            const alert = this.fuseAlert.open(comfirmConfig)
+        }else{
+            if (this.projectTeamAddForm.controls.duration.value < 0) {
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "Duration value cannot be smaller than 0",
+                    "message": "",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": false,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+            }else{
+                this.projecthubservice.isFormChanged = false
+                var projectTeam = this.projectTeamAddForm.getRawValue();
+                var mainObj = {
+                    projectTeamUniqueId: "",
+                    problemUniqueId: this.projecthubservice.projectid,
+                    roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
+                    teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
+                    teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
+                    teamPermissionId: projectTeam.permission,
+                    percentTime: projectTeam.percentTime== "" ?  0 : projectTeam.percentTime,
+                    duration: projectTeam.duration== "" ?  0 : projectTeam.duration,
+                    includeInCharter: false,
+                    includeInProposal: projectTeam.includeInProposal
+                }
+                this.apiService.addProjectTeam(mainObj).then(res => {
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                })
+            }
+        }
+
     }
     else {
       var comfirmConfig: FuseConfirmationConfig = {

@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as moment from 'moment';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -19,9 +19,15 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   providers: [],
 })
 export class GeneralInfoComponent implements OnInit {
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
+  strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
+  isWizzard: boolean = false
   lookUpData: any = []
-  kpiData:any = []
+  kpiData: any = []
   id: string = ""
   generalInfoData: any = {}
   filterCriteria: any = {}
@@ -50,6 +56,11 @@ export class GeneralInfoComponent implements OnInit {
     isQualityRef: new FormControl(false),
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
+    closeOutApprovedDate: new FormControl(''),
+    projectProposalApprovedDate: new FormControl(''),
+    approvedDate: new FormControl(''),
+    opU: new FormControl(''),
+    projectId: new FormControl(''),
     //Stategic Drivers
     primaryKPI: new FormControl(''),
     isAgile: new FormControl(false),
@@ -88,10 +99,27 @@ export class GeneralInfoComponent implements OnInit {
     this.dataloader()
   }
   dataloader(): void {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    if(this.viewElementChecker('closeOutApprovedDate') || this.viewElementChecker('approvedDate') || this.viewElementChecker('projectProposalApprovedDate')){
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+        this.isWizzard= true;
+        if(this.viewElementChecker('closeOutApprovedDate')){
+            this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
+            this.strategicDriversType = 'StrategicDriversSingleEditCloseOut'
+        }
+        if(this.viewElementChecker('approvedDate')){
+            this.generalInfoType = 'GeneralInfoSingleEditProjectCharter';
+            this.strategicDriversType = 'StrategicDriversSingleEditProjectCharter'
+        }
+        if(this.viewElementChecker('projectProposalApprovedDate')){
+            this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
+            this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
+        }
+    }else{
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    }
     this.portApiService.getfilterlist().then(filterres => {
       this.authService.lookupMaster().then((lookup: any) => {
-        this.authService.KPIMaster().then((kpi:any)=>{
+        this.authService.KPIMaster().then((kpi: any) => {
           console.log('LookUp Data', lookup)
           this.lookUpData = lookup
           this.projectHubService.lookUpMaster = lookup
@@ -129,26 +157,29 @@ export class GeneralInfoComponent implements OnInit {
               isQualityRef: res.qualityReferences.length != 0,
               isArchived: res.projectData.isArchived,
               owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
+              projectId: res.projectData.problemId,
+              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName,
+              isGoodPractise: res.projectData.isGoodPractise,
+              approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
               //Stategic Drivers
-              primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != ''?kpi.find(x=>x.kpiid == res.projectData.primaryKpi).kpiname:'',
+              primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
               agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
-              agileSecondaryWorkstream: res.agileSecondaryWorkstream,
+              agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
               agileWave: res.agileWave ? res.agileWave.lookUpName : '',
               isPobos: res.projectData.isPobos,
-              pobosCategory: res.pobosCategory,
+              pobosCategory: res.pobosCategory ? res.pobosCategory : [],
               isGmsgqltannualMustWin: res.projectData.isGmsgqltannualMustWin,
               strategicYear: res.strategicYearID ? res.strategicYearID.lookUpName : '',
               annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
               isSiteAssessment: res.projectData.isSiteAssessment,
-              siteAssessmentCategory: res.siteAssessmentCategory,
-              isGoodPractise: res.projectData.isGoodPractise
+              siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
             })
             this.viewContent = true
+          })
         })
       })
     })
-  })
     this.disabler()
   }
 
@@ -179,5 +210,8 @@ export class GeneralInfoComponent implements OnInit {
   }
   getLookUpName(id: string): string {
     return id && id != '' ? this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
+  }
+  viewElementChecker(element: string): boolean {
+    return this.viewElements.some(x => x == element)
   }
 }
