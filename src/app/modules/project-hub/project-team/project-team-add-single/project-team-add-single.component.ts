@@ -68,6 +68,11 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                  this.projectTeamAddForm.controls['includeInProposal'].disable()
             }
          }
+        if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
+          if (this.projectTeamAddForm.value.includeInCharter != true) {
+            this.projectTeamAddForm.controls['includeInCharter'].disable()
+          }
+        }
       }
     })
     this.charterCount = parseInt(localStorage.getItem('chartercount'));
@@ -142,7 +147,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
             }else{
                 this.projecthubservice.isFormChanged = false
                 var projectTeam = this.projectTeamAddForm.getRawValue();
-              var projectDuration = this.Urlval == 'project-charter-project-teams' ? projectTeam.duration.replaceAll(',', '') : 0;
+              // var projectDuration = this.Urlval == 'project-charter-project-teams' ? projectTeam.duration.replaceAll(',', '') : 0;
                 var mainObj = {
                     projectTeamUniqueId: "",
                     problemUniqueId: this.projecthubservice.projectid,
@@ -152,7 +157,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                     teamPermissionId: projectTeam.permission,
                     percentTime: projectTeam.percentTime== "" ?  0 : projectTeam.percentTime,
                     duration: projectTeam.duration== "" ?  0 : projectTeam.duration,
-                    includeInCharter: false,
+                    includeInCharter: projectTeam.includeInCharter,
                     includeInProposal: projectTeam.includeInProposal
                 }
                 this.apiService.addProjectTeam(mainObj).then(res => {
@@ -202,10 +207,10 @@ export class ProjectTeamAddSingleComponent implements OnInit {
           teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
           teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
           teamPermissionId: projectTeam.permission,
-          percentTime: this.Urlval == 'project-charter-project-teams' ? projectTeam.percentTime : 0,
-          duration: this.Urlval == 'project-charter-project-teams' ? projectDuration : 0,
-          includeInCharter: this.Urlval == 'project-charter-project-teams' ? projectTeam.includeInCharter : false,
-          includeInProposal: false
+          percentTime: projectTeam.percentTime == "" ? 0 : projectTeam.percentTime,
+          duration: projectTeam.duration == "" ? 0 : projectTeam.duration,
+          includeInCharter: projectTeam.includeInCharter,
+          includeInProposal: projectTeam.includeInProposal
         }
         this.apiService.addProjectTeam(mainObj).then(res => {
           this.projecthubservice.submitbutton.next(true)

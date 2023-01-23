@@ -109,11 +109,11 @@ import { CloseOutScheduleBaselineComponent } from './close-out/close-out-schedul
 import { ProjectCharterGeneralInfoComponent } from './project-charter/project-charter-general-info/project-charter-general-info.component';
 import { ProjectCharterScopeComponent } from './project-charter/project-charter-scope/project-charter-scope.component';
 import { ProjectCharterMilestonesComponent } from './project-charter/project-charter-milestones/project-charter-milestones.component';
-import { ProjectCharterProjectTeamComponent } from './project-charter/project-charter-project-team/project-charter-project-team.component';
 import { ProjectCharterRiskIssuesComponent } from './project-charter/project-charter-risk-issues/project-charter-risk-issues.component';
 import { ProjectCharterCostFundingComponent } from './project-charter/project-charter-cost-funding/project-charter-cost-funding.component';
 import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
 import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/close-out-general-info.component";
+import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -230,7 +230,7 @@ export const projectRoutes: Route[] = [
         },
         {
           path: 'project-team',
-          component: ProjectCharterProjectTeamComponent,
+          component: ProjectCharterProjectTeamsComponent,
         },
         {
           path: 'risks',
@@ -357,7 +357,7 @@ export const projectRoutes: Route[] = [
     ProjectCharterGeneralInfoComponent,
     ProjectCharterScopeComponent,
     ProjectCharterMilestonesComponent,
-    ProjectCharterProjectTeamComponent,
+    ProjectCharterProjectTeamsComponent,
     ProjectCharterRiskIssuesComponent,
     ProjectCharterCostFundingComponent,
     ProjectCharterCapsComponent
@@ -405,7 +405,9 @@ export const projectRoutes: Route[] = [
         UserModule
     ],
     exports:[
-      GeneralInfoSingleEditComponent
+      GeneralInfoSingleEditComponent,
+      QualityRefBulkEditComponent,
+      OeProjectSingleEditComponent
     ]
 })
 export class ProjectHubModule { }

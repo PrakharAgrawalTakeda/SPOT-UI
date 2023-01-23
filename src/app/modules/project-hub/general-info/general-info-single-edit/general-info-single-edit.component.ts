@@ -20,6 +20,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
 
   @Output() eventName = new EventEmitter<EventType>();
+  viewContent:boolean = false
   reqName: boolean = false;
   reqPortfolio: boolean = false;
   reqUser: boolean = false;
@@ -62,6 +63,9 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     closeOutApprovedDate: new FormControl(''),
     projectProposalApprovedDate: new FormControl(''),
     approvedDate: new FormControl(''),
+    SubmittedBy: new FormControl(''),
+    targetGoalSituation: new FormControl(''),
+    localCurrency: new FormControl('')
   })
 
   @Output() formValue = new EventEmitter<FormGroup>();
@@ -73,13 +77,20 @@ export class GeneralInfoSingleEditComponent implements OnInit{
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        this.projectHubService.isFormChanged = true
+        if (this.callLocation == 'ProjectHub') {
+          this.projectHubService.isFormChanged = true
+        }
+        else {
+          this.formValue.emit(this.generalInfoForm.getRawValue())
+        }
       }
     })
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       this.generalInfoForm.controls.owningOrganization.disable()
+      this.generalInfoForm.controls.localCurrency.disable()
     } else {
       this.generalInfoForm.controls.owningOrganization.enable()
+      this.generalInfoForm.controls.localCurrency.disable()
     }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -96,6 +107,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    if (this.callLocation == 'ProjectHub') {
     this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
       this.generalInfo = res
       this.filterCriteria = this.projectHubService.all
@@ -122,6 +134,18 @@ export class GeneralInfoSingleEditComponent implements OnInit{
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true
     })
+    }
+    else {
+      this.apiService.getfilterlist().then(res => {
+        this.apiService.getLocalCurrency().then(data => {
+          this.localCurrencyList = data
+        })
+        this.filterCriteria = res
+        this.formValue.emit(this.generalInfoForm.getRawValue())
+        this.generalInfoForm.controls.localCurrency.disable()
+        this.viewContent = true
+      })
+    }
   }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
@@ -134,6 +158,9 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
     // return "";
+  }
+  viewElementChecker(element: string): boolean {
+    return this.viewElements.some(x => x == element)
   }
 
   clickEvent(value: string, name: string) {

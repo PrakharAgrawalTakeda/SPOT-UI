@@ -37,8 +37,8 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   charterCount: number;
   projectTeamForm = new FormArray([])
   ngOnInit(): void {
-    const url = this.Router.url;
-    this.Urlval = url.substring(url.lastIndexOf('/') + 1);
+    // const url = this.Router.url;
+    // this.Urlval = url.substring(url.lastIndexOf('/') + 1);
     this.dataloader()
   }
   dataloader() {
@@ -163,7 +163,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
 
   submitProjectTeams() {
     this.formValue() 
-    if (this.teamMembersSubmit.filter(x => x.includeInCharter == true).length > 10 && this.Urlval=="project-charter-project-teams") {
+    if (this.teamMembersSubmit.filter(x => x.includeInCharter == true).length > 10 && this.mode =="Project-Charter") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Only 10 can be selected at a time for Team Charter slide display.",
         "message": "",
@@ -390,6 +390,18 @@ export class ProjectTeamBulkEditComponent implements OnInit {
                 }
             }
          }
+      if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length < 10) {
+        for (var i of this.projectTeamForm.controls) {
+          i['controls']['includeInCharter'].enable()
+        }
+      }
+      else {
+        for (var i of this.projectTeamForm.controls) {
+          if (i['controls']['includeInCharter'].value != true) {
+            i['controls']['includeInCharter'].disable()
+          }
+        }
+      }
     }
 
   numberWithCommas(x) {

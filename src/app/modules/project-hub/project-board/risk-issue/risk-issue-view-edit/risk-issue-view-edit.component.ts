@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef,ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -7,7 +7,7 @@ import { AuthService } from '../../../../../core/auth/auth.service'
 import * as moment from 'moment';
 import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../../common/project-api.service';
-import {ActivatedRoute} from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -46,7 +46,7 @@ export class RiskIssueViewEditComponent implements OnInit {
   item: any = {}
   functionSets: any = []
   id: string = ''
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService,private _elementRef: ElementRef) {
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService, private _elementRef: ElementRef) {
 
     this.functionSets = this.riskIssueForm.controls['function'].valueChanges.pipe(
       startWith(''),
@@ -66,8 +66,7 @@ export class RiskIssueViewEditComponent implements OnInit {
             })
           }
         }
-        else if(this.riskIssueForm.controls.functionid.value == "")
-        {
+        else if (this.riskIssueForm.controls.functionid.value == "") {
           return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
             return a.lookUpOrder - b.lookUpOrder;
           })
@@ -264,8 +263,8 @@ export class RiskIssueViewEditComponent implements OnInit {
           mainObjnew.logDate = this.riskissue.logDate + ".000Z"
         }
         if (this.riskIssueForm.controls['usersingleid'].value == "") {
-            mainObjnew.ownerName = null
-            mainObjnew.ownerId = null
+          mainObjnew.ownerName = null
+          mainObjnew.ownerId = null
         }
 
         // if (this.riskIssueForm.controls['logDate'].value == null) {
@@ -315,8 +314,8 @@ export class RiskIssueViewEditComponent implements OnInit {
           mainObj.functionGroupId = null
         }
         if (this.riskIssueForm.controls['usersingle'].value == "") {
-            mainObj.ownerName = null
-            mainObj.ownerId = null
+          mainObj.ownerName = null
+          mainObj.ownerId = null
         }
         //Log Date
         console.log(this.riskIssueForm.value.logDate)
@@ -341,7 +340,7 @@ export class RiskIssueViewEditComponent implements OnInit {
 
         console.log("final object")
         console.log(mainObj)
-        this.apiService.editRiskIssue(this.id,mainObj).then(res => {
+        this.apiService.editRiskIssue(this.id, mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)

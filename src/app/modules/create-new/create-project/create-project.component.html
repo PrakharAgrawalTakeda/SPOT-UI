@@ -38,6 +38,7 @@
                                     <ng-template matStepLabel>Details</ng-template>
                                     <h2><b>Project Details</b></h2>
                                     <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(1,$event)"></app-oe-project-single-edit>
+                                    <app-tech-transfer-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(2,$event)"></app-tech-transfer-single-edit>
                                     <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueQuality)="captureValueQuality(2,$event)"></app-quality-ref-bulk-edit>
                                     <p>*Required</p>
                                     <div style="text-align: right;">

@@ -22,7 +22,6 @@ export class ProjectTeamComponent implements OnInit {
   addSingle: string = 'ProjectTeamAddSingle';
   chartercount: string;
   @Output() eventName = new EventEmitter<EventType>();
-  @Input() mode: 'Project-Teams' | 'project-charter-project-teams' = 'Project-Teams';
   constructor(private Router: Router, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
@@ -44,6 +43,10 @@ export class ProjectTeamComponent implements OnInit {
     if(this.mode == 'Project-Proposal'){
         this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
         this.addSingle = 'ProjectTeamAddSingleProjectProposal'
+    }
+    if (this.mode == 'Project-Charter') {
+      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
+      this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
     this.apiService.getmembersbyproject(this.id).then((res) => {
       this.teamMembers = res

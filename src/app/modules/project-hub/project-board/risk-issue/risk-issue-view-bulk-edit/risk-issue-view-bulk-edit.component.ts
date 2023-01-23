@@ -1,12 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {ProjectHubService} from "../../../project-hub.service";
-import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {ProjectApiService} from "../../../common/project-api.service";
-import {SpotlightIndicatorsService} from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ProjectHubService } from "../../../project-hub.service";
+import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { ProjectApiService } from "../../../common/project-api.service";
+import { SpotlightIndicatorsService } from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
 import * as moment from "moment";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
-import {AuthService} from "../../../../../core/auth/auth.service";
-import { ActivatedRoute, Router } from '@angular/router';
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../../@fuse/services/confirmation";
+import { AuthService } from "../../../../../core/auth/auth.service";
 
 @Component({
     selector: 'app-risk-issue-view-bulk-edit',
@@ -21,7 +20,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         public apiService: ProjectApiService,
         public indicator: SpotlightIndicatorsService,
         public fuseAlert: FuseConfirmationService,
-        public auth: AuthService, private Router: Router
+        public auth: AuthService
     ) {
         this.projectHubService.includeClosedItems.riskIssue.subscribe(res => {
             if (this.viewContent) {
@@ -61,10 +60,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     riTableEditStack = []
     isclosedriskissuetoggle: boolean = false;
     lookupdata: any = []
-    Urlval: any;
     ngOnInit(): void {
-        const url = this.Router.url;
-        this.Urlval = url.substring(url.lastIndexOf('/') + 1);
         this.getllookup()
     }
     dataloader() {
@@ -128,12 +124,12 @@ export class RisIssueViewBulkEditComponent implements OnInit {
 
     addRI() {
         this.riskIssueForm.push(new FormGroup({
-            owner: new FormControl( {}),
+            owner: new FormControl({}),
             closeDate: new FormControl(""),
             dueDate: new FormControl(""),
-            functionGroupId: new FormControl( ""),
+            functionGroupId: new FormControl(""),
             ifHappens: new FormControl(""),
-            impactId: new FormControl( ""),
+            impactId: new FormControl(""),
             includeInCharter: new FormControl(false),
             includeInReport: new FormControl(false),
             indicator: new FormControl(""),
@@ -142,7 +138,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             postMitigationComments: new FormControl(""),
             postMitigationImpact: new FormControl(""),
             postMitigationProbability: new FormControl(""),
-            probabilityId: new FormControl( ""),
+            probabilityId: new FormControl(""),
             projectId: new FormControl(this.projectHubService.projectid),
             riskIssueResult: new FormControl(""),
             riskIssueTypeId: new FormControl(""),
@@ -150,7 +146,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }))
         var j = [{
             closeDate: null,
-            dueDate:  null,
+            dueDate: null,
             functionGroupId: '',
             ifHappens: '',
             impactId: '',
@@ -162,7 +158,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             ownerId: '',
             ownerName: '',
             postMitigationComments: '',
-            postMitigationImpact:'',
+            postMitigationImpact: '',
             postMitigationProbability: '',
             probabilityId: '',
             projectId: '',
@@ -276,41 +272,14 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     submitRI() {
         if (this.projectHubService.isFormChanged) {
             this.submitPrep()
-            if (this.formValue.filter(x => x.includeInCharter == true).length > 5 && this.Urlval == 'project-charter-risk-assumption') {
-                var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "Only 5 risk/issues can be included in project charter",
-                    "message": "",
-                    "icon": {
-                        "show": true,
-                        "name": "heroicons_outline:exclamation",
-                        "color": "warning"
-                    },
-                    "actions": {
-                        "confirm": {
-                            "show": true,
-                            "label": "OK",
-                            "color": "primary"
-                        },
-                        "cancel": {
-                            "show": false,
-                            "label": "Cancel"
-                        }
-                    },
-                    "dismissible": true
-                }
-                const alert = this.fuseAlert.open(comfirmConfig)
-                this.projectHubService.isBulkEdit = true
+            this.projectHubService.isFormChanged = false
+            this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
+                this.projectHubService.toggleDrawerOpen('', '', [], '')
+                this.projectHubService.submitbutton.next(true)
+                this.projectHubService.isNavChanged.next(true)
+                this.projectHubService.successSave.next(true)
             }
-            else{
-                this.projectHubService.isFormChanged = false
-                this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
-                        this.projectHubService.toggleDrawerOpen('', '', [], '')
-                        this.projectHubService.submitbutton.next(true)
-                        this.projectHubService.isNavChanged.next(true)
-                        this.projectHubService.successSave.next(true)
-                    }
-                )
-            }
+            )
         }
         else {
             this.projectHubService.toggleDrawerOpen('', '', [], '')
@@ -421,7 +390,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     }
     getLinkType(projectId: string): string {
         return projectId == this.projectHubService.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
-      }
+    }
     riTableEditRow(rowIndex) {
         if (!this.riTableEditStack.includes(rowIndex)) {
             this.riTableEditStack.push(rowIndex)
@@ -453,21 +422,21 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
-                if (close == 'confirmed') {
-                    console.log(this.tableData)
-                    this.tableData.splice(rowIndex, 1)
-                    console.log(this.riskIssueForm.getRawValue())
-                    this.riskIssueForm.removeAt(rowIndex)
-                    if (this.riTableEditStack.includes(rowIndex)) {
-                        this.riTableEditStack.splice(this.riTableEditStack.indexOf(rowIndex), 1)
-                    }
-                    this.riTableEditStack = this.riTableEditStack.map(function (value) {
-                        return value > rowIndex ? value - 1 : value;
-                    })
-                    this.disabler()
-                    this.tableData = [...this.tableData]
+            if (close == 'confirmed') {
+                console.log(this.tableData)
+                this.tableData.splice(rowIndex, 1)
+                console.log(this.riskIssueForm.getRawValue())
+                this.riskIssueForm.removeAt(rowIndex)
+                if (this.riTableEditStack.includes(rowIndex)) {
+                    this.riTableEditStack.splice(this.riTableEditStack.indexOf(rowIndex), 1)
                 }
+                this.riTableEditStack = this.riTableEditStack.map(function (value) {
+                    return value > rowIndex ? value - 1 : value;
+                })
+                this.disabler()
+                this.tableData = [...this.tableData]
             }
+        }
         )
     }
     islink(uid: string): boolean {
