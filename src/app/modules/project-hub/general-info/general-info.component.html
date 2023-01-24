@@ -30,6 +30,18 @@
 
           </div>
         </div>
+        <div class="flex justify-between items-start gap-6">
+          <div class="w-full" *ngIf="viewElementChecker('projectReviewedYN')">
+            <spot-input *ngIf="viewElementChecker('projectReviewedYN')" formControlName="projectReviewedYN"
+              name="projectReviewedYN" class="read-only" [label]="'Project Reviewed'">
+            </spot-input>
+          </div>
+          <div class="w-full" *ngIf="viewElementChecker('projectProposalApprovedDate')">
+            <spot-input-date class="w-full read-only" formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate"
+              [label]="'Date Approved'">
+            </spot-input-date>
+          </div>
+        </div>
         <div class="flex justify-between items-center gap-6">
           <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
             *ngIf="viewElementChecker('problemTitle')" [label]="'Project Name'">
@@ -57,15 +69,15 @@
         </div>
         <div class="flex justify-between items-start gap-6">
           <div class="w-full"
-            *ngIf="viewElementChecker('approvedDate') || viewElementChecker('closeOutApprovedDate') || viewElementChecker('projectProposalApprovedDate')">
+            *ngIf="viewElementChecker('approvedDate')">
             <spot-input-date class="w-full read-only" formControlName="approvedDate" name="approvedDate"
               [label]="'Date Approved'"></spot-input-date>
           </div>
           <div class="w-full" *ngIf="viewElementChecker('opU')">
-            <spot-input formControlName="opU" name="opU" class="read-only" [label]="'OpU'">
+            <spot-input *ngIf="viewElementChecker('opU')" formControlName="opU" name="opU" class="read-only"
+              [label]="'OpU'">
             </spot-input>
           </div>
-
         </div>
 
         <div class="flex justify-between items-start gap-6">
@@ -129,6 +141,9 @@
             </spot-multiselect-autocomplete>
           </div>
         </div>
+        <spot-input class="w-full read-only" formControlName="functionGroupID" name="functionGroupID"
+            *ngIf="viewElementChecker('functionGroupID')" [label]="'Requesting Function'">
+          </spot-input>
         <div class="flex justify-between items-start gap-6">
           <div class="w-full " *ngIf="viewElementChecker('problemType')">
             <spot-input class="w-full read-only" formControlName="problemType" name="problemType"
@@ -143,6 +158,16 @@
         <div class="w-full " *ngIf="viewElementChecker('projectDescription')">
           <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
             [label]="'Problem Description / Present Situation / Submission Description'">
+          </spot-textarea>
+        </div>
+        <div class="w-full " *ngIf="viewElementChecker('proposalStatement')">
+          <spot-textarea class="w-full read-only" formControlName="proposalStatement" name="proposalStatement"
+            [label]="'Proposal Statement'">
+          </spot-textarea>
+        </div>
+        <div class="w-full " *ngIf="viewElementChecker('whynotgoforNextBestAlternative')">
+          <spot-textarea class="w-full read-only" formControlName="whynotgoforNextBestAlternative"
+            name="whynotgoforNextBestAlternative" [label]="'Why not go for Next Best Alternative (NBA)'">
           </spot-textarea>
         </div>
       </div>

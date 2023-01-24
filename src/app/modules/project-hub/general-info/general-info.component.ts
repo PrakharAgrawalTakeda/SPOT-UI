@@ -57,10 +57,16 @@ export class GeneralInfoComponent implements OnInit {
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
-    projectProposalApprovedDate: new FormControl(''),
+    
     approvedDate: new FormControl(''),
     opU: new FormControl(''),
     projectId: new FormControl(''),
+    //
+    projectProposalApprovedDate: new FormControl(''),
+    functionGroupID:  new FormControl(''),
+    whynotgoforNextBestAlternative:  new FormControl(''),
+    proposalStatement:  new FormControl(''),
+    projectReviewedYN:  new FormControl(''),
     //Stategic Drivers
     primaryKPI: new FormControl(''),
     isAgile: new FormControl(false),
@@ -162,6 +168,12 @@ export class GeneralInfoComponent implements OnInit {
                     x => x.lookUpId == res.portfolioOwner?.opU?.toLowerCase())?.lookUpName,
               isGoodPractise: res.projectData.isGoodPractise,
               approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
+              //
+              functionGroupID: lookup.find(x => x.lookUpId == res.projectData.functionGroupID?.toLowerCase())?.lookUpName,
+              whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
+              proposalStatement: res.projectData.proposalStatement,
+              projectReviewedYN: lookup.find(x => x.lookUpId == res.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
+              projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
