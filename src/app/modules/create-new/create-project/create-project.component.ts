@@ -31,7 +31,7 @@ export class CreateProjectComponent implements OnInit {
   qualityformValue = [];
   qualityType: any = [];
   qualityValue = false;
-  qualityForm = new FormArray([])
+  qualityForm = []
   activeaccount: any;
   oeProjectType: any = [];
   campaignPhase: any = [];
@@ -44,6 +44,7 @@ export class CreateProjectComponent implements OnInit {
   siteAssessmentType: any = [];
   startegicYear: any = [];
   AnnualMustWin: any = [];
+
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -55,7 +56,6 @@ export class CreateProjectComponent implements OnInit {
     portfolioOwner: new FormControl({}),
     excecutionScope: new FormControl([]),
     enviornmentalPortfolio: new FormControl({}),
-    isArchived: new FormControl(false),
     isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
     SubmittedBy: new FormControl(''),
@@ -107,32 +107,76 @@ export class CreateProjectComponent implements OnInit {
 
   captureValue(index: number, event: any) {
     this.capturedValues[index] = event
+    if(index == 4){
+      this.capturedValues[index] = event.value
+      this.qualityForm = event.value;
+    }
+    else if (index == 0){
+      debugger;
+      this.createProjectForm.patchValue({
+        problemTitle: event.problemTitle,
+        projectsingle: event.parentProject ? event.parentProject.problemTitle : '',
+        projectsingleid: event.projectsingle ? event.projectsingle.problemUniqueId : '',
+        projectDescription: event.projectDescription,
+        primaryProduct: event.primaryProduct ? event.primaryProduct : {},
+        otherImpactedProducts: event.otherImpactedProducts ? event.otherImpactedProducts : [],
+        portfolioOwner: event.portfolioOwner ? event.portfolioOwner : {},
+        excecutionScope: event.excecutionScope ? event.excecutionScope : [],
+        enviornmentalPortfolio: event.enviornmentalPortfolio ? event.enviornmentalPortfolio : {},
+        isArchived: event.isArchived,
+        isCapsProject: event.isCapsProject,
+        owningOrganization: event.defaultOwningOrganizationId,
+        SubmittedBy: event.SubmittedBy,
+        targetGoalSituation: event.targetGoalSituation
+      })
+    }
+    else if (index == 1) {
+      debugger;
+      this.createProjectForm.patchValue({
+        problemType: event.problemType,
+        enviornmentalPortfolio: event.enviornmentalPortfolio,
+        isCapsProject: event.isCapsProject
+      })
+    }
+    else if (index == 2) {
+      debugger;
+      this.createProjectForm.patchValue({
+        oeProject: event.isOeproject,
+        oeProjectType: event.oeprojectType
+      })
+    }
+    else if (index == 3) {
+      debugger;
+      this.createProjectForm.patchValue({
+        techTransfer: event.isTechTransfer,
+        campaignPhase: event.campaignPhaseId,
+        campaignType: event.campaignTypeId,
+        productionSteps: event.productionStepId
+      })
+    }
+    else if (index == 5) {
+      debugger;
+      this.createProjectForm.patchValue({
+        primaryKPI: event.primaryKPI,
+        AgileProject: event.isAgile,
+        agilePrimaryWorkstream: event.agilePrimaryWorkstream,
+        agileSecondaryWorkstream: event.agileSecondaryWorkstream,
+        agileWave: event.agileWave,
+        POBOS: event.isPobos,
+        POBOSType: event.pobosCategory,
+        siteAssignment: event.isSiteAssessment,
+        siteAssessmentType: event.siteAssessmentCategory,
+        StrategicDeployment: event.isGmsgqltannualMustWin,
+        StrategicYear: event.strategicYear,
+        AnnualMustWin: event.annualMustWinID,
+      })
+    }
     // this.createProjectForm.patchValue = event
-    this.createProjectForm.patchValue({
-      problemTitle: event.problemTitle,
-      problemType: event.problemType,
-      projectsingle: event.parentProject ? event.parentProject.problemTitle : '',
-      projectsingleid: event.parentProject ? event.parentProject.problemUniqueId : '',
-      projectDescription: event.projectDescription,
-      primaryProduct: event.primaryProduct ? event.primaryProduct : {},
-      otherImpactedProducts: event.otherImpactedProducts ? event.otherImpactedProducts : [],
-      portfolioOwner: event.portfolioOwner ? event.portfolioOwner : {},
-      excecutionScope: event.excecutionScope ? event.excecutionScope : [],
-      enviornmentalPortfolio: event.enviornmentalPortfolio ? event.enviornmentalPortfolio : {},
-      isArchived: event.isArchived,
-      isCapsProject: event.isCapsProject,
-      owningOrganization: event.defaultOwningOrganizationId,
-    })
+    
     console.log(this.capturedValues)
     console.log(this.createProjectForm)
   }
 
-  captureValueQuality(index: number, event: any) {
-    debugger;
-    this.capturedValues[index] = event
-    this.qualityForm = event.value;
-    console.log(this.capturedValues)
-  }
 
   RouteBack() {
     this.router.navigate([`./portfolio-center`]);
@@ -148,11 +192,7 @@ export class CreateProjectComponent implements OnInit {
 
   createProject() {
     debugger;
-    console.log(history.state);
     console.log(this.qualityForm);
-    // this.createProjectForm.patchValue({
-    //   quality: this.child.qualityRefForm
-    // })
     var hubSettings = [{
       hubSettingId: "",
       projectId: "",
@@ -216,28 +256,34 @@ export class CreateProjectComponent implements OnInit {
     mainObj[0].ProblemType = formValue.problemType
     mainObj[0].DefaultOwningOrganizationID = formValue.owningOrganization
     mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? formValue.localCurrency.localCurrencyId : ''
-    mainObj[0].IsOEProject = formValue.oeProject == "Yes" ? true : false
+    mainObj[0].IsOEProject = formValue.oeProject
     if (mainObj[0].IsOEProject) {
-      mainObj[0].OEProjectType = formValue.oeProjectType != "" ? formValue.oeProjectType.lookUpId : ''
+      mainObj[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsTechTransfer = formValue.techTransfer == "Yes" ? true : false
+    mainObj[0].IsTechTransfer = formValue.techTransfer
     if (mainObj[0].IsTechTransfer) {
-      mainObj[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase.lookUpId : ''
-      mainObj[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps.lookUpId : ''
-      mainObj[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType.lookUpId : ''
+      mainObj[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
+      mainObj[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
+      mainObj[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
     }
-    mainObj[0].IsCapsProject = formValue.isCapsProject == "Yes" ? true : false
+    mainObj[0].IsAgile = formValue.AgileProject
+    if (mainObj[0].IsAgile) {
+      mainObj[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
+      mainObj[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
+      mainObj[0].agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
+    }
+    mainObj[0].IsCapsProject = formValue.isCapsProject
     mainObj[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
     mainObj[0].PrimaryKPI = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
-    mainObj[0].IsPOBOS = formValue.POBOS == "Yes" ? true : false
+    mainObj[0].IsPOBOS = formValue.POBOS
     if (mainObj[0].IsPOBOS) {
-      mainObj[0].POBOSCategory = formValue.POBOSType != "" ? formValue.POBOSType.lookUpId : ''
+      mainObj[0].POBOSCategory = formValue.POBOSType.length > 0 ? formValue.POBOSType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsSiteAssessment = formValue.siteAssignment == "Yes" ? true : false
+    mainObj[0].IsSiteAssessment = formValue.siteAssignment
     if (mainObj[0].IsSiteAssessment) {
-      mainObj[0].SiteAssessmentCategory = formValue.siteAssessmentType != "" ? formValue.siteAssessmentType.lookUpId : ''
+      mainObj[0].SiteAssessmentCategory = formValue.siteAssessmentType.length > 0 ? formValue.siteAssessmentType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsGMSGQLTAnnualMustWin = formValue.StrategicDeployment == "Yes" ? true : false
+    mainObj[0].IsGMSGQLTAnnualMustWin = formValue.StrategicDeployment
     if (mainObj[0].IsGMSGQLTAnnualMustWin) {
       mainObj[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
       mainObj[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
@@ -259,11 +305,11 @@ export class CreateProjectComponent implements OnInit {
         "copyProjectParameter": copyProjectParameter
       }
   }
-    if (formValue.qualityReference == "Yes"){
+    if (true){
       this.qualityValue = true;
       this.qualityformValue = []
-      var genQRFORM = this.createProjectForm.value.quality.value
-      for (var quality of genQRFORM) {
+      var genQRFORM = this.qualityForm
+      for (var quality of this.qualityForm) {
         this.qualityformValue.push({
           qualityUniqueId: quality.qualityUniqueId,
           problemUniqueId: this.projectid,
@@ -292,4 +338,5 @@ export class CreateProjectComponent implements OnInit {
     debugger;
       return id && id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
   }
+
 }
