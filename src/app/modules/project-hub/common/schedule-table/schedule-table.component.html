@@ -126,7 +126,7 @@
 
         
 
-        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.47" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.49" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p class = "variance" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
             </ng-template>
