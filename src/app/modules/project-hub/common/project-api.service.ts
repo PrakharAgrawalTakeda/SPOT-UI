@@ -275,6 +275,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async bulkEditKeyAssumptions(body,projectId){
+      var link = GlobalVariables.apiurl+"KeyAssumption/BulkEdit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async bulkeditKeySuccess(body,projectId){
     var link = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/BulkEdit/" + projectId
     const abc$ = this.http.put(link,body)
