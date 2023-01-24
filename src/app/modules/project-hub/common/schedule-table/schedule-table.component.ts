@@ -26,7 +26,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @ViewChild('scheduleTable') scheduleTable: any;
   getRowClass = (row) => {
     return {
-      'row-color1': row.completionDate != null,
+      'row-color1': row.completionDate != null && this.mode == 'Normal',
     };
   };
   schedulengxdata: any = []
@@ -50,9 +50,8 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       this.changeschedule(res)
       console.log(res)
     })
+    
   }
-
-
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
@@ -61,10 +60,14 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       i.variance = this.calculateVariance(i)
     }
     console.log(this.scheduleData)
-    if (this.isclosed == false) {
+    
+    if (this.isclosed == false && this.mode == 'Normal') {
       this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
     }
-    else {
+    else if(this.isclosed == true && this.mode == 'Normal'){
+      this.schedulengxdata = this.scheduleData
+    }
+    else{
       this.schedulengxdata = this.scheduleData
     }
     //this.localIncludedItems.controls.toggle.patchValue(event)
