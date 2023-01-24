@@ -1181,6 +1181,7 @@ console.log(this.scheduleData.scheduleData)
 
 for(var i=0; i<this.insertarray.length; i++)
 {
+ // debugger
   this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
 
     this.baselineLog = res.projectBaselineLog.sort((a, b) => {
@@ -1226,8 +1227,8 @@ for(var i=0; i<this.insertarray.length; i++)
           //this.viewContent = true
           //this.viewBaseline = false
           // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          // this.projecthubservice.submitbutton.next(true)
-          // this.projecthubservice.isNavChanged.next(true)
+           this.projecthubservice.submitbutton.next(true)
+           this.projecthubservice.isNavChanged.next(true)
           //this.saveScheduleBulkEdit()
         })
       })
@@ -1253,8 +1254,8 @@ for(var i=0; i<this.insertarray.length; i++)
         //this.viewContent = true
         //this.viewBaseline = false
         // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        // this.projecthubservice.submitbutton.next(true)
-        // this.projecthubservice.isNavChanged.next(true)
+         this.projecthubservice.submitbutton.next(true)
+         this.projecthubservice.isNavChanged.next(true)
        // this.saveScheduleBulkEdit()
       })
 
@@ -1281,8 +1282,8 @@ for(var i=0; i<this.insertarray.length; i++)
           //this.viewContent = true
           // this.viewBaseline = false
           // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          // this.projecthubservice.submitbutton.next(true)
-          // this.projecthubservice.isNavChanged.next(true)
+           this.projecthubservice.submitbutton.next(true)
+           this.projecthubservice.isNavChanged.next(true)
           //this.saveScheduleBulkEdit()
         })
       }
@@ -1316,8 +1317,8 @@ for(var i=0; i<this.insertarray.length; i++)
             //this.viewContent = true
             //this.viewBaseline = false
             // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            // this.projecthubservice.submitbutton.next(true)
-            // this.projecthubservice.isNavChanged.next(true)
+             this.projecthubservice.submitbutton.next(true)
+             this.projecthubservice.isNavChanged.next(true)
             //this.saveScheduleBulkEdit()
           })
         })
@@ -1354,8 +1355,8 @@ for(var i=0; i<this.insertarray.length; i++)
             //this.viewContent = true
             //this.viewBaseline = false
             // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            // this.projecthubservice.submitbutton.next(true)
-            // this.projecthubservice.isNavChanged.next(true)
+             this.projecthubservice.submitbutton.next(true)
+             this.projecthubservice.isNavChanged.next(true)
             //this.saveScheduleBulkEdit()
           })
         })
@@ -1363,6 +1364,7 @@ for(var i=0; i<this.insertarray.length; i++)
     }
 
   })
+
 }
 this.projecthubservice.toggleDrawerOpen('', '', [], '')
 this.projecthubservice.submitbutton.next(true)
