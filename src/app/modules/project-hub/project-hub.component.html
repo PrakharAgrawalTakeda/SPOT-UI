@@ -10,6 +10,7 @@
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueViewEdit'" [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter']" ></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCloseOut'" [mode]="'Project-Close-Out'"></app-schedule-view-bulk-edit>
         <app-schedule-link *ngIf="projecthubservice.itemtype == 'LinkMilestones'"></app-schedule-link>
         <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
         <app-project-team-add-single *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingleProjectProposal'" [mode]="'Project-Proposal'"></app-project-team-add-single>
@@ -24,12 +25,14 @@
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','parentProject']"></app-general-info-single-edit>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectCharter'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','approvedDate']"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectProposal'" [viewElements]='["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription","projectProposalApprovedDate", "functionGroupID", "whynotgoforNextBestAlternative", "proposalStatement", "projectReviewedYN"]'></app-general-info-single-edit>
         <app-quality-ref-bulk-edit *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
         <app-oe-project-single-edit *ngIf="projecthubservice.itemtype == 'OEProjectSingleEdit'"></app-oe-project-single-edit>
         <app-tech-transfer-single-edit *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEdit'" [viewElements]="['primaryKPI', 'isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave','isPobos','pobosCategory','isGmsgqltannualMustWin','strategicYear','annualMustWinID', 'isSiteAssessment', 'siteAssessmentCategory', 'isGoodPractise']"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOut'" [viewElements]="['isGoodPractise']"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectCharter'" [viewElements]="['primaryKPI','isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposal'" [viewElements]='["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory"]'></app-strategic-drivers>
         <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
         <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
         <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>

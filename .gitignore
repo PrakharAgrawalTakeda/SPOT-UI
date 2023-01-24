@@ -45,3 +45,5 @@ testem.log
 .DS_Store
 Thumbs.db
 src/app/shared/global-variables.ts
+/.vs
+/Web.config

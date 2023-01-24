@@ -20,8 +20,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 })
 export class GeneralInfoComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
@@ -57,10 +57,16 @@ export class GeneralInfoComponent implements OnInit {
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
-    projectProposalApprovedDate: new FormControl(''),
+    
     approvedDate: new FormControl(''),
     opU: new FormControl(''),
     projectId: new FormControl(''),
+    //
+    projectProposalApprovedDate: new FormControl(''),
+    functionGroupID:  new FormControl(''),
+    whynotgoforNextBestAlternative:  new FormControl(''),
+    proposalStatement:  new FormControl(''),
+    projectReviewedYN:  new FormControl(''),
     //Stategic Drivers
     primaryKPI: new FormControl(''),
     isAgile: new FormControl(false),
@@ -99,18 +105,17 @@ export class GeneralInfoComponent implements OnInit {
     this.dataloader()
   }
   dataloader(): void {
-    if(this.viewElementChecker('closeOutApprovedDate') || this.viewElementChecker('approvedDate') || this.viewElementChecker('projectProposalApprovedDate')){
+    if(this.callLocation != 'ProjectHub'){
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-        this.isWizzard= true;
-        if(this.viewElementChecker('closeOutApprovedDate')){
+        if(this.callLocation=='CloseOut'){
             this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
             this.strategicDriversType = 'StrategicDriversSingleEditCloseOut'
         }
-        if(this.viewElementChecker('approvedDate')){
+        if(this.callLocation=='ProjectCharter'){
             this.generalInfoType = 'GeneralInfoSingleEditProjectCharter';
             this.strategicDriversType = 'StrategicDriversSingleEditProjectCharter'
         }
-        if(this.viewElementChecker('projectProposalApprovedDate')){
+        if(this.callLocation=='ProjectProposal'){
             this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
             this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
         }
@@ -158,9 +163,16 @@ export class GeneralInfoComponent implements OnInit {
               isArchived: res.projectData.isArchived,
               owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
               projectId: res.projectData.problemId,
-              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName,
+                opU:  this.filterCriteria.opuMasters.find(
+                    x => x.lookUpId == res.portfolioOwner?.opU?.toLowerCase())?.lookUpName,
               isGoodPractise: res.projectData.isGoodPractise,
               approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
+              //
+              functionGroupID: lookup.find(x => x.lookUpId == res.projectData.functionGroupID?.toLowerCase())?.lookUpName,
+              whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
+              proposalStatement: res.projectData.proposalStatement,
+              projectReviewedYN: lookup.find(x => x.lookUpId == res.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
+              projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
