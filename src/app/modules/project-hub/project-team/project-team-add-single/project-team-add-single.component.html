@@ -20,26 +20,26 @@
         [placeholder]="'Project Permission'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
         [showNoneOption]="false" [dropDownArrayType]="'object'" [dropDownArray]="getPermissions()">
     </spot-select>
-    <div *ngIf="mode == 'Project-Proposal'">
+    <div *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
         <mat-form-field class="w-full" [floatLabel]="'always'">
             <mat-label>% Time</mat-label>
-            <input matInput
-                   formControlName="percentTime"
-                   type="number"
-                   max="100" min="0" placeholder="0"
-                   pattern="\d*"
-            />
+            <input matInput formControlName="percentTime" type="number" max="100" min="0" placeholder="0"
+                pattern="\d*" />
         </mat-form-field>
         <mat-form-field class="w-full" [floatLabel]="'always'">
             <mat-label>Duration (Months)</mat-label>
-            <input matInput
-                   formControlName="duration"
-                   type="number"
-                   min="0" placeholder="0"
-                   pattern="\d*"
-            />
+            <input matInput formControlName="duration" type="number" min="0" placeholder="0" pattern="\d*" />
         </mat-form-field>
-        <div class="flex items-start justify-between incuded-in-dash">
+        <div *ngIf="mode == 'Project-Charter'" class="flex justify-between items-center w-full pt-4 pb-6">
+            <div class="flex justify-start gap-1 items-center">Include in Charter(Max-10)
+            </div>
+            <div>
+                <mat-slide-toggle
+                    [matTooltip]="this.projectTeamAddForm.controls['includeInCharter'].disabled ? 'Only 10 can be selected at a time for the charter' : null"
+                    formControlName="includeInCharter"></mat-slide-toggle>
+            </div>
+        </div>
+        <div *ngIf="mode == 'Project-Proposal'" class="flex items-start justify-between incuded-in-dash">
             <mat-slide-toggle
                 [matTooltip]="this.projectTeamAddForm.controls['includeInProposal'].disabled ? 'Only 5 can be selected at a time for the proposal' : null"
                 formControlName="includeInProposal">Include in Proposal</mat-slide-toggle>
