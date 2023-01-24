@@ -211,7 +211,7 @@ export class StrategicDriversComponent implements OnInit {
         this.kpiMasters = this.projectHubService.kpiMasters
         this.lookUpMaster = this.projectHubService.lookUpMaster
         this.strategicDriversForm.patchValue({
-          primaryKPI: res.projectData.primaryKpi || res.projectData.primaryKpi != '' ? this.kpiMasters.find(x => x.kpiid == res.projectData.primaryKpi) : '',
+          primaryKPI: res.projectData.primaryKpi ? this.kpiMasters.find(x => x.kpiid == res.projectData.primaryKpi) : {},
           isAgile: (res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream) ? true : false,
           agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream : {},
           agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
@@ -255,6 +255,7 @@ export class StrategicDriversComponent implements OnInit {
     this.projectHubService.isFormChanged = false
     var formValue = this.strategicDriversForm.getRawValue()
     var mainObj = this.generalInfo.projectData
+      console.log("aaaaaaaaaaaaaa", formValue.primaryKPI);
     mainObj.primaryKpi = Object.keys(formValue.primaryKPI).length > 0 ? formValue.primaryKPI.kpiid : ''
     mainObj.agilePrimaryWorkstream = Object.keys(formValue.agilePrimaryWorkstream).length > 0 ? formValue.agilePrimaryWorkstream.lookUpId : ''
     mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''

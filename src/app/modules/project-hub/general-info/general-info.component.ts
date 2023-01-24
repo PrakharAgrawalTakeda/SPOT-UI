@@ -57,7 +57,7 @@ export class GeneralInfoComponent implements OnInit {
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
-    
+
     approvedDate: new FormControl(''),
     opU: new FormControl(''),
     projectId: new FormControl(''),
