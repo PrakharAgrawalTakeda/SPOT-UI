@@ -146,13 +146,20 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     })
     //this.setSize();
     this.milestoneForm.valueChanges.subscribe(res => {
-      debugger
-      for (let control of this.milestoneForm.controls) {
+      //debugger
+      this.insertarray = []
+      for(let control of this.milestoneForm.controls)
+      {
+        //debugger
+        console.log(this.milestoneForm.getRawValue())
         console.log(control['controls']['baselineFinish'].value)
         console.log(this.scheduleData.scheduleData)
         console.log(control['value']['scheduleUniqueId'])
         console.log(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
-        if (control['controls']['baselineFinish'].value != moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')) {
+        console.log(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss'))
+        console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
+        if(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
+        {
           this.insertArray(control['controls']['projectId'].value)
         }
       }
@@ -222,14 +229,16 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   insertArray(projectId: string): void {
-    debugger
-    if (this.insertarray.length == 0) {
-      this.insertarray.push(this._Activatedroute.parent.snapshot.paramMap.get("id"))
-    }
-    else if (!this.insertarray.contains(projectId)) {
-      this.insertarray.push(projectId)
-    }
-
+    //debugger
+if(this.insertarray.length == 0)
+{
+this.insertarray.push(this._Activatedroute.parent.snapshot.paramMap.get("id"))
+}
+ if(!this.insertarray.includes(projectId))
+ {
+  this.insertarray.push(projectId)
+}
+console.log(this.insertarray)
   }
 
   getFunctionOwner(): any {
@@ -1171,189 +1180,195 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     //if (this.projecthubservice.itemid != "new") {
 
+for(var i=0; i<this.insertarray.length; i++)
+{
+  this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
 
-    this.apiService.getProjectBaselineLog(this.id).then((res: any) => {
+    this.baselineLog = res.projectBaselineLog.sort((a, b) => {
+      return a.baselineCount - b.baselineCount;
 
-      this.baselineLog = res.projectBaselineLog.sort((a, b) => {
+    })
+    //})
+
+    console.log(this.baselineLog)
+    if (this.baselineLog.length > 0) {
+      this.baselineLogObj = this.baselineLog.sort((a, b) => {
         return a.baselineCount - b.baselineCount;
 
       })
-      //})
+    }
+    else {
+      this.baselineLogObj = ''
+    }
+    console.log(this.baselineLogObj)
+     //debugger
+    if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
-      console.log(this.baselineLog)
-      if (this.baselineLog.length > 0) {
-        this.baselineLogObj = this.baselineLog.sort((a, b) => {
-          return a.baselineCount - b.baselineCount;
-
-        })
+      var justificationObjNew = {
+        baselineLogId: "new",
+        projectId: this.id,
+        baselineCount: 1,
+        teamMemberAdId: this.teamMemberAdId,
+        modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+        baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
+        includeInCloseout: false,
+        includeSlipChart: false
       }
-      else {
-        this.baselineLogObj = ''
+      console.log(justificationObjNew)
+
+      var baselineObjNew = {
+        projectId: this.id,
+        baselineCount: 1,
+        teamMemberAdId: this.teamMemberAdId,
+        modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
       }
-      console.log(this.baselineLogObj)
-      //debugger
-      if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
-
-        var justificationObjNew = {
-          baselineLogId: "new",
-          projectId: this.id,
-          baselineCount: 1,
-          teamMemberAdId: this.teamMemberAdId,
-          modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
-          includeInCloseout: false,
-          includeSlipChart: false
-        }
-        console.log(justificationObjNew)
-
-        var baselineObjNew = {
-          projectId: this.id,
-          baselineCount: 1,
-          teamMemberAdId: this.teamMemberAdId,
-          modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-        }
-        this.apiService.editProjectBaseline(baselineObjNew).then((count: any) => {
-          this.apiService.addProjectBaselineLog(justificationObjNew).then(res => {
-            //this.viewContent = true
-            //this.viewBaseline = false
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.isNavChanged.next(true)
-            //this.saveScheduleBulkEdit()
-          })
-        })
-
-
-      }
-
-      else if (this.baselineLogObj == '' && this.baselineForm.value.counter == false) {
-
-        var justificationObjNewnocounter = {
-          baselineLogId: "new",
-          projectId: this.id,
-          baselineCount: 1,
-          teamMemberAdId: this.teamMemberAdId,
-          modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
-          includeInCloseout: false,
-          includeSlipChart: false
-        }
-        console.log(justificationObjNewnocounter)
-
-        this.apiService.addProjectBaselineLog(justificationObjNewnocounter).then(res => {
+      this.apiService.editProjectBaseline(baselineObjNew).then((count: any) => {
+        this.apiService.addProjectBaselineLog(justificationObjNew).then(res => {
           //this.viewContent = true
           //this.viewBaseline = false
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.isNavChanged.next(true)
-          // this.saveScheduleBulkEdit()
+          // this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          // this.projecthubservice.submitbutton.next(true)
+          // this.projecthubservice.isNavChanged.next(true)
+          //this.saveScheduleBulkEdit()
         })
+      })
 
+
+    }
+
+    else if (this.baselineLogObj == '' && this.baselineForm.value.counter == false) {
+
+      var justificationObjNewnocounter = {
+        baselineLogId: "new",
+        projectId: this.id,
+        baselineCount: 1,
+        teamMemberAdId: this.teamMemberAdId,
+        modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+        baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
+        includeInCloseout: false,
+        includeSlipChart: false
+      }
+      console.log(justificationObjNewnocounter)
+
+      this.apiService.addProjectBaselineLog(justificationObjNewnocounter).then(res => {
+        //this.viewContent = true
+        //this.viewBaseline = false
+        // this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        // this.projecthubservice.submitbutton.next(true)
+        // this.projecthubservice.isNavChanged.next(true)
+       // this.saveScheduleBulkEdit()
+      })
+
+    }
+
+    else if (this.baselineLogObj != '') {
+      //console.log(this.baselineForm.value.counter)
+      if (this.baselineForm.value.counter == false) {
+        for (var i of this.baselineLogObj) {
+          var justjustificationObj = {
+            baselineLogId: "new",
+            projectId: i.projectId,
+            baselineCount: i.baselineCount,
+            teamMemberAdId: this.teamMemberAdId,
+            modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
+            includeInCloseout: i.includeInCloseout,
+            includeSlipChart: i.includeSlipChart
+          }
+        }
+
+        console.log(justificationObj)
+        this.apiService.addProjectBaselineLog(justjustificationObj).then(res => {
+          //this.viewContent = true
+          // this.viewBaseline = false
+          // this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          // this.projecthubservice.submitbutton.next(true)
+          // this.projecthubservice.isNavChanged.next(true)
+          //this.saveScheduleBulkEdit()
+        })
       }
 
-      else if (this.baselineLogObj != '') {
-        //console.log(this.baselineForm.value.counter)
-        if (this.baselineForm.value.counter == false) {
-          for (var i of this.baselineLogObj) {
-            var justjustificationObj = {
-              baselineLogId: "new",
-              projectId: i.projectId,
-              baselineCount: i.baselineCount,
-              teamMemberAdId: this.teamMemberAdId,
-              modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-              baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
-              includeInCloseout: i.includeInCloseout,
-              includeSlipChart: i.includeSlipChart
-            }
+      else if (this.baselineCount == null && this.baselineForm.value.counter == true || this.baselineCount == '' && this.baselineForm.value.counter == true) {
+        for (var i of this.baselineLogObj) {
+          var newbaselineObj = {
+            projectId: i.projectId,
+            baselineCount: 1,
+            teamMemberAdId: this.teamMemberAdId,
+            modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
           }
+          console.log(newbaselineObj)
+          var newjustificationObj = {
+            baselineLogId: "new",
+            projectId: i.projectId,
+            baselineCount: 1,
+            teamMemberAdId: this.teamMemberAdId,
+            modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
+            includeInCloseout: i.includeInCloseout,
+            includeSlipChart: i.includeSlipChart
+          }
+        }
 
-          console.log(justificationObj)
-          this.apiService.addProjectBaselineLog(justjustificationObj).then(res => {
+        console.log(newjustificationObj)
+        this.apiService.editProjectBaseline(newbaselineObj).then((count: any) => {
+          //this.viewContent = true
+
+          this.apiService.addProjectBaselineLog(newjustificationObj).then(res => {
             //this.viewContent = true
-            // this.viewBaseline = false
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.isNavChanged.next(true)
+            //this.viewBaseline = false
+            // this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            // this.projecthubservice.submitbutton.next(true)
+            // this.projecthubservice.isNavChanged.next(true)
             //this.saveScheduleBulkEdit()
           })
-        }
-
-        else if (this.baselineCount == null && this.baselineForm.value.counter == true || this.baselineCount == '' && this.baselineForm.value.counter == true) {
-          for (var i of this.baselineLogObj) {
-            var newbaselineObj = {
-              projectId: i.projectId,
-              baselineCount: 1,
-              teamMemberAdId: this.teamMemberAdId,
-              modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-            }
-            console.log(newbaselineObj)
-            var newjustificationObj = {
-              baselineLogId: "new",
-              projectId: i.projectId,
-              baselineCount: 1,
-              teamMemberAdId: this.teamMemberAdId,
-              modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-              baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
-              includeInCloseout: i.includeInCloseout,
-              includeSlipChart: i.includeSlipChart
-            }
-          }
-
-          console.log(newjustificationObj)
-          this.apiService.editProjectBaseline(newbaselineObj).then((count: any) => {
-            //this.viewContent = true
-
-            this.apiService.addProjectBaselineLog(newjustificationObj).then(res => {
-              //this.viewContent = true
-              //this.viewBaseline = false
-              this.projecthubservice.toggleDrawerOpen('', '', [], '')
-              this.projecthubservice.submitbutton.next(true)
-              this.projecthubservice.isNavChanged.next(true)
-              //this.saveScheduleBulkEdit()
-            })
-          })
-        }
-
-
-        else if (this.baselineForm.value.counter == true) {
-          for (var i of this.baselineLogObj) {
-            var justificationObj = {
-              baselineLogId: "new",
-              projectId: i.projectId,
-              baselineCount: i.baselineCount + 1,
-              teamMemberAdId: this.teamMemberAdId,
-              modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-              baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
-              includeInCloseout: i.includeInCloseout,
-              includeSlipChart: i.includeSlipChart
-            }
-            var baselineObj = {
-              projectId: i.projectId,
-              baselineCount: this.baselineCount.baselineCount + 1,
-              teamMemberAdId: i.teamMemberAdId,
-              modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-            }
-          }
-
-
-          console.log(justificationObj)
-          console.log(baselineObj)
-          this.apiService.editProjectBaseline(baselineObj).then((count: any) => {
-            //this.viewContent = true
-
-            this.apiService.addProjectBaselineLog(justificationObj).then(res => {
-              //this.viewContent = true
-              //this.viewBaseline = false
-              this.projecthubservice.toggleDrawerOpen('', '', [], '')
-              this.projecthubservice.submitbutton.next(true)
-              this.projecthubservice.isNavChanged.next(true)
-              //this.saveScheduleBulkEdit()
-            })
-          })
-        }
+        })
       }
 
-    })
+
+      else if (this.baselineForm.value.counter == true) {
+        for (var i of this.baselineLogObj) {
+          var justificationObj = {
+            baselineLogId: "new",
+            projectId: i.projectId,
+            baselineCount: i.baselineCount + 1,
+            teamMemberAdId: this.teamMemberAdId,
+            modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+            baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
+            includeInCloseout: i.includeInCloseout,
+            includeSlipChart: i.includeSlipChart
+          }
+          var baselineObj = {
+            projectId: i.projectId,
+            baselineCount: this.baselineCount.baselineCount + 1,
+            teamMemberAdId: i.teamMemberAdId,
+            modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+          }
+        }
+
+
+        console.log(justificationObj)
+        console.log(baselineObj)
+        this.apiService.editProjectBaseline(baselineObj).then((count: any) => {
+          //this.viewContent = true
+
+          this.apiService.addProjectBaselineLog(justificationObj).then(res => {
+            //this.viewContent = true
+            //this.viewBaseline = false
+            // this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            // this.projecthubservice.submitbutton.next(true)
+            // this.projecthubservice.isNavChanged.next(true)
+            //this.saveScheduleBulkEdit()
+          })
+        })
+      }
+    }
+
+  })
+}
+this.projecthubservice.toggleDrawerOpen('', '', [], '')
+this.projecthubservice.submitbutton.next(true)
+this.projecthubservice.isNavChanged.next(true)
+
   }
 
 
@@ -2241,6 +2256,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     if (!this.flag && baselinedates.length == baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
       this.flag = true
+      //this.insertArray(control['controls']['projectId'].value)
     }
 
     //     if(!this.flag && baselinedates.length < baselinedates3.length)
