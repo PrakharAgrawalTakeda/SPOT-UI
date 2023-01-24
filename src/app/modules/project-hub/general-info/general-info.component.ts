@@ -20,8 +20,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 })
 export class GeneralInfoComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
@@ -99,7 +99,7 @@ export class GeneralInfoComponent implements OnInit {
     this.dataloader()
   }
   dataloader(): void {
-    if(this.viewElementChecker('closeOutApprovedDate') || this.viewElementChecker('approvedDate') || this.viewElementChecker('projectProposalApprovedDate')){
+    if(this.callLocation != 'ProjectHub'){
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
         this.isWizzard= true;
         if(this.viewElementChecker('closeOutApprovedDate')){
@@ -158,7 +158,7 @@ export class GeneralInfoComponent implements OnInit {
               isArchived: res.projectData.isArchived,
               owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
               projectId: res.projectData.problemId,
-              opU: this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName,
+              opU:  this.filterCriteria.opuMasters.find(x => x.lookUpId == res.portfolioOwner.opU.toLowerCase()).lookUpName,
               isGoodPractise: res.projectData.isGoodPractise,
               approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
               //Stategic Drivers

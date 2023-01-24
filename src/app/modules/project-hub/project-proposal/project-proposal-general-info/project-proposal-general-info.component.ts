@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ProjectProposalGeneralInfoComponent implements OnInit {
 
   constructor() { }
-
+  viewElements: any = ["isArchived", "problemTitle", "portfolioOwner", "owningOrganization", "primaryProduct", "otherImpactedProducts", "projectDescription","StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment"]
   ngOnInit(): void {
   }
 
