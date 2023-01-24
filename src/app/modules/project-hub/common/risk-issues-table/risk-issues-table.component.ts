@@ -64,8 +64,6 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     this.riskIssuesData = this.projectViewDetails.riskIssuesData
     this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
     this.viewContent = true
-      console.log("Aaaaaaaaaaaaaa",this.riskIssuesData)
-
   }
   changeriskissues(event: any) {
     if (event == true) {
