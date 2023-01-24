@@ -27,23 +27,10 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   reqProduct: boolean = false;
   reqDesc: boolean = false;
   reqOwning: boolean = false;
-  KPIlookupdata: any = [];
   filterCriteria: any = {}
   generalInfo: any = {}
   lookupdata: any = [];
-  // oeProjectType: any = [];
-  // campaignPhase: any = [];
-  // productionSteps: any = [];
-  // campaignType: any = [];
-  // primWorkstream: any = [];
-  // agileWave: any = [];
-  // POBOSType: any = [];
   localCurrencyList: any = [];
-  // siteAssessmentType: any = [];
-  // qualityType: any = [];
-  // startegicYear: any = [];  
-  // AnnualMustWin: any = [];
-  // qrTableEditStack = []
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
   generalInfoForm = new FormGroup({
@@ -80,7 +67,8 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         if (this.callLocation == 'ProjectHub') {
           this.projectHubService.isFormChanged = true
         }
-        else {
+        else{
+          
           this.formValue.emit(this.generalInfoForm.getRawValue())
         }
       }
@@ -139,11 +127,58 @@ export class GeneralInfoSingleEditComponent implements OnInit{
       this.apiService.getfilterlist().then(res => {
         this.apiService.getLocalCurrency().then(data => {
           this.localCurrencyList = data
+          this.filterCriteria = res
+          if (history.state.data != undefined) {
+                if (history.state.data[0].primaryProduct != null) {
+                  history.state.data[0].primaryProduct = this.filterCriteria.products.filter(function (entry) {
+                    return entry.productId == history.state.data[0].primaryProduct
+                  })
+                }
+                if (history.state.data[0].otherImpactedProducts != null) {
+                  const data = history.state.data[0].otherImpactedProducts.split(',');
+                  var impactedproducts = {};
+                  var finaldata = [];
+                  for (var i = 0; i < data.length; i++) {
+                    impactedproducts = this.filterCriteria.products.filter(function (entry) {
+                      return entry.productId == data[i]
+                    })
+                    finaldata.push(impactedproducts[0]);
+                  }
+                }
+                if (history.state.data[0].ProblemOwnerID != null) {
+                  var user = {
+                    userAdid: history.state.data[0].ProblemOwnerID,
+                    userDisplayName: history.state.data[0].ProblemOwnerName
+                  };
+                }
+                this.generalInfoForm.patchValue({
+                  problemTitle: history.state.data[0].title,
+                  projectsingle: '',
+                  projectsingleid: '',
+                  problemType: history.state.data[0].problemType,
+                  projectDescription: history.state.data[0].problemDescription,
+                  primaryProduct: history.state.data[0].primaryProduct == null ? '' : history.state.data[0].primaryProduct[0],
+                  otherImpactedProducts: history.state.data[0].otherImpactedProducts == null ? '' : finaldata,
+                  portfolioOwner: '',
+                  excecutionScope: '',
+                  enviornmentalPortfolio: '',
+                  isArchived: "No",
+                  isCapsProject: "No",
+                  owningOrganization: '',
+                  SubmittedBy: user,
+                  targetGoalSituation: history.state.data[0].targetEndState == null ? '' : history.state.data[0].targetEndState,
+                  localCurrency: ''
+                })
+                this.formValue.emit(this.generalInfoForm.getRawValue())
+                this.generalInfoForm.controls.localCurrency.disable()
+                this.viewContent = true
+          }
+          else{
+          this.formValue.emit(this.generalInfoForm.getRawValue())
+          this.generalInfoForm.controls.localCurrency.disable()
+          this.viewContent = true
+          }
         })
-        this.filterCriteria = res
-        this.formValue.emit(this.generalInfoForm.getRawValue())
-        this.generalInfoForm.controls.localCurrency.disable()
-        this.viewContent = true
       })
     }
   }

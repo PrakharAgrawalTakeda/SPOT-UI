@@ -14,7 +14,7 @@
             </button>
         </div>
 
-        <div class="w-full pl-3 overflow-hidden h-[81vh]">
+        <div [ngClass] = "{'w-full pl-3 overflow-hidden h-[81vh]': viewType == 'SidePanel'}">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="datatable-qr-80 material font-medium text-sm text-secondary whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>

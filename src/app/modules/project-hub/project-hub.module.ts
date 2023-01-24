@@ -407,7 +407,9 @@ export const projectRoutes: Route[] = [
     exports:[
       GeneralInfoSingleEditComponent,
       QualityRefBulkEditComponent,
-      OeProjectSingleEditComponent
+      OeProjectSingleEditComponent,
+      TechTransferSingleEditComponent,
+      StrategicDriversComponent
     ]
 })
 export class ProjectHubModule { }

@@ -8,12 +8,12 @@
         </div>
     </div>
     <form class="w-full p-[20px]" [formGroup]="generalInfoForm" (ngSubmit)="OE()">
-        <div class="h-[84vh] overflow-hidden">
-        <!--<div class="flex justify-between items-center">
-            <div>OE Project</div>
-            <mat-slide-toggle formControlName="isOeproject"></mat-slide-toggle>
-        </div>-->
-        <spot-toggle formControlName="isOeproject"  [label]="'OE Project'"></spot-toggle>
+        <div [ngClass] = "{'h-[84vh] overflow-hidden': viewType == 'SidePanel'}" >
+        <!-- <div class="w-full mt-4 mb-6"> -->
+            <spot-toggle class="w-full" formControlName="isOeproject"
+                [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'OE Project'" >
+            </spot-toggle>
+        <!-- </div> -->
         <div class="mt-6" *ngIf="generalInfoForm.controls['isOeproject'].value">
             <spot-multiselect-autocomplete formControlName="oeprojectType" name="oeprojectType"
                 [label]="'OE Project Type'" [placeholder]="'OE Project Type'" [valuePointer]="'lookUpName'"
