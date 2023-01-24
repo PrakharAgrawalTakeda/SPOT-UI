@@ -191,9 +191,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
-    mainObj.closeOutApprovedDate = moment(formValue.closeOutApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-    mainObj.projectProposalApprovedDate = moment(formValue.projectProposalApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-    mainObj.approvedDate = moment(formValue.approvedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+    mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate ? moment(formValue.closeOutApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+    mainObj.projectProposalApprovedDate = formValue.projectProposalApprovedDate ? moment(formValue.projectProposalApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+    mainObj.approvedDate = formValue.approvedDate ? moment(formValue.approvedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
     mainObj.whynotgoforNextBestAlternative = formValue.whynotgoforNextBestAlternative
     mainObj.proposalStatement = formValue.proposalStatement
     mainObj.projectReviewedYN = Object.keys(formValue.projectReviewedYN).length > 0 ? formValue.projectReviewedYN.lookUpId : ''
