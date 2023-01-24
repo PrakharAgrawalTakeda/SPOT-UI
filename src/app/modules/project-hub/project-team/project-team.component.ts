@@ -42,5 +42,8 @@ export class ProjectTeamComponent implements OnInit {
       this.teamMembers = res
     })
   }
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
+  }
 
 }

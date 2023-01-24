@@ -43,14 +43,14 @@
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="% Time" prop="percentTime" [flexGrow]="1" *ngIf="mode == 'Project-Proposal'">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p>{{value}}</p>
+                <ngx-datatable-column name="% Time" prop="percentTime" [flexGrow]="0.25" *ngIf="mode == 'Project-Proposal'" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
+                        <p style="text-align:center">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Duration (Months)" prop="duration" [flexGrow]="1" *ngIf="mode == 'Project-Proposal'">
+                <ngx-datatable-column name="Duration (Months)" prop="duration" [flexGrow]="0.5" *ngIf="mode == 'Project-Proposal'" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p>{{value}}</p>
+                        <p style="text-align:center">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"  *ngIf="mode == 'Normal'" >

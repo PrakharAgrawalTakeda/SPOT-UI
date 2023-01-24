@@ -69,11 +69,11 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="% Time" prop="percentTime" [flexGrow]="0.25" *ngIf="mode == 'Project-Proposal'">
+                <ngx-datatable-column [sortable]="false" name="% Time" prop="percentTime" [flexGrow]="0.75" *ngIf="mode == 'Project-Proposal'" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p style="text-align:center">{{value}}</p>
                         </a>
                         <form [formGroup]="projectTeamForm.controls[rowIndex]"
                               *ngIf="ptTableEditStack.includes(rowIndex)">
@@ -88,11 +88,11 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="0.25" *ngIf="mode == 'Project-Proposal'">
+                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="0.75" *ngIf="mode == 'Project-Proposal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p style="text-align:center">{{value}}</p>
                         </a>
                         <form [formGroup]="projectTeamForm.controls[rowIndex]"
                               *ngIf="ptTableEditStack.includes(rowIndex)">

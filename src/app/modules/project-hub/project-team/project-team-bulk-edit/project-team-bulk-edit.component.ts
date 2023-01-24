@@ -5,6 +5,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-project-team-bulk-edit',
@@ -18,7 +19,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       if (this.viewContent == true) {
         this.formValue()
         if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
-          this.projecthubservice.isFormChanged = true
+            this.projecthubservice.isFormChanged = true
         }
         else {
           this.projecthubservice.isFormChanged = false
@@ -159,7 +160,6 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     this.formValue()
     if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
       console.log(this.teamMembersSubmit)
-      this.projecthubservice.isFormChanged = false
       this.formValue()
       if (this.teamMembersSubmit.some(x => x.roleId == "")) {
         var comfirmConfig: FuseConfirmationConfig = {
@@ -235,9 +235,11 @@ export class ProjectTeamBulkEditComponent implements OnInit {
                   const alert = this.fuseAlert.open(comfirmConfig)
               }else{
                   this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+                      this.projecthubservice.isFormChanged = false
                       this.projecthubservice.submitbutton.next(true)
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                       this.projecthubservice.isNavChanged.next(true)
+                      this.projecthubservice.successSave.next(true)
                   })
               }
 
@@ -248,6 +250,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
       this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.successSave.next(true)
     }
   }
   deleteShowLogic(rowIndex: number): boolean {
