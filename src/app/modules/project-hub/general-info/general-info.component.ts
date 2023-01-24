@@ -20,7 +20,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 })
 export class GeneralInfoComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' = 'ProjectHub'
+  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
@@ -107,16 +107,15 @@ export class GeneralInfoComponent implements OnInit {
   dataloader(): void {
     if(this.callLocation != 'ProjectHub'){
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-        this.isWizzard= true;
-        if(this.viewElementChecker('closeOutApprovedDate')){
+        if(this.callLocation=='CloseOut'){
             this.generalInfoType = 'GeneralInfoSingleEditCloseOut';
             this.strategicDriversType = 'StrategicDriversSingleEditCloseOut'
         }
-        if(this.viewElementChecker('approvedDate')){
+        if(this.callLocation=='ProjectCharter'){
             this.generalInfoType = 'GeneralInfoSingleEditProjectCharter';
             this.strategicDriversType = 'StrategicDriversSingleEditProjectCharter'
         }
-        if(this.viewElementChecker('projectProposalApprovedDate')){
+        if(this.callLocation=='ProjectProposal'){
             this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
             this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
         }
