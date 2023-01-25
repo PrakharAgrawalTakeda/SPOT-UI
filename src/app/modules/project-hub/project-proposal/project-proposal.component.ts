@@ -10,9 +10,16 @@ import { ProjectHubService } from '../project-hub.service';
 })
 export class ProjectProposalComponent implements OnInit {
 
-  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) { }
+  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) { 
+    this.projectHubService.submitbutton.subscribe(res=>{
+      if(res == true){
+        this.dataloader()
+      }
+    })
+  }
   id: string = ''
-  viewContent:boolean = false
+  viewContent: boolean = false
+  reportInfoData: any = {}
   ngOnInit(): void {
     this.dataloader()
   }
@@ -20,6 +27,7 @@ export class ProjectProposalComponent implements OnInit {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getReportInfoData(this.id).then(res => {
       console.log("Report Info", res)
+      this.reportInfoData = res
       this.viewContent = true
     })
   }
