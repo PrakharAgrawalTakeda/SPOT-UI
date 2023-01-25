@@ -34,10 +34,8 @@
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
-        <app-general-info-single-edit
-            *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
-        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'"
-            [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','parentProject']"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','parentProject', 'sponsor', 'projectManager']"></app-general-info-single-edit>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectCharter'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','approvedDate']"></app-general-info-single-edit>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectProposal'" [viewElements]='["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription","projectProposalApprovedDate", "functionGroupID", "whynotgoforNextBestAlternative", "proposalStatement", "projectReviewedYN"]'></app-general-info-single-edit>
         <app-quality-ref-bulk-edit

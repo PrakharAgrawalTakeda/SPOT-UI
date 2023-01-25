@@ -34,6 +34,16 @@
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
+            <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-start gap-6">
+                        <a href="javascript:void(0)" title="Delete Single"
+                           (click)="deleteKeyAssumption(row.keyAssumptionUniqueId)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
         </ngx-datatable>
     </div>
 </div>
