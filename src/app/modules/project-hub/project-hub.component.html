@@ -35,10 +35,12 @@
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
-        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
-        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','parentProject', 'sponsor', 'projectManager']"></app-general-info-single-edit>
-        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectCharter'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','approvedDate']"></app-general-info-single-edit>
-        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectProposal'" [viewElements]='["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription","projectProposalApprovedDate", "functionGroupID", "whynotgoforNextBestAlternative", "proposalStatement", "projectReviewedYN"]'></app-general-info-single-edit>
+        <app-general-info-single-edit
+            *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'" [subCallLocation]="'CloseOut'"
+            [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','parentProject']"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectCharter'" [subCallLocation]="'ProjectCharter'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','approvedDate']"></app-general-info-single-edit>
+        <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectProposal'" [subCallLocation]="'ProjectProposal'" [viewElements]='["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription","projectProposalApprovedDate", "functionGroupID", "whynotgoforNextBestAlternative", "proposalStatement", "projectReviewedYN"]'></app-general-info-single-edit>
         <app-quality-ref-bulk-edit
             *ngIf="projecthubservice.itemtype == 'QualityRefBulkEdit'"></app-quality-ref-bulk-edit>
         <app-oe-project-single-edit
@@ -46,10 +48,10 @@
         <app-tech-transfer-single-edit
             *ngIf="projecthubservice.itemtype == 'TechTransferSingleEdit'"></app-tech-transfer-single-edit>
         <app-strategic-drivers
-            *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEdit'" [viewElements]="['primaryKPI', 'isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave','isPobos','pobosCategory','isGmsgqltannualMustWin','strategicYear','annualMustWinID', 'isSiteAssessment', 'siteAssessmentCategory', 'isGoodPractise']"></app-strategic-drivers>
-        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOut'" [viewElements]="['isGoodPractise']"></app-strategic-drivers>
-        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectCharter'" [viewElements]="['primaryKPI','isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave']"></app-strategic-drivers>
-        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposal'" [viewElements]='["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory"]'></app-strategic-drivers>
+            *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEdit'"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOut'" [subCallLocation]="'CloseOut'"  [viewElements]="['isGoodPractise']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectCharter'" [subCallLocation]="'ProjectCharter'" [viewElements]="['primaryKPI','isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposal'" [subCallLocation]="'ProjectProposal'" [viewElements]='["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory"]'></app-strategic-drivers>
         <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
         <app-state-check *ngIf="projecthubservice.itemtype == 'StateCheck'"></app-state-check>
         <app-risk-issue-view-bulk-edit

@@ -15,6 +15,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   @Output() formValue = new EventEmitter();
   owningOrganizationValues = []
@@ -213,11 +214,37 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
     mainObj.sponsorId =  Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
     mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
-      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-      this.projectHubService.isNavChanged.next(true)
-      this.projectHubService.submitbutton.next(true)
-      this.projectHubService.successSave.next(true)
-      this.projectHubService.toggleDrawerOpen('', '', [], '')
+    this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+      if (this.subCallLocation == 'ProjectProposal') {
+        this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+          this.projectHubService.isNavChanged.next(true)
+          this.projectHubService.submitbutton.next(true)
+          this.projectHubService.successSave.next(true)
+          this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
+      else if (this.subCallLocation == 'CloseOut') {
+        this.apiService.updateReportDates(this.projectHubService.projectid, "CloseoutModifiedDate").then(secondRes => {
+          this.projectHubService.isNavChanged.next(true)
+          this.projectHubService.submitbutton.next(true)
+          this.projectHubService.successSave.next(true)
+          this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
+      else if (this.subCallLocation == 'ProjectCharter') {
+        this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
+          this.projectHubService.isNavChanged.next(true)
+          this.projectHubService.submitbutton.next(true)
+          this.projectHubService.successSave.next(true)
+          this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
+      else {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      }
     })
   }
 }
