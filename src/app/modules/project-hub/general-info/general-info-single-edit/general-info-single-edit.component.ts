@@ -40,6 +40,8 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     whynotgoforNextBestAlternative: new FormControl(''),
     proposalStatement: new FormControl(''),
     projectReviewedYN: new FormControl({}),
+    sponsor: new FormControl(''),
+    projectManager: new FormControl(''),
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -57,8 +59,12 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     })
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       this.generalInfoForm.controls.owningOrganization.disable()
+      this.generalInfoForm.controls.sponsor.disable()
+      this.generalInfoForm.controls.projectManager.disable()
     } else {
       this.generalInfoForm.controls.owningOrganization.enable()
+      this.generalInfoForm.controls.sponsor.enable()
+      this.generalInfoForm.controls.projectManager.enable()
     }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -79,6 +85,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
       this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
         this.generalInfo = res
         this.filterCriteria = this.projectHubService.all
+          console.log("Aaaaaaaaaaaaaaa", res)
         this.generalInfoForm.patchValue({
           problemTitle: res.projectData.problemTitle,
           problemType: res.projectData.problemType,
@@ -99,8 +106,10 @@ export class GeneralInfoSingleEditComponent implements OnInit {
           functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
           whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
           proposalStatement: res.projectData.proposalStatement,
-          projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {}
-        });
+          projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
+          projectManager: res.portfolioCenterData.pm ? res.portfolioCenterData.pm : "",
+          sponsor: res.sponsor.teamMemberName ? res.sponsor.teamMemberName : "",
+        })
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
@@ -132,6 +141,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   }
   viewElementChecker(element: string): boolean {
     return this.viewElements.some(x => x == element)
+  }
+  getSponsor(): any {
+      return this.filterCriteria.sponsor
   }
 
   submitGI() {
@@ -176,6 +188,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   }
 
   submitLogic() {
+
     this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
@@ -198,8 +211,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.proposalStatement = formValue.proposalStatement
     mainObj.projectReviewedYN = Object.keys(formValue.projectReviewedYN).length > 0 ? formValue.projectReviewedYN.lookUpId : ''
     mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
-
-    this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+    mainObj.sponsorId =  Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
+    mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
+      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)
       this.projectHubService.successSave.next(true)

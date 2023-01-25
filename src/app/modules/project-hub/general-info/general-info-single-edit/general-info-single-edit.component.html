@@ -55,6 +55,12 @@
                 [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'"
                 *ngIf="viewElementChecker('excecutionScope')">
             </spot-multiselect-autocomplete>
+            <spot-singleselect-user-autocomplete formControlName="sponsor" name="sponsor" [label]="'Sponsor'" *ngIf="viewElementChecker('sponsor')"
+                                                 [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+            </spot-singleselect-user-autocomplete>
+            <spot-singleselect-user-autocomplete formControlName="projectManager" name="projectManager" [label]="'Project Manager'" *ngIf="viewElementChecker('projectManager')"
+                                                 [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+            </spot-singleselect-user-autocomplete>
             <spot-select class="w-full" formControlName="owningOrganization" name="owningOrganization"
                 [label]="'Owning Organization'" [placeholder]="'Owning Organization'" [showNoneOption]="true"
                 [dropDownArrayType]="'string'" [dropDownArray]="owningOrganizationValues" [showHint]="true"
