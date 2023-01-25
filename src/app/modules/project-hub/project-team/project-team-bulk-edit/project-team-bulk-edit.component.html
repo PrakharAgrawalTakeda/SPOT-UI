@@ -88,7 +88,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="0.75" *ngIf="mode == 'Project-Proposal'">
+                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="0.75" *ngIf="mode == 'Project-Proposal'" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>

@@ -366,5 +366,8 @@ export class ProjectTeamBulkEditComponent implements OnInit {
             }
         }
     }
+    getNgxDatatableNumberHeader(): any {
+        return ' ngx-number-header';
+    }
 
 }
