@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EventType } from '@azure/msal-browser';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
@@ -27,6 +27,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   reqProduct: boolean = false;
   reqDesc: boolean = false;
   reqOwning: boolean = false;
+  reqType: boolean = false;
   filterCriteria: any = {}
   generalInfo: any = {}
   lookupdata: any = [];
@@ -34,7 +35,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
   generalInfoForm = new FormGroup({
-    problemTitle: new FormControl(''),
+    problemTitle: new FormControl('', Validators.required),
     projectsingle: new FormControl(''),
     projectsingleid: new FormControl(''),
     problemType: new FormControl('Standard Project / Program'),
@@ -70,6 +71,9 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         else{
           
           this.formValue.emit(this.generalInfoForm.getRawValue())
+          if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
+            this.generalInfoForm.controls.localCurrency.enable()
+          }
         }
       }
     })
@@ -208,7 +212,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     else if (name == "Portfolio Ownerhelp *" && value == "") {
       this.reqPortfolio = true;
     }
-    else if (name == "Portfolio Ownerhelp *" && value == "") {
+    else if (name == "Portfolio Ownerhelp *" && value != "") {
       this.reqPortfolio = false;
     } 
     else if (name == "None\nOwning Organizationhelp *" && value == "") {
@@ -234,6 +238,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     }
     else if (name == "Problem Description / Present Situation / Submission Description *" && value != "") {
       this.reqDesc = false;
+    }
+    else if (name == "Project Type *" && value == "") {
+      this.reqType = true;
+    }
+    else if (name == "Project Type *" && value != "") {
+      this.reqType = false;
     }
   }
 
@@ -308,9 +318,9 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   }
 
   GetPortfolioOwnerSelected(){
-    if(this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable){
-      this.generalInfoForm.controls.localCurrency.enable()
-    }
+    // if(this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable){
+    //   this.generalInfoForm.controls.localCurrency.enable()
+    // }
     
     var currency = this.localCurrencyList.filter(x => x.localCurrencyId == this.generalInfoForm.value.portfolioOwner.localCurrencyId)
     this.generalInfoForm.patchValue({

@@ -8,8 +8,8 @@
         </div>
     </div>
     <form class="pl-3 w-full overflow-hidden" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
-        <div class="overflow-y-scroll overflow-x-hidden h-[86.5vh] pr-3">
-        <p style="color:red;" *ngIf="reqName || reqPortfolio || reqUser || reqProduct || reqDesc">Error: Some of the
+        <div [ngClass] = "{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pr-3': viewType == 'SidePanel'}">
+        <p style="color:red;" *ngIf="reqName || reqPortfolio || reqUser || reqProduct || reqDesc || reqType || reqOwning">Error: Some of the
             required fields are missing. Please review and correct your data below</p>
         <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('IsArchived')"
             class="flex justify-between items-center mt-6 mb-6">
@@ -22,7 +22,7 @@
         <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
             *ngIf="viewElementChecker('problemTitle')" class="w-full"
             formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
-            [Required]="BasicsForm != ''">
+            [Required]="callLocation == 'CreateNew'">
         </spot-input>
         <div *ngIf="viewElementChecker('approvedDate')">
             <mat-form-field class="w-full" [floatLabel]="'always'">
@@ -56,22 +56,26 @@
             class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
             [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
         </app-project-single-dropdown>
+        <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType1')" class="w-full"
+            formControlName="problemType" name="problemType" [label]="'Project Type'" [placeholder]="'Project Type'"
+            [showNoneOption]="true" [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues">
+        </spot-select>
         <spot-singleselect-autocomplete (childEmitter)="GetPortfolioOwnerSelected()"
             (focusout)="clickEvent($event, $event.currentTarget.innerText)" *ngIf="viewElementChecker('portfolioOwner')"
             formControlName="portfolioOwner" class="w-full" name="portfolioOwner" [label]="'Portfolio Owner'"
-            [Required]="BasicsForm != ''" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
+            [Required]="callLocation == 'CreateNew'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
             [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
             [hint]="'The group which is responsible for the oversight and process adherence of the record'">
         </spot-singleselect-autocomplete>
         <spot-multiselect-autocomplete *ngIf="viewElementChecker('excecutionScope')"
             formControlName="excecutionScope" class="w-full" name="excecutionScope" [label]="'Execution Scope'"
-            [Required]="BasicsForm != ''" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
+            [Required]="callLocation == 'CreateNew'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
             [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
             [sortByType]="'custom'" [customSortPointer]="'pfid'"
             [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
         </spot-multiselect-autocomplete>
         <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="BasicsForm != ''" *ngIf="viewElementChecker('owningOrganization')"
+            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('owningOrganization')"
             class="w-full" formControlName="owningOrganization" name="owningOrganization"
             [label]="'Owning Organization'" [placeholder]="'Owning Organization'" [showNoneOption]="true"
             [dropDownArrayType]="'string'" [dropDownArray]="owningOrganizationValues" [showHint]="true"
@@ -84,12 +88,12 @@
         </spot-singleselect-user-autocomplete>
 
         <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="BasicsForm != ''" *ngIf="viewElementChecker('localCurrency')"
+            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('localCurrency')"
             class="w-full" formControlName="localCurrency" name="localCurrency" [label]="'Local Currency'"
             [placeholder]="'Local Currency'" [valuePointer]="'localCurrencyAbbreviation'"
             [dropDownArray]="localCurrencyList">
         </spot-singleselect-autocomplete>
-        <spot-select [Required]="BasicsForm != ''"
+        <spot-select [Required]="callLocation == 'CreateNew'"
             *ngIf="viewElementChecker('problemType')" class="w-full" formControlName="problemType" name="problemType"
             [label]="'Project Type'" [placeholder]="'Project Type'" [showNoneOption]="true"
             [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues">
@@ -109,7 +113,7 @@
             </spot-toggle>
         </div>
         <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="BasicsForm != ''" *ngIf="viewElementChecker('primaryProduct')"
+            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('primaryProduct')"
             class="w-full" formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
             [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
             [dropDownArray]="filterCriteria.products" [showHint]="true"
@@ -123,13 +127,13 @@
         </spot-multiselect-autocomplete>        
 
         <spot-textarea (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="BasicsForm != ''" *ngIf="viewElementChecker('projectDescription')"
+            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('projectDescription')"
             formControlName="projectDescription" name="projectDescription"
             [label]="'Problem Description / Present Situation / Submission Description'"
             [placeholder]="'Problem Description / Present Situation / Submission Description'">
         </spot-textarea>
         <spot-textarea (onChange)="addNewItem()" formControlName="targetGoalSituation" *ngIf="viewElementChecker('targetGoalSituation')"
-            name="Target End Date" [label]="'target Goal Situation'" [placeholder]="'target Goal Situation'">
+            name="targetGoalSituation" [label]="'Target End State'" [placeholder]="'Target End State'">
         </spot-textarea>
         </div>
         <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">
