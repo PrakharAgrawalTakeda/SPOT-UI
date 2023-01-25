@@ -2300,7 +2300,7 @@ console.log(this.schedulecloseoutobj)
 else
 {
   var comfirmConfig: FuseConfirmationConfig = {
-    "title": "Only 20 milestones can be included in close out report",
+    "title": "Only 20 milestones can be included in Close Out report",
     "message": "",
     "icon": {
       "show": true,
