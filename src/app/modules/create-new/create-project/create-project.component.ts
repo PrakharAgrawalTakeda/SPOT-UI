@@ -10,6 +10,8 @@ import { EventType } from '@azure/msal-browser';
 import * as uuid from "uuid";
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { QualityRefBulkEditComponent } from 'app/modules/project-hub/general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { __classPrivateFieldSet } from 'tslib';
 
 
 @Component({
@@ -20,12 +22,12 @@ import { QualityRefBulkEditComponent } from 'app/modules/project-hub/general-inf
 })
 
 export class CreateProjectComponent implements OnInit {
-  @ViewChild(QualityRefBulkEditComponent) child
-  @Output() eventName = new EventEmitter<EventType>();
-  @Input() mode: 'General-Info' | 'Project-Creation' = 'General-Info';
+  // @ViewChild(QualityRefBulkEditComponent) child
+  // @Output() eventName = new EventEmitter<EventType>();
+  // @Input() mode: 'General-Info' | 'Project-Creation' = 'General-Info';
   filterCriteria: any = {};
   getData: boolean = false;
-  @Input() Data: any;
+  // @Input() Data: any;
   lookupdata: any = [];
   projectid: string = "";
   qualityformValue = [];
@@ -33,17 +35,17 @@ export class CreateProjectComponent implements OnInit {
   qualityValue = false;
   qualityForm = []
   activeaccount: any;
-  oeProjectType: any = [];
-  campaignPhase: any = [];
-  productionSteps: any = [];
-  campaignType: any = [];
-  primWorkstream: any = [];
-  agileWave: any = [];
-  POBOSType: any = [];
-  localCurrencyList: any = [];
-  siteAssessmentType: any = [];
-  startegicYear: any = [];
-  AnnualMustWin: any = [];
+  // oeProjectType: any = [];
+  // campaignPhase: any = [];
+  // productionSteps: any = [];
+  // campaignType: any = [];
+  // primWorkstream: any = [];
+  // agileWave: any = [];
+  // POBOSType: any = [];
+  // localCurrencyList: any = [];
+  // siteAssessmentType: any = [];
+  // startegicYear: any = [];
+  // AnnualMustWin: any = [];
 
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(''),
@@ -84,8 +86,9 @@ export class CreateProjectComponent implements OnInit {
   })
 
   capturedValues = ['', '']
+  // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, private apiProjectService: ProjectApiService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, private apiProjectService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
   }
 
   
@@ -111,12 +114,18 @@ export class CreateProjectComponent implements OnInit {
       this.capturedValues[index] = event.value
       this.qualityForm = event.value;
     }
+    if (index == 6) {
+      this.capturedValues[index] = event.value
+      this.createProjectForm.patchValue({
+        qualityReference: event.value.isQualityRef
+      })
+    }
     else if (index == 0){
       debugger;
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
-        projectsingle: event.parentProject ? event.parentProject.problemTitle : '',
-        projectsingleid: event.projectsingle ? event.projectsingle.problemUniqueId : '',
+        projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
+        projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         projectDescription: event.projectDescription,
         primaryProduct: event.primaryProduct ? event.primaryProduct : {},
         otherImpactedProducts: event.otherImpactedProducts ? event.otherImpactedProducts : [],
@@ -288,6 +297,31 @@ export class CreateProjectComponent implements OnInit {
       mainObj[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
       mainObj[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
     }
+    if (true) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "You must complete all mandatory fields.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else{
     var dataToSend = {}
     if (history.state.data != undefined){
       dataToSend = {
@@ -296,47 +330,50 @@ export class CreateProjectComponent implements OnInit {
         "projectIDTemplate": history.state.copytemplateId,
         "copyProjectParameter": history.state.lookupString
       }
-  }
-  else{
-      dataToSend = {
-        "projectCaptures": mainObj,
-        "hubSettings": hubSettings,
-        "projectIDTemplate": projectIDTemplate,
-        "copyProjectParameter": copyProjectParameter
-      }
-  }
-    if (true){
-      this.qualityValue = true;
-      this.qualityformValue = []
-      var genQRFORM = this.qualityForm
-      for (var quality of this.qualityForm) {
-        this.qualityformValue.push({
-          qualityUniqueId: quality.qualityUniqueId,
-          problemUniqueId: this.projectid,
-          qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-          qualityReference1: quality.qualityReference1
-        })
-      }
-  }
-    this.apiService.createProject(dataToSend).then(res => {
-      if (this.qualityValue == true){
-        this.apiService2.bulkeditQualityReference(this.qualityformValue, this.projectid).then(quality => {
-          console.log(quality);
-          console.log(res);
-          if (res != "") {
-            window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
-          }
-      })
     }
     else{
-        window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+        dataToSend = {
+          "projectCaptures": mainObj,
+          "hubSettings": hubSettings,
+          "projectIDTemplate": projectIDTemplate,
+          "copyProjectParameter": copyProjectParameter
+        }
     }
+      if (true){
+        this.qualityValue = true;
+        this.qualityformValue = []
+        var genQRFORM = this.qualityForm
+        for (var quality of this.qualityForm) {
+          this.qualityformValue.push({
+            qualityUniqueId: quality.qualityUniqueId,
+            problemUniqueId: this.projectid,
+            qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+            qualityReference1: quality.qualityReference1
+          })
+        }
+    }
+      this.apiService.createProject(dataToSend).then(res => {
+        if (this.qualityValue == true){
+          this.apiService2.bulkeditQualityReference(this.qualityformValue, this.projectid).then(quality => {
+            console.log(quality);
+            console.log(res);
+            if (res != "") {
+              window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+            }
+        })
+      }
+      else{
+          window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+      }
     })
   }
+  }
 
-  getLookUpName(id: string): string {
-    debugger;
-      return id && id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
+  getLookUpName(id: any): any {
+    if (Object.keys(id).length > 0) {
+      debugger;
+      return id && id.lookUpId != '' ? this.qualityType.find(x => x.lookUpId == id.lookUpId).lookUpName : ''
+    }
   }
 
 }

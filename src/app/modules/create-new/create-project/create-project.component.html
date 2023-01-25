@@ -15,11 +15,11 @@
                     <div>
                         <mat-stepper linear #stepper>
                             <mat-step>
-                                <div class="CreateForm">
-                                <form [formGroup]="createProjectForm">
-                                    <ng-template style="width: 50px;height: 50px" ;
+                                <div >
+                                <form style="margin-right: 300px;margin-left: 300px;">
+                                    <ng-template 
                                         matStepLabel><span>Basics</span></ng-template>
-                                    <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'parentProject', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency']"></app-general-info-single-edit>
+                                    <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'parentProject', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
 
                                     <p>*Required</p>
                                     <div style="text-align: right;">
@@ -33,15 +33,15 @@
                                 </div>
                             </mat-step>
                             <mat-step>
-                                <div class="CreateForm">
-                                <form>
+                                <div >
+                                <form style="margin-right: 300px;margin-left: 300px;">
                                     <ng-template matStepLabel>Details</ng-template>
                                     <h2><b>Project Details</b></h2>
                                     <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
-                                        [viewElements]="['problemType','enviornmentalPortfolio', 'isCapsProject']"></app-general-info-single-edit>
+                                        [viewElements]="['enviornmentalPortfolio', 'isCapsProject']"></app-general-info-single-edit>
                                     <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(2,$event)"></app-oe-project-single-edit>
                                     <app-tech-transfer-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueTech)="captureValue(3,$event)"></app-tech-transfer-single-edit>
-                                    <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueQuality)="captureValue(4,$event)"></app-quality-ref-bulk-edit>
+                                    <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (QualityValue) = "captureValue(6,$event)" (formValueQuality)="captureValue(4,$event)"></app-quality-ref-bulk-edit>
                                     <h2><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
                                     <p>*Required</p>
@@ -62,14 +62,14 @@
                                 <form>
                                     <ng-template matStepLabel>Review</ng-template>
                                     <div class="row">
-                                        <!-- <label><b>Basic Info</b></label>
+                                        <label><b>Basic Info</b></label>
                                         <br /><br />
                                         <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">Project Name * </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].problemTitle}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.problemTitle}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -77,7 +77,7 @@
                                                 <label class="reviewLabel">Project Type *</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[1].problemType}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.problemType}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -85,7 +85,7 @@
                                                 <label class="reviewLabel">Parent Program * </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].projectsingle}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.projectsingle}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -93,7 +93,7 @@
                                                 <label class="reviewLabel">Portfolio Owner * </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].portfolioOwner.portfolioOwner}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.portfolioOwner.portfolioOwner}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -101,8 +101,8 @@
                                                 <label class="reviewLabel">Execution Scope * </label>
                                             </div>
                                             <div class="child">
-                                                <span *ngFor="let item of capturedValues[0].excecutionScope; let i = index">
-                                                    <label class="reviewText" *ngIf="i > 0 && i<capturedValues[0].excecutionScope.length">,</label>
+                                                <span *ngFor="let item of createProjectForm.value.excecutionScope; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.excecutionScope.length">,</label>
                                                     <label class="reviewText">{{item.portfolioOwner}}</label>
                                                 </span>
                                             </div>
@@ -112,7 +112,7 @@
                                                 <label class="reviewLabel">Owning Organization * </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].owningOrganization}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.owningOrganization}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -120,7 +120,7 @@
                                                 <label class="reviewLabel">Submitted By * </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].SubmittedBy.userDisplayName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.SubmittedBy.userDisplayName}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -128,7 +128,7 @@
                                                 <label class="reviewLabel">Primary Product * </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].primaryProduct.fullProductName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.primaryProduct.fullProductName}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -136,9 +136,9 @@
                                                 <label class="reviewLabel">Other Impacted Products</label>
                                             </div>
                                             <div class="child">
-                                                <span *ngFor="let item of capturedValues[0].otherImpactedProducts; let i = index">
+                                                <span *ngFor="let item of createProjectForm.value.otherImpactedProducts; let i = index">
                                                     <label class="reviewText"
-                                                        *ngIf="i > 0 && i<capturedValues[0].otherImpactedProducts.length">,</label>
+                                                        *ngIf="i > 0 && i<createProjectForm.value.otherImpactedProducts.length">,</label>
                                                     <label class="reviewText">{{item.fullProductName}}</label>
                                                 </span>
                                             </div>
@@ -148,7 +148,7 @@
                                                 <label class="reviewLabel">Problem Description / Present Situation *</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].projectDescription}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.projectDescription}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -156,7 +156,7 @@
                                                 <label class="reviewLabel">Target End State</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[0].targetGoalSituation}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.targetGoalSituation}}</label>
                                             </div>
                                         </div>
                                         <br />
@@ -167,7 +167,7 @@
                                                 <label class="reviewLabel">Environmental Portfolio</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[1].enviornmentalPortfolio.portfolioOwner}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.enviornmentalPortfolio.portfolioOwner}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -175,7 +175,7 @@
                                                 <label class="reviewLabel">CAPS Project *</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[1].isCapsProject}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.isCapsProject}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -183,16 +183,16 @@
                                                 <label class="reviewLabel">OE Project</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[2].isOeproject}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.oeProject}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="capturedValues[2].isOeproject">
+                                        <div class="test" *ngIf="createProjectForm.controls['oeProject'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">OE Project Type</label>
                                             </div>
                                             <div class="child">
-                                                <span *ngFor="let item of capturedValues[2].oeprojectType; let i = index">
-                                                    <label class="reviewText" *ngIf="i > 0 && i<capturedValues[2].oeprojectType.length">,</label>
+                                                <span *ngFor="let item of createProjectForm.value.oeProjectType; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.oeProjectType.length">,</label>
                                                     <label class="reviewText">{{item.lookUpName}}</label>
                                                 </span>
                                             </div>
@@ -202,16 +202,16 @@
                                                 <label class="reviewLabel">Tech Transfer or Clinical Campaign</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[3].isTechTransfer}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.techTransfer}}</label>
                                             </div>
                                         </div>
-                                        <div *ngIf="capturedValues[3].isTechTransfer">
+                                        <div *ngIf="createProjectForm.controls['techTransfer'].value">
                                             <div class="test">
                                                 <div class="child">
                                                     <label class="reviewLabel">Campaign Phase</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{capturedValues[3].campaignPhaseId.lookUpName}}</label>
+                                                    <label class="reviewText">{{createProjectForm.value.campaignPhase.lookUpName}}</label>
                                                 </div>
                                             </div>
                                             <div class="test">
@@ -219,7 +219,7 @@
                                                     <label class="reviewLabel">Production Steps</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{capturedValues[3].productionStepId.lookUpName}}</label>
+                                                    <label class="reviewText">{{createProjectForm.value.productionSteps.lookUpName}}</label>
                                                 </div>
                                             </div>
                                             <div class="test">
@@ -227,7 +227,7 @@
                                                     <label class="reviewLabel">Campaign Type</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{capturedValues[3].campaignTypeId.lookUpName}}</label>
+                                                    <label class="reviewText">{{createProjectForm.value.campaignType.lookUpName}}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -236,34 +236,34 @@
                                                 <label class="reviewLabel">Quality Reference #</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[4].qualityReference}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.qualityReference}}</label>
                                             </div>
                                         </div>
                                         
-                                        <div class="flex justify-between items-start gap-6">
+                                        <div *ngIf="createProjectForm.controls['qualityReference'].value"
+                                            class="flex justify-between items-start gap-6">
                                             <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
-                                        <div class="mt-3">
-                                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                                                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
-                                                [rows]="qualityForm" >
-                                                <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
-                                                    [sortable]="false" [flexGrow]="1">
-                                                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                                                        <p>{{value.lookUpName}}</p>
-                                                    </ng-template>
-                                                </ngx-datatable-column>
-                                                <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
-                                                    [sortable]="false" [flexGrow]="1">
-                                                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                                                        <p>&nbsp;</p>
-                                                        <p>{{value}}</p>
-                                                    </ng-template>
-                                                </ngx-datatable-column>
-                                            </ngx-datatable>
+                                                <div class="mt-3">
+                                                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                                                        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm">
+                                                        <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
+                                                            [sortable]="false" [flexGrow]="1">
+                                                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                                                                <p>{{getLookUpName(value)}}</p>
+                                                            </ng-template>
+                                                        </ngx-datatable-column>
+                                                        <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
+                                                            [sortable]="false" [flexGrow]="1">
+                                                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                                                                <p>&nbsp;</p>
+                                                                <p>{{value}}</p>
+                                                            </ng-template>
+                                                        </ngx-datatable-column>
+                                                    </ngx-datatable>
+                                                </div>
+                                            </div>
                                         </div>
-                                        </div>
-                                        </div>
-
+                                        
                                         <br />
                                         <label><b>Strategic Drivers</b></label>
                                         <br /><br />
@@ -272,7 +272,7 @@
                                                 <label class="reviewLabel">Primary KPI</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].primaryKPI.kpiname}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.primaryKPI.kpiname}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -280,16 +280,16 @@
                                                 <label class="reviewLabel">Agile Project</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].isAgile}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.AgileProject}}</label>
                                             </div>
                                         </div>
-                                        <div *ngIf="capturedValues[5].isAgile">
+                                        <div *ngIf="createProjectForm.controls['AgileProject'].value">
                                             <div class="test">
                                                 <div class="child">
                                                     <label class="reviewLabel">AGILE Primary Workstream</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{capturedValues[5].agilePrimaryWorkstream.lookUpName}}</label>
+                                                    <label class="reviewText">{{createProjectForm.value.agilePrimaryWorkstream.lookUpName}}</label>
                                                 </div>
                                             </div>
                                             <div class="test">
@@ -297,7 +297,7 @@
                                                     <label class="reviewLabel">AGILE Secondary Workstream</label>
                                                 </div>
                                                 <div class="child">
-                                                    <span *ngFor="let item of capturedValues[5].agileSecondaryWorkstream; let i = index">
+                                                    <span *ngFor="let item of createProjectForm.value.agileSecondaryWorkstream; let i = index">
                                                         <label class="reviewText">{{item.lookUpName}}</label>
                                                     </span>
                                                 </div>
@@ -307,7 +307,7 @@
                                                     <label class="reviewLabel">AGILE Wave</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{capturedValues[5].agileWave.lookUpName}}</label>
+                                                    <label class="reviewText">{{createProjectForm.value.agileWave.lookUpName}}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -316,15 +316,15 @@
                                                 <label class="reviewLabel">POBOS</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].isPobos}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.POBOS}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="capturedValues[5].isPobos">
+                                        <div class="test" *ngIf="createProjectForm.controls['POBOS'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">POBOS Type</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].pobosCategory.lookUpName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.POBOSType.lookUpName}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -332,47 +332,48 @@
                                                 <label class="reviewLabel">Site Assessment</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].isSiteAssessment}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.siteAssignment}}</label>
                                             </div>
                                         </div>
-
-                                        <div class="test" *ngIf="capturedValues[5].isSiteAssessment">
+                                        
+                                        <div class="test" *ngIf="createProjectForm.controls['siteAssignment'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">Site Assessment Type</label>
                                             </div>
                                             <div class="child">
-                                                <span *ngFor="let item of capturedValues[5].siteAssessmentCategory; let i = index">
-                                                    <label class="reviewText" *ngIf="i > 0 && i<capturedValues[5].siteAssessmentCategory.length">,</label>
+                                                <span *ngFor="let item of createProjectForm.value.siteAssessmentType; let i = index">
+                                                    <label class="reviewText"
+                                                        *ngIf="i > 0 && i<createProjectForm.value.siteAssessmentType.length">,</label>
                                                     <label class="reviewText">{{item.lookUpName}}</label>
                                                 </span>
                                             </div>
                                         </div>
-
+                                        
                                         <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">Strategic Deployment Annual Initiative</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].isGmsgqltannualMustWin}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.StrategicDeployment}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="capturedValues[5].isGmsgqltannualMustWin">
+                                        <div class="test" *ngIf="createProjectForm.controls['StrategicDeployment'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">Strategic Year</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].StrategicYear.lookUpName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.StrategicYear.lookUpName}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="capturedValues[5].isGmsgqltannualMustWin">
+                                        <div class="test" *ngIf="createProjectForm.controls['StrategicDeployment'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">GMSGQ LT Annual Must Win?</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{capturedValues[5].annualMustWinID.lookUpName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.AnnualMustWin.lookUpName}}</label>
                                             </div>
-                                        </div> -->
-                                    </div>
+                                        </div>
+                                        </div>
                                     <p>*Required</p>
                                     <div style="text-align: right;">
                                         <!-- <button (click) = "RouteBack()" style="background-color: rgba(76,155,207);" mat-button

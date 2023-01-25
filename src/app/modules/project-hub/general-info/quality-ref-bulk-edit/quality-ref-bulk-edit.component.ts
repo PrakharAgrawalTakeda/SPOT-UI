@@ -17,13 +17,15 @@ export class QualityRefBulkEditComponent implements OnInit {
   qrTableEditStack: any = []  
   formValue = []
   dbvalue = []
-  // @Input() mode: string = ""
+  qualityForm = new FormGroup({
+    isQualityRef: new FormControl(false)
+  })
   @Input() qualityType: any = [];
-  // @Input() qualityForm= new FormArray([]);
 
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Output() formValueQuality = new EventEmitter<FormArray>();
+  @Output() QualityValue = new EventEmitter<FormGroup>();
   constructor(private apiService: ProjectApiService,
     private projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService) {
@@ -44,6 +46,9 @@ export class QualityRefBulkEditComponent implements OnInit {
           this.formValueQuality.emit(this.qualityRefForm)
       }
     }
+    })
+    this.qualityForm.valueChanges.subscribe(res => {
+      this.QualityValue.emit(this.qualityForm)
     })
   }
 
@@ -71,6 +76,7 @@ debugger
         topsData:null,
       }
       this.formValueQuality.emit(this.qualityRefForm)
+      this.QualityValue.emit(this.qualityForm)
       this.viewContent = true
     }
     else{
