@@ -424,5 +424,11 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
     }
+    async updateReportDates(projectid:string ,itemid: string){
+      var userid = GlobalVariables.apiurl+"ProjectCharter/UpdateDate/"+projectid+"/"+itemid
+      const abc$ = this.http.patch(userid,itemid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
   }
 

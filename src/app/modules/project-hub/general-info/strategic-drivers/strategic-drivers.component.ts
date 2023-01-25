@@ -32,6 +32,7 @@ export class StrategicDriversComponent implements OnInit {
   viewContent = false
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory", "isGoodPractise"]
   @Output() formValue = new EventEmitter();
   constructor(private apiService: ProjectApiService,
@@ -269,10 +270,36 @@ export class StrategicDriversComponent implements OnInit {
     mainObj.siteAssessmentCategory = formValue.siteAssessmentCategory.length > 0 ? formValue.siteAssessmentCategory.map(x => x.lookUpId).join() : ''
     mainObj.isGoodPractise = formValue.isGoodPractise
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-      this.projectHubService.isNavChanged.next(true)
-      this.projectHubService.submitbutton.next(true)
-      this.projectHubService.successSave.next(true)
-      this.projectHubService.toggleDrawerOpen('', '', [], '')
+      if (this.subCallLocation == 'ProjectProposal') {
+        this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+          this.projectHubService.isNavChanged.next(true)
+          this.projectHubService.submitbutton.next(true)
+          this.projectHubService.successSave.next(true)
+          this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
+      else if (this.subCallLocation == 'CloseOut') {
+        this.apiService.updateReportDates(this.projectHubService.projectid, "CloseoutModifiedDate").then(secondRes => {
+          this.projectHubService.isNavChanged.next(true)
+          this.projectHubService.submitbutton.next(true)
+          this.projectHubService.successSave.next(true)
+          this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
+      else if (this.subCallLocation == 'ProjectCharter') {
+        this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
+          this.projectHubService.isNavChanged.next(true)
+          this.projectHubService.submitbutton.next(true)
+          this.projectHubService.successSave.next(true)
+          this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
+      else {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      }
     })
   }
 }
