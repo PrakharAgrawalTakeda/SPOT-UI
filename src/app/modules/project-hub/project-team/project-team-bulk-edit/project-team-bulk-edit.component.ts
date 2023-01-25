@@ -396,7 +396,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
          }
       if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length < 10) {
         for (var i of this.projectTeamForm.controls) {
-          i['controls']['includeInCharter'].enable()
+          i['controls']['includeInCharter'].enable()  
         }
       }
       else {
