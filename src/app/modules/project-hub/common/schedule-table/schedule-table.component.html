@@ -66,7 +66,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Link" prop="indicator" [resizeable]="false" [flexGrow]="0.3" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                
                 <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
@@ -102,7 +102,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="0.4" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
@@ -118,7 +118,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="0.4" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
@@ -132,7 +132,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.31" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p class = "variancecloseout">{{value}}</p>
             </ng-template>
@@ -166,7 +166,7 @@
         <!-- </ng-template>
       </ngx-datatable-column> -->
 
-      <ngx-datatable-column name="Comment" prop="comments" [flexGrow]="0.45" *ngIf="mode== 'Project-Close-Out'">
+      <ngx-datatable-column name="Comment" prop="comments" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
             <!-- <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong> -->
@@ -188,7 +188,7 @@
       </ngx-datatable-column> -->
 
       <ngx-datatable-column name="Include in Report (Max 20)" prop="includeInCloseout" [sortable]="false"
-            [resizeable]="false" [flexGrow]="0.42" *ngIf="mode== 'Project-Close-Out'">
+            [resizeable]="false" [flexGrow]="0.4" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
               <!-- <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)"> -->
                 <!-- <p *ngIf="!value">&nbsp;</p>

@@ -382,30 +382,23 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     this.disabler()
   }
     disabler() {
-        if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length < 5) {
-            for (var i of this.projectTeamForm.controls) {
-                i['controls']['includeInProposal'].enable()
+        var formValue = this.projectTeamForm.getRawValue()
+        if (formValue.length > 0) {
+            if (formValue.filter(x => x.includeInProposal == true).length < 5) {
+                for (var i of this.projectTeamForm.controls) {
+                    i['controls']['includeInProposal'].enable()
+                }
+            } else {
+                for (var i of this.projectTeamForm.controls) {
+                    if (i['controls']['includeInProposal'].value != true) {
+                        i['controls']['includeInProposal'].disable()
+                    }
                 }
             }
-        else {
-            for (var i of this.projectTeamForm.controls) {
-                if (i['controls']['includeInProposal'].value != true) {
-                    i['controls']['includeInProposal'].disable()
-                }
-            }
-         }
-      if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length < 10) {
-        for (var i of this.projectTeamForm.controls) {
-          i['controls']['includeInCharter'].enable()
         }
-      }
-      else {
-        for (var i of this.projectTeamForm.controls) {
-          if (i['controls']['includeInCharter'].value != true) {
-            i['controls']['includeInCharter'].disable()
-          }
-        }
-      }
+    }
+    getNgxDatatableNumberHeader(): any {
+        return ' ngx-number-header';
     }
 
   numberWithCommas(x) {

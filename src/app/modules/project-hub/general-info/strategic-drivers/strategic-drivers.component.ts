@@ -256,7 +256,6 @@ export class StrategicDriversComponent implements OnInit {
     this.projectHubService.isFormChanged = false
     var formValue = this.strategicDriversForm.getRawValue()
     var mainObj = this.generalInfo.projectData
-      console.log("aaaaaaaaaaaaaa", formValue.primaryKPI);
     mainObj.primaryKpi = Object.keys(formValue.primaryKPI).length > 0 ? formValue.primaryKPI.kpiid : ''
     mainObj.agilePrimaryWorkstream = Object.keys(formValue.agilePrimaryWorkstream).length > 0 ? formValue.agilePrimaryWorkstream.lookUpId : ''
     mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
