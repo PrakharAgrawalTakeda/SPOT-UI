@@ -51,7 +51,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   @Input() editable: boolean
   @ViewChild('scheduleTable') scheduleTable: any;
   @ViewChild('target') private myScrollContainer: ElementRef;
-  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   editing = {};
   scheduleData: any = []
   ColumnMode = ColumnMode;

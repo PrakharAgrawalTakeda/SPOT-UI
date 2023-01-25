@@ -12,6 +12,7 @@
         <app-schedule-view-bulk-edit
             *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCloseOut'" [mode]="'Project-Close-Out'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCharter'" [mode]="'Project-Charter'"></app-schedule-view-bulk-edit>
         <app-schedule-link *ngIf="projecthubservice.itemtype == 'LinkMilestones'"></app-schedule-link>
         <app-project-team-add-single
             *ngIf="projecthubservice.itemtype == 'ProjectTeamAddSingle'"></app-project-team-add-single>
