@@ -394,18 +394,6 @@ export class ProjectTeamBulkEditComponent implements OnInit {
                 }
             }
          }
-      // if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length < 10) {
-      //   for (var i of this.projectTeamForm.controls) {
-      //     i['controls']['includeInCharter'].enable()
-      //   }
-      // }
-      // else {
-      //   for (var i of this.projectTeamForm.controls) {
-      //     if (i['controls']['includeInCharter'].value != true) {
-      //       i['controls']['includeInCharter'].disable()
-      //     }
-      //   }
-      // }
     }
 
   numberWithCommas(x) {
