@@ -21,7 +21,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 export class GeneralInfoComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
