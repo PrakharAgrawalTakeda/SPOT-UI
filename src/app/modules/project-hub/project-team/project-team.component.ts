@@ -45,7 +45,7 @@ export class ProjectTeamComponent implements OnInit {
       this.addSingle = 'ProjectTeamAddSingleProjectProposal'
     }
     if (this.mode == 'Project-Charter') {
-      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
+      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';  
       this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
     this.apiService.getmembersbyproject(this.id).then((res) => {
