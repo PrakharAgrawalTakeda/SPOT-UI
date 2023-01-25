@@ -114,6 +114,9 @@ import { ProjectCharterCostFundingComponent } from './project-charter/project-ch
 import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
 import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/close-out-general-info.component";
 import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
+import { KeyAssumptionsTableComponent } from './common/key-assumptions-table/key-assumptions-table.component';
+import { KeyAssumptionsAddSingleComponent } from './common/key-assumptions-table/key-assumptions-add-single/key-assumptions-add-single.component';
+import { KeyAssumptionsBulkEditComponent } from './common/key-assumptions-table/key-assumptions-bulk-edit/key-assumptions-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -360,7 +363,10 @@ export const projectRoutes: Route[] = [
     ProjectCharterProjectTeamsComponent,
     ProjectCharterRiskIssuesComponent,
     ProjectCharterCostFundingComponent,
-    ProjectCharterCapsComponent
+    ProjectCharterCapsComponent,
+    KeyAssumptionsTableComponent,
+    KeyAssumptionsAddSingleComponent,
+    KeyAssumptionsBulkEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

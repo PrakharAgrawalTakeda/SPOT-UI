@@ -5,10 +5,12 @@
             <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
                 <div class="flex items-start justify-between">
                     <div class=" flex gap-2">
-                        <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen(bulkEditType, '', teamMembers, id, true)">
+                        <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projecthubservice.toggleDrawerOpen(bulkEditType, '', teamMembers, id, true)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                         </button>
-                        <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen(addSingle, '', teamMembers, id)">
+                        <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projecthubservice.toggleDrawerOpen(addSingle, '', teamMembers, id)">
                             <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                         </button>
                     </div>
@@ -28,39 +30,43 @@
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Email Address" prop="userEmail" [flexGrow]="1" *ngIf="mode == 'Normal'" >
+                <ngx-datatable-column name="Email Address" prop="userEmail" [flexGrow]="1" *ngIf="mode == 'Normal'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Location" prop="userOfficeLocation" [flexGrow]="1"  *ngIf="mode == 'Normal'">
+                <ngx-datatable-column name="Location" prop="userOfficeLocation" [flexGrow]="1" *ngIf="mode == 'Normal'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Role" prop="roleName" [flexGrow]="1" >
+                <ngx-datatable-column name="Role" prop="roleName" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="% Time" prop="percentTime" [flexGrow]="1" *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
+                <ngx-datatable-column name="% Time" prop="percentTime" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                    *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p>{{value}}</p>
+                        <p style="text-align:center">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Duration (Months)" prop="duration" [flexGrow]="1" *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
+                <ngx-datatable-column name="Duration (Months)" prop="duration" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                    *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p>{{value | number : fractionSize}}</p>
+                        <p style="text-align:center">{{value | number : fractionSize}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"  *ngIf="mode == 'Normal'" >
+                <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"
+                    *ngIf="mode == 'Normal'">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                         <div class="flex items-center justify-end gap-6">
                             <a [href]="'mailto:' + row.userEmail" title=" Email" target="_blank">
                                 <mat-icon [svgIcon]="'heroicons_outline:mail'"></mat-icon>
                             </a>
-                            <a [href]="'https://teams.microsoft.com/l/chat/0/0?users=' + row.userEmail" title="Chat" target="_blank">
+                            <a [href]="'https://teams.microsoft.com/l/chat/0/0?users=' + row.userEmail" title="Chat"
+                                target="_blank">
                                 <mat-icon svgIcon="heroicons_outline:chat"></mat-icon>
 
                             </a>

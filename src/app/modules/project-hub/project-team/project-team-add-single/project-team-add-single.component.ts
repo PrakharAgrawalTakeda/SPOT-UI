@@ -76,6 +76,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
       }
     })
     this.charterCount = parseInt(localStorage.getItem('chartercount'));
+    this.charterCount = parseInt(localStorage.getItem('chartercount'));
   }
   getRoles(): any {
     var j = this.projecthubservice.all
@@ -170,7 +171,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     }
     else {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a Role",
+        "title": "Only 10 can be selected at a time for Team Charter slide display.",
         "message": "",
         "icon": {
           "show": true,

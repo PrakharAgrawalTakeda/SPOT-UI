@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ProjectHubService } from "../../../project-hub.service";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
-import { ProjectApiService } from "../../../common/project-api.service";
-import { SpotlightIndicatorsService } from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {ProjectHubService} from "../../../project-hub.service";
+import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {ProjectApiService} from "../../../common/project-api.service";
+import {SpotlightIndicatorsService} from "../../../../../core/spotlight-indicators/spotlight-indicators.service";
 import * as moment from "moment";
 import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../../@fuse/services/confirmation";
 import { AuthService } from "../../../../../core/auth/auth.service";
@@ -14,7 +14,7 @@ import { AuthService } from "../../../../../core/auth/auth.service";
     encapsulation: ViewEncapsulation.None
 })
 export class RisIssueViewBulkEditComponent implements OnInit {
-
+    @Input() viewElements: any = ["status", "dateInitiated", "type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard"]
     constructor(
         public projectHubService: ProjectHubService,
         public apiService: ProjectApiService,
@@ -103,6 +103,9 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 this.viewContent = true
             })
         }
+    }
+    viewElementChecker(element: string): boolean {
+        return this.viewElements.some(x => x == element)
     }
     sortByDate(array: any): any {
         return array.length > 1 ? array.sort((a, b) => {
@@ -328,6 +331,18 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 for (var i of this.riskIssueForm.controls) {
                     if (i['controls']['includeInReport'].value != true) {
                         i['controls']['includeInReport'].disable()
+                    }
+                }
+            }
+            if (formValue.filter(x => x.includeInCharter == true).length < 5) {
+                for (var i of this.riskIssueForm.controls) {
+                    i['controls']['includeInCharter'].enable()
+                }
+            }
+            else {
+                for (var i of this.riskIssueForm.controls) {
+                    if (i['controls']['includeInCharter'].value != true) {
+                        i['controls']['includeInCharter'].disable()
                     }
                 }
             }

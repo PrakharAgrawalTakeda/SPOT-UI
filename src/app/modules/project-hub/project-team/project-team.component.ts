@@ -28,21 +28,25 @@ export class ProjectTeamComponent implements OnInit {
         this.dataloader()
       }
     })
-   }
+  }
 
   ngOnInit(): void {
     const url = this.Router.url;
     this.Urlval = url.substring(url.lastIndexOf('/') + 1);
     this.dataloader()
   }
-  dataloader(){
+  dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    if(this.mode != 'Normal'){
-        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    if (this.mode != 'Normal') {
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
-    if(this.mode == 'Project-Proposal'){
-        this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
-        this.addSingle = 'ProjectTeamAddSingleProjectProposal'
+    if (this.mode == 'Project-Proposal') {
+      this.bulkEditType = 'ProjectTeamBulkEditProjectProposal';
+      this.addSingle = 'ProjectTeamAddSingleProjectProposal'
+    }
+    if (this.mode == 'Project-Charter') {
+      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
+      this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
     if (this.mode == 'Project-Charter') {
       this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
@@ -58,6 +62,9 @@ export class ProjectTeamComponent implements OnInit {
         }
       }
     })
+  }
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
   }
 
 }

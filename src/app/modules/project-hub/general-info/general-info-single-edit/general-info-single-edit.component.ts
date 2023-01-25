@@ -8,6 +8,7 @@ import { ProjectHubService } from '../../project-hub.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { I } from '@angular/cdk/keycodes';
 import { QualityRefBulkEditComponent } from '../quality-ref-bulk-edit/quality-ref-bulk-edit.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-general-info-single-edit',
@@ -53,7 +54,11 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     approvedDate: new FormControl(''),
     SubmittedBy: new FormControl(''),
     targetGoalSituation: new FormControl(''),
-    localCurrency: new FormControl('')
+    localCurrency: new FormControl(''),
+    functionGroupID: new FormControl({}),
+    whynotgoforNextBestAlternative: new FormControl(''),
+    proposalStatement: new FormControl(''),
+    projectReviewedYN: new FormControl({}),
   })
 
   @Output() formValue = new EventEmitter<FormGroup>();
@@ -120,6 +125,10 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         closeOutApprovedDate: res.projectData.closeOutApprovedDate,
         projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
         approvedDate: res.projectData.approvedDate,
+        functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
+        whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
+        proposalStatement: res.projectData.proposalStatement,
+        projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {}
       });
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
@@ -196,7 +205,13 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
-    // return "";
+    
+  }
+  getProjectReviewedYN(): any {
+    return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'c58fb456-3901-4677-9ec5-f4eada7158e6')
+  }
+  getFunctionGroupID(): any {
+    return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
   }
   viewElementChecker(element: string): boolean {
     return this.viewElements.some(x => x == element)
@@ -306,9 +321,14 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
     mainObj.defaultOwningOrganizationId = formValue.owningOrganization
-    mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate
-    mainObj.projectProposalApprovedDate = formValue.projectProposalApprovedDate
-    mainObj.approvedDate = formValue.approvedDate
+    mainObj.closeOutApprovedDate = formValue.closeOutApprovedDate ? moment(formValue.closeOutApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+    mainObj.projectProposalApprovedDate = formValue.projectProposalApprovedDate ? moment(formValue.projectProposalApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+    mainObj.approvedDate = formValue.approvedDate ? moment(formValue.approvedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+    mainObj.whynotgoforNextBestAlternative = formValue.whynotgoforNextBestAlternative
+    mainObj.proposalStatement = formValue.proposalStatement
+    mainObj.projectReviewedYN = Object.keys(formValue.projectReviewedYN).length > 0 ? formValue.projectReviewedYN.lookUpId : ''
+    mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
+
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)

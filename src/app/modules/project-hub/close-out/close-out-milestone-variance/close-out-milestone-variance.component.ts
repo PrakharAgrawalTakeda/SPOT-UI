@@ -14,7 +14,14 @@ export class CloseOutMilestoneVarianceComponent implements OnInit {
   id: string = ''
   constructor(public projecthubservice: ProjectHubService,
     private apiService: ProjectApiService,
-    private _Activatedroute: ActivatedRoute) { }
+    private _Activatedroute: ActivatedRoute) {
+      this.projecthubservice.submitbutton.subscribe(res => {
+      console.log(res)
+      if(res == true)
+      {
+        this.dataloader()
+      } })
+    }
 
     ngOnInit(): void {
       this.dataloader()

@@ -15,6 +15,11 @@ export class ProjectCharterRiskIssuesComponent implements OnInit {
     constructor(public projecthubservice: ProjectHubService,
                 private apiService: ProjectApiService,
                 private _Activatedroute: ActivatedRoute,) {
+        this.projecthubservice.submitbutton.subscribe(res => {
+            if (res) {
+                this.dataloader()
+            }
+        })
     }
     ngOnInit(): void {
         this.dataloader()

@@ -1,4 +1,13 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    OnDestroy,
+    OnInit,
+    ElementRef,
+    ViewChild,
+    ViewEncapsulation,
+    Input
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -39,6 +48,7 @@ export const MY_FORMATS = {
 })
 
 export class RiskIssueViewEditComponent implements OnInit {
+  @Input() viewElements: any = ["type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard", "postMitigation"]
   formFieldHelpers: string[] = [''];
   lookupdata: any = []
   riskissue: any = {}
@@ -92,6 +102,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     function: new FormControl(''),
     functionid: new FormControl(''),
     includeInReport: new FormControl(''),
+    includeInCharter: new FormControl(''),
     postMitigationProbability: new FormControl(''),
     postMitigationImpact: new FormControl(''),
     postMitigationComments: new FormControl('')
@@ -123,6 +134,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           usersingleid: res.ownerId,
           functionid: res.functionGroupId,
           includeInReport: res.includeInReport,
+          includeInCharter: res.includeInCharter,
           postMitigationProbability: res.postMitigationProbability,
           postMitigationImpact: res.postMitigationImpact,
           postMitigationComments: res.postMitigationComments
@@ -136,6 +148,11 @@ export class RiskIssueViewEditComponent implements OnInit {
             if (this.riskIssueForm.value.includeInReport != true) {
               this.riskIssueForm.controls['includeInReport'].disable()
             }
+          }
+          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 5) {
+              if (this.riskIssueForm.value.includeInCharter != true) {
+                  this.riskIssueForm.controls['includeInCharter'].disable()
+              }
           }
         }
         this.projecthubservice.isFormChanged = false
@@ -156,6 +173,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         usersingleid: "",
         functionid: "",
         includeInReport: false,
+        includeInCharter: false,
         postMitigationProbability: "",
         postMitigationImpact: "",
         postMitigationComments: ""
@@ -168,6 +186,9 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 3) {
           this.riskIssueForm.controls['includeInReport'].disable()
         }
+        if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 5) {
+            this.riskIssueForm.controls['includeInCharter'].disable()
+        }
       }
       this.projecthubservice.isFormChanged = false
     }
@@ -176,6 +197,9 @@ export class RiskIssueViewEditComponent implements OnInit {
     })
   }
 
+  viewElementChecker(element: string): boolean {
+      return this.viewElements.some(x => x == element)
+  }
   getllookup() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.auth.lookupMaster().then((resp: any) => {
@@ -257,6 +281,9 @@ export class RiskIssueViewEditComponent implements OnInit {
         }
         if (this.riskIssueForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
+        }
+        if (this.riskIssueForm.controls['includeInCharter'].disabled) {
+            mainObjnew.includeInCharter = false
         }
         //Log Date
         if (mainObjnew.logDate == "Invalid date") {

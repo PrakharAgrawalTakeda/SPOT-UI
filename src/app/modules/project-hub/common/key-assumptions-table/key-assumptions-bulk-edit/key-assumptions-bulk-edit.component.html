@@ -1,0 +1,101 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Key Assumptions</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="py-3 px-0">
+        <div class="flex justify-between items-center">
+            <div></div>
+            <div class="flex justify-between items-center gap-3">
+                <div class="pr-3">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                            [color]="'primary-200'"
+                            (click)="addKA()">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-y-hidden h-[80vh] pl-3" id="keyAssumptionsTableDiv" >
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
+                           columnMode="flex"
+                           class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                           [rows]="keyAssumptions"
+                           #keyAssumptionsTable>
+                <ngx-datatable-column name="Key Assumption" prop="keyAssumption" [resizeable]="false" [flexGrow]="5"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!kaTableEditStack.includes(rowIndex)"
+                           (click)="kaTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
+                              *ngIf="kaTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="keyAssumption" [showLabel]="false"
+                                           [maxLength]=1000></spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Why is This Assumption Valid" prop="assumptionRationale" [flexGrow]="5"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!kaTableEditStack.includes(rowIndex)"
+                           (click)="kaTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
+                              *ngIf="kaTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="assumptionRationale" [showLabel]="false"
+                                           [maxLength]=1000></spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Included In Charter (Max 5)" prop="includeInCharter" [flexGrow]="1"
+                                      [draggable]="false" [resizeable]="false" [sortable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!kaTableEditStack.includes(rowIndex)"
+                           (click)="kaTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
+                              *ngIf="kaTableEditStack.includes(rowIndex)"
+                              class="h-[45px]">
+                            <mat-slide-toggle
+                                [matTooltip]="this.keyAssumptionForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 5 can be selected at a time in the charter' : null"
+                                (change)="disabler()" class="h-full overflow-visible"
+                                formControlName="includeInCharter">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [draggable]="false" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                                 ngx-datatable-cell-template>
+                        <div class="flex justify-start items-center gap-6">
+                            <a href="javascript:void(0)" title="Delete Single" (click)="deleteKA(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="flex items-start justify-between mt-6 px-3">
+            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+               (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitKeyAssumptions()" type="button">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>

@@ -23,21 +23,12 @@
     <div *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
         <mat-form-field class="w-full" [floatLabel]="'always'">
             <mat-label>% Time</mat-label>
-            <input matInput
-                   formControlName="percentTime"
-                   type="number"
-                   max="100" min="1" placeholder="0"
-                   pattern="\d*"
-            />
+            <input matInput formControlName="percentTime" type="number" max="100" min="0" placeholder="0"
+                pattern="\d*" />
         </mat-form-field>
         <mat-form-field class="w-full" [floatLabel]="'always'">
             <mat-label>Duration (Months)</mat-label>
-            <input matInput
-                   formControlName="duration"
-                   type="number"
-                   min="0" placeholder="0"
-                   pattern="\d*"
-            />
+            <input matInput formControlName="duration" type="number" min="0" placeholder="0" pattern="\d*" />
         </mat-form-field>
         <div *ngIf="mode == 'Project-Charter'" class="flex justify-between items-center w-full pt-4 pb-6">
             <div class="flex justify-start gap-1 items-center">Include in Charter(Max-10)

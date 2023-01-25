@@ -19,6 +19,15 @@
                 <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
             </div>
         </div>
+        <spot-singleselect-autocomplete class="w-full" formControlName="projectReviewedYN" name="projectReviewedYN"
+            [label]="'Project Reviewed'" [placeholder]="'Project Reviewed'" [valuePointer]="'lookUpName'"
+            [dropDownArray]="getProjectReviewedYN()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+            *ngIf="viewElementChecker('projectReviewedYN')">
+        </spot-singleselect-autocomplete>
+        <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('projectProposalApprovedDate')"
+            formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate" [label]="'Date Approved'"
+            [placeholder]="'Date Approved'">
+        </spot-input-date>
         <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
             *ngIf="viewElementChecker('problemTitle')" class="w-full"
             formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
@@ -42,7 +51,7 @@
                 <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
         </div>
-        <div *ngIf="viewElementChecker('projectProposalApprovedDate')">
+        <!-- <div *ngIf="viewElementChecker('projectProposalApprovedDate')">
             <mat-form-field class="w-full" [floatLabel]="'always'">
                 <mat-label>Date Approved</mat-label>
                 <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'"
@@ -50,7 +59,7 @@
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-        </div>
+        </div> -->
         
         <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')"
             class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"

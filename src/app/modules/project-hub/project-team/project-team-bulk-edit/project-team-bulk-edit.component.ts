@@ -6,6 +6,7 @@ import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { Router } from '@angular/router';
+import * as moment from "moment";
 
 @Component({
   selector: 'app-project-team-bulk-edit',
@@ -266,9 +267,11 @@ export class ProjectTeamBulkEditComponent implements OnInit {
                   const alert = this.fuseAlert.open(comfirmConfig)
               }else{
                   this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
+                      this.projecthubservice.isFormChanged = false
                       this.projecthubservice.submitbutton.next(true)
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                       this.projecthubservice.isNavChanged.next(true)
+                      this.projecthubservice.successSave.next(true)
                   })
               }
 
@@ -279,6 +282,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
       this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.successSave.next(true)
     }
   }
   

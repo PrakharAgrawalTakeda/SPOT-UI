@@ -51,6 +51,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   @Input() editable: boolean
   @ViewChild('scheduleTable') scheduleTable: any;
   @ViewChild('target') private myScrollContainer: ElementRef;
+  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
   editing = {};
   scheduleData: any = []
   ColumnMode = ColumnMode;
@@ -104,7 +105,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   logdetails: any = {}
   getRowClass = (row) => {
     return {
-      'row-color1': row.completionDate != null,
+      'row-color1': row.completionDate != null && this.mode == 'Normal',
     };
   };
   milestoneName: any;
@@ -123,7 +124,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   prevObj: any = []
   newArray: any = []
   temp: any = []
-  insertarray: any = []
+  insertarray : any = []
+  schedulecloseoutobj: any = []
   // onResize(event){
   //   event.window.innerWidth; // window width
   // }
@@ -286,24 +288,29 @@ console.log(this.insertarray)
                 //debugger
 
 
-                this.baselineCount = count
-                console.log("Baseline Count", this.baselineCount)
-                console.log('LookUp Data', lookup)
-                this.lookUpData = lookup
-                console.log('Filter Criteria:', filterres)
-                this.filterCriteria = filterres
-                console.log("Milestone info:", res)
-                this.scheduleData = res
-                console.log(this.isclosed)
-                console.log(this.scheduleData.scheduleData)
-                this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
-                if (this.isclosed == false) {
-                  this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
-                  console.log("ngx", this.schedulengxdata)
-                }
-                this.scheduledataDB = res.scheduleData
-                console.log(this.scheduledataDB)
-                console.log(this.projecthubservice.includeClosedItems.schedule.value)
+                  this.baselineCount = count
+                  console.log("Baseline Count", this.baselineCount)
+                  console.log('LookUp Data', lookup)
+                  this.lookUpData = lookup
+                  console.log('Filter Criteria:', filterres)
+                  this.filterCriteria = filterres
+                  console.log("Milestone info:", res)
+                  this.scheduleData = res
+                  console.log(this.isclosed)
+                  console.log(this.scheduleData.scheduleData)
+                  this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
+                  if (this.isclosed == false) {
+                    this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+                    console.log("ngx", this.schedulengxdata)
+                  }
+
+                  if(this.mode == 'Project-Close-Out')
+                  {
+                    this.schedulengxdata = this.scheduleData.scheduleData
+                  }
+                  this.scheduledataDB = res.scheduleData
+                  console.log(this.scheduledataDB)
+                  console.log(this.projecthubservice.includeClosedItems.schedule.value)
 
                 if (res.scheduleData.length != 0) {
                   for (var i of res.scheduleData) {
@@ -1182,6 +1189,7 @@ console.log(this.insertarray)
 
 for(var i=0; i<this.insertarray.length; i++)
 {
+ // debugger
   this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
 
     this.baselineLog = res.projectBaselineLog.sort((a, b) => {
@@ -1227,8 +1235,8 @@ for(var i=0; i<this.insertarray.length; i++)
           //this.viewContent = true
           //this.viewBaseline = false
           // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          // this.projecthubservice.submitbutton.next(true)
-          // this.projecthubservice.isNavChanged.next(true)
+           this.projecthubservice.submitbutton.next(true)
+           this.projecthubservice.isNavChanged.next(true)
           //this.saveScheduleBulkEdit()
         })
       })
@@ -1254,8 +1262,8 @@ for(var i=0; i<this.insertarray.length; i++)
         //this.viewContent = true
         //this.viewBaseline = false
         // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        // this.projecthubservice.submitbutton.next(true)
-        // this.projecthubservice.isNavChanged.next(true)
+         this.projecthubservice.submitbutton.next(true)
+         this.projecthubservice.isNavChanged.next(true)
        // this.saveScheduleBulkEdit()
       })
 
@@ -1282,8 +1290,8 @@ for(var i=0; i<this.insertarray.length; i++)
           //this.viewContent = true
           // this.viewBaseline = false
           // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          // this.projecthubservice.submitbutton.next(true)
-          // this.projecthubservice.isNavChanged.next(true)
+           this.projecthubservice.submitbutton.next(true)
+           this.projecthubservice.isNavChanged.next(true)
           //this.saveScheduleBulkEdit()
         })
       }
@@ -1317,8 +1325,8 @@ for(var i=0; i<this.insertarray.length; i++)
             //this.viewContent = true
             //this.viewBaseline = false
             // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            // this.projecthubservice.submitbutton.next(true)
-            // this.projecthubservice.isNavChanged.next(true)
+             this.projecthubservice.submitbutton.next(true)
+             this.projecthubservice.isNavChanged.next(true)
             //this.saveScheduleBulkEdit()
           })
         })
@@ -1355,8 +1363,8 @@ for(var i=0; i<this.insertarray.length; i++)
             //this.viewContent = true
             //this.viewBaseline = false
             // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            // this.projecthubservice.submitbutton.next(true)
-            // this.projecthubservice.isNavChanged.next(true)
+             this.projecthubservice.submitbutton.next(true)
+             this.projecthubservice.isNavChanged.next(true)
             //this.saveScheduleBulkEdit()
           })
         })
@@ -1364,6 +1372,7 @@ for(var i=0; i<this.insertarray.length; i++)
     }
 
   })
+
 }
 this.projecthubservice.toggleDrawerOpen('', '', [], '')
 this.projecthubservice.submitbutton.next(true)
@@ -2210,11 +2219,103 @@ this.projecthubservice.isNavChanged.next(true)
 
   }
 
+
+  submitschedulecloseout() {
+    this.projecthubservice.isFormChanged = false
+var formValue = this.milestoneForm.getRawValue()
+for (var i of formValue) {
+  console.log(i)
+  if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
+    this.schedulecloseoutobj.push({
+      scheduleUniqueId: i.scheduleUniqueId,
+      projectId: i.projectId,
+      milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+      plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+      baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+      responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+      completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+      comments: i.comments,
+      includeInReport: i.includeInReport,
+      functionGroupId: i.function == null ? null : i.function.lookUpId,
+      includeInCharter: i.includeInCharter,
+      milestoneType: i.milestoneType,
+      templateMilestoneId: i.templateMilestoneId,
+      includeInCloseout: i.includeInCloseout
+    })
+   }
+   else {
+    this.schedulecloseoutobj.push({
+      scheduleUniqueId: i.scheduleUniqueId,
+      projectId: i.projectId,
+      milestone: (i.milestone),
+      plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+      baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+      responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+      completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+      comments: i.comments,
+      includeInReport: i.includeInReport,
+      functionGroupId: i.function == null ? null : i.function.lookUpId,
+      includeInCharter: i.includeInCharter,
+      milestoneType: i.milestoneType,
+      templateMilestoneId: i.templateMilestoneId,
+      includeInCloseout: i.includeInCloseout,
+      responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+      indicator: i.indicator
+    })
+  }
+}
+if (this.schedulecloseoutobj.filter(x => x.includeInCloseout == true).length <= 20) {
+  this.apiService.bulkeditSchedule(this.schedulecloseoutobj, this.id).then(res => {
+      this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.submitbutton.next(true)
+      this.projecthubservice.successSave.next(true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+
+console.log(this.schedulecloseoutobj)
+  })
+  
+}
+
+else
+{
+  var comfirmConfig: FuseConfirmationConfig = {
+    "title": "Only 8 milestones can be included in project dashboard",
+    "message": "",
+    "icon": {
+      "show": true,
+      "name": "heroicons_outline:exclamation",
+      "color": "warning"
+    },
+    "actions": {
+      "confirm": {
+        "show": true,
+        "label": "OK",
+        "color": "primary"
+      },
+      "cancel": {
+        "show": false,
+        "label": "Cancel"
+      }
+    },
+    "dismissible": true
+  }
+  const alert = this.fuseAlert.open(comfirmConfig)
+  this.projecthubservice.isBulkEdit = true
+}
+  }
+
+
+
+
   submitschedule() {
-    //debugger
+    debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
-    console.log(this.scheduleData.scheduleData)
+console.log(this.scheduleData.scheduleData)
+// if(this.mode == 'Project-Close-Out')
+// {
+//   this.projecthubservice.includeClosedItems.schedule.value == true
+// }
 
     if (this.projecthubservice.includeClosedItems.schedule.value) {
       var baselinedates = this.scheduleData.scheduleData.map(x => {
