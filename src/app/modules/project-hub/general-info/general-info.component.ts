@@ -31,6 +31,7 @@ export class GeneralInfoComponent implements OnInit {
   id: string = ""
   generalInfoData: any = {}
   filterCriteria: any = {}
+  wizzardApprovedDate: string = ""
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     parentProgram: new FormControl(''),
@@ -136,6 +137,15 @@ export class GeneralInfoComponent implements OnInit {
           this.apiService.getGeneralInfoData(this.id).then((res: any) => {
             console.log("General Info:", res)
             this.generalInfoData = res
+            if(this.callLocation=='CloseOut'){
+                this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
+            }
+            if(this.callLocation=='ProjectCharter'){
+                this.wizzardApprovedDate = res.projectData.approvedDate
+            }
+            if(this.callLocation=='ProjectProposal'){
+                this.wizzardApprovedDate = res.projectData.projectProposalApprovedDate
+            }
             var oeprojectypelist = res.projectData.oeprojectType && res.projectData.oeprojectType != '' ? res.projectData.oeprojectType.split(',') : []
             this.generalInfoForm.patchValue({
               problemTitle: res.projectData.problemTitle,
@@ -166,7 +176,7 @@ export class GeneralInfoComponent implements OnInit {
                 opU:  this.filterCriteria.opuMasters.find(
                     x => x.lookUpId == res.portfolioOwner?.opU?.toLowerCase())?.lookUpName,
               isGoodPractise: res.projectData.isGoodPractise,
-              approvedDate: res.projectData.approvedDate || res.projectData.projectProposalApprovedDate || res.projectData.closeOutApprovedDate,
+              approvedDate: this.wizzardApprovedDate,
               //
               functionGroupID: lookup.find(x => x.lookUpId == res.projectData.functionGroupID?.toLowerCase())?.lookUpName,
               whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,

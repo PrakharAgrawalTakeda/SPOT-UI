@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class CloseOutGeneralInfoComponent implements OnInit {
 
   constructor() { }
-  viewElements: any = ['problemTitle','projectId','portfolioOwner','excecutionScope','parentProject','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','opU','sponsor','projectManager','parentProject','isGoodPractise','StrategicDrivers']
+  viewElements: any = ['problemTitle','projectId','portfolioOwner','excecutionScope','parentProject','owningOrganization','primaryProduct','otherImpactedProducts','approvedDate','opU','sponsor','projectManager','parentProject','isGoodPractise','StrategicDrivers']
   ngOnInit(): void {
   }
 

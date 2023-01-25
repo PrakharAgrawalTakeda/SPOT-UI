@@ -74,9 +74,8 @@
               [label]="'Date Approved'"></spot-input-date>
           </div>
           <div class="w-full" *ngIf="viewElementChecker('opU')">
-            <spot-input *ngIf="viewElementChecker('opU')" formControlName="opU" name="opU" class="read-only"
-              [label]="'OpU'">
-            </spot-input>
+              <spot-input  formControlName="opU" name="opU" [label]="'opU'">
+              </spot-input>
           </div>
         </div>
 
@@ -89,7 +88,7 @@
           </div>
           <div class="w-full" *ngIf="!viewElementChecker('projectId')"></div>
           <div class="w-full " *ngIf="viewElementChecker('projectId')">
-            <spot-input lass="w-full read-only" formControlName="projectId" name="projectId" [label]="'Project ID'">
+            <spot-input  formControlName="projectId" name="projectId" [label]="'Project ID'">
             </spot-input>
           </div>
         </div>

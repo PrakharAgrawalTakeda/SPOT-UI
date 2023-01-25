@@ -351,14 +351,17 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     }
 
     disabler() {
-        if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length < 5) {
-            for (var i of this.projectTeamForm.controls) {
-                i['controls']['includeInProposal'].enable()
-            }
-        } else {
-            for (var i of this.projectTeamForm.controls) {
-                if (i['controls']['includeInProposal'].value != true) {
-                    i['controls']['includeInProposal'].disable()
+        var formValue = this.projectTeamForm.getRawValue()
+        if (formValue.length > 0) {
+            if (formValue.filter(x => x.includeInProposal == true).length < 5) {
+                for (var i of this.projectTeamForm.controls) {
+                    i['controls']['includeInProposal'].enable()
+                }
+            } else {
+                for (var i of this.projectTeamForm.controls) {
+                    if (i['controls']['includeInProposal'].value != true) {
+                        i['controls']['includeInProposal'].disable()
+                    }
                 }
             }
         }

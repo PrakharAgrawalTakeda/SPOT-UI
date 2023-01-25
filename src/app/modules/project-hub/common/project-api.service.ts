@@ -185,6 +185,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+   async deleteKeyAssumption(id: string){
+      var link = GlobalVariables.apiurl+"KeyAssumption/"+id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
+   }
   async getOperationalPerformanceSingle(itemid: string){
     var userid = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+itemid
     const abc$ = this.http.get(userid)

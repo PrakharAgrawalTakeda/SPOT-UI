@@ -67,14 +67,17 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
 
     }
     disabler() {
-        if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length <= 5) {
-            for (var i of this.keyAssumptionForm.controls) {
-                i['controls']['includeInCharter'].enable()
-            }
-        } else {
-            for (var i of this.keyAssumptionForm.controls) {
-                if (i['controls']['includeInCharter'].value != true) {
-                    i['controls']['includeInCharter'].disable()
+        var formValue = this.keyAssumptionForm.getRawValue()
+        if (formValue.length > 0) {
+            if (formValue.filter(x => x.includeInCharter == true).length < 5) {
+                for (var i of this.keyAssumptionForm.controls) {
+                    i['controls']['includeInCharter'].enable()
+                }
+            } else {
+                for (var i of this.keyAssumptionForm.controls) {
+                    if (i['controls']['includeInCharter'].value != true) {
+                        i['controls']['includeInCharter'].disable()
+                    }
                 }
             }
         }
@@ -105,16 +108,16 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
             projectId: '',
             keyAssumption: '',
             assumptionRationale: '',
-            includeInCharter: '',
+            includeInCharter: false,
         }]
-        this.disabler()
         this.keyAssumptionForm.push(new FormGroup({
             keyAssumptionUniqueId: new FormControl(''),
-            projectId: new FormControl({}),
-            keyAssumption: new FormControl({}),
-            assumptionRationale: new FormControl(0),
-            includeInCharter: new FormControl(0),
+            projectId: new FormControl(this.projecthubservice.projectid),
+            keyAssumption: new FormControl(''),
+            assumptionRationale: new FormControl(''),
+            includeInCharter: new FormControl(false),
         }))
+        this.disabler()
         this.keyAssumptions = [...this.keyAssumptions, ...j]
         this.kaTableEditStack.push(this.keyAssumptions.length - 1)
         var div = document.getElementsByClassName('datatable-scroll')[0]
