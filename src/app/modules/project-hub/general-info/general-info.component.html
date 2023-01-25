@@ -116,12 +116,12 @@
         </div>
         <div class="flex justify-between items-center gap-6">
           <div class="w-full " *ngIf="viewElementChecker('projectManager')">
-            <spot-input class="w-full read-only" formControlName="projectManager" name="projectManager"
+            <spot-input class="w-full" [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="projectManager" name="projectManager"
               [label]="'Project Manager'">
             </spot-input>
           </div>
           <div class="w-full " *ngIf="viewElementChecker('sponsor')">
-            <spot-input class="w-full read-only" formControlName="sponsor" name="sponsor" [label]="'Sponsor'">
+            <spot-input class="w-full" [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="sponsor" name="sponsor" [label]="'Sponsor'">
             </spot-input>
           </div>
         </div>
