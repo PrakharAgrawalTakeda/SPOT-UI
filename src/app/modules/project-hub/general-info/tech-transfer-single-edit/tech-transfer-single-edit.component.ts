@@ -33,11 +33,14 @@ export class TechTransferSingleEditComponent implements OnInit {
     public auth: AuthService) {
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        if (this.callLocation == 'ProjectHub') {
+        if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
           this.projectHubService.isFormChanged = true
         }
-        else {
+        else if (this.callLocation == 'CreateNew') {
           this.formValueTech.emit(this.generalInfoForm.getRawValue())
+        }
+      else if (history.state.callLocation == 'CopyProject') {
+        this.formValueTech.emit(this.generalInfoForm.getRawValue())
         }
       }
     })

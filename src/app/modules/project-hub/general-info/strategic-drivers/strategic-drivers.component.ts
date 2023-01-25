@@ -47,11 +47,14 @@ export class StrategicDriversComponent implements OnInit {
     public fuseAlert: FuseConfirmationService, public auth: AuthService) {
     this.strategicDriversForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        if (this.callLocation == 'ProjectHub') {
+        if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
           this.projectHubService.isFormChanged = true
         }
-        else {
+        else if (this.callLocation == 'CreateNew') {
           this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
+        }
+      else if (history.state.callLocation == 'CopyProject') {
+        this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
         }
       }
     })

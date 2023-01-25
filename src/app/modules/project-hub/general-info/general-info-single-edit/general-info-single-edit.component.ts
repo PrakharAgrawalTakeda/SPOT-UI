@@ -70,11 +70,16 @@ export class GeneralInfoSingleEditComponent implements OnInit{
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        if (this.callLocation == 'ProjectHub') {
+        if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
           this.projectHubService.isFormChanged = true
         }
-        else{
-          
+        else if (this.callLocation == 'CreateNew'){
+          this.formValue.emit(this.generalInfoForm.getRawValue())
+          if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
+            this.generalInfoForm.controls.localCurrency.enable()
+          }
+        }
+        else if (history.state.callLocation == 'CopyProject'){
           this.formValue.emit(this.generalInfoForm.getRawValue())
           if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
             this.generalInfoForm.controls.localCurrency.enable()
@@ -158,10 +163,10 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                     finaldata.push(impactedproducts[0]);
                   }
                 }
-                if (history.state.data[0].ProblemOwnerID != null) {
+                if (history.state.data[0].problemOwnerID != null) {
                   var user = {
-                    userAdid: history.state.data[0].ProblemOwnerID,
-                    userDisplayName: history.state.data[0].ProblemOwnerName
+                    userAdid: history.state.data[0].problemOwnerID,
+                    userDisplayName: history.state.data[0].problemOwner
                   };
                 }
                 this.generalInfoForm.patchValue({
@@ -338,10 +343,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   }
 
   GetPortfolioOwnerSelected(){
-    // if(this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable){
-    //   this.generalInfoForm.controls.localCurrency.enable()
-    // }
-    
     var currency = this.localCurrencyList.filter(x => x.localCurrencyId == this.generalInfoForm.value.portfolioOwner.localCurrencyId)
     this.generalInfoForm.patchValue({
       owningOrganization: this.generalInfoForm.value.portfolioOwner.defaultOwningOrganization,

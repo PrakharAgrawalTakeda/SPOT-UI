@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Form, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 
@@ -26,12 +27,14 @@ export class QualityRefBulkEditComponent implements OnInit {
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Output() formValueQuality = new EventEmitter<FormArray>();
   @Output() QualityValue = new EventEmitter<FormGroup>();
+  lookupdata: any = [];
   constructor(private apiService: ProjectApiService,
     private projectHubService: ProjectHubService,
-    public fuseAlert: FuseConfirmationService) {
+    public fuseAlert: FuseConfirmationService,
+    public auth: AuthService) {
     this.qualityRefForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        if (this.callLocation == 'ProjectHub') {
+        if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
         this.dataprep()
         console.log("formValue", this.formValue)
         console.log("Db", this.dbvalue)
@@ -42,9 +45,12 @@ export class QualityRefBulkEditComponent implements OnInit {
           this.projectHubService.isFormChanged = false
         }
       }
-      else{
+        else if (this.callLocation == 'CreateNew') {
           this.formValueQuality.emit(this.qualityRefForm)
       }
+      else if (history.state.callLocation == 'CopyProject') {
+          this.formValueQuality.emit(this.qualityRefForm)
+        }
     }
     })
     this.qualityForm.valueChanges.subscribe(res => {
@@ -74,6 +80,26 @@ debugger
         sponsor:null,
         strategicYearID:null,
         topsData:null,
+      }
+      if (history.state.quality != undefined) {
+        this.auth.lookupMaster().then(res => {
+          this.lookupdata = res;
+          this.qualityType = this.lookupdata.filter(x => x.lookUpParentId == 'A4C55F7E-C213-401E-A777-3BA741FF5802');
+          this.qualityType.sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+          })
+          this.qualityForm.patchValue({
+            isQualityRef: true
+          })
+          this.qualityRefForm.push(new FormGroup({
+            qualityUniqueId: new FormControl(history.state.quality[0].qualityUniqueId),
+            qualityReferenceTypeId: new FormControl(this.qualityType.find(x => x.lookUpId == history.state.quality[0].qualityReferenceTypeId)),
+            qualityReference1: new FormControl(history.state.quality[0].qualityReference1),
+            problemUniqueId: new FormControl(history.state.data[0].problemUniqueId)
+          }))
+          this.viewContent = true
+        })
+        
       }
       this.formValueQuality.emit(this.qualityRefForm)
       this.QualityValue.emit(this.qualityForm)

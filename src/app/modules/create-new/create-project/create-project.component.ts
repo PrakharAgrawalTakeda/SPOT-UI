@@ -121,9 +121,10 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 0){
-      debugger;
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
+        problemType: event.problemType,
+        localCurrency: event.localCurrency,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         projectDescription: event.projectDescription,
@@ -140,22 +141,18 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 1) {
-      debugger;
       this.createProjectForm.patchValue({
-        problemType: event.problemType,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
         isCapsProject: event.isCapsProject
       })
     }
     else if (index == 2) {
-      debugger;
       this.createProjectForm.patchValue({
         oeProject: event.isOeproject,
         oeProjectType: event.oeprojectType
       })
     }
     else if (index == 3) {
-      debugger;
       this.createProjectForm.patchValue({
         techTransfer: event.isTechTransfer,
         campaignPhase: event.campaignPhaseId,
@@ -164,7 +161,6 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 5) {
-      debugger;
       this.createProjectForm.patchValue({
         primaryKPI: event.primaryKPI,
         AgileProject: event.isAgile,
@@ -180,7 +176,6 @@ export class CreateProjectComponent implements OnInit {
         AnnualMustWin: event.annualMustWinID,
       })
     }
-    // this.createProjectForm.patchValue = event
     
     console.log(this.capturedValues)
     console.log(this.createProjectForm)
@@ -297,7 +292,7 @@ export class CreateProjectComponent implements OnInit {
       mainObj[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
       mainObj[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
     }
-    if (true) {
+    if (mainObj[0].ProblemTitle == "" || mainObj[0].PortfolioOwnerID == "" || mainObj[0].ProblemOwnerID == "" || mainObj[0].LocalCurrencyID == "" || mainObj[0].PrimaryProductID == "" || mainObj[0].ProjectDescription == "") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -371,7 +366,6 @@ export class CreateProjectComponent implements OnInit {
 
   getLookUpName(id: any): any {
     if (Object.keys(id).length > 0) {
-      debugger;
       return id && id.lookUpId != '' ? this.qualityType.find(x => x.lookUpId == id.lookUpId).lookUpName : ''
     }
   }

@@ -29,12 +29,15 @@ export class OeProjectSingleEditComponent implements OnInit {
     public auth: AuthService) {
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        if (this.callLocation == 'ProjectHub') {
+        if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
         this.projectHubService.isFormChanged = true
       }
-      else {
+        else if (this.callLocation == 'CreateNew') {
           this.formValueOE.emit(this.generalInfoForm.getRawValue())
       }
+      else if (history.state.callLocation == 'CopyProject') {
+          this.formValueOE.emit(this.generalInfoForm.getRawValue())
+        }
     }
     })
     this.generalInfoForm.controls.isOeproject.valueChanges.subscribe(res => {
