@@ -1,1 +1,52 @@
-<router-outlet></router-outlet>
+<div *ngIf="viewContent" class="w-full">
+    <div class="flex flex-auto justify-between items-center bg-card p-6 m-7 mb-5 mt-0 shadow rounded-2xl">
+        <div class="w-1/3">
+            <p class="text-md">Report Name</p>
+            <span class="font-bold text-primary text-lg">Project Charter</span>
+        </div>
+        <div class="flex flex-auto w-2/3">
+            <div class="flex flex-auto w-2/3">
+                <div class="w-full">
+                    <p class="text-md">Last Generated</p>
+                    <span *ngIf="reportInfoData.charterLastReportDate" class="font-bold text-primary text-lg">
+                        {{reportInfoData.charterLastReportDate | date:'dd-MMM-yyyy'}}
+                    </span>
+                    <span *ngIf="!reportInfoData.charterLastReportDate" class="font-bold text-primary text-lg">
+                        -
+                    </span>
+                </div>
+                <div class="w-full">
+                    <p class="text-md">Last Updated</p>
+                    <span *ngIf="reportInfoData.charterModifiedDate"
+                        class="font-bold text-primary text-lg">
+                        {{reportInfoData.charterModifiedDate | date:'dd-MMM-yyyy'}}
+                    </span>
+                    <span *ngIf="!reportInfoData.charterModifiedDate"
+                        class="font-bold text-primary text-lg">
+                       -
+                    </span>
+
+                </div>
+                <div class="w-full">
+                    <p class="text-md">Date Approved</p>
+                    <span *ngIf="reportInfoData.charterApprovedDate"
+                        class="font-bold text-primary text-lg">
+                        {{reportInfoData.charterApprovedDate | date:'dd-MMM-yyyy'}}
+                    </span>
+                    <span *ngIf="!reportInfoData.charterApprovedDate"
+                        class="font-bold text-primary text-lg">
+                        -
+                    </span>
+                </div>
+            </div>
+            <div class="w-1/3">
+                <button class="min-w-26 w-full" mat-flat-button [color]="'primary'" type="button">
+                    Generate Document
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="w-full">
+        <router-outlet></router-outlet>
+    </div>
+</div>

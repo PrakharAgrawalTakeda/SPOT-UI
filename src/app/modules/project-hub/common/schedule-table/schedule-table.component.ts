@@ -7,6 +7,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { ProjectApiService } from '../project-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
   selector: 'app-schedule-table',
@@ -22,7 +23,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() baselineLog: any = {}
   @Input() lookup: any
   @Input() editable: boolean
-  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   @ViewChild('scheduleTable') scheduleTable: any;
   getRowClass = (row) => {
     return {
@@ -40,8 +41,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   })
   milestoneForm = new FormArray([])
   scheduleData: any = []
+  lookUpData: any = []
   baselinelogTableEditStack: any = []
   constructor(public projecthubservice: ProjectHubService,
+    private authService: AuthService,
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
     public fuseAlert: FuseConfirmationService,
@@ -83,6 +86,9 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     //this.getCount()
+    this.authService.lookupMaster().then((lookup: any) => {
+      this.lookUpData = lookup
+    })
     console.log(this.mode)
     console.log( this.projecthubservice.includeClosedItems.schedule.value )
     if(this.mode == 'Project-Close-Out')
@@ -114,6 +120,14 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   //   return this.baselineCount.baselineCount
   // }
+
+  getLookupName(lookUpId: string): string {
+
+    var lookup = this.lookUpData.find(x => x.lookUpId == lookUpId)
+
+    return lookup ? lookup.lookUpName : ""
+
+  }
 
   toggleSchedule(event: any) {
     this.projecthubservice.includeClosedItems.schedule.next(event.checked)
