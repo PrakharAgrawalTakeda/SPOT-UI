@@ -46,7 +46,7 @@
           <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
             *ngIf="viewElementChecker('problemTitle')" [label]="'Project Name'">
           </spot-input>
-          <spot-input class="w-full read-only" formControlName="parentProgram" name="parentProgram"
+          <spot-input class="w-full read-only"  [ngClass]="{'read-only': callLocation != 'ProjectCharter'}" formControlName="parentProgram" name="parentProgram"
             *ngIf="viewElementChecker('parentProject')" [label]="'Parent Program'" [showHint]="true"
             [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
           </spot-input>
@@ -74,7 +74,7 @@
               [label]="'Date Approved'"></spot-input-date>
           </div>
           <div class="w-full" *ngIf="viewElementChecker('opU')">
-              <spot-input formControlName="opU" name="opU" [label]="'opU'">
+              <spot-input  formControlName="opU" name="opU" [label]="'OpU'">
               </spot-input>
           </div>
         </div>
@@ -86,11 +86,12 @@
               [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
             </spot-input>
           </div>
-          <div class="w-full" *ngIf="!viewElementChecker('projectId')"></div>
-          <div class="w-full " *ngIf="viewElementChecker('projectId')">
-            <spot-input  formControlName="projectId" name="projectId" [label]="'Project ID'">
-            </spot-input>
-          </div>
+<!--          <div class="w-full " *ngIf="viewElementChecker('projectId')">-->
+<!--            <spot-input  formControlName="projectId" name="projectId" [label]="'Project ID'">-->
+<!--            </spot-input>-->
+<!--          </div>-->
+           <div class="w-full ">
+           </div>
         </div>
         <div class="flex justify-between items-center gap-6">
           <div class="w-full " *ngIf="viewElementChecker('enviornmentalPortfolio')">

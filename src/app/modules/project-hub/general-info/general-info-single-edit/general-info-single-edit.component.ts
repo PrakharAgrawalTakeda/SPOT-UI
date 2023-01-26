@@ -41,7 +41,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     whynotgoforNextBestAlternative: new FormControl(''),
     proposalStatement: new FormControl(''),
     projectReviewedYN: new FormControl({}),
-    sponsor: new FormControl(''),
+    sponsor: new FormControl({}),
     projectManager: new FormControl(''),
   })
   constructor(private apiService: ProjectApiService,
@@ -86,7 +86,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
       this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
         this.generalInfo = res
         this.filterCriteria = this.projectHubService.all
-          console.log("Aaaaaaaaaaaaaaa", res)
         this.generalInfoForm.patchValue({
           problemTitle: res.projectData.problemTitle,
           problemType: res.projectData.problemType,
@@ -110,6 +109,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
           projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
           projectManager: res.portfolioCenterData.pm ? res.portfolioCenterData.pm : "",
           sponsor: res.sponsor.teamMemberName ? res.sponsor.teamMemberName : "",
+          sponsorId: res.sponsor.teamMemberAdId ? res.sponsor.teamMemberAdId : "",
         })
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
@@ -189,7 +189,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   }
 
   submitLogic() {
-
     this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData

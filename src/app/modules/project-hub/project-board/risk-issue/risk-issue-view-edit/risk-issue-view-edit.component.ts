@@ -103,7 +103,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     function: new FormControl(''),
     functionid: new FormControl(''),
     includeInReport: new FormControl(''),
-    includeInCharter: new FormControl(''),
+    includeInCharter: new FormControl(false),
     postMitigationProbability: new FormControl(''),
     postMitigationImpact: new FormControl(''),
     postMitigationComments: new FormControl('')
@@ -188,7 +188,9 @@ export class RiskIssueViewEditComponent implements OnInit {
           this.riskIssueForm.controls['includeInReport'].disable()
         }
         if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 5) {
-            this.riskIssueForm.controls['includeInCharter'].disable()
+            if (this.riskIssueForm.value.includeInCharter != true) {
+                this.riskIssueForm.controls['includeInCharter'].disable()
+            }
         }
       }
       this.projecthubservice.isFormChanged = false

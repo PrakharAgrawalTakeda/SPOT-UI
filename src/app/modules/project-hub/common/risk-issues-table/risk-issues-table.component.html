@@ -63,7 +63,7 @@
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="This is the result" prop="riskIssueResult" [flexGrow]="6" *ngIf="mode== 'Project-Charter'">
+        <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [flexGrow]="6" *ngIf="mode== 'Project-Charter'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p>{{value}}</p>
             </ng-template>
