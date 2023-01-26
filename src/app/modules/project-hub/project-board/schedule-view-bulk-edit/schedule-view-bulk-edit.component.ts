@@ -1042,7 +1042,7 @@ console.log(this.scheduleData.scheduleData)
     console.log(this.scheduleData)
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Save Changes?",
-      "message": "Are you sure you want to save the changes permanently? ",
+      "message": "Are you sure you want to delete the milestone permanently? ",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
