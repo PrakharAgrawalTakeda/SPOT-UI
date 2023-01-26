@@ -160,7 +160,7 @@ indicatorchange: boolean = false
         console.log(control['value']['scheduleUniqueId'])
         console.log(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
         console.log(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss'))
-        console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
+       // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
         if(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
         {
           this.insertArray(control['controls']['projectId'].value)
@@ -1193,7 +1193,7 @@ console.log(this.scheduleData.scheduleData)
 
 for(var i=0; i<this.insertarray.length; i++)
 {
- // debugger
+  //debugger
   this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
 
     this.baselineLog = res.projectBaselineLog.sort((a, b) => {
@@ -1855,7 +1855,10 @@ this.submitjustification()
   }
 
   checklogDetails(baselinelogid: string) : boolean {
-    return this.logdetails.some(x=> x.baselineLogId == baselinelogid)
+    console.log(baselinelogid)
+    console.log(this.logdetails)
+    return  this.logdetails && this.logdetails != '' && this.logdetails.length > 0  ? this.logdetails.some(x=> x.baselineLogId == baselinelogid) : false
+    //return
   }
   //Baseline Log Form Changes
 
