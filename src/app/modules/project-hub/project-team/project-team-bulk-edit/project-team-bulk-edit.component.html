@@ -73,8 +73,8 @@
                     *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <p style="text-align:center">{{value}}</p>
+                            <p *ngIf="!value && value!=0">&nbsp;</p>
+                            <p style="text-align:right">{{value}}</p>
                         </a>
                         <form [formGroup]="projectTeamForm.controls[rowIndex]"
                             *ngIf="ptTableEditStack.includes(rowIndex)">
@@ -89,8 +89,8 @@
                     *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <p style="text-align:center">{{value}}</p>
+                            <p *ngIf="!value && value!=0">&nbsp;</p>
+                            <p style="text-align:right">{{value}}</p>
                         </a>
                         <form [formGroup]="projectTeamForm.controls[rowIndex]"
                             *ngIf="ptTableEditStack.includes(rowIndex)">

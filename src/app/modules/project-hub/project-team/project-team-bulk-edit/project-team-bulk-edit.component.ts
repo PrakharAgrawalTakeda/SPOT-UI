@@ -17,9 +17,9 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   @Input() mode: 'Normal' | 'Close-Out' | 'Project-Proposal' | 'Project-Charter' = 'Normal'
   constructor(private Router: Router, public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.projectTeamForm.valueChanges.subscribe(res => {
-      if (this.viewContent == true) {
-        this.formValue()
-        if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
+      if (this.viewContent) {
+        this.submitPrep()
+        if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.formValue)) {
           this.projecthubservice.isFormChanged = true
         }
         else {
@@ -30,10 +30,10 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   teamMembers = []
   teamMembersDb = []
-  teamMembersSubmit = []
   viewContent: boolean = false
   lookupdata: any[]
   ptTableEditStack = []
+  formValue: any = []
   Urlval: any;
   charterCount: number;
   projectTeamForm = new FormArray([])
@@ -55,8 +55,8 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               "projectTeamUniqueId": x.projectTeamUniqueId,
               "problemUniqueId": x.problemUniqueId,
               "roleId": x.roleId,
-              "teamMemberAdId": x.userId,
-              "teamMemberName": x.userName,
+              "teamMemberAdId": x.userId ? x.userId : "",
+              "teamMemberName": x.userName ? x.userName : "",
               "teamPermissionId": x.teamPermissionId,
               "percentTime": x.percentTime,
               "duration": x.duration,
@@ -123,29 +123,24 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     return id && id != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
   }
 
-  formValue() {
-    var form = this.projectTeamForm.getRawValue()
-    if (form.length > 0) {
-      this.teamMembersSubmit = []
-      for (var i of form) {
-        this.teamMembersSubmit.push({
-          "projectTeamUniqueId": i.projectTeamUniqueId,
-          "problemUniqueId": i.problemUniqueId,
-          "roleId": Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
-          "teamMemberAdId": Object.keys(i.user).length > 0 ? i.user.userAdid : '',
-          "teamMemberName": Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
-          "teamPermissionId": i.teamPermissionId,
-          "percentTime": i.percentTime,
-          "duration": i.duration,
-          "includeInCharter": i.includeInCharter,
-          "includeInProposal": i.includeInProposal
+  submitPrep() {
+    this.formValue = []
+    var formValue = this.projectTeamForm.getRawValue()
+      for (var i of formValue) {
+        this.formValue.push({
+          projectTeamUniqueId: i.projectTeamUniqueId,
+          problemUniqueId: i.problemUniqueId,
+          roleId: Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
+          teamMemberAdId: Object.keys(i.user).length > 0 ? i.user.userAdid : '',
+          teamMemberName: Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
+          teamPermissionId: i.teamPermissionId,
+          percentTime: i.percentTime,
+          duration: i.duration,
+          includeInCharter: i.includeInCharter,
+          includeInProposal: i.includeInProposal
         })
-      // this.charterCount = this.teamMembersSubmit.filter(x => x.includeInCharter == true).length;
     }
-  }
-    else {
-      this.teamMembersSubmit = []
-    }
+
   }
 
 
@@ -163,8 +158,8 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
 
   submitProjectTeams() {
-    this.formValue()
-    if (this.teamMembersSubmit.filter(x => x.includeInCharter == true).length > 10 && this.mode =="Project-Charter") {
+    this.submitPrep()
+    if (this.formValue.filter(x => x.includeInCharter == true).length > 10 && this.mode =="Project-Charter") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Only 10 can be selected at a time for Team Charter slide display.",
         "message": "",
@@ -189,11 +184,11 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       const alert = this.fuseAlert.open(comfirmConfig)
     }
     else{
-    if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.teamMembersSubmit)) {
-      console.log(this.teamMembersSubmit)
+    if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.formValue)) {
+      console.log(this.formValue)
       this.projecthubservice.isFormChanged = false
-      this.formValue()
-      if (this.teamMembersSubmit.some(x => x.roleId == "")) {
+      this.submitPrep()
+      if (this.formValue.some(x => x.roleId == "")) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Please select a Role",
           "message": "",
@@ -218,7 +213,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
         const alert = this.fuseAlert.open(comfirmConfig)
       }
       else {
-          if (this.teamMembersSubmit.some(x => x.percentTime >100 || x.percentTime < 0)) {
+          if (this.formValue.some(x => x.percentTime >100 || x.percentTime < 0)) {
               var comfirmConfig: FuseConfirmationConfig = {
                   "title": "Percent time value cannot be greater than 100 or smaller than 0",
                   "message": "",
@@ -242,7 +237,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               }
               const alert = this.fuseAlert.open(comfirmConfig)
           }else{
-              if (this.teamMembersSubmit.some(x =>  x.duration < 0)) {
+              if (this.formValue.some(x =>  x.duration < 0)) {
                   var comfirmConfig: FuseConfirmationConfig = {
                       "title": "Duration value cannot be smaller than 0",
                       "message": "",
@@ -266,13 +261,38 @@ export class ProjectTeamBulkEditComponent implements OnInit {
                   }
                   const alert = this.fuseAlert.open(comfirmConfig)
               }else{
-                  this.apiService.bulkeditProjectTeam(this.teamMembersSubmit, this.projecthubservice.projectid).then(res => {
-                      this.projecthubservice.isFormChanged = false
-                      this.projecthubservice.submitbutton.next(true)
-                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                      this.projecthubservice.isNavChanged.next(true)
-                      this.projecthubservice.successSave.next(true)
-                  })
+                  if ((this.formValue.some(x =>  x.duration % 1 != 0 || x.percentTime % 1 != 0)) && this.mode =="Project-Charter") {
+                      var comfirmConfig: FuseConfirmationConfig = {
+                          "title": "Duration and percent can't have decimals",
+                          "message": "",
+                          "icon": {
+                              "show": true,
+                              "name": "heroicons_outline:exclamation",
+                              "color": "warning"
+                          },
+                          "actions": {
+                              "confirm": {
+                                  "show": true,
+                                  "label": "Okay",
+                                  "color": "primary"
+                              },
+                              "cancel": {
+                                  "show": false,
+                                  "label": "Cancel"
+                              }
+                          },
+                          "dismissible": true
+                      }
+                      const alert = this.fuseAlert.open(comfirmConfig)
+                      }else{
+                            this.apiService.bulkeditProjectTeam(this.formValue, this.projecthubservice.projectid).then(res => {
+                                this.projecthubservice.isFormChanged = false
+                                this.projecthubservice.submitbutton.next(true)
+                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                                this.projecthubservice.isNavChanged.next(true)
+                                this.projecthubservice.successSave.next(true)
+                              })
+                  }
               }
 
           }
