@@ -154,17 +154,22 @@ indicatorchange: boolean = false
       for(let control of this.milestoneForm.controls)
       {
         //debugger
+        if(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']))
+        {
+
+       
         console.log(this.milestoneForm.getRawValue())
         console.log(control['controls']['baselineFinish'].value)
         console.log(this.scheduleData.scheduleData)
         console.log(control['value']['scheduleUniqueId'])
         console.log(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
         console.log(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss'))
-        console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
+       // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
         if(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
         {
           this.insertArray(control['controls']['projectId'].value)
         }
+      }
       }
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
       console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
@@ -958,14 +963,14 @@ console.log(this.scheduleData.scheduleData)
   }
 
   addMilestoneRecord(el): void {
-    var div = document.getElementsByClassName('datatable-scroll')[0]
-    setTimeout(() => {
-      div.scroll({
-        top: div.scrollHeight,
-        left: 0,
-        behavior: 'smooth'
-      });
-    }, 100);
+    // var div = document.getElementsByClassName('datatable-scroll')[0]
+    // setTimeout(() => {
+    //   div.scroll({
+    //     top: div.scrollHeight,
+    //     left: 0,
+    //     behavior: 'smooth'
+    //   });
+    // }, 100);
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
     this.milestoneForm.push(new FormGroup({
       scheduleUniqueId: new FormControl(''),
@@ -1022,8 +1027,17 @@ console.log(this.scheduleData.scheduleData)
     console.log(this.scheduleData.scheduleData)
     console.log(this.milestoneTableEditStack)
     this.milestoneTableEditRow(this.schedulengxdata.length - 1)
-
+    var div = document.getElementsByClassName('datatable-scroll')[0]
+    setTimeout(() => {
+      div.scroll({
+        top: div.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
   })
+
+
   }
 
   //let index = this.datarows.indexOf(this.selected[0])
@@ -1042,7 +1056,7 @@ console.log(this.scheduleData.scheduleData)
     console.log(this.scheduleData)
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Save Changes?",
-      "message": "Are you sure you want to save the changes permanently? ",
+      "message": "Are you sure you want to delete the milestone permanently? ",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
@@ -1193,7 +1207,7 @@ console.log(this.scheduleData.scheduleData)
 
 for(var i=0; i<this.insertarray.length; i++)
 {
- // debugger
+  //debugger
   this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
 
     this.baselineLog = res.projectBaselineLog.sort((a, b) => {
@@ -1855,7 +1869,10 @@ this.submitjustification()
   }
 
   checklogDetails(baselinelogid: string) : boolean {
-    return this.logdetails.some(x=> x.baselineLogId == baselinelogid)
+    console.log(baselinelogid)
+    console.log(this.logdetails)
+    return  this.logdetails && this.logdetails != '' && this.logdetails.length > 0  ? this.logdetails.some(x=> x.baselineLogId == baselinelogid) : false
+    //return
   }
   //Baseline Log Form Changes
 
@@ -2247,6 +2264,8 @@ console.log(this.currObj)
   submitschedulecharter() {
     this.projecthubservice.isFormChanged = false
     var formValue = this.milestoneForm.getRawValue()
+    console.log(formValue)
+    if (formValue.filter(x => x.includeInCharter == true).length <= 10) {
     for (var i of formValue) {
       console.log(i)
       if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
@@ -2288,7 +2307,9 @@ console.log(this.currObj)
         })
       }
     }
-    if (this.schedulecharterobj.filter(x => x.includeInCharter == true).length <= 10) {
+    console.log(formValue.filter(x => x.includeInCharter == true).length)
+    
+      
       this.apiService.bulkeditSchedule(this.schedulecharterobj, this.id).then(res => {
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
@@ -2331,6 +2352,7 @@ console.log(this.currObj)
   submitschedulecloseout() {
     this.projecthubservice.isFormChanged = false
 var formValue = this.milestoneForm.getRawValue()
+if (formValue.filter(x => x.includeInCloseout == true).length <= 20) {
 for (var i of formValue) {
   console.log(i)
   if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
@@ -2372,7 +2394,7 @@ for (var i of formValue) {
     })
   }
 }
-if (this.schedulecloseoutobj.filter(x => x.includeInCloseout == true).length <= 20) {
+
   this.apiService.bulkeditSchedule(this.schedulecloseoutobj, this.id).then(res => {
       this.projecthubservice.isNavChanged.next(true)
       this.projecthubservice.submitbutton.next(true)

@@ -16,8 +16,8 @@
                         [color]="'primary-200'" (click)="addPT()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
-                </div>
-            </div>
+                </div>  
+            </div>  
         </div>
         <div class="overflow-x-auto overflow-hidden h-[80vh] ml-3 mt-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
@@ -90,12 +90,12 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{value}}</p>
+                            <p style="text-align:right">{{value | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="projectTeamForm.controls[rowIndex]"
                             *ngIf="ptTableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="duration" type="number" min="0" placeholder="0"
+                                <input matInput formControlName="duration" type="number" min="0" placeholder="0" (click)="numberWithCommas($event.target.value)"
                                     pattern="\d*" />
                             </mat-form-field>
                         </form>
