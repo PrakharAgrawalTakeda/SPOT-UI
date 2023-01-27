@@ -154,6 +154,10 @@ indicatorchange: boolean = false
       for(let control of this.milestoneForm.controls)
       {
         //debugger
+        if(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']))
+        {
+
+       
         console.log(this.milestoneForm.getRawValue())
         console.log(control['controls']['baselineFinish'].value)
         console.log(this.scheduleData.scheduleData)
@@ -165,6 +169,7 @@ indicatorchange: boolean = false
         {
           this.insertArray(control['controls']['projectId'].value)
         }
+      }
       }
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
       console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
@@ -2259,6 +2264,8 @@ console.log(this.currObj)
   submitschedulecharter() {
     this.projecthubservice.isFormChanged = false
     var formValue = this.milestoneForm.getRawValue()
+    console.log(formValue)
+    if (formValue.filter(x => x.includeInCharter == true).length <= 10) {
     for (var i of formValue) {
       console.log(i)
       if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
@@ -2300,7 +2307,9 @@ console.log(this.currObj)
         })
       }
     }
-    if (this.schedulecharterobj.filter(x => x.includeInCharter == true).length <= 10) {
+    console.log(formValue.filter(x => x.includeInCharter == true).length)
+    
+      
       this.apiService.bulkeditSchedule(this.schedulecharterobj, this.id).then(res => {
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
@@ -2343,6 +2352,7 @@ console.log(this.currObj)
   submitschedulecloseout() {
     this.projecthubservice.isFormChanged = false
 var formValue = this.milestoneForm.getRawValue()
+if (formValue.filter(x => x.includeInCloseout == true).length <= 20) {
 for (var i of formValue) {
   console.log(i)
   if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
@@ -2384,7 +2394,7 @@ for (var i of formValue) {
     })
   }
 }
-if (this.schedulecloseoutobj.filter(x => x.includeInCloseout == true).length <= 20) {
+
   this.apiService.bulkeditSchedule(this.schedulecloseoutobj, this.id).then(res => {
       this.projecthubservice.isNavChanged.next(true)
       this.projecthubservice.submitbutton.next(true)
