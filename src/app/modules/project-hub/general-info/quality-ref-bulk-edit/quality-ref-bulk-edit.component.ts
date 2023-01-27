@@ -88,6 +88,7 @@ debugger
           this.qualityType.sort((a, b) => {
             return a.lookUpOrder - b.lookUpOrder;
           })
+          if (history.state.quality[0].qualityReferenceTypeId != "" && history.state.quality[0].qualityReference1 != ""){
           this.qualityForm.patchValue({
             isQualityRef: true
           })
@@ -97,7 +98,7 @@ debugger
             qualityReference1: new FormControl(history.state.quality[0].qualityReference1),
             problemUniqueId: new FormControl(history.state.data[0].problemUniqueId)
           }))
-          this.viewContent = true
+        }
         })
         
       }

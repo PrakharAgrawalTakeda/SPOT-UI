@@ -21,7 +21,7 @@
                                         matStepLabel><span>Basics</span></ng-template>
                                     <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'parentProject', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
 
-                                    <p>*Required</p>
+                                    <p style="margin-top: 20px; font-style:italic">*Required</p>
                                     <div style="text-align: right;">
                                         <label (click)="RouteBack()"
                                             style="color: rgba(76,155,207);margin-right: 10px">Cancel</label>
@@ -44,7 +44,7 @@
                                     <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (QualityValue) = "captureValue(6,$event)" (formValueQuality)="captureValue(4,$event)"></app-quality-ref-bulk-edit>
                                     <h2><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
-                                    <p>*Required</p>
+                                    <p style="margin-top: 20px; font-style:italic">*Required</p>
                                     <div style="text-align: right;">
                                         <label (click)="RouteBack()"
                                             style="color: rgba(76,155,207);margin-right: 10px">Cancel</label>
@@ -58,8 +58,8 @@
                             </mat-step>
 
                             <mat-step>
-                                <div class="CreateForm">
-                                <form>
+                                <div>
+                                <form style="margin-right: 300px;margin-left: 300px;">
                                     <ng-template matStepLabel>Review</ng-template>
                                     <div class="row">
                                         <label><b>Basic Info</b></label>
@@ -374,7 +374,7 @@
                                             </div>
                                         </div>
                                         </div>
-                                    <p>*Required</p>
+                                    <p style="margin-top: 20px; font-style:italic">*Required</p>
                                     <div style="text-align: right;">
                                         <!-- <button (click) = "RouteBack()" style="background-color: rgba(76,155,207);" mat-button
                                             >Cancel</button> -->

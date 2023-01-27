@@ -260,34 +260,34 @@ export class CreateProjectComponent implements OnInit {
     mainObj[0].ProblemType = formValue.problemType
     mainObj[0].DefaultOwningOrganizationID = formValue.owningOrganization
     mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? formValue.localCurrency.localCurrencyId : ''
-    mainObj[0].IsOEProject = formValue.oeProject
+    mainObj[0].IsOEProject = formValue.oeProject == "" ? false : formValue.oeProject
     if (mainObj[0].IsOEProject) {
       mainObj[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsTechTransfer = formValue.techTransfer
+    mainObj[0].IsTechTransfer = formValue.techTransfer == "" ? false : formValue.techTransfer
     if (mainObj[0].IsTechTransfer) {
       mainObj[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
       mainObj[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
       mainObj[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
     }
-    mainObj[0].IsAgile = formValue.AgileProject
+    mainObj[0].IsAgile = formValue.AgileProject == "" ? false : formValue.AgileProject
     if (mainObj[0].IsAgile) {
       mainObj[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
       mainObj[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
       mainObj[0].agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
     }
-    mainObj[0].IsCapsProject = formValue.isCapsProject
+    mainObj[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
     mainObj[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
     mainObj[0].PrimaryKPI = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
-    mainObj[0].IsPOBOS = formValue.POBOS
+    mainObj[0].IsPOBOS = formValue.POBOS == "" ? false : formValue.POBOS
     if (mainObj[0].IsPOBOS) {
       mainObj[0].POBOSCategory = formValue.POBOSType.length > 0 ? formValue.POBOSType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsSiteAssessment = formValue.siteAssignment
+    mainObj[0].IsSiteAssessment = formValue.siteAssignment == "" ? false : formValue.siteAssignment
     if (mainObj[0].IsSiteAssessment) {
       mainObj[0].SiteAssessmentCategory = formValue.siteAssessmentType.length > 0 ? formValue.siteAssessmentType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsGMSGQLTAnnualMustWin = formValue.StrategicDeployment
+    mainObj[0].IsGMSGQLTAnnualMustWin = formValue.StrategicDeployment == "" ? false : formValue.StrategicDeployment
     if (mainObj[0].IsGMSGQLTAnnualMustWin) {
       mainObj[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
       mainObj[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
@@ -339,12 +339,24 @@ export class CreateProjectComponent implements OnInit {
         this.qualityformValue = []
         var genQRFORM = this.qualityForm
         for (var quality of this.qualityForm) {
-          this.qualityformValue.push({
-            qualityUniqueId: quality.qualityUniqueId,
-            problemUniqueId: this.projectid,
-            qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-            qualityReference1: quality.qualityReference1
-          })
+          if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != ""){
+            if(history.state.quality != undefined){
+              this.qualityformValue.push({
+                qualityUniqueId: "",
+                problemUniqueId: this.projectid,
+                qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+                qualityReference1: quality.qualityReference1
+              })
+            }
+            else{
+              this.qualityformValue.push({
+                qualityUniqueId: quality.qualityUniqueId,
+                problemUniqueId: this.projectid,
+                qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+                qualityReference1: quality.qualityReference1
+              })
+            }
+          }
         }
     }
       this.apiService.createProject(dataToSend).then(res => {
