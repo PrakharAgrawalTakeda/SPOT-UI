@@ -28,7 +28,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       }
     })
   }
-  teamMembers = []  
+  teamMembers = []    
   teamMembersDb = []
   viewContent: boolean = false
   lookupdata: any[]

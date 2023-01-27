@@ -255,7 +255,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         },
         "actions": {
           "confirm": {
-            "show": true,
+            "show": true,  
             "label": "Okay",
             "color": "primary"
           },
