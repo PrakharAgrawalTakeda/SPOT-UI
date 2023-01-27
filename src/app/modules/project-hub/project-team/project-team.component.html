@@ -53,7 +53,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Duration (Months)" prop="duration" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                     *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>  
                         <p style="text-align:right">{{value | number : fractionSize}}</p>
                     </ng-template>
                 </ngx-datatable-column>

@@ -59,7 +59,7 @@ export class ProjectTeamComponent implements OnInit {
       for (let i = 0; i < this.teamMembers.length; i++) {
         if (this.teamMembers[i].includeInCharter === null) {
           this.teamMembers[i].includeInCharter = false;
-        }
+        }  
       }
     })
   }

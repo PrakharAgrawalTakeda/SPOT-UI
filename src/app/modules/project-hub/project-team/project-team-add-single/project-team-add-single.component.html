@@ -40,7 +40,7 @@
         <div *ngIf="mode == 'Project-Charter'" class="flex items-start justify-between incuded-in-dash">
             <mat-slide-toggle
                 [matTooltip]="this.projectTeamAddForm.controls['includeInCharter'].disabled ? 'Only 10 can be selected at a time for the charter' : null"
-                formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
+                formControlName="includeInCharter">Include in Charter</mat-slide-toggle>  
         </div>
         <div *ngIf="mode == 'Project-Proposal'" class="flex items-start justify-between incuded-in-dash">
             <mat-slide-toggle

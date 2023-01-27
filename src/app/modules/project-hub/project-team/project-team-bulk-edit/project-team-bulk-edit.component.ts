@@ -23,7 +23,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
           this.projecthubservice.isFormChanged = true
         }
         else {
-          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isFormChanged = false  
         }
       }
     })

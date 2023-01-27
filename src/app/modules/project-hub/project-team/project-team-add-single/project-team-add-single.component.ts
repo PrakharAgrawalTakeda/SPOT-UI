@@ -247,7 +247,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         }
         this.apiService.addProjectTeam(mainObj).then(res => {
           this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')  
         })
       }
     }
