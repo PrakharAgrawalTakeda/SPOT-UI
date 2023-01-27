@@ -99,73 +99,99 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     if (projectTeam.includeInCharter === false) {
     if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
         if (this.projectTeamAddForm.controls.percentTime.value < 0 || this.projectTeamAddForm.controls.percentTime.value > 100) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Percent time value cannot be greater than 100 or smaller than 0",
+            "message": "",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warning"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Okay",
+                "color": "primary"
+              },
+              "cancel": {
+                "show": false,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+        } else {
+          if (this.projectTeamAddForm.controls.duration.value < 0) {
             var comfirmConfig: FuseConfirmationConfig = {
-                "title": "Percent time value cannot be greater than 100 or smaller than 0",
-                "message": "",
-                "icon": {
-                    "show": true,
-                    "name": "heroicons_outline:exclamation",
-                    "color": "warning"
+              "title": "Duration value cannot be smaller than 0",
+              "message": "",
+              "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warning"
+              },
+              "actions": {
+                "confirm": {
+                  "show": true,
+                  "label": "Okay",
+                  "color": "primary"
                 },
-                "actions": {
-                    "confirm": {
-                        "show": true,
-                        "label": "Okay",
-                        "color": "primary"
-                    },
-                    "cancel": {
-                        "show": false,
-                        "label": "Cancel"
-                    }
-                },
-                "dismissible": true
+                "cancel": {
+                  "show": false,
+                  "label": "Cancel"
+                }
+              },
+              "dismissible": true
             }
             const alert = this.fuseAlert.open(comfirmConfig)
-        }else{
-            if (this.projectTeamAddForm.controls.duration.value < 0) {
-                var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "Duration value cannot be smaller than 0",
-                    "message": "",
-                    "icon": {
-                        "show": true,
-                        "name": "heroicons_outline:exclamation",
-                        "color": "warning"
-                    },
-                    "actions": {
-                        "confirm": {
-                            "show": true,
-                            "label": "Okay",
-                            "color": "primary"
-                        },
-                        "cancel": {
-                            "show": false,
-                            "label": "Cancel"
-                        }
-                    },
-                    "dismissible": true
-                }
-                const alert = this.fuseAlert.open(comfirmConfig)
-            }else{
-                this.projecthubservice.isFormChanged = false
-                var projectTeam = this.projectTeamAddForm.getRawValue();
-              // var projectDuration = this.Urlval == 'project-charter-project-teams' ? projectTeam.duration.replaceAll(',', '') : 0;
-                var mainObj = {
-                    projectTeamUniqueId: "",
-                    problemUniqueId: this.projecthubservice.projectid,
-                    roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
-                    teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
-                    teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
-                    teamPermissionId: projectTeam.permission,
-                    percentTime: projectTeam.percentTime== "" ?  0 : projectTeam.percentTime,
-                    duration: projectTeam.duration== "" ?  0 : projectTeam.duration,
-                    includeInCharter: projectTeam.includeInCharter,
-                    includeInProposal: projectTeam.includeInProposal
-                }
-                this.apiService.addProjectTeam(mainObj).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                })
-            }
+          } else {
+              if (this.projectTeamAddForm.controls.duration.value % 1 != 0 || this.projectTeamAddForm.controls.percentTime.value % 1 != 0) {
+                  var comfirmConfig: FuseConfirmationConfig = {
+                      "title": "Duration and percent can't have decimals",
+                      "message": "",
+                      "icon": {
+                          "show": true,
+                          "name": "heroicons_outline:exclamation",
+                          "color": "warning"
+                      },
+                      "actions": {
+                          "confirm": {
+                              "show": true,
+                              "label": "Okay",
+                              "color": "primary"
+                          },
+                          "cancel": {
+                              "show": false,
+                              "label": "Cancel"
+                          }
+                      },
+                      "dismissible": true
+                  }
+                  const alert = this.fuseAlert.open(comfirmConfig)
+              }else{
+                  this.projecthubservice.isFormChanged = false
+                  var projectTeam = this.projectTeamAddForm.getRawValue();
+                  // var projectDuration = this.Urlval == 'project-charter-project-teams' ? projectTeam.duration.replaceAll(',', '') : 0;
+                  var mainObj = {
+                      projectTeamUniqueId: "",
+                      problemUniqueId: this.projecthubservice.projectid,
+                      roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
+                      teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
+                      teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
+                      teamPermissionId: projectTeam.permission,
+                      percentTime: projectTeam.percentTime == "" ? 0 : projectTeam.percentTime,
+                      duration: projectTeam.duration == "" ? 0 : projectTeam.duration,
+                      includeInCharter: projectTeam.includeInCharter,
+                      includeInProposal: projectTeam.includeInProposal
+                  }
+                  this.apiService.addProjectTeam(mainObj).then(res => {
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  })
+              }
+
+          }
         }
 
     }

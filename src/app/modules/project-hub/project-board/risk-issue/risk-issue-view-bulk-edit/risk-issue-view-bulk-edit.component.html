@@ -27,7 +27,7 @@
                            [rows]="tableData" #riskIssueTable [rowClass]="getRowClass">
                 <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false" *ngIf="viewElementChecker('status')"
                                       [width]="75" [draggable]="false">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
                         <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                                   class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
                         </mat-icon>
