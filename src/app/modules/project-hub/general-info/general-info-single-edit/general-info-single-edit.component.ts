@@ -88,6 +88,8 @@ export class GeneralInfoSingleEditComponent implements OnInit {
       this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
         this.generalInfo = res
         this.filterCriteria = this.projectHubService.all
+          console.log("aaaaaaaaaaaaaaaaa", res.projectManager)
+          console.log("xxxxxxxxxxxxxx", res.sponsor)
         this.generalInfoForm.patchValue({
           problemTitle: res.projectData.problemTitle,
           problemType: res.projectData.problemType,
@@ -109,13 +111,17 @@ export class GeneralInfoSingleEditComponent implements OnInit {
           whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
           proposalStatement: res.projectData.proposalStatement,
           projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
-          projectManager: res.portfolioCenterData.pm ? res.portfolioCenterData.pm : "",
-          sponsor: res.sponsor.teamMemberName ? res.sponsor.teamMemberName : "",
-          sponsorId: res.sponsor.teamMemberAdId ? res.sponsor.teamMemberAdId : "",
+          sponsor: res.sponsor ?  {
+              userAdid: res.sponsor.teamMemberAdId,
+              userDisplayName: res.sponsor.teamMemberName
+          }: {},
+          projectManager: {
+             userAdid: res.projectData.projectManagerId,
+             userDisplayName: res.portfolioCenterData.pm
+          }
         })
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
           this.viewContent = true
       })
     }
