@@ -249,3 +249,4 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     this.projectTeamAddForm.controls.duration.patchValue(numberVal);
   }
 }
+  

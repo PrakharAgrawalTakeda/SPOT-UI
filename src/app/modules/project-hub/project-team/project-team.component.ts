@@ -64,3 +64,4 @@ export class ProjectTeamComponent implements OnInit {
   }
 
 }
+  
