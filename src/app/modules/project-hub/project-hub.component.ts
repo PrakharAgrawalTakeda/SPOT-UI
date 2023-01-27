@@ -139,7 +139,10 @@ export class ProjectHubComponent implements OnInit {
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits'||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'associated-projects') {
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'associated-projects'||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-charter'||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'close-out'||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-proposal') {
             this.projecthubservice.submitbutton.next(true)
         }
     }
