@@ -4,6 +4,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 import * as moment from 'moment';
+import {HttpParams} from "@angular/common/http";
+import {GlobalVariables} from "../../../../shared/global-variables";
 @Component({
   selector: 'app-general-info-single-edit',
   templateUrl: './general-info-single-edit.component.html',
@@ -42,7 +44,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     proposalStatement: new FormControl(''),
     projectReviewedYN: new FormControl({}),
     sponsor: new FormControl({}),
-    projectManager: new FormControl(''),
+    projectManager: new FormControl({}),
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -114,7 +116,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        this.viewContent = true
+          this.viewContent = true
       })
     }
     else {

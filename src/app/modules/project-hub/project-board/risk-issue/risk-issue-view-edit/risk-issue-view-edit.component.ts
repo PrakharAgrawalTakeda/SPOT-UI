@@ -255,6 +255,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     if (this.riskIssueForm.valid) {
       if (this.projecthubservice.itemid == "new") {
         console.log(this.projecthubservice)
+        console.log("000000000000", this.riskIssueForm.value.includeInCharter)
         var mainObjnew = {
           riskIssueUniqueId: "new",
           projectId: this.projecthubservice.projectid,
@@ -273,7 +274,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           //logDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: "Grey",
-          includeInCharter: this.riskissue.includeInCharter,
+          includeInCharter: this.riskIssueForm.value.includeInCharter,
           postMitigationProbability: this.riskIssueForm.value.postMitigationProbability,
           postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
           postMitigationComments: this.riskIssueForm.value.postMitigationComments
