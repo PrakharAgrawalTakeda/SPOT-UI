@@ -30,12 +30,17 @@
             <mat-label>Duration (Months)</mat-label>
             <input matInput formControlName="duration" type="number" min="0" placeholder="0" pattern="\d*" />
         </mat-form-field>
-        <div *ngIf="mode == 'Project-Charter'" class="flex justify-between items-center w-full pt-4 pb-6">
-            <div class="flex justify-start gap-1 items-center">Include in Charter(Max-10)
+        <!-- <div *ngIf="mode == 'Project-Charter'" class="flex items-start justify-between incuded-in-dash">
+            <div class="flex justify-start gap-1 items-center">Include in Charter
             </div>
             <div>
                 <mat-slide-toggle [matTooltip]="this.projectTeamAddForm.controls['includeInCharter'].disabled ? 'Only 10 can be selected at a time for the charter' : null" formControlName="includeInCharter"></mat-slide-toggle>
             </div>
+        </div> -->
+        <div *ngIf="mode == 'Project-Charter'" class="flex items-start justify-between incuded-in-dash">
+            <mat-slide-toggle
+                [matTooltip]="this.projectTeamAddForm.controls['includeInCharter'].disabled ? 'Only 10 can be selected at a time for the charter' : null"
+                formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
         </div>
         <div *ngIf="mode == 'Project-Proposal'" class="flex items-start justify-between incuded-in-dash">
             <mat-slide-toggle

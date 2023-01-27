@@ -1,12 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
-import { Router } from '@angular/router';
 import * as moment from "moment";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-team-bulk-edit',
@@ -126,19 +126,19 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   submitPrep() {
     this.formValue = []
     var formValue = this.projectTeamForm.getRawValue()
-      for (var i of formValue) {
-        this.formValue.push({
-          projectTeamUniqueId: i.projectTeamUniqueId,
-          problemUniqueId: i.problemUniqueId,
-          roleId: Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
-          teamMemberAdId: Object.keys(i.user).length > 0 ? i.user.userAdid : '',
-          teamMemberName: Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
-          teamPermissionId: i.teamPermissionId,
-          percentTime: i.percentTime,
-          duration: i.duration,
-          includeInCharter: i.includeInCharter,
-          includeInProposal: i.includeInProposal
-        })
+    for (var i of formValue) {
+      this.formValue.push({
+        projectTeamUniqueId: i.projectTeamUniqueId,
+        problemUniqueId: i.problemUniqueId,
+        roleId: Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
+        teamMemberAdId: Object.keys(i.user).length > 0 ? i.user.userAdid : '',
+        teamMemberName: Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
+        teamPermissionId: i.teamPermissionId,
+        percentTime: i.percentTime,
+        duration: i.duration,
+        includeInCharter: i.includeInCharter,
+        includeInProposal: i.includeInProposal
+      })
     }
 
   }
@@ -159,7 +159,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
 
   submitProjectTeams() {
     this.submitPrep()
-    if (this.teamMembersSubmit.filter(x => x.includeInCharter == true).length > 10 && this.mode =="Project-Charter") {
+    if (this.formValue.filter(x => x.includeInCharter == true).length > 10 && this.mode == "Project-Charter") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Only 10 can be selected at a time for Team Charter slide display.",
         "message": "",
@@ -183,129 +183,129 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else{
-    if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.formValue)) {
-      console.log(this.formValue)
-      this.projecthubservice.isFormChanged = false
-      this.submitPrep()
-      if (this.formValue.some(x => x.roleId == "")) {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "Please select a Role",
-          "message": "",
-          "icon": {
-            "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
-          },
-          "actions": {
-            "confirm": {
+    else {
+      if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.formValue)) {
+        console.log(this.formValue)
+        this.projecthubservice.isFormChanged = false
+        this.submitPrep()
+        if (this.formValue.some(x => x.roleId == "")) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Please select a Role",
+            "message": "",
+            "icon": {
               "show": true,
-              "label": "Okay",
-              "color": "primary"
+              "name": "heroicons_outline:exclamation",
+              "color": "warning"
             },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Okay",
+                "color": "primary"
+              },
+              "cancel": {
+                "show": false,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
         }
-        const alert = this.fuseAlert.open(comfirmConfig)
-      }
-      else {
-          if (this.formValue.some(x => x.percentTime >100 || x.percentTime < 0)) {
+        else {
+          if (this.formValue.some(x => x.percentTime > 100 || x.percentTime < 0)) {
+            var comfirmConfig: FuseConfirmationConfig = {
+              "title": "Percent time value cannot be greater than 100 or smaller than 0",
+              "message": "",
+              "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warning"
+              },
+              "actions": {
+                "confirm": {
+                  "show": true,
+                  "label": "Okay",
+                  "color": "primary"
+                },
+                "cancel": {
+                  "show": false,
+                  "label": "Cancel"
+                }
+              },
+              "dismissible": true
+            }
+            const alert = this.fuseAlert.open(comfirmConfig)
+          } else {
+            if (this.formValue.some(x => x.duration < 0)) {
               var comfirmConfig: FuseConfirmationConfig = {
-                  "title": "Percent time value cannot be greater than 100 or smaller than 0",
-                  "message": "",
-                  "icon": {
-                      "show": true,
-                      "name": "heroicons_outline:exclamation",
-                      "color": "warning"
+                "title": "Duration value cannot be smaller than 0",
+                "message": "",
+                "icon": {
+                  "show": true,
+                  "name": "heroicons_outline:exclamation",
+                  "color": "warning"
+                },
+                "actions": {
+                  "confirm": {
+                    "show": true,
+                    "label": "Okay",
+                    "color": "primary"
                   },
-                  "actions": {
-                      "confirm": {
-                          "show": true,
-                          "label": "Okay",
-                          "color": "primary"
-                      },
-                      "cancel": {
-                          "show": false,
-                          "label": "Cancel"
-                      }
-                  },
-                  "dismissible": true
+                  "cancel": {
+                    "show": false,
+                    "label": "Cancel"
+                  }
+                },
+                "dismissible": true
               }
               const alert = this.fuseAlert.open(comfirmConfig)
-          }else{
-              if (this.formValue.some(x =>  x.duration < 0)) {
-                  var comfirmConfig: FuseConfirmationConfig = {
-                      "title": "Duration value cannot be smaller than 0",
-                      "message": "",
-                      "icon": {
-                          "show": true,
-                          "name": "heroicons_outline:exclamation",
-                          "color": "warning"
-                      },
-                      "actions": {
-                          "confirm": {
-                              "show": true,
-                              "label": "Okay",
-                              "color": "primary"
-                          },
-                          "cancel": {
-                              "show": false,
-                              "label": "Cancel"
-                          }
-                      },
-                      "dismissible": true
-                  }
-                  const alert = this.fuseAlert.open(comfirmConfig)
-              }else{
-                  if ((this.formValue.some(x =>  x.duration % 1 != 0 || x.percentTime % 1 != 0)) && this.mode =="Project-Charter") {
-                      var comfirmConfig: FuseConfirmationConfig = {
-                          "title": "Duration and percent can't have decimals",
-                          "message": "",
-                          "icon": {
-                              "show": true,
-                              "name": "heroicons_outline:exclamation",
-                              "color": "warning"
-                          },
-                          "actions": {
-                              "confirm": {
-                                  "show": true,
-                                  "label": "Okay",
-                                  "color": "primary"
-                              },
-                              "cancel": {
-                                  "show": false,
-                                  "label": "Cancel"
-                              }
-                          },
-                          "dismissible": true
-                      }
-                      const alert = this.fuseAlert.open(comfirmConfig)
-                      }else{
-                            this.apiService.bulkeditProjectTeam(this.formValue, this.projecthubservice.projectid).then(res => {
-                                this.projecthubservice.isFormChanged = false
-                                this.projecthubservice.submitbutton.next(true)
-                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                                this.projecthubservice.isNavChanged.next(true)
-                                this.projecthubservice.successSave.next(true)
-                              })
-                  }
+            } else {
+              if ((this.formValue.some(x => x.duration % 1 != 0 || x.percentTime % 1 != 0)) && this.mode == "Project-Charter") {
+                var comfirmConfig: FuseConfirmationConfig = {
+                  "title": "Duration and percent can't have decimals",
+                  "message": "",
+                  "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warning"
+                  },
+                  "actions": {
+                    "confirm": {
+                      "show": true,
+                      "label": "Okay",
+                      "color": "primary"
+                    },
+                    "cancel": {
+                      "show": false,
+                      "label": "Cancel"
+                    }
+                  },
+                  "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+              } else {
+                this.apiService.bulkeditProjectTeam(this.formValue, this.projecthubservice.projectid).then(res => {
+                  this.projecthubservice.isFormChanged = false
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  this.projecthubservice.isNavChanged.next(true)
+                  this.projecthubservice.successSave.next(true)
+                })
               }
+            }
 
           }
+        }
+      }
+      else {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        this.projecthubservice.isNavChanged.next(true)
+        this.projecthubservice.successSave.next(true)
       }
     }
-    else {
-      this.projecthubservice.submitbutton.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      this.projecthubservice.isNavChanged.next(true)
-      this.projecthubservice.successSave.next(true)
-    }
-  }
-  
+
   }
   deleteShowLogic(rowIndex: number): boolean {
     var j = this.projectTeamForm.controls[rowIndex]['controls']['role'].value
@@ -401,26 +401,25 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     }
     this.disabler()
   }
-    disabler() {
-        var formValue = this.projectTeamForm.getRawValue()
-        if (formValue.length > 0) {
-            if (formValue.filter(x => x.includeInProposal == true).length < 5) {
-                for (var i of this.projectTeamForm.controls) {
-                    i['controls']['includeInProposal'].enable()
-                }
-            }
-        else {
-            for (var i of this.projectTeamForm.controls) {
-                if (i['controls']['includeInProposal'].value != true) {
-                    i['controls']['includeInProposal'].disable()
-                }
-            }
-         }
-      
-          getNgxDatatableNumberHeader(): any {
-            return ' ngx-number-header';
+  disabler() {
+    var formValue = this.projectTeamForm.getRawValue()
+    if (formValue.length > 0) {
+      if (formValue.filter(x => x.includeInProposal == true).length < 5) {
+        for (var i of this.projectTeamForm.controls) {
+          i['controls']['includeInProposal'].enable()
+        }
+      } else {
+        for (var i of this.projectTeamForm.controls) {
+          if (i['controls']['includeInProposal'].value != true) {
+            i['controls']['includeInProposal'].disable()
           }
+        }
+      }
     }
+  }
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
+  }
 
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

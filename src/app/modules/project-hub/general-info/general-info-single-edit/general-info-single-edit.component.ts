@@ -140,7 +140,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
         whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
         proposalStatement: res.projectData.proposalStatement,
-        projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {}
+        projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
         projectManager: res.portfolioCenterData.pm ? res.portfolioCenterData.pm : "",
         sponsor: res.sponsor.teamMemberName ? res.sponsor.teamMemberName : "",
         sponsorId: res.sponsor.teamMemberAdId ? res.sponsor.teamMemberAdId : "",
@@ -390,12 +390,5 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     })
   }
 
-  GetPortfolioOwnerSelected() {
-    var currency = this.localCurrencyList.filter(x => x.localCurrencyId == this.generalInfoForm.value.portfolioOwner.localCurrencyId)
-    this.generalInfoForm.patchValue({
-      owningOrganization: this.generalInfoForm.value.portfolioOwner.defaultOwningOrganization,
-      localCurrency: currency[0]
-    })
-  }
 
 }
