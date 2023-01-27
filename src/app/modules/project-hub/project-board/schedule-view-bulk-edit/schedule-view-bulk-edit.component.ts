@@ -958,14 +958,14 @@ console.log(this.scheduleData.scheduleData)
   }
 
   addMilestoneRecord(el): void {
-    var div = document.getElementsByClassName('datatable-scroll')[0]
-    setTimeout(() => {
-      div.scroll({
-        top: div.scrollHeight,
-        left: 0,
-        behavior: 'smooth'
-      });
-    }, 100);
+    // var div = document.getElementsByClassName('datatable-scroll')[0]
+    // setTimeout(() => {
+    //   div.scroll({
+    //     top: div.scrollHeight,
+    //     left: 0,
+    //     behavior: 'smooth'
+    //   });
+    // }, 100);
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
     this.milestoneForm.push(new FormGroup({
       scheduleUniqueId: new FormControl(''),
@@ -1022,8 +1022,17 @@ console.log(this.scheduleData.scheduleData)
     console.log(this.scheduleData.scheduleData)
     console.log(this.milestoneTableEditStack)
     this.milestoneTableEditRow(this.schedulengxdata.length - 1)
-
+    var div = document.getElementsByClassName('datatable-scroll')[0]
+    setTimeout(() => {
+      div.scroll({
+        top: div.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
   })
+
+
   }
 
   //let index = this.datarows.indexOf(this.selected[0])
