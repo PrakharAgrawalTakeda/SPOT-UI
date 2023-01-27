@@ -185,6 +185,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+   async deleteKeyAssumption(id: string){
+      var link = GlobalVariables.apiurl+"KeyAssumption/"+id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
+   }
   async getOperationalPerformanceSingle(itemid: string){
     var userid = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+itemid
     const abc$ = this.http.get(userid)
@@ -411,6 +417,24 @@ export class ProjectApiService {
         const abc$ = this.http.put(link,body)
         const response = await lastValueFrom(abc$)
         return response
+    }
+    async projectCharterSingle(itemid: string){
+      var userid = GlobalVariables.apiurl+"ProjectCharter/"+itemid
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async getReportInfoData(projectid) {
+      var url = GlobalVariables.apiurl + "ProjectHubData/ReportPageInfo/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async updateReportDates(projectid:string ,itemid: string){
+      var userid = GlobalVariables.apiurl+"ProjectCharter/UpdateDate/"+projectid+"/"+itemid
+      const abc$ = this.http.patch(userid,itemid)
+      const response = await lastValueFrom(abc$)
+      return response
     }
   }
 

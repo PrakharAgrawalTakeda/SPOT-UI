@@ -23,7 +23,7 @@
         </div>
         <div class="overflow-x-auto mx-6">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="pr-6 font-medium text-sm text-secondary whitespace-nowrap" [rows]="teamMembers"
+                class=" font-medium text-sm text-secondary whitespace-nowrap" [rows]="teamMembers"
                 #projectTeamsTable>
                 <ngx-datatable-column name="Team Member" prop="userName" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -48,13 +48,13 @@
                 <ngx-datatable-column name="% Time" prop="percentTime" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                     *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p style="text-align:center">{{value}}</p>
+                        <p style="text-align:right">{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Duration (Months)" prop="duration" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                     *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p style="text-align:center">{{value | number : fractionSize}}</p>
+                        <p style="text-align:right">{{value | number : fractionSize}}</p>
                     </ng-template>
                 </ngx-datatable-column>  
                 <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"

@@ -26,7 +26,8 @@
                            class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
                            [rows]="keyAssumptions"
                            #keyAssumptionsTable>
-                <ngx-datatable-column name="Key Assumption" prop="keyAssumption" [resizeable]="false" [flexGrow]="5"
+                <ngx-datatable-column name="Key Assumption" prop="keyAssumption" [flexGrow]="5"
+                                      [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!kaTableEditStack.includes(rowIndex)"

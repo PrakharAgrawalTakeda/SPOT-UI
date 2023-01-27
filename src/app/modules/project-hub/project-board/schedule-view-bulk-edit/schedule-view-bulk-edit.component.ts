@@ -51,7 +51,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   @Input() editable: boolean
   @ViewChild('scheduleTable') scheduleTable: any;
   @ViewChild('target') private myScrollContainer: ElementRef;
-  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   editing = {};
   scheduleData: any = []
   ColumnMode = ColumnMode;
@@ -126,6 +126,7 @@ indicatorchange: boolean = false
   temp: any = []
   insertarray : any = []
   schedulecloseoutobj: any = []
+  schedulecharterobj: any = []
   // onResize(event){
   //   event.window.innerWidth; // window width
   // }
@@ -159,7 +160,7 @@ indicatorchange: boolean = false
         console.log(control['value']['scheduleUniqueId'])
         console.log(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
         console.log(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss'))
-        console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
+       // console.log( moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish.value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'))
         if(moment(control['controls']['baselineFinish'].value).format('YYYY-MM-DD[T]HH:mm:ss') != this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']).baselineFinish)
         {
           this.insertArray(control['controls']['projectId'].value)
@@ -305,6 +306,10 @@ console.log(this.insertarray)
                   }
 
                   if(this.mode == 'Project-Close-Out')
+                  {
+                    this.schedulengxdata = this.scheduleData.scheduleData
+                  }
+                  if(this.mode == 'Project-Charter')
                   {
                     this.schedulengxdata = this.scheduleData.scheduleData
                   }
@@ -1037,7 +1042,7 @@ console.log(this.scheduleData.scheduleData)
     console.log(this.scheduleData)
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Save Changes?",
-      "message": "Are you sure you want to save the changes permanently? ",
+      "message": "Are you sure you want to delete the milestone permanently? ",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
@@ -1188,7 +1193,7 @@ console.log(this.scheduleData.scheduleData)
 
 for(var i=0; i<this.insertarray.length; i++)
 {
- // debugger
+  //debugger
   this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
 
     this.baselineLog = res.projectBaselineLog.sort((a, b) => {
@@ -1850,7 +1855,10 @@ this.submitjustification()
   }
 
   checklogDetails(baselinelogid: string) : boolean {
-    return this.logdetails.some(x=> x.baselineLogId == baselinelogid)
+    console.log(baselinelogid)
+    console.log(this.logdetails)
+    return  this.logdetails && this.logdetails != '' && this.logdetails.length > 0  ? this.logdetails.some(x=> x.baselineLogId == baselinelogid) : false
+    //return
   }
   //Baseline Log Form Changes
 
@@ -2239,7 +2247,89 @@ console.log(this.currObj)
 
 
   }
-
+  submitschedulecharter() {
+    this.projecthubservice.isFormChanged = false
+    var formValue = this.milestoneForm.getRawValue()
+    for (var i of formValue) {
+      console.log(i)
+      if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
+        this.schedulecharterobj.push({
+          scheduleUniqueId: i.scheduleUniqueId,
+          projectId: i.projectId,
+          milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+          plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+          completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          comments: i.comments,
+          includeInReport: i.includeInReport,
+          functionGroupId: i.function == null ? null : i.function.lookUpId,
+          includeInCharter: i.includeInCharter,
+          milestoneType: i.milestoneType,
+          templateMilestoneId: i.templateMilestoneId,
+          includeInCloseout: i.includeInCloseout
+        })
+       }
+       else {
+        this.schedulecharterobj.push({
+          scheduleUniqueId: i.scheduleUniqueId,
+          projectId: i.projectId,
+          milestone: (i.milestone),
+          plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+          completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          comments: i.comments,
+          includeInReport: i.includeInReport,
+          functionGroupId: i.function == null ? null : i.function.lookUpId,
+          includeInCharter: i.includeInCharter,
+          milestoneType: i.milestoneType,
+          templateMilestoneId: i.templateMilestoneId,
+          includeInCloseout: i.includeInCloseout,
+          responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+          indicator: i.indicator
+        })
+      }
+    }
+    if (this.schedulecharterobj.filter(x => x.includeInCharter == true).length <= 10) {
+      this.apiService.bulkeditSchedule(this.schedulecharterobj, this.id).then(res => {
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+    
+    console.log(this.schedulecharterobj)
+      })
+      
+    }
+    
+    else
+    {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Only 10 milestones can be included in Charter report",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "OK",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+      this.projecthubservice.isBulkEdit = true
+    }
+  }
 
   submitschedulecloseout() {
     this.projecthubservice.isFormChanged = false
@@ -2300,7 +2390,7 @@ console.log(this.schedulecloseoutobj)
 else
 {
   var comfirmConfig: FuseConfirmationConfig = {
-    "title": "Only 8 milestones can be included in project dashboard",
+    "title": "Only 20 milestones can be included in Close Out report",
     "message": "",
     "icon": {
       "show": true,
@@ -2329,7 +2419,7 @@ else
 
 
   submitschedule() {
-    debugger
+   // debugger
     var baselineFormValue = this.milestoneForm.getRawValue()
     console.log(baselineFormValue)
 console.log(this.scheduleData.scheduleData)
