@@ -30,10 +30,10 @@ export class ProjectTeamAddSingleComponent implements OnInit {
   formInital: boolean = false
   constructor(private Router: Router, public projecthubservice: ProjectHubService, public auth: AuthService, public role: RoleService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
     this.projectTeamAddForm.valueChanges.subscribe(res => {
-      if (res.duration == null && res.percentTime == null && Object.keys(res.role).length == 0 && Object.keys(res.usersingle).length == 0){
+      if (res.duration == null && res.percentTime == null && Object.keys(res.role).length == 0 && Object.keys(res.usersingle).length == 0) {
         this.formInital = false;
       }
-      else{
+      else {
         this.formInital = true;
       }
       if (this.formInital == true) {
@@ -262,7 +262,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         },
         "actions": {
           "confirm": {
-            "show": true,
+            "show": true,  
             "label": "Okay",
             "color": "primary"
           },
@@ -282,3 +282,4 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     this.projectTeamAddForm.controls.duration.patchValue(numberVal);
   }
 }
+  

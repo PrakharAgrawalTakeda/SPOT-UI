@@ -58,7 +58,7 @@
     </div> -->
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="schedulengxdata"
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default" [rows]="schedulengxdata"
         #scheduleTable [rowClass]="getRowClass">
         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5" *ngIf="mode== 'Normal'">

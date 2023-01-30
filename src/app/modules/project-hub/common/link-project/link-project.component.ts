@@ -7,7 +7,6 @@ import {ProjectApiService} from "../project-api.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
 import {ActivatedRoute, Router} from "@angular/router";
-import {add} from "lodash-es";
 
 @Component({
     selector: 'app-link-project',
@@ -66,13 +65,13 @@ export class LinkProjectComponent implements OnInit {
                 if (this.selectedValueExists.value == true && this.searchControl.value !="") {
                     this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
                         .subscribe((resultSets: any) => {
-                            resultSets.projectData.forEach((item, index) => {
-                                this.projecthubservice.removedIds.find(removedId => {
-                                    if (item.problemUniqueId == removedId) {
-                                        resultSets.projectData.splice(index, 1);
-                                    }
-                                })
-                            })
+                            for (var i = 0; i < resultSets.projectData.length; i++) {
+                                var obj = resultSets.projectData[i];
+                                if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
+                                    resultSets.projectData.splice(i, 1);
+                                    i--;
+                                }
+                            }
                             this.resultSets = resultSets.projectData;
                             this.budget = resultSets.budget
                             this.search.next(resultSets);

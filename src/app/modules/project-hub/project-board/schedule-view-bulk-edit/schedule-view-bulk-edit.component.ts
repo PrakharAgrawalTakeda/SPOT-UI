@@ -154,6 +154,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       for(let control of this.milestoneForm.controls)
       {
         //debugger
+        if(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']))
+        {
+
+       
         console.log(this.milestoneForm.getRawValue())
         console.log(control['controls']['baselineFinish'].value)
         console.log(this.scheduleData.scheduleData)
@@ -165,6 +169,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         {
           this.insertArray(control['controls']['projectId'].value)
         }
+      }
       }
       console.log("Milestone form Value", this.milestoneForm.getRawValue())
       console.log("Milstone Schedule Data Array", this.scheduleData.scheduleData)
@@ -958,14 +963,14 @@ console.log(this.insertarray)
   }
 
   addMilestoneRecord(el): void {
-    var div = document.getElementsByClassName('datatable-scroll')[0]
-    setTimeout(() => {
-      div.scroll({
-        top: div.scrollHeight,
-        left: 0,
-        behavior: 'smooth'
-      });
-    }, 100);
+    // var div = document.getElementsByClassName('datatable-scroll')[0]
+    // setTimeout(() => {
+    //   div.scroll({
+    //     top: div.scrollHeight,
+    //     left: 0,
+    //     behavior: 'smooth'
+    //   });
+    // }, 100);
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
       this.milestoneForm.push(new FormGroup({
         scheduleUniqueId: new FormControl(''),
@@ -1017,13 +1022,22 @@ console.log(this.insertarray)
         templateMilestoneId: null
       }]
 
-      this.schedulengxdata = [...this.schedulengxdata, ...j]
-      this.scheduleData.scheduleData = res.scheduleData
-      console.log(this.scheduleData.scheduleData)
-      console.log(this.milestoneTableEditStack)
-      this.milestoneTableEditRow(this.schedulengxdata.length - 1)
+    this.schedulengxdata = [...this.schedulengxdata, ...j]
+    this.scheduleData.scheduleData = res.scheduleData
+    console.log(this.scheduleData.scheduleData)
+    console.log(this.milestoneTableEditStack)
+    this.milestoneTableEditRow(this.schedulengxdata.length - 1)
+    var div = document.getElementsByClassName('datatable-scroll')[0]
+    setTimeout(() => {
+      div.scroll({
+        top: div.scrollHeight,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
+  })
 
-    })
+
   }
 
   //let index = this.datarows.indexOf(this.selected[0])
@@ -2229,6 +2243,8 @@ this.projecthubservice.isNavChanged.next(true)
   submitschedulecharter() {
     this.projecthubservice.isFormChanged = false
     var formValue = this.milestoneForm.getRawValue()
+    console.log(formValue)
+    if (formValue.filter(x => x.includeInCharter == true).length <= 10) {
     for (var i of formValue) {
       console.log(i)
       if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
@@ -2270,7 +2286,9 @@ this.projecthubservice.isNavChanged.next(true)
         })
       }
     }
-    if (this.schedulecharterobj.filter(x => x.includeInCharter == true).length <= 10) {
+    console.log(formValue.filter(x => x.includeInCharter == true).length)
+    
+      
       this.apiService.bulkeditSchedule(this.schedulecharterobj, this.id).then(res => {
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
@@ -2313,6 +2331,7 @@ this.projecthubservice.isNavChanged.next(true)
   submitschedulecloseout() {
     this.projecthubservice.isFormChanged = false
 var formValue = this.milestoneForm.getRawValue()
+if (formValue.filter(x => x.includeInCloseout == true).length <= 20) {
 for (var i of formValue) {
   console.log(i)
   if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
@@ -2354,7 +2373,7 @@ for (var i of formValue) {
     })
   }
 }
-if (this.schedulecloseoutobj.filter(x => x.includeInCloseout == true).length <= 20) {
+
   this.apiService.bulkeditSchedule(this.schedulecloseoutobj, this.id).then(res => {
       this.projecthubservice.isNavChanged.next(true)
       this.projecthubservice.submitbutton.next(true)
