@@ -247,7 +247,7 @@ export class ProjectHubService {
           ]
         },
         {
-          title: 'Close Out',
+          title: 'Project Close Out',
           type: 'collapsable',
           icon: 'heroicons_outline:flag',
           children: [
