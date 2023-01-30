@@ -113,6 +113,12 @@ export class CreateProjectComponent implements OnInit {
     if(index == 4){
       this.capturedValues[index] = event.value
       this.qualityForm = event.value;
+      // this.qualityForm.push(new FormGroup({
+      //   qualityUniqueId: new FormControl(history.state.quality[0].qualityUniqueId),
+      //   qualityReferenceTypeId: new FormControl(this.qualityType.find(x => x.lookUpId == history.state.quality[0].qualityReferenceTypeId)),
+      //   qualityReference1: new FormControl(history.state.quality[0].qualityReference1),
+      //   problemUniqueId: new FormControl(history.state.data[0].problemUniqueId)
+      // }))
     }
     if (index == 6) {
       this.capturedValues[index] = event.value
@@ -377,7 +383,10 @@ export class CreateProjectComponent implements OnInit {
   }
 
   getLookUpName(id: any): any {
-    if (Object.keys(id).length > 0) {
+    if (id.lookUpId == undefined){
+      return id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
+    }
+    else if (Object.keys(id).length > 0) {
       return id && id.lookUpId != '' ? this.qualityType.find(x => x.lookUpId == id.lookUpId).lookUpName : ''
     }
   }

@@ -92,12 +92,19 @@ debugger
           this.qualityForm.patchValue({
             isQualityRef: true
           })
+          var j=0;
+            for (var i of history.state.quality) {
+              
           this.qualityRefForm.push(new FormGroup({
-            qualityUniqueId: new FormControl(history.state.quality[0].qualityUniqueId),
-            qualityReferenceTypeId: new FormControl(this.qualityType.find(x => x.lookUpId == history.state.quality[0].qualityReferenceTypeId)),
-            qualityReference1: new FormControl(history.state.quality[0].qualityReference1),
-            problemUniqueId: new FormControl(history.state.data[0].problemUniqueId)
+            qualityUniqueId: new FormControl(i.qualityUniqueId),
+            qualityReferenceTypeId: new FormControl(this.qualityType.find(x => x.lookUpId == i.qualityReferenceTypeId)),
+            qualityReference1: new FormControl(i.qualityReference1),
+            problemUniqueId: new FormControl(i.problemUniqueId)
           }))
+            this.generalInfoData.qualityReferences = this.qualityRefForm.value;
+              this.generalInfoData.qualityReferences[j].qualityReferenceTypeId = i.qualityReferenceTypeId
+              j++
+        }
         }
         })
         
