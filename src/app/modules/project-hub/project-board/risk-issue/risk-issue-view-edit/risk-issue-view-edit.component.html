@@ -104,7 +104,7 @@
             <mat-datepicker #picker3></mat-datepicker>
         </mat-form-field>
 
-        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInReport')">
+        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInProjectDashboard')">
             <mat-slide-toggle
                 [matTooltip]="this.riskIssueForm.controls['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
                 formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
