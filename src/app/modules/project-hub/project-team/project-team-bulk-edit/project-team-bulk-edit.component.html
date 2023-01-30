@@ -16,8 +16,8 @@
                         [color]="'primary-200'" (click)="addPT()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
-                </div>  
-            </div>  
+                </div>
+            </div>
         </div>
         <div class="overflow-x-auto overflow-hidden h-[80vh] ml-3 mt-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
@@ -53,7 +53,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="Permission" prop="teamPermissionId" [flexGrow]="1">
+                <ngx-datatable-column [sortable]="false" name="Permission" prop="teamPermissionId" [flexGrow]="0.25">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
@@ -102,7 +102,7 @@
                     </ng-template></ngx-datatable-column>
                 <ngx-datatable-column *ngIf="mode == 'Project-Charter'" name="Include In Charter (Max 10)" prop="includeInCharter" [flexGrow]="1"
                     [draggable]="false" [resizeable]="false" [sortable]="false">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <ng-template class="ml-4" let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
 
@@ -118,7 +118,7 @@
                 <ngx-datatable-column *ngIf="mode == 'Project-Proposal'" name="Included In Proposal (Max 5)" prop="includeInProposal" [flexGrow]="1"
                     [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                        <a  class="ml-4" *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
                             <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                         </a>
@@ -126,7 +126,7 @@
                             *ngIf="ptTableEditStack.includes(rowIndex)" class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.projectTeamForm.controls[rowIndex]['controls']['includeInProposal'].disabled ? 'Only 5 can be selected at a time for the proposal' : null"
-                                (change)="disabler()" class="h-full overflow-visible"
+                                (change)="disabler()" class="h-full overflow-visible ml-4"
                                 formControlName="includeInProposal">
                             </mat-slide-toggle>
                         </form>

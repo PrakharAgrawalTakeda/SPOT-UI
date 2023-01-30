@@ -184,6 +184,7 @@ export class ScheduleLinkComponent implements OnInit {
     console.log("Submit Object", mainObj)
     this.apiService.bulkeditScheduleLinks(mainObj, this.projectHubService.projectid).then(res => {
       this.projectHubService.toggleDrawerOpen('', '', [], '')
+      this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)
       this.projectHubService.successSave.next(true)
     })

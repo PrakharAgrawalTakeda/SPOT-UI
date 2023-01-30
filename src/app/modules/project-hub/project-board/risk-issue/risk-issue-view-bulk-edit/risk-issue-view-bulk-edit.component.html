@@ -13,7 +13,7 @@
                     (click)="addRI()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
-            <form [formGroup]="localIncludedItems" *ngIf="viewElementChecker('includeInProjectCharter')">
+            <form [formGroup]="localIncludedItems" *ngIf="viewElementChecker('includeClosedItems')">
                 <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
                                   (checked)="projectHubService.includeClosedItems.riskIssue.value" (change)="toggleRiskIssue($event)">
                     Include Closed Items

@@ -104,7 +104,7 @@
             <mat-datepicker #picker3></mat-datepicker>
         </mat-form-field>
 
-        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInReport')">
+        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInProjectDashboard')">
             <mat-slide-toggle
                 [matTooltip]="this.riskIssueForm.controls['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
                 formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
@@ -112,7 +112,7 @@
         <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInCharter')">
             <mat-slide-toggle
                 [matTooltip]="this.riskIssueForm.controls['includeInCharter'].disabled ? 'Only 5 can be selected at a time for dashboard report display' : null"
-                formControlName="includeInReport">Include in Charter</mat-slide-toggle>
+                formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
         </div>
         <mat-accordion class="h-120" multi *ngIf="viewElementChecker('postMitigation')">
             <mat-expansion-panel [expanded]="false">

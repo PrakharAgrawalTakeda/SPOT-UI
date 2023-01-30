@@ -55,7 +55,6 @@ export class ProjectSingleDropdownComponent implements OnInit {
         const params = new HttpParams().set('query', value);
         this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
-
             // Store the result sets
             this.resultSets = resultSets.projectData;
             console.log(this.resultSets)

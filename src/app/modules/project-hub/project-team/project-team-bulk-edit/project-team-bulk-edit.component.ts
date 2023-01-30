@@ -28,7 +28,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       }
     })
   }
-  teamMembers = []    
+  teamMembers = []
   teamMembersDb = []
   viewContent: boolean = false
   lookupdata: any[]
@@ -261,7 +261,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
                   }
                   const alert = this.fuseAlert.open(comfirmConfig)
               }else{
-                  if ((this.formValue.some(x =>  x.duration % 1 != 0 || x.percentTime % 1 != 0)) && this.mode =="Project-Charter") {
+                  if ((this.formValue.some(x =>  x.duration % 1 != 0 || x.percentTime % 1 != 0)) && (this.mode =="Project-Proposal"|| this.mode =="Project-Charter")) {
                       var comfirmConfig: FuseConfirmationConfig = {
                           "title": "Duration and percent can't have decimals",
                           "message": "",
