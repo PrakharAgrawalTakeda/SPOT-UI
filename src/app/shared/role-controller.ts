@@ -19,6 +19,7 @@ export class ProjectBoard{
     public baselineedit: boolean = true
     public baselineproject: boolean = false
     public phaseState:boolean = true
+    public keyAssumptionsEdit: boolean = true
 }
 
 export class GeneralInfo{

@@ -47,7 +47,8 @@ export class RoleService {
           scheduleEdit: false,
           baselineedit: false,
           baselineproject: true,
-          phaseState: false
+          phaseState: false,
+          keyAssumptionsEdit: false,
         }
         localroleController.projectTeam = false
         localroleController.projectBenefits = false
