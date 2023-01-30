@@ -44,7 +44,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="0.5">
+        <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
                     [ngClass]="{'closed': row.closeDate != null}">Risk</p>
