@@ -41,7 +41,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="1">
+                    [sortable]="false" [flexGrow]="0.75">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>

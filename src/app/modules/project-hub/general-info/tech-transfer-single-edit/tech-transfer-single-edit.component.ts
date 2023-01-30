@@ -94,38 +94,38 @@ export class TechTransferSingleEditComponent implements OnInit {
       this.auth.lookupMaster().then(res => {
         this.lookupdata = res;
         if (history.state.data != undefined) {
-          this.productionSteps = this.lookupdata.filter(x => x.lookUpParentId == 'b137412d-8008-4446-8fe6-c56a06b83174');
-          this.productionSteps.sort((a, b) => {
-            return a.lookUpOrder - b.lookUpOrder;
-          })
-          if (history.state.data[0].productionStepID != null) {
-            history.state.data[0].productionStepID = this.productionSteps.filter(function (entry) {
-              return entry.lookUpId == history.state.data[0].productionStepID
-            })
-          }
-          this.campaignPhase = this.lookupdata.filter(x => x.lookUpParentId == '183dc1f1-06ba-4022-bd6f-ae07f70751e2');
-          this.campaignPhase.sort((a, b) => {
-            return a.lookUpOrder - b.lookUpOrder;
-          })
-          if (history.state.data[0].campaignPhase != null) {
-            history.state.data[0].campaignPhase = this.campaignPhase.filter(function (entry) {
-              return entry.lookUpId == history.state.data[0].campaignPhase
-            })
-          }
-          this.campaignType = this.lookupdata.filter(x => x.lookUpParentId == '01a49f16-0744-4100-ae8a-ec2e469dbf74');
-          this.campaignType.sort((a, b) => {
-            return a.lookUpOrder - b.lookUpOrder;
-          })
-          if (history.state.data[0].campaignType != null) {
-            history.state.data[0].campaignType = this.campaignType.filter(function (entry) {
-              return entry.lookUpId == history.state.data[0].campaignType
-            })
-          }
+          // this.productionSteps = this.lookupdata.filter(x => x.lookUpParentId == 'b137412d-8008-4446-8fe6-c56a06b83174');
+          // this.productionSteps.sort((a, b) => {
+          //   return a.lookUpOrder - b.lookUpOrder;
+          // })
+          // if (history.state.data[0].productionStepID != null) {
+          //   history.state.data[0].productionStepID = this.productionSteps.filter(function (entry) {
+          //     return entry.lookUpId == history.state.data[0].productionStepID
+          //   })
+          // }
+          // this.campaignPhase = this.lookupdata.filter(x => x.lookUpParentId == '183dc1f1-06ba-4022-bd6f-ae07f70751e2');
+          // this.campaignPhase.sort((a, b) => {
+          //   return a.lookUpOrder - b.lookUpOrder;
+          // })
+          // if (history.state.data[0].campaignPhase != null) {
+          //   history.state.data[0].campaignPhase = this.campaignPhase.filter(function (entry) {
+          //     return entry.lookUpId == history.state.data[0].campaignPhase
+          //   })
+          // }
+          // this.campaignType = this.lookupdata.filter(x => x.lookUpParentId == '01a49f16-0744-4100-ae8a-ec2e469dbf74');
+          // this.campaignType.sort((a, b) => {
+          //   return a.lookUpOrder - b.lookUpOrder;
+          // })
+          // if (history.state.data[0].campaignType != null) {
+          //   history.state.data[0].campaignType = this.campaignType.filter(function (entry) {
+          //     return entry.lookUpId == history.state.data[0].campaignType
+          //   })
+          // }
           this.generalInfoForm.patchValue({
             isTechTransfer: history.state.data[0].isTechTransfer,
-            productionStepId: history.state.data[0].productionStepID == null ? '' : history.state.data[0].productionStepID[0],
-            campaignPhaseId: history.state.data[0].campaignPhase == null ? '' : history.state.data[0].campaignPhase[0],
-            campaignTypeId: history.state.data[0].campaignType == null ? '' : history.state.data[0].campaignType[0],
+            productionStepId: history.state.data[0].productionStepID == null ? '' : history.state.data[0].productionStepID,
+            campaignPhaseId: history.state.data[0].campaignPhase == null ? '' : history.state.data[0].campaignPhase,
+            campaignTypeId: history.state.data[0].campaignType == null ? '' : history.state.data[0].campaignType,
           })
           this.formValueTech.emit(this.generalInfoForm.getRawValue())
           this.viewContent = true

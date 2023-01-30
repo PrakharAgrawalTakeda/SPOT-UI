@@ -22,31 +22,20 @@ import { __classPrivateFieldSet } from 'tslib';
 })
 
 export class CreateProjectComponent implements OnInit {
-  // @ViewChild(QualityRefBulkEditComponent) child
-  // @Output() eventName = new EventEmitter<EventType>();
-  // @Input() mode: 'General-Info' | 'Project-Creation' = 'General-Info';
   filterCriteria: any = {};
   getData: boolean = false;
-  // @Input() Data: any;
   lookupdata: any = [];
   projectid: string = "";
   qualityformValue = [];
   qualityType: any = [];
+  campaignPhase: any = [];
+  campaignType: any = [];
+  productionSteps: any = [];
   qualityValue = false;
   qualityForm = []
-  activeaccount: any;
-  // oeProjectType: any = [];
-  // campaignPhase: any = [];
-  // productionSteps: any = [];
-  // campaignType: any = [];
-  // primWorkstream: any = [];
-  // agileWave: any = [];
-  // POBOSType: any = [];
-  // localCurrencyList: any = [];
-  // siteAssessmentType: any = [];
-  // startegicYear: any = [];
-  // AnnualMustWin: any = [];
-
+  campaingPhaseName:string = "";
+  campaingTypeName: string = "";
+  productionStepName: string = "";
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -99,8 +88,19 @@ export class CreateProjectComponent implements OnInit {
       this.qualityType.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
       })
+      this.campaignPhase = this.lookupdata.filter(x => x.lookUpParentId == '183dc1f1-06ba-4022-bd6f-ae07f70751e2');
+      this.campaignPhase.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
+      this.campaignType = this.lookupdata.filter(x => x.lookUpParentId == '01a49f16-0744-4100-ae8a-ec2e469dbf74');
+      this.campaignType.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
+      this.productionSteps = this.lookupdata.filter(x => x.lookUpParentId == 'b137412d-8008-4446-8fe6-c56a06b83174');
+      this.productionSteps.sort((a, b) => {
+        return a.lookUpOrder - b.lookUpOrder;
+      })
     })
-    this.activeaccount = this.authService.instance.getActiveAccount();
     console.log("From Create project " + history.state);
     
     this.titleService.setTitle("Create New Project")
@@ -113,12 +113,6 @@ export class CreateProjectComponent implements OnInit {
     if(index == 4){
       this.capturedValues[index] = event.value
       this.qualityForm = event.value;
-      // this.qualityForm.push(new FormGroup({
-      //   qualityUniqueId: new FormControl(history.state.quality[0].qualityUniqueId),
-      //   qualityReferenceTypeId: new FormControl(this.qualityType.find(x => x.lookUpId == history.state.quality[0].qualityReferenceTypeId)),
-      //   qualityReference1: new FormControl(history.state.quality[0].qualityReference1),
-      //   problemUniqueId: new FormControl(history.state.data[0].problemUniqueId)
-      // }))
     }
     if (index == 6) {
       this.capturedValues[index] = event.value
@@ -159,6 +153,9 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 3) {
+      this.campaingPhaseName = this.campaignPhase.filter(x => x.lookUpId == event.campaignPhaseId)[0].lookUpName
+      this.campaingTypeName = this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName
+      this.productionStepName = this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName
       this.createProjectForm.patchValue({
         techTransfer: event.isTechTransfer,
         campaignPhase: event.campaignPhaseId,
@@ -298,7 +295,7 @@ export class CreateProjectComponent implements OnInit {
       mainObj[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
       mainObj[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
     }
-    if (mainObj[0].ProblemTitle == "" || mainObj[0].PortfolioOwnerID == "" || mainObj[0].ProblemOwnerID == "" || mainObj[0].LocalCurrencyID == "" || mainObj[0].PrimaryProductID == "" || mainObj[0].ProjectDescription == "") {
+    if (mainObj[0].ProblemTitle == "" || mainObj[0].PortfolioOwnerID == "" || mainObj[0].ProblemOwnerID == "" || mainObj[0].LocalCurrencyID == "" || mainObj[0].PrimaryProductID == "" || mainObj[0].ProjectDescription == "" || mainObj[0].ExecutionScope == "") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -340,17 +337,17 @@ export class CreateProjectComponent implements OnInit {
           "copyProjectParameter": copyProjectParameter
         }
     }
-      if (true){
+      if (formValue.qualityReference){
         this.qualityValue = true;
         this.qualityformValue = []
         var genQRFORM = this.qualityForm
         for (var quality of this.qualityForm) {
           if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != ""){
-            if(history.state.quality != undefined){
+            if (history.state.callLocation == "CopyProject"){
               this.qualityformValue.push({
                 qualityUniqueId: "",
                 problemUniqueId: this.projectid,
-                qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+                qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
                 qualityReference1: quality.qualityReference1
               })
             }
@@ -371,6 +368,7 @@ export class CreateProjectComponent implements OnInit {
             console.log(quality);
             console.log(res);
             if (res != "") {
+              this.createProjectForm.reset();
               window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
             }
         })
@@ -383,7 +381,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   getLookUpName(id: any): any {
-    if (id.lookUpId == undefined){
+    if (typeof (id) == 'string'){
       return id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
     }
     else if (Object.keys(id).length > 0) {

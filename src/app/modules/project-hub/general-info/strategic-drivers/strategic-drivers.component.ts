@@ -321,9 +321,15 @@ export class StrategicDriversComponent implements OnInit {
               return a.lookUpOrder - b.lookUpOrder;
             })
             if (history.state.data[0].siteAssessmentCategory != null) {
-              history.state.data[0].siteAssessmentCategory = this.site.filter(function (entry) {
-                return entry.lookUpId == history.state.data[0].siteAssessmentCategory
-              })
+              const data = history.state.data[0].siteAssessmentCategory.split(',');
+              var SiteAssessmentCategory = {};
+              var finaldataSite = [];
+              for (var i = 0; i < data.length; i++) {
+                SiteAssessmentCategory = this.site.filter(function (entry) {
+                  return entry.lookUpId == data[i]
+                })
+                finaldataSite.push(SiteAssessmentCategory[0]);
+              }
             }
             this.strategicDriversForm.patchValue({
               primaryKPI: history.state.data[0].primaryKPI == null ? '' : history.state.data[0].primaryKPI[0],
@@ -337,7 +343,7 @@ export class StrategicDriversComponent implements OnInit {
               strategicYear: history.state.data[0].strategicYear == null ? '' : history.state.data[0].strategicYear[0],
               annualMustWinID: history.state.data[0].annualMustWin == null ? '' : history.state.data[0].annualMustWin[0],
               isSiteAssessment: history.state.data[0].isSiteAssessment,
-              siteAssessmentCategory: history.state.data[0].siteAssessmentCategory == null ? '' : history.state.data[0].siteAssessmentCategory[0],
+              siteAssessmentCategory: history.state.data[0].siteAssessmentCategory == null ? '' : finaldataSite,
               isGoodPractise: false
             })
             this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())

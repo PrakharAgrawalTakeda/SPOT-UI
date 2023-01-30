@@ -85,7 +85,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="0.25" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column [sortable]="false" name="Duration (Months)" prop="duration" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                     *ngIf="mode == 'Project-Proposal' || mode == 'Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
@@ -100,15 +100,15 @@
                             </mat-form-field>
                         </form>
                     </ng-template></ngx-datatable-column>
-                    <ngx-datatable-column *ngIf="mode == 'Project-Charter'" name="Include In Charter (Max 10)"
-                        prop="includeInCharter" [flexGrow]="1" [draggable]="false" [resizeable]="false" [sortable]="false">
+                    <ngx-datatable-column [headerClass]="getNgxDatatableIconHeader" *ngIf="mode == 'Project-Charter'" name="Include In Charter (Max 10)"
+                        prop="includeInCharter" [flexGrow]="1.5" [draggable]="false" [resizeable]="false" [sortable]="false">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                             <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                                 <p *ngIf="!value">&nbsp;</p>
                     
-                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                                <mat-icon class="iconClass" svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                             </a>
-                            <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)" class="h-[45px]">
+                            <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)" class="h-[45px] iconClass">
                                 <mat-slide-toggle  class="h-full overflow-visible" formControlName="includeInCharter"></mat-slide-toggle>
                             </form>
                         </ng-template>

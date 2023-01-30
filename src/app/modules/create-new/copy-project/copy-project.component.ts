@@ -19,6 +19,7 @@ import { MsalService } from '@azure/msal-angular';
 export class CopyProjectComponent implements OnInit {
   lookupdata: any = [];
   lookupTemplate: any = [];
+  activeaccount: any;
   disableToggle: boolean = true;
   finalData: any = [];
   finalIndex: any = [];
@@ -33,6 +34,7 @@ export class CopyProjectComponent implements OnInit {
     private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService) { }
 
   ngOnInit(): void {
+    this.activeaccount = this.authService.instance.getActiveAccount();
     this.titleService.setTitle("Copy Project")
     this.CopyProjectForm.patchValue({
       addTemplate: true
@@ -64,7 +66,7 @@ export class CopyProjectComponent implements OnInit {
     this.userid = "";
     var dataToSend = {
       ProjectIDTemplate: this.projectid,
-      CopyUserID: this.userid,
+      CopyUserID: this.activeaccount.localAccountId,
       CopyProjectParameter: this.finalData.toString()
     }
     this.apiService.getTemplateInfo(dataToSend).then(res => {

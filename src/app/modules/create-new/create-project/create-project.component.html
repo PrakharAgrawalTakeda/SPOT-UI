@@ -211,7 +211,7 @@
                                                     <label class="reviewLabel">Campaign Phase</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{createProjectForm.value.campaignPhase.lookUpName}}</label>
+                                                    <label class="reviewText">{{campaingPhaseName}}</label>
                                                 </div>
                                             </div>
                                             <div class="test">
@@ -219,7 +219,7 @@
                                                     <label class="reviewLabel">Production Steps</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{createProjectForm.value.productionSteps.lookUpName}}</label>
+                                                    <label class="reviewText">{{productionStepName}}</label>
                                                 </div>
                                             </div>
                                             <div class="test">
@@ -227,7 +227,7 @@
                                                     <label class="reviewLabel">Campaign Type</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{createProjectForm.value.campaignType.lookUpName}}</label>
+                                                    <label class="reviewText">{{campaingTypeName}}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -298,6 +298,7 @@
                                                 </div>
                                                 <div class="child">
                                                     <span *ngFor="let item of createProjectForm.value.agileSecondaryWorkstream; let i = index">
+                                                        <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.agileSecondaryWorkstream.length">,</label>
                                                         <label class="reviewText">{{item.lookUpName}}</label>
                                                     </span>
                                                 </div>
@@ -319,12 +320,15 @@
                                                 <label class="reviewText">{{createProjectForm.value.POBOS}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="createProjectForm.controls['POBOS'].value">
+                                        <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">POBOS Type</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.POBOSType.lookUpName}}</label>
+                                                <span *ngFor="let item of createProjectForm.value.POBOSType; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.POBOSType.length">,</label>
+                                                    <label class="reviewText">{{item.lookUpName}}</label>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="test">

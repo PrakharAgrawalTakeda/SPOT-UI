@@ -92,7 +92,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.onChange(this.selectedOption)
   }
   isOptionSelected(option: any): boolean {
-    if (this.selectedOption) {
+    if (this.selectedOption && this.selectedOption.length > 0) {
       if (this.selectedOption.some(x => x[this.idPointer] == option[this.idPointer])) {
         return false
       }

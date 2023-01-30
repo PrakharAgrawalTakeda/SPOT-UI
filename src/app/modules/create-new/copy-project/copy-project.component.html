@@ -1,15 +1,4 @@
-<!-- <div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
-    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
-        <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
-            <div
-                class="flex items-start justify-between bg-primary sidepanel-header">
-                <div class="text-on-primary" style="padding-top: 6px">Copy Project Selection</div>
-                <div style="padding-top: 2px"><a (click)="callCreateProject()"
-                        href="javascript:void(0)" title="Close">
-                        <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-                    </a>
-                </div>
-            </div> -->
+
 <div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
     <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
         <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
@@ -42,11 +31,6 @@
                         <mat-slide-toggle [disabled]="i<2"
                             formControlName="addTemplate">{{items.lookUpName}}</mat-slide-toggle>
                     </div>
-                    <!-- <div style="text-align: right;">
-                    <button class="min-w-30" mat-flat-button [color]="'primary'" style="background-color: rgba(76,155,207);margin-bottom: 10px;margin-right: 80px;" type="button">
-                        Copy Project
-                    </button>
-                    </div> -->
                     <div style="text-align: right;">
                         <button style="background-color: rgba(76,155,207);margin-bottom: 10px;margin-right: 80px;"
                             mat-button type="submit">Copy Project</button>
