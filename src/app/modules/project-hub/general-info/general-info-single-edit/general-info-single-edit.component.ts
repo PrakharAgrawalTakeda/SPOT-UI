@@ -88,8 +88,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
       this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
         this.generalInfo = res
         this.filterCriteria = this.projectHubService.all
-          console.log("aaaaaaaaaaaaaaaaa", res.projectManager)
-          console.log("xxxxxxxxxxxxxx", res.sponsor)
         this.generalInfoForm.patchValue({
           problemTitle: res.projectData.problemTitle,
           problemType: res.projectData.problemType,

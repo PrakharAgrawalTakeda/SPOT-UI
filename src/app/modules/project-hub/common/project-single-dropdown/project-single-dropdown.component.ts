@@ -2,7 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GlobalVariables } from 'app/shared/global-variables';
-import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
+import {debounceTime, filter, lastValueFrom, map, Observable, startWith, Subject, takeUntil} from 'rxjs';
+import {ProjectHubService} from "../../project-hub.service";
 
 @Component({
   selector: 'app-project-single-dropdown',
@@ -15,6 +16,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
   @Input() label: string;
   @Input() showHint: boolean = false
   @Input() hint: string = ''
+  @Input() hideRelations: boolean = false
 
   options: string[] = ['One', 'Two', 'Three'];
   resultSets: any[];
@@ -22,7 +24,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
   debounce = 400
   filteredOptions: any
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private _httpClient: HttpClient) {
+  constructor(private _httpClient: HttpClient,public projecthubservice: ProjectHubService) {
   }
 
   ngOnInit(): void {
@@ -55,7 +57,27 @@ export class ProjectSingleDropdownComponent implements OnInit {
         const params = new HttpParams().set('query', value);
         this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
+              let abc$;
+              if (this.hideRelations) {
+                  var ids = [];
+                  abc$ = this._httpClient.get(GlobalVariables.apiurl + `ProjectHubData/ProjectTree/${this.projecthubservice.projectid}`)
+                  const response =  lastValueFrom(abc$)
+                  response.then((res: any) => {
+                      res.values.forEach(project => {
+                          ids.push(project.problemUniqueId);
+                      })
+                      this.projecthubservice.removedIds = ids;
+                      for (var i = 0; i < resultSets.projectData.length; i++) {
+                          var obj = resultSets.projectData[i];
+                          if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
+                              resultSets.projectData.splice(i, 1);
+                              i--;
+                          }
+                      }
+                  })
 
+
+              }
             // Store the result sets
             this.resultSets = resultSets.projectData;
             console.log(this.resultSets)

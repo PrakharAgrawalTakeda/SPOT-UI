@@ -116,7 +116,7 @@
                 <ngx-datatable-column *ngIf="mode == 'Project-Proposal'" name="Included In Proposal (Max 5)" prop="includeInProposal" [flexGrow]="1"
                                       [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
+                        <a  class="ml-4" *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
                             <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                         </a>
