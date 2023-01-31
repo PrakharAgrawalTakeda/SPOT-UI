@@ -34,11 +34,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   filterCriteria: any = {}
   generalInfo: any = {}
   lookupdata: any = [];
-  localCurrencyList: any = {};
+  localCurrencyList: any = [];
+  local:any=[];
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
   generalInfoForm = new FormGroup({
-    problemTitle: new FormControl('', Validators.required),
+    problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
     projectsingleid: new FormControl(''),
     problemType: new FormControl('Standard Project / Program'),
@@ -93,12 +94,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     })
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       this.generalInfoForm.controls.owningOrganization.disable()
-      // this.generalInfoForm.controls.localCurrency.disable()
+      this.generalInfoForm.controls.localCurrency.disable()
       this.generalInfoForm.controls.sponsor.disable()
       this.generalInfoForm.controls.projectManager.disable()
     } else {
       this.generalInfoForm.controls.owningOrganization.enable()
-      // this.generalInfoForm.controls.localCurrency.disable()
+      this.generalInfoForm.controls.localCurrency.disable()
       this.generalInfoForm.controls.sponsor.enable()
       this.generalInfoForm.controls.projectManager.enable()
     }
@@ -117,10 +118,10 @@ export class GeneralInfoSingleEditComponent implements OnInit{
 
     this.generalInfoForm.controls.portfolioOwner.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        var currency = this.localCurrencyList.filter(x => x.localCurrencyId == this.generalInfoForm.value.portfolioOwner.localCurrencyId)
+        var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
         this.generalInfoForm.patchValue({
-          owningOrganization: this.generalInfoForm.value.portfolioOwner.defaultOwningOrganization,
-          localCurrency: currency[0]
+          owningOrganization: res.defaultOwningOrganization,
+          localCurrency: currency[0].localCurrencyAbbreviation
         })
       }
     })
@@ -171,16 +172,19 @@ export class GeneralInfoSingleEditComponent implements OnInit{
       this.apiService.getfilterlist().then(res => {
         this.apiService.getLocalCurrency().then(data => {
           this.localCurrencyList = data
+          for (var i = 0; i < this.localCurrencyList.length; i++) {
+            this.local.push(this.localCurrencyList[i].localCurrencyAbbreviation)
+          }
           this.filterCriteria = res
           this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
           if (history.state.data != undefined) {
-                if (history.state.data[0].primaryProduct != null) {
-                  history.state.data[0].primaryProduct = this.filterCriteria.products.filter(function (entry) {
-                    return entry.productId == history.state.data[0].primaryProduct
+            if (history.state.data.primaryProductId != null) {
+              history.state.data.primaryProductId = this.filterCriteria.products.filter(function (entry) {
+                return entry.productId == history.state.data.primaryProductId
                   })
                 }
-                if (history.state.data[0].otherImpactedProducts != null) {
-                  const data = history.state.data[0].otherImpactedProducts.split(',');
+                if (history.state.data.otherImpactedProducts != null) {
+                  const data = history.state.data.otherImpactedProducts.split(',');
                   var impactedproducts = {};
                   var finaldata = [];
                   for (var i = 0; i < data.length; i++) {
@@ -190,20 +194,20 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                     finaldata.push(impactedproducts[0]);
                   }
                 }
-                if (history.state.data[0].problemOwnerID != null) {
+                if (history.state.data.problemOwnerId != null) {
                   var user = {
-                    userAdid: history.state.data[0].problemOwnerID,
-                    userDisplayName: history.state.data[0].problemOwner
+                    userAdid: history.state.data.problemOwnerId,
+                    userDisplayName: history.state.data.problemOwnerName
                   };
                 }
                 this.generalInfoForm.patchValue({
-                  problemTitle: history.state.data[0].title,
+                  problemTitle: history.state.data.problemTitle,
                   projectsingle: '',
                   projectsingleid: '',
-                  problemType: history.state.data[0].problemType,
-                  projectDescription: history.state.data[0].problemDescription,
-                  primaryProduct: history.state.data[0].primaryProduct == null ? '' : history.state.data[0].primaryProduct[0],
-                  otherImpactedProducts: history.state.data[0].otherImpactedProducts == null ? '' : finaldata,
+                  problemType: history.state.data.problemType,
+                  projectDescription: history.state.data.projectDescription,
+                  primaryProduct: history.state.data.primaryProductId == null ? '' : history.state.data.primaryProductId[0],
+                  otherImpactedProducts: history.state.data.otherImpactedProducts == null ? '' : finaldata,
                   portfolioOwner: '',
                   excecutionScope: '',
                   enviornmentalPortfolio: '',
@@ -211,7 +215,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                   isCapsProject: "No",
                   owningOrganization: '',
                   SubmittedBy: user,
-                  targetGoalSituation: history.state.data[0].targetEndState == null ? '' : history.state.data[0].targetEndState,
+                  targetGoalSituation: history.state.data.targetEndState == null ? '' : history.state.data.targetEndState,
                   localCurrency: ''
                 })
                 this.formValue.emit(this.generalInfoForm.getRawValue())
@@ -245,6 +249,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   getFunctionGroupID(): any {
     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
   }
+  // getLocalCurrency(): any {
+  //   for (var i = 0; i < this.localCurrencyList.length; i++){
+  //     this.local.push(this.localCurrencyList[i].localCurrencyAbbreviation) 
+  //   }
+  //   return this.local
+  // }
   viewElementChecker(element: string): boolean {
     return this.viewElements.some(x => x == element)
   }

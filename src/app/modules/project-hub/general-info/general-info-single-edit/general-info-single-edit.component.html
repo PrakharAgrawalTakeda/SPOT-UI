@@ -51,15 +51,6 @@
                 <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
         </div>
-        <!-- <div *ngIf="viewElementChecker('projectProposalApprovedDate')">
-            <mat-form-field class="w-full" [floatLabel]="'always'">
-                <mat-label>Date Approved</mat-label>
-                <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'"
-                    formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate">
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-        </div> -->
         
         <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')"
             class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
@@ -96,12 +87,18 @@
             name="SubmittedBy" [showLabel]="true">
         </spot-singleselect-user-autocomplete>
 
-        <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('localCurrency')"
+        <!-- <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+            *ngIf="viewElementChecker('localCurrency')"
             class="w-full" formControlName="localCurrency" name="localCurrency" [label]="'Local Currency'"
             [placeholder]="'Local Currency'" [valuePointer]="'localCurrencyAbbreviation'"
-            [dropDownArray]="localCurrencyList">
-        </spot-singleselect-autocomplete>
+            [dropDownArray]="getLocalCurrency()">
+        </spot-singleselect-autocomplete> -->
+        <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('localCurrency')" class="w-full"
+            formControlName="localCurrency" name="localCurrency" [label]="'Local Currency'"
+            [placeholder]="'Local Currency'" [showNoneOption]="true" [dropDownArrayType]="'string'"
+            [dropDownArray]="local" >
+        </spot-select>
         
         <spot-select [Required]="callLocation == 'CreateNew'"
             *ngIf="viewElementChecker('problemType')" class="w-full" formControlName="problemType" name="problemType"

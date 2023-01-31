@@ -81,7 +81,7 @@ debugger
         strategicYearID:null,
         topsData:null,
       }
-      if (history.state.quality != undefined) {
+      if (history.state.quality.length != 0) {
         this.auth.lookupMaster().then(res => {
           this.lookupdata = res;
           this.qualityType = this.lookupdata.filter(x => x.lookUpParentId == 'A4C55F7E-C213-401E-A777-3BA741FF5802');

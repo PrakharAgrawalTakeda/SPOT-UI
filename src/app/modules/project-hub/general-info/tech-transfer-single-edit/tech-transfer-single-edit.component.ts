@@ -122,10 +122,10 @@ export class TechTransferSingleEditComponent implements OnInit {
           //   })
           // }
           this.generalInfoForm.patchValue({
-            isTechTransfer: history.state.data[0].isTechTransfer,
-            productionStepId: history.state.data[0].productionStepID == null ? '' : history.state.data[0].productionStepID,
-            campaignPhaseId: history.state.data[0].campaignPhase == null ? '' : history.state.data[0].campaignPhase,
-            campaignTypeId: history.state.data[0].campaignType == null ? '' : history.state.data[0].campaignType,
+            isTechTransfer: history.state.data.isTechTransfer,
+            productionStepId: history.state.data.productionStepId == null ? '' : history.state.data.productionStepId,
+            campaignPhaseId: history.state.data.campaignPhaseId == null ? '' : history.state.data.campaignPhaseId,
+            campaignTypeId: history.state.data.campaignTypeId == null ? '' : history.state.data.campaignTypeId,
           })
           this.formValueTech.emit(this.generalInfoForm.getRawValue())
           this.viewContent = true

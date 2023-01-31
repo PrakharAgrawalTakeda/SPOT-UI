@@ -249,46 +249,46 @@ export class StrategicDriversComponent implements OnInit {
           this.lookupdata = res;
           this.kpiMasters = kpi;
           if (history.state.data != undefined) {
-            if (history.state.data[0].primaryKPI != null) {
-              history.state.data[0].primaryKPI = this.kpiMasters.filter(function (entry) {
-                return entry.kpiid == history.state.data[0].primaryKPI
+            if (history.state.data.primaryKpi != null) {
+              history.state.data.primaryKpi = this.kpiMasters.filter(function (entry) {
+                return entry.kpiid == history.state.data.primaryKpi
               })
             }
             this.agileWorkStream = this.lookupdata.filter(x => x.lookUpParentId == 'f4486388-4c52-48fc-8c05-836878da2247');
             this.agileWorkStream.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data[0].agilePrimaryWorkstation != null) {
-              history.state.data[0].agilePrimaryWorkstation = this.agileWorkStream.filter(function (entry) {
-                return entry.lookUpId == history.state.data[0].agilePrimaryWorkstation
+            if (history.state.data.agilePrimaryWorkstream != null) {
+              history.state.data.agilePrimaryWorkstream = this.agileWorkStream.filter(function (entry) {
+                return entry.lookUpId == history.state.data.agilePrimaryWorkstream
               })
             }
-            if (history.state.data[0].agileSecWorkstream != null) {
-              const data = history.state.data[0].agileSecWorkstream.split(',');
+            if (history.state.data.agileSecondaryWorkstream != null) {
+              const data = history.state.data.agileSecondaryWorkstream.split(',');
               var agilesec = {};
               var finaldatasecagile = [];
               for (var i = 0; i < data.length; i++) {
                 agilesec = this.agileWorkStream.filter(function (entry) {
                   return entry.lookUpId == data[i]
                 })
-                finaldatasecagile.push(agilesec[0]);
+                finaldatasecagile.push(agilesec);
               }
             }
             this.agileWave = this.lookupdata.filter(x => x.lookUpParentId == '4bdbcbca-90f2-4c7b-b2a5-c337446d60b1');
             this.agileWave.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data[0].agileWave != null) {
-              history.state.data[0].agileWave = this.agileWave.filter(function (entry) {
-                return entry.lookUpId == history.state.data[0].agileWave
+            if (history.state.data.agileWave != null) {
+              history.state.data.agileWave = this.agileWave.filter(function (entry) {
+                return entry.lookUpId == history.state.data.agileWave
               })
             }
             this.Pobos = this.lookupdata.filter(x => x.lookUpParentId == 'A9AB0ADC-AA10-44C1-A99B-3BEB637D0A4E');
             this.Pobos.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data[0].pobosCategory != null) {
-              const data = history.state.data[0].pobosCategory.split(',');
+            if (history.state.data.poboscategory != null) {
+              const data = history.state.data.poboscategory.split(',');
               var Pobostype = {};
               var finaldataPobos = [];
               for (var i = 0; i < data.length; i++) {
@@ -302,26 +302,26 @@ export class StrategicDriversComponent implements OnInit {
             this.strategicYear.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data[0].strategicYear != null) {
-              history.state.data[0].strategicYear = this.strategicYear.filter(function (entry) {
-                return entry.lookUpId == history.state.data[0].strategicYear
+            if (history.state.data.strategicYearId != null) {
+              history.state.data.strategicYearId = this.strategicYear.filter(function (entry) {
+                return entry.lookUpId == history.state.data.strategicYearId
               })
             } 
             this.annualMustWin = this.lookupdata.filter(x => x.lookUpParentId == '265400f0-6202-469b-bb3d-38727928d1b2');
             this.annualMustWin.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data[0].annualMustWin != null) {
-              history.state.data[0].annualMustWin = this.annualMustWin.filter(function (entry) {
-                return entry.lookUpId == history.state.data[0].annualMustWin
+            if (history.state.data.annualMustWinId != null) {
+              history.state.data.annualMustWinId = this.annualMustWin.filter(function (entry) {
+                return entry.lookUpId == history.state.data.annualMustWinId
               })
             }
             this.site = this.lookupdata.filter(x => x.lookUpParentId == '1DB73E6F-DD4B-44FF-8234-CE5FB3EC68BC');
             this.site.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data[0].siteAssessmentCategory != null) {
-              const data = history.state.data[0].siteAssessmentCategory.split(',');
+            if (history.state.data.siteAssessmentCategory != null) {
+              const data = history.state.data.siteAssessmentCategory.split(',');
               var SiteAssessmentCategory = {};
               var finaldataSite = [];
               for (var i = 0; i < data.length; i++) {
@@ -332,18 +332,18 @@ export class StrategicDriversComponent implements OnInit {
               }
             }
             this.strategicDriversForm.patchValue({
-              primaryKPI: history.state.data[0].primaryKPI == null ? '' : history.state.data[0].primaryKPI[0],
-              isAgile: history.state.data[0].isAgile,
-              agilePrimaryWorkstream: history.state.data[0].agilePrimaryWorkstation == null ? '' : history.state.data[0].agilePrimaryWorkstation[0],
-              agileSecondaryWorkstream: history.state.data[0].agileSecWorkstream == null ? '' : finaldatasecagile,
-              agileWave: history.state.data[0].agileWave == null ? '' : history.state.data[0].agileWave[0],
-              isPobos: history.state.data[0].isPOBOS,
-              pobosCategory: history.state.data[0].pobosCategory == null ? '' : finaldataPobos,
-              isGmsgqltannualMustWin: history.state.data[0].isGMSGQLTAnnualMustWin,
-              strategicYear: history.state.data[0].strategicYear == null ? '' : history.state.data[0].strategicYear[0],
-              annualMustWinID: history.state.data[0].annualMustWin == null ? '' : history.state.data[0].annualMustWin[0],
-              isSiteAssessment: history.state.data[0].isSiteAssessment,
-              siteAssessmentCategory: history.state.data[0].siteAssessmentCategory == null ? '' : finaldataSite,
+              primaryKPI: history.state.data.primaryKpi == null ? '' : history.state.data.primaryKpi[0],
+              isAgile: history.state.data.isAgile,
+              agilePrimaryWorkstream: history.state.data.agilePrimaryWorkstream == null ? '' : history.state.data.agilePrimaryWorkstream[0],
+              agileSecondaryWorkstream: history.state.data.agileSecondaryWorkstream == null ? '' : finaldatasecagile,
+              agileWave: history.state.data.agileWave == null ? '' : history.state.data.agileWave[0],
+              isPobos: history.state.data.isPobos,
+              pobosCategory: history.state.data.poboscategory == null ? '' : finaldataPobos,
+              isGmsgqltannualMustWin: history.state.data.isGmsgqltannualMustWin,
+              strategicYear: history.state.data.strategicYearId == null ? '' : history.state.data.strategicYearId[0],
+              annualMustWinID: history.state.data.annualMustWinId == null ? '' : history.state.data.annualMustWinId[0],
+              isSiteAssessment: history.state.data.isSiteAssessment,
+              siteAssessmentCategory: history.state.data.siteAssessmentCategory == null ? '' : finaldataSite,
               isGoodPractise: false
             })
             this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())

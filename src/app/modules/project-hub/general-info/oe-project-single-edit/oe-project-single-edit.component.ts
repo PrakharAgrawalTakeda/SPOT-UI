@@ -87,12 +87,12 @@ export class OeProjectSingleEditComponent implements OnInit {
       this.auth.lookupMaster().then(res => {
         this.lookupdata = res;
         if (history.state.data != undefined) {
-          if (history.state.data[0].oeProjectType != null) {
+          if (history.state.data.oeprojectType != null) {
             this.oeProjectType = this.lookupdata.filter(x => x.lookUpParentId == '04D143E7-CAA7-4D8D-88C3-A6CB575890A3');
             this.oeProjectType.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            const data = history.state.data[0].oeProjectType.split(',');
+            const data = history.state.data.oeprojectType.split(',');
             var oetype = {};
             var finaldataoe = [];
             for (var i = 0; i < data.length; i++) {
@@ -102,8 +102,8 @@ export class OeProjectSingleEditComponent implements OnInit {
               finaldataoe.push(oetype[0]);
             }
             this.generalInfoForm.patchValue({
-              isOeproject: history.state.data[0].isOEProject ,
-              oeprojectType: history.state.data[0].oeProjectType == null ? '' : finaldataoe,
+              isOeproject: history.state.data.isOeproject ,
+              oeprojectType: history.state.data.oeprojectType == null ? '' : finaldataoe,
             })
             this.formValueOE.emit(this.generalInfoForm.getRawValue())
             this.viewContent = true

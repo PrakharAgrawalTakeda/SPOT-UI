@@ -36,6 +36,7 @@ export class CreateProjectComponent implements OnInit {
   campaingPhaseName:string = "";
   campaingTypeName: string = "";
   productionStepName: string = "";
+  localCurrency:any = [];
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -83,6 +84,8 @@ export class CreateProjectComponent implements OnInit {
   
   ngOnInit(): void {
     this.auth.lookupMaster().then(res => {
+      this.apiService.getLocalCurrency().then(currency => {
+        this.localCurrency = currency
       this.lookupdata = res;
       this.qualityType = this.lookupdata.filter(x => x.lookUpParentId == 'A4C55F7E-C213-401E-A777-3BA741FF5802');
       this.qualityType.sort((a, b) => {
@@ -100,6 +103,7 @@ export class CreateProjectComponent implements OnInit {
       this.productionSteps.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
       })
+    })
     })
     console.log("From Create project " + history.state);
     
@@ -179,9 +183,6 @@ export class CreateProjectComponent implements OnInit {
         AnnualMustWin: event.annualMustWinID,
       })
     }
-    
-    console.log(this.capturedValues)
-    console.log(this.createProjectForm)
   }
 
 
@@ -209,43 +210,43 @@ export class CreateProjectComponent implements OnInit {
     var projectIDTemplate = "";
     var copyProjectParameter = "";
     var mainObj = [{
-      ProblemUniqueID: null,
-      ProblemTitle: null,
-      ProblemType: null,
-      PortfolioOwnerID: null,
-      DefaultOwningOrganizationID: null,
-      CreatedByID: null,
-      ProblemOwnerID: null,
-      ProblemOwnerName: null,
-      ParentProgramID: null,
-      PrimaryProductID: null,
-      ProjectDescription: null,
-      ExecutionScope: null,
-      OtherImpactedProducts: null,
-      IsTechTransfer: false,
-      CampaignTypeID: null,
-      CampaignPhaseID: null,
-      ProductionStepID: null,
-      TargetEndState: null,
-      IsConfidential: false,
-      LocalCurrencyID: null,
-      IsOEProject: false,
-      OEProjectType: null,
-      IsAgile: false,
-      AgilePrimaryWorkstream: null,
-      AgileSecondaryWorkstream: null,
-      agileWave: null,
-      IsCapsProject: false,
-      EmissionPortfolioID: null,
-      IsPOBOS: false,
-      IsSiteAssessment: false,
-      POBOSCategory: null,
-      SiteAssessmentCategory: null,
-      PrimaryKPI: null,
-      IsGMSGQLTAnnualMustWin: false,
-      StrategicYearID: null,
-      AnnualMustWinID: null
-    }];
+ProblemUniqueID:null,
+ProblemTitle:null,
+ProblemType:null,
+PortfolioOwnerID:null,
+DefaultOwningOrganizationID:null,
+CreatedByID:null,
+ProblemOwnerID:null,
+ProblemOwnerName:null,
+ParentProgramID:null,
+PrimaryProductID:null,
+ProjectDescription:null,
+ExecutionScope:null,
+OtherImpactedProducts:null,
+IsTechTransfer:false,
+CampaignTypeID:null,
+CampaignPhaseID:null,
+ProductionStepID:null,
+TargetEndState:null,
+IsConfidential:false,
+LocalCurrencyID:null,
+IsOEProject:false,
+OEProjectType:null,
+IsAgile:false,
+AgilePrimaryWorkstream:null,
+AgileSecondaryWorkstream:null,
+agileWave:null,
+IsCapsProject:false,
+EmissionPortfolioID:null,
+IsPOBOS:false,
+IsSiteAssessment:false,
+POBOSCategory:null,
+SiteAssessmentCategory:null,
+PrimaryKPI:null,
+IsGMSGQLTAnnualMustWin:false,
+StrategicYearID:null,
+AnnualMustWinID:null
+}];
     var formValue = this.createProjectForm.getRawValue()
     this.projectid = uuid.v4()
     mainObj[0].ProblemUniqueID = this.projectid
@@ -262,7 +263,7 @@ export class CreateProjectComponent implements OnInit {
     mainObj[0].TargetEndState = formValue.targetGoalSituation
     mainObj[0].ProblemType = formValue.problemType
     mainObj[0].DefaultOwningOrganizationID = formValue.owningOrganization
-    mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? formValue.localCurrency.localCurrencyId : ''
+    mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
     mainObj[0].IsOEProject = formValue.oeProject == "" ? false : formValue.oeProject
     if (mainObj[0].IsOEProject) {
       mainObj[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
@@ -362,7 +363,9 @@ export class CreateProjectComponent implements OnInit {
           }
         }
     }
-      this.apiService.createProject(dataToSend).then(res => {
+      var jsonData = JSON.stringify(dataToSend)
+      console.log(JSON.parse(jsonData))
+      this.apiService.createProject(JSON.parse(jsonData)).then(res => {
         if (this.qualityValue == true){
           this.apiService2.bulkeditQualityReference(this.qualityformValue, this.projectid).then(quality => {
             console.log(quality);
