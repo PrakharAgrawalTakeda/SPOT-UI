@@ -325,6 +325,19 @@
             </form>
           </ng-template>
         </ngx-datatable-column>
+
+        <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Project-Close-Out'">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+              <p *ngIf="value == ''">&nbsp;</p>{{value}}
+            </a>
+            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+              <spot-textarea [rows]="3" formControlName="comments" name="comments" [showLabel]="false">
+              </spot-textarea>
+            </form>
+          </ng-template>
+        </ngx-datatable-column>
+
         <ngx-datatable-column name="Include in Dashboard (Max 8)" prop="includeInReport" [sortable]="false"
           [resizeable]="false" [flexGrow]="0.40" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>

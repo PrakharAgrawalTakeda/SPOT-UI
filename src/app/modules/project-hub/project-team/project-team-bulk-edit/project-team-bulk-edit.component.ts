@@ -425,6 +425,10 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     return ' ngx-icon-header';
   }
 
+  getNgxDatatableIconHeader(): any {
+    return ' ngx-icon-header';
+  }
+
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }

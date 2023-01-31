@@ -14,7 +14,7 @@ import { AuthService } from "../../../../../core/auth/auth.service";
     encapsulation: ViewEncapsulation.None
 })
 export class RisIssueViewBulkEditComponent implements OnInit {
-    @Input() viewElements: any = ["status", "dateInitiated", "type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard",'isLink', 'indicator']
+    @Input() viewElements: any = ["status", "dateInitiated", "type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard",'isLink', 'indicator', 'includeClosedItems']
     constructor(
         public projectHubService: ProjectHubService,
         public apiService: ProjectApiService,

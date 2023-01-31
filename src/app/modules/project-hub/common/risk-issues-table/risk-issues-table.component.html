@@ -30,9 +30,9 @@
 </div>
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="riskIssuesngxdata"
+        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="riskIssuesngxdata"
         [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #riskIssuesTable [rowClass]="getRowClass">
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                     class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -44,7 +44,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="0.5">
+        <ngx-datatable-column name="Type" prop="riskIssueTypeId" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p *ngIf="value == '6feabe5a-575a-4a08-85de-f429abc3f088'"
                     [ngClass]="{'closed': row.closeDate != null}">Risk</p>
@@ -58,12 +58,12 @@
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="6">
+        <ngx-datatable-column name="If This Happens" prop="ifHappens" [flexGrow]="5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [flexGrow]="6" *ngIf="mode== 'Project-Charter'">
+        <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [flexGrow]="5" *ngIf="mode== 'Project-Charter'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p>{{value}}</p>
             </ng-template>
@@ -79,16 +79,16 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false"  *ngIf="mode== 'Normal'">
+        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" >
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
-                <div class="flex items-center justify-start gap-6">
-                    <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                <div class="flex items-center justify-start gap-6" >
+                    <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)" *ngIf="mode== 'Normal'">
                         <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                         <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
 
                     </a>
-                    <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
+                    <a href="javascript:void(0)" *ngIf="editable && mode== 'Normal'" title="Edit Single"
                         (click)="projecthubservice.toggleDrawerOpen('RiskIssue', row.riskIssueUniqueId, projectViewDetails.riskIssuesData)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 

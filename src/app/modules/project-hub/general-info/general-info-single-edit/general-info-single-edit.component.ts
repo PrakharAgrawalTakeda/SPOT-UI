@@ -132,8 +132,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
       this.generalInfo = res
       this.filterCriteria = this.projectHubService.all
-      console.log("aaaaaaaaaaaaaaaaa", res.projectManager)
-      console.log("xxxxxxxxxxxxxx", res.sponsor)
       this.generalInfoForm.patchValue({
         problemTitle: res.projectData.problemTitle,
         problemType: res.projectData.problemType,
@@ -166,7 +164,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
       });
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true
     })
     }
