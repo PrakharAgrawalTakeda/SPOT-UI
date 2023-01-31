@@ -28,7 +28,6 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
   @Input() Required: boolean = false
-  onFocusout: any = () => {console.log("fdg") ; this.childEmitter.emit()}
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
   filteredDropDownValues: Observable<any>
@@ -40,7 +39,6 @@ export class SpotSingleselectAutocompleteComponent implements OnInit, ControlVal
     control: new FormControl('')
   });
   disabled = false;
-@Output() childEmitter = new EventEmitter();
   constructor(private fb: FormBuilder) {
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {

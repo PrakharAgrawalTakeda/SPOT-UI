@@ -135,7 +135,7 @@ export class CreateProjectComponent implements OnInit {
         enviornmentalPortfolio: event.enviornmentalPortfolio ? event.enviornmentalPortfolio : {},
         isArchived: event.isArchived,
         isCapsProject: event.isCapsProject,
-        owningOrganization: event.defaultOwningOrganizationId,
+        owningOrganization: event.owningOrganization,
         SubmittedBy: event.SubmittedBy,
         targetGoalSituation: event.targetGoalSituation
       })

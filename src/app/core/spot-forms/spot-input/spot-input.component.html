@@ -1,13 +1,17 @@
 <form [formGroup]="form" class="form w-full">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
         <mat-label class="items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe" *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}" >help</mat-icon></mat-label>
-        
-            <input *ngIf="Required" matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
-                (blur)="onTouch()" required="true" (focusout)="onChange($event.target.value)">
-            <input *ngIf="max" maxlength = {{len}} matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
-                    (blur)="onTouch()" (keyup) = "Validate($event)">
-            <input *ngIf="!Required && !max" matInput formControlName="control" [placeholder]="placeholder" (input)="onChange($event.target.value)"
-                (blur)="onTouch()">
+        <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
+        <ng-template #ifBlock>
+            <input matInput formControlName="control" [placeholder]="placeholder"
+                (input)="onChange($event.target.value)" (blur)="onTouch()" required="true"
+                (focusout)="onChange($event.target.value)">
+        </ng-template>
+        <ng-template #elseBlock>
+            <input matInput formControlName="control" [placeholder]="placeholder"
+                (input)="onChange($event.target.value)" (blur)="onTouch()">
+        </ng-template>
+            
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
     </mat-form-field>
 </form>

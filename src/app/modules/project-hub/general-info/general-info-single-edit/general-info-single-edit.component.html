@@ -69,7 +69,7 @@
             formControlName="problemType" name="problemType" [label]="'Project Type'" [placeholder]="'Project Type'"
             [showNoneOption]="true" [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues">
         </spot-select>
-        <spot-singleselect-autocomplete (childEmitter)="GetPortfolioOwnerSelected()"
+        <spot-singleselect-autocomplete 
             (focusout)="clickEvent($event, $event.currentTarget.innerText)" *ngIf="viewElementChecker('portfolioOwner')"
             formControlName="portfolioOwner" class="w-full" name="portfolioOwner" [label]="'Portfolio Owner'"
             [Required]="callLocation == 'CreateNew'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
@@ -102,6 +102,7 @@
             [placeholder]="'Local Currency'" [valuePointer]="'localCurrencyAbbreviation'"
             [dropDownArray]="localCurrencyList">
         </spot-singleselect-autocomplete>
+        
         <spot-select [Required]="callLocation == 'CreateNew'"
             *ngIf="viewElementChecker('problemType')" class="w-full" formControlName="problemType" name="problemType"
             [label]="'Project Type'" [placeholder]="'Project Type'" [showNoneOption]="true"

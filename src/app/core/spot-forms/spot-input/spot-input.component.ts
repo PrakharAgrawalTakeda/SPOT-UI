@@ -29,13 +29,10 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   onChange: any = () => { };
   form: FormGroup;
   disabled = false;
-  @Input() max=false;
-  @Input() len = 3;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    console.log("Length", this.len , this.max)
     this.form = this.fb.group({
       control: '',
     })

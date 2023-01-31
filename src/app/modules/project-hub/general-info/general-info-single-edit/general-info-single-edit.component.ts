@@ -34,7 +34,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   filterCriteria: any = {}
   generalInfo: any = {}
   lookupdata: any = [];
-  localCurrencyList: any = [];
+  localCurrencyList: any = {};
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
   generalInfoForm = new FormGroup({
@@ -93,12 +93,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     })
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       this.generalInfoForm.controls.owningOrganization.disable()
-      this.generalInfoForm.controls.localCurrency.disable()
+      // this.generalInfoForm.controls.localCurrency.disable()
       this.generalInfoForm.controls.sponsor.disable()
       this.generalInfoForm.controls.projectManager.disable()
     } else {
       this.generalInfoForm.controls.owningOrganization.enable()
-      this.generalInfoForm.controls.localCurrency.disable()
+      // this.generalInfoForm.controls.localCurrency.disable()
       this.generalInfoForm.controls.sponsor.enable()
       this.generalInfoForm.controls.projectManager.enable()
     }
@@ -114,6 +114,17 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         }
       }
     })
+
+    this.generalInfoForm.controls.portfolioOwner.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        var currency = this.localCurrencyList.filter(x => x.localCurrencyId == this.generalInfoForm.value.portfolioOwner.localCurrencyId)
+        this.generalInfoForm.patchValue({
+          owningOrganization: this.generalInfoForm.value.portfolioOwner.defaultOwningOrganization,
+          localCurrency: currency[0]
+        })
+      }
+    })
+
   }
 
   ngOnInit(): void {
@@ -164,6 +175,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         this.apiService.getLocalCurrency().then(data => {
           this.localCurrencyList = data
           this.filterCriteria = res
+          this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
           if (history.state.data != undefined) {
                 if (history.state.data[0].primaryProduct != null) {
                   history.state.data[0].primaryProduct = this.filterCriteria.products.filter(function (entry) {
@@ -206,12 +218,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                   localCurrency: ''
                 })
                 this.formValue.emit(this.generalInfoForm.getRawValue())
-                this.generalInfoForm.controls.localCurrency.disable()
+                // this.generalInfoForm.controls.localCurrency.disable()
                 this.viewContent = true
           }
           else{
           this.formValue.emit(this.generalInfoForm.getRawValue())
-          this.generalInfoForm.controls.localCurrency.disable()
+          // this.generalInfoForm.controls.localCurrency.disable()
           this.viewContent = true
           }
         })
@@ -387,14 +399,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         this.projectHubService.successSave.next(true)
         this.projectHubService.toggleDrawerOpen('', '', [], '')
       }
-    })
-  }
-
-  GetPortfolioOwnerSelected(){
-    var currency = this.localCurrencyList.filter(x => x.localCurrencyId == this.generalInfoForm.value.portfolioOwner.localCurrencyId)
-    this.generalInfoForm.patchValue({
-      owningOrganization: this.generalInfoForm.value.portfolioOwner.defaultOwningOrganization,
-      localCurrency: currency[0]
     })
   }
 
