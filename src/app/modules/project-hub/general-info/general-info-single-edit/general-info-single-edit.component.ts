@@ -24,13 +24,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
 
   @Output() eventName = new EventEmitter<EventType>();
   viewContent:boolean = false
-  reqName: boolean = false;
-  reqPortfolio: boolean = false;
-  reqUser: boolean = false;
-  reqProduct: boolean = false;
-  reqDesc: boolean = false;
-  reqOwning: boolean = false;
-  reqType: boolean = false;
+  showMessage: boolean = false;
   filterCriteria: any = {}
   generalInfo: any = {}
   lookupdata: any = [];
@@ -219,12 +213,10 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                   localCurrency: ''
                 })
                 this.formValue.emit(this.generalInfoForm.getRawValue())
-                // this.generalInfoForm.controls.localCurrency.disable()
                 this.viewContent = true
           }
           else{
           this.formValue.emit(this.generalInfoForm.getRawValue())
-          // this.generalInfoForm.controls.localCurrency.disable()
           this.viewContent = true
           }
         })
@@ -249,12 +241,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   getFunctionGroupID(): any {
     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
   }
-  // getLocalCurrency(): any {
-  //   for (var i = 0; i < this.localCurrencyList.length; i++){
-  //     this.local.push(this.localCurrencyList[i].localCurrencyAbbreviation) 
-  //   }
-  //   return this.local
-  // }
   viewElementChecker(element: string): boolean {
     return this.viewElements.some(x => x == element)
   }
@@ -263,47 +249,11 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   }
 
   clickEvent(value: string, name: string) {
-    if (name == "Project Name *" && value == '') {
-      this.reqName = true;
+    if ((name == "Project Name *" || name == "Portfolio Ownerhelp *" || name == "None\nOwning Organizationhelp *" || name == "Submitted By *" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)){
+      this.showMessage = true
     }
-    else if (name == "Project Name *" && value != '') {
-      this.reqName = false;
-    }
-    else if (name == "Portfolio Ownerhelp *" && value == "") {
-      this.reqPortfolio = true;
-    }
-    else if (name == "Portfolio Ownerhelp *" && value != "") {
-      this.reqPortfolio = false;
-    } 
-    else if (name == "None\nOwning Organizationhelp *" && value == "") {
-      this.reqOwning = true;
-    }
-    else if (name == "None\nOwning Organizationhelp *" && value != "") {
-      this.reqOwning = false;
-    }
-    else if (name == "Submitted By *" && value == "") {
-      this.reqUser = true;
-    }
-    else if (name == "Submitted By *" && value != "") {
-      this.reqUser = false;
-    }
-    else if (name == "Primary Producthelp *" && value == "") {
-      this.reqProduct = true;
-    }
-    else if (name == "Primary Producthelp *" && value != "") {
-      this.reqProduct = false;
-    }
-    else if (name == "Problem Description / Present Situation / Submission Description *" && value == "") {
-      this.reqDesc = true;
-    }
-    else if (name == "Problem Description / Present Situation / Submission Description *" && value != "") {
-      this.reqDesc = false;
-    }
-    else if (name == "Project Type *" && value == "") {
-      this.reqType = true;
-    }
-    else if (name == "Project Type *" && value != "") {
-      this.reqType = false;
+    else{
+      this.showMessage = false
     }
   }
 

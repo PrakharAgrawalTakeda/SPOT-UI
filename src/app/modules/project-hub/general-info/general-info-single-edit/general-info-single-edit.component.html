@@ -9,7 +9,7 @@
     </div>
     <form class="pl-3 w-full overflow-hidden" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
         <div [ngClass] = "{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pr-3': viewType == 'SidePanel'}">
-        <p style="color:red;" *ngIf="reqName || reqPortfolio || reqUser || reqProduct || reqDesc || reqType || reqOwning">Error: Some of the
+        <p style="color:red;" *ngIf="showMessage">Error: Some of the
             required fields are missing. Please review and correct your data below</p>
         <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('IsArchived')"
             class="flex justify-between items-center mt-6 mb-6">
@@ -61,7 +61,7 @@
             [showNoneOption]="true" [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues">
         </spot-select>
         <spot-singleselect-autocomplete 
-            (focusout)="clickEvent($event, $event.currentTarget.innerText)" *ngIf="viewElementChecker('portfolioOwner')"
+            (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)" *ngIf="viewElementChecker('portfolioOwner')"
             formControlName="portfolioOwner" class="w-full" name="portfolioOwner" [label]="'Portfolio Owner'"
             [Required]="callLocation == 'CreateNew'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
             [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
