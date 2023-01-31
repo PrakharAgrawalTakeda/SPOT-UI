@@ -248,7 +248,7 @@ StrategicYearID:null,
 AnnualMustWinID:null
 }];
     var formValue = this.createProjectForm.getRawValue()
-    this.projectid = uuid.v4()
+    this.projectid = ""
     mainObj[0].ProblemUniqueID = this.projectid
     mainObj[0].ProblemTitle = formValue.problemTitle
     mainObj[0].PortfolioOwnerID = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''

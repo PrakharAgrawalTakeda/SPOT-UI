@@ -4,7 +4,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { PortfolioApiService } from './../../portfolio-center/portfolio-api.service';
-import { CreateNewService } from '../create-new.service';
 import { } from '@angular/compiler'
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Title } from '@angular/platform-browser';
