@@ -29,7 +29,8 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     // if your getAuthToken() function declared as "async getAuthToken() {}"
     if (req.url.includes(GlobalVariables.apiurl)) {
-     if (moment(new Date()).diff(moment(localStorage.getItem('token-initaited-time')), 'hours') > 0) {
+      console.log("Token Last refreshed " + moment(new Date()).diff(moment(localStorage.getItem('token-initaited-time')), 'minutes')+ " mins ago")
+     if (moment(new Date()).diff(moment(localStorage.getItem('token-initaited-time')), 'minutes') > 30) {
         await lastValueFrom(this.msalService.acquireTokenSilent(scopes)).then(res => {
           token = res.accessToken
           localStorage.setItem('token', res.accessToken)
