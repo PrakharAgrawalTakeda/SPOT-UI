@@ -298,7 +298,6 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
                 }
             }
 
-            console.log(child.link, this._router.url.includes(child.link))
             // Check if the child has a link and is active
             if ( child.link, this._router.url.includes(child.link) )
             {
