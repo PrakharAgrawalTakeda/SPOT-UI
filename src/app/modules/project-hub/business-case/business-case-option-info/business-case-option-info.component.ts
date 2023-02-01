@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-business-case-option-info',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BusinessCaseOptionInfoComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private _Activatedroute: ActivatedRoute) { }
+  option: string = ''
   ngOnInit(): void {
+    this.dataloader()
+  }
+  dataloader() {
+    this.option = this._Activatedroute.parent.snapshot.routeConfig.path
   }
 
 }

@@ -144,7 +144,6 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
             .subscribe((event: NavigationEnd) => {
 
                 // If the item has a children that has a matching url with the current url, expand...
-                console.log(this.item)
                 if ( this._hasActiveChild(this.item, event.urlAfterRedirects) )
                 {
                     this.expand();
