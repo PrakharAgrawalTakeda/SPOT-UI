@@ -81,6 +81,7 @@ debugger
         strategicYearID:null,
         topsData:null,
       }
+      if (history.state.quality != undefined){
       if (history.state.quality.length != 0) {
         this.auth.lookupMaster().then(res => {
           this.lookupdata = res;
@@ -107,7 +108,7 @@ debugger
         }
         }
         })
-        
+      }
       }
       this.formValueQuality.emit(this.qualityRefForm)
       this.QualityValue.emit(this.qualityForm)

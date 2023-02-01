@@ -248,8 +248,7 @@ StrategicYearID:null,
 AnnualMustWinID:null
 }];
     var formValue = this.createProjectForm.getRawValue()
-    this.projectid = ""
-    mainObj[0].ProblemUniqueID = this.projectid
+    mainObj[0].ProblemUniqueID = ""
     mainObj[0].ProblemTitle = formValue.problemTitle
     mainObj[0].PortfolioOwnerID = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
     mainObj[0].ExecutionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
@@ -340,44 +339,65 @@ AnnualMustWinID:null
     }
       if (formValue.qualityReference){
         this.qualityValue = true;
-        this.qualityformValue = []
-        var genQRFORM = this.qualityForm
-        for (var quality of this.qualityForm) {
-          if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != ""){
-            if (history.state.callLocation == "CopyProject"){
-              this.qualityformValue.push({
-                qualityUniqueId: "",
-                problemUniqueId: this.projectid,
-                qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
-                qualityReference1: quality.qualityReference1
-              })
-            }
-            else{
-              this.qualityformValue.push({
-                qualityUniqueId: quality.qualityUniqueId,
-                problemUniqueId: this.projectid,
-                qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-                qualityReference1: quality.qualityReference1
-              })
-            }
-          }
-        }
+        // this.qualityformValue = []
+        // var genQRFORM = this.qualityForm
+        // for (var quality of this.qualityForm) {
+        //   if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != ""){
+        //     if (history.state.callLocation == "CopyProject"){
+        //       this.qualityformValue.push({
+        //         qualityUniqueId: "",
+        //         problemUniqueId: this.projectid,
+        //         qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
+        //         qualityReference1: quality.qualityReference1
+        //       })
+        //     }
+        //     else{
+        //       this.qualityformValue.push({
+        //         qualityUniqueId: quality.qualityUniqueId,
+        //         problemUniqueId: this.projectid,
+        //         qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+        //         qualityReference1: quality.qualityReference1
+        //       })
+        //     }
+        //   }
+        // }
     }
       var jsonData = JSON.stringify(dataToSend)
       console.log(JSON.parse(jsonData))
-      this.apiService.createProject(JSON.parse(jsonData)).then(res => {
-        if (this.qualityValue == true){
-          this.apiService2.bulkeditQualityReference(this.qualityformValue, this.projectid).then(quality => {
+      this.apiService.createProject(JSON.parse(jsonData)).then((res: any) => {
+        if (this.qualityValue == true) {
+          this.qualityformValue = []
+          var genQRFORM = this.qualityForm
+          for (var quality of this.qualityForm) {
+            if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
+              if (history.state.callLocation == "CopyProject") {
+                this.qualityformValue.push({
+                  qualityUniqueId: "",
+                  problemUniqueId: res.problemUniqueId,
+                  qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
+                  qualityReference1: quality.qualityReference1
+                })
+              }
+              else {
+                this.qualityformValue.push({
+                  qualityUniqueId: quality.qualityUniqueId,
+                  problemUniqueId: res.problemUniqueId,
+                  qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+                  qualityReference1: quality.qualityReference1
+                })
+              }
+            }
+          }
+          this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
-            console.log(res);
             if (res != "") {
               this.createProjectForm.reset();
-              window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+              window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
             }
         })
       }
       else{
-          window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+          window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
       }
     })
   }
