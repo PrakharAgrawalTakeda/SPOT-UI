@@ -13,18 +13,26 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
+  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() kpi: any
   @Input() editable: boolean = true
   initializationComplete: boolean = false
+  bulkEditType: string = 'OperationalPerformanceBulkEdit';
+  addSingle: string = 'OperationalPerformanceSingleEdit';
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService) {
   }
 
   ngOnInit(): void {
+    console.log(this.projectViewDetails);
+    if (this.mode == 'Project-Close-Out') {
+      this.bulkEditType = 'OperationalPerformanceBulkEditCloseOut';
+      this.addSingle = 'OperationalPerformanceSingleEditCloseOut'
+    }
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {

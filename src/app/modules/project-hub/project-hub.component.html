@@ -28,9 +28,13 @@
             [mode]="'Project-Charter'"></app-project-team-bulk-edit>
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+        <app-operational-performance-edit
+                *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCloseOut'"></app-operational-performance-edit>
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
+        <app-operational-performance-bulk-edit
+                *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>

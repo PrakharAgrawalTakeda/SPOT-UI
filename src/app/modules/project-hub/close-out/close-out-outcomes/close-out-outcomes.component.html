@@ -1,1 +1,4 @@
-<p>close-out-outcomes works!</p>
+<app-operational-performance-table *ngIf="viewContent" [mode]="'Project-Close-Out'" class="w-full" [kpi]="kpiMasters" [lookup]="lookupMasters"
+        [projectViewDetails]="projectViewDetails" [projectid]="id"
+        [editable]="projecthubservice.roleControllerControl.projectBenefits">
+</app-operational-performance-table>
