@@ -28,9 +28,7 @@ export class LandingHomeComponent implements OnInit {
                     scopes: ["api://1457c97b-39c4-4789-9ac6-1c7a39211d9a/Api.Read"]
                 }
                 this.authService.instance.acquireTokenSilent(scopes).then(response => {
-                    localStorage.setItem('token', response.accessToken)
-                    localStorage.setItem('token-initaited-time', moment(new Date()).toString())
-                    if (localStorage.getItem('spot-redirect') != null) {
+                   if (localStorage.getItem('spot-redirect') != null) {
                         var temp = localStorage.getItem('spot-redirect')
                         console.log("hey" + temp)
                         localStorage.removeItem('spot-redirect')
