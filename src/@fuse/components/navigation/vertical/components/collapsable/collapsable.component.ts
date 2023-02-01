@@ -144,6 +144,7 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
             .subscribe((event: NavigationEnd) => {
 
                 // If the item has a children that has a matching url with the current url, expand...
+                console.log(this.item)
                 if ( this._hasActiveChild(this.item, event.urlAfterRedirects) )
                 {
                     this.expand();
@@ -297,8 +298,9 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
                 }
             }
 
+            console.log(child.link, this._router.url.includes(child.link))
             // Check if the child has a link and is active
-            if ( child.link && this._router.isActive(child.link, child.exactMatch || false) )
+            if ( child.link, this._router.url.includes(child.link) )
             {
                 return true;
             }
