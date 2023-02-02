@@ -170,17 +170,132 @@ export class ProjectHubService {
           icon: 'heroicons_outline:briefcase',
           children: [
             {
-              title: 'Recommended Option',
+              title: 'General Info',
               type: 'basic',
-              link: 'business-case'
+              link: 'business-case/general-info'
+            },
+            {
+              title: 'Recommended Option',
+              type: 'collapsable',
+              children: [
+                {
+                  title: 'Option Info',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/option-info'
+                },
+                {
+                  title: 'Timeline',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/timeline'
+                },
+                {
+                  title: 'Cost / Funding',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/cost-funding'
+                },
+                {
+                  title: 'Benefits',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/benefits'
+                },
+                {
+                  title: 'TOPS',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/tops'
+                },
+                {
+                  title: 'CAPS',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/caps'
+                },
+                {
+                  title: 'Risks / Assumptions',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/risks'
+                },
+              ]
             },
             {
               title: 'Option 2',
-              type: 'basic',
+              type: 'collapsable',
+              children: [
+                {
+                  title: 'Option Info',
+                  type: 'basic',
+                  link: 'business-case/option-2/option-info'
+                },
+                {
+                  title: 'Timeline',
+                  type: 'basic',
+                  link: 'business-case/option-2/timeline'
+                },
+                {
+                  title: 'Cost / Funding',
+                  type: 'basic',
+                  link: 'business-case/option-2/cost-funding'
+                },
+                {
+                  title: 'Benefits',
+                  type: 'basic',
+                  link: 'business-case/option-2/benefits'
+                },
+                {
+                  title: 'TOPS',
+                  type: 'basic',
+                  link: 'business-case/option-2/tops'
+                },
+                {
+                  title: 'CAPS',
+                  type: 'basic',
+                  link: 'business-case/option-2/caps'
+                },
+                {
+                  title: 'Risks / Assumptions',
+                  type: 'basic',
+                  link: 'business-case/option-2/risks'
+                },
+              ]
             },
             {
               title: 'Option 3',
-              type: 'basic',
+              type: 'collapsable',
+              children: [
+                {
+                  title: 'Option Info',
+                  type: 'basic',
+                  link: 'business-case/option-3/option-info'
+                },
+                {
+                  title: 'Timeline',
+                  type: 'basic',
+                  link: 'business-case/option-3/timeline'
+                },
+                {
+                  title: 'Cost / Funding',
+                  type: 'basic',
+                  link: 'business-case/option-3/cost-funding'
+                },
+                {
+                  title: 'Benefits',
+                  type: 'basic',
+                  link: 'business-case/option-3/benefits'
+                },
+                {
+                  title: 'TOPS',
+                  type: 'basic',
+                  link: 'business-case/option-3/tops'
+                },
+                {
+                  title: 'CAPS',
+                  type: 'basic',
+                  link: 'business-case/option-3/caps'
+                },
+                {
+                  title: 'Risks / Assumptions',
+                  type: 'basic',
+                  link: 'business-case/option-3/risks'
+                },
+              ]
             }
           ]
         },

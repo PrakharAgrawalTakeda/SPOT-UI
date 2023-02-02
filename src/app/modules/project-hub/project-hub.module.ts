@@ -40,7 +40,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserSingleDropdownComponent } from './common/user-single-dropdown/user-single-dropdown.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -77,13 +77,13 @@ import { AskNeedSingleEditComponent } from './project-board/ask-need/ask-need-si
 import { AskNeedLinkComponent } from './project-board/ask-need/ask-need-link/ask-need-link.component';
 import { LinkProjectComponent } from './common/link-project/link-project.component';
 import { UpdateParentComponent } from './common/update-parent/update-parent.component';
-import {SearchModule} from "../../layout/common/search/search.module";
-import {LanguagesModule} from "../../layout/common/languages/languages.module";
-import {FuseFullscreenModule} from "../../../@fuse/components/fullscreen";
-import {ShortcutsModule} from "../../layout/common/shortcuts/shortcuts.module";
-import {MessagesModule} from "../../layout/common/messages/messages.module";
-import {NotificationsModule} from "../../layout/common/notifications/notifications.module";
-import {UserModule} from "../../layout/common/user/user.module";
+import { SearchModule } from "../../layout/common/search/search.module";
+import { LanguagesModule } from "../../layout/common/languages/languages.module";
+import { FuseFullscreenModule } from "../../../@fuse/components/fullscreen";
+import { ShortcutsModule } from "../../layout/common/shortcuts/shortcuts.module";
+import { MessagesModule } from "../../layout/common/messages/messages.module";
+import { NotificationsModule } from "../../layout/common/notifications/notifications.module";
+import { UserModule } from "../../layout/common/user/user.module";
 //Delete Later
 import { LinkMilestonesComponent } from './project-board/link-milestones/link-milestones.component';
 // End Delete Later
@@ -91,7 +91,7 @@ import { ScheduleComponent } from './project-board/schedule/schedule.component';
 import { ScheduleLinkComponent } from './project-board/schedule/schedule-link/schedule-link.component';
 import { ScheduleSingleEditComponent } from './project-board/schedule/schedule-single-edit/schedule-single-edit.component';
 import { ScheduleBulkEditComponent } from './project-board/schedule/schedule-bulk-edit/schedule-bulk-edit.component';
-import { PhaseStateComponent} from "./common/phase-state/phase-state.component";
+import { PhaseStateComponent } from "./common/phase-state/phase-state.component";
 import { StateCheckComponent } from './common/state-check/state-check.component';
 import { RisIssueViewBulkEditComponent } from './project-board/risk-issue/risk-issue-view-bulk-edit/risk-issue-view-bulk-edit.component';
 import { SchedulesTableComponent } from './project-board/schedule/schedule-table/schedule-table.component';
@@ -113,10 +113,19 @@ import { ProjectCharterProjectTeamComponent } from './project-charter/project-ch
 import { ProjectCharterRiskIssuesComponent } from './project-charter/project-charter-risk-issues/project-charter-risk-issues.component';
 import { ProjectCharterCostFundingComponent } from './project-charter/project-charter-cost-funding/project-charter-cost-funding.component';
 import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
-import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/close-out-general-info.component";
+import { CloseOutGeneralInfoComponent } from "./close-out/close-out-general-info/close-out-general-info.component";
 import { KeyAssumptionsTableComponent } from './common/key-assumptions-table/key-assumptions-table.component';
 import { KeyAssumptionsAddSingleComponent } from './common/key-assumptions-table/key-assumptions-add-single/key-assumptions-add-single.component';
 import { KeyAssumptionsBulkEditComponent } from './common/key-assumptions-table/key-assumptions-bulk-edit/key-assumptions-bulk-edit.component';
+import { BusinessCaseGeneralInfoComponent } from './business-case/business-case-general-info/business-case-general-info.component';
+import { BusinessCaseOptionInfoComponent } from './business-case/business-case-option-info/business-case-option-info.component';
+import { BusinessCaseTimelineComponent } from './business-case/business-case-timeline/business-case-timeline.component';
+import { BusinessCaseCostFundingComponent } from './business-case/business-case-cost-funding/business-case-cost-funding.component';
+import { BusinessCaseBenefitsComponent } from './business-case/business-case-benefits/business-case-benefits.component';
+import { BusinessCaseTopsComponent } from './business-case/business-case-tops/business-case-tops.component';
+import { BusinessCaseCapsComponent } from './business-case/business-case-caps/business-case-caps.component';
+import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-risk-issues/business-case-risk-issues.component';
+import { OptionInfoComponent } from './common/option-info/option-info.component';
 import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
 
 export const projectRoutes: Route[] = [
@@ -196,7 +205,7 @@ export const projectRoutes: Route[] = [
     {
       path: 'project-proposal',
       component: ProjectProposalComponent,
-      children:[
+      children: [
         {
           path: 'general-info',
           component: ProjectProposalGeneralInfoComponent,
@@ -219,7 +228,7 @@ export const projectRoutes: Route[] = [
     {
       path: 'project-charter',
       component: ProjectCharterComponent,
-      children:[
+      children: [
         {
           path: 'general-info',
           component: ProjectCharterGeneralInfoComponent,
@@ -253,7 +262,7 @@ export const projectRoutes: Route[] = [
     {
       path: 'close-out',
       component: CloseOutComponent,
-      children:[
+      children: [
         {
           path: 'general-info',
           component: CloseOutGeneralInfoComponent,
@@ -277,6 +286,115 @@ export const projectRoutes: Route[] = [
         {
           path: 'lessons-learned',
           component: CloseOutLessonsLearnedComponent,
+        }
+      ]
+    },
+    {
+      path: 'business-case',
+      component: BusinessCaseComponent,
+      children: [
+        {
+          path: 'general-info',
+          component: BusinessCaseGeneralInfoComponent,
+        },
+        {
+          path: 'recommended-option',
+          children: [
+            {
+              path: 'option-info',
+              component: BusinessCaseOptionInfoComponent,
+            },
+            {
+              path: 'timeline',
+              component: BusinessCaseTimelineComponent,
+            },
+            {
+              path: 'cost-funding',
+              component: BusinessCaseCostFundingComponent,
+            },
+            {
+              path: 'benefits',
+              component: BusinessCaseBenefitsComponent,
+            },
+            {
+              path: 'tops',
+              component: BusinessCaseTopsComponent,
+            },
+            {
+              path: 'caps',
+              component: BusinessCaseOptionInfoComponent,
+            },
+            {
+              path: 'risks',
+              component: BusinessCaseRiskIssuesComponent,
+            }
+          ]
+        },
+        {
+          path: 'option-2',
+          children: [
+            {
+              path: 'option-info',
+              component: BusinessCaseOptionInfoComponent,
+            },
+            {
+              path: 'timeline',
+              component: BusinessCaseTimelineComponent,
+            },
+            {
+              path: 'cost-funding',
+              component: BusinessCaseCostFundingComponent,
+            },
+            {
+              path: 'benefits',
+              component: BusinessCaseBenefitsComponent,
+            },
+            {
+              path: 'tops',
+              component: BusinessCaseTopsComponent,
+            },
+            {
+              path: 'caps',
+              component: BusinessCaseOptionInfoComponent,
+            },
+            {
+              path: 'risks',
+              component: BusinessCaseRiskIssuesComponent,
+            }
+          ]
+        },
+        {
+          path: 'option-3',
+          children: [
+            {
+              path: 'option-info',
+              component: BusinessCaseOptionInfoComponent,
+            },
+            {
+              path: 'timeline',
+              component: BusinessCaseTimelineComponent,
+            },
+            {
+              path: 'cost-funding',
+              component: BusinessCaseCostFundingComponent,
+            },
+            {
+              path: 'benefits',
+              component: BusinessCaseBenefitsComponent,
+            },
+            {
+              path: 'tops',
+              component: BusinessCaseTopsComponent,
+            },
+            {
+              path: 'caps',
+              component: BusinessCaseOptionInfoComponent,
+            },
+            {
+              path: 'risks',
+              component: BusinessCaseRiskIssuesComponent,
+            }
+          ]
         }
       ]
     }
@@ -368,52 +486,61 @@ export const projectRoutes: Route[] = [
     KeyAssumptionsTableComponent,
     KeyAssumptionsAddSingleComponent,
     KeyAssumptionsBulkEditComponent,
+    BusinessCaseGeneralInfoComponent,
+    BusinessCaseOptionInfoComponent,
+    BusinessCaseTimelineComponent,
+    BusinessCaseCostFundingComponent,
+    BusinessCaseBenefitsComponent,
+    BusinessCaseTopsComponent,
+    BusinessCaseCapsComponent,
+    BusinessCaseRiskIssuesComponent,
+    OptionInfoComponent,
     CloseOutOutcomesSingleEditComponent
   ],
-    imports: [
-        RouterModule.forChild(projectRoutes),
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatDividerModule,
-        MatIconModule,
-        MatMenuModule,
-        MatProgressBarModule,
-        MatRippleModule,
-        MatSidenavModule,
-        MatSortModule,
-        MatTableModule,
-        MatTabsModule,
-        MatExpansionModule,
-        NgApexchartsModule,
-        TranslocoModule,
-        SharedModule,
-        CommonModule,
-        FuseDrawerModule,
-        FuseNavigationModule,
-        NgScrollbarModule,
-        MatChipsModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        NgxDatatableModule,
-        MatSlideToggleModule,
-        MatDatepickerModule,
-        MatMomentDateModule,
-        MatAutocompleteModule,
-        MatTooltipModule,
-        MatSnackBarModule,
-        FuseAlertModule,
-        SpotFormsModule,
-        SearchModule,
-        LanguagesModule,
-        FuseFullscreenModule,
-        ShortcutsModule,
-        MessagesModule,
-        NotificationsModule,
-        UserModule
-    ],
-    exports:[
-      GeneralInfoSingleEditComponent
-    ]
+  imports: [
+    RouterModule.forChild(projectRoutes),
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatDividerModule,
+    MatIconModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatExpansionModule,
+    NgApexchartsModule,
+    TranslocoModule,
+    SharedModule,
+    CommonModule,
+    FuseDrawerModule,
+    FuseNavigationModule,
+    NgScrollbarModule,
+    MatChipsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    NgxDatatableModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatAutocompleteModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    FuseAlertModule,
+    SpotFormsModule,
+    SearchModule,
+    LanguagesModule,
+    FuseFullscreenModule,
+    ShortcutsModule,
+    MessagesModule,
+    NotificationsModule,
+    UserModule
+  ],
+  exports: [
+    GeneralInfoSingleEditComponent
+  ]
 })
 export class ProjectHubModule { }
