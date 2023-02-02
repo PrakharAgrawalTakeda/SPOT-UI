@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../../common/project-api.service';
@@ -16,6 +17,12 @@ export class CloseOutOutcomesComponent implements OnInit {
   kpiMasters = []
   viewContent: boolean = false
   editable: boolean = false
+  outcomeForm = new FormGroup({
+    projectDescription: new FormControl(''),
+    approachTaken: new FormControl(''),
+    targetEndState: new FormControl(''),
+    benefitsRealized: new FormControl('')
+  })
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -38,6 +45,12 @@ export class CloseOutOutcomesComponent implements OnInit {
         })
       })
     })
+    this.disabler()
+  }
+
+
+  disabler() {
+    this.outcomeForm.disable()
   }
 
 }

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
@@ -20,11 +21,17 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   @Input() kpi: any
   @Input() editable: boolean = true
   initializationComplete: boolean = false
+  id:string=""
   bulkEditType: string = 'OperationalPerformanceBulkEdit';
   addSingle: string = 'OperationalPerformanceSingleEdit';
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
-    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService) {
+    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
+    this.projecthubservice.submitbutton.subscribe(res => {
+      if (res == true) {
+        this.dataloader()
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -39,6 +46,12 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     this.dataloader()
   }
   dataloader() {
+    if (this.mode == 'Project-Close-Out'){
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getprojectviewdata(this.id).then((res: any) => {
+            this.projectViewDetails = res
+      })
+    }
     this.initializationComplete = false
     this.initializationComplete = true
   }

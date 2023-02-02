@@ -117,6 +117,7 @@ import {CloseOutGeneralInfoComponent} from "./close-out/close-out-general-info/c
 import { KeyAssumptionsTableComponent } from './common/key-assumptions-table/key-assumptions-table.component';
 import { KeyAssumptionsAddSingleComponent } from './common/key-assumptions-table/key-assumptions-add-single/key-assumptions-add-single.component';
 import { KeyAssumptionsBulkEditComponent } from './common/key-assumptions-table/key-assumptions-bulk-edit/key-assumptions-bulk-edit.component';
+import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -366,7 +367,8 @@ export const projectRoutes: Route[] = [
     ProjectCharterCapsComponent,
     KeyAssumptionsTableComponent,
     KeyAssumptionsAddSingleComponent,
-    KeyAssumptionsBulkEditComponent
+    KeyAssumptionsBulkEditComponent,
+    CloseOutOutcomesSingleEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

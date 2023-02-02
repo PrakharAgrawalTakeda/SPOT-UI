@@ -1,0 +1,35 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header" *ngIf="viewType == 'SidePanel'">
+        <div class="text-on-primary" style="padding-top: 6px">Outcomes Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="outcomeForm" (ngSubmit)="submitOutcomes()">
+        <div class="overflow-x-hidden  pr-3" [ngClass]="{'overflow-y-scroll h-[86.5vh] pt-3': viewType == 'SidePanel'}">
+                <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
+                    [label]="'Problem Description'" [placeholder]="'Problem Description'">
+                </spot-textarea>
+                <spot-textarea class="w-full read-only" formControlName="approachTaken" name="approachTaken"
+                    [label]="'Approach Taken to Solve Problem'" [placeholder]="'Approach Taken to Solve Problem'">
+                </spot-textarea>
+                <spot-textarea class="w-full read-only" formControlName="targetEndState" name="targetEndState"
+                    [label]="'Target End State'" [placeholder]="'Target End State'">
+                </spot-textarea>
+                <spot-textarea class="w-full read-only" formControlName="benefitsRealized" name="benefitsRealized"
+                    [label]="'Benefits Realized/Outcomes'" [placeholder]="'Benefits Realized/Outcomes'">
+                </spot-textarea>
+        </div>
+        <div class="pr-3 flex items-start justify-between mt-6" *ngIf="viewType == 'SidePanel'">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

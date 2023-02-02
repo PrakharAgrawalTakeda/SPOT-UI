@@ -1,4 +1,50 @@
-<app-operational-performance-table *ngIf="viewContent" [mode]="'Project-Close-Out'" class="w-full" [kpi]="kpiMasters" [lookup]="lookupMasters"
-        [projectViewDetails]="projectViewDetails" [projectid]="id"
-        [editable]="projecthubservice.roleControllerControl.projectBenefits">
-</app-operational-performance-table>
+<div class="w-full min-w-0 p-8 pt-0" #container>
+        <div class="flex justify-between items-start gap-6 w-full">
+                <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
+                        #container *ngIf="viewContent">
+                        <div class="flex justify-end items-end">
+                                <div></div>
+                                        <div>
+                                                <button class="ml-4 text-primary bg-gray-200"
+                                                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                                                        [color]="'primary-200'"
+                                                        (click)="projecthubservice.toggleDrawerOpen('Close-Out-Outcome', '', '' , id)">
+                                                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                                                </button>
+                                        </div>
+                        </div>
+                        <form class="w-full" [formGroup]="outcomeForm">
+                                <div class="w-full ">
+                                        <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
+                                                [label]="'Problem Description'">
+                                        </spot-textarea>
+                                </div>
+                                <div class="w-full ">
+                                        <spot-textarea class="w-full read-only" formControlName="approachTaken" name="approachTaken"
+                                                [label]="'Approach Taken to Solve Problem'">
+                                        </spot-textarea>
+                                </div>
+                                <div class="w-full ">
+                                        <spot-textarea class="w-full read-only" formControlName="targetEndState" name="targetEndState"
+                                                [label]="'Target End State'">
+                                        </spot-textarea>
+                                </div>
+                                <div class="w-full ">
+                                        <spot-textarea class="w-full read-only" formControlName="benefitsRealized" name="benefitsRealized"
+                                                [label]="'Benefits Realized/Outcomes'">
+                                        </spot-textarea>
+                                </div>
+                        </form>
+                </div>
+        </div>
+        <div class="flex justify-between items-start gap-6 w-full">
+                <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+                                *ngIf="viewContent">
+                        <app-operational-performance-table *ngIf="viewContent" [mode]="'Project-Close-Out'" class="w-full" [kpi]="kpiMasters" [lookup]="lookupMasters"
+                        [projectViewDetails]="projectViewDetails" [projectid]="id"
+                        [editable]="projecthubservice.roleControllerControl.projectBenefits">
+                        </app-operational-performance-table>
+                </div>
+        </div>
+</div>
+
