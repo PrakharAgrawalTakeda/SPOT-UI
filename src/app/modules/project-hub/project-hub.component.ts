@@ -96,7 +96,7 @@ export class ProjectHubComponent implements OnInit {
         this.phaseStatePermission = this.projecthubservice.roleControllerControl.projectHub.projectBoard.phaseState;
         console.log(this.projecthubservice.roleControllerControl)
         var appSetting = JSON.parse(localStorage.getItem('app-setting'))
-        console.log("App Setting",appSetting)
+        console.log("App Setting", appSetting)
         if (appSetting?.projectHubPanel == 'Locked') {
             this.navigationAppearance = 'default'
         }
@@ -156,12 +156,16 @@ export class ProjectHubComponent implements OnInit {
         this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
         if (this.navigationAppearance == 'default') {
             var appSetting: IAppSetting = JSON.parse(localStorage.getItem('app-setting'))
-            appSetting.projectHubPanel = 'Locked'
+            appSetting ? appSetting.projectHubPanel = 'Locked': appSetting = {
+                projectHubPanel: 'Locked'
+            }
             localStorage.setItem('app-setting', JSON.stringify(appSetting))
         }
         else {
             var appSetting: IAppSetting = JSON.parse(localStorage.getItem('app-setting'))
-            appSetting.projectHubPanel = 'Unlocked'
+            appSetting ? appSetting.projectHubPanel = 'Unlocked': appSetting = {
+                projectHubPanel: 'Unlocked'
+            }
             localStorage.setItem('app-setting', JSON.stringify(appSetting))
         }
     }
