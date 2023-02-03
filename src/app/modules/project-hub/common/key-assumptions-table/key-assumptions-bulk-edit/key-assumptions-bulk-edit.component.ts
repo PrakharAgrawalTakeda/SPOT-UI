@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ProjectApiService} from "../../project-api.service";
 import {ProjectHubService} from "../../../project-hub.service";
 import {AuthService} from "../../../../../core/auth/auth.service";
@@ -11,7 +11,7 @@ import {FormArray, FormControl, FormGroup} from "@angular/forms";
     styleUrls: ['./key-assumptions-bulk-edit.component.scss']
 })
 export class KeyAssumptionsBulkEditComponent implements OnInit {
-
+    @Input() viewElements: any = ["keyAssumption", "whyIsThisAssumptionValid"];
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService, public fuseAlert: FuseConfirmationService) {
         this.keyAssumptionForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
@@ -47,6 +47,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                         "projectId": x.projectId,
                         "keyAssumption": x.keyAssumption,
                         "includeInCharter": x.includeInCharter,
+                        "includeInBusinessCase": x.includeInBusinessCase,
                         "assumptionRationale": x.assumptionRationale,
                     }
                 })
@@ -56,6 +57,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                         projectId: new FormControl(i.projectId),
                         keyAssumption: new FormControl(i.keyAssumption),
                         includeInCharter: new FormControl(i.includeInCharter),
+                        includeInBusinessCase: new FormControl(i.includeInBusinessCase),
                         assumptionRationale: new FormControl(i.assumptionRationale),
                     }))
                 }
@@ -80,6 +82,17 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                     }
                 }
             }
+            if (formValue.filter(x => x.includeInBusinessCase == true).length < 5) {
+                for (var i of this.keyAssumptionForm.controls) {
+                    i['controls']['includeInBusinessCase'].enable()
+                }
+            } else {
+                for (var i of this.keyAssumptionForm.controls) {
+                    if (i['controls']['includeInBusinessCase'].value != true) {
+                        i['controls']['includeInBusinessCase'].disable()
+                    }
+                }
+            }
         }
     }
 
@@ -94,6 +107,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                     "keyAssumption": i.keyAssumption,
                     "assumptionRationale": i.assumptionRationale,
                     "includeInCharter": i.includeInCharter,
+                    "includeInBusinessCase": i.includeInBusinessCase,
 
                 })
             }
@@ -109,6 +123,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
             keyAssumption: '',
             assumptionRationale: '',
             includeInCharter: false,
+            includeInBusinessCase: false,
         }]
         this.keyAssumptionForm.push(new FormGroup({
             keyAssumptionUniqueId: new FormControl(''),
@@ -116,6 +131,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
             keyAssumption: new FormControl(''),
             assumptionRationale: new FormControl(''),
             includeInCharter: new FormControl(false),
+            includeInBusinessCase: new FormControl(false),
         }))
         this.disabler()
         this.keyAssumptions = [...this.keyAssumptions, ...j]
@@ -194,6 +210,9 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.isNavChanged.next(true)
         }
+    }
+    viewElementChecker(element: string): boolean {
+        return this.viewElements.some(x => x == element)
     }
 
 }

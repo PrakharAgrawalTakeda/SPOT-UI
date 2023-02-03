@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {ProjectHubService} from "../../../project-hub.service";
 import {AuthService} from "../../../../../core/auth/auth.service";
@@ -13,10 +13,12 @@ import {ActivatedRoute} from "@angular/router";
     styleUrls: ['./key-assumptions-add-single.component.scss']
 })
 export class KeyAssumptionsAddSingleComponent implements OnInit {
+    @Input() viewElements: any = ["keyAssumption", "whyIsThisAssumptionValid"];
     keyAssumptionForm = new FormGroup({
         keyAssumptionName: new FormControl(''),
         assumptionRationale: new FormControl(''),
         includeInCharter: new FormControl(false),
+        includeInBusinessCase: new FormControl(false),
     })
     formInital: boolean = false
     id: string = ''
@@ -38,6 +40,11 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
                     this.keyAssumptionForm.controls['includeInCharter'].disable()
                 }
             }
+            if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 5) {
+                if (this.keyAssumptionForm.value.includeInBusinessCase != true) {
+                    this.keyAssumptionForm.controls['includeInBusinessCase'].disable()
+                }
+            }
         }
     }
 
@@ -50,10 +57,14 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
             keyAssumption: keyAssumption.keyAssumptionName,
             assumptionRationale: keyAssumption.assumptionRationale,
             includeInCharter: keyAssumption.includeInCharter,
+            includeInBusinessCase: keyAssumption.includeInBusinessCase,
         }
         this.apiService.addKeyAssumption(mainObj).then(res => {
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
         })
+    }
+    viewElementChecker(element: string): boolean {
+        return this.viewElements.some(x => x == element)
     }
 }

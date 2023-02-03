@@ -15,6 +15,8 @@ export class KeyAssumptionsTableComponent implements OnInit {
     keyAssumptions: any = []
     id: string = ''
     isGrid: boolean = false
+    keyAssumptionsViewEditType: string = "KeyAssumptions";
+    keyAssumptionsBulkEditType: string = "KeyAssumptionsBulkEdit";
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     ,public fuseAlert: FuseConfirmationService) {
         this.projecthubservice.submitbutton.subscribe(res => {
@@ -31,9 +33,13 @@ export class KeyAssumptionsTableComponent implements OnInit {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         if(this.callLocation == 'Project-Charter'){
             this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+            this.keyAssumptionsViewEditType = "ProjectCharterKeyAssumptionAddSingle"
+            this.keyAssumptionsBulkEditType = "ProjectCharterKeyAssumptionBulkEdit"
         }
         if(this.callLocation == 'Recommended-Option'){
-            this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+            this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
+            this.keyAssumptionsViewEditType = "RecommendedOptionKeyAssumptionAddSingle"
+            this.keyAssumptionsBulkEditType = "RecommendedOptionKeyAssumptionBulkEdit"
         }
         this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
             this.keyAssumptions = res

@@ -7,8 +7,8 @@
         <app-ask-need-link *ngIf="projecthubservice.itemtype == 'LinkAskNeeds'"></app-ask-need-link>
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
-        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueViewEdit'" [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter']" ></app-risk-issue-view-edit>
-        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RecommendedOptionRiskIssueViewEdit'" [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact','mitigation','type','owner']" ></app-risk-issue-view-edit>
+        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueAddSingle'" [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter']" ></app-risk-issue-view-edit>
+        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RecommendedOptionRiskIssueAddSingle'" [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact','mitigation','type','owner']" ></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
         <app-schedule-view-bulk-edit
             *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
@@ -64,7 +64,11 @@
         <app-key-assumption-view-edit
             *ngIf="projecthubservice.itemtype == 'KeyAssumption'"></app-key-assumption-view-edit>
         <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsAddSingle'"></app-key-assumptions-add-single>
+        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'RecommendedOptionKeyAssumptionAddSingle'" [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInBusinessCase']"></app-key-assumptions-add-single>
+        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionAddSingle'" [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInCharter']"></app-key-assumptions-add-single>
         <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsBulkEdit'"></app-key-assumptions-bulk-edit>
+        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionBulkEdit'" [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInCharter']"></app-key-assumptions-bulk-edit>
+        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'RecommendedOptionKeyAssumptionBulkEdit'" [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInBusinessCase']"></app-key-assumptions-bulk-edit>
         <app-standard-milestone-sets *ngIf="projecthubservice.itemtype == 'StandardMilestoneSets'"></app-standard-milestone-sets>
     </div>
 </fuse-drawer>

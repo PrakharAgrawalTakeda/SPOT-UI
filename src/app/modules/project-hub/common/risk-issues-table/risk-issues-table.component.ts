@@ -64,15 +64,14 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit(): void {
-      console.log("Aaaaaaaaaaaaaaaaa", this.lookup);
      this.riskIssuesData = this.projectViewDetails.riskIssuesData
      this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
      if(this.callLocation == 'Project-Charter'){
-         this.riskIssueViewEditType = "ProjectCharterRiskIssueViewEdit"
+         this.riskIssueViewEditType = "ProjectCharterRiskIssueAddSingle"
          this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
      }
      if(this.callLocation == 'Recommended-Option'){
-         this.riskIssueViewEditType = "RecommendedOptionRiskIssueViewEdit"
+         this.riskIssueViewEditType = "RecommendedOptionRiskIssueAddSingle"
          this.riskIssueBulkEditType = "RecommendedOptionIssueBulkEdit"
      }
      this.viewContent = true
