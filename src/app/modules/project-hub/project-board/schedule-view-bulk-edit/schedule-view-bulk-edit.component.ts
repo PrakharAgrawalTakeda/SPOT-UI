@@ -143,7 +143,7 @@ indicatorchange: boolean = false
           console.log("contructor")
           console.log("LINE !#&",this.scheduleData.scheduleData)
           this.changeschedule(res, true)
-          
+
         }
       }
     })
@@ -157,7 +157,7 @@ indicatorchange: boolean = false
         if(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']))
         {
 
-       
+
         console.log(this.milestoneForm.getRawValue())
         console.log(control['controls']['baselineFinish'].value)
         console.log(this.scheduleData.scheduleData)
@@ -290,7 +290,7 @@ console.log(this.insertarray)
                     this.userlist = log.users
                   }
                   console.log("Users List", this.userlist)
-                  
+
                   //debugger
 
 
@@ -326,7 +326,7 @@ console.log(this.insertarray)
                     for (var i of res.scheduleData) {
                       console.log(this.id)
                       i.includeInReport = i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
-           
+
                       this.dbSchedule.push({
                         scheduleUniqueId: i.scheduleUniqueId,
                         projectId: i.projectId,
@@ -348,7 +348,7 @@ console.log(this.insertarray)
                     }
                     this.scheduledataDb = this.schedulengxdata.map(x => {
                       i.includeInReport = i.projectId == this.id? i.includeInReport: this.scheduleData.links.find(t=>t.linkItemId == i.scheduleUniqueId).includeInReport
-           
+
                       return {
                         "scheduleUniqueId": x.scheduleUniqueId,
                         "projectId": x.projectId,
@@ -1040,6 +1040,10 @@ console.log(this.scheduleData.scheduleData)
 
   }
 
+  openStandardMilestonesSets(): void {
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      this.projecthubservice.toggleDrawerOpen('StandardMilestoneSets', '', '', '', false, true);
+  }
   //let index = this.datarows.indexOf(this.selected[0])
 
 
@@ -1180,7 +1184,7 @@ console.log(this.scheduleData.scheduleData)
         var parentProject = this.scheduleData.linksProblemCapture.find(x => x.problemUniqueId == linkItem.parentProjectId)
         if (parentProject != null) {
         projectName = projectName == '' ? projectName + parentProject.problemId.toString() + " - " + parentProject.problemTitle: projectName +=" , " + parentProject.problemId.toString() + " - " + parentProject.problemTitle
-     
+
        } }
       if(returnString != ''){
         returnString = returnString + '\n'
@@ -1455,7 +1459,7 @@ this.projecthubservice.isNavChanged.next(true)
       //this.scheduleObj = formValue
       console.log(this.dbSchedule)
       if (!this.projecthubservice.includeClosedItems.schedule.value) {
-        
+
         var closeditems = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
 
         console.log(this.formValue)
@@ -1540,17 +1544,17 @@ this.projecthubservice.isNavChanged.next(true)
       if (baselines.length == baselines2.length && JSON.stringify(baselines) != JSON.stringify(baselines2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-        
+
           //  this.viewBaseline = true
           //  this.viewBaselineLogs = true
           //  this.compareBaselineLogs = false
           //  this.projecthubservice.isBulkEdit = false
 
 console.log(this.formValue)
-this.submitjustification() 
+this.submitjustification()
           //this.projecthubservice.submitbutton.next(true)
         })
-        
+
 
       }
       else if(this.formValue.length < this.scheduleData.scheduleData.length)
@@ -1581,7 +1585,7 @@ this.submitjustification()
       //this.scheduleObj = formValue
       console.log(formValue)
       if (!this.projecthubservice.includeClosedItems.schedule.value) {
-        
+
         var closeditems = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
 
         console.log(this.formValue)
@@ -1666,7 +1670,7 @@ this.submitjustification()
       if (baselinedates.length == baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-        
+
           // this.viewBaseline = true
           // this.viewBaselineLogs = true
           // this.compareBaselineLogs = false
@@ -1676,7 +1680,7 @@ this.submitjustification()
           this.submitjustification()
           //this.projecthubservice.submitbutton.next(true)
         })
-        
+
 
       }
       else if(this.formValue.length < this.scheduleData.scheduleData.length)
@@ -1921,15 +1925,15 @@ this.submitjustification()
     for (var j of this.schedulengxdata) {
 
       if (!this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || !this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
-       
+
         j.baselineFinish = j.plannedFinish
-        
+
           this.scheduleData.scheduleData = res.scheduleData
-          
+
         //console.log(j.baselineFinish = j.plannedFinish)
         //j.baselineFinish.dirty()
         console.log(this.scheduleData.scheduleData)
-      
+
         this.flag = true
       }
       else if (this.flag && (j.completionDate == null && j.plannedFinish != null && j.baselineFinish != j.plannedFinish) || this.flag && (j.completionDate == '' && j.plannedFinish != null && j.baselineFinish != j.plannedFinish)) {
@@ -1967,8 +1971,8 @@ this.submitjustification()
 //     {
 // temp.push(x)
 //     }
-    
-    
+
+
     console.log(this.scheduleData.scheduleData)
     //  if (this.projecthubservice.includeClosedItems.schedule.value) {
     //   this.schedulengxdata = [...this.scheduleData.scheduleData]
@@ -2064,7 +2068,7 @@ for(var m of this.projectbaselinelogDetailscurr)
     //   this.projectbaselinelogDetailscurr[x].indicatorchange = true
     // }
   }
-  else 
+  else
   {
     if( m.baselineFinish != '')
   {
@@ -2147,7 +2151,7 @@ console.log(this.projectbaselinelogDetailscurr)
 //         this.baselinechange = false
 //       }
 //     }
-    
+
 //   }
 //  if(!this.plannedchange && JSON.stringify(planneddates) != JSON.stringify(plannedates2)) {
 //   for(var z in planneddates)
@@ -2188,7 +2192,7 @@ console.log(this.projectbaselinelogDetailscurr)
 //     }
 //   }
 //   }
-  
+
     //this.newArray = this.projectbaselinelogDetailscurr.filter(({ milestone, plannedFinish, baselineFinish, completionDate, indicator}) => !this.projectbaselinelogDetailsprev.some((e) => e.milestone == milestone && e.plannedFinish == plannedFinish && e.baselineFinish == baselineFinish && e.completionDate == completionDate && e.indicator == indicator))
 //
 //
@@ -2240,7 +2244,7 @@ console.log(this.currObj)
 
     }
 
-    
+
 
     //this.newArray = [...new Set([...this.logdetailsObj])]
 
@@ -2308,19 +2312,19 @@ console.log(this.currObj)
       }
     }
     console.log(formValue.filter(x => x.includeInCharter == true).length)
-    
-      
+
+
       this.apiService.bulkeditSchedule(this.schedulecharterobj, this.id).then(res => {
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.successSave.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
-    
+
     console.log(this.schedulecharterobj)
       })
-      
+
     }
-    
+
     else
     {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -2403,7 +2407,7 @@ for (var i of formValue) {
 
 console.log(this.schedulecloseoutobj)
   })
-  
+
 }
 
 else
@@ -2476,7 +2480,7 @@ else{
       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
      })
    }
-    
+
     console.log(this.flag)
 // if(this.flag != true)
 // {
@@ -2498,7 +2502,7 @@ else{
 //     this.flag = false
 //     this.
 // }
-    
+
 
     console.log(baselinedates)
     console.log(baselinedates2)
