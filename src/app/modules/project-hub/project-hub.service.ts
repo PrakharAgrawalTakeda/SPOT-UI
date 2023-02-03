@@ -175,6 +175,7 @@ export class ProjectHubService {
               link: 'business-case/general-info'
             },
             {
+              id: 'recommended-option',
               title: 'Recommended Option',
               type: 'collapsable',
               children: [
@@ -216,6 +217,7 @@ export class ProjectHubService {
               ]
             },
             {
+              id: 'option-2',
               title: 'Option 2',
               type: 'collapsable',
               children: [
@@ -257,6 +259,7 @@ export class ProjectHubService {
               ]
             },
             {
+              id: 'option-3',
               title: 'Option 3',
               type: 'collapsable',
               children: [
