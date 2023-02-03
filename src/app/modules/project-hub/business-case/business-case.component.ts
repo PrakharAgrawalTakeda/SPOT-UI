@@ -27,6 +27,7 @@ export class BusinessCaseComponent implements OnInit {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getReportInfoData(this.id).then(res => {
       console.log("Report Info", res)
+      console.log("Router", this._Activatedroute)
       this.reportInfoData = res
       this.viewContent = true
     })

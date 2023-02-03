@@ -14,6 +14,7 @@ import { ProjectApiService } from '../project-api.service';
 })
 export class OptionInfoComponent implements OnInit {
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
+  optionInfoEditType: 'OptionInfoEditRC' | 'OptionInfoEditO2' | 'OptionInfoEditO3'
   optionId: string = ''
   optionInfoData = {}
   id: string = ''
@@ -37,12 +38,15 @@ export class OptionInfoComponent implements OnInit {
   dataloader() {
     if (this.optionType == 'recommended-option') {
       this.optionId = GlobalBusinessCaseOptions.OPTION_1
+      this.optionInfoEditType = 'OptionInfoEditRC'
     }
     else if (this.optionType == 'option-2') {
       this.optionId = GlobalBusinessCaseOptions.OPTION_2
+      this.optionInfoEditType = 'OptionInfoEditO2'
     }
     else if (this.optionType == 'option-3') {
       this.optionId = GlobalBusinessCaseOptions.OPTION_3
+      this.optionInfoEditType = 'OptionInfoEditO3'
     }
     this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getBusinessCaseOptionInfoData(this.id, this.optionId).then((res: any) => {

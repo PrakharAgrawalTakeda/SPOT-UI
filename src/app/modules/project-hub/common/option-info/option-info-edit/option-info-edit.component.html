@@ -1,1 +1,41 @@
-<p>option-info-edit works!</p>
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Option Info Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <form class="w-full p-[20px]" [formGroup]="optionInfoForm" (ngSubmit)="submitOptionInfo()">
+        <div class="h-[84vh] overflow-hidden">
+            <!--Enter Element here-->
+            <spot-input [label]="'Name'" formControlName="optionTitle" name="optionTitle" class="w-full read-only">
+            </spot-input>
+            <spot-textarea [label]="'Proposal Statement'" formControlName="proposalStatement" name="proposalStatement"
+                class="w-full read-only">
+            </spot-textarea>
+            <spot-textarea [label]="'Detailed Description'" formControlName="detailedDescription"
+                name="detailedDescription" class="w-full read-only">
+            </spot-textarea>
+            <spot-textarea [label]="'Rationale Why (Or Why Not) Best Option'" formControlName="rationaleWhyBestOption"
+                name="rationaleWhyBestOption" class="w-full read-only">
+            </spot-textarea>
+            <spot-textarea [label]="'Tradeoffs & Considerations'" formControlName="tradeoffsConsiderations"
+                name="tradeoffsConsiderations" [showHint]="true"
+                [hint]="'What are the downsides or opportunity cost of choosing this option? What do we NOT get with this option that we WOULD get with another option?'"
+                class="w-full read-only">
+            </spot-textarea>
+        </div>
+        <!-- Submit Actions here-->
+        <div class="flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
