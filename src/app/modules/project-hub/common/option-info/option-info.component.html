@@ -1,1 +1,41 @@
-<p>option-info works!</p>
+<ng-container *ngIf="viewContent">
+    <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
+        <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate ">
+            <h3 class="text-xl text-primary">Option Info</h3>
+        </div>
+        <!-- Enter Content here-->
+        <form class="w-full" [formGroup]="optionInfoForm">
+            <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden">
+                <div class="flex justify-end items-end">
+                    <div></div>
+                    <div>
+                        <button class="ml-4 text-primary bg-gray-200"
+                            *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                            [color]="'primary-200'"
+                            (click)="projectHubService.toggleDrawerOpen(generalInfoType, '', filterCriteria , id)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
+                </div>
+                <!--Form Elements Start here-->
+
+                <spot-input [label]="'Name'" formControlName="optionTitle" name="optionTitle" class="w-full read-only">
+                </spot-input>
+                <spot-textarea [label]="'Proposal Statement'" formControlName="proposalStatement"
+                    name="proposalStatement" class="w-full read-only">
+                </spot-textarea>
+                <spot-textarea [label]="'Detailed Description'" formControlName="detailedDescription"
+                    name="detailedDescription" class="w-full read-only">
+                </spot-textarea>
+                <spot-textarea [label]="'Rationale Why (Or Why Not) Best Option'"
+                    formControlName="rationaleWhyBestOption" name="rationaleWhyBestOption" class="w-full read-only">
+                </spot-textarea>
+                <spot-textarea [label]="'Tradeoffs & Considerations'" formControlName="tradeoffsConsiderations"
+                    name="tradeoffsConsiderations" [showHint]="true"
+                    [hint]="'What are the downsides or opportunity cost of choosing this option? What do we NOT get with this option that we WOULD get with another option?'"
+                    class="w-full read-only">
+                </spot-textarea>
+            </div>
+        </form>
+    </div>
+</ng-container>

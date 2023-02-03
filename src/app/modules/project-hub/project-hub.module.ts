@@ -126,6 +126,8 @@ import { BusinessCaseTopsComponent } from './business-case/business-case-tops/bu
 import { BusinessCaseCapsComponent } from './business-case/business-case-caps/business-case-caps.component';
 import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-risk-issues/business-case-risk-issues.component';
 import { OptionInfoComponent } from './common/option-info/option-info.component';
+import { OptionInfoEditComponent } from './common/option-info/option-info-edit/option-info-edit.component';
+import { FeasibilityEditComponent } from './common/option-info/feasibility-edit/feasibility-edit.component';
 import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
 
 export const projectRoutes: Route[] = [
@@ -495,6 +497,8 @@ export const projectRoutes: Route[] = [
     BusinessCaseCapsComponent,
     BusinessCaseRiskIssuesComponent,
     OptionInfoComponent,
+    OptionInfoEditComponent,
+    FeasibilityEditComponent,
     CloseOutOutcomesSingleEditComponent
   ],
   imports: [
