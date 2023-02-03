@@ -1,4 +1,4 @@
-<div *ngIf="viewContent">
+<div >
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Risks/Issues</div>
 
@@ -6,7 +6,7 @@
         <div class="flex items-start justify-between">
             <div>
                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                        *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit && projecthubservice.hasChildren && mode== 'Normal'"
+                        *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit && projecthubservice.hasChildren && callLocation== 'Normal'"
                         (click)="projecthubservice.toggleDrawerOpen('LinkRiskIssues', 'new', [], projectid, true)">
                     <mat-icon svgIcon="heroicons_solid:link"></mat-icon>&nbsp; Link Risk/Issues
                 </button>
@@ -19,7 +19,7 @@
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
-            <div *ngIf="mode== 'Normal'">
+            <div *ngIf="callLocation== 'Normal'">
                 <form [formGroup]="localIncludedItems">
                     <mat-slide-toggle class="primary slider-adjust" formControlName="toggle" (checked)="projecthubservice.includeClosedItems.riskIssue.value"  (change)="toggleRiskIssue($event)" >
                         Include Closed Items</mat-slide-toggle>
@@ -53,7 +53,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1"  *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Date Initiated" prop="logDate" [flexGrow]="1"  *ngIf="callLocation== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
@@ -63,17 +63,32 @@
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [flexGrow]="5" *ngIf="mode== 'Project-Charter'">
+        <ngx-datatable-column name="Probability" prop="probabilityId" [flexGrow]="2" *ngIf="callLocation== 'Recommended-Option'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value)}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [flexGrow]="5" *ngIf="callLocation== 'Project-Charter' || callLocation== 'Recommended-Option' ">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Impact" prop="impactId" [flexGrow]="2" *ngIf="callLocation == 'Recommended-Option'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{getLookUpName(value)}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter' || callLocation== 'Recommended-Option'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p>{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="2" *ngIf="mode== 'Project-Charter'">
+        <ngx-datatable-column name="Owner" prop="ownerName" [flexGrow]="2" *ngIf="callLocation== 'Recommended-Option'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p>{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" *ngIf="callLocation== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
@@ -83,12 +98,12 @@
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                 <div class="flex items-center justify-start gap-6" >
-                    <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)" *ngIf="mode== 'Normal'">
+                    <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)" *ngIf="callLocation== 'Normal'">
                         <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
                         <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
 
                     </a>
-                    <a href="javascript:void(0)" *ngIf="editable && mode== 'Normal'" title="Edit Single"
+                    <a href="javascript:void(0)" *ngIf="editable && callLocation== 'Normal'" title="Edit Single"
                         (click)="projecthubservice.toggleDrawerOpen('RiskIssue', row.riskIssueUniqueId, projectViewDetails.riskIssuesData)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 

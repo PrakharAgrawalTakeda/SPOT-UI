@@ -10,7 +10,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
     styleUrls: ['./key-assumptions-table.component.scss']
 })
 export class KeyAssumptionsTableComponent implements OnInit {
-    @Input() callLocation:  'Normal'  | 'Project-Charter'  = 'Normal'
+    @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Recommended-Option'  = 'Normal'
     @Input() editable: boolean
     keyAssumptions: any = []
     id: string = ''
@@ -29,8 +29,11 @@ export class KeyAssumptionsTableComponent implements OnInit {
     }
     dataloader(){
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        if(this.callLocation != 'Normal'){
+        if(this.callLocation == 'Project-Charter'){
             this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+        }
+        if(this.callLocation == 'Recommended-Option'){
+            this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
         }
         this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
             this.keyAssumptions = res

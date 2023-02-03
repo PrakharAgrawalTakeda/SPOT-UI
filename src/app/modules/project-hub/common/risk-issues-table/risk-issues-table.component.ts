@@ -14,6 +14,7 @@ import {SpotlightIndicatorsService} from 'app/core/spotlight-indicators/spotligh
 import {ProjectHubService} from '../../project-hub.service';
 import {ProjectApiService} from '../project-api.service';
 import {FormControl, FormGroup} from "@angular/forms";
+import {AuthService} from "../../../../core/auth/auth.service";
 
 @Component({
   selector: 'app-risk-issues-table',
@@ -28,7 +29,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() editable: boolean
-  @Input() mode: 'Normal' | 'Project-Charter' = 'Normal'
+  @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Recommended-Option'  = 'Normal'
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
   getRowClass = (row) => {
     return {
@@ -43,7 +44,8 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService,
-    private apiService: ProjectApiService) {
+    private apiService: ProjectApiService,
+    public auth: AuthService) {
       this.projecthubservice.includeClosedItems.riskIssue.subscribe(res => {
           this.changeriskissues(res)
       })
@@ -62,13 +64,21 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit(): void {
-    this.riskIssuesData = this.projectViewDetails.riskIssuesData
-    this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
-    if(this.mode == 'Project-Charter'){
-        this.riskIssueViewEditType = "ProjectCharterRiskIssueViewEdit"
-        this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
-    }
-    this.viewContent = true
+      console.log("Aaaaaaaaaaaaaaaaa", this.lookup);
+     this.riskIssuesData = this.projectViewDetails.riskIssuesData
+     this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+     if(this.callLocation == 'Project-Charter'){
+         this.riskIssueViewEditType = "ProjectCharterRiskIssueViewEdit"
+         this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
+     }
+     if(this.callLocation == 'Recommended-Option'){
+         this.riskIssueViewEditType = "RecommendedOptionRiskIssueViewEdit"
+         this.riskIssueBulkEditType = "RecommendedOptionIssueBulkEdit"
+     }
+     this.viewContent = true
+  }
+  getLookUpName(lookUpId: string): string {
+       return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
   reload(): void {
       this.riskIssuesData = this.projectViewDetails.riskIssuesData
