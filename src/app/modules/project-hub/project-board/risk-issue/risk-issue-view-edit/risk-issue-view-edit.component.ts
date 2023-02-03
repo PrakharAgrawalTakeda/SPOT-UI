@@ -208,7 +208,6 @@ export class RiskIssueViewEditComponent implements OnInit {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.dataloader()
-      this.riskIssueForm.controls.function.patchValue('')
     })
   }
   getissuetype(): any {
