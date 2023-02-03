@@ -442,5 +442,11 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
     }
+    async getBusinessCaseOptionInfoData(projectid, optionid) {
+      var url = GlobalVariables.apiurl + "BusinessCaseOptionDetail/GetByProjectIdAndOptionId/"+optionid+"/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
   }
 
