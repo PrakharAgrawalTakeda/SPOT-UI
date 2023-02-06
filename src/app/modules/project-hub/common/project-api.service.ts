@@ -424,32 +424,29 @@ export class ProjectApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
-
-  async projectCharterSingle(itemid: string) {
-    var userid = GlobalVariables.apiurl + "ProjectCharter/" + itemid
-    const abc$ = this.http.get(userid)
-    const response = await lastValueFrom(abc$)
-    return response
-  }
-  async getReportInfoData(projectid) {
-    var url = GlobalVariables.apiurl + "ProjectHubData/ReportPageInfo/" + projectid
-    const abc$ = this.http.get(url)
-    const response = await lastValueFrom(abc$)
-    return response
-  }
-  async updateReportDates(projectid: string, itemid: string) {
-    var userid = GlobalVariables.apiurl + "ProjectCharter/UpdateDate/" + projectid + "/" + itemid
-    const abc$ = this.http.patch(userid, itemid)
-    const response = await lastValueFrom(abc$)
-    return response
-  }
-
-  async getLocalCurrency() {
-    var userid = GlobalVariables.apiurl + "Budget/GetLocalCurrency";
-    const abc$ = this.http.get(userid)
-    const response = await lastValueFrom(abc$)
-    return response
-  }
-
+    async projectCharterSingle(itemid: string){
+      var userid = GlobalVariables.apiurl+"ProjectCharter/"+itemid
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async getReportInfoData(projectid) {
+      var url = GlobalVariables.apiurl + "ProjectHubData/ReportPageInfo/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async updateReportDates(projectid:string ,itemid: string){
+      var userid = GlobalVariables.apiurl+"ProjectCharter/UpdateDate/"+projectid+"/"+itemid
+      const abc$ = this.http.patch(userid,itemid)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+    async getBusinessCaseOptionInfoData(projectid, optionid) {
+      var url = GlobalVariables.apiurl + "BusinessCaseOptionDetail/GetByProjectIdAndOptionId/"+optionid+"/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
   }
 
