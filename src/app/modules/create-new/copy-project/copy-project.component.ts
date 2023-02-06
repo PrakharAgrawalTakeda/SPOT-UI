@@ -58,15 +58,56 @@ export class CopyProjectComponent implements OnInit {
         this.finalIndex.push(i);
       }
     }
+    var copyProjectParameter= {
+      projectTitle: true,
+      projectType: true,
+      problemDescription: true,
+      proposedStatement: true,
+      keySuccessCriteria: true,
+      inOutOfScope: true,
+      milestones: true,
+      projectTeam: true,
+      categoricalData: true,
+      strategicDriverDetails: true
+    }
+    if (!this.finalIndex.includes(0)){
+      copyProjectParameter.projectTitle = false
+    }
+    if (!this.finalIndex.includes(1)) {
+      copyProjectParameter.projectType = false
+    }
+    if (!this.finalIndex.includes(2)) {
+      copyProjectParameter.problemDescription = false
+    }
+    if (!this.finalIndex.includes(3)) {
+      copyProjectParameter.proposedStatement = false
+    }
+    if (!this.finalIndex.includes(4)) {
+      copyProjectParameter.keySuccessCriteria = false
+    }
+    if (!this.finalIndex.includes(5)) {
+      copyProjectParameter.inOutOfScope = false
+    }
+    if (!this.finalIndex.includes(6)) {
+      copyProjectParameter.milestones = false
+    }
+    if (!this.finalIndex.includes(7)) {
+      copyProjectParameter.projectTeam = false
+    }
+    if (!this.finalIndex.includes(8)) {
+      copyProjectParameter.categoricalData = false
+    }
+    if (!this.finalIndex.includes(9)) {
+      copyProjectParameter.strategicDriverDetails = false
+    }
     for (var i = 0; i < this.finalIndex.length; i++) {
       this.finalData.push(this.lookupTemplate[i].lookUpId);
       console.log(this.finalData);
     }
-    this.userid = "";
     var dataToSend = {
       ProjectIDTemplate: this.projectid,
       CopyUserID: this.activeaccount.localAccountId,
-      CopyProjectParameter: this.finalData.toString()
+      CopyProjectParameter: copyProjectParameter
     }
     this.apiService.getTemplateInfo(dataToSend).then(res => {
       this.apiService.getQuality(this.projectid).then(quality => {

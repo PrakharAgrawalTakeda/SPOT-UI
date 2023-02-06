@@ -331,9 +331,13 @@ export class StrategicDriversComponent implements OnInit {
                 finaldataSite.push(SiteAssessmentCategory[0]);
               }
             }
+            var isAgile = false
+            if (history.state.data.agilePrimaryWorkstream != null || history.state.data.agileSecondaryWorkstream != null || history.state.data.agileWave != null){
+              isAgile = true
+            }
             this.strategicDriversForm.patchValue({
               primaryKPI: history.state.data.primaryKpi == null ? '' : history.state.data.primaryKpi[0],
-              isAgile: history.state.data.isAgile,
+              isAgile: isAgile,
               agilePrimaryWorkstream: history.state.data.agilePrimaryWorkstream == null ? '' : history.state.data.agilePrimaryWorkstream[0],
               agileSecondaryWorkstream: history.state.data.agileSecondaryWorkstream == null ? '' : finaldatasecagile,
               agileWave: history.state.data.agileWave == null ? '' : history.state.data.agileWave[0],

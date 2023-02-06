@@ -132,11 +132,11 @@ export class CreateProjectComponent implements OnInit {
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         projectDescription: event.projectDescription,
-        primaryProduct: event.primaryProduct ? event.primaryProduct : {},
+        primaryProduct: event.primaryProduct == undefined ? [] : event.primaryProduct,
         otherImpactedProducts: event.otherImpactedProducts ? event.otherImpactedProducts : [],
-        portfolioOwner: event.portfolioOwner ? event.portfolioOwner : {},
-        excecutionScope: event.excecutionScope ? event.excecutionScope : [],
-        enviornmentalPortfolio: event.enviornmentalPortfolio ? event.enviornmentalPortfolio : {},
+        portfolioOwner: event.portfolioOwner == undefined ? '' : event.portfolioOwner,
+        excecutionScope: event.excecutionScope ? event.excecutionScope : [],  
+        enviornmentalPortfolio: event.enviornmentalPortfolio == undefined ? '' : event.enviornmentalPortfolio,
         isArchived: event.isArchived,
         isCapsProject: event.isCapsProject,
         owningOrganization: event.owningOrganization,
@@ -199,6 +199,182 @@ export class CreateProjectComponent implements OnInit {
   }
 
   createProject() {
+    // if (history.state.data != undefined){
+    //   var mainObj = {
+    //   agilePrimaryWorkstream:null,
+    //   agileSecondaryWorkstream:null,
+    //   agileWave:null,
+    //   annualMustWinId:null,
+    //   approvedDate:null,
+    //   archiveredBy:null,
+    //   archiveredOn:null,
+    //   benefitsRealizedOutcome:null,
+    //   calculatedEmissionsImpact:null,
+    //   campaignPhaseId:null,
+    //   campaignTypeId:null,
+    //   closeOutApprovedDate:null,
+    //   createdById:"",
+    //   createdDate:"2023-02-3T13:16:13.5",
+    //   dataMigrationInfo:null,
+    //   defaultOwningOrganizationId:"",
+    //   emissionPortfolioId:"",
+    //   emissionsImpactRealizationDate:null,
+    //   energyCostImpactPerYear:null,
+    //   energyCostImpactPerYearFxconv:null,
+    //   energyImpact:null,
+    //   executionScope:"",
+    //   functionGroupID:"",
+    //   isArchived:null,
+    //   isCapsProject:false,
+    //   isConfidential:false,
+    //   isGmsgqltannualMustWin:null,
+    //   isGoodPractise:null,
+    //   isManualArchive:null,
+    //   isOeproject:false,
+    //   isPobos:null,
+    //   isSiteAssessment:null,
+    //   isTechTransfer:false,
+    //   keyTakeaways:null,
+    //   legacyPpmprojectId:null,
+    //   legacyPpmsystem:null,
+    //   noCarbonImpact:null,
+    //   oeprojectType:null,
+    //   otherImpactedProducts:"",
+    //   parentProgramId:"",
+    //   poboscategory:null,
+    //   portfolioOwnerId:"",
+    //   primaryKpi:null,
+    //   primaryProductId:"",
+    //   problemId: history.state.data.problemId,
+    //   problemOwnerId:"",
+    //   problemOwnerName:"",
+    //   problemTitle:"",
+    //   problemType:"",
+    //   problemUniqueId:"",
+    //   productionStepId:null,
+    //   projectClassificationId:null,
+    //   projectDescription:"",
+    //   projectManagerId:"",
+    //   projectProposalApprovedDate:null,
+    //   projectReviewedYN:"",
+    //   projectSiteUrl:null,
+    //   proposalStatement:null,
+    //   siteAssessmentCategory:null,
+    //   sponsorId:"",
+    //   strategicRationale:null,
+    //   strategicYearId:null,
+    //   svpelementTypeId:null,
+    //   targetEndState:"",
+    //   wasteImpactCost:null,
+    //   wasteImpactUnits:null,
+    //   wasteLandfillImpactUnits:null,
+    //   waterImpactCost:null,
+    //   waterImpactUnits:null,
+    //   whynotgoforNextBestAlternative:null
+    //   }
+    //   var formValue = this.createProjectForm.getRawValue()
+    //   mainObj.problemUniqueId = history.state.data.problemUniqueId
+    //   mainObj.problemTitle = formValue.problemTitle
+    //   mainObj.portfolioOwnerId = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
+    //   mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
+    //   mainObj.problemOwnerId = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
+    //   mainObj.createdById = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
+    //   mainObj.problemOwnerName = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userDisplayName : ''
+    //   mainObj.primaryProductId = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
+    //   mainObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
+    //   mainObj.parentProgramId = formValue.projectsingleid
+    //   mainObj.projectDescription = formValue.projectDescription
+    //   mainObj.targetEndState = formValue.targetGoalSituation
+    //   mainObj.problemType = formValue.problemType
+    //   mainObj.defaultOwningOrganizationId = formValue.owningOrganization
+    //   // mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
+    //   mainObj.isOeproject = formValue.oeProject == "" ? false : formValue.oeProject
+    //   if (mainObj.isOeproject) {
+    //     mainObj.oeprojectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
+    //   }
+    //   mainObj.isTechTransfer = formValue.techTransfer == "" ? false : formValue.techTransfer
+    //   if (mainObj.isTechTransfer) {
+    //     mainObj.campaignPhaseId = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
+    //     mainObj.productionStepId = formValue.productionSteps != "" ? formValue.productionSteps : ''
+    //     mainObj.campaignTypeId = formValue.campaignType != "" ? formValue.campaignType : ''
+    //   }
+    //   if (formValue.AgileProject) {
+    //     mainObj.agilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
+    //     mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
+    //     mainObj.agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
+    //   }
+    //   mainObj.isCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
+    //   mainObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
+    //   mainObj.primaryKpi = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
+    //   mainObj.isPobos = formValue.POBOS == "" ? false : formValue.POBOS
+    //   if (mainObj.isPobos) {
+    //     mainObj.poboscategory = formValue.POBOSType.length > 0 ? formValue.POBOSType.map(x => x.lookUpId).join() : ''
+    //   }
+    //   mainObj.isSiteAssessment = formValue.siteAssignment == "" ? false : formValue.siteAssignment
+    //   if (mainObj.isSiteAssessment) {
+    //     mainObj.siteAssessmentCategory = formValue.siteAssessmentType.length > 0 ? formValue.siteAssessmentType.map(x => x.lookUpId).join() : ''
+    //   }
+    //   mainObj.isGmsgqltannualMustWin = formValue.StrategicDeployment == "" ? false : formValue.StrategicDeployment
+    //   if (mainObj.isGmsgqltannualMustWin) {
+    //     mainObj.strategicYearId = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
+    //     mainObj.annualMustWinId = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
+    //   }
+    //   if (mainObj.problemTitle == "" || mainObj.portfolioOwnerId == "" || mainObj.problemOwnerId == "" || mainObj.primaryProductId == "" || mainObj.problemOwnerId == "" || mainObj.executionScope == "") {
+    //     var comfirmConfig: FuseConfirmationConfig = {
+    //       "title": "You must complete all mandatory fields.",
+    //       "message": "",
+    //       "icon": {
+    //         "show": true,
+    //         "name": "heroicons_outline:exclamation",
+    //         "color": "warning"
+    //       },
+    //       "actions": {
+    //         "confirm": {
+    //           "show": true,
+    //           "label": "Okay",
+    //           "color": "primary"
+    //         },
+    //         "cancel": {
+    //           "show": false,
+    //           "label": "Cancel"
+    //         }
+    //       },
+    //       "dismissible": true
+    //     }
+    //     const alert = this.fuseAlert.open(comfirmConfig)
+    //   }
+    //   if (formValue.qualityReference) {
+    //     this.qualityValue = true;
+    //   }
+    //   this.apiService2.editGeneralInfo(history.state.data.problemUniqueId, mainObj).then(res => {
+    //   // this.apiService.copyProject(mainObj[0], history.state.data.problemUniqueId).then((res: any) => {
+    //     if (this.qualityValue == true) {
+    //       this.qualityformValue = []
+    //       var genQRFORM = this.qualityForm
+    //       for (var quality of this.qualityForm) {
+    //         if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
+    //           this.qualityformValue.push({
+    //             qualityUniqueId: "",
+    //             problemUniqueId: history.state.data.problemUniqueId,
+    //             qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
+    //             qualityReference1: quality.qualityReference1
+    //           })
+    //         }
+    //       }
+    //       this.apiService2.bulkeditQualityReference(this.qualityformValue, history.state.data.problemUniqueId).then(quality => {
+    //         console.log(quality);
+    //         if (res != "") {
+    //           this.createProjectForm.reset();
+    //           window.open('/project-hub/' + history.state.data.problemUniqueId + '/project-board', "_blank")
+    //         }
+    //       })
+    //     }
+    //     else {
+    //       window.open('/project-hub/' + history.state.data.problemUniqueId + '/project-board', "_blank")
+    //     }
+    //   })
+    // }
+    // else{
     debugger;
     console.log(this.qualityForm);
     var hubSettings = [{
@@ -209,93 +385,93 @@ export class CreateProjectComponent implements OnInit {
     }];
     var projectIDTemplate = "";
     var copyProjectParameter = "";
-    var mainObj = [{
-ProblemUniqueID:null,
-ProblemTitle:null,
-ProblemType:null,
-PortfolioOwnerID:null,
-DefaultOwningOrganizationID:null,
-CreatedByID:null,
-ProblemOwnerID:null,
-ProblemOwnerName:null,
-ParentProgramID:null,
-PrimaryProductID:null,
-ProjectDescription:null,
-ExecutionScope:null,
-OtherImpactedProducts:null,
-IsTechTransfer:false,
-CampaignTypeID:null,
-CampaignPhaseID:null,
-ProductionStepID:null,
-TargetEndState:null,
-IsConfidential:false,
-LocalCurrencyID:null,
-IsOEProject:false,
-OEProjectType:null,
-IsAgile:false,
-AgilePrimaryWorkstream:null,
-AgileSecondaryWorkstream:null,
-agileWave:null,
-IsCapsProject:false,
-EmissionPortfolioID:null,
-IsPOBOS:false,
-IsSiteAssessment:false,
-POBOSCategory:null,
-SiteAssessmentCategory:null,
-PrimaryKPI:null,
-IsGMSGQLTAnnualMustWin:false,
-StrategicYearID:null,
-AnnualMustWinID:null
-}];
+    var mainObjCreate = [{
+      ProblemUniqueID:null,
+      ProblemTitle:null,
+      ProblemType:null,
+      PortfolioOwnerID:null,
+      DefaultOwningOrganizationID:null,
+      CreatedByID:null,
+      ProblemOwnerID:null,
+      ProblemOwnerName:null,
+      ParentProgramID:null,
+      PrimaryProductID:null,
+      ProjectDescription:null,
+      ExecutionScope:null,
+      OtherImpactedProducts:null,
+      IsTechTransfer:false,
+      CampaignTypeID:null,
+      CampaignPhaseID:null,
+      ProductionStepID:null,
+      TargetEndState:null,
+      IsConfidential:false,
+      LocalCurrencyID:null,
+      IsOEProject:false,
+      OEProjectType:null,
+      IsAgile:false,
+      AgilePrimaryWorkstream:null,
+      AgileSecondaryWorkstream:null,
+      agileWave:null,
+      IsCapsProject:false,
+      EmissionPortfolioID:null,
+      IsPOBOS:false,
+      IsSiteAssessment:false,
+      POBOSCategory:null,
+      SiteAssessmentCategory:null,
+      PrimaryKPI:null,
+      IsGMSGQLTAnnualMustWin:false,
+      StrategicYearID:null,
+      AnnualMustWinID:null
+      }];
     var formValue = this.createProjectForm.getRawValue()
-    mainObj[0].ProblemUniqueID = ""
-    mainObj[0].ProblemTitle = formValue.problemTitle
-    mainObj[0].PortfolioOwnerID = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
-    mainObj[0].ExecutionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
-    mainObj[0].ProblemOwnerID = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
-    mainObj[0].CreatedByID = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
-    mainObj[0].ProblemOwnerName = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userDisplayName : ''
-    mainObj[0].PrimaryProductID = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
-    mainObj[0].OtherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
-    mainObj[0].ParentProgramID = formValue.projectsingleid
-    mainObj[0].ProjectDescription = formValue.projectDescription
-    mainObj[0].TargetEndState = formValue.targetGoalSituation
-    mainObj[0].ProblemType = formValue.problemType
-    mainObj[0].DefaultOwningOrganizationID = formValue.owningOrganization
-    mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
-    mainObj[0].IsOEProject = formValue.oeProject == "" ? false : formValue.oeProject
-    if (mainObj[0].IsOEProject) {
-      mainObj[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
+      mainObjCreate[0].ProblemUniqueID = ""
+      mainObjCreate[0].ProblemTitle = formValue.problemTitle
+      mainObjCreate[0].PortfolioOwnerID = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
+      mainObjCreate[0].ExecutionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
+      mainObjCreate[0].ProblemOwnerID = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
+      mainObjCreate[0].CreatedByID = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
+      mainObjCreate[0].ProblemOwnerName = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userDisplayName : ''
+      mainObjCreate[0].PrimaryProductID = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
+      mainObjCreate[0].OtherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
+      mainObjCreate[0].ParentProgramID = formValue.projectsingleid
+      mainObjCreate[0].ProjectDescription = formValue.projectDescription
+      mainObjCreate[0].TargetEndState = formValue.targetGoalSituation
+      mainObjCreate[0].ProblemType = formValue.problemType
+      mainObjCreate[0].DefaultOwningOrganizationID = formValue.owningOrganization
+      mainObjCreate[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
+      mainObjCreate[0].IsOEProject = formValue.oeProject == "" ? false : formValue.oeProject
+      if (mainObjCreate[0].IsOEProject) {
+        mainObjCreate[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsTechTransfer = formValue.techTransfer == "" ? false : formValue.techTransfer
-    if (mainObj[0].IsTechTransfer) {
-      mainObj[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
-      mainObj[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
-      mainObj[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
+      mainObjCreate[0].IsTechTransfer = formValue.techTransfer == "" ? false : formValue.techTransfer
+      if (mainObjCreate[0].IsTechTransfer) {
+        mainObjCreate[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
+        mainObjCreate[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
+        mainObjCreate[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
     }
-    mainObj[0].IsAgile = formValue.AgileProject == "" ? false : formValue.AgileProject
-    if (mainObj[0].IsAgile) {
-      mainObj[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
-      mainObj[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
-      mainObj[0].agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
+      mainObjCreate[0].IsAgile = formValue.AgileProject == "" ? false : formValue.AgileProject
+      if (mainObjCreate[0].IsAgile) {
+        mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
+        mainObjCreate[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
+        mainObjCreate[0].agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
     }
-    mainObj[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
-    mainObj[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    mainObj[0].PrimaryKPI = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
-    mainObj[0].IsPOBOS = formValue.POBOS == "" ? false : formValue.POBOS
-    if (mainObj[0].IsPOBOS) {
-      mainObj[0].POBOSCategory = formValue.POBOSType.length > 0 ? formValue.POBOSType.map(x => x.lookUpId).join() : ''
+      mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
+      mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
+      mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
+      mainObjCreate[0].IsPOBOS = formValue.POBOS == "" ? false : formValue.POBOS
+      if (mainObjCreate[0].IsPOBOS) {
+        mainObjCreate[0].POBOSCategory = formValue.POBOSType.length > 0 ? formValue.POBOSType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsSiteAssessment = formValue.siteAssignment == "" ? false : formValue.siteAssignment
-    if (mainObj[0].IsSiteAssessment) {
-      mainObj[0].SiteAssessmentCategory = formValue.siteAssessmentType.length > 0 ? formValue.siteAssessmentType.map(x => x.lookUpId).join() : ''
+      mainObjCreate[0].IsSiteAssessment = formValue.siteAssignment == "" ? false : formValue.siteAssignment
+      if (mainObjCreate[0].IsSiteAssessment) {
+        mainObjCreate[0].SiteAssessmentCategory = formValue.siteAssessmentType.length > 0 ? formValue.siteAssessmentType.map(x => x.lookUpId).join() : ''
     }
-    mainObj[0].IsGMSGQLTAnnualMustWin = formValue.StrategicDeployment == "" ? false : formValue.StrategicDeployment
-    if (mainObj[0].IsGMSGQLTAnnualMustWin) {
-      mainObj[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
-      mainObj[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
+      mainObjCreate[0].IsGMSGQLTAnnualMustWin = formValue.StrategicDeployment == "" ? false : formValue.StrategicDeployment
+      if (mainObjCreate[0].IsGMSGQLTAnnualMustWin) {
+        mainObjCreate[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
+        mainObjCreate[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
     }
-    if (mainObj[0].ProblemTitle == "" || mainObj[0].PortfolioOwnerID == "" || mainObj[0].ProblemOwnerID == "" || mainObj[0].LocalCurrencyID == "" || mainObj[0].PrimaryProductID == "" || mainObj[0].ProjectDescription == "" || mainObj[0].ExecutionScope == "") {
+      if (mainObjCreate[0].ProblemTitle == "" || mainObjCreate[0].PortfolioOwnerID == "" || mainObjCreate[0].ProblemOwnerID == "" || mainObjCreate[0].LocalCurrencyID == "" || mainObjCreate[0].PrimaryProductID == "" || mainObjCreate[0].ProjectDescription == "" || mainObjCreate[0].ExecutionScope == "") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -321,73 +497,54 @@ AnnualMustWinID:null
     }
     else{
     var dataToSend = {}
-    if (history.state.data != undefined){
+      if (history.state.callLocation == "CopyProject"){
       dataToSend = {
-        "projectCaptures": mainObj,
+        "projectCaptures": mainObjCreate,
         "hubSettings": hubSettings,
         "projectIDTemplate": history.state.copytemplateId,
         "copyProjectParameter": history.state.lookupString
       }
     }
     else{
-        dataToSend = {
-          "projectCaptures": mainObj,
-          "hubSettings": hubSettings,
-          "projectIDTemplate": projectIDTemplate,
-          "copyProjectParameter": copyProjectParameter
-        }
+      dataToSend = {
+        "projectCaptures": mainObjCreate,
+        "hubSettings": hubSettings,
+        "projectIDTemplate": projectIDTemplate,
+        "copyProjectParameter": copyProjectParameter
+      }
     }
+    
       if (formValue.qualityReference){
         this.qualityValue = true;
-        // this.qualityformValue = []
-        // var genQRFORM = this.qualityForm
-        // for (var quality of this.qualityForm) {
-        //   if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != ""){
-        //     if (history.state.callLocation == "CopyProject"){
-        //       this.qualityformValue.push({
-        //         qualityUniqueId: "",
-        //         problemUniqueId: this.projectid,
-        //         qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
-        //         qualityReference1: quality.qualityReference1
-        //       })
-        //     }
-        //     else{
-        //       this.qualityformValue.push({
-        //         qualityUniqueId: quality.qualityUniqueId,
-        //         problemUniqueId: this.projectid,
-        //         qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-        //         qualityReference1: quality.qualityReference1
-        //       })
-        //     }
-        //   }
-        // }
-    }
-      var jsonData = JSON.stringify(dataToSend)
-      console.log(JSON.parse(jsonData))
-      this.apiService.createProject(JSON.parse(jsonData)).then((res: any) => {
+      }
+      this.apiService.createProject(dataToSend).then((res: any) => {
         if (this.qualityValue == true) {
           this.qualityformValue = []
           var genQRFORM = this.qualityForm
+          if (history.state.callLocation == "CopyProject"){
           for (var quality of this.qualityForm) {
             if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
-              if (history.state.callLocation == "CopyProject") {
-                this.qualityformValue.push({
-                  qualityUniqueId: "",
-                  problemUniqueId: res.problemUniqueId,
-                  qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
-                  qualityReference1: quality.qualityReference1
-                })
-              }
-              else {
+              this.qualityformValue.push({
+                qualityUniqueId: "",
+                problemUniqueId: history.state.data.problemUniqueId,
+                qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
+                qualityReference1: quality.qualityReference1
+              })
+            }
+          }
+        }
+        else{
+          for (var quality of this.qualityForm) {
+            if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
                 this.qualityformValue.push({
                   qualityUniqueId: quality.qualityUniqueId,
                   problemUniqueId: res.problemUniqueId,
                   qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
                   qualityReference1: quality.qualityReference1
                 })
-              }
             }
           }
+        }
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
             if (res != "") {

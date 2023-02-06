@@ -172,12 +172,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           this.filterCriteria = res
           this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
           if (history.state.data != undefined) {
-            if (history.state.data.primaryProductId != null) {
+            if (history.state.data.primaryProductId != null || history.state.data.primaryProductId != "") {
               history.state.data.primaryProductId = this.filterCriteria.products.filter(function (entry) {
                 return entry.productId == history.state.data.primaryProductId
                   })
                 }
-                if (history.state.data.otherImpactedProducts != null) {
+            if (history.state.data.otherImpactedProducts != null || history.state.data.otherImpactedProducts != "") {
                   const data = history.state.data.otherImpactedProducts.split(',');
                   var impactedproducts = {};
                   var finaldata = [];
@@ -201,7 +201,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                   problemType: history.state.data.problemType,
                   projectDescription: history.state.data.projectDescription,
                   primaryProduct: history.state.data.primaryProductId == null ? '' : history.state.data.primaryProductId[0],
-                  otherImpactedProducts: history.state.data.otherImpactedProducts == null ? '' : finaldata,
+                  otherImpactedProducts: history.state.data.otherImpactedProducts[0] == undefined ? '' : finaldata,
                   portfolioOwner: '',
                   excecutionScope: '',
                   enviornmentalPortfolio: '',

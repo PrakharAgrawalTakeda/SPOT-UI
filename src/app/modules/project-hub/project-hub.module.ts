@@ -125,6 +125,7 @@ import { BusinessCaseTopsComponent } from './business-case/business-case-tops/bu
 import { BusinessCaseCapsComponent } from './business-case/business-case-caps/business-case-caps.component';
 import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-risk-issues/business-case-risk-issues.component';
 import { OptionInfoComponent } from './common/option-info/option-info.component';
+import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
 
 export const projectRoutes: Route[] = [
   {
