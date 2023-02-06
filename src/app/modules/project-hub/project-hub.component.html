@@ -70,6 +70,9 @@
         <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionBulkEdit'" [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInCharter']"></app-key-assumptions-bulk-edit>
         <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'RecommendedOptionKeyAssumptionBulkEdit'" [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInBusinessCase']"></app-key-assumptions-bulk-edit>
         <app-standard-milestone-sets *ngIf="projecthubservice.itemtype == 'StandardMilestoneSets'"></app-standard-milestone-sets>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditRC'" [optionType]="'recommended-option'"></app-option-info-edit>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO2'" [optionType]="'option-2'"></app-option-info-edit>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO3'" [optionType]="'option-3'"></app-option-info-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

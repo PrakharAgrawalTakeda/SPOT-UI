@@ -10,6 +10,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Constants } from 'app/shared/constants';
+import { IAppSetting } from 'app/shared/global-app-settings';
 @Component({
     selector: 'app-project-hub',
     templateUrl: './project-hub.component.html',
@@ -94,6 +95,11 @@ export class ProjectHubComponent implements OnInit {
         this.projecthubservice.projectidInjector(this.id)
         this.phaseStatePermission = this.projecthubservice.roleControllerControl.projectHub.projectBoard.phaseState;
         console.log(this.projecthubservice.roleControllerControl)
+        var appSetting = JSON.parse(localStorage.getItem('app-setting'))
+        console.log("App Setting", appSetting)
+        if (appSetting?.projectHubPanel == 'Locked') {
+            this.navigationAppearance = 'default'
+        }
         this.getdata()
     }
 
@@ -128,9 +134,9 @@ export class ProjectHubComponent implements OnInit {
             //
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
-                this.dataQualityPercentage = res * 100;
-                this.dataQualityPercentageString =
-                    (~~this.dataQualityPercentage).toString() + "%";
+            this.dataQualityPercentage = res * 100;
+            this.dataQualityPercentageString =
+                (~~this.dataQualityPercentage).toString() + "%";
         })
     }
     toggleSideNav() {
@@ -138,76 +144,90 @@ export class ProjectHubComponent implements OnInit {
         if (this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-board' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-team' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'general-info' ||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits'||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'associated-projects'||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-charter'||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'close-out'||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-benefits' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'associated-projects' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-charter' ||
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'close-out' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-proposal') {
             this.projecthubservice.submitbutton.next(true)
         }
     }
     toggleNavigationAppearance(): void {
         this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
+        if (this.navigationAppearance == 'default') {
+            var appSetting: IAppSetting = JSON.parse(localStorage.getItem('app-setting'))
+            appSetting ? appSetting.projectHubPanel = 'Locked': appSetting = {
+                projectHubPanel: 'Locked'
+            }
+            localStorage.setItem('app-setting', JSON.stringify(appSetting))
+        }
+        else {
+            var appSetting: IAppSetting = JSON.parse(localStorage.getItem('app-setting'))
+            appSetting ? appSetting.projectHubPanel = 'Unlocked': appSetting = {
+                projectHubPanel: 'Unlocked'
+            }
+            localStorage.setItem('app-setting', JSON.stringify(appSetting))
+        }
     }
     getStateClass(state: string): any {
-        if(state == 'Active') {
+        if (state == 'Active') {
             return 'font-bold text-primary';
         }
         return 'font-bold';
     }
     getPhaseClass(phase: string): any {
         var className = 'pointer-unselect';
-        if(this.portfolioDetails.phase == phase){
+        if (this.portfolioDetails.phase == phase) {
             className = 'pointer';
         }
-        if(this.portfolioDetails.projStatus == 'Completed') {
+        if (this.portfolioDetails.projStatus == 'Completed') {
             className = 'pointer-completed';
         }
-        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == phase) {
+        if ((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled') && this.portfolioDetails.phase == phase) {
             className = 'pointer-completed';
         }
-        if(this.phaseStatePermission) {
+        if (this.phaseStatePermission) {
             className = className + ' cursor-pointer'
         }
         return className;
     }
     getStartPhaseClass(): any {
         var className = 'pointer-start-unselect';
-        if(this.portfolioDetails.projStatus == 'Completed') {
+        if (this.portfolioDetails.projStatus == 'Completed') {
             className = 'pointer-start-completed';
         }
-        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == 'Initiate') {
+        if ((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled') && this.portfolioDetails.phase == 'Initiate') {
             className = 'pointer-start-completed';
         }
-        if(this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Initiate'){
+        if (this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Initiate') {
             className = 'pointer-start';
         }
-        if(this.phaseStatePermission) {
+        if (this.phaseStatePermission) {
             className = className + ' cursor-pointer'
         }
         return className;
     }
     getEndPhaseClass(): any {
         var className = 'pointer-last-unselect';
-        if(this.portfolioDetails.projStatus == 'Completed') {
-            className =  'pointer-last-completed';
-        }
-        if((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled')  && this.portfolioDetails.phase == 'Track') {
+        if (this.portfolioDetails.projStatus == 'Completed') {
             className = 'pointer-last-completed';
         }
-        if(this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Track'){
+        if ((this.portfolioDetails.projStatus == 'Hold' || this.portfolioDetails.projStatus == 'Cancelled') && this.portfolioDetails.phase == 'Track') {
+            className = 'pointer-last-completed';
+        }
+        if (this.portfolioDetails.projStatus == 'Active' && this.portfolioDetails.phase == 'Track') {
             className = 'pointer-last';
         }
-        if(this.phaseStatePermission) {
+        if (this.phaseStatePermission) {
             className = className + ' cursor-pointer'
         }
         return className;
     }
     getColor(percentage: number) {
-        if(this.portfolioDetails.phase == "Initiate" || this.portfolioDetails.projStatus == 'Cancelled' || this.portfolioDetails.projStatus == 'Hold'){
+        if (this.portfolioDetails.phase == "Initiate" || this.portfolioDetails.projStatus == 'Cancelled' || this.portfolioDetails.projStatus == 'Hold') {
             this.dataQualityPercentageString = "N/A";
             return '#808080';
-        }else{
+        } else {
             this.dataQualityPercentageString = (~~this.dataQualityPercentage).toString() + "%";
         }
         if (this.projectType == "Simple Project" || percentage == null) {
@@ -223,14 +243,14 @@ export class ProjectHubComponent implements OnInit {
                 return "green";
             }
         }
-      }
+    }
     openPhaseStateDrawer() {
-        if(this.phaseStatePermission){
+        if (this.phaseStatePermission) {
             this.projecthubservice.toggleDrawerOpen('PhaseState', '', [], '', false, true);
         }
     }
-    isCursorPointer(){
-        if(this.phaseStatePermission){
+    isCursorPointer() {
+        if (this.phaseStatePermission) {
             return 'cursor-pointer';
         }
     }
