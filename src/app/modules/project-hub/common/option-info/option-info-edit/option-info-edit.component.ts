@@ -67,10 +67,17 @@ export class OptionInfoEditComponent implements OnInit {
     this.projectHubService.isFormChanged = false
     var mainObj = this.optionInfoData
     var formValue = this.optionInfoForm.getRawValue()
+    mainObj.businessOptionId = mainObj.businessOptionId ? mainObj.businessOptionId : this.optionId
     mainObj.optionTitle = formValue.optionTitle
     mainObj.proposalStatement = formValue.proposalStatement
     mainObj.detailedDescription = formValue.detailedDescription
     mainObj.rationaleWhyBestOption = formValue.rationaleWhyBestOption
     mainObj.tradeoffsConsiderations = formValue.tradeoffsConsiderations
+    this.apiService.updateBusinessCaseOptionInfoDetails(mainObj,this.projectHubService.projectid).then(secondRes => {
+      this.projectHubService.isNavChanged.next(true)
+      this.projectHubService.submitbutton.next(true)
+      this.projectHubService.successSave.next(true)
+      this.projectHubService.toggleDrawerOpen('', '', [], '')
+    })
   }
 }
