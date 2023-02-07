@@ -6,14 +6,14 @@ export class GlobalVariables {
 
     //SPOT UI APPLICATION VARIABLES
 
-    public static spotui: string = environment.production?'http://localhost:4200/' : 'https://salmon-grass-03d30f90f.1.azurestaticapps.net/' 
-    //process.env.NODE_ENV === 'development' ? 'http://localhost:4200/' : 'https://salmon-grass-03d30f90f.1.azurestaticapps.net/'
-
+    public static spotui: string = environment.SPOT_API_URL
 
     //SPOT API APPLICATION VARIABLES
 
 
-    public static apiurl: string = process.env.NODE_ENV === 'development' ?
+    public static apiurl: string = environment.SPOT_API_URL
+    
+    //process.env.NODE_ENV === 'development' ?
 
         //Mannat
 

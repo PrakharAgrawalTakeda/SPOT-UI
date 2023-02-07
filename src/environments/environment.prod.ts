@@ -1,3 +1,5 @@
 export const environment = {
-    production: false
+    environment: 'PROD',
+    SPOT_UI_URL: '',
+    SPOT_API_URL:''
 };
