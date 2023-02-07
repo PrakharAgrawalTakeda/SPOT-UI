@@ -6,7 +6,7 @@ export class GlobalVariables {
 
     //SPOT UI APPLICATION VARIABLES
 
-    public static spotui: string = environment.SPOT_API_URL
+    public static spotui: string = environment.SPOT_UI_URL
 
     //SPOT API APPLICATION VARIABLES
 
