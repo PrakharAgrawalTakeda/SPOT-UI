@@ -22,7 +22,6 @@ export class QualityRefBulkEditComponent implements OnInit {
     isQualityRef: new FormControl(false)
   })
   @Input() qualityType: any = [];
-
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Output() formValueQuality = new EventEmitter<FormArray>();

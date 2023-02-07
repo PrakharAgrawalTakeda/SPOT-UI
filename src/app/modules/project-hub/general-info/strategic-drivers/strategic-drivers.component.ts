@@ -353,7 +353,7 @@ export class StrategicDriversComponent implements OnInit {
             this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
             this.viewContent = true
           }
-          else{
+          else {
           this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
           this.viewContent = true
           }

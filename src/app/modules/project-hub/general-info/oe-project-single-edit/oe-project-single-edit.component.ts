@@ -20,6 +20,7 @@ export class OeProjectSingleEditComponent implements OnInit {
   })
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  
   @Output() formValueOE = new EventEmitter<FormGroup>();
   oeProjectType: any = [];
   lookupdata: any = [];

@@ -12,6 +12,7 @@ import { ProjectApiService } from 'app/modules/project-hub/common/project-api.se
 import { QualityRefBulkEditComponent } from 'app/modules/project-hub/general-info/quality-ref-bulk-edit/quality-ref-bulk-edit.component';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { __classPrivateFieldSet } from 'tslib';
+import { MatStepper } from '@angular/material/stepper';
 
 
 @Component({
@@ -22,6 +23,7 @@ import { __classPrivateFieldSet } from 'tslib';
 })
 
 export class CreateProjectComponent implements OnInit {
+  @ViewChild('stepper') stepper: MatStepper;
   filterCriteria: any = {};
   getData: boolean = false;
   lookupdata: any = [];
@@ -52,13 +54,13 @@ export class CreateProjectComponent implements OnInit {
     owningOrganization: new FormControl(''),
     SubmittedBy: new FormControl(''),
     targetGoalSituation: new FormControl(''),
-    oeProject: new FormControl(''),
+    isOeproject: new FormControl(''),
     qualityReference: new FormControl(''),
-    techTransfer: new FormControl(''),
+    isTechTransfer: new FormControl(''),
     primaryKPI: new FormControl(''),
-    AgileProject: new FormControl(''),
-    siteAssignment: new FormControl(''),
-    POBOS: new FormControl(''),
+    isAgile: new FormControl(''),
+    isSiteAssessment: new FormControl(''),
+    isPobos: new FormControl(''),
     oeProjectType: new FormControl(''),
     campaignPhase: new FormControl(''),
     productionSteps: new FormControl(''),
@@ -66,12 +68,12 @@ export class CreateProjectComponent implements OnInit {
     agilePrimaryWorkstream: new FormControl(''),
     agileSecondaryWorkstream: new FormControl(''),
     agileWave: new FormControl(''),
-    POBOSType: new FormControl(''),
-    siteAssessmentType: new FormControl(''),
+    pobosCategory: new FormControl(''),
+    siteAssessmentCategory: new FormControl(''),
     quality: new FormControl(new FormArray([])),
-    StrategicDeployment: new FormControl(''),
-    StrategicYear: new FormControl(''),
-    AnnualMustWin: new FormControl(''),
+    isGmsgqltannualMustWin: new FormControl(''),
+    strategicYear: new FormControl(''),
+    annualMustWinID: new FormControl(''),
     localCurrency: new FormControl('')
   })
 
@@ -152,7 +154,7 @@ export class CreateProjectComponent implements OnInit {
     }
     else if (index == 2) {
       this.createProjectForm.patchValue({
-        oeProject: event.isOeproject,
+        isOeproject: event.isOeproject,
         oeProjectType: event.oeprojectType
       })
     }
@@ -161,7 +163,7 @@ export class CreateProjectComponent implements OnInit {
       this.campaingTypeName = this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName
       this.productionStepName = this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName
       this.createProjectForm.patchValue({
-        techTransfer: event.isTechTransfer,
+        isTechTransfer: event.isTechTransfer,
         campaignPhase: event.campaignPhaseId,
         campaignType: event.campaignTypeId,
         productionSteps: event.productionStepId
@@ -170,17 +172,17 @@ export class CreateProjectComponent implements OnInit {
     else if (index == 5) {
       this.createProjectForm.patchValue({
         primaryKPI: event.primaryKPI,
-        AgileProject: event.isAgile,
+        isAgile: event.isAgile,
         agilePrimaryWorkstream: event.agilePrimaryWorkstream,
         agileSecondaryWorkstream: event.agileSecondaryWorkstream,
         agileWave: event.agileWave,
-        POBOS: event.isPobos,
-        POBOSType: event.pobosCategory,
-        siteAssignment: event.isSiteAssessment,
-        siteAssessmentType: event.siteAssessmentCategory,
-        StrategicDeployment: event.isGmsgqltannualMustWin,
-        StrategicYear: event.strategicYear,
-        AnnualMustWin: event.annualMustWinID,
+        isPobos: event.isPobos,
+        pobosCategory: event.pobosCategory,
+        isSiteAssessment: event.isSiteAssessment,
+        siteAssessmentCategory: event.siteAssessmentCategory,
+        isGmsgqltannualMustWin: event.isGmsgqltannualMustWin,
+        strategicYear: event.strategicYear,
+        annualMustWinID: event.annualMustWinID,
       })
     }
   }
@@ -199,182 +201,6 @@ export class CreateProjectComponent implements OnInit {
   }
 
   createProject() {
-    // if (history.state.data != undefined){
-    //   var mainObj = {
-    //   agilePrimaryWorkstream:null,
-    //   agileSecondaryWorkstream:null,
-    //   agileWave:null,
-    //   annualMustWinId:null,
-    //   approvedDate:null,
-    //   archiveredBy:null,
-    //   archiveredOn:null,
-    //   benefitsRealizedOutcome:null,
-    //   calculatedEmissionsImpact:null,
-    //   campaignPhaseId:null,
-    //   campaignTypeId:null,
-    //   closeOutApprovedDate:null,
-    //   createdById:"",
-    //   createdDate:"2023-02-3T13:16:13.5",
-    //   dataMigrationInfo:null,
-    //   defaultOwningOrganizationId:"",
-    //   emissionPortfolioId:"",
-    //   emissionsImpactRealizationDate:null,
-    //   energyCostImpactPerYear:null,
-    //   energyCostImpactPerYearFxconv:null,
-    //   energyImpact:null,
-    //   executionScope:"",
-    //   functionGroupID:"",
-    //   isArchived:null,
-    //   isCapsProject:false,
-    //   isConfidential:false,
-    //   isGmsgqltannualMustWin:null,
-    //   isGoodPractise:null,
-    //   isManualArchive:null,
-    //   isOeproject:false,
-    //   isPobos:null,
-    //   isSiteAssessment:null,
-    //   isTechTransfer:false,
-    //   keyTakeaways:null,
-    //   legacyPpmprojectId:null,
-    //   legacyPpmsystem:null,
-    //   noCarbonImpact:null,
-    //   oeprojectType:null,
-    //   otherImpactedProducts:"",
-    //   parentProgramId:"",
-    //   poboscategory:null,
-    //   portfolioOwnerId:"",
-    //   primaryKpi:null,
-    //   primaryProductId:"",
-    //   problemId: history.state.data.problemId,
-    //   problemOwnerId:"",
-    //   problemOwnerName:"",
-    //   problemTitle:"",
-    //   problemType:"",
-    //   problemUniqueId:"",
-    //   productionStepId:null,
-    //   projectClassificationId:null,
-    //   projectDescription:"",
-    //   projectManagerId:"",
-    //   projectProposalApprovedDate:null,
-    //   projectReviewedYN:"",
-    //   projectSiteUrl:null,
-    //   proposalStatement:null,
-    //   siteAssessmentCategory:null,
-    //   sponsorId:"",
-    //   strategicRationale:null,
-    //   strategicYearId:null,
-    //   svpelementTypeId:null,
-    //   targetEndState:"",
-    //   wasteImpactCost:null,
-    //   wasteImpactUnits:null,
-    //   wasteLandfillImpactUnits:null,
-    //   waterImpactCost:null,
-    //   waterImpactUnits:null,
-    //   whynotgoforNextBestAlternative:null
-    //   }
-    //   var formValue = this.createProjectForm.getRawValue()
-    //   mainObj.problemUniqueId = history.state.data.problemUniqueId
-    //   mainObj.problemTitle = formValue.problemTitle
-    //   mainObj.portfolioOwnerId = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
-    //   mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
-    //   mainObj.problemOwnerId = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
-    //   mainObj.createdById = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userAdid : ''
-    //   mainObj.problemOwnerName = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userDisplayName : ''
-    //   mainObj.primaryProductId = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
-    //   mainObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
-    //   mainObj.parentProgramId = formValue.projectsingleid
-    //   mainObj.projectDescription = formValue.projectDescription
-    //   mainObj.targetEndState = formValue.targetGoalSituation
-    //   mainObj.problemType = formValue.problemType
-    //   mainObj.defaultOwningOrganizationId = formValue.owningOrganization
-    //   // mainObj[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
-    //   mainObj.isOeproject = formValue.oeProject == "" ? false : formValue.oeProject
-    //   if (mainObj.isOeproject) {
-    //     mainObj.oeprojectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
-    //   }
-    //   mainObj.isTechTransfer = formValue.techTransfer == "" ? false : formValue.techTransfer
-    //   if (mainObj.isTechTransfer) {
-    //     mainObj.campaignPhaseId = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
-    //     mainObj.productionStepId = formValue.productionSteps != "" ? formValue.productionSteps : ''
-    //     mainObj.campaignTypeId = formValue.campaignType != "" ? formValue.campaignType : ''
-    //   }
-    //   if (formValue.AgileProject) {
-    //     mainObj.agilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
-    //     mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
-    //     mainObj.agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
-    //   }
-    //   mainObj.isCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
-    //   mainObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    //   mainObj.primaryKpi = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
-    //   mainObj.isPobos = formValue.POBOS == "" ? false : formValue.POBOS
-    //   if (mainObj.isPobos) {
-    //     mainObj.poboscategory = formValue.POBOSType.length > 0 ? formValue.POBOSType.map(x => x.lookUpId).join() : ''
-    //   }
-    //   mainObj.isSiteAssessment = formValue.siteAssignment == "" ? false : formValue.siteAssignment
-    //   if (mainObj.isSiteAssessment) {
-    //     mainObj.siteAssessmentCategory = formValue.siteAssessmentType.length > 0 ? formValue.siteAssessmentType.map(x => x.lookUpId).join() : ''
-    //   }
-    //   mainObj.isGmsgqltannualMustWin = formValue.StrategicDeployment == "" ? false : formValue.StrategicDeployment
-    //   if (mainObj.isGmsgqltannualMustWin) {
-    //     mainObj.strategicYearId = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
-    //     mainObj.annualMustWinId = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
-    //   }
-    //   if (mainObj.problemTitle == "" || mainObj.portfolioOwnerId == "" || mainObj.problemOwnerId == "" || mainObj.primaryProductId == "" || mainObj.problemOwnerId == "" || mainObj.executionScope == "") {
-    //     var comfirmConfig: FuseConfirmationConfig = {
-    //       "title": "You must complete all mandatory fields.",
-    //       "message": "",
-    //       "icon": {
-    //         "show": true,
-    //         "name": "heroicons_outline:exclamation",
-    //         "color": "warning"
-    //       },
-    //       "actions": {
-    //         "confirm": {
-    //           "show": true,
-    //           "label": "Okay",
-    //           "color": "primary"
-    //         },
-    //         "cancel": {
-    //           "show": false,
-    //           "label": "Cancel"
-    //         }
-    //       },
-    //       "dismissible": true
-    //     }
-    //     const alert = this.fuseAlert.open(comfirmConfig)
-    //   }
-    //   if (formValue.qualityReference) {
-    //     this.qualityValue = true;
-    //   }
-    //   this.apiService2.editGeneralInfo(history.state.data.problemUniqueId, mainObj).then(res => {
-    //   // this.apiService.copyProject(mainObj[0], history.state.data.problemUniqueId).then((res: any) => {
-    //     if (this.qualityValue == true) {
-    //       this.qualityformValue = []
-    //       var genQRFORM = this.qualityForm
-    //       for (var quality of this.qualityForm) {
-    //         if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
-    //           this.qualityformValue.push({
-    //             qualityUniqueId: "",
-    //             problemUniqueId: history.state.data.problemUniqueId,
-    //             qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
-    //             qualityReference1: quality.qualityReference1
-    //           })
-    //         }
-    //       }
-    //       this.apiService2.bulkeditQualityReference(this.qualityformValue, history.state.data.problemUniqueId).then(quality => {
-    //         console.log(quality);
-    //         if (res != "") {
-    //           this.createProjectForm.reset();
-    //           window.open('/project-hub/' + history.state.data.problemUniqueId + '/project-board', "_blank")
-    //         }
-    //       })
-    //     }
-    //     else {
-    //       window.open('/project-hub/' + history.state.data.problemUniqueId + '/project-board', "_blank")
-    //     }
-    //   })
-    // }
-    // else{
     debugger;
     console.log(this.qualityForm);
     var hubSettings = [{
@@ -439,17 +265,17 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].ProblemType = formValue.problemType
       mainObjCreate[0].DefaultOwningOrganizationID = formValue.owningOrganization
       mainObjCreate[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
-      mainObjCreate[0].IsOEProject = formValue.oeProject == "" ? false : formValue.oeProject
+    mainObjCreate[0].IsOEProject = formValue.isOeproject == "" ? false : formValue.isOeproject
       if (mainObjCreate[0].IsOEProject) {
         mainObjCreate[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
     }
-      mainObjCreate[0].IsTechTransfer = formValue.techTransfer == "" ? false : formValue.techTransfer
+    mainObjCreate[0].IsTechTransfer = formValue.isTechTransfer == "" ? false : formValue.isTechTransfer
       if (mainObjCreate[0].IsTechTransfer) {
         mainObjCreate[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
         mainObjCreate[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
         mainObjCreate[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
     }
-      mainObjCreate[0].IsAgile = formValue.AgileProject == "" ? false : formValue.AgileProject
+    mainObjCreate[0].IsAgile = formValue.isAgile == "" ? false : formValue.isAgile
       if (mainObjCreate[0].IsAgile) {
         mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
         mainObjCreate[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
@@ -458,18 +284,18 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
       mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
       mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
-      mainObjCreate[0].IsPOBOS = formValue.POBOS == "" ? false : formValue.POBOS
+    mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
       if (mainObjCreate[0].IsPOBOS) {
-        mainObjCreate[0].POBOSCategory = formValue.POBOSType.length > 0 ? formValue.POBOSType.map(x => x.lookUpId).join() : ''
+        mainObjCreate[0].POBOSCategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : ''
     }
-      mainObjCreate[0].IsSiteAssessment = formValue.siteAssignment == "" ? false : formValue.siteAssignment
+    mainObjCreate[0].IsSiteAssessment = formValue.isSiteAssessment == "" ? false : formValue.isSiteAssessment
       if (mainObjCreate[0].IsSiteAssessment) {
-        mainObjCreate[0].SiteAssessmentCategory = formValue.siteAssessmentType.length > 0 ? formValue.siteAssessmentType.map(x => x.lookUpId).join() : ''
+        mainObjCreate[0].SiteAssessmentCategory = formValue.siteAssessmentCategory.length > 0 ? formValue.siteAssessmentCategory.map(x => x.lookUpId).join() : ''
     }
-      mainObjCreate[0].IsGMSGQLTAnnualMustWin = formValue.StrategicDeployment == "" ? false : formValue.StrategicDeployment
+    mainObjCreate[0].IsGMSGQLTAnnualMustWin = formValue.isGmsgqltannualMustWin == "" ? false : formValue.isGmsgqltannualMustWin
       if (mainObjCreate[0].IsGMSGQLTAnnualMustWin) {
-        mainObjCreate[0].StrategicYearID = formValue.StrategicYear != "" ? formValue.StrategicYear.lookUpId : ''
-        mainObjCreate[0].AnnualMustWinID = formValue.AnnualMustWin != "" ? formValue.AnnualMustWin.lookUpId : ''
+        mainObjCreate[0].StrategicYearID = formValue.strategicYear != "" ? formValue.strategicYear.lookUpId : ''
+        mainObjCreate[0].AnnualMustWinID = formValue.annualMustWinID != "" ? formValue.annualMustWinID.lookUpId : ''
     }
       if (mainObjCreate[0].ProblemTitle == "" || mainObjCreate[0].PortfolioOwnerID == "" || mainObjCreate[0].ProblemOwnerID == "" || mainObjCreate[0].LocalCurrencyID == "" || mainObjCreate[0].PrimaryProductID == "" || mainObjCreate[0].ProjectDescription == "" || mainObjCreate[0].ExecutionScope == "") {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -518,6 +344,7 @@ export class CreateProjectComponent implements OnInit {
         this.qualityValue = true;
       }
       this.apiService.createProject(dataToSend).then((res: any) => {
+        this.projectid = res.problemUniqueId
         if (this.qualityValue == true) {
           this.qualityformValue = []
           var genQRFORM = this.qualityForm
@@ -547,19 +374,76 @@ export class CreateProjectComponent implements OnInit {
         }
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
-            if (res != "") {
-              this.createProjectForm.reset();
-              window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
-            }
+            // if (res != "") {
+            //   this.createProjectForm.reset();
+            //   window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
+            // }
         })
       }
-      else{
-          window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
-      }
+      // else{
+      //     window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
+      // }
     })
   }
   }
 
+  RoutetoBoard(){
+    window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+  }
+
+  RoutetoCharter() {
+    window.open('/project-hub/' + this.projectid + '/project-charter/general-info', "_blank")
+  }
+
+  RoutetoBC() {
+    window.open('/project-hub/' + this.projectid + '/business-case/general-info', "_blank")
+  }
+
+  RoutetoProposal() {
+    window.open('/project-hub/' + this.projectid + '/project-proposal/general-info', "_blank")
+  }
+
+  move(index: number) {
+    // this.createProjectForm.reset();
+    this.createProjectForm.patchValue({
+      problemTitle: '',
+      projectsingle: '',
+      projectsingleid: '',
+      problemType: 'Standard Project / Program',
+      projectDescription: '',
+      primaryProduct: {},
+      otherImpactedProducts: [],
+      portfolioOwner: {},
+      excecutionScope: [],
+      enviornmentalPortfolio: {},
+      isCapsProject: false,
+      owningOrganization: '',
+      SubmittedBy: '',
+      targetGoalSituation: '',
+      isOeproject: '',
+      qualityReference: '',
+      isTechTransfer: '',
+      primaryKPI: '',
+      isAgile: '',
+      isSiteAssessment: '',
+      isPobos: '',
+      oeProjectType: '',
+      campaignPhase: '',
+      productionSteps: '',
+      campaignType: '',
+      agilePrimaryWorkstream: '',
+      agileSecondaryWorkstream: '',
+      agileWave: '',
+      pobosCategory: [],
+      siteAssessmentCategory: [],
+      quality: new FormArray([]),
+      isGmsgqltannualMustWin: '',
+      strategicYear: '',
+      annualMustWinID: '',
+      localCurrency: ''
+    })
+    this.stepper.selectedIndex = index;
+  }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){
       return id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''

@@ -21,6 +21,7 @@ export class TechTransferSingleEditComponent implements OnInit {
   projectData: any = {}
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() CreateProjectForm
   @Output() formValueTech = new EventEmitter<FormGroup>();
   lookupdata: any = []; 
   campaignPhase: any = [];
@@ -94,43 +95,18 @@ export class TechTransferSingleEditComponent implements OnInit {
       this.auth.lookupMaster().then(res => {
         this.lookupdata = res;
         if (history.state.data != undefined) {
-          // this.productionSteps = this.lookupdata.filter(x => x.lookUpParentId == 'b137412d-8008-4446-8fe6-c56a06b83174');
-          // this.productionSteps.sort((a, b) => {
-          //   return a.lookUpOrder - b.lookUpOrder;
-          // })
-          // if (history.state.data[0].productionStepID != null) {
-          //   history.state.data[0].productionStepID = this.productionSteps.filter(function (entry) {
-          //     return entry.lookUpId == history.state.data[0].productionStepID
-          //   })
-          // }
-          // this.campaignPhase = this.lookupdata.filter(x => x.lookUpParentId == '183dc1f1-06ba-4022-bd6f-ae07f70751e2');
-          // this.campaignPhase.sort((a, b) => {
-          //   return a.lookUpOrder - b.lookUpOrder;
-          // })
-          // if (history.state.data[0].campaignPhase != null) {
-          //   history.state.data[0].campaignPhase = this.campaignPhase.filter(function (entry) {
-          //     return entry.lookUpId == history.state.data[0].campaignPhase
-          //   })
-          // }
-          // this.campaignType = this.lookupdata.filter(x => x.lookUpParentId == '01a49f16-0744-4100-ae8a-ec2e469dbf74');
-          // this.campaignType.sort((a, b) => {
-          //   return a.lookUpOrder - b.lookUpOrder;
-          // })
-          // if (history.state.data[0].campaignType != null) {
-          //   history.state.data[0].campaignType = this.campaignType.filter(function (entry) {
-          //     return entry.lookUpId == history.state.data[0].campaignType
-          //   })
-          // }
           this.generalInfoForm.patchValue({
             isTechTransfer: history.state.data.isTechTransfer,
             productionStepId: history.state.data.productionStepId == null ? '' : history.state.data.productionStepId,
             campaignPhaseId: history.state.data.campaignPhaseId == null ? '' : history.state.data.campaignPhaseId,
             campaignTypeId: history.state.data.campaignTypeId == null ? '' : history.state.data.campaignTypeId,
           })
+          this.generalInfoForm = this.CreateProjectForm
           this.formValueTech.emit(this.generalInfoForm.getRawValue())
           this.viewContent = true
         }
-        else{
+        else {
+        this.generalInfoForm = this.CreateProjectForm
         this.formValueTech.emit(this.generalInfoForm.getRawValue())
         this.viewContent = true
         }

@@ -21,7 +21,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
-
+  
   @Output() eventName = new EventEmitter<EventType>();
   viewContent:boolean = false
   showMessage: boolean = false;
@@ -65,7 +65,8 @@ export class GeneralInfoSingleEditComponent implements OnInit{
 
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
-    public fuseAlert: FuseConfirmationService) {
+    public fuseAlert: FuseConfirmationService,
+    public apiService2: PortfolioApiService) {
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -164,7 +165,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     }
     else {
       this.apiService.getfilterlist().then(res => {
-        this.apiService.getLocalCurrency().then(data => {
+        this.apiService2.getLocalCurrency().then(data => {
           this.localCurrencyList = data
           for (var i = 0; i < this.localCurrencyList.length; i++) {
             this.local.push(this.localCurrencyList[i].localCurrencyAbbreviation)

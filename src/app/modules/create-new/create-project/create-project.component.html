@@ -183,10 +183,10 @@
                                                 <label class="reviewLabel">OE Project</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.oeProject}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.isOeproject}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="createProjectForm.controls['oeProject'].value">
+                                        <div class="test" *ngIf="createProjectForm.controls['isOeproject'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">OE Project Type</label>
                                             </div>
@@ -202,10 +202,10 @@
                                                 <label class="reviewLabel">Tech Transfer or Clinical Campaign</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.techTransfer}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.isTechTransfer}}</label>
                                             </div>
                                         </div>
-                                        <div *ngIf="createProjectForm.controls['techTransfer'].value">
+                                        <div *ngIf="createProjectForm.controls['isTechTransfer'].value">
                                             <div class="test">
                                                 <div class="child">
                                                     <label class="reviewLabel">Campaign Phase</label>
@@ -280,10 +280,10 @@
                                                 <label class="reviewLabel">Agile Project</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.AgileProject}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.isAgile}}</label>
                                             </div>
                                         </div>
-                                        <div *ngIf="createProjectForm.controls['AgileProject'].value">
+                                        <div *ngIf="createProjectForm.controls['isAgile'].value">
                                             <div class="test">
                                                 <div class="child">
                                                     <label class="reviewLabel">AGILE Primary Workstream</label>
@@ -317,16 +317,16 @@
                                                 <label class="reviewLabel">POBOS</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.POBOS}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.isPobos}}</label>
                                             </div>
                                         </div>
-                                        <div class="test">
+                                        <div *ngIf="createProjectForm.controls['isPobos'].value" class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">POBOS Type</label>
                                             </div>
                                             <div class="child">
-                                                <span *ngFor="let item of createProjectForm.value.POBOSType; let i = index">
-                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.POBOSType.length">,</label>
+                                                <span *ngFor="let item of createProjectForm.value.pobosCategory; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<createProjectForm.value.pobosCategory.length">,</label>
                                                     <label class="reviewText">{{item.lookUpName}}</label>
                                                 </span>
                                             </div>
@@ -336,18 +336,18 @@
                                                 <label class="reviewLabel">Site Assessment</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.siteAssignment}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.isSiteAssessment}}</label>
                                             </div>
                                         </div>
                                         
-                                        <div class="test" *ngIf="createProjectForm.controls['siteAssignment'].value">
+                                        <div class="test" *ngIf="createProjectForm.controls['isSiteAssessment'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">Site Assessment Type</label>
                                             </div>
                                             <div class="child">
-                                                <span *ngFor="let item of createProjectForm.value.siteAssessmentType; let i = index">
+                                                <span *ngFor="let item of createProjectForm.value.siteAssessmentCategory; let i = index">
                                                     <label class="reviewText"
-                                                        *ngIf="i > 0 && i<createProjectForm.value.siteAssessmentType.length">,</label>
+                                                        *ngIf="i > 0 && i<createProjectForm.value.siteAssessmentCategory.length">,</label>
                                                     <label class="reviewText">{{item.lookUpName}}</label>
                                                 </span>
                                             </div>
@@ -358,23 +358,23 @@
                                                 <label class="reviewLabel">Strategic Deployment Annual Initiative</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.StrategicDeployment}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.isGmsgqltannualMustWin}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="createProjectForm.controls['StrategicDeployment'].value">
+                                        <div class="test" *ngIf="createProjectForm.controls['isGmsgqltannualMustWin'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">Strategic Year</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.StrategicYear.lookUpName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.strategicYear.lookUpName}}</label>
                                             </div>
                                         </div>
-                                        <div class="test" *ngIf="createProjectForm.controls['StrategicDeployment'].value">
+                                        <div class="test" *ngIf="createProjectForm.controls['isGmsgqltannualMustWin'].value">
                                             <div class="child">
                                                 <label class="reviewLabel">GMSGQ LT Annual Must Win?</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.AnnualMustWin.lookUpName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.annualMustWinID.lookUpName}}</label>
                                             </div>
                                         </div>
                                         </div>
@@ -386,11 +386,24 @@
                                             style="color: rgba(76,155,207);margin-right: 10px">Cancel</label>
                                         <button style="background-color: rgba(76,155,207);" mat-button
                                             matStepperPrevious>Back</button>
-                                        <button style="background-color: rgba(76,155,207);" mat-button (click)="
+                                        <button matStepperNext style="background-color: rgba(76,155,207);" mat-button (click)="
                                             createProject()" type="button">Submit</button>
                                     </div>
                                 </form>
                             </div>
+                            </mat-step>
+                            <mat-step>
+                                <div>
+                                    <div style="margin-right: 300px;margin-left: 300px;">
+                                        <ng-template matStepLabel><span></span></ng-template>
+                                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px;"><b>Please select the next page</b></label>
+                                        <button (click)="RoutetoProposal()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;">Project Proposal</button>
+                                        <button (click)="RoutetoBC()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;">Business Case</button>
+                                        <button (click)="RoutetoCharter()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;">Project Charter</button>
+                                        <button (click)="RoutetoBoard()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;">Project Board</button>
+                                        <button (click)="move(0)" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;">Create another Project</button>
+                                    </div>
+                                </div>
                             </mat-step>
                         </mat-stepper>
                     </div>
