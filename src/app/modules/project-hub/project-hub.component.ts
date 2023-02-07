@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ProjectApiService } from './common/project-api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from './project-hub.service';
@@ -90,6 +90,7 @@ export class ProjectHubComponent implements OnInit {
         public projecthubservice: ProjectHubService,
         public _fuseNavigationService: FuseNavigationService,
         private titleService: Title,
+        private routes: Router,
         private snack: MatSnackBar) {
         this.projecthubservice.isNavChanged.subscribe(res => {
             debugger;
@@ -169,7 +170,8 @@ export class ProjectHubComponent implements OnInit {
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'associated-projects' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-charter' ||
             this._Activatedroute.children[0].snapshot.routeConfig.path == 'close-out' ||
-            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-proposal') {
+            this._Activatedroute.children[0].snapshot.routeConfig.path == 'project-proposal' ||
+            this.routes.url.includes('option-info')) {
             this.projecthubservice.submitbutton.next(true)
         }
     }

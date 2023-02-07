@@ -53,6 +53,11 @@ export class BusinessCaseComponent implements OnInit {
     else if (this.router.url.includes('option-3')) {
       this.navItem = this._fuseNavigationService.getItem('option-3', navComponent.navigation)
     }
+    else if (this.router.url.includes('general-info')) {
+      this.navItem = {
+        title: 'General Info'
+      }
+    }
     console.log(this.navItem)
   }
 }
