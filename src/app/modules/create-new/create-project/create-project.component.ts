@@ -405,44 +405,45 @@ export class CreateProjectComponent implements OnInit {
 
   move(index: number) {
     // this.createProjectForm.reset();
-    this.createProjectForm.patchValue({
-      problemTitle: '',
-      projectsingle: '',
-      projectsingleid: '',
-      problemType: 'Standard Project / Program',
-      projectDescription: '',
-      primaryProduct: {},
-      otherImpactedProducts: [],
-      portfolioOwner: {},
-      excecutionScope: [],
-      enviornmentalPortfolio: {},
-      isCapsProject: false,
-      owningOrganization: '',
-      SubmittedBy: '',
-      targetGoalSituation: '',
-      isOeproject: '',
-      qualityReference: '',
-      isTechTransfer: '',
-      primaryKPI: '',
-      isAgile: '',
-      isSiteAssessment: '',
-      isPobos: '',
-      oeProjectType: '',
-      campaignPhase: '',
-      productionSteps: '',
-      campaignType: '',
-      agilePrimaryWorkstream: '',
-      agileSecondaryWorkstream: '',
-      agileWave: '',
-      pobosCategory: [],
-      siteAssessmentCategory: [],
-      quality: new FormArray([]),
-      isGmsgqltannualMustWin: '',
-      strategicYear: '',
-      annualMustWinID: '',
-      localCurrency: ''
-    })
-    this.stepper.selectedIndex = index;
+    // this.createProjectForm.patchValue({
+    //   problemTitle: '',
+    //   projectsingle: '',
+    //   projectsingleid: '',
+    //   problemType: 'Standard Project / Program',
+    //   projectDescription: '',
+    //   primaryProduct: {},
+    //   otherImpactedProducts: [],
+    //   portfolioOwner: {},
+    //   excecutionScope: [],
+    //   enviornmentalPortfolio: {},
+    //   isCapsProject: false,
+    //   owningOrganization: '',
+    //   SubmittedBy: '',
+    //   targetGoalSituation: '',
+    //   isOeproject: '',
+    //   qualityReference: '',
+    //   isTechTransfer: '',
+    //   primaryKPI: '',
+    //   isAgile: '',
+    //   isSiteAssessment: '',
+    //   isPobos: '',
+    //   oeProjectType: '',
+    //   campaignPhase: '',
+    //   productionSteps: '',
+    //   campaignType: '',
+    //   agilePrimaryWorkstream: '',
+    //   agileSecondaryWorkstream: '',
+    //   agileWave: '',
+    //   pobosCategory: [],
+    //   siteAssessmentCategory: [],
+    //   quality: new FormArray([]),
+    //   isGmsgqltannualMustWin: '',
+    //   strategicYear: '',
+    //   annualMustWinID: '',
+    //   localCurrency: ''
+    // })
+    // this.stepper.selectedIndex = index;
+    window.location.reload()
   }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){
