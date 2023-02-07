@@ -23,7 +23,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() baselineLog: any = {}
   @Input() lookup: any
   @Input() editable: boolean
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Recommended-Option' = 'Normal'
   @ViewChild('scheduleTable') scheduleTable: any;
   getRowClass = (row) => {
     return {
@@ -53,7 +53,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       this.changeschedule(res)
       console.log(res)
     })
-    
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -63,7 +63,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       i.variance = this.calculateVariance(i)
     }
     console.log(this.scheduleData)
-    
+
     if (this.isclosed == false && this.mode == 'Normal') {
       this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
     }
@@ -231,7 +231,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   getLinkType(projectId: string): string {
     return projectId == this.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
-  } 
+  }
   getlinkname2(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     // console.log(this.projectViewDetails.links)
