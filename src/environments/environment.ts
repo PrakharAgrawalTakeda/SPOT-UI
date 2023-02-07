@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+    production: false,
     environment: 'Local',
     SPOT_UI_URL: 'http://localhost:4200/',
     SPOT_API_URL:'https://spotapi-gateway-dev.azurewebsites.net/api/'
