@@ -1,4 +1,13 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    OnDestroy,
+    OnInit,
+    ElementRef,
+    ViewChild,
+    ViewEncapsulation,
+    Input
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -39,7 +48,8 @@ export const MY_FORMATS = {
 })
 
 export class ScheduleViewEditComponent implements OnInit {
-  formFieldHelpers: string[] = [''];
+  @Input() viewElements: any = ['milestone','plannedFinish','baselineFinish','responsiblePerson','functionOwner','comments','completionDate','includeInReport']
+    formFieldHelpers: string[] = [''];
   lookupdata: any = []
   schedule: any = {}
   today = new Date();
@@ -61,7 +71,8 @@ export class ScheduleViewEditComponent implements OnInit {
     usersingleid: new FormControl(''),
     function: new FormControl({}),
     //functionid: new FormControl(''),
-    includeInReport: new FormControl('')
+    includeInReport: new FormControl(''),
+    includeInBusinessCase: new FormControl('')
   })
   ngOnInit(): void {
     this.getllookup()
@@ -84,7 +95,8 @@ export class ScheduleViewEditComponent implements OnInit {
           usersingle: res.responsiblePersonName,
           usersingleid: res.responsiblePersonId,
           //functionid: res.functionGroupId,
-          includeInReport: res.includeInReport
+          includeInReport: res.includeInReport,
+          includeInBusinessCase: res.includeInBusinessCase
         })
         this.scheduleForm.controls['baselineFinish'].disable()
         //this.scheduleForm.controls['plannedFinish'].disable()
@@ -98,6 +110,11 @@ export class ScheduleViewEditComponent implements OnInit {
             if (this.scheduleForm.value.includeInReport != true) {
               this.scheduleForm.controls['includeInReport'].disable()
             }
+          }
+          if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 8) {
+              if (this.scheduleForm.value.includeInBusinessCase != true) {
+                  this.scheduleForm.controls['includeInBusinessCase'].disable()
+              }
           }
         }
         this.projecthubservice.isFormChanged = false
@@ -113,7 +130,8 @@ export class ScheduleViewEditComponent implements OnInit {
         usersingle: "",
         usersingleid: "",
         //functionid: "",
-        includeInReport: false
+        includeInReport: false,
+        includeInBusinessCase: false
       })
       this.scheduleForm.controls['baselineFinish'].disable()
       //this.scheduleForm.controls['plannedFinish'].disable()
@@ -126,6 +144,9 @@ export class ScheduleViewEditComponent implements OnInit {
         if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
           this.scheduleForm.controls['includeInReport'].disable()
         }
+          if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 8) {
+              this.scheduleForm.controls['includeInBusinessCase'].disable()
+          }
       }
       this.projecthubservice.isFormChanged = false
     }
@@ -141,6 +162,9 @@ export class ScheduleViewEditComponent implements OnInit {
       this.dataloader()
       this.scheduleForm.controls.function.patchValue('')
     })
+  }
+  viewElementChecker(element: string): boolean {
+      return this.viewElements.some(x => x == element)
   }
 
   submitschedule() {
@@ -158,6 +182,7 @@ export class ScheduleViewEditComponent implements OnInit {
           comments: this.scheduleForm.value.comments,
           completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.scheduleForm.value.includeInReport,
+          includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
           indicator: "Grey",
           includeInCharter: this.schedule.includeInCharter,
           milestoneType: this.schedule.milestoneType,
@@ -172,6 +197,9 @@ export class ScheduleViewEditComponent implements OnInit {
         }
         if (this.scheduleForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
+        }
+        if (this.scheduleForm.controls['includeInBusinessCase'].disabled) {
+            mainObjnew.includeInBusinessCase = false
         }
 
         // //Planned Finish
@@ -207,6 +235,7 @@ export class ScheduleViewEditComponent implements OnInit {
           comments: this.scheduleForm.value.comments,
           completionDate: moment(this.scheduleForm.value.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.scheduleForm.value.includeInReport,
+          includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
           indicator: this.schedule.indicator,
           includeInCharter: this.schedule.includeInCharter,
           milestoneType: this.schedule.milestoneType,

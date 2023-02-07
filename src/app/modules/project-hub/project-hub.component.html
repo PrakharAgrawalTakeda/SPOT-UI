@@ -10,6 +10,7 @@
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueAddSingle'" [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter']" ></app-risk-issue-view-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RecommendedOptionRiskIssueAddSingle'" [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact','mitigation','type','owner']" ></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
+        <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'RecommendedOptionScheduleAddNew'" [viewElements]="['milestone','plannedFinish','functionOwner','includeInBusinessCase']" ></app-schedule-view-edit>
         <app-schedule-view-bulk-edit
             *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCloseOut'" [mode]="'Project-Close-Out'"></app-schedule-view-bulk-edit>
