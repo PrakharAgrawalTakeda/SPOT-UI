@@ -323,7 +323,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -356,7 +356,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -389,7 +389,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
