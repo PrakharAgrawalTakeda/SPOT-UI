@@ -21,7 +21,7 @@
         </div>
         <div class="overflow-x-auto overflow-hidden h-[80vh] ml-3 mt-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="datatable-pt-80 font-medium text-sm text-secondary whitespace-nowrap" [rows]="teamMembers"
+                class="datatable-pt-80 font-medium text-sm text-default whitespace-nowrap" [rows]="teamMembers"
                 #projectTeamsTable>
                 <ngx-datatable-column [sortable]="false" name="Role" prop="roleName" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>

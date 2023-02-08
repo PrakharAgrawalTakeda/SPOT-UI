@@ -222,7 +222,7 @@
             </div>
             <div *ngIf="generalInfoForm.controls['isQualityRef'].value" class="mt-3">
               <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
+                class="pr-6 material font-medium text-sm text-default whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>
                 <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
                   [sortable]="false" [flexGrow]="1">

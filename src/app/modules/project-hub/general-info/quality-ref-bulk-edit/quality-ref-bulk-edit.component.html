@@ -22,7 +22,7 @@
         </div>
         <div *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" [ngClass] = "{'w-full pl-3 overflow-hidden h-[81vh]': viewType == 'SidePanel'}">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="datatable-qr-80 material font-medium text-sm text-secondary whitespace-nowrap"
+                class="datatable-qr-80 material font-medium text-sm text-default whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>
                 <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
                     [sortable]="false" [flexGrow]="1">
