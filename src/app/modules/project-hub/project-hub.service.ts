@@ -143,6 +143,7 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
+          id: 'project-proposal',
           title: 'Project Proposal',
           type: 'collapsable',
           icon: 'heroicons_outline:light-bulb',
