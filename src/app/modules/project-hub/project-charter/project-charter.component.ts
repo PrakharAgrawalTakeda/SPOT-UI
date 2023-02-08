@@ -46,6 +46,5 @@ export class ProjectCharterComponent implements OnInit {
   reloadName() {
     const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
     this.navItem = this._fuseNavigationService.getItem('project-charter', navComponent.navigation)
-    console.log(this.navItem)
   }
 }
