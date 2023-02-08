@@ -23,7 +23,7 @@
         <div class="overflow-y-hidden h-[80vh] pl-3" id="keyAssumptionsTableDiv" >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
-                           class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                           class="material datatable-an-80 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="keyAssumptions"
                            #keyAssumptionsTable>
                 <ngx-datatable-column name="Key Assumption" prop="keyAssumption" [flexGrow]="5" *ngIf="viewElementChecker('keyAssumption')"

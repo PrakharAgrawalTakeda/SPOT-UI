@@ -1,4 +1,4 @@
-<div >
+<div>
     <div class="p-6 pb-3 pt-0 flex items-center justify-between">
         <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Key Assumptions</div>
         <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
@@ -34,6 +34,30 @@
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
+            <ngx-datatable-column name="Include in Business Case (Max 8)" prop="includeInBusinessCase" [sortable]="false"
+                                  [resizeable]="false" [flexGrow]="2" *ngIf="callLocation== 'Recommended-Option'">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-between pl-2 overflow-hidden">
+                        <mat-icon svgIcon="heroicons_outline:x-circle"
+                                  *ngIf="value == false"></mat-icon>
+                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                  *ngIf="value == true">
+                        </mat-icon>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Include in Project Charter (Max 5)" prop="includeInCharter" [sortable]="false"
+                                  [resizeable]="false" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter'">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-between pl-2 overflow-hidden">
+                        <mat-icon svgIcon="heroicons_outline:x-circle"
+                                  *ngIf="value == false"></mat-icon>
+                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                  *ngIf="value == true">
+                        </mat-icon>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
                 <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
                     <div class="flex items-center justify-start gap-6">
@@ -45,6 +69,7 @@
                     </div>
                 </ng-template>
             </ngx-datatable-column>
+
         </ngx-datatable>
     </div>
 </div>

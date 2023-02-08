@@ -63,7 +63,6 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                 }
             }
             this.disabler();
-            wait(150);
             this.viewContent = true;
         })
 

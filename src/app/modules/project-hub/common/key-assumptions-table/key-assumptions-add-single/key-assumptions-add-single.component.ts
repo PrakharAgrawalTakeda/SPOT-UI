@@ -33,7 +33,6 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
 
     ngOnInit(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        this.formInital = true
         if (this.projecthubservice.all != []) {
             if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 5) {
                 if (this.keyAssumptionForm.value.includeInCharter != true) {
@@ -46,6 +45,9 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
                 }
             }
         }
+        this.keyAssumptionForm.valueChanges.subscribe(res => {
+            this.projecthubservice.isFormChanged = true
+        })
     }
 
     submitProjectTeam() {
