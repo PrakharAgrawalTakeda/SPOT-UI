@@ -1117,7 +1117,59 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.milestoneTableEditStack.push(row)
         }
     }
-
+    disabler() {
+        var formValue = this.milestoneForm.getRawValue()
+        if (formValue.length > 0) {
+            //Include in business Case
+            if (formValue.filter(x => x.includeInBusinessCase == true).length < 8) {
+                for (var i of this.milestoneForm.controls) {
+                    i['controls']['includeInBusinessCase'].enable()
+                }
+            } else {
+                for (var i of this.milestoneForm.controls) {
+                    if (i['controls']['includeInBusinessCase'].value != true) {
+                        i['controls']['includeInBusinessCase'].disable()
+                    }
+                }
+            }
+            //Include in close-out
+            if (formValue.filter(x => x.includeInCloseout == true).length < 20) {
+                for (var i of this.milestoneForm.controls) {
+                    i['controls']['includeInCloseout'].enable()
+                }
+            } else {
+                for (var i of this.milestoneForm.controls) {
+                    if (i['controls']['includeInCloseout'].value != true) {
+                        i['controls']['includeInCloseout'].disable()
+                    }
+                }
+            }
+            //Include in Report
+            if (formValue.filter(x => x.includeInReport == true).length < 8) {
+                for (var i of this.milestoneForm.controls) {
+                    i['controls']['includeInReport'].enable()
+                }
+            } else {
+                for (var i of this.milestoneForm.controls) {
+                    if (i['controls']['includeInReport'].value != true) {
+                        i['controls']['includeInReport'].disable()
+                    }
+                }
+            }
+            //Include in Report
+            if (formValue.filter(x => x.includeInCharter == true).length <10) {
+                for (var i of this.milestoneForm.controls) {
+                    i['controls']['includeInCharter'].enable()
+                }
+            } else {
+                for (var i of this.milestoneForm.controls) {
+                    if (i['controls']['includeInCharter'].value != true) {
+                        i['controls']['includeInCharter'].disable()
+                    }
+                }
+            }
+        }
+    }
 
     calculateVariance(row: any): string {
         var datetoday = new Date(moment(this.today).format('L'))
@@ -1451,9 +1503,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 //this.scheduleObj = formValue
                 console.log(this.dbSchedule)
                 if (!this.projecthubservice.includeClosedItems.schedule.value) {
-
                     var closeditems = this.scheduleData.scheduleData.length > 0 ? this.scheduleData.scheduleData.filter(x => x.completionDate != null) : []
-
                     console.log(this.formValue)
                     for (var i of closeditems) {
                         this.formValue.push({
@@ -2231,7 +2281,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         this.projecthubservice.isFormChanged = false
         var formValue = this.milestoneForm.getRawValue()
         if (formValue.filter(x => x.includeInCharter == true).length <= 10) {
-            if (formValue.filter(x => x.includeInCharter == true).length <= 8) {
+            if (formValue.filter(x => x.includeInBusinessCase == true).length <= 8) {
                 for (var i of formValue) {
                     if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
                         this.schedulecharterobj.push({
@@ -2246,6 +2296,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout
@@ -2263,6 +2314,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,

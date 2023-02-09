@@ -65,7 +65,7 @@
 
       <!-- *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" -->
       <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-        (click)="addMilestoneRecord(target)"  *ngIf="mode== 'Normal'">
+        (click)="addMilestoneRecord(target)"  *ngIf="mode== 'Normal' || mode== 'Recommended-Option'">
         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
       </button>
 
@@ -76,11 +76,11 @@
     </div>
 
 
-    <div class="mt-3 pl-3 h-[78vh] overflow-hidden" #target id="scheduleTableDiv">
-      <ngx-datatable class="datatable-schedule-74 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+    <div class="mt-3 pl-3 h-[84vh] overflow-hidden" #target id="scheduleTableDiv">
+      <ngx-datatable class="datatable-schedule-74  material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
         [scrollbarV]="false" [rowClass]="getRowClass">
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal' || mode =='Recommended-Option'">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
               class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}" *ngIf="row.scheduleUniqueId != 'new'">
@@ -110,7 +110,7 @@
 
 
         <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.9" *ngIf="mode== 'Normal' || mode =='Recommended-Option'">
+          [flexGrow]="0.9" *ngIf="mode== 'Normal' ">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
               [ngClass]="{'closed': row.completionDate != null}">
@@ -130,7 +130,7 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
-        [flexGrow]="1.5" *ngIf="mode== 'Project-Charter'">
+        [flexGrow]="1.5" *ngIf="mode== 'Project-Charter' || mode =='Recommended-Option'">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
             <p *ngIf="value == ''">&nbsp;</p>
@@ -162,7 +162,7 @@
 
 
         <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.7" *ngIf="mode== 'Normal' || mode =='Recommended-Option'">
+          [flexGrow]="0.7" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
               [ngClass]="{'closed': row.completionDate != null}">
@@ -177,7 +177,7 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.5" *ngIf="mode== 'Project-Charter'">
+          [flexGrow]="0.5" *ngIf="mode== 'Project-Charter' || mode =='Recommended-Option'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>{{value |
@@ -260,7 +260,7 @@
 
 
         <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.8" *ngIf="mode== 'Normal' || mode =='Recommended-Option'">
+          [flexGrow]="0.8" *ngIf="mode== 'Normal' ">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
               [ngClass]="{'closed': row.completionDate != null}">
@@ -276,7 +276,7 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.7" *ngIf="mode== 'Project-Charter'">
+          [flexGrow]="0.7" *ngIf="mode== 'Project-Charter' || mode =='Recommended-Option'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
               <p *ngIf="value == ''">&nbsp;</p>
@@ -347,13 +347,15 @@
               <p *ngIf="!value">&nbsp;</p>
               <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
             </a>
-            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
-              class="p-2 overflow-hidden">
-              <div class="flex items-center justify-between">
-                <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
-                </mat-slide-toggle>
-              </div>
-            </form>
+              <form [formGroup]="milestoneForm.controls[rowIndex]"
+                    *ngIf="milestoneTableEditStack.includes(rowIndex)"
+                    class="h-[45px]">
+                  <mat-slide-toggle
+                      [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 8 can be selected at a time in the project report' : null"
+                      (change)="disabler()" class="h-full overflow-visible"
+                      formControlName="includeInReport">
+                  </mat-slide-toggle>
+              </form>
           </ng-template>
         </ngx-datatable-column>
 
@@ -365,12 +367,14 @@
                     <p *ngIf="!value">&nbsp;</p>
                     <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                 </a>
-                <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
-                      class="p-2 overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <mat-slide-toggle name="includeInBusinessCase" [showLabel]="false" formControlName="includeInBusinessCase">
-                        </mat-slide-toggle>
-                    </div>
+                <form [formGroup]="milestoneForm.controls[rowIndex]"
+                      *ngIf="milestoneTableEditStack.includes(rowIndex)"
+                      class="h-[45px]">
+                    <mat-slide-toggle
+                        [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
+                        (change)="disabler()" class="h-full overflow-visible"
+                        formControlName="includeInBusinessCase">
+                    </mat-slide-toggle>
                 </form>
             </ng-template>
          </ngx-datatable-column>
@@ -382,13 +386,15 @@
             <p *ngIf="!value">&nbsp;</p>
             <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
           </a>
-          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
-            class="p-2 overflow-hidden">
-            <div class="flex items-center justify-between">
-              <mat-slide-toggle name="includeInCloseout" [showLabel]="false" formControlName="includeInCloseout">
-              </mat-slide-toggle>
-            </div>
-          </form>
+            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                  *ngIf="milestoneTableEditStack.includes(rowIndex)"
+                  class="h-[45px]">
+                <mat-slide-toggle
+                    [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 20 can be selected at a time in the project close out report' : null"
+                    (change)="disabler()" class="h-full overflow-visible"
+                    formControlName="includeInCloseout">
+                </mat-slide-toggle>
+            </form>
         </ng-template>
       </ngx-datatable-column>
 
@@ -399,17 +405,19 @@
             <p *ngIf="!value">&nbsp;</p>
             <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
           </a>
-          <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
-            class="p-2 overflow-hidden">
-            <div class="flex items-center justify-between">
-              <mat-slide-toggle name="includeInCharter" [showLabel]="false" formControlName="includeInCharter">
-              </mat-slide-toggle>
-            </div>
-          </form>
+            <form [formGroup]="milestoneForm.controls[rowIndex]"
+                  *ngIf="milestoneTableEditStack.includes(rowIndex)"
+                  class="h-[45px]">
+                <mat-slide-toggle
+                    [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 10 can be selected at a time in the project charter' : null"
+                    (change)="disabler()" class="h-full overflow-visible"
+                    formControlName="includeInCharter">
+                </mat-slide-toggle>
+            </form>
         </ng-template>
       </ngx-datatable-column>
 
-        <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Normal' || mode == 'Recommended-Option'">
+        <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
 
             <div class="flex items-center justify-start gap-6">
@@ -420,7 +428,7 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [flexGrow]="0.2" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Project-Charter'">
+        <ngx-datatable-column [flexGrow]="0.2" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Project-Charter' || mode == 'Recommended-Option'">
           <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
 
             <div class="flex items-center justify-start gap-6">
