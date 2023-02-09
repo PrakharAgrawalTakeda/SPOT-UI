@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -23,7 +23,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
           this.projecthubservice.isFormChanged = true
         }
         else {
-          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isFormChanged = false  
         }
       }
     })
@@ -126,19 +126,19 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   submitPrep() {
     this.formValue = []
     var formValue = this.projectTeamForm.getRawValue()
-      for (var i of formValue) {
-        this.formValue.push({
-          projectTeamUniqueId: i.projectTeamUniqueId,
-          problemUniqueId: i.problemUniqueId,
-          roleId: Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
-          teamMemberAdId: Object.keys(i.user).length > 0 ? i.user.userAdid : '',
-          teamMemberName: Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
-          teamPermissionId: i.teamPermissionId,
-          percentTime: i.percentTime,
-          duration: i.duration,
-          includeInCharter: i.includeInCharter,
-          includeInProposal: i.includeInProposal
-        })
+    for (var i of formValue) {
+      this.formValue.push({
+        projectTeamUniqueId: i.projectTeamUniqueId,
+        problemUniqueId: i.problemUniqueId,
+        roleId: Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
+        teamMemberAdId: Object.keys(i.user).length > 0 ? i.user.userAdid : '',
+        teamMemberName: Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
+        teamPermissionId: i.teamPermissionId,
+        percentTime: i.percentTime,
+        duration: i.duration,
+        includeInCharter: i.includeInCharter,
+        includeInProposal: i.includeInProposal
+      })
     }
 
   }
@@ -159,7 +159,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
 
   submitProjectTeams() {
     this.submitPrep()
-    if (this.formValue.filter(x => x.includeInCharter == true).length > 10 && this.mode =="Project-Charter") {
+    if (this.formValue.filter(x => x.includeInCharter == true).length > 10 && this.mode == "Project-Charter") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Only 10 can be selected at a time for Team Charter slide display.",
         "message": "",
@@ -296,15 +296,15 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               }
 
           }
+        }
+      }
+      else {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        this.projecthubservice.isNavChanged.next(true)
+        this.projecthubservice.successSave.next(true)
       }
     }
-    else {
-      this.projecthubservice.submitbutton.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-      this.projecthubservice.isNavChanged.next(true)
-      this.projecthubservice.successSave.next(true)
-    }
-  }
 
   }
   deleteShowLogic(rowIndex: number): boolean {
@@ -401,29 +401,30 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     }
     this.disabler()
   }
-    disabler() {
-        var formValue = this.projectTeamForm.getRawValue()
-        if (formValue.length > 0) {
-            if (formValue.filter(x => x.includeInProposal == true).length < 5) {
-                for (var i of this.projectTeamForm.controls) {
-                    i['controls']['includeInProposal'].enable()
-                }
-            } else {
-                for (var i of this.projectTeamForm.controls) {
-                    if (i['controls']['includeInProposal'].value != true) {
-                        i['controls']['includeInProposal'].disable()
-                    }
-                }
-            }
+  disabler() {
+    var formValue = this.projectTeamForm.getRawValue()
+    if (formValue.length > 0) {
+      if (formValue.filter(x => x.includeInProposal == true).length < 5) {
+        for (var i of this.projectTeamForm.controls) {
+          i['controls']['includeInProposal'].enable()
         }
+      } else {
+        for (var i of this.projectTeamForm.controls) {
+          if (i['controls']['includeInProposal'].value != true) {
+            i['controls']['includeInProposal'].disable()
+          }
+        }
+      }
     }
-    getNgxDatatableNumberHeader(): any {
-        return ' ngx-number-header';
-    }
+  }
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
+  }
 
   getNgxDatatableIconHeader(): any {
     return ' ngx-icon-header';
   }
+
 
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

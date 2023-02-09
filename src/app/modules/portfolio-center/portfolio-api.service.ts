@@ -48,4 +48,45 @@ export class PortfolioApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async createProject(body) {
+    var userid = GlobalVariables.apiurl + "Projects/CreateProject"
+    const abc$ = this.http.post(userid, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async copyProject(body, projectid) {
+    var userid = GlobalVariables.apiurl + "Projects/" + projectid
+    const abc$ = this.http.put(userid, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getTemplateInfo(body) {
+    var userid = GlobalVariables.apiurl + "Projects/GetProjectTemplateInfoByID"
+    const abc$ = this.http.post(userid, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getQuality(projectid) {
+    var userid = GlobalVariables.apiurl + "QualityReference/GetQualityReferenceByProjectId/" + projectid
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async BulkEditQualityReference(projectid: string, body: any) {
+    var userid = GlobalVariables.apiurl + "/QualityReference/BulkEditQualityRef" + projectid
+    const abc$ = this.http.put(userid, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getLocalCurrency() {
+    var userid = GlobalVariables.apiurl + "Budget/GetLocalCurrency";
+    const abc$ = this.http.get(userid)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

@@ -69,6 +69,12 @@
             *ngIf="projecthubservice.itemtype == 'KeyAssumption'"></app-key-assumption-view-edit>
         <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsAddSingle'"></app-key-assumptions-add-single>
         <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsBulkEdit'"></app-key-assumptions-bulk-edit>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditRC'" [optionType]="'recommended-option'"></app-option-info-edit>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO2'" [optionType]="'option-2'"></app-option-info-edit>
+        <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO3'" [optionType]="'option-3'"></app-option-info-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditRC'" [optionType]="'recommended-option'"></app-feasibility-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO2'" [optionType]="'option-2'"></app-feasibility-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO3'" [optionType]="'option-3'"></app-feasibility-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
@@ -96,7 +102,7 @@
     </ng-container>
 </fuse-vertical-navigation>
 <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
-    [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
+    [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"  
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <div class="p-8 pb-6 pt-2">
         <div class="w-full bg-card shadow rounded-2xl">
