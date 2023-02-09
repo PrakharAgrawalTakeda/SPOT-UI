@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { CloseOutApiService } from '../../close-out.service';
 
 @Component({
   selector: 'app-close-out-outcomes-single-edit',
@@ -12,13 +13,15 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
   viewType ='SidePanel'
   outcomeForm = new FormGroup({
     projectDescription: new FormControl(''),
-    approachTaken: new FormControl(''),
+    detailedDescription: new FormControl(''),
     targetEndState: new FormControl(''),
-    benefitsRealized: new FormControl('')
+    benefitsRealizedOutcome: new FormControl('')
   })
   outcomeInfo: any = {}
+  outcomeInfoCharter: any = {}
   viewContent = false
-  constructor(public projectHubService: ProjectHubService, private apiService: ProjectApiService) {
+  constructor(public projectHubService: ProjectHubService, private apiService: ProjectApiService,
+        public closeoutApiService: CloseOutApiService) {
     this.outcomeForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
           this.projectHubService.isFormChanged = true
@@ -27,23 +30,40 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
    }
 
   ngOnInit(): void {
-  //   this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
-  //     this.outcomeInfo = res
-  //     this.outcomeForm.patchValue({
-  //       projectDescription: res.projectData.projectDescription,
-  //       approachTaken: res.projectData.approachTaken,
-  //       targetEndState: res.projectData.TargetEndState,
-  //       benefitsRealized: res.projectData.BenefitsRealizedOutcome
-  //   })
-  //     this.viewContent = true
-  // })
-    this.outcomeForm.patchValue({
-        projectDescription: "test data",
-        approachTaken: "test data",
-        targetEndState: "test data",
-        benefitsRealized: "test data"
+    this.apiService.getproject(this.projectHubService.projectid).then((data: any) => {
+      this.apiService.projectCharterSingle(this.projectHubService.projectid).then((data1: any) => {
+      this.outcomeInfo = data
+      this.outcomeInfoCharter = data1
+      this.outcomeForm.patchValue({
+        projectDescription: data.projectDescription,
+        detailedDescription: data.detailedDescription,
+        targetEndState: data.targetEndState,
+        benefitsRealizedOutcome: data.benefitsRealizedOutcome
     })
+  })
       this.viewContent = true
+  })
+      this.viewContent = true
+  }
+
+  submitOutcomes() {
+    this.projectHubService.isFormChanged = false
+    var formValue = this.outcomeForm.getRawValue()
+    var mainObj = this.outcomeInfo
+    var charterObj = this.outcomeInfoCharter
+    mainObj.projectDescription = formValue.projectDescription
+    charterObj.detailedDescription = formValue.detailedDescription
+    mainObj.targetEndState = formValue.targetEndState
+    mainObj.benefitsRealizedOutcome = formValue.benefitsRealizedOutcome
+    mainObj.projectId = this.projectHubService.projectid
+    this.apiService.editGeneralInfoLocalhost(this.projectHubService.projectid, mainObj).then(res => {
+      this.apiService.BulkEditProjectCharter(this.projectHubService.projectid, charterObj).then(res1 => {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      })
+    })
   }
 
 }

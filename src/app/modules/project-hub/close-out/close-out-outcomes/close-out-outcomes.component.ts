@@ -22,9 +22,9 @@ export class CloseOutOutcomesComponent implements OnInit {
     editable: boolean = false
     outcomeForm = new FormGroup({
         projectDescription: new FormControl(''),
-        approachTaken: new FormControl(''),
+        detailedDescription: new FormControl(''),
         targetEndState: new FormControl(''),
-        benefitsRealized: new FormControl('')
+        benefitsRealizedOutcome: new FormControl('')
     })
 
     constructor(
@@ -39,27 +39,34 @@ export class CloseOutOutcomesComponent implements OnInit {
         this.dataloader()
     }
     dataloader() {
+        debugger;
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
         this.projectApiService.getprojectviewdata(this.id).then((res: any) => {
-            this.auth.KPIMaster().then((kpis: any) => {
-                this.auth.lookupMaster().then((lookup: any) => {
-                    this.projectViewDetails = res
-                    this.lookupMasters = lookup
-                    this.kpiMasters = kpis
-                    console.log("OVERALL DATA", this.projectViewDetails)
-                    this.projecthubservice.lookUpMaster = lookup
-                    this.projecthubservice.kpiMasters = kpis
-                    this.editable = this.projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit
+            this.projectApiService.getproject(this.id).then((data: any) => {
+                this.projectApiService.projectCharterSingle(this.id).then((data1: any) => {
+                    this.auth.KPIMaster().then((kpis: any) => {
+                        this.auth.lookupMaster().then((lookup: any) => {
+                        this.projectViewDetails = res
+                        this.lookupMasters = lookup
+                        this.kpiMasters = kpis
+                        this.outcomeForm.patchValue({
+                            projectDescription: data.projectDescription,
+                            detailedDescription: data1.detailedDescription,
+                            targetEndState: data.targetEndState,
+                            benefitsRealizedOutcome: data.benefitsRealizedOutcome
+                        })
+                        console.log("OVERALL DATA", this.projectViewDetails)
+                        this.projecthubservice.lookUpMaster = lookup
+                        this.projecthubservice.kpiMasters = kpis
+                        this.editable = this.projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit
 
-                    //View Content
-                    this.closeoutApiService.getCloseoutOutcomes(this.id).then(data => {
-                        console.log(data);
-                    })
 
-                    this.viewContent = true
+                        this.viewContent = true
                 })
             })
         })
+    })
+    })
 
         this.disabler()
     }
