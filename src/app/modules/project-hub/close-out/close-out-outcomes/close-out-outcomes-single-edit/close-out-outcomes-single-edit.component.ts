@@ -36,7 +36,7 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
       this.outcomeInfoCharter = data1
       this.outcomeForm.patchValue({
         projectDescription: data.projectDescription,
-        detailedDescription: data.detailedDescription,
+        detailedDescription: data1.detailedDescription,
         targetEndState: data.targetEndState,
         benefitsRealizedOutcome: data.benefitsRealizedOutcome
     })
@@ -51,6 +51,7 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
     var formValue = this.outcomeForm.getRawValue()
     var mainObj = this.outcomeInfo
     var charterObj = this.outcomeInfoCharter
+    mainObj.emissionPortfolioId = mainObj.emissionPortfolioId == null ? "" : mainObj.emissionPortfolioId
     mainObj.projectDescription = formValue.projectDescription
     charterObj.detailedDescription = formValue.detailedDescription
     mainObj.targetEndState = formValue.targetEndState

@@ -37,7 +37,7 @@
                         </a>
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
                             *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
-                            <div class="flex justify-start items-center gap-3">
+                            <div style="width:100px;" class="flex justify-start items-center gap-3">
                                 <mat-icon
                                     svgIcon="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).icontype}}"
                                     class="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).iconcolor}}">

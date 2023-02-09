@@ -33,6 +33,11 @@ export class CloseOutOutcomesComponent implements OnInit {
         public projecthubservice: ProjectHubService,
         public auth: AuthService,
         private _Activatedroute: ActivatedRoute) {
+        this.projecthubservice.submitbutton.subscribe(res => {
+            if (res == true) {
+                this.dataloader()
+            }
+        })
     }
 
     ngOnInit(): void {
