@@ -60,10 +60,10 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
-
     approvedDate: new FormControl(''),
     opU: new FormControl(''),
     projectId: new FormControl(''),
+    localCurrencyAbbreviation: new FormControl(''),
     //
     projectProposalApprovedDate: new FormControl(''),
     functionGroupID:  new FormControl(''),
@@ -185,6 +185,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
               proposalStatement: res.projectData.proposalStatement,
               projectReviewedYN: lookup.find(x => x.lookUpId == res.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
               projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+              localCurrencyAbbreviation: res.localCurrencyAbbreviation,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,

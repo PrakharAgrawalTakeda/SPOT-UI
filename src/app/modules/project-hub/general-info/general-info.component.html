@@ -18,9 +18,11 @@
           </div>
         </div>
         <div
-          *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
-          class="mt-6 mb-6">
-          <div class="flex justify-start gap-3 items-center">
+          class="grid grid-cols-2 gap-x-6 items-center">
+          <spot-input formControlName="localCurrencyAbbreviation" name="localCurrencyAbbreviation"
+          [label]="'Local Currency'">
+         </spot-input>
+          <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')" class="flex justify-start w-full gap-3 items-center">
             Is Archived?
             <mat-icon svgIcon="heroicons_outline:x-circle"
               *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
