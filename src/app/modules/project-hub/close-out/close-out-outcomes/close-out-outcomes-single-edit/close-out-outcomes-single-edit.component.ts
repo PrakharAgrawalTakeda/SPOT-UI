@@ -57,7 +57,7 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
     mainObj.targetEndState = formValue.targetEndState
     mainObj.benefitsRealizedOutcome = formValue.benefitsRealizedOutcome
     mainObj.projectId = this.projectHubService.projectid
-    this.apiService.editGeneralInfoLocalhost(this.projectHubService.projectid, mainObj).then(res => {
+    this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.apiService.BulkEditProjectCharter(this.projectHubService.projectid, charterObj).then(res1 => {
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
