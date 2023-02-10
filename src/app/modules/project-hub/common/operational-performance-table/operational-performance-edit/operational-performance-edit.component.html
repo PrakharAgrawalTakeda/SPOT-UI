@@ -34,9 +34,12 @@
     <spot-textarea formControlName="actualPerformance" name="actualPerformance" [label]="'Actual Performance'"
         [placeholder]="'Actual Performance'">
     </spot-textarea>
-    <mat-slide-toggle
+    <mat-slide-toggle *ngIf="mode=='Normal'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInProjectDashboard'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
         formControlName="includeInProjectDashboard">Include in Project Dashboard</mat-slide-toggle>
+    <mat-slide-toggle *ngIf="mode=='Project-Close-Out'"
+        [matTooltip]="this.OperationalPerformanceForm.controls['includeInCloseOut'].disabled ? 'Only 3 can be selected at a time for close out report display' : null"
+        formControlName="includeInCloseOut">Include in Project Close Out</mat-slide-toggle>
     </div>
     <div class="flex items-start justify-between form-ask-need">
         <a class="min-w-26" mat-flat-button [color]="'primary'"

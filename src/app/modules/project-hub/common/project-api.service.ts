@@ -454,5 +454,11 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async BulkEditProjectCharter(projectid: string, data) {
+    var url = GlobalVariables.apiurl + "ProjectCharter/" + projectid
+    const abc$ = this.http.put(url, data)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   }
 

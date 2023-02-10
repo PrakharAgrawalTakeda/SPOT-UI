@@ -126,6 +126,18 @@ export class ProjectViewComponent implements OnInit, OnDestroy, AfterViewChecked
     this.apiService.getprojectviewdata(this.id).then((res) => {
       this.apiService.getProjectBaseline(this.id).then((response: any) => {
         this.projectViewDetails = res
+        if (this.projectViewDetails.statusData == null) {
+          this.projectViewDetails.statusData = {
+            nextSteps: null,
+            overallStatusDescription: "",
+            overallStatusId: null,
+            projectId: this.id,
+            recentAccomplishments: null,
+            statusLastUpdated: null,
+            statusThrough: null,
+            statusUnquieId: "",
+          }
+        }
         this.baselineLog = response
         this.hubsetting = {
           overallStatus: this.projectViewDetails.hubSettings.some(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1') ? this.projectViewDetails.hubSettings.find(x => x.lookUpId == '2bd2e8a6-a605-4c38-817a-b266f2442ed1').hubValue : true,
