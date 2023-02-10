@@ -67,7 +67,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     @Input() editable: boolean
     @ViewChild('scheduleTable') scheduleTable: any;
     @ViewChild('target') private myScrollContainer: ElementRef;
-    @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Recommended-Option' = 'Normal'
+    @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
     editing = {};
     scheduleData: any = []
     ColumnMode = ColumnMode;
@@ -320,7 +320,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 if (this.mode == 'Project-Close-Out') {
                                     this.schedulengxdata = this.scheduleData.scheduleData
                                 }
-                                if (this.mode == 'Project-Charter' || this.mode == 'Recommended-Option') {
+                                if (this.mode == 'Project-Charter' || this.mode == 'Business-Case') {
                                     this.schedulengxdata = this.scheduleData.scheduleData
                                 }
                                 this.scheduledataDB = res.scheduleData

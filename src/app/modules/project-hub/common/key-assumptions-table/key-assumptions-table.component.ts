@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProjectApiService} from "../project-api.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {Constants} from "../../../../shared/constants";
 
 @Component({
     selector: 'app-key-assumptions-table',
@@ -10,7 +11,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
     styleUrls: ['./key-assumptions-table.component.scss']
 })
 export class KeyAssumptionsTableComponent implements OnInit {
-    @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Recommended-Option'  = 'Normal'
+    @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Business-Case'  = 'Normal'
     @Input() editable: boolean
     keyAssumptions: any = []
     id: string = ''
@@ -18,7 +19,7 @@ export class KeyAssumptionsTableComponent implements OnInit {
     keyAssumptionsViewEditType: string = "KeyAssumptions";
     keyAssumptionsBulkEditType: string = "KeyAssumptionsBulkEdit";
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
-    ,public fuseAlert: FuseConfirmationService) {
+    ,public fuseAlert: FuseConfirmationService, private router: Router) {
         this.projecthubservice.submitbutton.subscribe(res => {
             if (res == true) {
                 this.dataloader()
@@ -36,14 +37,27 @@ export class KeyAssumptionsTableComponent implements OnInit {
             this.keyAssumptionsViewEditType = "ProjectCharterKeyAssumptionAddSingle"
             this.keyAssumptionsBulkEditType = "ProjectCharterKeyAssumptionBulkEdit"
         }
-        if(this.callLocation == 'Recommended-Option'){
+        if(this.callLocation == 'Business-Case'){
             this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
-            this.keyAssumptionsViewEditType = "RecommendedOptionKeyAssumptionAddSingle"
-            this.keyAssumptionsBulkEditType = "RecommendedOptionKeyAssumptionBulkEdit"
+            this.keyAssumptionsViewEditType = "BusinessCaseKeyAssumptionAddSingle"
+            this.keyAssumptionsBulkEditType = "BusinessCaseKeyAssumptionBulkEdit"
         }
-        this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
-            this.keyAssumptions = res
-        })
+        if (this.router.url.includes('recommended-option')) {
+            this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
+                this.keyAssumptions = res
+            })
+        }
+        if (this.router.url.includes('option-2')) {
+            this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
+                this.keyAssumptions = res
+            })
+        }
+        if (this.router.url.includes('option-3')) {
+            this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
+                this.keyAssumptions = res
+            })
+        }
+
     }
     deleteKeyAssumption(id: string) {
         var comfirmConfig: FuseConfirmationConfig = {

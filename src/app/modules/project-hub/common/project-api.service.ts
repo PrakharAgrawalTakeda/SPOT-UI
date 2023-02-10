@@ -34,6 +34,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async getKeyAssumptionsByOption(projectid, optionId) {
+      var url = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/" + projectid+ "/"+ optionId
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getportfolioData(projectid) {
     var url = GlobalVariables.apiurl + "PortfolioCenterData/" + projectid
     const abc$ = this.http.get(url)
@@ -269,6 +275,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async addKeyAssumptionForOption(body){
+      var link = GlobalVariables.apiurl+"BusinessCase/KeyAssumption"
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async bulkeditQualityReference(body,projectId){
     var link = GlobalVariables.apiurl+"QualityReference/BulkEditQualityRef/" + projectId
     const abc$ = this.http.put(link,body)
@@ -289,6 +301,12 @@ export class ProjectApiService {
   }
   async bulkEditKeyAssumptions(body,projectId){
       var link = GlobalVariables.apiurl+"KeyAssumption/BulkEdit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkEditKeyAssumptionsForOption(body,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCase/KeyAssumption/BulkEdit/" + projectId
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response

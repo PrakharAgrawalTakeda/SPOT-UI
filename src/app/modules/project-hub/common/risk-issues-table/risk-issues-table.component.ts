@@ -29,7 +29,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() editable: boolean
-  @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Recommended-Option'  = 'Normal'
+  @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Business-Case'  = 'Normal'
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
   getRowClass = (row) => {
     return {
@@ -70,9 +70,9 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
          this.riskIssueViewEditType = "ProjectCharterRiskIssueAddSingle"
          this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
      }
-     if(this.callLocation == 'Recommended-Option'){
-         this.riskIssueViewEditType = "RecommendedOptionRiskIssueAddSingle"
-         this.riskIssueBulkEditType = "RecommendedOptionIssueBulkEdit"
+     if(this.callLocation == 'Business-Case'){
+         this.riskIssueViewEditType = "BusinessCaseRiskIssueAddSingle"
+         this.riskIssueBulkEditType = "BusinessCaseIssueBulkEdit"
      }
      this.viewContent = true
   }

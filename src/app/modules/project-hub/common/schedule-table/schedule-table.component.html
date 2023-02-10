@@ -1,7 +1,7 @@
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" *ngIf="mode== 'Normal'">Schedule</div>
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" *ngIf="mode== 'Project-Close-Out'">Milestone Variance</div>
-    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" *ngIf="mode== 'Project-Charter' || mode== 'Recommended-Option' ">Milestones</div>
+    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" *ngIf="mode== 'Project-Charter' || mode== 'Business-Case' ">Milestones</div>
     <div class="text-primary">
         <div class="flex items-start justify-between">
             <div>
@@ -24,8 +24,8 @@
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                 </button>
-                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Recommended-Option'"
-                        (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditRecommendedOption', 'new', projectViewDetails.scheduleData, '', true)">
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Business-Case'"
+                        (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditBusinessCase', 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
@@ -40,8 +40,8 @@
                     (click)="projecthubservice.toggleDrawerOpen('Schedule', 'new', [], projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
-                <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Recommended-Option'" mat-flat-button [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('RecommendedOptionScheduleAddNew', 'new', [], projectid)">
+                <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Business-Case'" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('BusinessCaseScheduleAddNew', 'new', [], projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
@@ -71,7 +71,7 @@
         class="material font-medium text-default text-sm whitespace-nowrap cursor-default" [rows]="schedulengxdata"
         #scheduleTable [rowClass]="getRowClass">
         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5" *ngIf="mode== 'Normal' || mode =='Recommended-Option'">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5" *ngIf="mode== 'Normal' || mode =='Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                     class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -99,7 +99,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.0" *ngIf="mode== 'Project-Close-Out' || mode== 'Project-Charter' || mode== 'Recommended-Option'">
+        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.0" *ngIf="mode== 'Project-Close-Out' || mode== 'Project-Charter' || mode== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
                 <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p></strong>
@@ -113,7 +113,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="0.4" *ngIf="mode== 'Project-Charter' || mode== 'Recommended-Option'">
+        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="0.4" *ngIf="mode== 'Project-Charter' || mode== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
@@ -128,7 +128,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
-          [flexGrow]="0.8" *ngIf="mode== 'Project-Charter' || mode== 'Recommended-Option'">
+          [flexGrow]="0.8" *ngIf="mode== 'Project-Charter' || mode== 'Business-Case'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
 
               <p *ngIf="value == ''">&nbsp;</p>
@@ -277,7 +277,7 @@
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Include in Business Case (Max 8)" prop="includeInBusinessCase" [sortable]="false"
-                              [resizeable]="false" [flexGrow]="0.45" *ngIf="mode== 'Recommended-Option'">
+                              [resizeable]="false" [flexGrow]="0.45" *ngIf="mode== 'Business-Case'">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                 <div class="flex items-center justify-between pl-2 overflow-hidden">
                     <mat-icon svgIcon="heroicons_outline:x-circle"
