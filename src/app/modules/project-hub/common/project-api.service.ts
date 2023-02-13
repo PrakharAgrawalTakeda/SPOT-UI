@@ -192,6 +192,7 @@ export class ProjectApiService {
     return response
   }
    async deleteKeyAssumption(id: string){
+    console.log("inside delete api")
       var link = GlobalVariables.apiurl+"KeyAssumption/"+id
       const abc$ = this.http.delete(link)
       const response = await lastValueFrom(abc$)

@@ -208,9 +208,9 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
               isSiteAssessment: res.projectData.isSiteAssessment,
               siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
               StrategicRationale: res.projectData.strategicRationale,
-              BCAuthor: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
-              RiskImpact: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
-              AdditionalAuthor: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
+              // BCAuthor: res.businessCase.businessCaseAuthorId,
+              // RiskImpact: res.businessCase.impactOfDoingNothing,
+              // AdditionalAuthor: res.businessCase.additionalAuthorsContributorsId,
               problemId : res.projectData.problemId
             })
             this.viewContent = true

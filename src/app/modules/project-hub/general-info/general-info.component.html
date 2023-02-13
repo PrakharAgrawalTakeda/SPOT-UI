@@ -98,11 +98,10 @@
             [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="sponsor" name="sponsor"
             [label]="'Sponsor'">
           </spot-input>
-          <spot-input class="w-full" *ngIf="viewElementChecker('BCAuthor')" [ngClass]="{'read-only': callLocation == 'BusinessCase'}"
+          <spot-input class="w-full read-only" *ngIf="viewElementChecker('BCAuthor')"
             formControlName="BCAuthor" name="BCAuthor" [label]="'Business Case Author'">
           </spot-input>
-          <spot-input class="w-full" *ngIf="viewElementChecker('AdditionalAuthor')"
-            [ngClass]="{'read-only': callLocation == 'BusinessCase'}" formControlName="AdditionalAuthor" name="AdditionalAuthor"
+          <spot-input class="w-full read-only" *ngIf="viewElementChecker('AdditionalAuthor')" formControlName="AdditionalAuthor" name="AdditionalAuthor"
             [label]="'Additional Authors / Contributors'">
           </spot-input>
           <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
