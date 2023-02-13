@@ -354,6 +354,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         if (this.projectHubService.isFormChanged) {
             if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
                 this.submitPrepForOptions()
+                this.projectHubService.isFormChanged = false
                 this.apiService.bulkEditRiskIssuesForOption(this.formValue, this.projectHubService.projectid).then(res => {
                     this.projectHubService.submitbutton.next(true)
                     this.projectHubService.toggleDrawerOpen('', '', [], '')
