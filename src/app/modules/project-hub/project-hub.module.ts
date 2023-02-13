@@ -128,6 +128,8 @@ import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-r
 import { OptionInfoComponent } from './common/option-info/option-info.component';
 import { OptionInfoEditComponent } from './common/option-info/option-info-edit/option-info-edit.component';
 import { FeasibilityEditComponent } from './common/option-info/feasibility-edit/feasibility-edit.component';
+import { CloseOutLessonLearnedBulkEditComponent } from './close-out/close-out-lessons-learned/close-out-lesson-learned-bulk-edit/close-out-lesson-learned-bulk-edit.component';
+import { CloseOutLessonLearnedSingleEditComponent } from './close-out/close-out-lessons-learned/close-out-lesson-learned-single-edit/close-out-lesson-learned-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -497,7 +499,9 @@ export const projectRoutes: Route[] = [
     BusinessCaseRiskIssuesComponent,
     OptionInfoComponent,
     OptionInfoEditComponent,
-    FeasibilityEditComponent
+    FeasibilityEditComponent,
+    CloseOutLessonLearnedBulkEditComponent,
+    CloseOutLessonLearnedSingleEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
