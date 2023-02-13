@@ -19,8 +19,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     @Input() debounce: number = 300;
     @Input() minLength: number = 4;
     @Output() search: EventEmitter<any> = new EventEmitter<any>();
-
-    opened: boolean = false;
+    @Output() newItemEvent = new EventEmitter<string>();
+    @Input() opened: boolean = false;
+    @Input() calledFrom: string = "";
+    projectid: string = "";
+    // opened: boolean = false;
     resultSets: any[];
     budget: any = [];
     searchControl: FormControl = new FormControl();
@@ -140,14 +143,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
             });
     }
     routeProject(projectid):void{
-        //this.close()
-        /*if (this.routes.url.includes('project-hub')){
-        this.routes.navigate(['project-hub/'+ projectid]).then(() => {
-            window.location.reload();
-          });
+        if (this.calledFrom != 'Copy') {
+            window.open('project-hub/' + projectid, "_blank")
+
         }
-        else{}*/
-            window.open('project-hub/'+ projectid, "_blank")
         
     }
 
@@ -182,10 +181,22 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      * @param event
      */
      selectedOption(event: any): void{
+         if (this.calledFrom == 'Copy') {
+             this.searchControl.patchValue(event.option.value.problemTitle);
+             this.projectid = event.option.value.problemUniqueId;
+             this.addNewItem();
+         }
+         else{
         this.searchControl.patchValue(this.temp)
-        this.routeProject(event.option.value)
+             this.routeProject(event.option.value.problemUniqueId)
         document.getElementById('myText').blur();
+         }
      }
+
+         addNewItem() {
+             this.newItemEvent.emit(this.projectid);
+         }
+
     onKeydown(event: KeyboardEvent): void
     {
         // Listen for escape to close the search
@@ -224,6 +235,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      */
     close(): void
     {
+        if (this.calledFrom == "Copy") {
+            this.searchControl.setValue('');
+        }
+        else {
         // Return if it's already closed
         if ( !this.opened )
         {
@@ -235,6 +250,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
 
         // Close the search
         this.opened = false;
+    }
     }
 
     /**

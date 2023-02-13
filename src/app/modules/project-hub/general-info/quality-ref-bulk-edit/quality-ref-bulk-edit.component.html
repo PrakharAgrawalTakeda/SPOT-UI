@@ -1,5 +1,5 @@
 <div *ngIf="viewContent">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Quality Reference Bulk Edit</div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
                 href="javascript:void(0)" title="Close">
@@ -8,15 +8,21 @@
         </div>
     </div>
     <div>
-        <div class="flex justify-end items-center mt-2 pr-3">
-            <button class="min-w-26 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'" (click)="addQR()">
+        
+        <form *ngIf = "callLocation == 'CreateNew'" class="pl-3 w-full overflow-hidden" [formGroup]="qualityForm">
+            <spot-toggle class="w-full" formControlName="isQualityRef" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
+                [label]="'Quality Reference #'">
+            </spot-toggle>
+        </form>
+        <div *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" class="flex justify-end items-center mt-2 pr-3">
+            <button class="min-w-26 text-primary bg-gray-200" type="button" mat-flat-button [color]="'primary-200'"
+                (click)="addQR()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
-
-        <div class="w-full pl-3 overflow-hidden h-[81vh]">
+        <div *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" [ngClass] = "{'w-full pl-3 overflow-hidden h-[81vh]': viewType == 'SidePanel'}">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="datatable-qr-80 material font-medium text-sm text-secondary whitespace-nowrap"
+                class="datatable-qr-80 material font-medium text-sm text-default whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>
                 <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
                     [sortable]="false" [flexGrow]="1">
@@ -35,7 +41,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="1">
+                    [sortable]="false" [flexGrow]="0.75">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
@@ -59,7 +65,7 @@
             </ngx-datatable>
         </div>
     </div>
-    <div class="flex items-start justify-between mt-6 px-3">
+    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between mt-6 px-3">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
             (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
             Cancel

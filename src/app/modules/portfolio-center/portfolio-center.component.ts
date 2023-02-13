@@ -132,6 +132,24 @@ export class PortfolioCenterComponent implements OnInit {
       link: '/portfolio-center'
     },
     {
+      // id: 'create-project',
+      title: 'Create Project',
+      type: 'collapsable',
+      link: '/create-project',
+      children: [
+        {
+          title: 'Copy Project',
+          type: 'basic',
+          link: '/create-project/copy-project'
+        },
+        {
+          title: 'Create Project',
+          type: 'basic',
+          link: '/create-project/create-new-project'
+        }
+      ],
+    },
+    {
       id: 'spot-documents',
       title: 'SPOT Resources',
       type: 'basic',

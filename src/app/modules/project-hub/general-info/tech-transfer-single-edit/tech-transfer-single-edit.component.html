@@ -1,5 +1,5 @@
 <div *ngIf="viewContent">
-    <div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Tech Transfer Edit</div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
                 href="javascript:void(0)" title="Close">
@@ -7,12 +7,13 @@
             </a>
         </div>
     </div>
-    <form class="w-full p-[20px]" [formGroup]="generalInfoForm" (ngSubmit)="techTransfer()">
-        <div class="h-[84vh] overflow-hidden">
-        <div class="flex justify-between items-center">
-            <div>Tech Transfer</div>
-            <mat-slide-toggle formControlName="isTechTransfer"></mat-slide-toggle>
-        </div>
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="generalInfoForm" (ngSubmit)="techTransfer()">
+        <div [ngClass] = "{'h-[84vh] overflow-hidden': viewType == 'SidePanel'}">
+        <!-- <div class="w-full mt-4 mb-6"> -->
+            <spot-toggle class="w-full" formControlName="isTechTransfer" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
+                [label]="'Tech Transfer'">
+            </spot-toggle>
+        <!-- </div> -->
         <div class="mt-6" *ngIf="generalInfoForm.controls['isTechTransfer'].value">
             <spot-select class="w-full" formControlName="campaignTypeId" name="campaignTypeId" [label]="'Campaign Type'"
                 [placeholder]="'Campaign Type'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" 
@@ -30,7 +31,7 @@
             </spot-select>
         </div>
     </div>
-        <div class="flex items-start justify-between mt-6">
+        <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"
                 (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
                 Cancel

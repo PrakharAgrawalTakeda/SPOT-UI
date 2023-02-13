@@ -6,6 +6,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { lookupMaster } from 'app/shared/lookup-global';
 import { Title } from '@angular/platform-browser';
 import moment from 'moment';
+import { IAppSetting } from 'app/shared/global-app-settings';
 
 @Component({
     selector: 'landing-home',
@@ -28,7 +29,13 @@ export class LandingHomeComponent implements OnInit {
                     scopes: ["api://1457c97b-39c4-4789-9ac6-1c7a39211d9a/Api.Read"]
                 }
                 this.authService.instance.acquireTokenSilent(scopes).then(response => {
-                   if (localStorage.getItem('spot-redirect') != null) {
+                    if (!localStorage.getItem('app-setting')) {
+                        var appSetting: IAppSetting ={
+                            projectHubPanel: 'Unlocked'
+                        }
+                        localStorage.setItem('app-setting', JSON.stringify(appSetting))
+                    }
+                    if (localStorage.getItem('spot-redirect') != null) {
                         var temp = localStorage.getItem('spot-redirect')
                         console.log("hey" + temp)
                         localStorage.removeItem('spot-redirect')

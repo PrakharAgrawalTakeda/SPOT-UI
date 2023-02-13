@@ -15,12 +15,12 @@ fuse-drawer {
 
     /* Animations */
     &.fuse-drawer-animations-enabled {
-        transition-duration: 400ms;
+        transition-duration: 300ms;
         transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
         transition-property: visibility, margin-left, margin-right, transform, width, max-width, min-width;
 
         .fuse-drawer-content {
-            transition-duration: 400ms;
+            transition-duration: 300ms;
             transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
             transition-property: width, max-width, min-width;
         }

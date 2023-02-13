@@ -1,14 +1,27 @@
 <form [formGroup]="form" class="form w-full">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label class="flex items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
+        <mat-label class="items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
                 *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
         </mat-label>
-        <mat-select formControlName="control" [placeholder]="placeholder" (selectionChange)="onChange($event.value)"
-            (closed)="onTouch()">
-            <mat-option *ngIf="showNoneOption" value="">{{noneOptionCustomText}}</mat-option>
-            <mat-option *ngFor="let singleValue of getDropDown()"
-                value="{{dropDownArrayType == 'string'?singleValue:singleValue[idPointer]}}">{{dropDownArrayType == 'string'?singleValue:singleValue[valuePointer]}}</mat-option>
-        </mat-select>
+        <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
+        <ng-template #ifBlock>
+            <mat-select required="true" formControlName="control" [placeholder]="placeholder" (onChange)="selected($event.value)"
+                (selectionChange)="onChange($event.value)" (closed)="onTouch()">
+                <mat-option *ngIf="showNoneOption" value="">{{noneOptionCustomText}}</mat-option>
+                <mat-option *ngFor="let singleValue of getDropDown()"
+                    value="{{dropDownArrayType == 'string'?singleValue:singleValue[idPointer]}}">{{dropDownArrayType ==
+                    'string'?singleValue:singleValue[valuePointer]}}</mat-option>
+            </mat-select>
+        </ng-template>
+        <ng-template #elseBlock>
+            <mat-select formControlName="control" [placeholder]="placeholder" (onChange)="selected($event.value)" (selectionChange)="onChange($event.value)"
+                (closed)="onTouch()">
+                <mat-option *ngIf="showNoneOption" value="">{{noneOptionCustomText}}</mat-option>
+                <mat-option *ngFor="let singleValue of getDropDown()"
+                    value="{{dropDownArrayType == 'string'?singleValue:singleValue[idPointer]}}">{{dropDownArrayType ==
+                    'string'?singleValue:singleValue[valuePointer]}}</mat-option>
+            </mat-select>
+        </ng-template>
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
     </mat-form-field>
 </form>
