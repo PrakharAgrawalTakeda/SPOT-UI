@@ -88,16 +88,13 @@
             <spot-singleselect-user-autocomplete formControlName="sponsor" name="sponsor" [label]="'Sponsor'" *ngIf="viewElementChecker('sponsor')"
                                                  [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
             </spot-singleselect-user-autocomplete>
-            <!--<div class="flex justify-between items-center w-full pt-4 pb-6" *ngIf="viewElementChecker('isCapsProject')">
-                <div class="flex justify-start gap-1 items-center">CAPS Project <mat-icon class="pe icon-size-4"
-                        matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
-            CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-                        help</mat-icon>
-                </div>
-                <div>
-                    <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
-                </div>
-            </div>-->
+            <spot-singleselect-user-autocomplete formControlName="BCAuthor" name="BCAuthor" [label]="'Business Case Author'"
+                *ngIf="viewElementChecker('BCAuthor')" [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+            </spot-singleselect-user-autocomplete>
+            <spot-singleselect-user-autocomplete formControlName="AdditionalAuthor" name="AdditionalAuthor" [label]="'Additional Authors / Contributors'"
+                *ngIf="viewElementChecker('AdditionalAuthor')" [placeholder]="'Type Last, First Name or e-Mail Address and hit enter'">
+            </spot-singleselect-user-autocomplete>
+            
             <spot-singleselect-autocomplete class="w-full" formControlName="primaryProduct" name="primaryProduct"
                 [label]="'Primary Product'" [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
                 [dropDownArray]="filterCriteria.products" [showHint]="true"
@@ -128,6 +125,14 @@
                 name="whynotgoforNextBestAlternative" [label]="'Why not go for Next Best Alternative (NBA)'"
                 *ngIf="viewElementChecker('whynotgoforNextBestAlternative')"
                 [placeholder]="'Why not go for Next Best Alternative (NBA)'">
+            </spot-textarea>
+            <spot-textarea formControlName="StrategicRationale" name="StrategicRationale"
+                [label]="'Strategic Rationale'"
+                [placeholder]="'Strategic Rationale'"
+                *ngIf="viewElementChecker('StrategicRationale')">
+            </spot-textarea>
+            <spot-textarea formControlName="RiskImpact" name="RiskImpact" [label]="'Risk / Impact of Doing Nothing'"
+                [placeholder]="'Risk / Impact of Doing Nothing'" *ngIf="viewElementChecker('RiskImpact')">
             </spot-textarea>
         </div>
         <div class="pr-3 flex items-start justify-between mt-6" *ngIf="viewType == 'SidePanel'">

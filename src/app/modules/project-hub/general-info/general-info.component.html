@@ -31,6 +31,7 @@
         </div>
 
         <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
+          <spot-input class="w-full" formControlName="problemId" name="problemId" [label]="'Problem Id'" *ngIf="viewElementChecker('problemId')"></spot-input>
           <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
             *ngIf="viewElementChecker('problemTitle')" [label]="'Project Name'">
           </spot-input>
@@ -95,6 +96,13 @@
             [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="sponsor" name="sponsor"
             [label]="'Sponsor'">
           </spot-input>
+          <spot-input class="w-full" *ngIf="viewElementChecker('BCAuthor')" [ngClass]="{'read-only': callLocation == 'BusinessCase'}"
+            formControlName="BCAuthor" name="BCAuthor" [label]="'Business Case Author'">
+          </spot-input>
+          <spot-input class="w-full" *ngIf="viewElementChecker('AdditionalAuthor')"
+            [ngClass]="{'read-only': callLocation == 'BusinessCase'}" formControlName="AdditionalAuthor" name="AdditionalAuthor"
+            [label]="'Additional Authors / Contributors'">
+          </spot-input>
           <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
             [label]="'Primary Product'" [showHint]="true" *ngIf="viewElementChecker('primaryProduct')"
             [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
@@ -118,6 +126,16 @@
         <div class="w-full " *ngIf="viewElementChecker('projectDescription')">
           <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
             [label]="'Problem Description / Present Situation / Submission Description'">
+          </spot-textarea>
+        </div>
+        <div class="w-full " *ngIf="viewElementChecker('StrategicRationale')">
+          <spot-textarea class="w-full read-only" formControlName="StrategicRationale" name="StrategicRationale"
+            [label]="'Strategic Rationale'">
+          </spot-textarea>
+        </div>
+        <div class="w-full " *ngIf="viewElementChecker('RiskImpact')">
+          <spot-textarea class="w-full read-only" formControlName="RiskImpact" name="RiskImpact"
+            [label]="'Risk / Impact of Doing Nothing'">
           </spot-textarea>
         </div>
         <div class="w-full " *ngIf="viewElementChecker('proposalStatement')">

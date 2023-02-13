@@ -20,9 +20,9 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 })
 export class GeneralInfoComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
+  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
-  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' | 'GeneralInfoSingleEditBusinessCase' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
   isWizzard: boolean = false
@@ -81,7 +81,12 @@ export class GeneralInfoComponent implements OnInit {
     annualMustWinID: new FormControl(''),
     isSiteAssessment: new FormControl(false),
     siteAssessmentCategory: new FormControl([]),
-    isGoodPractise: new FormControl(false)
+    isGoodPractise: new FormControl(false),
+    StrategicRationale: new FormControl(''),
+    BCAuthor: new FormControl({}),
+    RiskImpact: new FormControl(''),
+    AdditionalAuthor: new FormControl({}),
+    problemId: new FormControl('')
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -119,6 +124,9 @@ export class GeneralInfoComponent implements OnInit {
         if(this.callLocation=='ProjectProposal'){
             this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
             this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
+        }
+        if (this.callLocation == 'BusinessCase') {
+            this.generalInfoType = 'GeneralInfoSingleEditBusinessCase'
         }
     }else{
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -196,6 +204,11 @@ export class GeneralInfoComponent implements OnInit {
               annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
               isSiteAssessment: res.projectData.isSiteAssessment,
               siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
+              StrategicRationale: res.projectData.strategicRationale,
+              BCAuthor: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
+              RiskImpact: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
+              AdditionalAuthor: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
+              problemId : res.projectData.problemId
             })
             this.viewContent = true
           })

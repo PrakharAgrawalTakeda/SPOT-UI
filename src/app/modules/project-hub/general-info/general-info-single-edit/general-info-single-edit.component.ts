@@ -17,7 +17,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
-  @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
+  @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   @Output() formValue = new EventEmitter();
   owningOrganizationValues = []
@@ -45,6 +45,10 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     projectReviewedYN: new FormControl({}),
     sponsor: new FormControl({}),
     projectManager: new FormControl({}),
+    StrategicRationale: new FormControl(''),
+    BCAuthor: new FormControl({}),
+    RiskImpact: new FormControl(''),
+    AdditionalAuthor: new FormControl({})
   })
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -109,6 +113,10 @@ export class GeneralInfoSingleEditComponent implements OnInit {
           whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
           proposalStatement: res.projectData.proposalStatement,
           projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
+          StrategicRationale: res.projectData.strategicRationale,
+          BCAuthor: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
+          RiskImpact: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
+          AdditionalAuthor: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
           sponsor: res.sponsor ?  {
               userAdid: res.sponsor.teamMemberAdId,
               userDisplayName: res.sponsor.teamMemberName
@@ -219,6 +227,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
     mainObj.sponsorId =  Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
     mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
+    mainObj.strategicRationale = formValue.StrategicRationale
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       if (this.subCallLocation == 'ProjectProposal') {
         this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {
