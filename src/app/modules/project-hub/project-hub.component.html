@@ -75,6 +75,9 @@
         <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditRC'" [optionType]="'recommended-option'"></app-option-info-edit>
         <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO2'" [optionType]="'option-2'"></app-option-info-edit>
         <app-option-info-edit *ngIf="projecthubservice.itemtype == 'OptionInfoEditO3'" [optionType]="'option-3'"></app-option-info-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditRC'" [optionType]="'recommended-option'"></app-feasibility-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO2'" [optionType]="'option-2'"></app-feasibility-edit>
+        <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO3'" [optionType]="'option-3'"></app-feasibility-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

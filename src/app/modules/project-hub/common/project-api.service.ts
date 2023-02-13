@@ -508,5 +508,11 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
     }
+    async updateBusinessCaseOptionInfoDetails(body,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCaseOptionDetail/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   }
 

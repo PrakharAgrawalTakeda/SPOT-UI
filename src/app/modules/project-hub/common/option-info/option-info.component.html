@@ -1,10 +1,10 @@
 <ng-container *ngIf="viewContent">
     <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
-        <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate ">
-            <h3 class="text-xl text-primary">Option Info</h3>
-        </div>
         <!-- Enter Content here-->
         <form class="w-full" [formGroup]="optionInfoForm">
+            <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate ">
+                <h3 class="text-xl text-primary">Option Info</h3>
+            </div>
             <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden">
                 <div class="flex justify-end items-end">
                     <div></div>
@@ -35,6 +35,50 @@
                     [hint]="'What are the downsides or opportunity cost of choosing this option? What do we NOT get with this option that we WOULD get with another option?'"
                     class="w-full read-only">
                 </spot-textarea>
+            </div>
+            <div class="py-6 pl-2 font-medium tracking-tight leading-6 truncate ">
+                <h3 class="text-xl text-primary">Feasibility</h3>
+            </div>
+            <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden">
+                <div class="flex justify-end items-end">
+                    <div></div>
+                    <div>
+                        <button class="ml-4 text-primary bg-gray-200"
+                            *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                            [color]="'primary-200'"
+                            (click)="projectHubService.toggleDrawerOpen(feasibilityEditType, '', filterCriteria , id, true)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
+                </div>
+                <!--Form Elements Start here-->
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                    class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="feasibilityData"
+                    #qualityRefTable>
+                    <ngx-datatable-column name="Component" prop="component" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="0.6">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            <p>{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Rating" prop="rating" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="1">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}">
+                            </spot-input>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Justification" prop="justification" [resizeable]="false"
+                        [sortable]="false" [flexGrow]="1">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}">
+                            </spot-input>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
             </div>
         </form>
     </div>

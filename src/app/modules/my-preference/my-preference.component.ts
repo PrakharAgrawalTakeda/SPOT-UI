@@ -20,7 +20,6 @@ export class MyPreferenceComponent implements OnInit {
   constructor(private titleService: Title, public auth: AuthService, private roleService: RoleService, private apiService: MyPreferenceApiService, private msalService: MsalService) { }
 
   ngOnInit(): void {
-
     this.auth.lookupMaster().then(res=>{
       this.lookupdata =  res
       this.preferenceForm.patchValue({
