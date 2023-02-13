@@ -350,8 +350,8 @@ export class CreateProjectComponent implements OnInit {
             if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
               this.qualityformValue.push({
                 qualityUniqueId: "",
-                problemUniqueId: history.state.data.problemUniqueId,
-                qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
+                problemUniqueId: res.problemUniqueId,
+                qualityReferenceTypeId: quality.qualityReferenceTypeId.length == undefined ? quality.qualityReferenceTypeId.lookUpId : quality.qualityReferenceTypeId,
                 qualityReference1: quality.qualityReference1
               })
             }
