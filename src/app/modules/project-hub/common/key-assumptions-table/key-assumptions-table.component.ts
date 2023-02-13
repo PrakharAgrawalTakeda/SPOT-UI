@@ -36,28 +36,30 @@ export class KeyAssumptionsTableComponent implements OnInit {
             this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
             this.keyAssumptionsViewEditType = "ProjectCharterKeyAssumptionAddSingle"
             this.keyAssumptionsBulkEditType = "ProjectCharterKeyAssumptionBulkEdit"
+            this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
+                this.keyAssumptions = res
+            })
         }
         if(this.callLocation == 'Business-Case'){
             this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
             this.keyAssumptionsViewEditType = "BusinessCaseKeyAssumptionAddSingle"
             this.keyAssumptionsBulkEditType = "BusinessCaseKeyAssumptionBulkEdit"
+            if (this.router.url.includes('recommended-option')) {
+                this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
+                    this.keyAssumptions = res
+                })
+            }
+            if (this.router.url.includes('option-2')) {
+                this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
+                    this.keyAssumptions = res
+                })
+            }
+            if (this.router.url.includes('option-3')) {
+                this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
+                    this.keyAssumptions = res
+                })
+            }
         }
-        if (this.router.url.includes('recommended-option')) {
-            this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
-                this.keyAssumptions = res
-            })
-        }
-        if (this.router.url.includes('option-2')) {
-            this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
-                this.keyAssumptions = res
-            })
-        }
-        if (this.router.url.includes('option-3')) {
-            this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
-                this.keyAssumptions = res
-            })
-        }
-
     }
     deleteKeyAssumption(id: string) {
         var comfirmConfig: FuseConfirmationConfig = {
@@ -82,12 +84,25 @@ export class KeyAssumptionsTableComponent implements OnInit {
             "dismissible": true
         }
         const keyAsumptioneAlert = this.fuseAlert.open(comfirmConfig)
-
         keyAsumptioneAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                this.apiService.deleteKeyAssumption(id).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                })
+                if (this.callLocation == 'Business-Case') {
+                    if (this.router.url.includes('recommended-option')) {
+                        this.apiService.deleteKeyAssumption(id).then(res => {
+                            this.projecthubservice.submitbutton.next(true)
+                        })
+                    }
+                    if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+                        this.apiService.deleteKeyAssumptionByOption(id).then((res) => {
+                            this.projecthubservice.submitbutton.next(true)
+                        })
+                    }
+                }
+                if (this.callLocation == "Project-Charter") {
+                    this.apiService.deleteKeyAssumption(id).then(res => {
+                         this.projecthubservice.submitbutton.next(true)
+                    })
+                }
             }
         })
     }

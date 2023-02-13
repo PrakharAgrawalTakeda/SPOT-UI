@@ -69,66 +69,96 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                 this.disabler();
                 this.viewContent = true;
             })
-        }
-        if (this.router.url.includes('option-2')) {
-            this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,Constants.OPTION_2_ID.toString()).then((res: any) => {
-                this.keyAssumptions = res
-                if (this.keyAssumptions.length > 0) {
-                    this.keyAssumptionsDb = this.keyAssumptions.map(x => {
-                        return {
-                            "keyAssumptionUniqueId": x.keyAssumptionUniqueId,
-                            "projectId": x.projectId,
-                            "keyAssumption": x.keyAssumption,
-                            "includeInCharter": x.includeInCharter,
-                            "includeInBusinessCase": x.includeInBusinessCase,
-                            "assumptionRationale": x.assumptionRationale,
+        }else{
+            if (this.router.url.includes('option-2')) {
+                this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,Constants.OPTION_2_ID.toString()).then((res: any) => {
+                    this.keyAssumptions = res
+                    if (this.keyAssumptions.length > 0) {
+                        this.keyAssumptionsDb = this.keyAssumptions.map(x => {
+                            return {
+                                "keyAssumptionUniqueId": x.keyAssumptionUniqueId,
+                                "projectId": x.projectId,
+                                "keyAssumption": x.keyAssumption,
+                                "includeInCharter": x.includeInCharter,
+                                "includeInBusinessCase": x.includeInBusinessCase,
+                                "assumptionRationale": x.assumptionRationale,
+                            }
+                        })
+                        for (var i of this.keyAssumptions) {
+                            this.keyAssumptionForm.push(new FormGroup({
+                                keyAssumptionUniqueId: new FormControl(i.keyAssumptionUniqueId),
+                                projectId: new FormControl(i.projectId),
+                                keyAssumption: new FormControl(i.keyAssumption),
+                                includeInCharter: new FormControl(i.includeInCharter),
+                                includeInBusinessCase: new FormControl(i.includeInBusinessCase),
+                                assumptionRationale: new FormControl(i.assumptionRationale),
+                            }))
                         }
-                    })
-                    for (var i of this.keyAssumptions) {
-                        this.keyAssumptionForm.push(new FormGroup({
-                            keyAssumptionUniqueId: new FormControl(i.keyAssumptionUniqueId),
-                            projectId: new FormControl(i.projectId),
-                            keyAssumption: new FormControl(i.keyAssumption),
-                            includeInCharter: new FormControl(i.includeInCharter),
-                            includeInBusinessCase: new FormControl(i.includeInBusinessCase),
-                            assumptionRationale: new FormControl(i.assumptionRationale),
-                        }))
                     }
-                }
-                this.disabler();
-                this.viewContent = true;
-            })
-        }
-        if (this.router.url.includes('option-3')) {
-            this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,Constants.OPTION_3_ID.toString()).then((res: any) => {
-                this.keyAssumptions = res
-                if (this.keyAssumptions.length > 0) {
-                    this.keyAssumptionsDb = this.keyAssumptions.map(x => {
-                        return {
-                            "keyAssumptionUniqueId": x.keyAssumptionUniqueId,
-                            "projectId": x.projectId,
-                            "keyAssumption": x.keyAssumption,
-                            "includeInCharter": x.includeInCharter,
-                            "includeInBusinessCase": x.includeInBusinessCase,
-                            "assumptionRationale": x.assumptionRationale,
+                    this.disabler();
+                    this.viewContent = true;
+                })
+            }else{
+                if (this.router.url.includes('option-3')) {
+                    this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,Constants.OPTION_3_ID.toString()).then((res: any) => {
+                        this.keyAssumptions = res
+                        if (this.keyAssumptions.length > 0) {
+                            this.keyAssumptionsDb = this.keyAssumptions.map(x => {
+                                return {
+                                    "keyAssumptionUniqueId": x.keyAssumptionUniqueId,
+                                    "projectId": x.projectId,
+                                    "keyAssumption": x.keyAssumption,
+                                    "includeInCharter": x.includeInCharter,
+                                    "includeInBusinessCase": x.includeInBusinessCase,
+                                    "assumptionRationale": x.assumptionRationale,
+                                }
+                            })
+                            for (var i of this.keyAssumptions) {
+                                this.keyAssumptionForm.push(new FormGroup({
+                                    keyAssumptionUniqueId: new FormControl(i.keyAssumptionUniqueId),
+                                    projectId: new FormControl(i.projectId),
+                                    keyAssumption: new FormControl(i.keyAssumption),
+                                    includeInCharter: new FormControl(i.includeInCharter),
+                                    includeInBusinessCase: new FormControl(i.includeInBusinessCase),
+                                    assumptionRationale: new FormControl(i.assumptionRationale),
+                                }))
+                            }
                         }
+                        this.disabler();
+                        this.viewContent = true;
                     })
-                    for (var i of this.keyAssumptions) {
-                        this.keyAssumptionForm.push(new FormGroup({
-                            keyAssumptionUniqueId: new FormControl(i.keyAssumptionUniqueId),
-                            projectId: new FormControl(i.projectId),
-                            keyAssumption: new FormControl(i.keyAssumption),
-                            includeInCharter: new FormControl(i.includeInCharter),
-                            includeInBusinessCase: new FormControl(i.includeInBusinessCase),
-                            assumptionRationale: new FormControl(i.assumptionRationale),
-                        }))
-                    }
+                }else{
+                    this.apiService.getKeyAssumptionsByProject(this.projecthubservice.projectid).then((res: any) => {
+                        this.keyAssumptions = res
+                        if (this.keyAssumptions.length > 0) {
+                            this.keyAssumptionsDb = this.keyAssumptions.map(x => {
+                                return {
+                                    "keyAssumptionUniqueId": x.keyAssumptionUniqueId,
+                                    "projectId": x.projectId,
+                                    "keyAssumption": x.keyAssumption,
+                                    "includeInCharter": x.includeInCharter,
+                                    "includeInBusinessCase": x.includeInBusinessCase,
+                                    "assumptionRationale": x.assumptionRationale,
+                                }
+                            })
+                            for (var i of this.keyAssumptions) {
+                                this.keyAssumptionForm.push(new FormGroup({
+                                    keyAssumptionUniqueId: new FormControl(i.keyAssumptionUniqueId),
+                                    projectId: new FormControl(i.projectId),
+                                    keyAssumption: new FormControl(i.keyAssumption),
+                                    includeInCharter: new FormControl(i.includeInCharter),
+                                    includeInBusinessCase: new FormControl(i.includeInBusinessCase),
+                                    assumptionRationale: new FormControl(i.assumptionRationale),
+                                }))
+                            }
+                        }
+                        this.disabler();
+                        this.viewContent = true;
+                    })
                 }
-                this.disabler();
-                this.viewContent = true;
-            })
-        }
+            }
 
+        }
 
     }
     disabler() {
@@ -191,7 +221,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                         "assumptionRationale": i.assumptionRationale,
                         "includeInCharter": i.includeInCharter,
                         "includeInBusinessCase": i.includeInBusinessCase,
-                        "businessKeyAssumptionUniqueId":"",
+                        "businessKeyAssumptionUniqueId":i.businessKeyAssumptionUniqueId,
                         "businessOptionId": Constants.OPTION_3_ID.toString()
                     })
                 }
@@ -205,7 +235,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                         "assumptionRationale": i.assumptionRationale,
                         "includeInCharter": i.includeInCharter,
                         "includeInBusinessCase": i.includeInBusinessCase,
-                        "businessKeyAssumptionUniqueId":"",
+                        "businessKeyAssumptionUniqueId":i.businessKeyAssumptionUniqueId,
                         "businessOptionId": Constants.OPTION_2_ID.toString()
                     })
                 }
@@ -216,22 +246,46 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
     }
 
     addKA() {
-        var j = [{
-            keyAssumptionUniqueId: '',
-            projectId: '',
-            keyAssumption: '',
-            assumptionRationale: '',
-            includeInCharter: false,
-            includeInBusinessCase: false,
-        }]
-        this.keyAssumptionForm.push(new FormGroup({
-            keyAssumptionUniqueId: new FormControl(''),
-            projectId: new FormControl(this.projecthubservice.projectid),
-            keyAssumption: new FormControl(''),
-            assumptionRationale: new FormControl(''),
-            includeInCharter: new FormControl(false),
-            includeInBusinessCase: new FormControl(false),
-        }))
+        var j = [{}]
+        if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+            j = [{
+                keyAssumptionUniqueId: '',
+                projectId: '',
+                keyAssumption: '',
+                assumptionRationale: '',
+                includeInCharter: false,
+                includeInBusinessCase: false,
+                businessKeyAssumptionUniqueId:'',
+                businessOptionId:''
+            }]
+            this.keyAssumptionForm.push(new FormGroup({
+                keyAssumptionUniqueId: new FormControl(''),
+                projectId: new FormControl(this.projecthubservice.projectid),
+                keyAssumption: new FormControl(''),
+                assumptionRationale: new FormControl(''),
+                includeInCharter: new FormControl(false),
+                includeInBusinessCase: new FormControl(false),
+                businessKeyAssumptionUniqueId:new FormControl(''),
+                businessOptionId:new FormControl(''),
+            }))
+        }else{
+            j = [{
+                keyAssumptionUniqueId: '',
+                projectId: '',
+                keyAssumption: '',
+                assumptionRationale: '',
+                includeInCharter: false,
+                includeInBusinessCase: false,
+            }]
+            this.keyAssumptionForm.push(new FormGroup({
+                keyAssumptionUniqueId: new FormControl(''),
+                projectId: new FormControl(this.projecthubservice.projectid),
+                keyAssumption: new FormControl(''),
+                assumptionRationale: new FormControl(''),
+                includeInCharter: new FormControl(false),
+                includeInBusinessCase: new FormControl(false),
+            }))
+        }
         this.disabler()
         this.keyAssumptions = [...this.keyAssumptions, ...j]
         this.kaTableEditStack.push(this.keyAssumptions.length - 1)
@@ -294,17 +348,8 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
     }
 
     submitKeyAssumptions() {
-        this.formValue()
         if (JSON.stringify(this.keyAssumptionsDb) != JSON.stringify(this.keyAssumptionsSubmit)) {
             this.projecthubservice.isFormChanged = false
-            this.formValue()
-            if (this.router.url.includes('recommended-option')) {
-                this.apiService.bulkEditKeyAssumptions(this.keyAssumptionsSubmit, this.projecthubservice.projectid).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                    this.projecthubservice.isNavChanged.next(true)
-                })
-            }
             if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
                 this.formValueForOptions()
                 this.apiService.bulkEditKeyAssumptionsForOption(this.keyAssumptionsSubmit, this.projecthubservice.projectid).then(res => {
@@ -312,10 +357,14 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     this.projecthubservice.isNavChanged.next(true)
                 })
+            }else{
+                this.formValue()
+                this.apiService.bulkEditKeyAssumptions(this.keyAssumptionsSubmit, this.projecthubservice.projectid).then(res => {
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    this.projecthubservice.isNavChanged.next(true)
+                })
             }
-
-
-
         } else {
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')

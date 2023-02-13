@@ -17,6 +17,8 @@ import * as moment from 'moment';
 import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../common/project-api.service';
 import { FuseAlertService } from '@fuse/components/alert';
+import {Constants} from "../../../../shared/constants";
+import {Router} from "@angular/router";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -56,7 +58,8 @@ export class ScheduleViewEditComponent implements OnInit {
   item: any = {}
   functionSets: any = []
   milestoneName: any;
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _elementRef: ElementRef) {
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
+              public auth: AuthService, private _elementRef: ElementRef,  private router: Router) {
     //this.scheduleForm.controls.function.valueChanges.subscribe(res => (console.log(res)))
   }
 
@@ -189,7 +192,8 @@ export class ScheduleViewEditComponent implements OnInit {
           templateMilestoneId: this.schedule.templateMilestoneId,
           includeInCloseout: this.schedule.includeInCloseout,
           responsiblePersonId: this.scheduleForm.value.usersingleid,
-          responsiblePersonName: this.scheduleForm.value.usersingle
+          responsiblePersonName: this.scheduleForm.value.usersingle,
+          businessOptionId:""
         }
         //Function when null
         if (this.scheduleForm.controls['function'].value == "") {
@@ -215,13 +219,27 @@ export class ScheduleViewEditComponent implements OnInit {
         if (mainObjnew.baselineFinish == "Invalid date") {
           mainObjnew.baselineFinish = null
         }
-        console.log("final object")
-        console.log(mainObjnew)
-        this.apiService.addSchedule(mainObjnew).then(() => {
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.isNavChanged.next(true)
-        })
+          if (this.router.url.includes('option-2')) {
+              mainObjnew.businessOptionId = Constants.OPTION_2_ID.toString();
+              this.apiService.addTimelineForOption(mainObjnew).then(res => {
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+              })
+          }else{
+              if (this.router.url.includes('option-3')) {
+                  mainObjnew.businessOptionId = Constants.OPTION_3_ID.toString();
+                  this.apiService.addTimelineForOption(mainObjnew).then(res => {
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  })
+              }else{
+                  this.apiService.addSchedule(mainObjnew).then(() => {
+                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.isNavChanged.next(true)
+                  })
+              }
+          }
       }
       else {
         console.log(this.scheduleForm.controls.baselineFinish.value)

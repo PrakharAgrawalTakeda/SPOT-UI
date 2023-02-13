@@ -52,7 +52,7 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
         })
     }
 
-    submitProjectTeam() {
+    submitKeyAssumption() {
         this.projecthubservice.isFormChanged = false
         var keyAssumption = this.keyAssumptionForm.getRawValue();
         var mainObj = {
@@ -73,26 +73,28 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
             businessKeyAssumptionUniqueId:"",
             businessOptionId:""
         }
-        if (this.router.url.includes('recommended-option')) {
-            this.apiService.addKeyAssumption(mainObj).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
-        }
         if (this.router.url.includes('option-2')) {
             optionObj.businessOptionId = Constants.OPTION_2_ID.toString();
             this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
+        }else{
+            if (this.router.url.includes('option-3')) {
+                optionObj.businessOptionId = Constants.OPTION_3_ID.toString();
+                this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                })
+            }else{
+                this.apiService.addKeyAssumption(mainObj).then(res => {
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                })
+            }
         }
-        if (this.router.url.includes('option-3')) {
-            optionObj.businessOptionId = Constants.OPTION_3_ID.toString();
-            this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
-        }
+
+
 
     }
     viewElementChecker(element: string): boolean {

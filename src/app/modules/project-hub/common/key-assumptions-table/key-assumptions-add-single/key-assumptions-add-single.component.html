@@ -6,7 +6,7 @@
     </a>
     </div>
 </div>
-<form class="w-full form-ask-need" [formGroup]="keyAssumptionForm" (ngSubmit)="submitProjectTeam()"
+<form class="w-full form-ask-need" [formGroup]="keyAssumptionForm" (ngSubmit)="submitKeyAssumption()"
       style="overflow-y: scroll; height: 95vh;">
 
     <spot-textarea class="w-full read-only" formControlName="keyAssumptionName" name="keyAssumptionName" *ngIf="viewElementChecker('keyAssumption')"
