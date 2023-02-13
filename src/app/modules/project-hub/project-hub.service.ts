@@ -143,6 +143,7 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
+          id: 'project-proposal',
           title: 'Project Proposal',
           type: 'collapsable',
           icon: 'heroicons_outline:light-bulb',
@@ -303,6 +304,7 @@ export class ProjectHubService {
           ]
         },
         {
+          id: 'project-charter',
           title: 'Project Charter',
           type: 'collapsable',
           icon: 'heroicons_outline:clipboard-check',
@@ -345,6 +347,7 @@ export class ProjectHubService {
           ]
         },
         {
+          id: 'project-dashboard',
           title: 'Project Dashboards',
           type: 'collapsable',
           icon: 'heroicons_outline:presentation-chart-line',
@@ -365,6 +368,7 @@ export class ProjectHubService {
           ]
         },
         {
+          id: 'project-closeout',
           title: 'Project Close Out',
           type: 'collapsable',
           icon: 'heroicons_outline:flag',
@@ -419,7 +423,7 @@ export class ProjectHubService {
   getroles() {
     this.roleControllerControl = this.roleController.getRolesbyProjectData(this.projectid)
   }
-  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false,fuseDrawerLarge: boolean = false): void {
+  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false, fuseDrawerLarge: boolean = false): void {
     console.log(itemtype)
     if (this.drawerOpenedright == true && this.isFormChanged == true) {
       const alertopener = this.fusealert.open(this.alert)
@@ -473,7 +477,7 @@ export class ProjectHubService {
     this.isFormChanged = false
     alertopener.afterClosed().subscribe(res => {
       if (res != 'confirmed') {
-        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid,this.isBulkEdit)
+        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid, this.isBulkEdit)
         this.isFormChanged = true
       }
       else {

@@ -1,9 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { GlobalVariables } from 'app/shared/global-variables';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
-export class CloseOutService {
+export class CloseOutApiService {
 
-  constructor() { }
+    constructor(private http: HttpClient) { }
+
+    
 }

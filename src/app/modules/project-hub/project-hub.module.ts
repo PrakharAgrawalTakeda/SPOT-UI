@@ -127,6 +127,7 @@ import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-r
 import { OptionInfoComponent } from './common/option-info/option-info.component';
 import { OptionInfoEditComponent } from './common/option-info/option-info-edit/option-info-edit.component';
 import { FeasibilityEditComponent } from './common/option-info/feasibility-edit/feasibility-edit.component';
+import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
 import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
 
 export const projectRoutes: Route[] = [
@@ -323,7 +324,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -356,7 +357,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -389,7 +390,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -497,7 +498,8 @@ export const projectRoutes: Route[] = [
     BusinessCaseRiskIssuesComponent,
     OptionInfoComponent,
     OptionInfoEditComponent,
-    FeasibilityEditComponent
+    FeasibilityEditComponent,
+    CloseOutOutcomesSingleEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
