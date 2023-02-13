@@ -21,7 +21,7 @@
         </div>
         <div class="overflow-x-auto overflow-hidden h-[80vh] ml-3 mt-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="datatable-pt-80 font-medium text-sm text-secondary whitespace-nowrap" [rows]="teamMembers"
+                class="datatable-pt-80 font-medium text-sm text-default whitespace-nowrap" [rows]="teamMembers"
                 #projectTeamsTable>
                 <ngx-datatable-column [sortable]="false" name="Role" prop="roleName" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -108,7 +108,7 @@
                     
                                 <mat-icon class="iconClass" svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                             </a>
-                            <form class="iconClass" [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)" class="h-[45px] iconClass">
+                            <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)" class="h-[45px] iconClass">
                                 <mat-slide-toggle  class="h-full overflow-visible" formControlName="includeInCharter"></mat-slide-toggle>
                             </form>
                         </ng-template>

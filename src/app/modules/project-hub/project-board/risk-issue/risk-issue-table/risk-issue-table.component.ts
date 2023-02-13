@@ -23,7 +23,7 @@ export class RiskIssueTableComponent implements OnInit {
     @Output() toggleChange = new EventEmitter();
     lookupdata: any = []
     selected = [];
-    viewContent =false;
+    viewContent = false;
     SelectionType = SelectionType;
     getRowClass = (row) => {
         return {
@@ -85,7 +85,7 @@ export class RiskIssueTableComponent implements OnInit {
     // }
     getLinkType(projectId: string): string {
         return projectId == this.projectId ? 'mat_solid:link' : 'heroicons_outline:link'
-      }
+    }
     getlinkname(uid: string): string {
         var linkItemList = this.links.filter(x => x.linkItemId == uid)
         var returnString = ''

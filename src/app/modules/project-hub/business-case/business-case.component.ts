@@ -17,8 +17,8 @@ export class BusinessCaseComponent implements OnInit {
         this.dataloader()
       }
     })
-    this.router.events.subscribe(res=>{
-      if(this.viewContent){
+    this.router.events.subscribe(res => {
+      if (this.viewContent) {
         this.navItem = null
         this.reloadName()
       }
@@ -41,8 +41,10 @@ export class BusinessCaseComponent implements OnInit {
       this.viewContent = true
     })
   }
-  
-  reloadName(){
+  isNavActive(link: string): boolean {
+    return this.router.url.includes(link)
+  }
+  reloadName() {
     const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
     if (this.router.url.includes('recommended-option')) {
       this.navItem = this._fuseNavigationService.getItem('recommended-option', navComponent.navigation)
@@ -55,7 +57,8 @@ export class BusinessCaseComponent implements OnInit {
     }
     else if (this.router.url.includes('general-info')) {
       this.navItem = {
-        title: 'General Info'
+        title: 'General Info',
+        children: []
       }
     }
     console.log(this.navItem)

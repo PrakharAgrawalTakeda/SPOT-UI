@@ -69,11 +69,11 @@ export class ProjectTeamAddSingleComponent implements OnInit {
       this.lookUpData = resp
       // this.formInital = true
       if (this.projecthubservice.all != []) {
-        if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 5) {
-          if (this.projectTeamAddForm.value.includeInProposal != true) {
-            this.projectTeamAddForm.controls['includeInProposal'].disable()
-          }
-        }
+         if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 5) {
+            if (this.projectTeamAddForm.value.includeInProposal != true) {
+                 this.projectTeamAddForm.controls['includeInProposal'].disable()
+            }
+         }
         if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
           if (this.projectTeamAddForm.value.includeInCharter != true) {
             this.projectTeamAddForm.controls['includeInCharter'].disable()
@@ -81,6 +81,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         }
       }
     })
+    this.charterCount = parseInt(localStorage.getItem('chartercount'));
     this.charterCount = parseInt(localStorage.getItem('chartercount'));
   }
   getRoles(): any {
@@ -100,9 +101,9 @@ export class ProjectTeamAddSingleComponent implements OnInit {
     return this.lookUpData.filter(x => x.lookUpParentId == "474EE4AC-7A6C-4D30-B6EA-12A0D0F4BC2C" && x.lookUpId != "87DA989B-0BBA-406F-99C1-99E1E80EE9FE")
   }
   submitProjectTeam() {
-    var projectTeam = this.projectTeamAddForm.getRawValue();
+    var projectTeam = this.projectTeamAddForm.getRawValue();  
     if (projectTeam.includeInCharter === false) {
-      if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
+    if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
         if (this.projectTeamAddForm.controls.percentTime.value < 0 || this.projectTeamAddForm.controls.percentTime.value > 100) {
           var comfirmConfig: FuseConfirmationConfig = {
             "title": "Percent time value cannot be greater than 100 or smaller than 0",
@@ -199,32 +200,32 @@ export class ProjectTeamAddSingleComponent implements OnInit {
           }
         }
 
-      }
-      else {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "Please select a Role",
-          "message": "",
-          "icon": {
-            "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
-          },
-          "actions": {
-            "confirm": {
-              "show": true,
-              "label": "Okay",
-              "color": "primary"
-            },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
-        }
-        const alert = this.fuseAlert.open(comfirmConfig)
-      }
     }
+    else {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Only 10 can be selected at a time for Team Charter slide display.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+  }
     else if (this.charterCount < 10) {
       if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
 
@@ -246,7 +247,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
         }
         this.apiService.addProjectTeam(mainObj).then(res => {
           this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')  
         })
       }
     }

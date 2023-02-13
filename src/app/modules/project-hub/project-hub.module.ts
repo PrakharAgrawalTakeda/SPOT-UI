@@ -109,7 +109,6 @@ import { CloseOutScheduleBaselineComponent } from './close-out/close-out-schedul
 import { ProjectCharterGeneralInfoComponent } from './project-charter/project-charter-general-info/project-charter-general-info.component';
 import { ProjectCharterScopeComponent } from './project-charter/project-charter-scope/project-charter-scope.component';
 import { ProjectCharterMilestonesComponent } from './project-charter/project-charter-milestones/project-charter-milestones.component';
-import { ProjectCharterProjectTeamComponent } from './project-charter/project-charter-project-team/project-charter-project-team.component';
 import { ProjectCharterRiskIssuesComponent } from './project-charter/project-charter-risk-issues/project-charter-risk-issues.component';
 import { ProjectCharterCostFundingComponent } from './project-charter/project-charter-cost-funding/project-charter-cost-funding.component';
 import { ProjectCharterCapsComponent } from './project-charter/project-charter-caps/project-charter-caps.component';
@@ -128,6 +127,8 @@ import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-r
 import { OptionInfoComponent } from './common/option-info/option-info.component';
 import { OptionInfoEditComponent } from './common/option-info/option-info-edit/option-info-edit.component';
 import { FeasibilityEditComponent } from './common/option-info/feasibility-edit/feasibility-edit.component';
+import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
+import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
 import { CloseOutLessonLearnedBulkEditComponent } from './close-out/close-out-lessons-learned/close-out-lesson-learned-bulk-edit/close-out-lesson-learned-bulk-edit.component';
 import { CloseOutLessonLearnedSingleEditComponent } from './close-out/close-out-lessons-learned/close-out-lesson-learned-single-edit/close-out-lesson-learned-single-edit.component';
 
@@ -246,7 +247,7 @@ export const projectRoutes: Route[] = [
         },
         {
           path: 'project-team',
-          component: ProjectCharterProjectTeamComponent,
+          component: ProjectCharterProjectTeamsComponent,
         },
         {
           path: 'risks',
@@ -325,7 +326,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -358,7 +359,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -391,7 +392,7 @@ export const projectRoutes: Route[] = [
             },
             {
               path: 'caps',
-              component: BusinessCaseOptionInfoComponent,
+              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -482,7 +483,7 @@ export const projectRoutes: Route[] = [
     ProjectCharterGeneralInfoComponent,
     ProjectCharterScopeComponent,
     ProjectCharterMilestonesComponent,
-    ProjectCharterProjectTeamComponent,
+    ProjectCharterProjectTeamsComponent,
     ProjectCharterRiskIssuesComponent,
     ProjectCharterCostFundingComponent,
     ProjectCharterCapsComponent,
@@ -500,53 +501,58 @@ export const projectRoutes: Route[] = [
     OptionInfoComponent,
     OptionInfoEditComponent,
     FeasibilityEditComponent,
+    CloseOutOutcomesSingleEditComponent,
     CloseOutLessonLearnedBulkEditComponent,
     CloseOutLessonLearnedSingleEditComponent
   ],
-  imports: [
-    RouterModule.forChild(projectRoutes),
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatExpansionModule,
-    NgApexchartsModule,
-    TranslocoModule,
-    SharedModule,
-    CommonModule,
-    FuseDrawerModule,
-    FuseNavigationModule,
-    NgScrollbarModule,
-    MatChipsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    NgxDatatableModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    MatSnackBarModule,
-    FuseAlertModule,
-    SpotFormsModule,
-    SearchModule,
-    LanguagesModule,
-    FuseFullscreenModule,
-    ShortcutsModule,
-    MessagesModule,
-    NotificationsModule,
-    UserModule
-  ],
-  exports: [
-    GeneralInfoSingleEditComponent
-  ]
+    imports: [
+        RouterModule.forChild(projectRoutes),
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatExpansionModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        SharedModule,
+        CommonModule,
+        FuseDrawerModule,
+        FuseNavigationModule,
+        NgScrollbarModule,
+        MatChipsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NgxDatatableModule,
+        MatSlideToggleModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatAutocompleteModule,
+        MatTooltipModule,
+        MatSnackBarModule,
+        FuseAlertModule,
+        SpotFormsModule,
+        SearchModule,
+        LanguagesModule,
+        FuseFullscreenModule,
+        ShortcutsModule,
+        MessagesModule,
+        NotificationsModule,
+        UserModule
+    ],
+    exports:[
+      GeneralInfoSingleEditComponent,
+      QualityRefBulkEditComponent,
+      OeProjectSingleEditComponent,
+      TechTransferSingleEditComponent,
+      StrategicDriversComponent
+    ]
 })
 export class ProjectHubModule { }

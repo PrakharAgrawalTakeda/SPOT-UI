@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -12,6 +12,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./operational-performance-bulk-edit.component.scss']
 })
 export class OperationalPerformanceBulkEditComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
   projectViewDetails: any = {}
   opDb = []
   submitObj = []
