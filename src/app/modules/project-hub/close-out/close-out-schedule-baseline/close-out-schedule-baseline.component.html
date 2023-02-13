@@ -1,1 +1,112 @@
-<p>close-out-schedule-baseline works!</p>
+<div class="flex justify-between items-start gap-6 w-full pl-8 pr-8">
+    <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
+        <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Schedule Baseline</div>
+            
+        
+        <div class="text-primary">
+            <div class="flex items-start justify-between">
+                <div>
+                    <button *ngIf="mode== 'Baseline-Log'" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" 
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBaselineEdit', 'new', baselineLogData, '', true)">
+                    <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
+                </div>
+            </div>
+                </div>
+            </div>
+        <div class="overflow-x-auto mx-6">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default" [rows]="baselineLogData"
+                #scheduleTable [sorts]="[{ prop: 'baselineCount', dir: 'asc' }]">
+      
+                <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
+                  [resizeable]="false" [flexGrow]="0.6">
+                  <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)">
+                      <p *ngIf="!value">&nbsp;</p>
+                      <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                    </a>
+                    <form [formGroup]="baselineLogForm.controls[rowIndex]" class="p-2 overflow-hidden"
+                      *ngIf="baselinelogTableEditStack.includes(rowIndex)">
+                      <div class="flex items-center justify-between p-2 overflow-hidden">
+                        <mat-slide-toggle name="includeSlipChart" [showLabel]="false" formControlName="includeSlipChart">
+                        </mat-slide-toggle>
+                      </div>
+                    </form>
+                  </ng-template>
+                </ngx-datatable-column> -->
+      
+      
+                <!-- <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
+                  <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
+                      <a (click)="baselineLogDetails(row.baselineLogId)" class="cursor-pointer">{{value}}</a>
+                    </div>
+                    <div *ngIf="!checklogDetails(row.baselineLogId) || value == '1'" class="logID1">
+                      <a>{{value}}</a>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column> -->
+      
+      
+      
+                <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68">
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div class="count">
+                      <p>{{value}}</p>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+      
+                <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5">
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
+                  </ng-template>
+                </ngx-datatable-column>
+      
+      
+      
+                <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5">
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{getUserName(value)}}</p>
+                  </ng-template>
+                </ngx-datatable-column>
+      
+                <ngx-datatable-column name="Justification" prop="baselineComment" [flexGrow]="2.1">
+                  <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Include in Close Out (Max 10)" prop="includeInCloseout" [sortable]="false"
+                [resizeable]="false" [flexGrow]="0.7">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                  <div class="flex items-center justify-between pl-2 overflow-hidden">
+                  <mat-icon svgIcon="heroicons_outline:x-circle"
+                  *ngIf="value == false"></mat-icon>
+                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                  *ngIf="value == true">
+                </mat-icon>
+    </div>
+                </ng-template>
+              </ngx-datatable-column>
+      
+              </ngx-datatable>
+            </div>
+          </div>
+
+        <!-- <div class="mt-7 pr-6 pl-6 flex justify-end items-center w-full"> -->
+          <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
+            Cancel
+          </button> -->
+      
+          <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
+            OK
+          </button>
+       -->
+        <!-- </div> -->
+      </div>
+

@@ -326,8 +326,8 @@ export class ProjectApiService {
   }
 
   async patchBaselineLogs(body){
-    var link = GlobalVariables.apiurl+"ProjectBaselineLogs/IncludedInSlipChart"
-    const abc$ = this.http.patch(link,body)
+    var link = GlobalVariables.apiurl+"ProjectBaselineLogs/BulkEditProjectBaselineLog"
+    const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
   }

@@ -51,7 +51,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   @Input() editable: boolean
   @ViewChild('scheduleTable') scheduleTable: any;
   @ViewChild('target') private myScrollContainer: ElementRef;
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' = 'Normal'
   editing = {};
   scheduleData: any = []
   ColumnMode = ColumnMode;
@@ -255,6 +255,74 @@ console.log(this.insertarray)
 
 
   dataloader() {
+    console.log("MODE")
+    if(this.mode == 'Baseline-Log')
+                  {
+                    //this.BaselineLog()
+                    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
+                    this.apiService.getProjectBaselineLogDetails(this.id).then((logDetails: any) => {
+                     this.apiService.getProjectBaselineLog(this.id).then((logs: any) => {
+                       console.log("Log Details", logDetails)
+                                   if(logDetails.length != 0)
+                                   {
+                                     this.logdetails = logDetails
+                                   }
+                       console.log("Logs", logs)
+                       console.log("Users List", this.userlist)
+                       console.log(logs.projectBaselineLog.length)
+                       //debugger
+                       if (logs.projectBaselineLog.length != 0 || logs.users != null) {
+                         this.userlist = logs.users
+                 
+                         this.getUserName(this.id)
+                         this.baselinelogTableEditStack = []
+                         console.log(this.baselineLogForm.getRawValue())
+                 
+                         this.baselineLogData = logs.projectBaselineLog.sort((a, b) => {
+                           return a.baselineCount - b.baselineCount;
+                         })
+                         var count = 1
+                         for (var i of this.baselineLogData) {
+                           i.logId = count
+                           count = count + 1
+                 
+                           //Baseline Log Form changes
+                 
+                           this.baselineLogForm.push(new FormGroup({
+                             baselineLogId: new FormControl(i.baselineLogId),
+                             includeInCloseout: new FormControl(i.includeInCloseout == null ? false : i.includeInCloseout),
+                             baselineComment: new FormControl(i.baselineComment == null ? '' : i.baselineComment),
+                             projectId: new FormControl(i.projectId),
+                             baselineCount: new FormControl(i.baselineCount),
+                             modifiedDate: new FormControl(i.modifiedDate),
+                             includeSlipChart: new FormControl(i.includeSlipChart),
+                             teamMemberAdId: new FormControl(i.teamMemberAdId)
+                           }))
+                           console.log(this.baselineLogData)
+                         }
+                         this.viewContent = false
+                         this.viewBaseline = false
+                         this.viewBaselineLogs = true
+                       }
+                       else {
+                         this.viewContent = false
+                         this.viewBaseline = false
+                         this.viewBaselineLogs = true
+                       }
+                 
+                 
+                 
+                 
+                     })
+                     })
+        //             this.viewContent = false
+        // this.viewBaseline = false
+        // this.viewBaselineLogs = true
+        
+                  }
+                  else{
+
+                 
 //debugger
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getProjectBaselineLog(this.id).then((log: any) => {
@@ -307,7 +375,13 @@ console.log(this.insertarray)
                   this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
                   if (this.isclosed == false) {
                     this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
-                    console.log("ngx", this.schedulengxdata)
+                    console.log(this.schedulengxdata)
+                    this.schedulengxdata = this.sortbyPlanned(this.schedulengxdata)
+                    console.log(this.schedulengxdata)
+                     //this.schedulengxdata = this.sortbyBaseline(this.schedulengxdata)
+                    // console.log(this.schedulengxdata)
+                    // this.schedulengxdata = this.sortbyCompletion(this.schedulengxdata)
+                    // console.log("ngx", this.schedulengxdata)
                   }
 
                   if(this.mode == 'Project-Close-Out')
@@ -433,7 +507,7 @@ console.log(this.insertarray)
           })
         })
       })
-
+    }
   }
 
   toggleSchedule(event: any) {
@@ -1207,7 +1281,7 @@ console.log(this.scheduleData.scheduleData)
 
 for(var i=0; i<this.insertarray.length; i++)
 {
-  //debugger
+  debugger
   this.apiService.getProjectBaselineLog(this.insertarray[i]).then((res: any) => {
 
     this.baselineLog = res.projectBaselineLog.sort((a, b) => {
@@ -1227,7 +1301,7 @@ for(var i=0; i<this.insertarray.length; i++)
       this.baselineLogObj = ''
     }
     console.log(this.baselineLogObj)
-     //debugger
+     debugger
     if (this.baselineLogObj == '' && this.baselineForm.value.counter == true) {
 
       var justificationObjNew = {
@@ -1439,6 +1513,135 @@ this.projecthubservice.isNavChanged.next(true)
 
   }
 
+  sortbyPlanned(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+
+          // if (a.plannedFinish === null && b.plannedFinish === null) {
+    
+          //   return -1;
+    
+          // }
+    
+    
+    
+          // if (a.baselineFinish === null && b.baselineFinish === null) {
+    
+          //   return 1;
+    
+          // }
+
+          // // if (a.baselineFinish === null) {
+    
+          // //   return -1;
+    
+          // // }
+    
+    
+    
+          // // if (b.baselineFinish === null) {
+    
+          // //   return 1;
+    
+          // // }
+    
+    
+    
+          // if (a.plannedFinish === b.plannedFinish) {
+    
+          //   return a.baselineFinish < b.baselineFinish ? -1 : 1;
+    
+          // }
+
+          // else if(a.baselineFinish === b.baselineFinish) {
+    
+          //   return a.plannedFinish < b.plannedFinish ? -1 : 1;
+    
+          // }
+          // else {
+          //   return 0;
+          // }
+
+          if (a.plannedFinish > b.plannedFinish) {
+            return 1;
+          } else if (a.plannedFinish === b.plannedFinish && a.baselineFinish > b.baselineFinish) {
+            return 1;
+          } else if (a.plannedFinish === b.plannedFinish && a.baselineFinish === b.baselineFinish) {
+            return 0;
+          } else if (a.plannedFinish === b.plannedFinish && a.baselineFinish < b.baselineFinish) {
+            return -1;
+          } else if (a.plannedFinish < b.plannedFinish) {
+            return -1;
+          }
+    
+        }) : array
+  }
+
+  // sortbyBaseline(array: any): any {
+  //   return array.length > 1 ? array.sort((a, b) => {
+
+  //     if (a.baselineFinish === null) {
+
+  //       return -1;
+
+  //     }
+
+
+
+  //     if (b.baselineFinish === null) {
+
+  //       return 1;
+
+  //     }
+
+
+
+  //     if (a.baselineFinish === b.baselineFinish) {
+
+  //       return 0;
+
+  //     }
+
+
+
+  //     return b.baselineFinish < a.baselineFinish ? -1 : 1;
+    
+
+  //   }) : array
+  // }
+
+  // sortbyCompletion(array: any): any {
+  //   return array.length > 1 ? array.sort((a, b) => {
+
+  //     if (a.completionDate === null) {
+
+  //       return -1;
+
+  //     }
+
+
+
+  //     if (b.completionDate === null) {
+
+  //       return 1;
+
+  //     }
+
+
+
+  //     if (a.completionDate === b.completionDate) {
+
+  //       return 0;
+
+  //     }
+
+
+
+  //     return a.completionDate < b.completionDate ? -1 : 1;
+
+  //   }) : array
+  // }
+
+
   saveScheduleBulkEdit() {
     //debugger
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
@@ -1536,8 +1739,8 @@ this.projecthubservice.isNavChanged.next(true)
       var baselines2 = sortedbaselines2.map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
       })
-//debugger
-      if (baselines.length == baselines2.length && JSON.stringify(baselines) != JSON.stringify(baselines2))
+debugger
+      if (baselines.length <= baselines2.length && JSON.stringify(baselines) != JSON.stringify(baselines2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
         
@@ -1564,11 +1767,20 @@ this.submitjustification()
       else
       {
         console.log("CHANGED PLANNED FINISH", this.formValue)
+//         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+        
+//           //  this.viewBaseline = true
+//           //  this.viewBaselineLogs = true
+//           //  this.compareBaselineLogs = false
+//           //  this.projecthubservice.isBulkEdit = false
+
+// console.log(this.formValue)
+// this.submitjustification() 
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)
-        })
+         })
       }
 
     }
@@ -1652,6 +1864,7 @@ this.submitjustification()
           })
         }
       }
+      debugger
       console.log(this.formValue)
       this.scheduleData.scheduleData = res.scheduleData
       var sortedbaselinedates = this.sortByScheduleUniqeIDs(this.scheduleData.scheduleData)
@@ -1663,7 +1876,7 @@ this.submitjustification()
         return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
       })
 
-      if (baselinedates.length == baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
+      if (baselinedates.length <= baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2))
       {
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
         
@@ -1690,6 +1903,17 @@ this.submitjustification()
       else
       {
         console.log("CHANGED PLANNED FINISH", this.formValue)
+        // this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+        
+        //   // this.viewBaseline = true
+        //   // this.viewBaselineLogs = true
+        //   // this.compareBaselineLogs = false
+        //   // this.projecthubservice.isBulkEdit = false
+
+
+        //   this.submitjustification()
+        //   //this.projecthubservice.submitbutton.next(true)
+        // })
         this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
@@ -1811,6 +2035,79 @@ this.submitjustification()
     this.viewBaselineLogs = true
   }
 
+  BaselineLog() {
+    //console.log("BASELINE LOG CALLED")
+
+    
+  }
+
+  submitLog()
+  {
+    
+    this.projecthubservice.isFormChanged = false
+    var logformValue = this.baselineLogForm.getRawValue()
+    console.log(logformValue)
+    if (logformValue.filter(x => x.includeInCloseout == true).length <= 10) {
+    for (var i of logformValue) {
+      console.log(i)
+      console.log(i.includeInCloseout)
+      console.log(i.baselineLogId)
+      this.baselineLogObj.push({
+        baselineLogId: i.baselineLogId,
+        includeInCloseout: i.includeInCloseout,
+        baselineComment: i.baselineComment,
+        projectId: i.projectId,
+            baselineCount: i.baselineCount,
+            modifiedDate: i.modifiedDate,
+            includeSlipChart: i.includeSlipChart,
+            teamMemberAdId: i.teamMemberAdId
+
+      })
+    }
+    console.log(this.baselineLogObj)
+    this.apiService.patchBaselineLogs(this.baselineLogObj).then(res => {
+      //this.projecthubservice.isBulkEdit = true
+      // this.viewContent = false
+      // this.viewBaseline = false
+      // this.viewBaselineLogs = false
+      this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.submitbutton.next(true)
+      this.projecthubservice.successSave.next(true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      //this.projecthubservice.successSave.next(true)
+      //this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      //this.projecthubservice.submitbutton.next(true)
+
+    })
+  }
+  else
+  {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Only 10 baseline logs can be included in Close Out report",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warning"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "OK",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    this.projecthubservice.isBulkEdit = true
+  }
+  }
+
   baselineLogs() {
 
     // this.baselineLogForm = new FormArray([])
@@ -1869,8 +2166,8 @@ this.submitjustification()
   }
 
   checklogDetails(baselinelogid: string) : boolean {
-    console.log(baselinelogid)
-    console.log(this.logdetails)
+    //console.log(baselinelogid)
+   // console.log(this.logdetails)
     return  this.logdetails && this.logdetails != '' && this.logdetails.length > 0  ? this.logdetails.some(x=> x.baselineLogId == baselinelogid) : false
     //return
   }
@@ -2023,67 +2320,74 @@ console.log(this.projectbaselinelogDetailscurr)
 // if(this.projectbaselinelogDetailscurr.length >= this.projectbaselinelogDetailsprev.length)
 // {
 
-
-for(var m of this.projectbaselinelogDetailscurr)
+debugger
+for(var m = 0; m<this.projectbaselinelogDetailscurr.length; m++)
 {
   // for(var x in this.projectbaselinelogDetailscurr)
   // {
 
-    if(this.projectbaselinelogDetailsprev.some(y=>y.scheduleUniqueId == m.scheduleUniqueId))
+    if(this.projectbaselinelogDetailsprev.some(y=>y.scheduleUniqueId == this.projectbaselinelogDetailscurr[m].scheduleUniqueId))
 {
-    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).baselineFinish != m.baselineFinish)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == this.projectbaselinelogDetailscurr[m].scheduleUniqueId).baselineFinish != this.projectbaselinelogDetailscurr[m].baselineFinish)
     {
-      m.baselinechange = true
+      this.projectbaselinelogDetailscurr[m].baselinechange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].baselineFinish)
     // {
     //   this.projectbaselinelogDetailscurr[x].baselinechange = true
     // }
-    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).plannedFinish != m.plannedFinish)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == this.projectbaselinelogDetailscurr[m].scheduleUniqueId).plannedFinish != this.projectbaselinelogDetailscurr[m].plannedFinish)
     {
-      m.plannedchange = true
+      this.projectbaselinelogDetailscurr[m].plannedchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].plannedFinish)
     // {
     //   this.projectbaselinelogDetailscurr[x].plannedchange = true
     // }
-    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).completionDate != m.completionDate)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == this.projectbaselinelogDetailscurr[m].scheduleUniqueId).completionDate != this.projectbaselinelogDetailscurr[m].completionDate)
     {
-      m.completionchange = true
+      this.projectbaselinelogDetailscurr[m].completionchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].completionDate)
     // {
     //   this.projectbaselinelogDetailscurr[x].completionchange = true
     // }
-    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == m.scheduleUniqueId).indicator != m.indicator)
+    if(this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == this.projectbaselinelogDetailscurr[m].scheduleUniqueId).indicator != this.projectbaselinelogDetailscurr[m].indicator)
     {
-      m.indicatorchange = true
+      this.projectbaselinelogDetailscurr[m].indicatorchange = true
     }
     // if(!this.projectbaselinelogDetailsprev[x].indicator)
     // {
     //   this.projectbaselinelogDetailscurr[x].indicatorchange = true
     // }
   }
-  else 
+  else if(!this.projectbaselinelogDetailsprev.some(y=>y.scheduleUniqueId == this.projectbaselinelogDetailscurr[m].scheduleUniqueId))
+  
   {
-    if( m.baselineFinish != '')
+    if( this.projectbaselinelogDetailscurr[m].baselineFinish != '')
   {
-    m.baselinechange = true
+    this.projectbaselinelogDetailscurr[m].baselinechange = true
   }
-   if( m.plannedFinish != '')
+   if( this.projectbaselinelogDetailscurr[m].plannedFinish != '')
   {
-    m.plannedchange = true
+    this.projectbaselinelogDetailscurr[m].plannedchange = true
   }
-   if( m.completionDate != '')
+   if( this.projectbaselinelogDetailscurr[m].completionDate != '')
   {
-    m.completionchange = true
+    this.projectbaselinelogDetailscurr[m].completionchange = true
   }
-   if( m.indicator != '')
+   if( this.projectbaselinelogDetailscurr[m].indicator != '')
   {
-    m.indicatorchange = true
+    this.projectbaselinelogDetailscurr[m].indicatorchange = true
   }
 }
 //}
+else{
+  this.projectbaselinelogDetailscurr[m].baselinechange = false
+  this.projectbaselinelogDetailscurr[m].plannedchange = false
+  this.projectbaselinelogDetailscurr[m].completionchange = false
+  this.projectbaselinelogDetailscurr[m].indicatorchange = false
+}
 }
 //}
 
@@ -2218,24 +2522,25 @@ console.log(this.currObj)
     this.myFinalArray = [...this.currObj,...this.prevObj]
     var unique = this.myFinalArray.filter((v, i, a) => a.indexOf(v) === i);
 
-    for(var i of unique)
+    for(var k=0; k<unique.length; k++)
     {
       console.log(i)
+      debugger
       this.logdetailsObj.push({
 
-          milestone: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).milestone : this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).milestone,
-          currplannedFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedFinish  : 'empty',
-          currbaselineFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselineFinish : 'empty',
-          currcompletionDate: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).completionDate : 'empty',
-          currindicator: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).indicator : 'empty',
-          prevplannedFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).plannedFinish : '',
-          prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).baselineFinish : '',
-          prevcompletionDate: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).completionDate : '',
-          previndicator: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == i).indicator : '',
-          baselinechange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).baselinechange  : '',
-          plannedchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).plannedchange  : '',
-          completionchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).completionchange  : '',
-          indicatorchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == i) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == i).indicatorchange  : ''
+          milestone: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).milestone : this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == unique[k]).milestone,
+          currplannedFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k]) && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).plannedFinish != null && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).plannedchange != true ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).plannedFinish  : 'empty',
+          currbaselineFinish: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId ==unique[k])  && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).baselineFinish != null && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).baselinechange != true ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).baselineFinish : 'empty',
+          currcompletionDate: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k])  && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).completionDate != null && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).completionchange != true ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).completionDate : 'empty',
+          currindicator: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k])  && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).indicator != null && this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).indicatorchange != true ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).indicator : 'empty',
+          prevplannedFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == unique[k]).plannedFinish : '',
+          prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == unique[k]).baselineFinish : '',
+          prevcompletionDate: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == unique[k]).completionDate : '',
+          previndicator: this.projectbaselinelogDetailsprev.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x=>x.scheduleUniqueId == unique[k]).indicator : '',
+          baselinechange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).baselinechange  : '',
+          plannedchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).plannedchange  : '',
+          completionchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).completionchange  : '',
+          indicatorchange: this.projectbaselinelogDetailscurr.some(x=>x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x=>x.scheduleUniqueId == unique[k]).indicatorchange  : ''
       })
 
     }
@@ -2461,6 +2766,7 @@ else{
 
    for(var control of this.milestoneForm.controls)
    {
+     //debugger
      if(control['controls']['scheduleUniqueId'].value != '')
      {
       var baselinedates2 = baselineFormValue.map(x => {
@@ -2468,7 +2774,7 @@ else{
       })
      }
      else {
-      var baselinedates2 = baselineFormValue.filter(x => x.scheduleUniqueId != '').map(x => {
+     var baselinedates2 = baselineFormValue.filter(x => x.scheduleUniqueId == '').map(x => {
         return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
       })
      }
@@ -2488,7 +2794,7 @@ else{
   //    }
 
 
-    if (!this.flag && baselinedates.length == baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
+    if (!this.flag && baselinedates.length <= baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
       this.flag = true
       //this.insertArray(control['controls']['projectId'].value)
     }
@@ -2502,6 +2808,7 @@ else{
 
     console.log(baselinedates)
     console.log(baselinedates2)
+    console.log(baselinedates3)
     console.log(this.flag)
     if (this.flag && baselineFormValue.filter(x => x.includeInReport == true).length <= 8) {
       this.viewBaseline = true
