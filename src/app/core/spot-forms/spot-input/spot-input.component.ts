@@ -20,8 +20,9 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() showHint: boolean = false
   @Input() hint: string = ''
   @Input() hintPostion: 'tooltip'|'mat-hint' = 'tooltip'
-
-
+  @Input() Required: boolean = false;
+  
+  
 
   formFieldHelpers: any
   onTouch: any = () => { };
@@ -56,4 +57,14 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     isDisabled == true ? this.control.disable() : this.control.enable()
   }
+
+  Validate(data){
+    debugger;
+    if (data.target.value > 100){
+      data.target.value = 100
+    }
+    console.log(data);
+  }
+
+   
 }

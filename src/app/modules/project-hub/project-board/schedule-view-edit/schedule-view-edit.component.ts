@@ -289,7 +289,7 @@ export class ScheduleViewEditComponent implements OnInit {
 
         console.log("final object")
         console.log(mainObj)
-        this.apiService.editSchedule(this.projecthubservice.projectid,mainObj).then(res => {
+        this.apiService.editSchedule(this.projecthubservice.projectid, mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.isNavChanged.next(true)

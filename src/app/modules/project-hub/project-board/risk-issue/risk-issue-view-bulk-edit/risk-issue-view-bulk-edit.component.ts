@@ -205,12 +205,12 @@ export class RisIssueViewBulkEditComponent implements OnInit {
 
     addRI() {
         this.riskIssueForm.push(new FormGroup({
-            owner: new FormControl( {}),
+            owner: new FormControl({}),
             closeDate: new FormControl(""),
             dueDate: new FormControl(""),
-            functionGroupId: new FormControl( ""),
+            functionGroupId: new FormControl(""),
             ifHappens: new FormControl(""),
-            impactId: new FormControl( ""),
+            impactId: new FormControl(""),
             includeInCharter: new FormControl(false),
             includeInReport: new FormControl(false),
             indicator: new FormControl(""),
@@ -219,7 +219,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             postMitigationComments: new FormControl(""),
             postMitigationImpact: new FormControl(""),
             postMitigationProbability: new FormControl(""),
-            probabilityId: new FormControl( ""),
+            probabilityId: new FormControl(""),
             projectId: new FormControl(this.projectHubService.projectid),
             riskIssueResult: new FormControl(""),
             riskIssueTypeId: new FormControl(""),
@@ -227,7 +227,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }))
         var j = [{
             closeDate: null,
-            dueDate:  null,
+            dueDate: null,
             functionGroupId: '',
             ifHappens: '',
             impactId: '',
@@ -239,7 +239,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             ownerId: '',
             ownerName: '',
             postMitigationComments: '',
-            postMitigationImpact:'',
+            postMitigationImpact: '',
             postMitigationProbability: '',
             probabilityId: '',
             projectId: '',
@@ -440,7 +440,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 }
             }
         }
-
     }
     submitPrep() {
         this.formValue = []
@@ -561,7 +560,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     }
     getLinkType(projectId: string): string {
         return projectId == this.projectHubService.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
-      }
+    }
     riTableEditRow(rowIndex) {
         if (!this.riTableEditStack.includes(rowIndex)) {
             this.riTableEditStack.push(rowIndex)
@@ -593,21 +592,21 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
-                if (close == 'confirmed') {
-                    console.log(this.tableData)
-                    this.tableData.splice(rowIndex, 1)
-                    console.log(this.riskIssueForm.getRawValue())
-                    this.riskIssueForm.removeAt(rowIndex)
-                    if (this.riTableEditStack.includes(rowIndex)) {
-                        this.riTableEditStack.splice(this.riTableEditStack.indexOf(rowIndex), 1)
-                    }
-                    this.riTableEditStack = this.riTableEditStack.map(function (value) {
-                        return value > rowIndex ? value - 1 : value;
-                    })
-                    this.disabler()
-                    this.tableData = [...this.tableData]
+            if (close == 'confirmed') {
+                console.log(this.tableData)
+                this.tableData.splice(rowIndex, 1)
+                console.log(this.riskIssueForm.getRawValue())
+                this.riskIssueForm.removeAt(rowIndex)
+                if (this.riTableEditStack.includes(rowIndex)) {
+                    this.riTableEditStack.splice(this.riTableEditStack.indexOf(rowIndex), 1)
                 }
+                this.riTableEditStack = this.riTableEditStack.map(function (value) {
+                    return value > rowIndex ? value - 1 : value;
+                })
+                this.disabler()
+                this.tableData = [...this.tableData]
             }
+        }
         )
     }
     islink(uid: string): boolean {

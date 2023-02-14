@@ -7,36 +7,21 @@ import {
     ViewChild,
     ViewEncapsulation,
     Input,
-    ChangeDetectionStrategy,
-    SimpleChanges,
-    OnChanges,
     ChangeDetectorRef,
     NgZone,
-    DoCheck,
-    ComponentFactoryResolver
 } from '@angular/core';
 import {ProjectHubService} from '../../project-hub.service';
-import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
 import * as moment from 'moment';
-import {startWith, map} from 'rxjs';
-
-import {FuseAlertService} from '@fuse/components/alert';
 import {ColumnMode} from '@swimlane/ngx-datatable';
 import {SpotlightIndicatorsService} from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import {ProjectApiService} from '../../common/project-api.service';
 import {AuthService} from 'app/core/auth/auth.service';
-
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {GlobalFiltersDropDown} from 'app/shared/global-filters';
 import {FormBuilder, Validators, FormGroup, FormControl, FormArray} from '@angular/forms';
 import {PortfolioApiService} from 'app/modules/portfolio-center/portfolio-api.service';
 import {FuseConfirmationConfig, FuseConfirmationService} from '@fuse/services/confirmation';
 import {MsalService} from '@azure/msal-angular';
 import {ViewportRuler} from '@angular/cdk/scrolling';
-import {J} from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'app-schedule-view-bulk-edit',
@@ -264,7 +249,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
 
     dataloader() {
-//debugger
+        //debugger
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.apiService.getProjectBaselineLog(this.id).then((log: any) => {
             log.projectBaselineLog.sort((a, b) => {
@@ -1117,6 +1102,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.milestoneTableEditStack.push(row)
         }
     }
+
     disabler() {
         var formValue = this.milestoneForm.getRawValue()
         if (formValue.length > 0) {
@@ -1157,7 +1143,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
             }
             //Include in Report
-            if (formValue.filter(x => x.includeInCharter == true).length <10) {
+            if (formValue.filter(x => x.includeInCharter == true).length < 10) {
                 for (var i of this.milestoneForm.controls) {
                     i['controls']['includeInCharter'].enable()
                 }

@@ -30,8 +30,10 @@ export class SpotSelectComponent implements OnInit, ControlValueAccessor {
   formFieldHelpers: any
   onTouch: any = () => { };
   onChange: any = () => { };
+  selected:any = () => { };
   form: FormGroup;
   disabled = false;
+  @Input() Required: boolean = false
 
   constructor(private fb: FormBuilder) { }
 

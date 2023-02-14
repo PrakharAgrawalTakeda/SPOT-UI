@@ -5,11 +5,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import * as moment from 'moment';
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-general-info',
@@ -18,7 +19,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   encapsulation: ViewEncapsulation.None,
   providers: [],
 })
-export class GeneralInfoComponent implements OnInit {
+export class GeneralInfoComponent implements OnInit, OnDestroy {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
@@ -58,10 +60,10 @@ export class GeneralInfoComponent implements OnInit {
     isArchived: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
-
     approvedDate: new FormControl(''),
     opU: new FormControl(''),
     projectId: new FormControl(''),
+    localCurrencyAbbreviation: new FormControl(''),
     //
     projectProposalApprovedDate: new FormControl(''),
     functionGroupID:  new FormControl(''),
@@ -96,7 +98,7 @@ export class GeneralInfoComponent implements OnInit {
     public fuseAlert: FuseConfirmationService) {
 
 
-    this.projectHubService.submitbutton.subscribe(res => {
+    this.projectHubService.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
       if (this.viewContent == true) {
         this.dataloader()
       }
@@ -183,6 +185,7 @@ export class GeneralInfoComponent implements OnInit {
               proposalStatement: res.projectData.proposalStatement,
               projectReviewedYN: lookup.find(x => x.lookUpId == res.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
               projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+              localCurrencyAbbreviation: res.localCurrencyAbbreviation,
               //Stategic Drivers
               primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
               isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
@@ -204,7 +207,12 @@ export class GeneralInfoComponent implements OnInit {
     })
     this.disabler()
   }
-
+  ngOnDestroy(): void
+  {
+      // Unsubscribe from all subscriptions
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
+  }
 
   disabler() {
     this.generalInfoForm.disable()

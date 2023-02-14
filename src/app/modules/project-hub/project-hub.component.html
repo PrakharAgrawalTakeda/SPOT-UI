@@ -31,15 +31,21 @@
             [mode]="'Project-Charter'"></app-project-team-bulk-edit>
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+        <app-operational-performance-edit
+                *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCloseOut'" [mode]="'Project-Close-Out'"></app-operational-performance-edit>
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
+        <app-operational-performance-bulk-edit
+                *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'" [mode]="'Project-Close-Out'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
         <app-general-info-single-edit
             *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEdit'"></app-general-info-single-edit>
+        <app-close-out-outcomes-single-edit
+            *ngIf="projecthubservice.itemtype == 'Close-Out-Outcome'"></app-close-out-outcomes-single-edit>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditCloseOut'" [subCallLocation]="'CloseOut'"
             [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','closeOutApprovedDate','parentProject','sponsor', 'projectManager']"></app-general-info-single-edit>
         <app-general-info-single-edit *ngIf="projecthubservice.itemtype == 'GeneralInfoSingleEditProjectCharter'" [subCallLocation]="'ProjectCharter'" [viewElements]="['problemTitle','portfolioOwner','excecutionScope','owningOrganization','primaryProduct','otherImpactedProducts','approvedDate']"></app-general-info-single-edit>
@@ -105,7 +111,7 @@
     </ng-container>
 </fuse-vertical-navigation>
 <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
-    [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"
+    [ngClass]="navigationAppearance=='default'?'project-hub-default':'project-hub-dense'"  
     [ngStyle]="{ 'position' : projecthubservice.drawerOpenedright ? 'fixed' : 'relative'}">
     <div class="p-8 pb-6 pt-2">
         <div class="w-full bg-card shadow rounded-2xl">
