@@ -1,60 +1,75 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Schedule</div>
     <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
-            href="javascript:void(0)" title="Close">
-            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-        </a>
+                                     href="javascript:void(0)" title="Close">
+        <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+    </a>
     </div>
 </div>
 <form class="w-full overflow-y-hidden form-ask-need" [formGroup]="scheduleForm" (ngSubmit)="submitschedule()">
-    <div class="h-[77vh] overflow-y-hidden">
-        <spot-textarea formControlName="milestone" name="milestone"
-            [label]="(this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Milestone (Execution Start - ...)' : (this.schedule.milestoneType == 2 ? 'Milestone (Execution End - ...)' : 'Milestone')) : 'Milestone')"
-            [placeholder]="'Milestone'" [rows]="1">
-        </spot-textarea>
+    <div class="overflow-x-hidden  pr-3  h-[77vh]">
+        <div class="mt-2" *ngIf="viewElementChecker('milestone')">
+            <spot-textarea formControlName="milestone" name="milestone"
+                           [label]="(this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Milestone (Execution Start - ...)' : (this.schedule.milestoneType == 2 ? 'Milestone (Execution End - ...)' : 'Milestone')) : 'Milestone')"
+                           [placeholder]="'Milestone'"
+                           [rows]="1">
+            </spot-textarea>
+        </div>
 
-        <div class="w-25">
+        <div class="w-25" *ngIf="viewElementChecker('plannedFinish')">
             <spot-input-date formControlName="plannedFinish" name="plannedFinish" [label]="'Planned Finish'"
-                [placeholder]="'Choose a date'" [showHint]="true"
-                [hint]="'The date which indicates when the milestone is planned to be completed'">
+                             [placeholder]="'Choose a date'" [showHint]="true"
+                             [hint]="'The date which indicates when the milestone is planned to be completed'">
             </spot-input-date>
         </div>
-        <div class="w-25">
+        <div class="w-25" *ngIf="viewElementChecker('baselineFinish')">
             <spot-input-date formControlName="baselineFinish" name="baselineFinish" [label]="'Baseline Finish'"
-                [placeholder]="'Choose a date'" [showHint]="true"
-                [hint]="'Baseline Finish Date can be edited in Bulk Edit'">
+                             [placeholder]="'Choose a date'" [showHint]="true"
+                             [hint]="'Baseline Finish Date can be edited in Bulk Edit'">
             </spot-input-date>
         </div>
+        <div *ngIf="viewElementChecker('responsiblePerson')">
+            <app-user-single-dropdown [formgroup]="scheduleForm"
+                                      [label]="'Responsible Person'"></app-user-single-dropdown>
+        </div>
 
-        <app-user-single-dropdown [formgroup]="scheduleForm" [label]="'Responsible Person'"></app-user-single-dropdown>
+        <div *ngIf="viewElementChecker('functionOwner')">
+            <spot-singleselect-autocomplete formControlName="function" name="function" [label]="'Function Owner'"
+                                            [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'"
+                                            [dropDownArray]="functionSets" [sortByType]="'custom'"
+                                            [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+        </div>
+        <div *ngIf="viewElementChecker('comments')">
+            <spot-textarea formControlName="comments" name="comments" [label]="'Comments'"
+                           [placeholder]="'Comments'">
+            </spot-textarea>
+        </div>
 
-
-        <spot-singleselect-autocomplete formControlName="function" name="function" [label]="'Function Owner'"
-            [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'" [dropDownArray]="functionSets"
-            [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-        </spot-singleselect-autocomplete>
-
-        <spot-textarea formControlName="comments" name="comments" [label]="'Comments'" [placeholder]="'Comments'">
-        </spot-textarea>
-
-        <div class="w-25">
+        <div class="w-25" *ngIf="viewElementChecker('completionDate')">
             <spot-input-date formControlName="completionDate" name="completionDate" [label]="'Completion Date'"
-                [placeholder]="'Choose a date'" [max]="'today'">
+                             [placeholder]="'Choose a date'" [max]="'today'">
             </spot-input-date>
         </div>
 
-        <div class="flex items-start justify-between included-in-dash">
+        <div class="flex items-start justify-between included-in-dash"
+             *ngIf="viewElementChecker('includeInReport')">
             <mat-slide-toggle
                 [matTooltip]="this.scheduleForm.controls['includeInReport'].disabled ? 'Only 8 can be selected at a time for dashboard report display' : null"
-                formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
+                formControlName="includeInReport">Include in Project Dashboard
+            </mat-slide-toggle>
+        </div>
+        <div class="flex items-start justify-between included-in-dash"
+             *ngIf="viewElementChecker('includeInBusinessCase')">
+            <mat-slide-toggle
+                [matTooltip]="this.scheduleForm.controls['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time for the business case' : null"
+                formControlName="includeInBusinessCase">Include in Business Case
+            </mat-slide-toggle>
         </div>
     </div>
-
-    <br>
-    <!-- <div class="flex items-start justify-between"> -->
-    <div class="mt-20 pr-6 pl-6 flex justify-between items-center w-full">
+    <div class="pr-3 flex items-start justify-between mt-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+           (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
         </a>
         <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
