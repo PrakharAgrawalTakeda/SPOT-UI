@@ -165,3 +165,20 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
+::ng-deep .cursor-wait-custom-loading{
+    cursor: wait !important;
+    
+    input{
+        cursor: wait !important;
+    }
+    input :disabled{
+        cursor: wait !important;
+    }
+    button{
+        cursor: wait !important;
+    }
+    .mat-chip{
+        cursor: wait !important;
+    }
+}
