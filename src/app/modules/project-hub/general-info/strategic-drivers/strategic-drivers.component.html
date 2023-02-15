@@ -90,7 +90,7 @@
                 [showLabel]="false">
             </spot-multiselect-autocomplete>
             <!--Site Assessment END-->
-            <div class="w-full mt-4 mb-6">
+            <div class="w-full mt-4 mb-6" *ngIf="callLocation == 'ProjectHub'">
                 <spot-toggle class="w-full" *ngIf="viewElementChecker('isGoodPractise')"
                     formControlName="isGoodPractise" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
                     [label]="'Good Practice'">
