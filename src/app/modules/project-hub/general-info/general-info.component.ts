@@ -144,81 +144,15 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           this.kpiData = kpi
           this.projectHubService.kpiMasters = kpi
           console.log('KPI Masters', kpi)
-          if (this.callLocation == 'BusinessCase'){
-            this.apiService.getGeneralInfoBusinessCaseData(this.id).then((res: any) => {
-              console.log(res)
-              this.generalInfoData = res
-              if (this.callLocation == 'CloseOut') {
-                this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
-              }
-              if (this.callLocation == 'ProjectCharter') {
-                this.wizzardApprovedDate = res.projectData.approvedDate
-              }
-              if (this.callLocation == 'ProjectProposal') {
-                this.wizzardApprovedDate = res.projectData.projectProposalApprovedDate
-              }
-              var oeprojectypelist = res.projectData.oeprojectType && res.projectData.oeprojectType != '' ? res.projectData.oeprojectType.split(',') : []
-              this.generalInfoForm.patchValue({
-                problemTitle: res.projectData.problemTitle,
-                problemType: res.projectData.problemType,
-                topsGroup: res.topsData ? res.topsData.topsgroup : '',
-                recordCreationDate: res.projectData.createdDate,
-                parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
-                submittedBy: res.projectData.problemOwnerName,
-                projectManager: res.portfolioCenterData.pm,
-                sponsor: res.portfolioCenterData.sponsor,
-                projectDescription: res.projectData.projectDescription,
-                primaryProduct: res.primaryProduct ? res.primaryProduct.fullProductName : '',
-                otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-                portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
-                excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-                enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
-                isOeproject: res.projectData.isOeproject,
-                oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => res.projectData.oeprojectType.includes(x.lookUpId)) : [],
-                isCapsProject: res.projectData.isCapsProject,
-                isTechTransfer: res.projectData.isTechTransfer,
-                productionStepId: res.projectData.productionStepId,
-                campaignPhaseId: res.projectData.campaignPhaseId,
-                campaignTypeId: res.projectData.campaignTypeId,
-                isQualityRef: res.qualityReferences.length != 0,
-                isArchived: res.projectData.isArchived,
-                owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
-                projectId: res.projectData.problemId,
-                opU: this.filterCriteria.opuMasters.find(
-                  x => x.lookUpId == res.portfolioOwner?.opU?.toLowerCase())?.lookUpName,
-                isGoodPractise: res.projectData.isGoodPractise,
-                approvedDate: this.wizzardApprovedDate,
-                //
-                functionGroupID: lookup.find(x => x.lookUpId == res.projectData.functionGroupID?.toLowerCase())?.lookUpName,
-                whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
-                proposalStatement: res.projectData.proposalStatement,
-                projectReviewedYN: lookup.find(x => x.lookUpId == res.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
-                projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-                localCurrencyAbbreviation: res.localCurrencyAbbreviation,
-                //Stategic Drivers
-                primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
-                isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
-                agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
-                agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
-                agileWave: res.agileWave ? res.agileWave.lookUpName : '',
-                isPobos: res.projectData.isPobos,
-                pobosCategory: res.pobosCategory ? res.pobosCategory : [],
-                isGmsgqltannualMustWin: res.projectData.isGmsgqltannualMustWin,
-                strategicYear: res.strategicYearID ? res.strategicYearID.lookUpName : '',
-                annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
-                isSiteAssessment: res.projectData.isSiteAssessment,
-                siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
-                StrategicRationale: res.projectData.strategicRationale,
-                BCAuthor: res.businessCaseAuthor.userDisplayName,
-                RiskImpact: res.businessCaseImpactOfDoingNothing,
-                AdditionalAuthor: res.businessCaseAuthor.userDisplayName,
-                problemId: res.projectData.problemId
-              })
-              this.viewContent = true
-            })
+          //This is temporary fix
+          var api;
+          if(this.callLocation == "BusinessCase"){
+            api = this.apiService.getGeneralInfoBusinessCaseData(this.id)
           }
           else{
-          this.apiService.getGeneralInfoData(this.id).then((res: any) => {
+            api = this.apiService.getGeneralInfoData(this.id)
+          }
+          api.then((res: any) => {
             console.log("General Info:", res)
             this.generalInfoData = res
             if(this.callLocation=='CloseOut'){
@@ -282,14 +216,13 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
               isSiteAssessment: res.projectData.isSiteAssessment,
               siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
               StrategicRationale: res.projectData.strategicRationale,
-              // BCAuthor: res.businessCase.businessCaseAuthorId,
-              // RiskImpact: res.businessCase.impactOfDoingNothing,
-              // AdditionalAuthor: res.businessCase.additionalAuthorsContributorsId,
-              problemId : res.projectData.problemId
+              BCAuthor: res.businessCaseAuthor == null ? "" : res.businessCaseAuthor.userDisplayName,
+              RiskImpact: res.businessCaseImpactOfDoingNothing == null ? "" : res.businessCaseImpactOfDoingNothing,
+              AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors == null ? "" : res.businessCaseAdditionalAuthorsContributors[0].userDisplayName,
+              problemId: res.projectData.problemId
             })
             this.viewContent = true
           })
-        }
         })
       })
     })

@@ -128,51 +128,16 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    if (this.callLocation == 'ProjectHub' && this.subCallLocation != 'BusinessCase') {
-      this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
-        this.generalInfo = res
-        this.filterCriteria = this.projectHubService.all
-        this.generalInfoForm.patchValue({
-          problemTitle: res.projectData.problemTitle,
-          problemType: res.projectData.problemType,
-          projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-          projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-          projectDescription: res.projectData.projectDescription,
-          primaryProduct: res.primaryProduct ? res.primaryProduct : {},
-          otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-          portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
-          excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-          enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
-          isArchived: res.projectData.isArchived,
-          isCapsProject: res.projectData.isCapsProject,
-          owningOrganization: res.projectData.defaultOwningOrganizationId,
-          closeOutApprovedDate: res.projectData.closeOutApprovedDate,
-          projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-          approvedDate: res.projectData.approvedDate,
-          functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
-          whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
-          proposalStatement: res.projectData.proposalStatement,
-          projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
-          StrategicRationale: res.projectData.strategicRationale,
-          BCAuthor: {},
-          RiskImpact: '',
-          AdditionalAuthor: {},
-          sponsor: res.sponsor ?  {
-              userAdid: res.sponsor.teamMemberAdId,
-              userDisplayName: res.sponsor.teamMemberName
-          }: {},
-          projectManager: {
-             userAdid: res.projectData.projectManagerId,
-             userDisplayName: res.portfolioCenterData.pm
-          }
-        })
-        this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-          this.viewContent = true
-        })
-    }
-    else if (this.subCallLocation == 'BusinessCase'){
-      this.apiService.getGeneralInfoBusinessCaseData(this.projectHubService.projectid).then((res: any) => {
+    if (this.callLocation == 'ProjectHub') {
+      //This is a temporary fix
+      var api;
+      if (this.subCallLocation == 'BusinessCase'){
+        api = this.apiService.getGeneralInfoBusinessCaseData(this.projectHubService.projectid)
+      }
+      else{
+        api = this.apiService.getGeneralInfoData(this.projectHubService.projectid)
+      }
+      api.then((res: any) => {
         this.generalInfo = res
         this.filterCriteria = this.projectHubService.all
         this.generalInfoForm.patchValue({
@@ -199,20 +164,20 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           StrategicRationale: res.projectData.strategicRationale,
           BCAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
           RiskImpact: res.businessCaseImpactOfDoingNothing,
-          AdditionalAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
-          sponsor: res.sponsor ? {
-            userAdid: res.sponsor.teamMemberAdId,
-            userDisplayName: res.sponsor.teamMemberName
-          } : {},
+          AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors[0] : {},
+          sponsor: res.sponsor ?  {
+              userAdid: res.sponsor.teamMemberAdId,
+              userDisplayName: res.sponsor.teamMemberName
+          }: {},
           projectManager: {
-            userAdid: res.projectData.projectManagerId,
-            userDisplayName: res.portfolioCenterData.pm
+             userAdid: res.projectData.projectManagerId,
+             userDisplayName: res.portfolioCenterData.pm
           }
         })
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        this.viewContent = true
-      })
+          this.viewContent = true
+        })
     }
     else {
       this.apiService.getfilterlist().then(res => {
