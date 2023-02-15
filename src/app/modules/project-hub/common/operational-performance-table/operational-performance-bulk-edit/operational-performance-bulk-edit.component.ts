@@ -110,6 +110,18 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           }
         }
       }
+      if (formValue.filter(x => x.includeInCloseOut == true).length < 3) {
+        for (var i of this.operationalPerformanceForm.controls) {
+          i['controls']['includeInCloseOut'].enable()
+        }
+      }
+      else {
+        for (var i of this.operationalPerformanceForm.controls) {
+          if (i['controls']['includeInCloseOut'].value != true) {
+            i['controls']['includeInCloseOut'].disable()
+          }
+        }
+      }
     }
   }
 

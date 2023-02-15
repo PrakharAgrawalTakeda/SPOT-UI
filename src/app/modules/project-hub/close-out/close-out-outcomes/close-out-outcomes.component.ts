@@ -44,7 +44,7 @@ export class CloseOutOutcomesComponent implements OnInit {
         this.dataloader()
     }
     dataloader() {
-       // debugger;
+        debugger;
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
         this.projectApiService.getprojectviewdata(this.id).then((res: any) => {
             this.projectApiService.getproject(this.id).then((data: any) => {

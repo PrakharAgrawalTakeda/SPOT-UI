@@ -11,6 +11,7 @@ import { QualityRefBulkEditComponent } from '../quality-ref-bulk-edit/quality-re
 import * as moment from 'moment';
 import {HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
+import { MsalService } from '@azure/msal-angular';
 @Component({
   selector: 'app-general-info-single-edit',
   templateUrl: './general-info-single-edit.component.html',
@@ -21,7 +22,8 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
-  
+  activeaccount: any;
+  flag = 0
   @Output() eventName = new EventEmitter<EventType>();
   viewContent:boolean = false
   showMessage: boolean = false;
@@ -66,7 +68,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService,
-    public apiService2: PortfolioApiService) {
+    public apiService2: PortfolioApiService, private authService: MsalService) {
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -78,11 +80,17 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
             this.generalInfoForm.controls.localCurrency.enable()
           }
+          else{
+            this.generalInfoForm.controls.localCurrency.disable()
+          }
         }
         else if (history.state.callLocation == 'CopyProject'){
           this.formValue.emit(this.generalInfoForm.getRawValue())
           if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
             this.generalInfoForm.controls.localCurrency.enable()
+          }
+          else {
+            this.generalInfoForm.controls.localCurrency.disable()
           }
         }
       }
@@ -113,8 +121,12 @@ export class GeneralInfoSingleEditComponent implements OnInit{
 
     this.generalInfoForm.controls.portfolioOwner.valueChanges.subscribe(res => {
       if (this.viewContent) {
+        var portfolio=[]
+        portfolio.push(res)
         var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
         this.generalInfoForm.patchValue({
+          excecutionScope: res.isExecutionScope ? portfolio : [],
+          enviornmentalPortfolio: res.isEmissionPortfolio ? res : '',
           owningOrganization: res.defaultOwningOrganization,
           localCurrency: currency[0].localCurrencyAbbreviation
         })
@@ -164,6 +176,11 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     })
     }
     else {
+      this.activeaccount = this.authService.instance.getActiveAccount();
+      var user = {
+        userAdid: this.activeaccount.localAccountId,
+        userDisplayName: this.activeaccount.name
+      };
       this.apiService.getfilterlist().then(res => {
         this.apiService2.getLocalCurrency().then(data => {
           this.localCurrencyList = data
@@ -173,7 +190,9 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           this.filterCriteria = res
           this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
           if (history.state.data != undefined) {
+            if(this.flag == 0){
             if (history.state.data.primaryProductId != null || history.state.data.primaryProductId != "") {
+              this.flag = 1;
               history.state.data.primaryProductId = this.filterCriteria.products.filter(function (entry) {
                 return entry.productId == history.state.data.primaryProductId
                   })
@@ -189,12 +208,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                     finaldata.push(impactedproducts[0]);
                   }
                 }
-                if (history.state.data.problemOwnerId != null) {
-                  var user = {
-                    userAdid: history.state.data.problemOwnerId,
-                    userDisplayName: history.state.data.problemOwnerName
-                  };
-                }
+              }
                 this.generalInfoForm.patchValue({
                   problemTitle: history.state.data.problemTitle,
                   projectsingle: '',
@@ -206,8 +220,8 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                   portfolioOwner: '',
                   excecutionScope: '',
                   enviornmentalPortfolio: '',
-                  isArchived: "No",
-                  isCapsProject: "No",
+                  isArchived: false,
+                  isCapsProject: false,
                   owningOrganization: '',
                   SubmittedBy: user,
                   targetGoalSituation: history.state.data.targetEndState == null ? '' : history.state.data.targetEndState,
@@ -217,6 +231,9 @@ export class GeneralInfoSingleEditComponent implements OnInit{
                 this.viewContent = true
           }
           else{
+          this.generalInfoForm.patchValue({
+            SubmittedBy: user
+          })
           this.formValue.emit(this.generalInfoForm.getRawValue())
           this.viewContent = true
           }
