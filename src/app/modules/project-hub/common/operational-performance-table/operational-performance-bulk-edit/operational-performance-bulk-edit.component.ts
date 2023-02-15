@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -12,6 +12,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./operational-performance-bulk-edit.component.scss']
 })
 export class OperationalPerformanceBulkEditComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   projectViewDetails: any = {}
   opDb = []
   submitObj = []
@@ -94,10 +95,18 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           i['controls']['includeInProjectDashboard'].enable()
         }
       }
+      if (formValue.filter(x => x.includeInCharter == true).length < 3) {
+        for (var i of this.operationalPerformanceForm.controls) {
+          i['controls']['includeInCharter'].enable()
+        }
+      }
       else {
         for (var i of this.operationalPerformanceForm.controls) {
           if (i['controls']['includeInProjectDashboard'].value != true) {
             i['controls']['includeInProjectDashboard'].disable()
+          }
+          if (i['controls']['includeInCharter'].value != true) {
+            i['controls']['includeInCharter'].disable()
           }
         }
       }

@@ -1,5 +1,5 @@
 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-    class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="tableData"
+    class="pr-6 material font-medium text-default text-sm whitespace-nowrap cursor-pointer" [rows]="tableData"
     [sorts]="[{ prop: 'plannedFinish', dir: 'asc' }]" #scheduleTable [rowClass]="getRowClass" [selected]="selected"
     [selectionType]="SelectionType.checkbox" [selectAllRowsOnPage]="false" (activate)="onActivate($event)"
     (select)="onSelect($event)">

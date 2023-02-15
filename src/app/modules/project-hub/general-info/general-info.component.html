@@ -5,7 +5,7 @@
     </div>
     <!-- Enter Content here-->
     <form class="w-full" [formGroup]="generalInfoForm">
-      <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden">
+      <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
         <div class="flex justify-end items-end">
           <div></div>
           <div>
@@ -18,88 +18,64 @@
           </div>
         </div>
         <div
-          *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
-          class="mt-6 mb-6">
-          <div class="flex justify-start gap-3 items-center">
+          class="grid grid-cols-2 gap-x-6 items-center">
+          <spot-input formControlName="localCurrencyAbbreviation" name="localCurrencyAbbreviation"
+          [label]="'Local Currency'">
+         </spot-input>
+          <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')" class="flex justify-start w-full gap-3 items-center">
             Is Archived?
             <mat-icon svgIcon="heroicons_outline:x-circle"
               *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
             <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
               *ngIf="generalInfoForm.controls.isArchived.value">
             </mat-icon>
+          </div>
+        </div>
 
-          </div>
-        </div>
-        <div class="flex justify-between items-start gap-6">
-          <div class="w-full" *ngIf="viewElementChecker('projectReviewedYN')">
-            <spot-input *ngIf="viewElementChecker('projectReviewedYN')" formControlName="projectReviewedYN"
-              name="projectReviewedYN" class="read-only" [label]="'Project Reviewed'">
-            </spot-input>
-          </div>
-          <div class="w-full" *ngIf="viewElementChecker('projectProposalApprovedDate')">
-            <spot-input-date class="w-full read-only" formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate"
-              [label]="'Date Approved'">
-            </spot-input-date>
-          </div>
-        </div>
-        <div class="flex justify-between items-center gap-6">
+        <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
           <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
             *ngIf="viewElementChecker('problemTitle')" [label]="'Project Name'">
           </spot-input>
-          <spot-input class="w-full read-only"  [ngClass]="{'read-only': callLocation != 'ProjectCharter'}" formControlName="parentProgram" name="parentProgram"
-            *ngIf="viewElementChecker('parentProject')" [label]="'Parent Program'" [showHint]="true"
+          <spot-input class="w-full read-only" [ngClass]="{'read-only': callLocation != 'ProjectCharter'}"
+            formControlName="parentProgram" name="parentProgram" *ngIf="viewElementChecker('parentProject')"
+            [label]="'Parent Program'" [showHint]="true"
             [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
           </spot-input>
-        </div>
-        <div class="flex justify-between items-start gap-6">
-          <div class="w-full read-only" *ngIf="viewElementChecker('portfolioOwner')">
-            <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
-              [showHint]="true"
-              [hint]="'The group which is responsible for the oversight and process adherence of the record'">
-            </spot-input>
-          </div>
-          <div class="w-full" *ngIf="viewElementChecker('excecutionScope')">
-            <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full read-only"
-              name="excecutionScope" [label]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
-              [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
-              [sortByType]="'custom'" [customSortPointer]="'pfid'"
-              [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
-            </spot-multiselect-autocomplete>
-          </div>
-        </div>
-        <div class="flex justify-between items-start gap-6">
-          <div class="w-full"
-            *ngIf="viewElementChecker('approvedDate')">
-            <spot-input-date class="w-full read-only" formControlName="approvedDate" name="approvedDate"
-              [label]="'Date Approved'"></spot-input-date>
-          </div>
-          <div class="w-full" *ngIf="viewElementChecker('opU')">
-              <spot-input  formControlName="opU" name="opU" [label]="'OpU'">
-              </spot-input>
-          </div>
-        </div>
+          <spot-input *ngIf="viewElementChecker('projectReviewedYN')" formControlName="projectReviewedYN"
+            name="projectReviewedYN" class="w-full read-only" [label]="'Project Reviewed'">
+          </spot-input>
+          <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('projectProposalApprovedDate')"
+            formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate" [label]="'Date Approved'">
+          </spot-input-date>
+          <spot-input-date class="w-full read-only" formControlName="approvedDate" name="approvedDate"
+            *ngIf="viewElementChecker('approvedDate')" [label]="'Date Approved'">
+          </spot-input-date>
+          <div class="w-full" *ngIf="callLocation == 'CloseOut' || callLocation == 'ProjectCharter'"></div>
+          <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
+            [showHint]="true"
+            [hint]="'The group which is responsible for the oversight and process adherence of the record'"
+            class="w-full read-only" *ngIf="viewElementChecker('portfolioOwner')">
+          </spot-input>
+          <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full read-only"
+            name="excecutionScope" [label]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
+            [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
+            [sortByType]="'custom'" [customSortPointer]="'pfid'"
+            [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'"
+            *ngIf="viewElementChecker('excecutionScope')">
+          </spot-multiselect-autocomplete>
+          <spot-input class="w-full" formControlName="opU" name="opU" [label]="'OpU'" *ngIf="viewElementChecker('opU')">
+          </spot-input>
+          <spot-input class="w-full read-only" *ngIf="viewElementChecker('owningOrganization')"
+            formControlName="owningOrganization" name="owningOrganization" [label]="'Owning Organization'"
+            [showHint]="true"
+            [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+          </spot-input>
 
-        <div class="flex justify-between items-start gap-6">
-          <div class="w-full" *ngIf="viewElementChecker('owningOrganization')">
-            <spot-input class="w-full read-only" formControlName="owningOrganization" name="owningOrganization"
-              [label]="'Owning Organization'" [showHint]="true"
-              [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
-            </spot-input>
-          </div>
-<!--          <div class="w-full " *ngIf="viewElementChecker('projectId')">-->
-<!--            <spot-input  formControlName="projectId" name="projectId" [label]="'Project ID'">-->
-<!--            </spot-input>-->
-<!--          </div>-->
-           <div class="w-full ">
-           </div>
-        </div>
-        <div class="flex justify-between items-center gap-6">
-          <div class="w-full " *ngIf="viewElementChecker('enviornmentalPortfolio')">
-            <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
-              [label]="'Environmental Portfolio'" [showHint]="true"
-              [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
-            </spot-input>
-          </div>
+          <div class="w-full" *ngIf="callLocation == 'ProjectHub'"></div>
+          <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+            [label]="'Environmental Portfolio'" [showHint]="true" *ngIf="viewElementChecker('enviornmentalPortfolio')"
+            [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+          </spot-input>
           <div class="flex justify-start gap-3 items-center w-full pt-2" *ngIf="viewElementChecker('isCapsProject')">
             <div class="flex justify-start gap-1 items-center">
               CAPS Project <mat-icon class="pe icon-size-4"
@@ -107,53 +83,39 @@
               CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
                 help</mat-icon>
             </div>
-
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!generalInfoForm.controls.isCapsProject.value">
             </mat-icon>
             <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
               *ngIf="generalInfoForm.controls.isCapsProject.value">
             </mat-icon>
           </div>
-        </div>
-        <div class="flex justify-between items-center gap-6">
-          <div class="w-full " *ngIf="viewElementChecker('projectManager')">
-            <spot-input class="w-full" [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="projectManager" name="projectManager"
-              [label]="'Project Manager'">
-            </spot-input>
-          </div>
-          <div class="w-full " *ngIf="viewElementChecker('sponsor')">
-            <spot-input class="w-full" [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="sponsor" name="sponsor" [label]="'Sponsor'">
-            </spot-input>
-          </div>
-        </div>
-        <div class="flex justify-between items-start gap-6">
-          <div class="w-full " *ngIf="viewElementChecker('primaryProduct')">
-            <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
-              [label]="'Primary Product'" [showHint]="true"
-              [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
-            </spot-input>
-          </div>
-          <div class="w-full " *ngIf="viewElementChecker('otherImpactedProducts')">
-            <spot-multiselect-autocomplete class="w-full read-only" formControlName="otherImpactedProducts"
-              name="otherImpactedProducts" [label]="'Other Impacted Products'" [valuePointer]="'fullProductName'"
-              [idPointer]="'productId'" [dropDownArray]="filterCriteria.products" [showHint]="true"
-              [hint]="'Any additional products which are impacted by the project execution'">
-            </spot-multiselect-autocomplete>
-          </div>
-        </div>
-        <spot-input class="w-full read-only" formControlName="functionGroupID" name="functionGroupID"
+          <spot-input class="w-full" *ngIf="viewElementChecker('projectManager')"
+            [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="projectManager" name="projectManager"
+            [label]="'Project Manager'">
+          </spot-input>
+          <spot-input class="w-full" *ngIf="viewElementChecker('sponsor')"
+            [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="sponsor" name="sponsor"
+            [label]="'Sponsor'">
+          </spot-input>
+          <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
+            [label]="'Primary Product'" [showHint]="true" *ngIf="viewElementChecker('primaryProduct')"
+            [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
+          </spot-input>
+          <spot-multiselect-autocomplete class="w-full read-only" formControlName="otherImpactedProducts"
+            name="otherImpactedProducts" [label]="'Other Impacted Products'" [valuePointer]="'fullProductName'"
+            [idPointer]="'productId'" [dropDownArray]="filterCriteria.products" [showHint]="true"
+            [hint]="'Any additional products which are impacted by the project execution'"
+            *ngIf="viewElementChecker('otherImpactedProducts')">
+          </spot-multiselect-autocomplete>
+          <spot-input class="w-full read-only" formControlName="functionGroupID" name="functionGroupID"
             *ngIf="viewElementChecker('functionGroupID')" [label]="'Requesting Function'">
           </spot-input>
-        <div class="flex justify-between items-start gap-6">
-          <div class="w-full " *ngIf="viewElementChecker('problemType')">
-            <spot-input class="w-full read-only" formControlName="problemType" name="problemType"
-              [label]="'Project Type'">
-            </spot-input>
-          </div>
-          <div class="w-full " *ngIf="viewElementChecker('topsGroup')">
-            <spot-input class="w-full read-only" formControlName="topsGroup" name="topsGroup" [label]="'TOPS Group'">
-            </spot-input>
-          </div>
+          <spot-input class="w-full read-only" *ngIf="viewElementChecker('problemType')" formControlName="problemType"
+            name="problemType" [label]="'Project Type'">
+          </spot-input>
+          <spot-input class="w-full read-only" *ngIf="viewElementChecker('topsGroup')" formControlName="topsGroup"
+            name="topsGroup" [label]="'TOPS Group'">
+          </spot-input>
         </div>
         <div class="w-full " *ngIf="viewElementChecker('projectDescription')">
           <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
@@ -262,7 +224,7 @@
             </div>
             <div *ngIf="generalInfoForm.controls['isQualityRef'].value" class="mt-3">
               <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap"
+                class="pr-6 material font-medium text-sm text-default whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>
                 <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
                   [sortable]="false" [flexGrow]="1">

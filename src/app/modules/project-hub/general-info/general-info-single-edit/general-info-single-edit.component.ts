@@ -1,8 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EventType } from '@azure/msal-browser';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { AuthService } from 'app/core/auth/auth.service';
+import { I } from '@angular/cdk/keycodes';
+import { QualityRefBulkEditComponent } from '../quality-ref-bulk-edit/quality-ref-bulk-edit.component';
 import * as moment from 'moment';
 import {HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
@@ -11,17 +16,22 @@ import {GlobalVariables} from "../../../../shared/global-variables";
   templateUrl: './general-info-single-edit.component.html',
   styleUrls: ['./general-info-single-edit.component.scss']
 })
-export class GeneralInfoSingleEditComponent implements OnInit {
-  filterCriteria: any = {}
-  generalInfo: any = {}
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
+export class GeneralInfoSingleEditComponent implements OnInit{
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
-  @Output() formValue = new EventEmitter();
+  
+  @Output() eventName = new EventEmitter<EventType>();
+  viewContent:boolean = false
+  showMessage: boolean = false;
+  filterCriteria: any = {}
+  generalInfo: any = {}
+  lookupdata: any = [];
+  localCurrencyList: any = [];
+  local:any=[];
+  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
-  viewContent = false
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -39,6 +49,9 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     closeOutApprovedDate: new FormControl(''),
     projectProposalApprovedDate: new FormControl(''),
     approvedDate: new FormControl(''),
+    SubmittedBy: new FormControl(''),
+    targetGoalSituation: new FormControl(''),
+    localCurrency: new FormControl(''),
     functionGroupID: new FormControl({}),
     whynotgoforNextBestAlternative: new FormControl(''),
     proposalStatement: new FormControl(''),
@@ -46,26 +59,42 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     sponsor: new FormControl({}),
     projectManager: new FormControl({}),
   })
+
+  @Output() formValue = new EventEmitter<FormGroup>();
+ 
+
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
-    public fuseAlert: FuseConfirmationService) {
+    public fuseAlert: FuseConfirmationService,
+    public apiService2: PortfolioApiService) {
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        if (this.callLocation == 'ProjectHub') {
+        if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
           this.projectHubService.isFormChanged = true
         }
-        else {
+        else if (this.callLocation == 'CreateNew'){
           this.formValue.emit(this.generalInfoForm.getRawValue())
+          if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
+            this.generalInfoForm.controls.localCurrency.enable()
+          }
+        }
+        else if (history.state.callLocation == 'CopyProject'){
+          this.formValue.emit(this.generalInfoForm.getRawValue())
+          if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
+            this.generalInfoForm.controls.localCurrency.enable()
+          }
         }
       }
     })
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       this.generalInfoForm.controls.owningOrganization.disable()
+      this.generalInfoForm.controls.localCurrency.disable()
       this.generalInfoForm.controls.sponsor.disable()
       this.generalInfoForm.controls.projectManager.disable()
     } else {
       this.generalInfoForm.controls.owningOrganization.enable()
+      this.generalInfoForm.controls.localCurrency.disable()
       this.generalInfoForm.controls.sponsor.enable()
       this.generalInfoForm.controls.projectManager.enable()
     }
@@ -81,66 +110,131 @@ export class GeneralInfoSingleEditComponent implements OnInit {
         }
       }
     })
+
+    this.generalInfoForm.controls.portfolioOwner.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
+        this.generalInfoForm.patchValue({
+          owningOrganization: res.defaultOwningOrganization,
+          localCurrency: currency[0].localCurrencyAbbreviation
+        })
+      }
+    })
+
   }
 
   ngOnInit(): void {
     if (this.callLocation == 'ProjectHub') {
-      this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
-        this.generalInfo = res
-        this.filterCriteria = this.projectHubService.all
-          console.log("aaaaaaaaaaaaaaaaa", res.projectManager)
-          console.log("xxxxxxxxxxxxxx", res.sponsor)
-        this.generalInfoForm.patchValue({
-          problemTitle: res.projectData.problemTitle,
-          problemType: res.projectData.problemType,
-          projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-          projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-          projectDescription: res.projectData.projectDescription,
-          primaryProduct: res.primaryProduct ? res.primaryProduct : {},
-          otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-          portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
-          excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-          enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
-          isArchived: res.projectData.isArchived,
-          isCapsProject: res.projectData.isCapsProject,
-          owningOrganization: res.projectData.defaultOwningOrganizationId,
-          closeOutApprovedDate: res.projectData.closeOutApprovedDate,
-          projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-          approvedDate: res.projectData.approvedDate,
-          functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
-          whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
-          proposalStatement: res.projectData.proposalStatement,
-          projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
-          sponsor: res.sponsor ?  {
-              userAdid: res.sponsor.teamMemberAdId,
-              userDisplayName: res.sponsor.teamMemberName
-          }: {},
-          projectManager: {
-             userAdid: res.projectData.projectManagerId,
-             userDisplayName: res.portfolioCenterData.pm
-          }
-        })
-        this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-          this.viewContent = true
-      })
+    this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
+      this.generalInfo = res
+      this.filterCriteria = this.projectHubService.all
+      this.generalInfoForm.patchValue({
+        problemTitle: res.projectData.problemTitle,
+        problemType: res.projectData.problemType,
+        projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+        projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+        projectDescription: res.projectData.projectDescription,
+        primaryProduct: res.primaryProduct ? res.primaryProduct : {},
+        otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+        portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+        excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+        enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+        isArchived: res.projectData.isArchived,
+        isCapsProject: res.projectData.isCapsProject,
+        owningOrganization: res.projectData.defaultOwningOrganizationId,
+        closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+        projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+        approvedDate: res.projectData.approvedDate,
+        functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
+        whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
+        proposalStatement: res.projectData.proposalStatement,
+        projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
+        sponsor: res.sponsor ? {
+          userAdid: res.sponsor.teamMemberAdId,
+          userDisplayName: res.sponsor.teamMemberName
+        } : {},
+        projectManager: {
+          userAdid: res.projectData.projectManagerId,
+          userDisplayName: res.portfolioCenterData.pm
+        }
+      });
+      this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
+      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+      this.viewContent = true
+    })
     }
     else {
       this.apiService.getfilterlist().then(res => {
-        this.filterCriteria = res
-        this.formValue.emit(this.generalInfoForm.getRawValue())
-        this.viewContent = true
+        this.apiService2.getLocalCurrency().then(data => {
+          this.localCurrencyList = data
+          for (var i = 0; i < this.localCurrencyList.length; i++) {
+            this.local.push(this.localCurrencyList[i].localCurrencyAbbreviation)
+          }
+          this.filterCriteria = res
+          this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
+          if (history.state.data != undefined) {
+            if (history.state.data.primaryProductId != null || history.state.data.primaryProductId != "") {
+              history.state.data.primaryProductId = this.filterCriteria.products.filter(function (entry) {
+                return entry.productId == history.state.data.primaryProductId
+                  })
+                }
+            if (history.state.data.otherImpactedProducts != null || history.state.data.otherImpactedProducts != "") {
+                  const data = history.state.data.otherImpactedProducts.split(',');
+                  var impactedproducts = {};
+                  var finaldata = [];
+                  for (var i = 0; i < data.length; i++) {
+                    impactedproducts = this.filterCriteria.products.filter(function (entry) {
+                      return entry.productId == data[i]
+                    })
+                    finaldata.push(impactedproducts[0]);
+                  }
+                }
+                if (history.state.data.problemOwnerId != null) {
+                  var user = {
+                    userAdid: history.state.data.problemOwnerId,
+                    userDisplayName: history.state.data.problemOwnerName
+                  };
+                }
+                this.generalInfoForm.patchValue({
+                  problemTitle: history.state.data.problemTitle,
+                  projectsingle: '',
+                  projectsingleid: '',
+                  problemType: history.state.data.problemType,
+                  projectDescription: history.state.data.projectDescription,
+                  primaryProduct: history.state.data.primaryProductId == null ? '' : history.state.data.primaryProductId[0],
+                  otherImpactedProducts: history.state.data.otherImpactedProducts[0] == undefined ? '' : finaldata,
+                  portfolioOwner: '',
+                  excecutionScope: '',
+                  enviornmentalPortfolio: '',
+                  isArchived: "No",
+                  isCapsProject: "No",
+                  owningOrganization: '',
+                  SubmittedBy: user,
+                  targetGoalSituation: history.state.data.targetEndState == null ? '' : history.state.data.targetEndState,
+                  localCurrency: ''
+                })
+                this.formValue.emit(this.generalInfoForm.getRawValue())
+                this.viewContent = true
+          }
+          else{
+          this.formValue.emit(this.generalInfoForm.getRawValue())
+          this.viewContent = true
+          }
+        })
       })
     }
   }
   getPortfolioOwner(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
+    // return "";
   }
   getEnviornmentPortfolio(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
+    // return "";
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
+    
   }
   getProjectReviewedYN(): any {
     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'c58fb456-3901-4677-9ec5-f4eada7158e6')
@@ -152,8 +246,18 @@ export class GeneralInfoSingleEditComponent implements OnInit {
     return this.viewElements.some(x => x == element)
   }
   getSponsor(): any {
-      return this.filterCriteria.sponsor
+    return this.filterCriteria.sponsor
   }
+
+  clickEvent(value: string, name: string) {
+    if ((name == "Project Name *" || name == "Portfolio Ownerhelp *" || name == "None\nOwning Organizationhelp *" || name == "Submitted By *" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)){
+      this.showMessage = true
+    }
+    else{
+      this.showMessage = false
+    }
+  }
+
 
   submitGI() {
     var formValue = this.generalInfoForm.getRawValue()
@@ -197,6 +301,7 @@ export class GeneralInfoSingleEditComponent implements OnInit {
   }
 
   submitLogic() {
+
     this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
@@ -254,4 +359,6 @@ export class GeneralInfoSingleEditComponent implements OnInit {
       }
     })
   }
+
+
 }

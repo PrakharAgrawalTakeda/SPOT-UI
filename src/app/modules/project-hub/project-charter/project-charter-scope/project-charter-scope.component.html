@@ -1,1 +1,70 @@
-<p>project-charter-scope works!</p>
+<div class="w-full min-w-0 p-8 pt-0" #container>
+    <div class="flex justify-between items-start gap-6 w-full">
+            <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden"
+                    #container *ngIf="viewContent">
+                    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Scope</div>
+                    <div class="flex justify-end items-end">
+                            <div></div>
+                                    <div>
+                                            <button class="ml-4 text-primary bg-gray-200"
+                                                    *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                                                    [color]="'primary-200'"
+                                                    (click)="projecthubservice.toggleDrawerOpen('Project-Charter-Scope', '', '' , id)">
+                                                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                                            </button>
+                                    </div>
+                    </div>
+                    <form class="w-full" [formGroup]="scopeForm">
+                            <div class="w-full ">
+                                    <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
+                                            [label]="'Problem Description'">
+                                    </spot-textarea>
+                            </div>
+                            <!-- <div class="w-full ">
+                                    <spot-textarea class="w-full read-only" formControlName="detailedDescription" name="detailedDescription"
+                                            [label]="'Approach Taken to Solve Problem'">
+                                    </spot-textarea>
+                            </div> -->
+                            <div class="w-full ">
+                                    <spot-textarea class="w-full read-only" formControlName="targetEndState" name="targetEndState"
+                                            [label]="'Target End State'">
+                                    </spot-textarea>
+                            </div>
+                            <!-- <div class="w-full ">
+                                    <spot-textarea class="w-full read-only" formControlName="benefitsRealizedOutcome" name="benefitsRealizedOutcome"
+                                            [label]="'Benefits Realized/Outcomes'">
+                                    </spot-textarea>
+                            </div> -->
+                    </form>
+            </div>
+    </div>
+    
+    <div class="flex flex-col flex-auto gap-6 pt-6 w-full" *ngIf="viewContent">
+        <div class="flex bg-card rounded-2xl p-3 pb-0 justify-between items-start">
+            <div class="w-full">
+                <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
+                    <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
+                        [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
+                        [dropDownArray]="kpiMasters">
+                    </spot-singleselect-autocomplete>
+                </form>
+            </div>
+            <div class="w-10 pt-8">
+                <a href="javascript:void(0)" *ngIf="projecthubservice.roleControllerControl.projectBenefits" title="Edit Single"
+                    (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.projectViewDetails.projectData.primaryKpi , [], id)">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+                </a>
+            </div>
+        </div>
+        
+</div>
+    <div class="flex justify-between items-start gap-6 w-full">
+            <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+                            *ngIf="viewContent">
+                    <app-operational-performance-table *ngIf="viewContent" [mode]="'Project-Charter'" class="w-full" [kpi]="kpiMasters" [lookup]="lookupMasters"
+                    [projectViewDetails]="projectViewDetails" [projectid]="id"
+                    [editable]="projecthubservice.roleControllerControl.projectBenefits">
+                    </app-operational-performance-table>
+            </div>
+    </div>
+</div> 

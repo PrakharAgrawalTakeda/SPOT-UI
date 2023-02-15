@@ -11,6 +11,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
 })
 export class KeyAssumptionsTableComponent implements OnInit {
     @Input() callLocation:  'Normal'  | 'Project-Charter'  = 'Normal'
+    @Input() editable: boolean
     keyAssumptions: any = []
     id: string = ''
     isGrid: boolean = false

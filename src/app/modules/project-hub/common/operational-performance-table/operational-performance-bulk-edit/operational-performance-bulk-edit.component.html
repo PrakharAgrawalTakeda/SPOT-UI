@@ -19,7 +19,7 @@
         </div>
         <div class="h-[80vh] overflow-y-hidden pl-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="w-full datatable-op-80 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
                 [rows]="projectViewDetails.overallPerformace" #operationalPerformanceTable>
                 <ngx-datatable-column name="Status" [resizeable]="false" [sortable]="false" prop="status"
                     [flexGrow]="0.8">
@@ -37,7 +37,7 @@
                         </a>
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
                             *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
-                            <div class="flex justify-start items-center gap-3">
+                            <div style="width:100px;" class="flex justify-start items-center gap-3">
                                 <mat-icon
                                     svgIcon="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).icontype}}"
                                     class="{{(indicator.getIndicators(getIndicator(operationalPerformanceForm.controls[rowIndex]['controls']['status'].value), 'circle')).iconcolor}}">
@@ -127,7 +127,41 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false"
+                <ngx-datatable-column *ngIf="mode=='Project-Close-Out'" [resizeable]="false" [sortable]="false" name="Include In Project Close Out Report (Max 3)"
+                    prop="includeInCloseOut" [flexGrow]="0.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                            (click)="operationalPerformanceTableEditRow(rowIndex)" class="w-full">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)" class="h-[45px]">
+                            <mat-slide-toggle
+                                [matTooltip]="this.operationalPerformanceForm.controls[rowIndex]['controls']['includeInCloseOut'].disabled ? 'Only 3 can be selected at a time for close out report display' : null"
+                                class="h-full overflow-visible" formControlName="includeInCloseOut">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="mode=='Project-Charter'" [resizeable]="false" [sortable]="false" name="Include In Project Charter Report (Max 3)"
+                prop="includeInCharter" [flexGrow]="0.5">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                        (click)="operationalPerformanceTableEditRow(rowIndex)" class="w-full">
+                        <p *ngIf="!value">&nbsp;</p>
+                        <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                    </a>
+                    <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                        *ngIf="operationalPerformanceEditStack.includes(rowIndex)" class="h-[45px]">
+                        <mat-slide-toggle
+                            [matTooltip]="this.operationalPerformanceForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter report display' : null"
+                            class="h-full overflow-visible" formControlName="includeInCharter">
+                        </mat-slide-toggle>
+                    </form>
+                </ng-template>
+            </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="mode=='Normal'" [resizeable]="false" [sortable]="false"
                     name="Include In Project Dashboard Report (Max 3)" prop="includeInProjectDashboard"
                     [flexGrow]="0.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>

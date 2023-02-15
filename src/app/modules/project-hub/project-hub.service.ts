@@ -143,6 +143,7 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
+          id: 'project-proposal',
           title: 'Project Proposal',
           type: 'collapsable',
           icon: 'heroicons_outline:light-bulb',
@@ -170,21 +171,140 @@ export class ProjectHubService {
           icon: 'heroicons_outline:briefcase',
           children: [
             {
+              title: 'General Info',
+              type: 'basic',
+              link: 'business-case/general-info'
+            },
+            {
+              id: 'recommended-option',
               title: 'Recommended Option',
-              type: 'basic',
-              link: 'business-case'
+              type: 'collapsable',
+              children: [
+                {
+                  title: 'Option Info',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/option-info'
+                },
+                {
+                  title: 'Timeline',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/timeline'
+                },
+                {
+                  title: 'Cost / Funding',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/cost-funding'
+                },
+                {
+                  title: 'Benefits',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/benefits'
+                },
+                {
+                  title: 'TOPS',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/tops'
+                },
+                {
+                  title: 'CAPS',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/caps'
+                },
+                {
+                  title: 'Risks / Assumptions',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/risks'
+                },
+              ]
             },
             {
+              id: 'option-2',
               title: 'Option 2',
-              type: 'basic',
+              type: 'collapsable',
+              children: [
+                {
+                  title: 'Option Info',
+                  type: 'basic',
+                  link: 'business-case/option-2/option-info'
+                },
+                {
+                  title: 'Timeline',
+                  type: 'basic',
+                  link: 'business-case/option-2/timeline'
+                },
+                {
+                  title: 'Cost / Funding',
+                  type: 'basic',
+                  link: 'business-case/option-2/cost-funding'
+                },
+                {
+                  title: 'Benefits',
+                  type: 'basic',
+                  link: 'business-case/option-2/benefits'
+                },
+                {
+                  title: 'TOPS',
+                  type: 'basic',
+                  link: 'business-case/option-2/tops'
+                },
+                {
+                  title: 'CAPS',
+                  type: 'basic',
+                  link: 'business-case/option-2/caps'
+                },
+                {
+                  title: 'Risks / Assumptions',
+                  type: 'basic',
+                  link: 'business-case/option-2/risks'
+                },
+              ]
             },
             {
+              id: 'option-3',
               title: 'Option 3',
-              type: 'basic',
+              type: 'collapsable',
+              children: [
+                {
+                  title: 'Option Info',
+                  type: 'basic',
+                  link: 'business-case/option-3/option-info'
+                },
+                {
+                  title: 'Timeline',
+                  type: 'basic',
+                  link: 'business-case/option-3/timeline'
+                },
+                {
+                  title: 'Cost / Funding',
+                  type: 'basic',
+                  link: 'business-case/option-3/cost-funding'
+                },
+                {
+                  title: 'Benefits',
+                  type: 'basic',
+                  link: 'business-case/option-3/benefits'
+                },
+                {
+                  title: 'TOPS',
+                  type: 'basic',
+                  link: 'business-case/option-3/tops'
+                },
+                {
+                  title: 'CAPS',
+                  type: 'basic',
+                  link: 'business-case/option-3/caps'
+                },
+                {
+                  title: 'Risks / Assumptions',
+                  type: 'basic',
+                  link: 'business-case/option-3/risks'
+                },
+              ]
             }
           ]
         },
         {
+          id: 'project-charter',
           title: 'Project Charter',
           type: 'collapsable',
           icon: 'heroicons_outline:clipboard-check',
@@ -227,6 +347,7 @@ export class ProjectHubService {
           ]
         },
         {
+          id: 'project-dashboard',
           title: 'Project Dashboards',
           type: 'collapsable',
           icon: 'heroicons_outline:presentation-chart-line',
@@ -247,6 +368,7 @@ export class ProjectHubService {
           ]
         },
         {
+          id: 'project-closeout',
           title: 'Project Close Out',
           type: 'collapsable',
           icon: 'heroicons_outline:flag',
@@ -301,7 +423,7 @@ export class ProjectHubService {
   getroles() {
     this.roleControllerControl = this.roleController.getRolesbyProjectData(this.projectid)
   }
-  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false,fuseDrawerLarge: boolean = false): void {
+  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false, fuseDrawerLarge: boolean = false): void {
     console.log(itemtype)
     if (this.drawerOpenedright == true && this.isFormChanged == true) {
       const alertopener = this.fusealert.open(this.alert)
@@ -355,7 +477,7 @@ export class ProjectHubService {
     this.isFormChanged = false
     alertopener.afterClosed().subscribe(res => {
       if (res != 'confirmed') {
-        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid,this.isBulkEdit)
+        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid, this.isBulkEdit)
         this.isFormChanged = true
       }
       else {

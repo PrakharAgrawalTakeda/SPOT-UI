@@ -30,6 +30,7 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
   @Output() valueChange = new EventEmitter();
+  @Input() Required: boolean = false
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
   filteredDropDownValues: any

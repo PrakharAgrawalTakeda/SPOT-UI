@@ -48,6 +48,10 @@ export class ProjectTeamComponent implements OnInit {
       this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';  
       this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
+    if (this.mode == 'Project-Charter') {
+      this.bulkEditType = 'ProjectTeamBulkEditProjectCharter';
+      this.addSingle = 'ProjectTeamAddSingleProjectCharter'
+    }
     this.apiService.getmembersbyproject(this.id).then((res) => {
       this.teamMembers = res
       this.chartercount = this.teamMembers.filter(x => x.includeInCharter == true).length;
@@ -55,7 +59,7 @@ export class ProjectTeamComponent implements OnInit {
       for (let i = 0; i < this.teamMembers.length; i++) {
         if (this.teamMembers[i].includeInCharter === null) {
           this.teamMembers[i].includeInCharter = false;
-        }
+        }  
       }
     })
   }
