@@ -101,12 +101,10 @@ export class TechTransferSingleEditComponent implements OnInit {
             campaignPhaseId: history.state.data.campaignPhaseId == null ? '' : history.state.data.campaignPhaseId,
             campaignTypeId: history.state.data.campaignTypeId == null ? '' : history.state.data.campaignTypeId,
           })
-          this.generalInfoForm = this.CreateProjectForm
           this.formValueTech.emit(this.generalInfoForm.getRawValue())
           this.viewContent = true
         }
         else {
-        this.generalInfoForm = this.CreateProjectForm
         this.formValueTech.emit(this.generalInfoForm.getRawValue())
         this.viewContent = true
         }

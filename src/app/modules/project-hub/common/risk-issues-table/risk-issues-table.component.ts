@@ -14,13 +14,15 @@ import {SpotlightIndicatorsService} from 'app/core/spotlight-indicators/spotligh
 import {ProjectHubService} from '../../project-hub.service';
 import {ProjectApiService} from '../project-api.service';
 import {FormControl, FormGroup} from "@angular/forms";
+import {AuthService} from "../../../../core/auth/auth.service";
+import {Constants} from "../../../../shared/constants";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-risk-issues-table',
   templateUrl: './risk-issues-table.component.html',
   styleUrls: ['./risk-issues-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @Input() riskIssuesData: any = []
@@ -28,7 +30,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() editable: boolean
-  @Input() mode: 'Normal' | 'Project-Charter' = 'Normal'
+  @Input() callLocation:  'Normal'  | 'Project-Charter' | 'Business-Case'  = 'Normal'
   @ViewChild('riskIssuesTable') riskIssuesTable: any;
   getRowClass = (row) => {
     return {
@@ -40,10 +42,14 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   viewContent: boolean = false
   riskIssueViewEditType: string = "RiskIssue";
   riskIssueBulkEditType: string = "RiskIssuesBulkEdit";
+  id: string = ''
   constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService,
-    private apiService: ProjectApiService) {
+    private apiService: ProjectApiService,
+    public auth: AuthService,
+    private router: Router,
+    private _Activatedroute: ActivatedRoute) {
       this.projecthubservice.includeClosedItems.riskIssue.subscribe(res => {
           this.changeriskissues(res)
       })
@@ -52,23 +58,65 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
       toggle: new FormControl(false)
   })
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-    this.riskIssuesData = this.projectViewDetails.riskIssuesData
-    if (this.isclosed == false) {
-      this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
-    }
-    else {
-      this.riskIssuesngxdata = this.riskIssuesData
-    }
+      if(this.callLocation=="Business-Case"){
+          this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+          if (this.router.url.includes('recommended-option')) {
+              this.riskIssuesngxdata = this.projectViewDetails.riskIssuesData
+          }
+          if (this.router.url.includes('option-2')) {
+              this.apiService.getRiskIssuesByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
+                  this.riskIssuesngxdata  = res
+              })
+          }
+          if (this.router.url.includes('option-3')) {
+              this.apiService.getRiskIssuesByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
+                  this.riskIssuesngxdata  = res
+              })
+          }
+      }else{
+          this.riskIssuesData = this.projectViewDetails.riskIssuesData
+          if (this.isclosed == false) {
+              this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+          }
+          else {
+              this.riskIssuesngxdata = this.riskIssuesData
+          }
+      }
   }
   ngOnInit(): void {
-    this.riskIssuesData = this.projectViewDetails.riskIssuesData
-    this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
-    if(this.mode == 'Project-Charter'){
-        this.riskIssueViewEditType = "ProjectCharterRiskIssueViewEdit"
-        this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
-    }
-    this.viewContent = true
+     if(this.callLocation == 'Normal'){
+        this.riskIssuesData = this.projectViewDetails.riskIssuesData
+        this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+     }
+     if(this.callLocation == 'Business-Case'){
+         this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+         if (this.router.url.includes('recommended-option')) {
+             this.riskIssuesData = this.projectViewDetails.riskIssuesData
+         }
+         if (this.router.url.includes('option-2')) {
+             this.apiService.getRiskIssuesByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
+                 this.riskIssuesData  = res
+             })
+         }
+         if (this.router.url.includes('option-3')) {
+             this.apiService.getRiskIssuesByOption(this.projecthubservice.projectid,Constants.OPTION_3_ID.toString()).then((res) => {
+                 this.riskIssuesData  = res
+             })
+         }
+         this.riskIssuesngxdata = this.riskIssuesData.filter(x => x.closeDate == null)
+     }
+
+     if(this.callLocation == 'Project-Charter'){
+         this.riskIssueViewEditType = "ProjectCharterRiskIssueAddSingle"
+         this.riskIssueBulkEditType = "ProjectCharterRiskIssueBulkEdit"
+     }
+     if(this.callLocation == 'Business-Case'){
+         this.riskIssueViewEditType = "BusinessCaseRiskIssueAddSingle"
+         this.riskIssueBulkEditType = "BusinessCaseIssueBulkEdit"
+     }
+  }
+  getLookUpName(lookUpId: string): string {
+       return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
   reload(): void {
       this.riskIssuesData = this.projectViewDetails.riskIssuesData
@@ -93,19 +141,6 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   getLinkType(projectId: string): string {
     return projectId == this.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
   }
-/*     getlinkname2(uid: string): string {
-    let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
-    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.childProjectId)
-    if (temp) {
-      return "This risk/issue is sourced (linked) from " + temp.problemId.toString() + " - " + temp.problemTitle
-    }
-    temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
-    temp = this.projectViewDetails.linksProblemCapture.find(x => x.problemUniqueId == temp.parentProjectId)
-    if(temp){
-      return "A link to this risk/issue has been created in project(s): " + temp.problemId.toString() + " - " + temp.problemTitle
-    }
-  } */
-
   getlinkname(uid: string): string {
     var linkItemList = this.projectViewDetails.links.filter(x => x.linkItemId == uid)
     var returnString = ''
@@ -159,10 +194,26 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
 
     riskIssueAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.isNavChanged.next(true)
-        })
+          if (this.callLocation == 'Business-Case') {
+              if (this.router.url.includes('recommended-option')) {
+                  this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.isNavChanged.next(true)
+                  })
+              }
+              if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+                  this.apiService.deleteRiskIssueByOption(id).then((res) => {
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.isNavChanged.next(true)
+                  })
+              }
+          }else{
+              this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.isNavChanged.next(true)
+              })
+          }
+
       }
     })
 

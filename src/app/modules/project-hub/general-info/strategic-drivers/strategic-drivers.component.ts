@@ -271,7 +271,7 @@ export class StrategicDriversComponent implements OnInit {
                 agilesec = this.agileWorkStream.filter(function (entry) {
                   return entry.lookUpId == data[i]
                 })
-                finaldatasecagile.push(agilesec);
+                finaldatasecagile.push(agilesec[0]);
               }
             }
             this.agileWave = this.lookupdata.filter(x => x.lookUpParentId == '4bdbcbca-90f2-4c7b-b2a5-c337446d60b1');
@@ -338,16 +338,16 @@ export class StrategicDriversComponent implements OnInit {
             this.strategicDriversForm.patchValue({
               primaryKPI: history.state.data.primaryKpi == null ? '' : history.state.data.primaryKpi[0],
               isAgile: isAgile,
-              agilePrimaryWorkstream: history.state.data.agilePrimaryWorkstream == null ? '' : history.state.data.agilePrimaryWorkstream[0],
-              agileSecondaryWorkstream: history.state.data.agileSecondaryWorkstream == null ? '' : finaldatasecagile,
-              agileWave: history.state.data.agileWave == null ? '' : history.state.data.agileWave[0],
+              agilePrimaryWorkstream: history.state.data.agilePrimaryWorkstream == null || history.state.data.agilePrimaryWorkstream == "" || history.state.data.agilePrimaryWorkstream == undefined ? '' : history.state.data.agilePrimaryWorkstream[0],
+              agileSecondaryWorkstream: history.state.data.agileSecondaryWorkstream == null || history.state.data.agileSecondaryWorkstream == "" || history.state.data.agileSecondaryWorkstream == undefined ? '' : finaldatasecagile,
+              agileWave: history.state.data.agileWave == null || history.state.data.agileWave == "" || history.state.data.agileWave == undefined ? '' : history.state.data.agileWave[0],
               isPobos: history.state.data.isPobos,
-              pobosCategory: history.state.data.poboscategory == null ? '' : finaldataPobos,
+              pobosCategory: history.state.data.poboscategory == null || history.state.data.poboscategory == "" || history.state.data.poboscategory == undefined ? '' : finaldataPobos,
               isGmsgqltannualMustWin: history.state.data.isGmsgqltannualMustWin,
-              strategicYear: history.state.data.strategicYearId == null ? '' : history.state.data.strategicYearId[0],
-              annualMustWinID: history.state.data.annualMustWinId == null ? '' : history.state.data.annualMustWinId[0],
+              strategicYear: history.state.data.strategicYearId == null || history.state.data.strategicYearId == "" || history.state.data.strategicYearId == undefined ? '' : history.state.data.strategicYearId[0],
+              annualMustWinID: history.state.data.annualMustWinId == null || history.state.data.annualMustWinId == "" || history.state.data.annualMustWinId == undefined ? '' : history.state.data.annualMustWinId[0],
               isSiteAssessment: history.state.data.isSiteAssessment,
-              siteAssessmentCategory: history.state.data.siteAssessmentCategory == null ? '' : finaldataSite,
+              siteAssessmentCategory: history.state.data.siteAssessmentCategory == null || history.state.data.siteAssessmentCategory == "" || history.state.data.siteAssessmentCategory == undefined ? '' : finaldataSite,
               isGoodPractise: false
             })
             this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
