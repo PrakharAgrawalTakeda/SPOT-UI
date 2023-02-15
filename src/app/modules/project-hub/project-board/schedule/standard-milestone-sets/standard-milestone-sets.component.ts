@@ -1,16 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ProjectHubService} from "../../../project-hub.service";
 import {ProjectApiService} from "../../../common/project-api.service";
 import {FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {ActivatedRoute} from "@angular/router";
-
+import { Output, EventEmitter } from '@angular/core';
 @Component({
     selector: 'app-standard-milestone-sets',
     templateUrl: './standard-milestone-sets.component.html',
     styleUrls: ['./standard-milestone-sets.component.scss']
 })
 export class StandardMilestoneSetsComponent implements OnInit {
-
+    @Output() standardMilestonesAdded = new EventEmitter<any[]>();
+    @Input() loadContent: boolean = false;
     standardMilestoneData: any = []
     standardMilestoneDBData: any = []
     standarMilestoneAdded: any = []
@@ -20,9 +21,13 @@ export class StandardMilestoneSetsComponent implements OnInit {
                 private _Activatedroute: ActivatedRoute) {
     }
 
-
+    ngOnChanges() {
+        if(this.loadContent){
+            this.dataloader()
+        }
+    }
     ngOnInit(): void {
-        this.dataloader()
+
     }
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -40,7 +45,7 @@ export class StandardMilestoneSetsComponent implements OnInit {
         })
     }
     submitStandardMilestoneSets() {
-
+        this.addStandardMilestonesToBulkEditList()
     }
     toggleSchedule(event: any) {
         this.standarMilestoneAdded[event.tableIndex] = [...event.selected]
@@ -58,5 +63,8 @@ export class StandardMilestoneSetsComponent implements OnInit {
             }
             return a.level < b.level ? -1 : 1;
         }) : array
+    }
+    addStandardMilestonesToBulkEditList() {
+        this.standardMilestonesAdded.emit(this.standarMilestoneAdded);
     }
 }

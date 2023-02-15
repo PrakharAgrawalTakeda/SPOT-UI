@@ -75,6 +75,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     viewBaseline: boolean = false
     viewBaselineLogs: boolean = false
     compareBaselineLogs: boolean = false
+    viewStandardMilestonesSets: boolean = false
     roleMaster: any = {}
     baselineCount: any = {}
     baselinelogdetails: any = {}
@@ -1034,10 +1035,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     }
 
-    openStandardMilestonesSets(): void {
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        this.projecthubservice.toggleDrawerOpen('StandardMilestoneSets', '', '', '', false, true);
-    }
 
     //let index = this.datarows.indexOf(this.selected[0])
 
@@ -1832,7 +1829,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         this.compareBaselineLogs = false
         this.viewBaselineLogs = true
     }
-
+    openStandardMilestonesSets(): void {
+        this.viewStandardMilestonesSets = true;
+        console.log("yyyyyyyyyyyyyyyy",this.viewStandardMilestonesSets)
+    }
     baselineLogs() {
 
         // this.baselineLogForm = new FormArray([])
@@ -2596,6 +2596,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     }
 
+    addStandardMilestonesToList(standardMilestones: any[]){
+        this.schedulengxdata.concat(standardMilestones);
+        this.viewStandardMilestonesSets = false
+    }
     //   @HostListener('window:resize', ['$event'])
     // onResize(event) {
     //   event.target.innerWidth;
