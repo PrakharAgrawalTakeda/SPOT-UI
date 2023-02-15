@@ -116,6 +116,7 @@ import { CloseOutGeneralInfoComponent } from "./close-out/close-out-general-info
 import { KeyAssumptionsTableComponent } from './common/key-assumptions-table/key-assumptions-table.component';
 import { KeyAssumptionsAddSingleComponent } from './common/key-assumptions-table/key-assumptions-add-single/key-assumptions-add-single.component';
 import { KeyAssumptionsBulkEditComponent } from './common/key-assumptions-table/key-assumptions-bulk-edit/key-assumptions-bulk-edit.component';
+import { StandardMilestoneSetsComponent } from './project-board/schedule/standard-milestone-sets/standard-milestone-sets.component';
 import { BusinessCaseGeneralInfoComponent } from './business-case/business-case-general-info/business-case-general-info.component';
 import { BusinessCaseOptionInfoComponent } from './business-case/business-case-option-info/business-case-option-info.component';
 import { BusinessCaseTimelineComponent } from './business-case/business-case-timeline/business-case-timeline.component';
@@ -499,7 +500,8 @@ export const projectRoutes: Route[] = [
     OptionInfoComponent,
     OptionInfoEditComponent,
     FeasibilityEditComponent,
-    CloseOutOutcomesSingleEditComponent
+    CloseOutOutcomesSingleEditComponent,
+    StandardMilestoneSetsComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
