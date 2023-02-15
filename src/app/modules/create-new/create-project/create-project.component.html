@@ -5,11 +5,7 @@
                 <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate"><b>Standard Project/Program Capture Form</b></div> -->
                 <div class="flex items-start justify-between bg-primary sidepanel-header">
                     <div class="text-on-primary" style="padding-top: 6px">Standard Project/Program Capture Form</div>
-                    <div style="padding-top: 2px"><a (click)="callCreateProject()" href="javascript:void(0)"
-                            title="Close">
-                            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-                        </a>
-                    </div>
+                    
                 </div>
                 <div>
                     <div>
@@ -17,17 +13,19 @@
                             <mat-step>
                                 <div >
                                 <form style="margin-right: 300px;margin-left: 300px;">
+                                    <div style="overflow-y: scroll;height: 400px;">
                                     <ng-template 
                                         matStepLabel><span>Basics</span></ng-template>
-                                    <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'parentProject', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
-
+                                    <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
+                                    </div>
                                     <p style="margin-top: 20px; font-style:italic">*Required</p>
                                     <div style="text-align: right;">
-                                        <label (click)="RouteBack()"
-                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label>
+                                        <!-- <label (click)="RouteBack()"
+                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label> -->
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white" mat-button>Cancel</button>
                                         &nbsp;
-                                        <button style="background-color: rgba(76,155,207);" mat-button
-                                            matStepperNext>Next</button>
+                                        <button (click)="CheckMandatory(1)" style="background-color: rgba(76,155,207);color: white" mat-button
+                                            >Next</button>
                                     </div>
                                 </form>
                                 </div>
@@ -35,23 +33,26 @@
                             <mat-step>
                                 <div >
                                 <form style="margin-right: 300px;margin-left: 300px;">
+                                    <div style="overflow-y: scroll;height: 400px;">
                                     <ng-template matStepLabel>Details</ng-template>
                                     <h2><b>Project Details</b></h2>
                                     <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
-                                        [viewElements]="['enviornmentalPortfolio', 'isCapsProject']"></app-general-info-single-edit>
+                                        [viewElements]="['enviornmentalPortfolio', 'isCapsProject', 'parentProject']"></app-general-info-single-edit>
                                     <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(2,$event)"></app-oe-project-single-edit>
                                     <app-tech-transfer-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueTech)="captureValue(3,$event)"></app-tech-transfer-single-edit>
                                     <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (QualityValue) = "captureValue(6,$event)" (formValueQuality)="captureValue(4,$event)"></app-quality-ref-bulk-edit>
                                     <h2><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
+                                    </div>
                                     <p style="margin-top: 20px; font-style:italic">*Required</p>
                                     <div style="text-align: right;">
-                                        <label (click)="RouteBack()"
-                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label>
+                                        <!-- <label (click)="RouteBack()"
+                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label> -->
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white" mat-button>Cancel</button>
                                         <button mat-button matStepperPrevious
-                                            style="background-color: rgba(76,155,207);">Back</button>
+                                            style="background-color: rgba(76,155,207);color: white">Back</button>
                                         <button mat-button matStepperNext class="Primary"
-                                            style="background-color: rgb(76,155,207);">Next</button>
+                                            style="background-color: rgb(76,155,207);color: white">Next</button>
                                     </div>
                                 </form>
                             </div>
@@ -60,6 +61,7 @@
                             <mat-step>
                                 <div>
                                 <form style="margin-right: 300px;margin-left: 300px;">
+                                    <div style="overflow-y: scroll;height: 400px;">
                                     <ng-template matStepLabel>Review</ng-template>
                                     <div class="row">
                                         <label><b>Basic Info</b></label>
@@ -82,7 +84,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="child">
-                                                <label class="reviewLabel">Parent Program * </label>
+                                                <label class="reviewLabel">Parent Program</label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.projectsingle}}</label>
@@ -172,7 +174,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="child">
-                                                <label class="reviewLabel">CAPS Project *</label>
+                                                <label class="reviewLabel">CAPS Project</label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.isCapsProject}}</label>
@@ -378,15 +380,17 @@
                                             </div>
                                         </div>
                                         </div>
+                                    </div>
                                     <p style="margin-top: 20px; font-style:italic">*Required</p>
                                     <div style="text-align: right;">
                                         <!-- <button (click) = "RouteBack()" style="background-color: rgba(76,155,207);" mat-button
                                             >Cancel</button> -->
-                                        <label (click)="RouteBack()"
-                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label>
-                                        <button style="background-color: rgba(76,155,207);" mat-button
+                                        <!-- <label (click)="RouteBack()"
+                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label> -->
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white" mat-button>Cancel</button>
+                                        <button style="background-color: rgba(76,155,207);color: white;" mat-button
                                             matStepperPrevious>Back</button>
-                                        <button matStepperNext style="background-color: rgba(76,155,207);" mat-button (click)="
+                                        <button matStepperNext style="background-color: rgba(76,155,207);color: white" mat-button (click)="
                                             createProject()" type="button">Submit</button>
                                     </div>
                                 </form>
@@ -396,12 +400,12 @@
                                 <div>
                                     <div style="margin-right: 300px;margin-left: 300px;">
                                         <ng-template matStepLabel><span></span></ng-template>
-                                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px;"><b>Please select the next page</b></label>
-                                        <button (click)="RoutetoProposal()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Proposal</button>
-                                        <button (click)="RoutetoBC()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Business Case</button>
-                                        <button (click)="RoutetoCharter()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Charter</button>
-                                        <button (click)="RoutetoBoard()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Board</button>
-                                        <button (click)="move(0)" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Create another Project</button>
+                                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px; margin-top: 42px;"><b>Please select the next page</b></label>
+                                        <div class="box"><button (click)="RoutetoProposal()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Proposal</button></div>
+                                        <div class="box"><button (click)="RoutetoBC()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Business Case</button></div>
+                                        <div class="box"><button (click)="RoutetoCharter()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Charter</button></div>
+                                        <div class="box"><button (click)="RoutetoBoard()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Board</button></div>
+                                        <div class="box"><button (click)="RouteCreateProject()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Create another Project</button></div>
                                     </div>
                                 </div>
                             </mat-step>
