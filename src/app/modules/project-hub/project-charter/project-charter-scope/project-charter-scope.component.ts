@@ -20,13 +20,18 @@ export class ProjectCharterScopeComponent implements OnInit {
   editable: boolean = false
   scopeForm = new FormGroup({
       projectDescription: new FormControl(''),
-     // detailedDescription: new FormControl(''),
+      detailedDescription: new FormControl(''),
       targetEndState: new FormControl(''),
-      //benefitsRealizedOutcome: new FormControl('')
+      proposalStatement: new FormControl(''),
+      inScope: new FormControl(''),
+    outOfScope: new FormControl('')
   })
   primaryKPIForm = new FormGroup({
     primaryKpi: new FormControl({})
   })
+//   scope2Form = new FormGroup({
+    
+// })
 
   constructor(
       public projectApiService: ProjectApiService,
@@ -42,6 +47,7 @@ export class ProjectCharterScopeComponent implements OnInit {
 
   ngOnInit(): void {
       this.dataloader()
+      
   }
   dataloader() {
       //debugger;
@@ -51,15 +57,21 @@ export class ProjectCharterScopeComponent implements OnInit {
               this.projectApiService.projectCharterSingle(this.id).then((data1: any) => {
                   this.auth.KPIMaster().then((kpis: any) => {
                       this.auth.lookupMaster().then((lookup: any) => {
+                        console.log(data1)
                       this.projectViewDetails = res
                       this.lookupMasters = lookup
                       this.kpiMasters = kpis
                       this.scopeForm.patchValue({
                           projectDescription: data.projectDescription,
-                         // detailedDescription: data1.detailedDescription,
+                          detailedDescription: data1.detailedDescription,
                           targetEndState: data.targetEndState,
-                          //benefitsRealizedOutcome: data.benefitsRealizedOutcome
+                          proposalStatement: data1.proposalStatement,
+                          inScope: data1.inScope,
+                        outOfScope: data1.outOfScope
                       })
+                    //   this.scope2Form.patchValue({
+                        
+                    // })
                       console.log("OVERALL DATA", this.projectViewDetails)
                       this.projecthubservice.lookUpMaster = lookup
                       this.projecthubservice.kpiMasters = kpis

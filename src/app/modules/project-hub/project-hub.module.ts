@@ -128,6 +128,7 @@ import { OptionInfoEditComponent } from './common/option-info/option-info-edit/o
 import { FeasibilityEditComponent } from './common/option-info/feasibility-edit/feasibility-edit.component';
 import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
 import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
+import { ProjectCharterScopeSingleEditComponent } from './project-charter/project-charter-scope/project-charter-scope-single-edit/project-charter-scope-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -475,7 +476,8 @@ export const projectRoutes: Route[] = [
     OptionInfoEditComponent,
     FeasibilityEditComponent,
     CloseOutOutcomesSingleEditComponent,
-    StandardMilestoneSetsComponent
+    StandardMilestoneSetsComponent,
+    ProjectCharterScopeSingleEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
