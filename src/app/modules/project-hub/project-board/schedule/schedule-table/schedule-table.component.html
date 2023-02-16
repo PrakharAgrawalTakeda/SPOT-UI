@@ -1,6 +1,6 @@
 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
     class="pr-6 material font-medium text-default text-sm whitespace-nowrap cursor-pointer" [rows]="tableData"
-    [sorts]="[{ prop: 'plannedFinish', dir: 'asc' }]" #scheduleTable [rowClass]="getRowClass" [selected]="selected"
+    [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }]" #scheduleTable [rowClass]="getRowClass" [selected]="selected"
     [selectionType]="SelectionType.checkbox" [selectAllRowsOnPage]="false" (activate)="onActivate($event)"
     (select)="onSelect($event)">
     <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="mode == 'Normal'?0.5:0.7" [resizeable]="false"

@@ -144,6 +144,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         if (this.toggleHelper == true) {
           console.log("contructor")
           console.log("LINE !#&", this.scheduleData.scheduleData)
+          //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
+          console.log("SORTING", res)
           this.changeschedule(res, true)
 
         }
@@ -156,7 +158,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
       for(let control of this.milestoneForm.controls)
       {
         //debugger
-        this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
+        //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
         if(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == control['value']['scheduleUniqueId']))
         {
 
@@ -365,14 +367,14 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                   console.log('Filter Criteria:', filterres)
                   this.filterCriteria = filterres
                   console.log("Milestone info:", res)
-                  this.scheduleData = this.sortbyPlannedBaseline(res)
+                  this.scheduleData = res
                   console.log(this.isclosed)
                   console.log(this.scheduleData.scheduleData)
                   this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
                   if (this.isclosed == false) {
                     this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
                     console.log(this.schedulengxdata)
-                    this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
+                    //this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
                     console.log(this.schedulengxdata)
                      //this.schedulengxdata = this.sortbyBaseline(this.schedulengxdata)
                     // console.log(this.schedulengxdata)
@@ -380,25 +382,25 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     // console.log("ngx", this.schedulengxdata)
                   }
 
-                  if(this.isclosed == true)
-                  {
-                    this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
-                  }
+                  // if(this.isclosed == true)
+                  // {
+                  //   this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
+                  // }
 
                   if(this.mode == 'Project-Close-Out')
                   {
                     this.schedulengxdata = this.scheduleData.scheduleData
-                    this.schedulengxdata = this.sortbyBaselineCompletion(this.schedulengxdata)
+                   // this.schedulengxdata = this.sortbyBaselineCompletion(this.schedulengxdata)
                   }
                   if(this.mode == 'Project-Charter')
                   {
                     this.schedulengxdata = this.scheduleData.scheduleData
-                    this.schedulengxdata = this.sortbyPlanned(this.schedulengxdata)
+                    //this.schedulengxdata = this.sortbyPlanned(this.schedulengxdata)
                   }
-                  this.scheduledataDB = this.sortbyPlannedBaseline(res.scheduleData)
+                  this.scheduledataDB = res.scheduleData
                   console.log(this.scheduledataDB)
                   console.log(this.projecthubservice.includeClosedItems.schedule.value)
-                  res.scheduleData = this.sortbyPlannedBaseline(res.scheduleData)
+                  //res.scheduleData = this.sortbyPlannedBaseline(res.scheduleData)
 
                 if (res.scheduleData.length != 0) {
                   for (var i of res.scheduleData) {
@@ -448,7 +450,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                       "indicator": x.indicator
                     }
                   })
-                  for (var i of this.sortbyPlannedBaseline(this.schedulengxdata)) {
+                  for (var i of this.schedulengxdata) {
                     console.log(this.schedulengxdata)
                     this.milestoneName = i.milestone
                     console.log(this.milestoneName)
@@ -515,15 +517,16 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   }
 
   toggleSchedule(event: any) {
-    this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
+    //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
     this.toggleHelper = true
     this.projecthubservice.includeClosedItems.schedule.next(event.checked)
   }
 
   changeschedule(event: any, initial: boolean = false) {
     //debugger
+    
+    //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
     console.log("Change Shedule", this.scheduleData.scheduleData)
-    this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
     for (var i of this.scheduleData.scheduleData) {
 
       for (let control of this.milestoneForm.controls.filter(x => x.value.scheduleUniqueId == i.scheduleUniqueId)) {
@@ -545,7 +548,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
 
     this.value = this.milestoneForm.getRawValue()
-    this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
+    //this.scheduleData.scheduleData = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
     var baseline = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
     })
@@ -674,7 +677,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
           Alert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
               this.isclosed = true
-              this.schedulengxdata = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
+              this.schedulengxdata = this.scheduleData.scheduleData
               // else {
               //   this.isclosed = false
               //   this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
@@ -699,7 +702,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
         else {
           this.isclosed = true
-          this.schedulengxdata = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
+          this.schedulengxdata = this.scheduleData.scheduleData
           console.log(this.schedulengxdata)
           this.localIncludedItems.controls.toggle.patchValue(event)
           this.localIncludedItems.controls.toggle.markAsPristine()
@@ -742,7 +745,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             if (close == 'confirmed') {
               this.isclosed = false
               this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
-              this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
+              //this.schedulengxdata = this.schedulengxdata
               console.log(this.schedulengxdata)
               this.localIncludedItems.controls.toggle.patchValue(event)
               this.localIncludedItems.controls.toggle.markAsPristine()
@@ -763,7 +766,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         else {
           this.isclosed = false
           this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
-          this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
+          //this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
           console.log(this.schedulengxdata)
           this.localIncludedItems.controls.toggle.patchValue(event)
           this.localIncludedItems.controls.toggle.markAsPristine()
@@ -779,12 +782,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     else {
       if (event == true) {
         this.isclosed = true
-        this.schedulengxdata = this.sortbyPlannedBaseline(this.scheduleData.scheduleData)
+        this.schedulengxdata = this.scheduleData.scheduleData
       }
       else {
         this.isclosed = false
         this.schedulengxdata = this.scheduleData.scheduleData.filter(row => row.closeDate == null)
-        this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
+        //this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
         console.log(this.schedulengxdata)
         console.log(this.scheduleData.scheduleData)
       }
@@ -1584,19 +1587,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   
     sortbyPlannedBaseline(array: any): any {
       return array.length > 1 ? array.sort((a, b) => {
-        // if (a.plannedFinish === null) {
+        if (a.plannedFinish === null) {
   
-        //         return -1;
+                return -1;
         
-        //       }
+              }
         
         
         
-        //       if (b.plannedFinish === null) {
+              if (b.plannedFinish === null) {
         
-        //         return 1;
+                return 1;
         
-        //       }
+              }
         
         
         
@@ -1620,19 +1623,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   
     sortbyBaselineCompletion(array: any): any {
       return array.length > 1 ? array.sort((a, b) => {
-        // if (a.plannedFinish === null) {
+        if (a.baselineFinish === null) {
   
-        //         return -1;
+                return -1;
         
-        //       }
+              }
         
         
         
-        //       if (b.plannedFinish === null) {
+              if (b.baselineFinish === null) {
         
-        //         return 1;
+                return 1;
         
-        //       }
+              }
         
         
         
