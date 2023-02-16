@@ -26,7 +26,6 @@ import { AssociatedProjectsComponent } from './associated-projects/associated-pr
 import { BudgetComponent } from './budget/budget.component';
 import { ProjectDocumentsComponent } from './project-documents/project-documents.component';
 import { GeneralInfoComponent } from './general-info/general-info.component';
-import { TopsComponent } from './tops/tops.component';
 import { CapsComponent } from './caps/caps.component';
 import { ReportsComponent } from './reports/reports.component';
 import { LocalAttributesComponent } from './local-attributes/local-attributes.component';
@@ -122,7 +121,6 @@ import { BusinessCaseOptionInfoComponent } from './business-case/business-case-o
 import { BusinessCaseTimelineComponent } from './business-case/business-case-timeline/business-case-timeline.component';
 import { BusinessCaseCostFundingComponent } from './business-case/business-case-cost-funding/business-case-cost-funding.component';
 import { BusinessCaseBenefitsComponent } from './business-case/business-case-benefits/business-case-benefits.component';
-import { BusinessCaseTopsComponent } from './business-case/business-case-tops/business-case-tops.component';
 import { BusinessCaseCapsComponent } from './business-case/business-case-caps/business-case-caps.component';
 import { BusinessCaseRiskIssuesComponent } from './business-case/business-case-risk-issues/business-case-risk-issues.component';
 import { OptionInfoComponent } from './common/option-info/option-info.component';
@@ -181,11 +179,6 @@ export const projectRoutes: Route[] = [
       pathMatch: 'full'
     },
     {
-      path: 'tops',
-      component: TopsComponent,
-      pathMatch: 'full'
-    },
-    {
       path: 'caps',
       component: CapsComponent,
       pathMatch: 'full'
@@ -222,11 +215,6 @@ export const projectRoutes: Route[] = [
           component: ProjectProposalPlanningTeamComponent,
         }
       ]
-    },
-    {
-      path: 'business-case',
-      component: BusinessCaseComponent,
-      pathMatch: 'full'
     },
     {
       path: 'project-charter',
@@ -320,10 +308,6 @@ export const projectRoutes: Route[] = [
               component: BusinessCaseBenefitsComponent,
             },
             {
-              path: 'tops',
-              component: BusinessCaseTopsComponent,
-            },
-            {
               path: 'caps',
               component: BusinessCaseCapsComponent,
             },
@@ -351,10 +335,6 @@ export const projectRoutes: Route[] = [
             {
               path: 'benefits',
               component: BusinessCaseBenefitsComponent,
-            },
-            {
-              path: 'tops',
-              component: BusinessCaseTopsComponent,
             },
             {
               path: 'caps',
@@ -386,10 +366,6 @@ export const projectRoutes: Route[] = [
               component: BusinessCaseBenefitsComponent,
             },
             {
-              path: 'tops',
-              component: BusinessCaseTopsComponent,
-            },
-            {
               path: 'caps',
               component: BusinessCaseCapsComponent,
             },
@@ -415,7 +391,6 @@ export const projectRoutes: Route[] = [
     BudgetComponent,
     ProjectDocumentsComponent,
     GeneralInfoComponent,
-    TopsComponent,
     CapsComponent,
     ReportsComponent,
     LocalAttributesComponent,
@@ -494,7 +469,6 @@ export const projectRoutes: Route[] = [
     BusinessCaseTimelineComponent,
     BusinessCaseCostFundingComponent,
     BusinessCaseBenefitsComponent,
-    BusinessCaseTopsComponent,
     BusinessCaseCapsComponent,
     BusinessCaseRiskIssuesComponent,
     OptionInfoComponent,

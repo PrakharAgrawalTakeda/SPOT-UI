@@ -201,11 +201,6 @@ export class ProjectHubService {
                   link: 'business-case/recommended-option/benefits'
                 },
                 {
-                  title: 'TOPS',
-                  type: 'basic',
-                  link: 'business-case/recommended-option/tops'
-                },
-                {
                   title: 'CAPS',
                   type: 'basic',
                   link: 'business-case/recommended-option/caps'
@@ -243,11 +238,6 @@ export class ProjectHubService {
                   link: 'business-case/option-2/benefits'
                 },
                 {
-                  title: 'TOPS',
-                  type: 'basic',
-                  link: 'business-case/option-2/tops'
-                },
-                {
                   title: 'CAPS',
                   type: 'basic',
                   link: 'business-case/option-2/caps'
@@ -283,11 +273,6 @@ export class ProjectHubService {
                   title: 'Benefits',
                   type: 'basic',
                   link: 'business-case/option-3/benefits'
-                },
-                {
-                  title: 'TOPS',
-                  type: 'basic',
-                  link: 'business-case/option-3/tops'
                 },
                 {
                   title: 'CAPS',
