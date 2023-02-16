@@ -59,10 +59,16 @@ export class ProjectApiService {
     return response
   }
   async getGeneralInfoData(projectid) {
-    var url = GlobalVariables.apiurl + "ProjectHubData/GeneralInfo/" + projectid
+    var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async getGeneralInfoDataWizzard(projectid, callLocation) {
+      var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizzard="+callLocation
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async getfilterlist(){
     var userid = GlobalVariables.apiurl+"FilterProjects/FilterCriteria"
@@ -123,6 +129,15 @@ export class ProjectApiService {
     const abc$ = this.http.put(url, body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async editGeneralInfoWizzard(projectid, body, wizzard) {
+      if(wizzard =="CloseOut"){
+          wizzard = "ProjectCloseOut";
+      }
+      var url = GlobalVariables.apiurl + "Projects/" + projectid + "?wizzard=" + wizzard
+      const abc$ = this.http.put(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async getHubSettings(projectid: string){
     var userid = GlobalVariables.apiurl+"HubSetting/"+projectid
