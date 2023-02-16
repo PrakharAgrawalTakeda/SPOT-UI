@@ -46,10 +46,11 @@ export class ProjectCharterScopeSingleEditComponent implements OnInit {
         outOfScope: data1.outOfScope
 
     })
+    this.viewContent = true
   })
-      this.viewContent = true
+      
   })
-      this.viewContent = true
+
   }
 
   submitScope() {
