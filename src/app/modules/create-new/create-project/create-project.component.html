@@ -4,7 +4,7 @@
             <div class="flex flex-col flex-auto  overflow-hidden p-6">
                 <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate"><b>Standard Project/Program Capture Form</b></div> -->
                 <div class="flex items-start justify-between bg-primary sidepanel-header">
-                    <div class="text-on-primary" style="padding-top: 6px">Standard Project/Program Capture Form</div>
+                    <div class="text-on-primary" style="padding-top: 6px">Project Capture Form</div>
                     
                 </div>
                 <div>
@@ -18,7 +18,7 @@
                                         matStepLabel><span>Basics</span></ng-template>
                                     <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
                                     </div>
-                                    <p style="margin-top: 20px; font-style:italic">*Required</p>
+                                    <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
                                     <div style="text-align: right;">
                                         <!-- <label (click)="RouteBack()"
                                             style="color: rgba(76,155,207);margin-right: 10px">Cancel</label> -->
@@ -44,13 +44,11 @@
                                     <h2><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
                                     </div>
-                                    <p style="margin-top: 20px; font-style:italic">*Required</p>
+                                    <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
                                     <div style="text-align: right;">
-                                        <!-- <label (click)="RouteBack()"
-                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label> -->
-                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white" mat-button>Cancel</button>
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white; margin-right: 10px;" mat-button>Cancel</button>
                                         <button mat-button matStepperPrevious
-                                            style="background-color: rgba(76,155,207);color: white">Back</button>
+                                            style="background-color: rgba(76,155,207);color: white; margin-right: 10px;">Back</button>
                                         <button mat-button matStepperNext class="Primary"
                                             style="background-color: rgb(76,155,207);color: white">Next</button>
                                     </div>
@@ -61,11 +59,11 @@
                             <mat-step>
                                 <div>
                                 <form style="margin-right: 300px;margin-left: 300px;">
-                                    <div style="overflow-y: scroll;height: 400px;">
+                                    <div >
                                     <ng-template matStepLabel>Review</ng-template>
-                                    <div class="row">
-                                        <label><b>Basic Info</b></label>
-                                        <br /><br />
+                                    <div class="row" style="overflow-y: scroll;height: 400px;margin-top: 30px;">
+                                        <label style="color: rgba(76,155,207);">Basic Info</label>
+                                        <br />
                                         <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">Project Name * </label>
@@ -162,8 +160,8 @@
                                             </div>
                                         </div>
                                         <br />
-                                        <label><b>Project Details</b></label>
-                                        <br /><br />
+                                        <label style="color: rgba(76,155,207);">Project Details</label>
+                                        <br />
                                         <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">Environmental Portfolio</label>
@@ -267,8 +265,8 @@
                                         </div>
                                         
                                         <br />
-                                        <label><b>Strategic Drivers</b></label>
-                                        <br /><br />
+                                        <label style="color: rgba(76,155,207);">Strategic Drivers</label>
+                                        <br />
                                         <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">Primary KPI</label>
@@ -381,14 +379,10 @@
                                         </div>
                                         </div>
                                     </div>
-                                    <p style="margin-top: 20px; font-style:italic">*Required</p>
+                                    <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
                                     <div style="text-align: right;">
-                                        <!-- <button (click) = "RouteBack()" style="background-color: rgba(76,155,207);" mat-button
-                                            >Cancel</button> -->
-                                        <!-- <label (click)="RouteBack()"
-                                            style="color: rgba(76,155,207);margin-right: 10px">Cancel</label> -->
-                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white" mat-button>Cancel</button>
-                                        <button style="background-color: rgba(76,155,207);color: white;" mat-button
+                                        <button (click)="RouteBack()" style="background-color: rgba(76,155,207);color: white; margin-right: 10px;" mat-button>Cancel</button>
+                                        <button style="background-color: rgba(76,155,207);color: white; margin-right: 10px;" mat-button
                                             matStepperPrevious>Back</button>
                                         <button matStepperNext style="background-color: rgba(76,155,207);color: white" mat-button (click)="
                                             createProject()" type="button">Submit</button>
