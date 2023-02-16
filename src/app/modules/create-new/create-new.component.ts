@@ -7,7 +7,7 @@ import { MsalService } from '@azure/msal-angular';
 import { AuthService } from './../../core/auth/auth.service';
 import { FuseNavigationService } from './../../../@fuse/components/navigation/navigation.service';
 import { Title } from '@angular/platform-browser';
-//import $ from "jquery";
+import $ from "jquery";
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { TooltipPosition } from '@angular/material/tooltip';
 // import { IDropdownSettings } from 'ng-multiselect-dropdown';
