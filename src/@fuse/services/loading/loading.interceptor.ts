@@ -40,6 +40,7 @@ export class FuseLoadingInterceptor implements HttpInterceptor {
             finalize(() => {
                 // Set the status to false if there are any errors or the request is completed
                 this._fuseLoadingService._setLoadingStatus(false, req.url);
+                document.getElementsByTagName('body') ? document.getElementsByTagName('body')[0].classList.remove('cursor-wait') : ''
             }));
     }
 }

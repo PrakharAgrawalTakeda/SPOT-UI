@@ -100,7 +100,6 @@
             [placeholder]="'Local Currency'" [showNoneOption]="true" [dropDownArrayType]="'string'"
             [dropDownArray]="local" >
         </spot-select>
-
         <spot-select [Required]="callLocation == 'CreateNew'"
             *ngIf="viewElementChecker('problemType')" class="w-full" formControlName="problemType" name="problemType"
             [label]="'Project Type'" [placeholder]="'Project Type'" [showNoneOption]="true"

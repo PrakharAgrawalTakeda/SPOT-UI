@@ -23,7 +23,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
@@ -38,7 +38,6 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     problemTitle: new FormControl(''),
     parentProgram: new FormControl(''),
     problemType: new FormControl('Standard Project / Program'),
-    topsGroup: new FormControl(''),
     recordCreationDate: new FormControl(''),
     submittedBy: new FormControl(''),
     sponsor: new FormControl(''),
@@ -152,7 +151,6 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
             this.generalInfoForm.patchValue({
               problemTitle: res.projectData.problemTitle,
               problemType: res.projectData.problemType,
-              topsGroup: res.topsData ? res.topsData.topsgroup : '',
               recordCreationDate: res.projectData.createdDate,
               parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
               submittedBy: res.projectData.problemOwnerName,

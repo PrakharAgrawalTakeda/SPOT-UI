@@ -34,6 +34,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   local:any=[];
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
+  envPortfolio:any
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -76,8 +77,11 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           this.projectHubService.isFormChanged = true
         }
         else if (this.callLocation == 'CreateNew'){
+          if (this.envPortfolio == undefined){
+          this.envPortfolio = this.generalInfoForm.value.enviornmentalPortfolio
+          }
           this.formValue.emit(this.generalInfoForm.getRawValue())
-          if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
+          if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
             this.generalInfoForm.controls.localCurrency.enable()
           }
           else{
@@ -86,7 +90,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         }
         else if (history.state.callLocation == 'CopyProject'){
           this.formValue.emit(this.generalInfoForm.getRawValue())
-          if (this.generalInfoForm.value.portfolioOwner.gmsbudgetOwnerEditable) {
+          if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
             this.generalInfoForm.controls.localCurrency.enable()
           }
           else {
@@ -170,7 +174,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           userDisplayName: res.portfolioCenterData.pm
         }
       });
-
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true
