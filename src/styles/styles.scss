@@ -59,4 +59,10 @@ $square-size: 10px;
 .ngx-icon-header {
     text-align: center;
 }
+.fast-load-table{
+    datatable-scroller {
+        width: 100% !important;
+    }
+}
+
 

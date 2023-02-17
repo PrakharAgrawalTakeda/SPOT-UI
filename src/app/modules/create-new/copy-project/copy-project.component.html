@@ -1,8 +1,8 @@
 
-<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10" *ngIf="viewContent">
     <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
         <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
-            <div class="flex flex-col flex-auto  overflow-hidden p-6">
+            <div class="flex flex-col flex-auto overflow-hidden p-6">
                 <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate"><b>Standard Project/Program Capture Form</b></div> -->
                 <div class="flex items-start justify-between bg-primary sidepanel-header">
                     <div class="text-on-primary" style="padding-top: 6px">Copy Project Selection</div>
@@ -14,9 +14,7 @@
                 </div>
                 <br />
                 <mat-label>Search and select a project to be copied</mat-label>
-                <div
-                    class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
-
+                <div class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
                     <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
                         <search (newItemEvent)="addItem($event)" [appearance]="'bar'" [opened]="true"
                             [calledFrom]="'Copy'"></search>
@@ -26,13 +24,29 @@
                     update/edit this data after project creation.</p>
                 <form class="pl-3 w-full overflow-hidden" [formGroup]="CopyProjectForm"
                     (ngSubmit)="SubmitCopyProject($event)">
-                    <div class="flex justify-between items-center mt-6 mb-6"
-                        *ngFor="let items of lookupTemplate; let i = index">
-                        <mat-slide-toggle [disabled]="i<2"
-                            formControlName="addTemplate">{{items.lookUpName}}</mat-slide-toggle>
+                    <div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="projectTitle">{{lookupTemplate[0].lookUpName}}</mat-slide-toggle>
+                    </div>
+                    <div class="flex justify-between items-center mt-6 mb-6">
+                    <mat-slide-toggle formControlName="projectType">{{lookupTemplate[1].lookUpName}}</mat-slide-toggle>
+                    </div>
+                    <div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="problemDescription">{{lookupTemplate[2].lookUpName}}</mat-slide-toggle>
+                    </div><div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="proposedStatement">{{lookupTemplate[3].lookUpName}}</mat-slide-toggle>
+                    </div><div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="keySuccess">{{lookupTemplate[4].lookUpName}}</mat-slide-toggle>
+                    </div><div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="scope">{{lookupTemplate[5].lookUpName}}</mat-slide-toggle>
+                    </div><div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="milestone">{{lookupTemplate[6].lookUpName}}</mat-slide-toggle>
+                    </div><div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="projectTeam">{{lookupTemplate[7].lookUpName}}</mat-slide-toggle>
+                    </div><div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="categoricalDriver">{{lookupTemplate[8].lookUpName}}</mat-slide-toggle>
                     </div>
                     <div style="text-align: right;">
-                        <button style="background-color: rgba(76,155,207);margin-bottom: 10px;margin-right: 80px;"
+                        <button style="background-color: rgba(76,155,207);margin-bottom: 10px;margin-right: 80px;color: white;"
                             mat-button type="submit">Copy Project</button>
                     </div>
                 </form>

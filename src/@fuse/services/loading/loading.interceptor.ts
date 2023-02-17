@@ -34,13 +34,12 @@ export class FuseLoadingInterceptor implements HttpInterceptor {
 
         // Set the loading status to true
         this._fuseLoadingService._setLoadingStatus(true, req.url);
-        document.getElementsByTagName('body') ? document.getElementsByTagName('body')[0].classList.add('cursor-wait') : ''
+        
 
         return next.handle(req).pipe(
             finalize(() => {
                 // Set the status to false if there are any errors or the request is completed
                 this._fuseLoadingService._setLoadingStatus(false, req.url);
-                document.getElementsByTagName('body') ? document.getElementsByTagName('body')[0].classList.remove('cursor-wait') : ''
             }));
     }
 }
