@@ -3,22 +3,15 @@
         <mat-label class="items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
                 *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
         </mat-label>
-        <mat-chip-list #chipList class="chiplist" formControlName="chipList">
+        <mat-chip-list #chipList class="chiplist" formControlName="chipList" [required]="Required">
             <mat-chip *ngFor="let item of selectedOption" (removed)="removeOption(item)">
                 {{item[valuePointer]}}
                 <button matChipRemove *ngIf="!isDisabled">
                     <mat-icon inline=true>cancel</mat-icon>
                 </button>
             </mat-chip>
-            <!-- <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>
-            <ng-template #ifBlock> -->
-                <input #input matInput [required]=Required (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
+                <input #input matInput (focus)="changeInput()" formControlName="chipList" [placeholder]="placeholder"
                     [matAutocomplete]="singleSelect" [matChipInputFor]="chipList">
-            <!-- </ng-template>
-            <ng-template #elseBlock>
-                <input #input matInput (focus)="changeInput()" formControlName="control" [placeholder]="placeholder"
-                    [matAutocomplete]="singleSelect" [matChipInputFor]="chipList">
-            </ng-template> -->
         </mat-chip-list>
         <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
             (optionSelected)="onFunctionSelect($event)">

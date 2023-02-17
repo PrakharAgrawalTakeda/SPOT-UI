@@ -1,19 +1,14 @@
 <div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
-    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: 680px;">
         <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
-            <div class="flex flex-col flex-auto  overflow-hidden p-6">
-                <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate"><b>Standard Project/Program Capture Form</b></div> -->
-                <div class="flex items-start justify-between bg-primary sidepanel-header">
-                    <div class="text-on-primary" style="padding-top: 6px">Project Capture Form</div>
-                    
-                </div>
+            <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
                 <div>
                     <div>
-                        <mat-stepper linear #stepper>
-                            <mat-step>
+                        <mat-stepper linear #stepper (animationDone)="selectionChange(stepper)">
+                            <mat-step *ngIf="!viewContent">
                                 <div >
-                                <form style="margin-right: 300px;margin-left: 300px;">
-                                    <div style="overflow-y: scroll;height: 400px;">
+                                <form style="margin-left: 420px;display: inline-block;width: 50%;">
+                                    <div style="overflow-y: scroll;height: 65vh;">
                                     <ng-template 
                                         matStepLabel><span>Basics</span></ng-template>
                                     <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(0,$event)" [viewElements]="['problemTitle', 'portfolioOwner', 'excecutionScope', 'owningOrganization', 'SubmittedBy', 'primaryProduct', 'otherImpactedProducts', 'projectDescription', 'targetGoalSituation', 'localCurrency', 'problemType1']"></app-general-info-single-edit>
@@ -30,17 +25,23 @@
                                 </form>
                                 </div>
                             </mat-step>
-                            <mat-step>
+                            <mat-step *ngIf="!viewContent">
                                 <div >
-                                <form style="margin-right: 300px;margin-left: 300px;">
-                                    <div style="overflow-y: scroll;height: 400px;">
+                                <form style="margin-left: 420px;display: inline-block;width: 50%;">
+                                    <div style="overflow-y: scroll;height: 65vh;">
                                     <ng-template matStepLabel>Details</ng-template>
                                     <h2><b>Project Details</b></h2>
                                     <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
                                         [viewElements]="['enviornmentalPortfolio', 'isCapsProject', 'parentProject']"></app-general-info-single-edit>
-                                    <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(2,$event)"></app-oe-project-single-edit>
+                                    <div style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;"class="flex flex-col flex-auto bg-card shadow rounded-2xl">
+                                        <app-oe-project-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueOE)="captureValue(2,$event)"></app-oe-project-single-edit>
+                                    </div>
+                                    <div style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;" class="flex flex-col flex-auto bg-card shadow rounded-2xl">
                                     <app-tech-transfer-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueTech)="captureValue(3,$event)"></app-tech-transfer-single-edit>
+                                    </div>
+                                    <div style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;" class="flex flex-col flex-auto bg-card shadow rounded-2xl">
                                     <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (QualityValue) = "captureValue(6,$event)" (formValueQuality)="captureValue(4,$event)"></app-quality-ref-bulk-edit>
+                                    </div>
                                     <h2><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
                                     </div>
@@ -56,14 +57,22 @@
                             </div>
                             </mat-step>
 
-                            <mat-step>
+                            <mat-step *ngIf="!viewContent">
                                 <div>
-                                <form style="margin-right: 300px;margin-left: 300px;">
+                                <form style="margin-right: 400px;margin-left: 350px;">
                                     <div >
                                     <ng-template matStepLabel>Review</ng-template>
-                                    <div class="row" style="overflow-y: scroll;height: 400px;margin-top: 30px;">
+                                    <div class="row" style="overflow-y: scroll;height: 65vh;margin-top: 30px;">
                                         <label style="color: rgba(76,155,207);">Basic Info</label>
                                         <br />
+                                        <div class="test">
+                                            <div class="child">
+                                                <label class="reviewLabel">Submitted By * </label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.SubmittedBy.userDisplayName}}</label>
+                                            </div>
+                                        </div>
                                         <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">Project Name * </label>
@@ -78,14 +87,6 @@
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.problemType}}</label>
-                                            </div>
-                                        </div>
-                                        <div class="test">
-                                            <div class="child">
-                                                <label class="reviewLabel">Parent Program</label>
-                                            </div>
-                                            <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.projectsingle}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -117,10 +118,10 @@
                                         </div>
                                         <div class="test">
                                             <div class="child">
-                                                <label class="reviewLabel">Submitted By * </label>
+                                                <label class="reviewLabel">Local Currency * </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.SubmittedBy.userDisplayName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.localCurrency}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -145,10 +146,10 @@
                                         </div>
                                         <div class="test">
                                             <div class="child">
-                                                <label class="reviewLabel">Problem Description / Present Situation *</label>
+                                                <label class="reviewLabel">Problem Description / Present Situation / Submission Description*</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.projectDescription}}</label>
+                                                <label style="white-space: pre-wrap;" class="reviewText">{{createProjectForm.value.projectDescription}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -156,12 +157,20 @@
                                                 <label class="reviewLabel">Target End State</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.targetGoalSituation}}</label>
+                                                <label style="white-space: pre-wrap;" class="reviewText">{{createProjectForm.value.targetGoalSituation}}</label>
                                             </div>
                                         </div>
                                         <br />
                                         <label style="color: rgba(76,155,207);">Project Details</label>
                                         <br />
+                                        <div class="test">
+                                            <div class="child">
+                                                <label class="reviewLabel">Parent Program</label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.projectsingle}}</label>
+                                            </div>
+                                        </div>
                                         <div class="test">
                                             <div class="child">
                                                 <label class="reviewLabel">Environmental Portfolio</label>
@@ -333,28 +342,6 @@
                                         </div>
                                         <div class="test">
                                             <div class="child">
-                                                <label class="reviewLabel">Site Assessment</label>
-                                            </div>
-                                            <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.isSiteAssessment}}</label>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="test" *ngIf="createProjectForm.controls['isSiteAssessment'].value">
-                                            <div class="child">
-                                                <label class="reviewLabel">Site Assessment Type</label>
-                                            </div>
-                                            <div class="child">
-                                                <span *ngFor="let item of createProjectForm.value.siteAssessmentCategory; let i = index">
-                                                    <label class="reviewText"
-                                                        *ngIf="i > 0 && i<createProjectForm.value.siteAssessmentCategory.length">,</label>
-                                                    <label class="reviewText">{{item.lookUpName}}</label>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="test">
-                                            <div class="child">
                                                 <label class="reviewLabel">Strategic Deployment Annual Initiative</label>
                                             </div>
                                             <div class="child">
@@ -377,6 +364,29 @@
                                                 <label class="reviewText">{{createProjectForm.value.annualMustWinID.lookUpName}}</label>
                                             </div>
                                         </div>
+                                        <div class="test">
+                                            <div class="child">
+                                                <label class="reviewLabel">Site Assessment</label>
+                                            </div>
+                                            <div class="child">
+                                                <label class="reviewText">{{createProjectForm.value.isSiteAssessment}}</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="test" *ngIf="createProjectForm.controls['isSiteAssessment'].value">
+                                            <div class="child">
+                                                <label class="reviewLabel">Site Assessment Type</label>
+                                            </div>
+                                            <div class="child">
+                                                <span *ngFor="let item of createProjectForm.value.siteAssessmentCategory; let i = index">
+                                                    <label class="reviewText"
+                                                        *ngIf="i > 0 && i<createProjectForm.value.siteAssessmentCategory.length">,</label>
+                                                    <label class="reviewText">{{item.lookUpName}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        
                                         </div>
                                     </div>
                                     <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
@@ -390,20 +400,21 @@
                                 </form>
                             </div>
                             </mat-step>
-                            <mat-step>
-                                <div>
-                                    <div style="margin-right: 300px;margin-left: 300px;">
-                                        <ng-template matStepLabel><span></span></ng-template>
+                            </mat-stepper>
+                            <!-- <mat-step *ngIf="viewContent"> -->
+                                <div *ngIf="viewContent">
+                                    <div style="margin-right: 13vw;margin-left: 16vw;">
+                                        <!-- <ng-template matStepLabel><span></span></ng-template> -->
                                         <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px; margin-top: 42px;"><b>Please select the next page</b></label>
-                                        <div class="box"><button (click)="RoutetoProposal()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Proposal</button></div>
-                                        <div class="box"><button (click)="RoutetoBC()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Business Case</button></div>
-                                        <div class="box"><button (click)="RoutetoCharter()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Charter</button></div>
-                                        <div class="box"><button (click)="RoutetoBoard()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Project Board</button></div>
-                                        <div class="box"><button (click)="RouteCreateProject()" mat-button style="background-color: rgba(76,155,207);margin-bottom: 10px; width: 50%;margin-left: 170px;color: white;">Create another Project</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoProposal()" mat-button>Project Proposal</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoBC()" mat-button>Business Case</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoCharter()" mat-button>Project Charter</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoBoard()" mat-button>Project Board</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RouteCreateProject()" mat-button>Create another Project</button></div>
                                     </div>
                                 </div>
-                            </mat-step>
-                        </mat-stepper>
+                            <!-- </mat-step> -->
+                        <!-- </mat-stepper> -->
                     </div>
                 </div>
             </div>
