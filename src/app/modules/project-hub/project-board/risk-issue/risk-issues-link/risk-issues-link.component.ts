@@ -30,7 +30,6 @@ export class RiskIssuesLinkComponent implements OnInit {
         this.linkDBData = []
         this.linkedRiskIssues = []
         this.apiService.riskIssueGetLinkData(this.projectHubService.projectid).then(res => {
-            console.log("Link Data:", res)
             this.linkDBData = [...this.sortByLevel(res)]
             if (!this.projectHubService.includeClosedItems.riskIssue.value) {
                 this.linkData = this.sortByLevel(this.filterClosedItems(res))
@@ -41,7 +40,6 @@ export class RiskIssuesLinkComponent implements OnInit {
             for (var i in this.linkData) {
                 this.linkedRiskIssues.push([])
             }
-            console.log("Linked RiskIssues", this.linkData, this.linkDBData)
             this.localIncludedItems.controls.toggle.patchValue(this.projectHubService.includeClosedItems.riskIssue.value)
             this.projectHubService.isFormChanged = false
             this.viewContent = true
