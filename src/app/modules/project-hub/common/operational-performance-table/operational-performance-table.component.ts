@@ -14,7 +14,7 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
-  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -40,6 +40,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
       this.bulkEditType = 'OperationalPerformanceBulkEditCloseOut';
       this.addSingle = 'OperationalPerformanceSingleEditCloseOut'
     }
+    if (this.mode == 'Project-Charter') {
+      this.bulkEditType = 'OperationalPerformanceBulkEditCharter';
+      this.addSingle = 'OperationalPerformanceSingleEditCharter'
+    }
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -47,6 +51,12 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   }
   dataloader() {
     if (this.mode == 'Project-Close-Out'){
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getprojectviewdata(this.id).then((res: any) => {
+            this.projectViewDetails = res
+      })
+    }
+    if (this.mode == 'Project-Charter'){
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getprojectviewdata(this.id).then((res: any) => {
             this.projectViewDetails = res

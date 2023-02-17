@@ -174,7 +174,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           userDisplayName: res.portfolioCenterData.pm
         }
       });
-
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
       this.viewContent = true

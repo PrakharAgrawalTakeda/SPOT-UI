@@ -78,7 +78,7 @@
 
     <div class="mt-3 pl-3 h-[78vh] overflow-hidden" #target id="scheduleTableDiv">
       <ngx-datatable
-        class="datatable-schedule-74 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+        class="datatable-schedule-74 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
         [scrollbarV]="false" [rowClass]="getRowClass">
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal' || mode =='Business-Case'">
@@ -530,11 +530,11 @@
       </a>
     </div>
   </div>
-  <form class="w-full">
+  <!-- <form class="w-full"> -->
     <div class="overflow-x-auto">
       <div class="mt-3 h-[85vh] overflow-hidden">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-          class="pl-3 datatable-bl-83 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+          class="pl-3 pt-3 datatable-bl-83 material font-medium text-sm text-default whitespace-nowrap cursor-default"
           [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
 
           <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
@@ -555,7 +555,7 @@
           </ngx-datatable-column> -->
 
 
-          <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5">
+          <ngx-datatable-column name="Log ID" prop="logId" [flexGrow]="0.5" *ngIf="mode=='Normal'">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
               <div *ngIf="checklogDetails(row.baselineLogId) && value != '1'" class="logID">
                 <a (click)="baselineLogDetails(row.baselineLogId)" class="cursor-pointer">{{value}}</a>
@@ -568,7 +568,14 @@
 
 
 
-          <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68">
+          <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68" *ngIf="mode=='Baseline-Log'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="countbaseline">
+                <p>{{value}}</p>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Baseline" prop="baselineCount" [flexGrow]="0.68" *ngIf="mode=='Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <div class="count">
                 <p>{{value}}</p>
@@ -576,7 +583,12 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5">
+          <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5"  *ngIf="mode=='Baseline-Log'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Baseline Date" prop="modifiedDate" [flexGrow]="1.5"  *ngIf="mode=='Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <p>{{value | date:'dd-MMM-yyyy hh:mm:ss a'}}</p>
             </ng-template>
@@ -584,13 +596,49 @@
 
 
 
-          <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5">
+          <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5"  *ngIf="mode=='Baseline-Log'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <p>{{getUserName(value)}}</p>
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Justification" prop="baselineComment" [flexGrow]="4">
+          <ngx-datatable-column name="Baseline Set By" prop="teamMemberAdId" [flexGrow]="1.5"  *ngIf="mode=='Normal'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <p>{{getUserName(value)}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Justification" prop="baselineComment" [resizeable]="false" [sortable]="false" [flexGrow]="2.1"  *ngIf="mode=='Baseline-Log'">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+                <p *ngIf="value == ''">&nbsp;</p>{{value}}
+              </a>
+              <form [formGroup]="baselineLogForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+                <spot-textarea [rows]="3" formControlName="baselineComment" name="baselineComment" [showLabel]="false">
+                </spot-textarea>
+              </form>
+            </ng-template>
+          </ngx-datatable-column>
+  
+          <ngx-datatable-column name="Include in Close Out (Max 10)" prop="includeInCloseout" [sortable]="false"
+            [resizeable]="false" [flexGrow]="0.6"  *ngIf="mode=='Baseline-Log'">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+                [ngClass]="{'closed': row.completionDate != null}">
+                <p *ngIf="!value">&nbsp;</p>
+                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+              </a>
+              <form [formGroup]="baselineLogForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
+                class="p-2 overflow-hidden">
+                <div class="flex items-center justify-between">
+                  <mat-slide-toggle name="includeInCloseout" [showLabel]="false" formControlName="includeInCloseout">
+                  </mat-slide-toggle>
+                </div>
+              </form>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Justification" prop="baselineComment" [flexGrow]="4"  *ngIf="mode=='Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
               <p>{{value}}</p>
             </ng-template>
@@ -599,13 +647,21 @@
         </ngx-datatable>
       </div>
     </div>
-  </form>
-  <div class="mt-7 pr-6 pl-6 flex justify-end items-center w-full">
-    <!-- <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
-      Cancel
-    </button> -->
+  
+  <!-- </form> -->
+  
+    <div class="pr-6 pl-6 pt-3 flex justify-between items-center w-full" *ngIf="mode== 'Baseline-Log'">
+    <button class="min-w-26" mat-flat-button [color]="'primary'"
+        (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)"  *ngIf="mode== 'Baseline-Log'">
+        Cancel
+      </button>
 
-    <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()">
+    <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitLog()" *ngIf="mode== 'Baseline-Log'">
+      Submit
+    </button>
+  </div>
+  <div class="mt-7 pr-6 pl-6 flex justify-end items-center w-full">
+    <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelBaselineLogs()"  *ngIf="mode=='Normal'">
       OK
     </button>
 
@@ -659,51 +715,69 @@
   </div>
   <div class="overflow-y-hidden">
     <!-- <div class="mt-3 h-[85vh] overflow-hidden"> -->
-  <div class="mx-4 mt-8 h-[78.5vh] overflow-y-scroll">
-    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-      class="pr-2 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="logdetailsObj"
-      [rowClass]="getRowClass">
+    <div class="mx-4 mt-8 h-[78.5vh] overflow-y-scroll">
+      <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        class="pr-2 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="logdetailsObj"
+        [rowClass]="getRowClass">
 
-      <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.8">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <p>{{value}}</p>
+        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.8">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <p>{{value}}</p>
 
-        </ng-template>
-      </ngx-datatable-column>
+          </ng-template>
+        </ngx-datatable-column>
 
-      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish" prop="prevplannedFinish"
-        [flexGrow]="0.48">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Planned Finish" prop="prevplannedFinish"
+          [flexGrow]="0.48">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+            <div *ngIf="value == 'empty'; else null55" class="noplanned1">
+              &nbsp;
+            </div>
+            <ng-template #null55>
+              <div *ngIf="row.plannedchange" class="plannedchange">
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+              </div>
+              <div *ngIf="!row.plannedchange">
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+              </div>
+            </ng-template>
 
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish" prop="currplannedFinish"
-        [flexGrow]="0.48">
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Log ID {{baselinelogdetailscurr.logId}} Planned Finish" prop="currplannedFinish"
+          [flexGrow]="0.48">
 
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <div *ngIf="value == 'empty'; else null5" class="noplanned">
-            &nbsp;
-          </div>
-          <ng-template #null5>
-          <div *ngIf="row.plannedchange" class="plannedchange">
-            <p>{{value | date:'dd-MMM-yyyy'}}</p>
-          </div>
-          <div *ngIf="!row.plannedchange">
-            <p>{{value | date:'dd-MMM-yyyy'}}</p>
-          </div>
-        </ng-template>
-        </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div *ngIf="value == 'empty'; else null5" class="noplanned">
+              &nbsp;
+            </div>
+            <ng-template #null5>
+              <div *ngIf="row.plannedchange" class="plannedchange">
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+              </div>
+              <div *ngIf="!row.plannedchange">
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+              </div>
+            </ng-template>
+          </ng-template>
 
 
-      </ngx-datatable-column>
+        </ngx-datatable-column>
 
-      <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish" prop="prevbaselineFinish"
-        [flexGrow]="0.48">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ngx-datatable-column name="Log ID {{baselinelogdetailsprev.logId}} Baseline Finish" prop="prevbaselineFinish"
+          [flexGrow]="0.48">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-          <p>{{value | date:'dd-MMM-yyyy'}}</p>
+            <div *ngIf="value == 'empty'; else null11" class="nobaselined1">
+              &nbsp;
+            </div>
+            <ng-template #null11>
+              <p *ngIf="row.baselinechange" class="baselineChange">{{value | date:'dd-MMM-yyyy'}}</p>
+
+
+              <p *ngIf="!row.baselinechange">{{value | date:'dd-MMM-yyyy'}}</p>
+            </ng-template>
 
           </ng-template>
         </ngx-datatable-column>
@@ -726,7 +800,17 @@
           [flexGrow]="0.55">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <p>{{value | date:'dd-MMM-yyyy'}}</p>
+            <div *ngIf="value == 'empty'; else null22" class="nocompleted1">
+              &nbsp;
+            </div>
+            <ng-template #null22>
+              <div *ngIf="row.completionchange" class="completionchange">
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+              </div>
+              <div *ngIf="!row.completionchange">
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+              </div>
+            </ng-template>
 
           </ng-template>
         </ngx-datatable-column>
@@ -751,7 +835,14 @@
           [flexGrow]="0.39">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <p>{{value}}</p>
+            <div *ngIf="value == 'empty'; else null33" class="noindicator1">
+              &nbsp;
+            </div>
+            <ng-template #null33>
+              <p *ngIf="row.indicatorchange" class="indicatorchange">{{value}}</p>
+
+              <p *ngIf="!row.indicatorchange">{{value}}</p>
+            </ng-template>
 
           </ng-template>
         </ngx-datatable-column>

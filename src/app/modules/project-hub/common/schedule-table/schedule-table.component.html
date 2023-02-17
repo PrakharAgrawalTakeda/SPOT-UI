@@ -68,8 +68,8 @@
     </div> -->
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="material font-medium text-default text-sm whitespace-nowrap cursor-default" [rows]="schedulengxdata"
-        #scheduleTable [rowClass]="getRowClass">
+        class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="schedulengxdata"
+        #scheduleTable [rowClass]="getRowClass" [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }]">
         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5" *ngIf="mode== 'Normal' || mode =='Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
