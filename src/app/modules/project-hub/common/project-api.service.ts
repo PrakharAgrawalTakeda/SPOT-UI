@@ -485,13 +485,19 @@ export class ProjectApiService {
       const abc$ = this.http.get(url)
       const response =  lastValueFrom(abc$)
       return response
-    }
+  }
 
     async milestoneGetLinkData(projectid: string){
       var userid = GlobalVariables.apiurl+"Schedule/GetScheduleLinkData/"+ projectid
       const abc$ = this.http.get(userid)
       const response = await lastValueFrom(abc$)
       return response
+    }
+    async getStandardMilestoneSets(projectid: string){
+        var userid = GlobalVariables.apiurl+"StandardMilestoneSet/GetTemplates/"+ projectid
+        const abc$ = this.http.get(userid)
+        const response = await lastValueFrom(abc$)
+        return response
     }
     async bulkeditRiskIssue(body,projectId){
         var link = GlobalVariables.apiurl+"RiskIssue/BulkEdit/" + projectId

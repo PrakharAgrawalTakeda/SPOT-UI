@@ -34,7 +34,7 @@ export class StandardMilestoneSetsComponent implements OnInit {
         this.standardMilestoneData = []
         this.standardMilestoneDBData = []
         this.standarMilestoneAdded = []
-        this.apiService.milestoneGetLinkData(this.id).then(res => {
+        this.apiService.getStandardMilestoneSets(this.id).then(res => {
             this.standardMilestoneDBData = [...this.sortByLevel(res)]
             this.standardMilestoneData = this.sortByLevel(res)
             for (var i in this.standardMilestoneData) {

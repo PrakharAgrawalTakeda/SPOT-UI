@@ -1831,7 +1831,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
     openStandardMilestonesSets(): void {
         this.viewStandardMilestonesSets = true;
-        console.log("yyyyyyyyyyyyyyyy",this.viewStandardMilestonesSets)
     }
     baselineLogs() {
 
