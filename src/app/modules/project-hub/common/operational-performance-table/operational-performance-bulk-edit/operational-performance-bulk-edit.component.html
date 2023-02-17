@@ -138,12 +138,29 @@
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
                             *ngIf="operationalPerformanceEditStack.includes(rowIndex)" class="h-[45px]">
                             <mat-slide-toggle
-                                [matTooltip]="this.operationalPerformanceForm.controls[rowIndex]['controls']['includeInCloseOut'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
+                                [matTooltip]="this.operationalPerformanceForm.controls[rowIndex]['controls']['includeInCloseOut'].disabled ? 'Only 3 can be selected at a time for close out report display' : null"
                                 class="h-full overflow-visible" formControlName="includeInCloseOut">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="mode=='Project-Charter'" [resizeable]="false" [sortable]="false" name="Include In Project Charter Report (Max 3)"
+                prop="includeInCharter" [flexGrow]="0.5">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                        (click)="operationalPerformanceTableEditRow(rowIndex)" class="w-full">
+                        <p *ngIf="!value">&nbsp;</p>
+                        <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                    </a>
+                    <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                        *ngIf="operationalPerformanceEditStack.includes(rowIndex)" class="h-[45px]">
+                        <mat-slide-toggle
+                            [matTooltip]="this.operationalPerformanceForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter report display' : null"
+                            class="h-full overflow-visible" formControlName="includeInCharter">
+                        </mat-slide-toggle>
+                    </form>
+                </ng-template>
+            </ngx-datatable-column>
                 <ngx-datatable-column *ngIf="mode=='Normal'" [resizeable]="false" [sortable]="false"
                     name="Include In Project Dashboard Report (Max 3)" prop="includeInProjectDashboard"
                     [flexGrow]="0.5">

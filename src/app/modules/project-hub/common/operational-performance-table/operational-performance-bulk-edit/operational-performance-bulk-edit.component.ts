@@ -12,7 +12,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./operational-performance-bulk-edit.component.scss']
 })
 export class OperationalPerformanceBulkEditComponent implements OnInit {
-  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   projectViewDetails: any = {}
   opDb = []
   submitObj = []
@@ -95,10 +95,30 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           i['controls']['includeInProjectDashboard'].enable()
         }
       }
+      if (formValue.filter(x => x.includeInCharter == true).length < 3) {
+        for (var i of this.operationalPerformanceForm.controls) {
+          i['controls']['includeInCharter'].enable()
+        }
+      }
       else {
         for (var i of this.operationalPerformanceForm.controls) {
           if (i['controls']['includeInProjectDashboard'].value != true) {
             i['controls']['includeInProjectDashboard'].disable()
+          }
+          if (i['controls']['includeInCharter'].value != true) {
+            i['controls']['includeInCharter'].disable()
+          }
+        }
+      }
+      if (formValue.filter(x => x.includeInCloseOut == true).length < 3) {
+        for (var i of this.operationalPerformanceForm.controls) {
+          i['controls']['includeInCloseOut'].enable()
+        }
+      }
+      else {
+        for (var i of this.operationalPerformanceForm.controls) {
+          if (i['controls']['includeInCloseOut'].value != true) {
+            i['controls']['includeInCloseOut'].disable()
           }
         }
       }

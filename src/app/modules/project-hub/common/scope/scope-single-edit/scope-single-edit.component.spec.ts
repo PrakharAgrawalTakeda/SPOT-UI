@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TopsComponent } from './tops.component';
+import { ScopeSingleEditComponent } from './scope-single-edit.component';
 
-describe('TopsComponent', () => {
-  let component: TopsComponent;
-  let fixture: ComponentFixture<TopsComponent>;
+describe('ScopeSingleEditComponent', () => {
+  let component: ScopeSingleEditComponent;
+  let fixture: ComponentFixture<ScopeSingleEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopsComponent ]
+      declarations: [ ScopeSingleEditComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TopsComponent);
+    fixture = TestBed.createComponent(ScopeSingleEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

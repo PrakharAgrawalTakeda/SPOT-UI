@@ -107,7 +107,13 @@
 }
 
 .ngx-datatable.datatable-qr-80 {
-    height: 33vh !important;
+    height: 22vh !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
+}
+
+.box{
+    display: flex;
+    justify-content: center;
+    margin-right: 160px;
 }
