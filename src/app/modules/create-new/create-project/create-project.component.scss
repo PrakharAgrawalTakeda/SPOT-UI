@@ -79,19 +79,24 @@
         width: 52%;
 }
 
-.reviewLabel {
-    margin-left: 20px;
-}
 
 .test {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     width: 100%;
 }
 
 
 .child {
     width: 50%;
+    margin-left: 10px;
+}
+
+.parent {
+    width: 50%;
+    margin-left: 10px;
+    text-align: end;
+    font-weight: bold;
 }
 
 .ngx-datatable.datatable-qr-80 {
@@ -128,11 +133,3 @@
     color: black !important;
     font-weight: normal !important;
 }
-
-// .mat-horizontal-stepper-header-container {
-//     display: none !important;
-// }
-
-// #cdk-step-label-0-3{
-//     display: none !important;
-// }
