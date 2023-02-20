@@ -36,6 +36,7 @@ export class CreateProjectComponent implements OnInit {
   campaingTypeName: string = "";
   productionStepName: string = "";
   localCurrency:any = [];
+  viewContent:boolean = false
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -375,8 +376,12 @@ export class CreateProjectComponent implements OnInit {
         }
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
-            this.router.navigate([`./portfolio-center`]);
+            this.viewContent = true
+            // this.router.navigate([`./portfolio-center`]);
         })
+      }
+      else{
+          this.viewContent = true
       }
     })
   }
@@ -406,7 +411,7 @@ export class CreateProjectComponent implements OnInit {
     window.location.reload()
   }
   CheckMandatory(index: number){
-    if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || this.createProjectForm.value.SubmittedBy == "" || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
+    if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -441,6 +446,40 @@ export class CreateProjectComponent implements OnInit {
     }
     else if (Object.keys(id).length > 0) {
       return id && id.lookUpId != '' ? this.qualityType.find(x => x.lookUpId == id.lookUpId).lookUpName : ''
+    }
+  }
+
+  selectionChange(index){
+    console.log(index)
+    if (index._selectedIndex == 1){
+      if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "You must complete all mandatory fields.",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        this.stepper.selectedIndex = "0"
+      }
+      else {
+        this.stepper.selectedIndex = index._selectedIndex;
+      }
     }
   }
 
