@@ -1761,12 +1761,22 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
 
         for (var i of formValue) {
-          console.log(i)
+            var milestoneName = i.milestone
+            if(i.milestoneType == 1){
+                if(!i.milestone.includes('Execution Start')){
+                    milestoneName = 'Execution Start - '.concat(i.milestone)
+                }
+            }
+            if(i.milestoneType == 2){
+                if(!i.milestone.includes('Execution End ')){
+                    milestoneName = 'Execution End - '.concat(i.milestone)
+                }
+            }
           if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
             this.formValue.push({
               scheduleUniqueId: i.scheduleUniqueId,
               projectId: i.projectId,
-              milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+              milestone: milestoneName,
               plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
@@ -2465,12 +2475,22 @@ else{
     console.log(formValue)
     if (formValue.filter(x => x.includeInCharter == true).length <= 10) {
     for (var i of formValue) {
-      console.log(i)
+        var milestoneName = i.milestone
+        if(i.milestoneType == 1){
+            if(!i.milestone.includes('Execution Start')){
+                milestoneName = 'Execution Start - '.concat(i.milestone)
+            }
+        }
+        if(i.milestoneType == 2){
+            if(!i.milestone.includes('Execution End ')){
+                milestoneName = 'Execution End - '.concat(i.milestone)
+            }
+        }
       if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
         this.schedulecharterobj.push({
           scheduleUniqueId: i.scheduleUniqueId,
           projectId: i.projectId,
-          milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+          milestone: milestoneName,
           plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
@@ -2547,12 +2567,22 @@ else{
 var formValue = this.milestoneForm.getRawValue()
 if (formValue.filter(x => x.includeInCloseout == true).length <= 20) {
 for (var i of formValue) {
-  console.log(i)
+    var milestoneName = i.milestone
+    if(i.milestoneType == 1){
+        if(!i.milestone.includes('Execution Start')){
+            milestoneName = 'Execution Start - '.concat(i.milestone)
+        }
+    }
+    if(i.milestoneType == 2){
+        if(!i.milestone.includes('Execution End ')){
+            milestoneName = 'Execution End - '.concat(i.milestone)
+        }
+    }
   if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
     this.schedulecloseoutobj.push({
       scheduleUniqueId: i.scheduleUniqueId,
       projectId: i.projectId,
-      milestone: (i.milestoneType > 0 ? (i.milestoneType == 1 ? 'Execution Start - '.concat(i.milestone) : (i.milestoneType == 2 ? 'Execution End - '.concat(i.milestone) : i.milestone)) : i.milestone),
+      milestone: milestoneName,
       plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
       baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
       responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
@@ -2795,55 +2825,43 @@ else{
   // }
   addStandardMilestonesToList(standardMilestones: any[]){
       standardMilestones.forEach(x=>{
-          if(x.milestoneType == 1 || x.milestoneType == 2){
-              let index = 0;
-              for (let control of this.milestoneForm.controls) {
-                  if(control.value.milestoneType == x.milestoneType){
-                      control.patchValue({milestone: x.milestone})
-                      this.milestoneTableEditRow(index)
+          switch(x.milestoneType) {
+              case 1: {
+                  let index = 0;
+                  let exists = false;
+                  for (let control of this.milestoneForm.controls) {
+                      if(control.value.milestoneType == x.milestoneType){
+                          control.patchValue({milestone: x.milestone})
+                          this.milestoneTableEditRow(index)
+                          exists = true;
+                      }
+                      index++;
                   }
-                  index++;
+                  if(!exists){
+                      this.addStandardMilestoneToEditStack(x)
+                  }
+                  break;
               }
-          }else{
-              this.milestoneForm.push(new FormGroup({
-                  scheduleUniqueId: new FormControl(''),
-                  projectId: new FormControl(this.id),
-                  milestone: new FormControl(x.milestone),
-                  plannedFinish: new FormControl(''),
-                  baselineFinish: new FormControl(''),
-                  responsiblePersonName: new FormControl({}),
-                  function: new FormControl({}),
-                  functionGroupId: new FormControl(x.functionalOwnerId),
-                  completionDate: new FormControl(''),
-                  comments: new FormControl(x.comment),
-                  includeInReport: new FormControl(x.includeInReport),
-                  includeInCharter: new FormControl(false),
-                  milestoneType: new FormControl(x.milestoneType),
-                  templateMilestoneId: new FormControl(''),
-                  includeInCloseout: new FormControl(false),
-                  responsiblePersonId: new FormControl(''),
-                  indicator: new FormControl('')
-              }))
-              var j = [{
-                  scheduleUniqueId: "new",
-                  baselineFinish: null,
-                  comments: x.comment,
-                  completionDate: null,
-                  functionGroupId: x.functionalOwnerId,
-                  includeInCharter: false,
-                  includeInCloseout: false,
-                  includeInReport: x.includeInReport,
-                  indicator: "Grey",
-                  milestone: x.milestone,
-                  milestoneType: x.milestoneType,
-                  plannedFinish: null,
-                  projectId: this.id,
-                  responsiblePersonId: null,
-                  responsiblePersonName: null,
-                  templateMilestoneId: null
-              }]
-              this.schedulengxdata = [...this.schedulengxdata, ...j]
-              this.milestoneTableEditRow(this.schedulengxdata.length - 1)
+              case 2: {
+                  let index = 0;
+                  let exists = false;
+                  for (let control of this.milestoneForm.controls) {
+                      if(control.value.milestoneType == x.milestoneType){
+                          control.patchValue({milestone: x.milestone})
+                          this.milestoneTableEditRow(index)
+                          exists = true;
+                      }
+                      index++;
+                  }
+                  if(!exists){
+                      this.addStandardMilestoneToEditStack(x)
+                  }
+                  break;
+              }
+              default: {
+                  this.addStandardMilestoneToEditStack(x)
+                  break;
+              }
           }
 
           var div = document.getElementsByClassName('datatable-scroll')[0]
@@ -2856,6 +2874,47 @@ else{
           }, 100);
       })
       this.viewStandardMilestonesSets = false
+  }
+  addStandardMilestoneToEditStack(sM: any){
+      this.milestoneForm.push(new FormGroup({
+          scheduleUniqueId: new FormControl(''),
+          projectId: new FormControl(this.id),
+          milestone: new FormControl(sM.milestone),
+          plannedFinish: new FormControl(''),
+          baselineFinish: new FormControl(''),
+          responsiblePersonName: new FormControl({}),
+          function: new FormControl({}),
+          functionGroupId: new FormControl(sM.functionalOwnerId),
+          completionDate: new FormControl(''),
+          comments: new FormControl(sM.comment),
+          includeInReport: new FormControl(sM.includeInReport),
+          includeInCharter: new FormControl(false),
+          milestoneType: new FormControl(sM.milestoneType),
+          templateMilestoneId: new FormControl(''),
+          includeInCloseout: new FormControl(false),
+          responsiblePersonId: new FormControl(''),
+          indicator: new FormControl('')
+      }))
+      var j = [{
+          scheduleUniqueId: "new",
+          baselineFinish: null,
+          comments: sM.comment,
+          completionDate: null,
+          functionGroupId: sM.functionalOwnerId,
+          includeInCharter: false,
+          includeInCloseout: false,
+          includeInReport: sM.includeInReport,
+          indicator: "Grey",
+          milestone: sM.milestone,
+          milestoneType: sM.milestoneType,
+          plannedFinish: null,
+          projectId: this.id,
+          responsiblePersonId: null,
+          responsiblePersonName: null,
+          templateMilestoneId: null
+      }]
+      this.schedulengxdata = [...this.schedulengxdata, ...j]
+      this.milestoneTableEditRow(this.schedulengxdata.length - 1)
   }
   @HostListener('unloaded')
   ngOnDestroy() {
