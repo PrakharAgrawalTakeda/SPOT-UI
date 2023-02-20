@@ -14,14 +14,13 @@
                     <mat-expansion-panel class="my-6" [expanded]="true">
                         <mat-expansion-panel-header class="pt-10 pb-10">
                             <mat-panel-title class="font-bold">
-                                {{"&nbsp;".repeat(milestone.level*2)}}{{milestone.projectId}} -
-                                {{milestone.projectName}}
+                                {{milestone.milestoneSet}}
                             </mat-panel-title>
                         </mat-expansion-panel-header>
 
-                        <schedule-table [tableIndex]="i" [scheduleData]="milestone.schedules"
-                                        [tableData]="milestone.schedules" [linksProblemCapture]="milestone.scheduleLinkProjectDetails"
-                                        [links]="milestone.schedulesLink" [mode]="'Link'" [projectId]="milestone.projectUId"
+                        <schedule-table [tableIndex]="i" [scheduleData]="milestone.templateDetails" [viewElements]="['milestone','functionalOwner','comment', 'includeInReport','addStandardMilestone']"
+                                        [tableData]="milestone.templateDetails"
+                                        [callLocation]="'StandardMilestones'" [projectId]="milestone.milestoneTemplateId"
                                         [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleSchedule($event)">
                         </schedule-table>
                     </mat-expansion-panel>

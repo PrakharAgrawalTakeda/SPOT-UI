@@ -65,6 +65,12 @@ export class StandardMilestoneSetsComponent implements OnInit {
         }) : array
     }
     addStandardMilestonesToBulkEditList() {
-        this.standardMilestonesAdded.emit(this.standarMilestoneAdded);
+        var returnedMilestones: any = []
+        this.standarMilestoneAdded.forEach(x => {
+            x.map(y=> {
+                returnedMilestones.push(y);
+            })
+        })
+        this.standardMilestonesAdded.emit(returnedMilestones);
     }
 }

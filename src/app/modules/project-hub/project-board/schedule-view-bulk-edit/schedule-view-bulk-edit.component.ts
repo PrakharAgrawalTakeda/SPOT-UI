@@ -41,7 +41,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
   //   .change(200)
   //   .subscribe(() => this.ngZone.run(() => this.setSize()));
   //@Input() scheduleData: any;
-  @Input() schedulengxdata: any;
+  @Input() schedulengxdata: any = [];
   @Input() baselineLogData: any;
   @Input() projectbaselinelogDetailsprev: any;
   @Input() projectbaselinelogDetailscurr: any;
@@ -2505,16 +2505,11 @@ else{
         })
       }
     }
-    console.log(formValue.filter(x => x.includeInCharter == true).length)
-
-
       this.apiService.bulkeditSchedule(this.schedulecharterobj, this.id).then(res => {
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.successSave.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
-
-    console.log(this.schedulecharterobj)
       })
 
     }
@@ -2799,7 +2794,56 @@ else{
   //   event.target.innerWidth;
   // }
   addStandardMilestonesToList(standardMilestones: any[]){
-      this.schedulengxdata.concat(standardMilestones);
+      standardMilestones.forEach(x=>{
+          this.milestoneForm.push(new FormGroup({
+              scheduleUniqueId: new FormControl(''),
+              projectId: new FormControl(this.id),
+              milestone: new FormControl(x.milestone),
+              plannedFinish: new FormControl(''),
+              baselineFinish: new FormControl(''),
+              responsiblePersonName: new FormControl({}),
+              function: new FormControl({}),
+              functionGroupId: new FormControl(x.functionalOwnerId),
+              completionDate: new FormControl(''),
+              comments: new FormControl(x.comment),
+              includeInReport: new FormControl(x.includeInReport),
+              includeInCharter: new FormControl(false),
+              milestoneType: new FormControl(x.milestoneType),
+              templateMilestoneId: new FormControl(''),
+              includeInCloseout: new FormControl(false),
+              responsiblePersonId: new FormControl(''),
+              indicator: new FormControl('')
+          }))
+
+          var j = [{
+              scheduleUniqueId: "new",
+              baselineFinish: null,
+              comments: x.comment,
+              completionDate: null,
+              functionGroupId: x.functionalOwnerId,
+              includeInCharter: false,
+              includeInCloseout: false,
+              includeInReport: x.includeInReport,
+              indicator: "Grey",
+              milestone: x.milestone,
+              milestoneType: x.milestoneType,
+              plannedFinish: null,
+              projectId: this.id,
+              responsiblePersonId: null,
+              responsiblePersonName: null,
+              templateMilestoneId: null
+          }]
+          this.schedulengxdata = [...this.schedulengxdata, ...j]
+          this.milestoneTableEditRow(this.schedulengxdata.length - 1)
+          var div = document.getElementsByClassName('datatable-scroll')[0]
+          setTimeout(() => {
+              div.scroll({
+                  top: div.scrollHeight,
+                  left: 0,
+                  behavior: 'smooth'
+              });
+          }, 100);
+      })
       this.viewStandardMilestonesSets = false
   }
   @HostListener('unloaded')
