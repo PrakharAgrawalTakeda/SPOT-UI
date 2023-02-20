@@ -75,8 +75,9 @@
         <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditRC'" [optionType]="'recommended-option'"></app-feasibility-edit>
         <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO2'" [optionType]="'option-2'"></app-feasibility-edit>
         <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO3'" [optionType]="'option-3'"></app-feasibility-edit>
-        <app-close-out-lesson-learned-bulk-edit *ngIf="projecthubservice.itemtype == 'LessonLearnedBulkEdit'"></app-close-out-lesson-learned-bulk-edit>
-        <app-close-out-lesson-learned-single-edit *ngIf="projecthubservice.itemtype == 'LessonLearnedSingleEdit'"></app-close-out-lesson-learned-single-edit>
+        <app-lesson-learned-bulk-edit *ngIf="projecthubservice.itemtype == 'LessonLearnedBulkEdit'"></app-lesson-learned-bulk-edit>
+        <app-lesson-learned-single-edit *ngIf="projecthubservice.itemtype == 'LessonLearnedSingleEdit'"></app-lesson-learned-single-edit>
+        <app-key-takeaway-single-edit *ngIf="projecthubservice.itemtype == 'keyTakeawaysSingleEdit'"></app-key-takeaway-single-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

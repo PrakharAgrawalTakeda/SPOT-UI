@@ -129,8 +129,10 @@ import { OptionInfoEditComponent } from './common/option-info/option-info-edit/o
 import { FeasibilityEditComponent } from './common/option-info/feasibility-edit/feasibility-edit.component';
 import { CloseOutOutcomesSingleEditComponent } from './close-out/close-out-outcomes/close-out-outcomes-single-edit/close-out-outcomes-single-edit.component';
 import { ProjectCharterProjectTeamsComponent } from './project-charter/project-charter-project-teams/project-charter-project-teams.component';
-import { CloseOutLessonLearnedBulkEditComponent } from './close-out/close-out-lessons-learned/close-out-lesson-learned-bulk-edit/close-out-lesson-learned-bulk-edit.component';
-import { CloseOutLessonLearnedSingleEditComponent } from './close-out/close-out-lessons-learned/close-out-lesson-learned-single-edit/close-out-lesson-learned-single-edit.component';
+import { LessonLearnedTableComponent } from './common/lesson-learned-table/lesson-learned-table.component';
+import { LessonLearnedBulkEditComponent } from './common/lesson-learned-table/lesson-learned-bulk-edit/lesson-learned-bulk-edit.component';
+import { LessonLearnedSingleEditComponent } from './common/lesson-learned-table/lesson-learned-single-edit/lesson-learned-single-edit.component';
+import { KeyTakeawaySingleEditComponent } from './close-out/close-out-lessons-learned/key-takeaway-single-edit/key-takeaway-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -502,8 +504,10 @@ export const projectRoutes: Route[] = [
     OptionInfoEditComponent,
     FeasibilityEditComponent,
     CloseOutOutcomesSingleEditComponent,
-    CloseOutLessonLearnedBulkEditComponent,
-    CloseOutLessonLearnedSingleEditComponent
+    LessonLearnedTableComponent,
+    LessonLearnedBulkEditComponent,
+    LessonLearnedSingleEditComponent,
+    KeyTakeawaySingleEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
