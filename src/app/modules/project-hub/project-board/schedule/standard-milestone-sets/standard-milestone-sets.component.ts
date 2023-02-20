@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProjectHubService} from "../../../project-hub.service";
 import {ProjectApiService} from "../../../common/project-api.service";
-import {FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {ActivatedRoute} from "@angular/router";
 import { Output, EventEmitter } from '@angular/core';
 @Component({
@@ -45,7 +45,33 @@ export class StandardMilestoneSetsComponent implements OnInit {
         })
     }
     submitStandardMilestoneSets() {
-        this.addStandardMilestonesToBulkEditList()
+        var comfirmConfig: FuseConfirmationConfig = {
+            "message": "The selected milestones will be added to your project’s existing milestones. Do you want to proceed? ",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warn"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "Yes",
+                    "color": "warn"
+                },
+                "cancel": {
+                    "show": true,
+                    "label": "Cancel"
+                }
+            },
+            "dismissible": true
+        }
+        const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+        askNeedAlert.afterClosed().subscribe(res => {
+            if (res == 'confirmed') {
+                this.addStandardMilestonesToBulkEditList()
+            }
+        })
+
     }
     toggleSchedule(event: any) {
         this.standarMilestoneAdded[event.tableIndex] = [...event.selected]
