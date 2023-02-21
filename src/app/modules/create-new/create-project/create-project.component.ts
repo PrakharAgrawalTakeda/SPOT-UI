@@ -10,6 +10,7 @@ import { QualityRefBulkEditComponent } from 'app/modules/project-hub/general-inf
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { __classPrivateFieldSet } from 'tslib';
 import { MatStepper } from '@angular/material/stepper';
+import { CreateNewApiService } from '../create-new-api.service';
 
 
 @Component({
@@ -74,11 +75,12 @@ export class CreateProjectComponent implements OnInit {
     annualMustWinID: new FormControl(''),
     localCurrency: new FormControl('')
   })
+  envPortfolio:any
 
   capturedValues = ['', '']
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, private apiProjectService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService) {
   }
 
   
@@ -124,7 +126,8 @@ export class CreateProjectComponent implements OnInit {
         qualityReference: event.value.isQualityRef
       })
     }
-    else if (index == 0){
+    else if (index == 0) {
+      this.envPortfolio = event.enviornmentalPortfolio,
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
         problemType: event.problemType,
@@ -146,6 +149,8 @@ export class CreateProjectComponent implements OnInit {
     }
     else if (index == 1) {
       this.createProjectForm.patchValue({
+        projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
+        projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
         isCapsProject: event.isCapsProject
       })
@@ -345,7 +350,7 @@ export class CreateProjectComponent implements OnInit {
       if (formValue.qualityReference){
         this.qualityValue = true;
       }
-      this.apiService.createProject(dataToSend).then((res: any) => {
+      this.createApiService.createProject(dataToSend).then((res: any) => {
         this.projectid = res.problemUniqueId
         if (this.qualityValue == true) {
           this.qualityformValue = []
@@ -376,12 +381,16 @@ export class CreateProjectComponent implements OnInit {
         }
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
-            this.viewContent = true
-            // this.router.navigate([`./portfolio-center`]);
+            this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+              this.viewContent = true
+            })
         })
+          
       }
       else{
-          this.viewContent = true
+          this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+            this.viewContent = true
+          })
       }
     })
   }
@@ -411,6 +420,7 @@ export class CreateProjectComponent implements OnInit {
     window.location.reload()
   }
   CheckMandatory(index: number){
+    this.stepper.selectedIndex = index;
     if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
@@ -434,6 +444,7 @@ export class CreateProjectComponent implements OnInit {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.stepper.selectedIndex = index-1;
     }
     else{
     this.stepper.selectedIndex = index;
@@ -451,7 +462,7 @@ export class CreateProjectComponent implements OnInit {
 
   selectionChange(index){
     console.log(index)
-    if (index._selectedIndex == 1){
+    if (index._selectedIndex == 1 || index._selectedIndex == 2){
       if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You must complete all mandatory fields.",
