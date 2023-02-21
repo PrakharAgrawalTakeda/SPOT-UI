@@ -1547,16 +1547,16 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.scheduleData.scheduleData = res.scheduleData
-                var sortedbaselines = this.sortByScheduleUniqeIDs(this.scheduleData.scheduleData)
-                var sortedbaselines2 = this.sortByScheduleUniqeIDs(this.formValue)
-                var baselines = sortedbaselines.map(x => {
-                    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
-                })
-                var baselines2 = sortedbaselines2.map(x => {
-                    return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
-                })
-                //debugger
-                if (baselines.length == baselines2.length && JSON.stringify(baselines) != JSON.stringify(baselines2)) {
+                // var sortedbaselines = this.sortByScheduleUniqeIDs(this.scheduleData.scheduleData)
+                // var sortedbaselines2 = this.sortByScheduleUniqeIDs(this.formValue)
+                // var baselines = sortedbaselines.map(x => {
+                //     return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
+                // })
+                // var baselines2 = sortedbaselines2.map(x => {
+                //     return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
+                // })
+                // //debugger
+                // if (baselines.length == baselines2.length && JSON.stringify(baselines) != JSON.stringify(baselines2)) {
                     this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
                         //  this.viewBaseline = true
                         //  this.viewBaselineLogs = true
@@ -1565,19 +1565,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         this.submitjustification()
                         //this.projecthubservice.submitbutton.next(true)
                     })
-                } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
-                    this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                        this.projecthubservice.submitbutton.next(true)
-                        this.projecthubservice.isNavChanged.next(true)
-                    })
-                } else {
-                    this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                        this.projecthubservice.submitbutton.next(true)
-                        this.projecthubservice.isNavChanged.next(true)
-                    })
-                }
+                // } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
+                //     this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+                //         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                //         this.projecthubservice.submitbutton.next(true)
+                //         this.projecthubservice.isNavChanged.next(true)
+                //     })
+                // } else {
+                //     this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+                //         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                //         this.projecthubservice.submitbutton.next(true)
+                //         this.projecthubservice.isNavChanged.next(true)
+                //     })
+                // }
             }
             // }
             else {
@@ -1649,15 +1649,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.scheduleData.scheduleData = res.scheduleData
-                var sortedbaselinedates = this.sortByScheduleUniqeIDs(this.scheduleData.scheduleData)
-                var sortedbaselinedates2 = this.sortByScheduleUniqeIDs(this.formValue)
-                var baselinedates = sortedbaselinedates.map(x => {
-                    return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
-                })
-                var baselinedates2 = sortedbaselinedates2.map(x => {
-                    return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
-                })
-                if (baselinedates.length == baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
+                // var sortedbaselinedates = this.sortByScheduleUniqeIDs(this.scheduleData.scheduleData)
+                // var sortedbaselinedates2 = this.sortByScheduleUniqeIDs(this.formValue)
+                // var baselinedates = sortedbaselinedates.map(x => {
+                //     return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : x.baselineFinish
+                // })
+                // var baselinedates2 = sortedbaselinedates2.map(x => {
+                //     return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
+                // })
+                // if (baselinedates.length == baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
                     this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
                         // this.viewBaseline = true
                         // this.viewBaselineLogs = true
@@ -1666,19 +1666,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         this.submitjustification()
                         //this.projecthubservice.submitbutton.next(true)
                     })
-                } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
-                    this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                        this.projecthubservice.submitbutton.next(true)
-                        this.projecthubservice.isNavChanged.next(true)
-                    })
-                } else {
-                    this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
-                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                        this.projecthubservice.submitbutton.next(true)
-                        this.projecthubservice.isNavChanged.next(true)
-                    })
-                }
+                // } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
+                //     this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+                //         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                //         this.projecthubservice.submitbutton.next(true)
+                //         this.projecthubservice.isNavChanged.next(true)
+                //     })
+                // } else {
+                //     this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
+                //         this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                //         this.projecthubservice.submitbutton.next(true)
+                //         this.projecthubservice.isNavChanged.next(true)
+                //     })
+                // }
                 // //   this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
                 // //     var baselinedates = this.schedulengxdata.map(x => {
                 // //       return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
@@ -2208,6 +2208,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     submitschedule() {
         // debugger
         var baselineFormValue = this.milestoneForm.getRawValue()
+        console.log(baselineFormValue)
         // if(this.mode == 'Project-Close-Out')
         // {
         //   this.projecthubservice.includeClosedItems.schedule.value == true
@@ -2220,6 +2221,22 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             var baselinedates = this.scheduleData.scheduleData.filter(x => x.completionDate == null).map(x => {
                 return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
             })
+        }
+        // var baselinedates4 = this.scheduleData.scheduleData.filter(x => x.completionDate == null && baselineFormValue.map(y => y.scheduleUniqueId == x.scheduleUniqueId)).map(x => {
+        //     return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+        // })
+        console.log(baselineFormValue.length)
+        var baselinedates4 = []
+        for (var controls of this.milestoneForm.controls) {
+            if(this.scheduleData.scheduleData.some(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value))
+            baselinedates4.push(
+                moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value).baselineFinish).format("YYYY-MM-DD HH:mm:ss")
+                
+                
+               /* .map(x => {
+                    return x.baselineFinish ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
+                })*/
+            ) 
         }
         //  for(var control of this.milestoneForm.controls)
         //  {
@@ -2239,15 +2256,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         // }
         for (var control of this.milestoneForm.controls) {
             if (control['controls']['scheduleUniqueId'].value != '') {
-                var baselinedates3 = baselineFormValue.map(x => {
+                var baselinedates3 = baselineFormValue.filter(x => x.scheduleUniqueId != '').map(x => {
                     return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
                 })
-            } else {
+            } else if(control['controls']['baselineFinish'].value != '') {
                 var baselinedates2 = baselineFormValue.filter(x => x.scheduleUniqueId == '').map(x => {
                     return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
                 })
             }
-            // var baselinedates3 = baselineFormValue.map(x => {
+            // var baselinedates4 = baselineFormValue.map(x => {
             //   return x.baselineFinish && x.baselineFinish != '' ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
             // })
         }
@@ -2259,18 +2276,33 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         //    {
         //     this.saveScheduleBulkEdit()
         //    }
+        console.log(baselinedates)
+        console.log("DELETED MIESTONE", baselinedates4)
+console.log("add new milestone baseline",baselinedates2)
+console.log("other add new milestone baseline",baselinedates3)
+console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
 
-
+        //standard milestones and no new milestone
         if (!this.flag && !baselinedates2 && baselinedates.length == baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
             this.flag = true
             //this.insertArray(control['controls']['projectId'].value)
         }
-        if (!this.flag && baselinedates2 && baselinedates.length < baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
+        //standard milestones and new milestone not baselined
+        if (!this.flag && !baselinedates2 && JSON.stringify(baselinedates2) == '' && baselinedates.length == baselinedates3.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates3)) {
+            this.flag = true
+            //this.insertArray(control['controls']['projectId'].value)
+        }
+        //new milestone baselined 
+        if (!this.flag && baselinedates2 && baselinedates.length == baselinedates3.length) {
             this.flag = true
         }
-        if (!this.flag && baselinedates2 && baselinedates.length < baselinedates2.length && JSON.stringify(baselinedates) == JSON.stringify(baselinedates3)) {
-            this.flag = false
+        //milestone deleted and other milestone baselined
+        if (!this.flag && baselinedates.length > baselinedates3.length && JSON.stringify(baselinedates4) != JSON.stringify(baselinedates3)) {
+            this.flag = true
         }
+        // if (!this.flag && JSON.stringify(baselinedates2) != '' && baselinedates.length < baselinedates2.length && JSON.stringify(baselinedates) == JSON.stringify(baselinedates2)) {
+        //     this.flag = false
+        // }
         //     if(!this.flag && baselinedates.length < baselinedates3.length)
         // {
         //     this.flag = false
