@@ -541,5 +541,18 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getLessonLearnedbyProjectId(projectid) {
+    var url = GlobalVariables.apiurl + "LessonsLearned/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkEditLessonLearned(body, projectid) {
+    var url = GlobalVariables.apiurl + "LessonsLearned/" + projectid
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   }
 
