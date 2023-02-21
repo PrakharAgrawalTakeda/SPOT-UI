@@ -9,7 +9,7 @@
         <div class="w-10">
             <a href="javascript:void(0)" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
                 title="Edit Single"
-                (click)="projecthubservice.toggleDrawerOpen('keyTakeawaysSingleEdit',this.projectViewDetails.projectData.primaryKpi , [], id)">
+                (click)="projecthubservice.toggleDrawerOpen('keyTakeawaysSingleEdit',this.projectData , keyTakeaways, id)">
                 <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
             </a>
         </div>

@@ -12,8 +12,8 @@
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
         <div class="flex items-start justify-between incuded-in-dash">
         <mat-slide-toggle 
-            [matTooltip]="this.LessonLearnedForm.controls['includeInSingleSlideSummary'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
-            formControlName="includeInSingleSlideSummary">Include in Single Slide Summary</mat-slide-toggle>
+            [matTooltip]="this.LessonLearnedForm.controls['includeInCloseOutReport'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
+            formControlName="includeInCloseOutReport">Include in Single Slide Summary</mat-slide-toggle>
         </div>
         <div class="flex items-start justify-between incuded-in-dash">
         <mat-slide-toggle formControlName="createDetailedReviewSlide">Create Detailed Review Slide</mat-slide-toggle>
@@ -22,25 +22,25 @@
             <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                 <mat-label>Log Date</mat-label>
                 <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
-                    formControlName="logDate" name="logDate">
+                    formControlName="lessonLogDate" name="logDate">
                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
         </div>
-        <spot-textarea formControlName="title" name="title" [label]="'Title'" [placeholder]="'Title'">
+        <spot-textarea formControlName="leassonTitle" name="leassonTitle" [label]="'Title'" [placeholder]="'Title'">
         </spot-textarea>
-        <spot-textarea formControlName="description" name="description" [label]="'Description / Details'" [placeholder]="'Description / Details'">
+        <spot-textarea formControlName="lessonDetail" name="description" [label]="'Description / Details'" [placeholder]="'Description / Details'">
         </spot-textarea>
-        <spot-singleselect-autocomplete formControlName="type" class="w-full" name="type" [label]="'Type'"
+        <spot-singleselect-autocomplete formControlName="lessonType" class="w-full" name="type" [label]="'Type'"
             [placeholder]="'Type'" [valuePointer]="'lookUpName'" [dropDownArray]="GetType()">
         </spot-singleselect-autocomplete>
         <spot-singleselect-autocomplete formControlName="criticality" class="w-full" name="criticality" [label]="'Criticality'"
             [placeholder]="'Criticality'" [valuePointer]="'lookUpName'" [dropDownArray]="GetCriticality()">
         </spot-singleselect-autocomplete>
-        <spot-singleselect-user-autocomplete formControlName="SubmittedBy" [label]="'Submitted By'"
+        <spot-singleselect-user-autocomplete formControlName="submittedBy" [label]="'Submitted By'"
             name="SubmittedBy" [showLabel]="true">
         </spot-singleselect-user-autocomplete>
-        <spot-singleselect-autocomplete formControlName="submittingGroup" class="w-full" name="submittingGroup" [label]="'Submitting Group / Role'"
+        <spot-singleselect-autocomplete formControlName="submittingGroupRole" class="w-full" name="submittingGroup" [label]="'Submitting Group / Role'"
             [placeholder]="'Submitting Group / Role'" [valuePointer]="'lookUpName'" [dropDownArray]="GetRole()">
         </spot-singleselect-autocomplete>
         <spot-textarea formControlName="suggestedAction" name="suggestedAction" [label]="'Suggested Action'" [placeholder]="'Suggested Action'">
@@ -48,13 +48,13 @@
         <div class="w-25">
             <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                 <mat-label>Due Date</mat-label>
-                <input matInput [matDatepicker]="picker2" [max]="today" [placeholder]="'Choose a date'"
+                <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'"
                     formControlName="dueDate" name="dueDate">
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
         </div>
-        <spot-singleselect-autocomplete formControlName="functionOwner" class="w-full" name="functionOwner" [label]="'Function Action Owner'"
+        <spot-singleselect-autocomplete formControlName="functionActionOwner" class="w-full" name="functionOwner" [label]="'Function Action Owner'"
             [placeholder]="'Function Action Owner'" [valuePointer]="'lookUpName'" [dropDownArray]="GetRole()">
         </spot-singleselect-autocomplete>
         <spot-singleselect-user-autocomplete formControlName="actionOwner" [label]="'Action Owner'" name="actionOwner"
@@ -63,8 +63,8 @@
         <div class="w-25">
             <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                 <mat-label>Close Date</mat-label>
-                <input matInput [matDatepicker]="picker3" [max]="today" [placeholder]="'Choose a date'"
-                    formControlName="closeDate" name="closeDate">
+                <input matInput [matDatepicker]="picker3" [placeholder]="'Choose a date'"
+                    formControlName="lessonCloseDate" name="closeDate">
                 <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                 <mat-datepicker #picker3></mat-datepicker>
             </mat-form-field>

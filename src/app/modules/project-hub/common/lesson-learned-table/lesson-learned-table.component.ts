@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../../project-hub.service';
+import { ProjectApiService } from '../project-api.service';
 
 @Component({
   selector: 'app-lesson-learned-table',
@@ -12,10 +15,12 @@ export class LessonLearnedTableComponent implements OnInit {
   id: string = ""
   lessonLearned: any = []
   editable: boolean = false
-  KeyTakeawayForm = new FormGroup({
-    keyTakeaways: new FormControl('')
-  })
-  constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute) {
+  lookupdata:any
+  // KeyTakeawayForm = new FormGroup({
+  //   keyTakeaways: new FormControl('')
+  // })
+  constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
+    public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.dataloader()
@@ -28,19 +33,52 @@ export class LessonLearnedTableComponent implements OnInit {
   }
 
   dataloader() {
-    // this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    // this.apiService.getmembersbyproject(this.id).then((res) => {
-    //   this.lessonLearned = res
-    // })
+    this.auth.lookupMaster().then((resp: any) => {
+      this.lookupdata = resp
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getLessonLearnedbyProjectId(this.id).then((res) => {
+        this.lessonLearned = res
+      })
+    })
   }
 
   getLookupName(lookUpId: string): string {
-    return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
+    return lookUpId && lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
 
+  deleteLL(id: string) {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Lesson Learned?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const lessonLearnedAlert = this.fuseAlert.open(comfirmConfig)
 
-  // criticality DFC4E626-10A1 - 464E-8B1A - 09A223B125A1
-  // Type 3B747FFC-139E-4ECC - 8123 - 85D8A730245E
-  // submitting group 0edea251-09b0 - 4323 - 80a0 - 9a6f90190c77
+    lessonLearnedAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        var index = this.lessonLearned.findIndex(x => x.lessonLearnedId === id);
+        this.lessonLearned.splice(index,1)
+        this.apiService.bulkEditLessonLearned(this.lessonLearned,this.id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
 
+  }
 }

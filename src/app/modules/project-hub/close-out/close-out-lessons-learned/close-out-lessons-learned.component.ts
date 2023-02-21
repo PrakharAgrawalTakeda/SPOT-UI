@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 
 @Component({
@@ -10,24 +11,35 @@ import { ProjectHubService } from '../../project-hub.service';
 })
 export class CloseOutLessonsLearnedComponent implements OnInit {
   id:string = ""
-  lessonLearned: any = []
   viewContent:boolean=false
   editable:boolean=false
+  projectData:any
+  keyTakeaways:any
   KeyTakeawayForm = new FormGroup({
     keyTakeaways: new FormControl('')
   })
-  constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute) {
-    // this.projecthubservice.submitbutton.subscribe(res => {
-    //   if (res == true) {
-    //     this.dataloader()
-    //   }
-    // })
+  constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public projectApiService: ProjectApiService) {
+    this.projecthubservice.submitbutton.subscribe(res => {
+      if (res == true) {
+        this.dataloader()
+      }
+    })
    }
 
   ngOnInit(): void {
+    this.dataloader();
     this.viewContent = true
   }
 
-  
+  dataloader(){
+    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    this.projectApiService.getproject(this.id).then((res: any) => {
+      this.projectData = res
+      this.keyTakeaways = res.keyTakeaways
+      this.KeyTakeawayForm.patchValue({
+        keyTakeaways: res.keyTakeaways
+      })
+    })
+  }
   
 }
