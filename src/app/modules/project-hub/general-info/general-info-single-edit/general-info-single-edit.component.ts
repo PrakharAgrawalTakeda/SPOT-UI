@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit, ViewChild, OnChanges } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EventType } from '@azure/msal-browser';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -12,18 +12,21 @@ import * as moment from 'moment';
 import {HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
 import { MsalService } from '@azure/msal-angular';
+import { RoleService } from 'app/core/auth/role.service';
 @Component({
   selector: 'app-general-info-single-edit',
   templateUrl: './general-info-single-edit.component.html',
   styleUrls: ['./general-info-single-edit.component.scss']
 })
-export class GeneralInfoSingleEditComponent implements OnInit{
+export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  @Input() envPortfolio: any = {}
   activeaccount: any;
   flag = 0
+  flagenv = 0
   @Output() eventName = new EventEmitter<EventType>();
   viewContent:boolean = false
   showMessage: boolean = false;
@@ -34,7 +37,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
   local:any=[];
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
-  envPortfolio:any
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -62,14 +64,13 @@ export class GeneralInfoSingleEditComponent implements OnInit{
     sponsor: new FormControl({}),
     projectManager: new FormControl({}),
   })
-
   @Output() formValue = new EventEmitter<FormGroup>();
  
 
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService,
-    public apiService2: PortfolioApiService, private authService: MsalService) {
+    public apiService2: PortfolioApiService, private authService: MsalService, public role: RoleService) {
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -77,9 +78,6 @@ export class GeneralInfoSingleEditComponent implements OnInit{
           this.projectHubService.isFormChanged = true
         }
         else if (this.callLocation == 'CreateNew'){
-          if (this.envPortfolio == undefined){
-          this.envPortfolio = this.generalInfoForm.value.enviornmentalPortfolio
-          }
           this.formValue.emit(this.generalInfoForm.getRawValue())
           if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
             this.generalInfoForm.controls.localCurrency.enable()
@@ -99,6 +97,17 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         }
       }
     })
+    if (this.callLocation == 'CopyProject' || this.callLocation == 'CreateNew'){
+      if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F"){
+        this.generalInfoForm.controls.owningOrganization.disable()
+        this.generalInfoForm.controls.localCurrency.disable()
+      }
+      else{
+        this.generalInfoForm.controls.owningOrganization.enable()
+        this.generalInfoForm.controls.localCurrency.disable()
+      }
+    }
+    else{
     if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
       this.generalInfoForm.controls.owningOrganization.disable()
       this.generalInfoForm.controls.localCurrency.disable()
@@ -110,6 +119,7 @@ export class GeneralInfoSingleEditComponent implements OnInit{
       this.generalInfoForm.controls.sponsor.enable()
       this.generalInfoForm.controls.projectManager.enable()
     }
+  }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
         if (res == 'Standard Project / Program') {
@@ -136,6 +146,10 @@ export class GeneralInfoSingleEditComponent implements OnInit{
         })
       }
     })
+
+  }
+
+  ngOnChanges(): void{
 
   }
 
