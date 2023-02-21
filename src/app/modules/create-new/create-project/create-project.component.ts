@@ -10,6 +10,7 @@ import { QualityRefBulkEditComponent } from 'app/modules/project-hub/general-inf
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { __classPrivateFieldSet } from 'tslib';
 import { MatStepper } from '@angular/material/stepper';
+import { CreateNewApiService } from '../create-new-api.service';
 
 
 @Component({
@@ -79,7 +80,7 @@ export class CreateProjectComponent implements OnInit {
   capturedValues = ['', '']
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, private apiProjectService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService) {
   }
 
   
@@ -349,7 +350,7 @@ export class CreateProjectComponent implements OnInit {
       if (formValue.qualityReference){
         this.qualityValue = true;
       }
-      this.apiService.createProject(dataToSend).then((res: any) => {
+      this.createApiService.createProject(dataToSend).then((res: any) => {
         this.projectid = res.problemUniqueId
         if (this.qualityValue == true) {
           this.qualityformValue = []
@@ -380,12 +381,16 @@ export class CreateProjectComponent implements OnInit {
         }
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
-            this.viewContent = true
-            // this.router.navigate([`./portfolio-center`]);
+            // this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+              this.viewContent = true
+            // })
         })
+          
       }
       else{
-          this.viewContent = true
+          // this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+            this.viewContent = true
+          // })
       }
     })
   }
