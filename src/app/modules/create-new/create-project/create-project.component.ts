@@ -381,16 +381,16 @@ export class CreateProjectComponent implements OnInit {
         }
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
-            // this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+            this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
               this.viewContent = true
-            // })
+            })
         })
           
       }
       else{
-          // this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+          this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
             this.viewContent = true
-          // })
+          })
       }
     })
   }
