@@ -5,10 +5,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
-import { AuthService } from 'app/core/auth/auth.service';
-import { I } from '@angular/cdk/keycodes';
-import { QualityRefBulkEditComponent } from '../quality-ref-bulk-edit/quality-ref-bulk-edit.component';
 import * as moment from 'moment';
+
 import {HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
 import { MsalService } from '@azure/msal-angular';
@@ -65,7 +63,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     projectManager: new FormControl({}),
   })
   @Output() formValue = new EventEmitter<FormGroup>();
- 
+
 
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
@@ -270,7 +268,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   }
   getExcecutionScope(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true)
-    
+
   }
   getProjectReviewedYN(): any {
     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'c58fb456-3901-4677-9ec5-f4eada7158e6')
@@ -361,39 +359,22 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     mainObj.projectReviewedYN = Object.keys(formValue.projectReviewedYN).length > 0 ? formValue.projectReviewedYN.lookUpId : ''
     mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
     mainObj.sponsorId =  Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
-    mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
-    this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-      if (this.subCallLocation == 'ProjectProposal') {
-        this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {
-          this.projectHubService.isNavChanged.next(true)
-          this.projectHubService.submitbutton.next(true)
-          this.projectHubService.successSave.next(true)
-          this.projectHubService.toggleDrawerOpen('', '', [], '')
+    mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : ''
+    if(this.subCallLocation =='ProjectHub'){
+        this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+            this.projectHubService.isNavChanged.next(true)
+            this.projectHubService.submitbutton.next(true)
+            this.projectHubService.successSave.next(true)
+            this.projectHubService.toggleDrawerOpen('', '', [], '')
         })
-      }
-      else if (this.subCallLocation == 'CloseOut') {
-        this.apiService.updateReportDates(this.projectHubService.projectid, "CloseoutModifiedDate").then(secondRes => {
-          this.projectHubService.isNavChanged.next(true)
-          this.projectHubService.submitbutton.next(true)
-          this.projectHubService.successSave.next(true)
-          this.projectHubService.toggleDrawerOpen('', '', [], '')
+    }else{
+        this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, this.subCallLocation).then(res => {
+            this.projectHubService.isNavChanged.next(true)
+            this.projectHubService.submitbutton.next(true)
+            this.projectHubService.successSave.next(true)
+            this.projectHubService.toggleDrawerOpen('', '', [], '')
         })
-      }
-      else if (this.subCallLocation == 'ProjectCharter') {
-        this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
-          this.projectHubService.isNavChanged.next(true)
-          this.projectHubService.submitbutton.next(true)
-          this.projectHubService.successSave.next(true)
-          this.projectHubService.toggleDrawerOpen('', '', [], '')
-        })
-      }
-      else {
-        this.projectHubService.isNavChanged.next(true)
-        this.projectHubService.submitbutton.next(true)
-        this.projectHubService.successSave.next(true)
-        this.projectHubService.toggleDrawerOpen('', '', [], '')
-      }
-    })
+    }
   }
 
 
