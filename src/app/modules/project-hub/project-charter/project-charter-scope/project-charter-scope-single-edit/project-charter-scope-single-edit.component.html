@@ -18,17 +18,21 @@
     </spot-textarea>
 
     <spot-textarea class="w-full read-only" formControlName="proposalStatement" name="proposalStatement"
-            [label]="'Proposal Statement'" [placeholder]="'Proposal Statement'">
+            [label]="'Proposal Statement'" [placeholder]="'Proposal Statement'" [showHint]="true"
+            [hint]="'Single summary statement of what, how, cost and by when'">
     </spot-textarea>
 
     <spot-textarea class="w-full read-only" formControlName="detailedDescription" name="detailedDescription"
-            [label]="'Detailed Description'" [placeholder]="'Detailed Description'">
+            [label]="'Detailed Description'" [placeholder]="'Detailed Description'" [showHint]="true"
+            [hint]="'More detailed information of how to execute proposal'">
     </spot-textarea>
     <spot-textarea class="w-full read-only" formControlName="inScope" name="inScope"
-            [label]="'In Scope'" [placeholder]="'In scope'">
+            [label]="'In Scope'" [placeholder]="'In scope'" [showHint]="true"
+            [hint]="'List/Statements of critical In Scope elements'">
     </spot-textarea>
     <spot-textarea class="w-full read-only" formControlName="outOfScope" name="outOfScope"
-            [label]="'Out of Scope'" [placeholder]="'Out of Scope'">
+            [label]="'Out of Scope'" [placeholder]="'Out of Scope'" [showHint]="true"
+            [hint]="'List/Statements of critical Out of Scope elements'">
     </spot-textarea>
         </div>
         <div class="pr-3 flex items-start justify-between mt-6" *ngIf="viewType == 'SidePanel'">
