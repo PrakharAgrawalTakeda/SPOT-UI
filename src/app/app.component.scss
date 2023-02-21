@@ -185,7 +185,25 @@
     button{
         cursor: wait !important;
     }
+    a{
+        cursor: wait !important;
+    }
     .mat-chip{
+        cursor: wait !important;
+    }
+    textarea {
+        cursor: wait !important;
+    }
+    textarea :disabled{
+        cursor: wait !important;
+    }
+    ngx-datatable {
+        cursor: wait !important;
+    }
+    span{
+        cursor: wait !important;
+    }
+    div{
         cursor: wait !important;
     }
 }

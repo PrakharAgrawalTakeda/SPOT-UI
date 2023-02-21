@@ -1,19 +1,21 @@
 import { Component, OnInit, forwardRef, Input, ViewChild, ElementRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { map, Observable, startWith, timeout } from 'rxjs';
+import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil, timeout } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { GlobalVariables } from 'app/shared/global-variables';
 @Component({
-  selector: 'spot-multiselect-autocomplete',
-  templateUrl: './spot-multiselect-autocomplete.component.html',
-  styleUrls: ['./spot-multiselect-autocomplete.component.scss'],
+  selector: 'spot-multiselect-user-autocomplete',
+  templateUrl: './spot-multiselect-user-autocomplete.component.html',
+  styleUrls: ['./spot-multiselect-user-autocomplete.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SpotMultiselectAutocompleteComponent),
+      useExisting: forwardRef(() => SpotMultiselectUserAutocompleteComponent),
       multi: true
     }
   ]
 })
-export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValueAccessor {
+export class SpotMultiselectUserAutocompleteComponent implements OnInit, ControlValueAccessor {
 
   @Input() showLabel: boolean = true
   @Input() label: string = ''
@@ -23,15 +25,15 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
   @Input() dropDownArrayType: 'string' | 'object'
   @Input() dropDownArray: any = []
-  @Input() valuePointer: string
-  @Input() idPointer: string = ''
+  valuePointer: string = 'userDisplayName'
+  idPointer: string = 'userAdid'
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
   @Input() Required: boolean = false
 
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
-  filteredDropDownValues: Observable<any>
+  filteredDropDownValues: any
   formFieldHelpers: any
   selectedOption: any = []
   isDisabled: boolean = false
@@ -42,7 +44,13 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     chipList: new FormControl([])
   });
 
-  constructor(private fb: FormBuilder) {
+  resultSets: any[];
+  minLength = 4
+  debounce = 400
+  filteredOptions: any
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+  constructor(private fb: FormBuilder, private _httpClient: HttpClient) {
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {
         //this.onChange({})
@@ -51,22 +59,41 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
 
     })
     this.filteredDropDownValues = this.form.controls.control.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        var filterValue = value ? value.toString().toLowerCase() : ''
-        if (this.dropDownArray != null) {
-          if (filterValue == "") {
-            return this.dropDownArray.sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
-          }
-          else {
-            return this.dropDownArray.filter(x => x[this.valuePointer].toLowerCase().includes(filterValue)).sort(this.sortByType == 'valuePointer' ? (a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0) : (a, b) => (a[this.customSortPointer] > b[this.customSortPointer]) ? 1 : ((b[this.customSortPointer] > a[this.customSortPointer]) ? -1 : 0))
-          }
+      debounceTime(this.debounce),
+      takeUntil(this._unsubscribeAll),
+      map((value) => {
+
+        // Set the resultSets to null if there is no value or
+        // the length of the value is smaller than the minLength
+        // so the autocomplete panel can be closed
+        if (!value || value.length < this.minLength) {
+          this.resultSets = null;
         }
-        else {
-          return []
-        }
-      })
+
+        // Continue
+        return value;
+      }),
+      // Filter out undefined/null/false statements and also
+      // filter out the values that are smaller than minLength
+      filter(value => value && value.length >= this.minLength)
     )
+      .subscribe((value) => {
+        const params = new HttpParams().set('query', value);
+        this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
+          .subscribe((resultSets: any) => {
+            if (this.selectedOption.length > 0 && resultSets.length > 0) {
+              var select = this.selectedOption.map(x => x.userAdid)
+              resultSets.filter(x => select.includes(x.userAdid))
+            }
+
+            // Store the result sets
+            this.resultSets = resultSets;
+            console.log(this.resultSets)
+            console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
+            // Execute the event
+            //this.search.next(resultSets);
+          });
+      });
   }
   changeInput() {
     this.form.controls.control.patchValue('')
@@ -121,7 +148,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
       this.isDisabled = true
       this.form.controls.chipList.disable()
     }
-    else{
+    else {
       this.isDisabled = false
       this.form.controls.chipList.enable()
     }
