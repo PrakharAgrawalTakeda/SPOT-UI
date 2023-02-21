@@ -1087,12 +1087,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     disabler() {
         var formValue = this.milestoneForm.getRawValue()
-        var baselineformValue = this.baselineLogForm.getRawValue()
+        //var baselineformValue = this.baselineLogForm.getRawValue()
         if (formValue.length > 0) {
             //Include in business Case
             if (formValue.filter(x => x.includeInBusinessCase == true).length < 8) {
                 for (var i of this.milestoneForm.controls) {
-                    i['controls']['includeInBusinessCase'].enable()
+                    i['controls']['includeInBusinessCase']?.enable()
                 }
             } else {
                 for (var i of this.milestoneForm.controls) {
@@ -1103,7 +1103,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             }
             //Include in close-out Milestone Variance
 
-            if (this.mode == "Project-Close-Out") {
+            
                 if (formValue.filter(x => x.includeInCloseout == true).length < 20) {
                     for (var i of this.milestoneForm.controls) {
                         i['controls']['includeInCloseout'].enable()
@@ -1115,7 +1115,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-            }
 
             //Include in Report
             if (formValue.filter(x => x.includeInReport == true).length < 8) {
