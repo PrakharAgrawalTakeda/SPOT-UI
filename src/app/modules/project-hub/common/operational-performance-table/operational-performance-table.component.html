@@ -1,3 +1,5 @@
+<div *ngIf="viewContent">
+
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Performance</div>
 
@@ -18,7 +20,7 @@
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
-        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'kpiid', dir: 'asc' }]"
+        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'kpiname', dir: 'asc' }]"
         #operationalPerformanceTable>
         <ngx-datatable-column name="Status" prop="status" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -30,9 +32,14 @@
                 </div>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="KPI" prop="kpiid" [flexGrow]="1">
+        <ngx-datatable-column name="KPI" prop="kpiname" [flexGrow]="1" *ngIf="mode == 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{getKPIName(value)}}
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Associated KPI" prop="kpiname" [flexGrow]="1" *ngIf="mode == 'Project-Charter'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Metric" prop="metric" [flexGrow]="1">
@@ -40,7 +47,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="1">
+        <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="1" >
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
@@ -50,7 +57,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Actual Performance" prop="actualPerformance" [flexGrow]="1">
+        <ngx-datatable-column name="Actual Performance" prop="actualPerformance" [flexGrow]="1"  *ngIf="mode == 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
@@ -73,4 +80,5 @@
             </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
+</div>
 </div>
