@@ -15,7 +15,7 @@
         </mat-chip-list>
         <mat-autocomplete autoActiveFirstOption #singleSelect="matAutocomplete"
             (optionSelected)="onFunctionSelect($event)">
-            <ng-container *ngFor="let function of filteredDropDownValues | async">
+            <ng-container *ngFor="let function of resultSets">
                 <mat-option [value]="function" *ngIf="isOptionSelected(function)">
                     {{function[valuePointer]}}
                 </mat-option>
