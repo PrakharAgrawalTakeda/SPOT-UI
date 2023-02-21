@@ -74,6 +74,7 @@ export class CreateProjectComponent implements OnInit {
     annualMustWinID: new FormControl(''),
     localCurrency: new FormControl('')
   })
+  envPortfolio:any
 
   capturedValues = ['', '']
   // fuseAlert: any;
@@ -124,7 +125,8 @@ export class CreateProjectComponent implements OnInit {
         qualityReference: event.value.isQualityRef
       })
     }
-    else if (index == 0){
+    else if (index == 0) {
+      this.envPortfolio = event.enviornmentalPortfolio,
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
         problemType: event.problemType,
@@ -146,6 +148,8 @@ export class CreateProjectComponent implements OnInit {
     }
     else if (index == 1) {
       this.createProjectForm.patchValue({
+        projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
+        projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
         isCapsProject: event.isCapsProject
       })
@@ -451,7 +455,7 @@ export class CreateProjectComponent implements OnInit {
 
   selectionChange(index){
     console.log(index)
-    if (index._selectedIndex == 1){
+    if (index._selectedIndex == 1 || index._selectedIndex == 2){
       if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You must complete all mandatory fields.",

@@ -44,17 +44,6 @@ export class CopyProjectComponent implements OnInit {
   ngOnInit(): void {
     this.activeaccount = this.authService.instance.getActiveAccount();
     this.titleService.setTitle("Copy Project")
-    // this.CopyProjectForm.patchValue({
-    //   projectTitle: true,
-    //   projectType: true,
-    //   problemDescription: true,
-    //   proposedStatement: true,
-    //   keySuccess: true,
-    //   scope: true,
-    //   milestone: true,
-    //   projectTeam: true,
-    //   categoricalDriver: true
-    // })
     this.auth.lookupMaster().then(res => {
       this.lookupdata = res;
       this.lookupTemplate = this.lookupdata.filter(x => x.lookUpParentId == 'a378aa1b-dadf-4592-8dc6-fee59b75f51d');
