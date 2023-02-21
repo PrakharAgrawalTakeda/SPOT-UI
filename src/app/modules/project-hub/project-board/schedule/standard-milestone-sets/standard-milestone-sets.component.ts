@@ -45,32 +45,89 @@ export class StandardMilestoneSetsComponent implements OnInit {
         })
     }
     submitStandardMilestoneSets() {
-        var comfirmConfig: FuseConfirmationConfig = {
-            "message": "The selected milestones will be added to your project’s existing milestones. Do you want to proceed? ",
-            "icon": {
-                "show": true,
-                "name": "heroicons_outline:exclamation",
-                "color": "warn"
-            },
-            "actions": {
-                "confirm": {
-                    "show": true,
-                    "label": "Yes",
-                    "color": "warn"
-                },
-                "cancel": {
-                    "show": true,
-                    "label": "Cancel"
-                }
-            },
-            "dismissible": true
-        }
-        const askNeedAlert = this.fuseAlert.open(comfirmConfig)
-        askNeedAlert.afterClosed().subscribe(res => {
-            if (res == 'confirmed') {
-                this.addStandardMilestonesToBulkEditList()
+        var returnedMilestones: any = []
+        this.standarMilestoneAdded.forEach(x => {
+            x.map(y=> {
+                returnedMilestones.push(y);
+            })
+        })
+        var startMilestonesCount =0;
+        var endMilestonesCount =0;
+        returnedMilestones.forEach(x=>{
+            if(x.milestoneType ==1){
+                startMilestonesCount++
+            }
+            if(x.milestoneType ==2){
+                endMilestonesCount++
             }
         })
+        if(startMilestonesCount>1){
+            var limitConfig: FuseConfirmationConfig = {
+                "message": "The Execution Start milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warn"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "OK",
+                        "color": "warn"
+                    }
+                },
+                "dismissible": true
+            }
+            this.fuseAlert.open(limitConfig)
+        }else{
+            if(startMilestonesCount>1) {
+                var limitConfig: FuseConfirmationConfig = {
+                    "message": "The Execution Start milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warn"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "OK",
+                            "color": "warn"
+                        }
+                    },
+                    "dismissible": true
+                }
+                this.fuseAlert.open(limitConfig)
+            }else {
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "message": "The selected milestones will be added to your project’s existing milestones. Do you want to proceed? ",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Yes",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": true,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                const askNeedAlert = this.fuseAlert.open(comfirmConfig)
+                askNeedAlert.afterClosed().subscribe(res => {
+                    if (res == 'confirmed') {
+                        this.standardMilestonesAdded.emit(returnedMilestones);
+                    }
+                })
+            }
+        }
+
 
     }
     toggleSchedule(event: any) {
@@ -91,12 +148,6 @@ export class StandardMilestoneSetsComponent implements OnInit {
         }) : array
     }
     addStandardMilestonesToBulkEditList() {
-        var returnedMilestones: any = []
-        this.standarMilestoneAdded.forEach(x => {
-            x.map(y=> {
-                returnedMilestones.push(y);
-            })
-        })
-        this.standardMilestonesAdded.emit(returnedMilestones);
+
     }
 }

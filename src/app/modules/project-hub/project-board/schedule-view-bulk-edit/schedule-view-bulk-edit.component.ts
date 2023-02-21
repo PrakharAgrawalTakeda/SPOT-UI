@@ -417,6 +417,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                             }
                                         }
                                     }
+                                    this.disabler()
                                     //this.value = this.milestoneForm.getRawValue()
                                     this.viewContent = true
                                 })
@@ -1044,7 +1045,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             //Include in business Case
             if (formValue.filter(x => x.includeInBusinessCase == true).length < 8) {
                 for (var i of this.milestoneForm.controls) {
-                    i['controls']['includeInBusinessCase'].enable()
+                    i['controls']['includeInBusinessCase']?.enable()
                 }
             } else {
                 for (var i of this.milestoneForm.controls) {
@@ -1983,7 +1984,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         var formValue = this.milestoneForm.getRawValue()
         if (formValue.filter(x => x.includeInCharter == true).length <= 10) {
             for (var i of formValue) {
-                var milestoneName = i.milestone
+                var milestoneName = i.milestone;
+                var functionOwner = i.functionGroupId;
                 if (i.milestoneType == 1) {
                     if (!i.milestone.includes('Execution Start')) {
                         milestoneName = 'Execution Start - '.concat(i.milestone)
@@ -2295,6 +2297,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     for (let control of this.milestoneForm.controls) {
                         if (control.value.milestoneType == x.milestoneType) {
                             control.patchValue({milestone: x.milestone})
+                            if(x.functionalOwnerId !=null && x.functionalOwnerId!=''){
+                                control.patchValue({functionGroupId: x.functionGroupId})
+                            }
+                            if(control.value.comments ==''){
+                                control.patchValue({comments: x.comments})
+                            }
+                            if(control.value.includeInReport ==false){
+                                control.patchValue({includeInReport: x.includeInReport})
+                            }
                             this.milestoneTableEditRow(index)
                             exists = true;
                         }
@@ -2311,6 +2322,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     for (let control of this.milestoneForm.controls) {
                         if (control.value.milestoneType == x.milestoneType) {
                             control.patchValue({milestone: x.milestone})
+                            if(x.functionalOwnerId !=null && x.functionalOwnerId!=''){
+                                control.patchValue({functionGroupId: x.funtionalOwnerId})
+                            }
+                            if(control.value.comments ==''){
+                                control.patchValue({comments: x.comment})
+                            }
+                            if(control.value.includeInReport ==false){
+                                control.patchValue({includeInReport: x.includeInReport})
+                            }
                             this.milestoneTableEditRow(index)
                             exists = true;
                         }
@@ -2339,6 +2359,13 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
 
     addStandardMilestoneToEditStack(sM: any) {
+        var formValue = this.milestoneForm.getRawValue()
+        var limitPassed = false;
+        if (formValue.length > 0) {
+            if (formValue.filter(x => x.includeInReport == true).length >= 8) {
+                limitPassed = true;
+            }
+        }
         this.milestoneForm.push(new FormGroup({
             scheduleUniqueId: new FormControl(''),
             projectId: new FormControl(this.id),
@@ -2350,7 +2377,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             functionGroupId: new FormControl(sM.functionalOwnerId),
             completionDate: new FormControl(''),
             comments: new FormControl(sM.comment),
-            includeInReport: new FormControl(sM.includeInReport),
+            includeInReport: new FormControl(limitPassed == false ? sM.includeInReport : false),
             includeInCharter: new FormControl(false),
             milestoneType: new FormControl(sM.milestoneType),
             templateMilestoneId: new FormControl(''),
@@ -2366,7 +2393,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             functionGroupId: sM.functionalOwnerId,
             includeInCharter: false,
             includeInCloseout: false,
-            includeInReport: sM.includeInReport,
+            includeInReport: limitPassed == false ? sM.includeInReport : false,
             indicator: "Grey",
             milestone: sM.milestone,
             milestoneType: sM.milestoneType,
@@ -2378,6 +2405,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }]
         this.schedulengxdata = [...this.schedulengxdata, ...j]
         this.milestoneTableEditRow(this.schedulengxdata.length - 1)
+        this.disabler();
     }
 
     @HostListener('unloaded')
