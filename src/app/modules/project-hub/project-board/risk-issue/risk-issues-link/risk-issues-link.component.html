@@ -29,7 +29,7 @@
 
                         <app-risk-issue-table [tableIndex]="i" [riskIssueData]="linkDatum.riskIssues"
                                             [tableData]="linkDatum.riskIssues" [linksProblemCapture]="linkDatum.riskIssuesLinkProjectDetails"
-                                            [links]="linkDatum.riskIssuesLink" [mode]="'Link'" [projectId]="linkDatum.projectUId"
+                                            [links]="linkDatum.riskIssuesLink" [mode]="'Link'" [projectId]="linkDatum.projectUId" [lookupdata] ="this.projectHubService.lookUpMaster"
                                             [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleRiskIssue($event)">
                         </app-risk-issue-table>
                     </mat-expansion-panel>

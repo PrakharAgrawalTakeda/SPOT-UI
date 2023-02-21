@@ -35,7 +35,7 @@
         <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
             *ngIf="viewElementChecker('problemTitle')" class="w-full"
             formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
-            [Required]="callLocation == 'CreateNew'">
+            [Required]="callLocation == 'CreateNew'" [showHint]="true" [hint]="'random'">
         </spot-input>
         <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')"
                 class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
@@ -71,7 +71,7 @@
 
         <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType1')" class="w-full"
             formControlName="problemType" name="problemType" [label]="'Project Type'" [placeholder]="'Project Type'"
-            [showNoneOption]="true" [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues" [showHint]="true" [hint]="'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
+            [showNoneOption]="false" [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues" [showHint]="true" [hint]="'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
         </spot-select>
         <spot-singleselect-autocomplete
             (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)" *ngIf="viewElementChecker('portfolioOwner')"
@@ -97,7 +97,7 @@
         <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
             [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('localCurrency')" class="w-full"
             formControlName="localCurrency" name="localCurrency" [label]="'Local Currency'"
-            [placeholder]="'Local Currency'" [showNoneOption]="true" [dropDownArrayType]="'string'"
+            [placeholder]="'Local Currency'" [showNoneOption]="false" [dropDownArrayType]="'string'"
             [dropDownArray]="local" >
         </spot-select>
         <spot-select [Required]="callLocation == 'CreateNew'"

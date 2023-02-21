@@ -1,0 +1,239 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Lesson Learned</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="w-full bg-card rounded-2xl">
+        <div class="p-3  flex items-center justify-between">
+            <div>
+            </div>
+            <button class="ml-4 text-primary bg-gray-200"
+                *ngIf="projecthubservice.roleControllerControl.projectBenefits" mat-flat-button [color]="'primary-200'"
+                (click)="addLL()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+        </div>
+        <div class="h-[110vh] overflow-hidden pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="datatable-ll-80 font-medium text-sm text-default whitespace-nowrap"
+                [rows]="lessonsLearned" #lessonLearnedTable>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Include In Single Slide Summary (Max 4)"
+                    prop="includeInCloseOutReport" [flexGrow]="4.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)"
+                            (click)="lessonLearnedTableEditRow(rowIndex)" class="w-full">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]"
+                            *ngIf="lessonLearnedTableEditStack.includes(rowIndex)" class="h-[45px]">
+                            <mat-slide-toggle
+                                [matTooltip]="this.lessonLearnedForm.controls[rowIndex]['controls']['includeInCloseOutReport'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
+                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInCloseOutReport">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Create Detailed Review Slides (No Max)"
+                    prop="createDetailedReviewSlide" [flexGrow]="4.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)"
+                            class="w-full">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)"
+                            class="h-[45px]">
+                            <mat-slide-toggle
+                                [matTooltip]="this.lessonLearnedForm.controls[rowIndex]['controls']['createDetailedReviewSlide'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
+                                class="h-full overflow-visible" formControlName="createDetailedReviewSlide">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Log Date" prop="lessonLogDate" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="4.9">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>{{value |
+                            date:'dd-MMM-yyyy'}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-input-date formControlName="lessonLogDate" name="lessonLogDate" [showLabel]="false">
+                            </spot-input-date>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Title" prop="leassonTitle"
+                    [flexGrow]="5.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)"
+                            (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]"
+                            *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="leassonTitle" [showLabel]="false" [label]="'Title'"
+                                [placeholder]="'Title'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Description / Details" prop="lessonDetail" [flexGrow]="5.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="lessonDetail" [showLabel]="false" [label]="'Description / Details'" [placeholder]="'Description / Details'"
+                                [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Type" prop="lessonType"
+                    [flexGrow]="4.3">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-autocomplete formControlName="lessonType" [showLabel]="false" [valuePointer]="'lookUpName'"
+                                [dropDownArray]="getType()">
+                            </spot-singleselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Criticality" prop="criticality" [flexGrow]="4.4">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-autocomplete formControlName="criticality" [showLabel]="false" [valuePointer]="'lookUpName'"
+                                [dropDownArray]="getCriticality()">
+                            </spot-singleselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Submitted By" prop="submittedByName" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="5.2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-user-autocomplete formControlName="submittedBy" name="submittedBy"
+                                [showLabel]="false" [placeholder]="'Last Name, First Name'">
+                            </spot-singleselect-user-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Submitting Group / Role" prop="submittingGroupRole" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="5.2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>
+                            {{getLookUpName(value)}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-autocomplete formControlName="submittingGroupRole" [showLabel]="false" [valuePointer]="'lookUpName'"
+                                [dropDownArray]="getFunctionOwner()">
+                            </spot-singleselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Suggested Action" prop="suggestedAction"
+                    [flexGrow]="5.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="suggestedAction" [showLabel]="false" [label]="'Suggested Action'"
+                                [placeholder]="'Suggested Action'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Due Date" prop="dueDate" [resizeable]="false" [sortable]="false" [flexGrow]="5.7">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>{{value |
+                            date:'dd-MMM-yyyy'}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-input-date formControlName="dueDate" name="dueDate" [showLabel]="false">
+                            </spot-input-date>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Function Action Owner" prop="functionActionOwner"
+                    [flexGrow]="5.4">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-autocomplete formControlName="functionActionOwner" [showLabel]="false" [valuePointer]="'lookUpName'"
+                                [dropDownArray]="getFunctionOwner()">
+                            </spot-singleselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Action Owner" prop="actionOwnerName" [resizeable]="false" [sortable]="false" [flexGrow]="5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-singleselect-user-autocomplete formControlName="actionOwner" [placeholder]="'Last Name, First Name'" name="actionOwner" [showLabel]="false">
+                            </spot-singleselect-user-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Close Date" prop="lessonCloseDate" [resizeable]="false" [sortable]="false" [flexGrow]="7.7">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>{{value |
+                            date:'dd-MMM-yyyy'}}
+                        </a>
+                        <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
+                            <spot-input-date formControlName="lessonCloseDate" name="lessonCloseDate" [showLabel]="false">
+                            </spot-input-date>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                
+                
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="1.5" [resizeable]="false"
+                    [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+
+                        <div class="flex items-center justify-start">
+                            <a href="javascript:void(0)" title="Delete Single"
+                                *ngIf="projecthubservice.roleControllerControl.projectBenefits"
+                                (click)="deleteLL(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitLL()" type="button">
+            Submit
+        </button>
+    </div>
+</div>
