@@ -415,6 +415,7 @@ export class CreateProjectComponent implements OnInit {
     window.location.reload()
   }
   CheckMandatory(index: number){
+    this.stepper.selectedIndex = index;
     if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
@@ -438,6 +439,7 @@ export class CreateProjectComponent implements OnInit {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.stepper.selectedIndex = index-1;
     }
     else{
     this.stepper.selectedIndex = index;

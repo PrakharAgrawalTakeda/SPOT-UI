@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EventType } from '@azure/msal-browser';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -23,10 +23,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
-  @Input() envPortfolio: any = {}
+  @Input() createform: any
+  @Input() portfolio
   activeaccount: any;
   flag = 0
-  flagenv = 0
   @Output() eventName = new EventEmitter<EventType>();
   viewContent:boolean = false
   showMessage: boolean = false;
@@ -149,8 +149,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
 
   }
 
-  ngOnChanges(): void{
-
+  ngOnChanges(changes: SimpleChanges): void{
+    this.generalInfoForm.patchValue({ enviornmentalPortfolio: changes.portfolio.currentValue })
   }
 
   ngOnInit(): void {
