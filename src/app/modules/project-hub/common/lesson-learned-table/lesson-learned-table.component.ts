@@ -36,8 +36,13 @@ export class LessonLearnedTableComponent implements OnInit {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getLessonLearnedbyProjectId(this.id).then((res) => {
+      this.apiService.getLessonLearnedbyProjectId(this.id).then((res:any) => {
         this.lessonLearned = res
+        for(var i=0;i<this.lessonLearned.length;i++){
+          this.lessonLearned[i].Actionusername = res[i].actionOwner.userDisplayName
+          this.lessonLearned[i].SubmittedByName = res[i].submittedBy.userDisplayName 
+        }
+        
       })
     })
   }

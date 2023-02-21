@@ -120,7 +120,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Submitted By" prop="submittedBy" [resizeable]="false" [sortable]="false"
+                <ngx-datatable-column name="Submitted By" prop="submittedByName" [resizeable]="false" [sortable]="false"
                     [flexGrow]="5.2">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
@@ -128,7 +128,7 @@
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
                             <spot-singleselect-user-autocomplete formControlName="submittedBy" name="submittedBy"
-                                [showLabel]="false">
+                                [showLabel]="false" [placeholder]="'Last Name, First Name'">
                             </spot-singleselect-user-autocomplete>
                         </form>
                     </ng-template>
@@ -185,13 +185,13 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Action Owner" prop="actionOwner" [resizeable]="false" [sortable]="false" [flexGrow]="5">
+                <ngx-datatable-column name="Action Owner" prop="actionOwnerName" [resizeable]="false" [sortable]="false" [flexGrow]="5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
                             <p *ngIf="value == ''">&nbsp;</p>{{value}}
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-user-autocomplete formControlName="actionOwner" name="actionOwner" [showLabel]="false">
+                            <spot-singleselect-user-autocomplete formControlName="actionOwner" [placeholder]="'Last Name, First Name'" name="actionOwner" [showLabel]="false">
                             </spot-singleselect-user-autocomplete>
                         </form>
                     </ng-template>

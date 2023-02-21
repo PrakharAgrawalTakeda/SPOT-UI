@@ -1,4 +1,3 @@
-<p>lesson-learned-single-edit works!</p>
 <div class="flex items-start justify-between bg-primary sidepanel-header">
     <div class="text-on-primary" style="padding-top: 6px">Lesson Learned</div>
     <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
@@ -38,7 +37,7 @@
             [placeholder]="'Criticality'" [valuePointer]="'lookUpName'" [dropDownArray]="GetCriticality()">
         </spot-singleselect-autocomplete>
         <spot-singleselect-user-autocomplete formControlName="submittedBy" [label]="'Submitted By'"
-            name="SubmittedBy" [showLabel]="true">
+            name="SubmittedBy" [showLabel]="true" [placeholder]="'Last Name, First Name'">
         </spot-singleselect-user-autocomplete>
         <spot-singleselect-autocomplete formControlName="submittingGroupRole" class="w-full" name="submittingGroup" [label]="'Submitting Group / Role'"
             [placeholder]="'Submitting Group / Role'" [valuePointer]="'lookUpName'" [dropDownArray]="GetRole()">
@@ -58,7 +57,7 @@
             [placeholder]="'Function Action Owner'" [valuePointer]="'lookUpName'" [dropDownArray]="GetRole()">
         </spot-singleselect-autocomplete>
         <spot-singleselect-user-autocomplete formControlName="actionOwner" [label]="'Action Owner'" name="actionOwner"
-            [showLabel]="true">
+            [showLabel]="true" [placeholder]="'Last Name, First Name'">
         </spot-singleselect-user-autocomplete>
         <div class="w-25">
             <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">

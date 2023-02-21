@@ -42,12 +42,17 @@ export class LessonLearnedBulkEditComponent implements OnInit {
       this.lookupdata = resp
     this.apiService.getLessonLearnedbyProjectId(this.projecthubservice.projectid).then((res: any) => {
       this.lessonLearnedData = res
+      for (var j = 0; j < res.length; j++) {
+        res[j].actionOwnerName = res[j].actionOwner.userDisplayName
+        res[j].submittedByName = res[j].submittedBy.userDisplayName
+      }
       this.lessonsLearned = res
       this.lessonLearnedDb = this.lessonsLearned.map(x => {
         return {
           "lessonLearnedId": x.lessonLearnedId,
           "projectUid": x.projectid,
-          "actionOwner": x.actionOwner,
+          "actionOwner": x.actionOwner.userAdid,
+          "actionOwnerName": x.actionOwner.userDisplayName,
           "createDetailedReviewSlide": x.createDetailedReviewSlide,
           "criticality": x.criticality,
           "dueDate": x.dueDate,
@@ -58,7 +63,8 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           "lessonDetail": x.lessonDetail,
           "lessonLogDate": x.lessonLogDate,
           "lessonType": x.lessonType,
-          "submittedBy": x.submittedBy,
+          "submittedBy": x.submittedBy.userAdid,
+          "submittedByName": x.submittedBy.userDisplayName,
           "submittingGroupRole": x.submittingGroupRole,
           "suggestedAction": x.suggestedAction
         }
@@ -68,11 +74,11 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         this.lessonLearnedForm.push(new FormGroup({
           lessonLearnedId: new FormControl(i.lessonLearnedId),
           projectUid: new FormControl(this.projecthubservice.projectid),
-          // actionOwner: new FormControl(i.actionOwner),
           actionOwner: new FormControl(i.actionOwner ? {
-            userAdid: i.userAdid,
-            userDisplayName: i.userDisplayName
+            userAdid: i.actionOwner.userAdid,
+            userDisplayName: i.actionOwner.userDisplayName
           } : {}),
+          actionOwnerName: new FormControl(i.actionOwner.userDisplayName),
           createDetailedReviewSlide: new FormControl(i.createDetailedReviewSlide),
           criticality: new FormControl(i.criticality),
           dueDate: new FormControl(i.dueDate),
@@ -83,11 +89,11 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           lessonDetail: new FormControl(i.lessonDetail),
           lessonLogDate: new FormControl(i.lessonLogDate),
           lessonType: new FormControl(i.lessonType),
-          // submittedBy: new FormControl(i.submittedBy),
           submittedBy: new FormControl(i.submittedBy ? {
-            userAdid: i.userAdid,
-            userDisplayName: i.userDisplayName
+            userAdid: i.submittedBy.userAdid,
+            userDisplayName: i.submittedBy.userDisplayName
           } : {}),
+          submittedByName: new FormControl(i.submittedBy.userDisplayName),
           submittingGroupRole: new FormControl(i.submittingGroupRole),
           suggestedAction: new FormControl(i.suggestedAction)
         }))
@@ -125,6 +131,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         lessonLearnedId: '',
         projectUid: '',
         actionOwner: '',
+        actionOwnerName: '',
         createDetailedReviewSlide: false,
         criticality: '',
         dueDate: '',
@@ -136,6 +143,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         lessonLogDate: '',
         lessonType: '',
         submittedBy: '',
+        submittedByName: '',
         submittingGroupRole: '',
         suggestedAction: '',
       }]
@@ -143,6 +151,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
       lessonLearnedId: new FormControl(''),
       projectUid: new FormControl(this.projecthubservice.projectid),
       actionOwner: new FormControl(''),
+      actionOwnerName: new FormControl(''),
       createDetailedReviewSlide: new FormControl(false),
       criticality: new FormControl(''),
       dueDate: new FormControl(''),
@@ -154,6 +163,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
       lessonLogDate: new FormControl(''),
       lessonType: new FormControl(''),
       submittedBy: new FormControl(''),
+      submittedByName: new FormControl(''),
       submittingGroupRole: new FormControl(''),
       suggestedAction: new FormControl('')
       }))
