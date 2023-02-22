@@ -113,7 +113,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Actual Performance"
-                    prop="actualPerformance" [flexGrow]="1"   *ngIf="mode == 'Normal'">
+                    prop="actualPerformance" [flexGrow]="1"   *ngIf="mode != 'Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)">

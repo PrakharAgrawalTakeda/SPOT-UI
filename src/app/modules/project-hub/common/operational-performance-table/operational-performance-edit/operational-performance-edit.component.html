@@ -21,7 +21,7 @@
         </spot-select>
     </div>
     <spot-singleselect-autocomplete formControlName="kpiid" class="w-full" name="kpiid" [label]="'KPI'"
-        [placeholder]="'KPI'" [valuePointer]="'kpiname'" [dropDownArray]="projecthubservice.kpiMasters"  *ngIf="mode == 'Normal'">
+        [placeholder]="'KPI'" [valuePointer]="'kpiname'" [dropDownArray]="projecthubservice.kpiMasters"  *ngIf="mode != 'Project-Charter'">
     </spot-singleselect-autocomplete>
      <spot-singleselect-autocomplete formControlName="kpiid" class="w-full" name="kpiid" [label]="'Associated KPI'"
         [placeholder]="'Associated KPI'" [valuePointer]="'kpiname'" [dropDownArray]="projecthubservice.kpiMasters"  *ngIf="mode == 'Project-Charter'">
@@ -35,7 +35,7 @@
         [placeholder]="'Target Performance'">
     </spot-textarea>
     <spot-textarea formControlName="actualPerformance" name="actualPerformance" [label]="'Actual Performance'"
-        [placeholder]="'Actual Performance'" *ngIf="mode == 'Normal'">
+        [placeholder]="'Actual Performance'" *ngIf="mode != 'Project-Charter'">
     </spot-textarea>
     <mat-slide-toggle *ngIf="mode=='Normal'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInProjectDashboard'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"

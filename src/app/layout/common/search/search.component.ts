@@ -26,6 +26,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     // opened: boolean = false;
     resultSets: any[];
     budget: any = [];
+    hide:boolean = true
     searchControl: FormControl = new FormControl();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     temp: string = ""
@@ -185,6 +186,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
              this.searchControl.patchValue(event.option.value.problemTitle);
              this.projectid = event.option.value.problemUniqueId;
              this.addNewItem();
+             this.hide = false
+            //  this.getNgxDatatableNumberHeader()
          }
          else{
         this.searchControl.patchValue(this.temp)
@@ -192,6 +195,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
         document.getElementById('myText').blur();
          }
      }
+
+    // getNgxDatatableNumberHeader(): any {
+    //     this.hide= true
+    //     return ' ngx-hide';
+    // }
 
          addNewItem() {
              this.newItemEvent.emit(this.projectid);
