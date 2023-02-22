@@ -87,8 +87,9 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     StrategicRationale: new FormControl(''),
     BCAuthor: new FormControl({}),
     RiskImpact: new FormControl(''),
-    AdditionalAuthor: new FormControl({}),
-    problemId: new FormControl('')
+    AdditionalAuthor: new FormControl([]),
+    problemId: new FormControl(''),
+    businessCaseApprovedDate: new FormControl('')
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -171,6 +172,13 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
                   this.viewContent = true
               })
           }
+          if (this.callLocation == 'BusinessCase') {
+            this.apiService.getGeneralInfoDataWizzard(this.id, 'BusinessCase').then((res: any) => {
+              // this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
+              this.generalInfoPatchValue(res)
+              this.viewContent = true
+            })
+          }
         })
       })
     })
@@ -215,6 +223,12 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   }
   generalInfoPatchValue(response){
       var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
+      var businessCaseAdditionalAuthorsContributors = []
+    if (response.businessCaseAdditionalAuthorsContributors != null){
+      for(var i=0;i<response.businessCaseAdditionalAuthorsContributors.length;i++){
+        businessCaseAdditionalAuthorsContributors.push(response.businessCaseAdditionalAuthorsContributors[i].userDisplayName)
+      }
+    }
       this.generalInfoForm.patchValue({
           problemTitle: response.projectData.problemTitle,
           problemType: response.projectData.problemType,
@@ -265,6 +279,13 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           annualMustWinID: response.annualMustWinID ? response.annualMustWinID.lookUpName : '',
           isSiteAssessment: response.projectData.isSiteAssessment,
           siteAssessmentCategory: response.siteAssessmentCategory ? response.siteAssessmentCategory : [],
+          StrategicRationale: response.projectData.strategicRationale,
+          BCAuthor: response.businessCaseAuthor == null ? '' : response.businessCaseAuthor.userDisplayName,
+          RiskImpact: response.businessCaseImpactOfDoingNothing,
+          // AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors,
+          AdditionalAuthor: businessCaseAdditionalAuthorsContributors,
+          problemId: response.projectData.problemId,
+          businessCaseApprovedDate: response.businessCaseApprovedDate
       })
   }
 }

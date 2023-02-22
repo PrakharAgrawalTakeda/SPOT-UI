@@ -51,6 +51,9 @@
           <spot-input-date class="w-full read-only" formControlName="approvedDate" name="approvedDate"
             *ngIf="viewElementChecker('approvedDate')" [label]="'Date Approved'">
           </spot-input-date>
+          <spot-input-date class="w-full read-only" formControlName="businessCaseApprovedDate" name="businessCaseApprovedDate"
+            *ngIf="viewElementChecker('businessCaseApprovedDate')" [label]="'Date Approved'">
+          </spot-input-date>
           <div class="w-full" *ngIf="callLocation == 'CloseOut' || callLocation == 'ProjectCharter'"></div>
           <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
             [showHint]="true"
@@ -101,7 +104,8 @@
           <spot-input class="w-full read-only" *ngIf="viewElementChecker('BCAuthor')"
             formControlName="BCAuthor" name="BCAuthor" [label]="'Business Case Author'">
           </spot-input>
-          <spot-input class="w-full read-only" *ngIf="viewElementChecker('AdditionalAuthor')" formControlName="AdditionalAuthor" name="AdditionalAuthor"
+          <spot-input class="w-full read-only"  [valuePointer]="'userDisplayName'"
+            [idPointer]="'userAdid'" *ngIf="viewElementChecker('AdditionalAuthor')" formControlName="AdditionalAuthor" name="AdditionalAuthor"
             [label]="'Additional Authors / Contributors'">
           </spot-input>
           <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"

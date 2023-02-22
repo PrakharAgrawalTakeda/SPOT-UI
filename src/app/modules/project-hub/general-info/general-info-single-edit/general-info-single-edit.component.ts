@@ -64,7 +64,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     StrategicRationale: new FormControl(''),
     BCAuthor: new FormControl({}),
     RiskImpact: new FormControl(''),
-    AdditionalAuthor: new FormControl({})
+    AdditionalAuthor: new FormControl([]),
+    businessCaseApprovedDate: new FormControl('')
   })
   @Output() formValue = new EventEmitter<FormGroup>();
 
@@ -159,7 +160,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     if (this.callLocation == 'ProjectHub') {
       var api;
       if (this.subCallLocation == 'BusinessCase') {
-        api = this.apiService.getGeneralInfoBusinessCaseData(this.projectHubService.projectid)
+        api = this.apiService.getGeneralInfoDataWizzard(this.projectHubService.projectid, 'BusinessCase')
       }
       else {
         api = this.apiService.getGeneralInfoData(this.projectHubService.projectid)
@@ -191,7 +192,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
         StrategicRationale: res.projectData.strategicRationale,
         BCAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
         RiskImpact: res.businessCaseImpactOfDoingNothing,
-        AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors[0] : {},
+        businessCaseApprovedDate: res.businessCaseApprovedDate,
+        AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors : [],
         sponsor: res.sponsor ? {
           userAdid: res.sponsor.teamMemberAdId,
           userDisplayName: res.sponsor.teamMemberName
@@ -353,19 +355,6 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
-    var businessCaseObj = {
-      projectid: this.projectHubService.projectid,
-      businessCaseAuthorId: this.generalInfo.businessCaseAuthor,
-      additionalAuthorsContributorsId: this.generalInfo.businessCaseAdditionalAuthorsContributors,
-      impactOfDoingNothing: this.generalInfo.businessCaseImpactOfDoingNothing,
-      approvedDate: this.generalInfo.businessCaseApprovedDate
-    }
-    
-    if (this.subCallLocation == 'BusinessCase'){
-      businessCaseObj.impactOfDoingNothing = formValue.RiskImpact
-      businessCaseObj.businessCaseAuthorId = Object.keys(formValue.BCAuthor).length > 0 ? formValue.BCAuthor.userAdid : '',
-      businessCaseObj.additionalAuthorsContributorsId = Object.keys(formValue.AdditionalAuthor).length > 0 ? formValue.AdditionalAuthor.userAdid : ''
-    }
     mainObj.isArchived = formValue.isArchived
     mainObj.problemTitle = formValue.problemTitle
     mainObj.problemType = formValue.problemType
@@ -387,38 +376,27 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
     mainObj.sponsorId =  Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
     mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
-    mainObj.strategicRationale = formValue.StrategicRationale
-    this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-      if (this.subCallLocation == 'ProjectProposal') {
-        this.apiService.updateReportDates(this.projectHubService.projectid, "ProjectProposalModifiedDate").then(secondRes => {
-          this.projectHubService.isNavChanged.next(true)
-          this.projectHubService.submitbutton.next(true)
-          this.projectHubService.successSave.next(true)
-          this.projectHubService.toggleDrawerOpen('', '', [], '')
-        })
-    }else{
-        this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, this.subCallLocation).then(res => {
-            this.projectHubService.isNavChanged.next(true)
-            this.projectHubService.submitbutton.next(true)
-            this.projectHubService.successSave.next(true)
-            this.projectHubService.toggleDrawerOpen('', '', [], '')
-        })
-      }
-      else if (this.subCallLocation == 'BusinessCase') {
-        this.apiService.editGeneralInfoBusinessCase(this.projectHubService.projectid, businessCaseObj).then(secondRes => {
-          this.projectHubService.isNavChanged.next(true)
-          this.projectHubService.submitbutton.next(true)
-          this.projectHubService.successSave.next(true)
-          this.projectHubService.toggleDrawerOpen('', '', [], '')
-        })
-      }
-      else {
+    mainObj.strategicRationale = formValue.StrategicRationale,
+    mainObj.businessCaseImpactOfDoingNothing = formValue.RiskImpact
+    mainObj.businessCaseAuthorADId = Object.keys(formValue.BCAuthor).length > 0 ? formValue.BCAuthor.userAdid : '',
+    mainObj.businessCaseAdditionalAuthorsContributorsADIds = formValue.AdditionalAuthor.length > 0 ? formValue.AdditionalAuthor.map(x => x.userAdid).join() : ''
+    mainObj.businessCaseApprovedDate = formValue.businessCaseApprovedDate ? moment(formValue.businessCaseApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+    
+    if (this.subCallLocation == 'ProjectHub') {
+      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
         this.projectHubService.toggleDrawerOpen('', '', [], '')
-      }
-    })
+      })
+    } else {
+      this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, this.subCallLocation).then(res => {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      })
+    }
   }
 
 

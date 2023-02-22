@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./business-case-general-info.component.scss']
 })
 export class BusinessCaseGeneralInfoComponent implements OnInit {
-  viewElements: any = ["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription", "excecutionScope", "sponsor", "BCAuthor", "StrategicRationale", "RiskImpact", "AdditionalAuthor","problemId"]
+  viewElements: any = ["problemTitle", "portfolioOwner", "owningOrganization", "opU", "primaryProduct", "otherImpactedProducts", "projectDescription", "excecutionScope", "sponsor", "BCAuthor", "StrategicRationale", "RiskImpact", "AdditionalAuthor", "problemId", "businessCaseApprovedDate"]
   constructor() { }
 
   ngOnInit(): void {

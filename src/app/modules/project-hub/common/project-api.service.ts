@@ -65,7 +65,7 @@ export class ProjectApiService {
     return response
   }
   async getGeneralInfoDataWizzard(projectid, callLocation) {
-      var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizzard="+callLocation
+      var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard="+callLocation
       const abc$ = this.http.get(url)
       const response = await lastValueFrom(abc$)
       return response
@@ -134,7 +134,7 @@ export class ProjectApiService {
       if(wizzard =="CloseOut"){
           wizzard = "ProjectCloseOut";
       }
-      var url = GlobalVariables.apiurl + "Projects/" + projectid + "?wizzard=" + wizzard
+    var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard=" + wizzard
       const abc$ = this.http.put(url, body)
       const response = await lastValueFrom(abc$)
       return response
