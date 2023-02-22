@@ -104,10 +104,10 @@
           <spot-input class="w-full read-only" *ngIf="viewElementChecker('BCAuthor')"
             formControlName="BCAuthor" name="BCAuthor" [label]="'Business Case Author'">
           </spot-input>
-          <spot-input class="w-full read-only"  [valuePointer]="'userDisplayName'"
+          <spot-multiselect-user-autocomplete class="w-full read-only"  [valuePointer]="'userDisplayName'"
             [idPointer]="'userAdid'" *ngIf="viewElementChecker('AdditionalAuthor')" formControlName="AdditionalAuthor" name="AdditionalAuthor"
             [label]="'Additional Authors / Contributors'">
-          </spot-input>
+          </spot-multiselect-user-autocomplete>
           <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
             [label]="'Primary Product'" [showHint]="true" *ngIf="viewElementChecker('primaryProduct')"
             [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">

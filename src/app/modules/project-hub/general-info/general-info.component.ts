@@ -223,12 +223,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   }
   generalInfoPatchValue(response){
       var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
-      var businessCaseAdditionalAuthorsContributors = []
-    if (response.businessCaseAdditionalAuthorsContributors != null){
-      for(var i=0;i<response.businessCaseAdditionalAuthorsContributors.length;i++){
-        businessCaseAdditionalAuthorsContributors.push(response.businessCaseAdditionalAuthorsContributors[i].userDisplayName)
-      }
-    }
+      
       this.generalInfoForm.patchValue({
           problemTitle: response.projectData.problemTitle,
           problemType: response.projectData.problemType,
@@ -282,8 +277,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           StrategicRationale: response.projectData.strategicRationale,
           BCAuthor: response.businessCaseAuthor == null ? '' : response.businessCaseAuthor.userDisplayName,
           RiskImpact: response.businessCaseImpactOfDoingNothing,
-          // AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors,
-          AdditionalAuthor: businessCaseAdditionalAuthorsContributors,
+          AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors,
           problemId: response.projectData.problemId,
           businessCaseApprovedDate: response.businessCaseApprovedDate
       })
