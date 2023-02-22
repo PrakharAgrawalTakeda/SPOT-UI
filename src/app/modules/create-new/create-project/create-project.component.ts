@@ -97,14 +97,17 @@ export class CreateProjectComponent implements OnInit {
       this.campaignPhase.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
       })
+        console.log("campaignPhase", this.campaignPhase)
       this.campaignType = this.lookupdata.filter(x => x.lookUpParentId == '01a49f16-0744-4100-ae8a-ec2e469dbf74');
       this.campaignType.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
       })
+        console.log("campaignType", this.campaignType)
       this.productionSteps = this.lookupdata.filter(x => x.lookUpParentId == 'b137412d-8008-4446-8fe6-c56a06b83174');
       this.productionSteps.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
       })
+        console.log("productionSteps", this.productionSteps)
     })
     })
     console.log("From Create project " + history.state);
@@ -162,6 +165,9 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 3) {
+      console.log("campaignPhase", this.campaignPhase)
+      console.log("campaignType", this.campaignType)
+      console.log("productionSteps", this.productionSteps)
       this.campaingPhaseName = event.campaignPhaseId != "" && event.campaignPhaseId != undefined ? this.campaignPhase.filter(x => x.lookUpId == event.campaignPhaseId)[0].lookUpName : ""
       this.campaingTypeName = event.campaignTypeId != "" && event.campaignTypeId != undefined ? this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName : ""
       this.productionStepName = event.productionStepId != "" && event.productionStepId != undefined ? this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName : ""
