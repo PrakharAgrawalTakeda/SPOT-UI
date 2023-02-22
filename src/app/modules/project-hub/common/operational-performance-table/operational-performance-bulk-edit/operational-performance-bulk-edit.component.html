@@ -32,7 +32,7 @@
                                     svgIcon="{{(indicator.getIndicators(getIndicator(value), 'circle')).icontype}}"
                                     class="{{(indicator.getIndicators(getIndicator(value), 'circle')).iconcolor}}">
                                 </mat-icon>
-                                {{ getLookUpName(value)}}
+                                {{getLookUpName(value)}}
                             </div>
                         </a>
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
@@ -52,15 +52,15 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" [name]="mode == 'Normal'?'KPI':'Associated KPI'" prop="kpiname" [flexGrow]="1.6">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [name]="mode == 'Normal'?'KPI':'Associated KPI'" prop="kpiid" [flexGrow]="1.6">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                            <p *ngIf="!value">&nbsp;</p>{{getKPIName(value)}}
                         </a>
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
                             *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
-                            <spot-singleselect-autocomplete formControlName="kpiname" [showLabel]="false" [label]="mode == 'Normal'?'KPI':'Associated KPI'"
+                            <spot-singleselect-autocomplete formControlName="kpiid" [showLabel]="false" [label]="mode == 'Normal'?'KPI':'Associated KPI'"
                             [placeholder]="mode == 'Normal'?'KPI':'Associated KPI'" [valuePointer]="'kpiname'"
                                 [dropDownArray]="projecthubservice.kpiMasters">
                             </spot-singleselect-autocomplete>
