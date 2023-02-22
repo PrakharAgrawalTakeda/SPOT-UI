@@ -8,6 +8,7 @@ import { } from '@angular/compiler'
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Title } from '@angular/platform-browser';
 import { MsalService } from '@azure/msal-angular';
+import { CreateNewApiService } from '../create-new-api.service';
 
 
 @Component({
@@ -25,27 +26,40 @@ export class CopyProjectComponent implements OnInit {
   projectList: any = {};
   userid: string = "";
   projectid: string = "";
+  viewContent:boolean = false
   CopyProjectForm = new FormGroup({
-    addTemplate: new FormControl('')
+    projectTitle: new FormControl({value: true, disabled: true}),
+    projectType: new FormControl({ value: true, disabled: true }),
+    problemDescription: new FormControl(true),
+    proposedStatement: new FormControl(true),
+    keySuccess: new FormControl(true),
+    scope: new FormControl(true),
+    milestone: new FormControl(true),
+    projectTeam: new FormControl(true),
+    categoricalDriver: new FormControl(true)
   })
 
   constructor(public auth: AuthService, private router: Router, private apiService: PortfolioApiService,
-    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService) { }
+    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService) { }
 
   ngOnInit(): void {
     this.activeaccount = this.authService.instance.getActiveAccount();
     this.titleService.setTitle("Copy Project")
-    this.CopyProjectForm.patchValue({
-      addTemplate: true
-    })
     this.auth.lookupMaster().then(res => {
       this.lookupdata = res;
       this.lookupTemplate = this.lookupdata.filter(x => x.lookUpParentId == 'a378aa1b-dadf-4592-8dc6-fee59b75f51d');
       this.lookupTemplate.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
       })
+      this.viewContent = true
       console.log(this.lookupTemplate);
     })
+  }
+
+  toggleSection(item: number) {
+    console.log(item)
+    console.log(this.lookupTemplate[item])
+    // this.gDatas[item].toggle = !this.gDatas[item].toggle;
   }
 
   addItem(newItem: string) {
@@ -53,6 +67,7 @@ export class CopyProjectComponent implements OnInit {
   }
 
   SubmitCopyProject(data: any) {
+    console.log(this.CopyProjectForm)
     for (var i = 0; i < data.currentTarget.length; i++) {
       if (data.currentTarget[i].checked == true) {
         this.finalIndex.push(i);
@@ -70,35 +85,26 @@ export class CopyProjectComponent implements OnInit {
       categoricalData: true,
       strategicDriverDetails: true
     }
-    if (!this.finalIndex.includes(0)){
-      copyProjectParameter.projectTitle = false
-    }
-    if (!this.finalIndex.includes(1)) {
-      copyProjectParameter.projectType = false
-    }
-    if (!this.finalIndex.includes(2)) {
+    if (!this.CopyProjectForm.value.problemDescription) {
       copyProjectParameter.problemDescription = false
     }
-    if (!this.finalIndex.includes(3)) {
+    if (!this.CopyProjectForm.value.proposedStatement) {
       copyProjectParameter.proposedStatement = false
     }
-    if (!this.finalIndex.includes(4)) {
+    if (!this.CopyProjectForm.value.keySuccess) {
       copyProjectParameter.keySuccessCriteria = false
     }
-    if (!this.finalIndex.includes(5)) {
+    if (!this.CopyProjectForm.value.scope) {
       copyProjectParameter.inOutOfScope = false
     }
-    if (!this.finalIndex.includes(6)) {
+    if (!this.CopyProjectForm.value.milestone) {
       copyProjectParameter.milestones = false
     }
-    if (!this.finalIndex.includes(7)) {
+    if (!this.CopyProjectForm.value.projectTeam) {
       copyProjectParameter.projectTeam = false
     }
-    if (!this.finalIndex.includes(8)) {
+    if (!this.CopyProjectForm.value.categoricalDriver) {
       copyProjectParameter.categoricalData = false
-    }
-    if (!this.finalIndex.includes(9)) {
-      copyProjectParameter.strategicDriverDetails = false
     }
     for (var i = 0; i < this.finalIndex.length; i++) {
       this.finalData.push(this.lookupTemplate[i].lookUpId);
@@ -109,8 +115,8 @@ export class CopyProjectComponent implements OnInit {
       CopyUserID: this.activeaccount.localAccountId,
       CopyProjectParameter: copyProjectParameter
     }
-    this.apiService.getTemplateInfo(dataToSend).then(res => {
-      this.apiService.getQuality(this.projectid).then(quality => {
+    this.createApiservice.getTemplateInfo(dataToSend).then(res => {
+      this.createApiservice.getQuality(this.projectid).then(quality => {
         console.log(quality);
         console.log(res);
         if (res != "") {

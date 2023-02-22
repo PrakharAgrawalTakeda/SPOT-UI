@@ -104,7 +104,7 @@ export class OeProjectSingleEditComponent implements OnInit {
             }
             this.generalInfoForm.patchValue({
               isOeproject: history.state.data.isOeproject ,
-              oeprojectType: history.state.data.oeprojectType == null ? '' : finaldataoe,
+              oeprojectType: history.state.data.oeprojectType == null || history.state.data.oeprojectType == "" || history.state.data.oeprojectType == undefined ? '' : finaldataoe,
             })
             this.formValueOE.emit(this.generalInfoForm.getRawValue())
             this.viewContent = true

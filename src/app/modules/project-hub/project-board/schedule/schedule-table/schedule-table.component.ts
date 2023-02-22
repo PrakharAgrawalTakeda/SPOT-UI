@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import {  FuseConfirmationService } from '@fuse/services/confirmation';
 import { SelectionType } from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
@@ -17,7 +17,8 @@ export class SchedulesTableComponent implements OnInit {
   @Input() scheduleData: any = []
   @Input() projectId: string = ''
   @Input() parentProjectId: string = ''
-  @Input() mode: 'Normal' | 'Link' = 'Normal'
+  @Input() callLocation: 'Normal' | 'Link' | 'StandardMilestones' = 'Normal'
+  @Input() viewElements: any = ['milestone','status','plannedFinish', 'baselineFinish','completionDate','variance']
   @Input() links: any = []
   @Input() linksProblemCapture: any = []
   @Input() tableIndex: number = 0
@@ -36,8 +37,7 @@ export class SchedulesTableComponent implements OnInit {
     , public fuseAlert: FuseConfirmationService) { }
 
   ngOnInit(): void {
-    console.log(this.tableData)
-    if (this.mode == 'Link') {
+    if (this.callLocation == 'Link') {
       this.dataloaderLink()
     }
   }
@@ -49,18 +49,12 @@ export class SchedulesTableComponent implements OnInit {
       var datebaseline = new Date(moment(item.baselineFinish).format('L'))
       var dateplanned = new Date(moment(item.plannedFinish).format('L'))
       var datecompletion = new Date(moment(item.completionDate).format('L'))
-  
-  
-  
       if (item.completionDate == null && item.baselineFinish != null && item.plannedFinish != null) {
         if (moment(this.today) > moment(item.plannedFinish)) {
           var Time1 = datetoday.getTime() - datebaseline.getTime();
           var Days1 = Time1 / (1000 * 3600 * 24)
-  
           var variance = Math.round(Days1)
           item.variance = variance
-  
-  
         }
         else if (moment(this.today) < moment(item.plannedFinish)) {
           var Time2 = dateplanned.getTime() - datebaseline.getTime();
@@ -78,9 +72,7 @@ export class SchedulesTableComponent implements OnInit {
       else {
         item.variance = "N/A"
       }
-      console.log(item.variance)
     }
-    
     return array
   }
   dataloaderLink() {
@@ -161,5 +153,8 @@ export class SchedulesTableComponent implements OnInit {
   }
   toggleExpandRow(row) {
     this.table.rowDetail.toggleExpandRow(row);
+  }
+  viewElementChecker(element: string): boolean {
+      return this.viewElements.some(x => x == element)
   }
 }

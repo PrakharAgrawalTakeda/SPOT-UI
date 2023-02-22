@@ -1,1 +1,20 @@
-<p>close-out-lessons-learned works!</p>
+<div class="flex flex-col flex-auto w-full px-8" *ngIf="viewContent">
+    <div class="flex bg-card rounded-2xl p-3 pb-0 justify-between items-center">
+        <div class="w-full">
+            <form class="w-full p-6 pb-3 pt-0" [formGroup]="KeyTakeawayForm">
+                <spot-textarea class="w-full read-only" formControlName="keyTakeaways" name="keyTakeaways" [label]="'Key Takeaways'">
+                </spot-textarea>
+            </form>
+        </div>
+        <div class="w-10">
+            <a href="javascript:void(0)" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
+                title="Edit Single"
+                (click)="projecthubservice.toggleDrawerOpen('keyTakeawaysSingleEdit',this.projectData , keyTakeaways, id)">
+                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="xl:col-span-6 flex flex-col mt-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
+        <app-lesson-learned-table></app-lesson-learned-table>
+    </div>
+</div>

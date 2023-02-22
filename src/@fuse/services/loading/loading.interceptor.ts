@@ -34,7 +34,7 @@ export class FuseLoadingInterceptor implements HttpInterceptor {
 
         // Set the loading status to true
         this._fuseLoadingService._setLoadingStatus(true, req.url);
-        document.getElementsByTagName('body') ? document.getElementsByTagName('body')[0].classList.add('cursor-wait') : ''
+        
 
         return next.handle(req).pipe(
             finalize(() => {

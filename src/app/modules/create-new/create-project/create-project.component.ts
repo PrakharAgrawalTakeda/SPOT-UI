@@ -10,6 +10,7 @@ import { QualityRefBulkEditComponent } from 'app/modules/project-hub/general-inf
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { __classPrivateFieldSet } from 'tslib';
 import { MatStepper } from '@angular/material/stepper';
+import { CreateNewApiService } from '../create-new-api.service';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class CreateProjectComponent implements OnInit {
   campaingTypeName: string = "";
   productionStepName: string = "";
   localCurrency:any = [];
+  viewContent:boolean = false
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -73,11 +75,12 @@ export class CreateProjectComponent implements OnInit {
     annualMustWinID: new FormControl(''),
     localCurrency: new FormControl('')
   })
+  envPortfolio:any
 
   capturedValues = ['', '']
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, private apiProjectService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService) {
   }
 
   
@@ -123,7 +126,8 @@ export class CreateProjectComponent implements OnInit {
         qualityReference: event.value.isQualityRef
       })
     }
-    else if (index == 0){
+    else if (index == 0) {
+      this.envPortfolio = event.enviornmentalPortfolio,
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
         problemType: event.problemType,
@@ -145,6 +149,8 @@ export class CreateProjectComponent implements OnInit {
     }
     else if (index == 1) {
       this.createProjectForm.patchValue({
+        projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
+        projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
         isCapsProject: event.isCapsProject
       })
@@ -156,9 +162,9 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 3) {
-      this.campaingPhaseName = this.campaignPhase.filter(x => x.lookUpId == event.campaignPhaseId)[0].lookUpName
-      this.campaingTypeName = this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName
-      this.productionStepName = this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName
+      this.campaingPhaseName = event.campaignPhaseId != "" && event.campaignPhaseId != undefined ? this.campaignPhase.filter(x => x.lookUpId == event.campaignPhaseId)[0].lookUpName : ""
+      this.campaingTypeName = event.campaignTypeId != "" && event.campaignTypeId != undefined ? this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName : ""
+      this.productionStepName = event.productionStepId != "" && event.productionStepId != undefined ? this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName : ""
       this.createProjectForm.patchValue({
         isTechTransfer: event.isTechTransfer,
         campaignPhase: event.campaignPhaseId,
@@ -186,7 +192,33 @@ export class CreateProjectComponent implements OnInit {
 
 
   RouteBack() {
-    this.router.navigate([`./portfolio-center`]);
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you Sure?",
+      "message": "Are you sure you want to exit?",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Yes",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const createProjectAlert = this.fuseAlert.open(comfirmConfig)
+    createProjectAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+      this.router.navigate([`./portfolio-center`]);
+      }
+    })
   }
 
   addItem(newItem: FormGroup) {
@@ -208,6 +240,7 @@ export class CreateProjectComponent implements OnInit {
     }];
     var projectIDTemplate = "";
     var copyProjectParameter = "";
+    var LocalCurrencyID = ""
     var mainObjCreate = [{
       ProblemUniqueID:null,
       ProblemTitle:null,
@@ -228,7 +261,6 @@ export class CreateProjectComponent implements OnInit {
       ProductionStepID:null,
       TargetEndState:null,
       IsConfidential:false,
-      LocalCurrencyID:null,
       IsOEProject:false,
       OEProjectType:null,
       IsAgile:false,
@@ -247,6 +279,7 @@ export class CreateProjectComponent implements OnInit {
       AnnualMustWinID:null
       }];
     var formValue = this.createProjectForm.getRawValue()
+    LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
       mainObjCreate[0].ProblemUniqueID = ""
       mainObjCreate[0].ProblemTitle = formValue.problemTitle
       mainObjCreate[0].PortfolioOwnerID = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
@@ -261,7 +294,6 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].TargetEndState = formValue.targetGoalSituation
       mainObjCreate[0].ProblemType = formValue.problemType
       mainObjCreate[0].DefaultOwningOrganizationID = formValue.owningOrganization
-      mainObjCreate[0].LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
     mainObjCreate[0].IsOEProject = formValue.isOeproject == "" ? false : formValue.isOeproject
       if (mainObjCreate[0].IsOEProject) {
         mainObjCreate[0].OEProjectType = formValue.oeProjectType.length > 0 ? formValue.oeProjectType.map(x => x.lookUpId).join() : ''
@@ -294,7 +326,102 @@ export class CreateProjectComponent implements OnInit {
         mainObjCreate[0].StrategicYearID = formValue.strategicYear != "" ? formValue.strategicYear.lookUpId : ''
         mainObjCreate[0].AnnualMustWinID = formValue.annualMustWinID != "" ? formValue.annualMustWinID.lookUpId : ''
     }
-      if (mainObjCreate[0].ProblemTitle == "" || mainObjCreate[0].PortfolioOwnerID == "" || mainObjCreate[0].ProblemOwnerID == "" || mainObjCreate[0].LocalCurrencyID == "" || mainObjCreate[0].PrimaryProductID == "" || mainObjCreate[0].ProjectDescription == "" || mainObjCreate[0].ExecutionScope == "") {
+    
+    var dataToSend = {}
+      if (history.state.callLocation == "CopyProject"){
+      dataToSend = {
+        "projectCaptures": mainObjCreate,
+        "hubSettings": hubSettings,
+        "projectIDTemplate": history.state.copytemplateId,
+        "copyProjectParameter": history.state.lookupString,
+        "LocalCurrencyID": LocalCurrencyID
+      }
+    }
+    else{
+      dataToSend = {
+        "projectCaptures": mainObjCreate,
+        "hubSettings": hubSettings,
+        "projectIDTemplate": projectIDTemplate,
+        "copyProjectParameter": copyProjectParameter,
+        "LocalCurrencyID": LocalCurrencyID
+      }
+    }
+    
+      if (formValue.qualityReference){
+        this.qualityValue = true;
+      }
+      this.createApiService.createProject(dataToSend).then((res: any) => {
+        this.projectid = res.problemUniqueId
+        if (this.qualityValue == true) {
+          this.qualityformValue = []
+          var genQRFORM = this.qualityForm
+          if (history.state.callLocation == "CopyProject"){
+          for (var quality of this.qualityForm) {
+            if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
+              this.qualityformValue.push({
+                qualityUniqueId: "",
+                problemUniqueId: res.problemUniqueId,
+                qualityReferenceTypeId: quality.qualityReferenceTypeId.length == undefined ? quality.qualityReferenceTypeId.lookUpId : quality.qualityReferenceTypeId,
+                qualityReference1: quality.qualityReference1
+              })
+            }
+          }
+        }
+        else{
+          for (var quality of this.qualityForm) {
+            if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
+                this.qualityformValue.push({
+                  qualityUniqueId: quality.qualityUniqueId,
+                  problemUniqueId: res.problemUniqueId,
+                  qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
+                  qualityReference1: quality.qualityReference1
+                })
+            }
+          }
+        }
+          this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
+            console.log(quality);
+            this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+              this.viewContent = true
+            })
+        })
+          
+      }
+      else{
+          this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+            this.viewContent = true
+          })
+      }
+    })
+  }
+
+  RoutetoBoard(){
+    this.router.navigate([`./portfolio-center`]);
+    window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
+  }
+
+  RoutetoCharter() {
+    this.router.navigate([`./portfolio-center`]);
+    window.open('/project-hub/' + this.projectid + '/project-charter/general-info', "_blank")
+  }
+
+  RoutetoBC() {
+    this.router.navigate([`./portfolio-center`]);
+    window.open('/project-hub/' + this.projectid + '/business-case/general-info', "_blank")
+  }
+
+  RoutetoProposal() {
+    this.router.navigate([`./portfolio-center`]);
+    window.open('/project-hub/' + this.projectid + '/project-proposal/general-info', "_blank")
+  }
+
+  RouteCreateProject() {
+    this.router.navigate([`./portfolio-center`]);
+    window.location.reload()
+  }
+  CheckMandatory(index: number){
+    this.stepper.selectedIndex = index;
+    if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -317,137 +444,53 @@ export class CreateProjectComponent implements OnInit {
         "dismissible": true
       }
       const alert = this.fuseAlert.open(comfirmConfig)
+      this.stepper.selectedIndex = index-1;
     }
     else{
-    var dataToSend = {}
-      if (history.state.callLocation == "CopyProject"){
-      dataToSend = {
-        "projectCaptures": mainObjCreate,
-        "hubSettings": hubSettings,
-        "projectIDTemplate": history.state.copytemplateId,
-        "copyProjectParameter": history.state.lookupString
-      }
+    this.stepper.selectedIndex = index;
     }
-    else{
-      dataToSend = {
-        "projectCaptures": mainObjCreate,
-        "hubSettings": hubSettings,
-        "projectIDTemplate": projectIDTemplate,
-        "copyProjectParameter": copyProjectParameter
-      }
-    }
-    
-      if (formValue.qualityReference){
-        this.qualityValue = true;
-      }
-      this.apiService.createProject(dataToSend).then((res: any) => {
-        this.projectid = res.problemUniqueId
-        if (this.qualityValue == true) {
-          this.qualityformValue = []
-          var genQRFORM = this.qualityForm
-          if (history.state.callLocation == "CopyProject"){
-          for (var quality of this.qualityForm) {
-            if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
-              this.qualityformValue.push({
-                qualityUniqueId: "",
-                problemUniqueId: history.state.data.problemUniqueId,
-                qualityReferenceTypeId: quality.qualityReferenceTypeId != "" ? quality.qualityReferenceTypeId : '',
-                qualityReference1: quality.qualityReference1
-              })
-            }
-          }
-        }
-        else{
-          for (var quality of this.qualityForm) {
-            if (Object.keys(quality.qualityReferenceTypeId).length > 0 && quality.qualityReference1 != "") {
-                this.qualityformValue.push({
-                  qualityUniqueId: quality.qualityUniqueId,
-                  problemUniqueId: res.problemUniqueId,
-                  qualityReferenceTypeId: Object.keys(quality.qualityReferenceTypeId).length > 0 ? quality.qualityReferenceTypeId.lookUpId : '',
-                  qualityReference1: quality.qualityReference1
-                })
-            }
-          }
-        }
-          this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
-            console.log(quality);
-            // if (res != "") {
-            //   this.createProjectForm.reset();
-            //   window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
-            // }
-        })
-      }
-      // else{
-      //     window.open('/project-hub/' + res.problemUniqueId + '/project-board', "_blank")
-      // }
-    })
-  }
   }
 
-  RoutetoBoard(){
-    window.open('/project-hub/' + this.projectid + '/project-board', "_blank")
-  }
-
-  RoutetoCharter() {
-    window.open('/project-hub/' + this.projectid + '/project-charter/general-info', "_blank")
-  }
-
-  RoutetoBC() {
-    window.open('/project-hub/' + this.projectid + '/business-case/general-info', "_blank")
-  }
-
-  RoutetoProposal() {
-    window.open('/project-hub/' + this.projectid + '/project-proposal/general-info', "_blank")
-  }
-
-  move(index: number) {
-    // this.createProjectForm.reset();
-    // this.createProjectForm.patchValue({
-    //   problemTitle: '',
-    //   projectsingle: '',
-    //   projectsingleid: '',
-    //   problemType: 'Standard Project / Program',
-    //   projectDescription: '',
-    //   primaryProduct: {},
-    //   otherImpactedProducts: [],
-    //   portfolioOwner: {},
-    //   excecutionScope: [],
-    //   enviornmentalPortfolio: {},
-    //   isCapsProject: false,
-    //   owningOrganization: '',
-    //   SubmittedBy: '',
-    //   targetGoalSituation: '',
-    //   isOeproject: '',
-    //   qualityReference: '',
-    //   isTechTransfer: '',
-    //   primaryKPI: '',
-    //   isAgile: '',
-    //   isSiteAssessment: '',
-    //   isPobos: '',
-    //   oeProjectType: '',
-    //   campaignPhase: '',
-    //   productionSteps: '',
-    //   campaignType: '',
-    //   agilePrimaryWorkstream: '',
-    //   agileSecondaryWorkstream: '',
-    //   agileWave: '',
-    //   pobosCategory: [],
-    //   siteAssessmentCategory: [],
-    //   quality: new FormArray([]),
-    //   isGmsgqltannualMustWin: '',
-    //   strategicYear: '',
-    //   annualMustWinID: '',
-    //   localCurrency: ''
-    // })
-    // this.stepper.selectedIndex = index;
-    window.location.reload()
-  }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){
       return id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
     }
     else if (Object.keys(id).length > 0) {
       return id && id.lookUpId != '' ? this.qualityType.find(x => x.lookUpId == id.lookUpId).lookUpName : ''
+    }
+  }
+
+  selectionChange(index){
+    console.log(index)
+    if (index._selectedIndex == 1 || index._selectedIndex == 2){
+      if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "You must complete all mandatory fields.",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        this.stepper.selectedIndex = "0"
+      }
+      else {
+        this.stepper.selectedIndex = index._selectedIndex;
+      }
     }
   }
 

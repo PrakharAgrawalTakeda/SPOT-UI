@@ -16,14 +16,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Copy Project',
-                type: 'basic',
-                link: '/create-project/copy-project'
-            },
-            {
                 title: 'Create Project',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
             }
         ],
     },
@@ -50,14 +50,14 @@ export const compactNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Copy Project',
-                type: 'basic',
-                link: '/create-project/copy-project'
-            },
-            {
                 title: 'Create Project',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
             }
         ],
     },
@@ -84,14 +84,14 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Copy Project',
-                type: 'basic',
-                link: '/create-project/copy-project'
-            },
-            {
                 title: 'Create Project',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
             }
         ],
     },
@@ -117,14 +117,14 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Copy Project',
-                type: 'basic',
-                link: '/create-project/copy-project'
-            },
-            {
                 title: 'Create Project',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
             }
         ],
     },

@@ -70,44 +70,68 @@
 .mat-horizontal-stepper-header {
     display: grid !important;
     height: 70px;
-    /* overflow: hidden; */
     align-items: center;
     padding: 0 24px;
+    // display: none;
 }
-// #cdk-step-content-0-0{
-//     display: flex !important;
-//     justify-content: center !important;
-// }
-// #cdk-step-content-0-1 {
-//     display: flex !important;
-//     justify-content: center !important;
-// }
-// #cdk-step-content-0-2 {
-//     display: flex !important;
-//     justify-content: center !important;
-// }
 
 .CreateForm{
         width: 52%;
 }
 
-.reviewLabel {
-    margin-left: 20px;
-}
 
 .test {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     width: 100%;
 }
 
 
 .child {
     width: 50%;
+    margin-left: 10px;
+}
+
+.parent {
+    width: 50%;
+    margin-left: 10px;
+    text-align: end;
+    font-weight: bold;
 }
 
 .ngx-datatable.datatable-qr-80 {
-    height: 33vh !important;
+    height: 22vh !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
+}
+
+.box{
+    display: flex;
+    justify-content: center;
+    margin-right: 23vw;
+    background-color: rgba(76, 155, 207);
+    margin-bottom: 10px;
+    width: 11vw;
+    margin-left: 25vw;
+    color: white;
+}
+
+.ngx-datatable .datatable-header{
+    display: block;
+        overflow: hidden;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        font-weight: normal !important;
+        font-size: 0.875rem;
+        overflow-wrap: break-word;
+        white-space: pre-line;
+        align-items: center;
+        color: black;
+}
+
+.ngx-datatable .datatable-body .datatable-body-row>div{
+    color: black !important;
+    font-weight: normal !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
 }
