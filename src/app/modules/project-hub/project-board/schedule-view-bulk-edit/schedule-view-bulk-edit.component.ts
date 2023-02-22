@@ -176,9 +176,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             if (this.viewContent == false &&
                 this.viewBaseline == false &&
                 this.viewBaselineLogs == true) {
-                //this.saveScheduleBulkEdit()
-                console.log("DB", this.baselineLogForm)
-                //console.log("SUB", this.baselineLogCloseOut)
                 if (JSON.stringify(this.baselineLogForm.getRawValue()) != JSON.stringify(this.baselineLogData)) {
 
                     this.projecthubservice.isFormChanged = true
@@ -279,12 +276,41 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
                                 this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
                             }
+                            if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F')
+                            {
+                                this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
+                            }
+                        }
+                        var justificationeditflag = true
+                        this.apiService.getmembersbyproject(this.id).then((res: any) => {
+                            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+
+                           
+                            for(var i of res)
+                            {
+                                
+                                if(i.userId == this.msalService.instance.getActiveAccount().localAccountId)
+                                {
+                                    if(i.teamPermissionId = '3448BD5C-38F4-4B3C-BA4C-C99E659DC0B0')
+                                    {
+                                        justificationeditflag = false
+                                        
+                                    }
+                                }
+                                
+                            }
                         }
                         for (let control of this.baselineLogForm.controls) {
-                            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && this.projecthubservice.roleControllerControl.roleId == 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'  &&  !justificationeditflag) {
+                                control['controls']['baselineComment'].disable()
+                            }
+                            else if(!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203')
+                            {
                                 control['controls']['baselineComment'].disable()
                             }
                         }
+                        
+                    })
 
                     })
                 })
@@ -1802,6 +1828,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     teamMemberAdId: i.teamMemberAdId
                 })
             }
+            console.log(this.baselineLogObj)
             this.apiService.patchBaselineLogs(this.baselineLogObj).then(res => {
                 //this.projecthubservice.isBulkEdit = true
                 // this.viewContent = false

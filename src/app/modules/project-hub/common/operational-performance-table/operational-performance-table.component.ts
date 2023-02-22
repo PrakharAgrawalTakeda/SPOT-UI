@@ -51,8 +51,8 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     this.dataloader()
   }
   dataloader() {
-    if(this.mode != 'Normal')
-    {
+    // if(this.mode != 'Normal')
+    // {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
       this.projectViewDetails = res
@@ -61,11 +61,11 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     }
     this.viewContent = true
   })
-}
-else
-  {
-    this.viewContent = true
-  }
+// }
+// else
+//   {
+//     this.viewContent = true
+//   }
     // if (this.mode == 'Project-Close-Out'){
     //   this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     //   this.apiService.getprojectviewdata(this.id).then((res: any) => {
