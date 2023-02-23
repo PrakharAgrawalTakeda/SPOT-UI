@@ -260,10 +260,13 @@
                                                 <label class="reviewText">No</label>
                                             </div>
                                         </div>
-                                        
-                                        <div *ngIf="createProjectForm.controls['qualityReference'].value"
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label></label>
+                                            </div>
+                                        <div class="child" *ngIf="createProjectForm.controls['qualityReference'].value"
                                             class="flex justify-between items-start gap-6">
-                                            <div style="padding-left: 10px; margin-left: 441px;margin-right: 10px;" class="flex flex-col flex-auto w-2/5 bg-card shadow rounded-2xl overflow-hidden">
+                                            <div style="padding-left: 10px; margin-left: 10px;margin-right: 10px;" class="flex flex-col flex-auto w-2/5 bg-card shadow rounded-2xl overflow-hidden">
                                                 <div class="">
                                                     <ngx-datatable [headerHeight]="'10px'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                                                         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm">
@@ -283,6 +286,7 @@
                                                     </ngx-datatable>
                                                 </div>
                                             </div>
+                                        </div>
                                         </div>
                                         
                                         <br />
