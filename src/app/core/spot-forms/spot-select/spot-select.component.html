@@ -1,6 +1,6 @@
-<form [formGroup]="form" class="form w-full">
+<form [formGroup]="form" class="form w-full" [ngClass]="{'custom-label-with-hint': showHint && hintPostion == 'tooltip'}">
     <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-textarea flex-auto w-full" [floatLabel]="'always'">
-        <mat-label class="items-center" *ngIf="showLabel">{{label}}<mat-icon class="pe"
+        <mat-label class="items-center flex" *ngIf="showLabel">{{label}}<mat-icon class="pe"
                 *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}">help</mat-icon>
         </mat-label>
         <!-- <h1 *ngIf="Required; then ifBlock else elseBlock"></h1>

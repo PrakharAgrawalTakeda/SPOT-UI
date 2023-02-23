@@ -114,6 +114,7 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-ri-73 .datatable-body .datatable-scroll {
     height: 73vh !important;
     overflow-x: hidden !important;
@@ -125,11 +126,13 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-qr-80 .datatable-body .datatable-scroll {
     height: 77vh !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-pt-80 .datatable-body .datatable-scroll {
     height: 77vh !important;
     overflow-x: scroll !important;
@@ -137,7 +140,8 @@
 }
 
 ::ng-deep .ngx-datatable.datatable-ll-80 .datatable-body .datatable-scroll {
-    height: 87vh !important;
+    height: 68vh !important;
+    // width: 100vw !important;
     overflow-x: scroll !important;
     overflow-y: scroll !important;
 }
@@ -148,24 +152,28 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-bl-83 .datatable-body .datatable-scroll {
     height: 80vh !important;
     width: 100% !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-dq-83 .datatable-body .datatable-scroll {
     height: 80vh !important;
     width: 100% !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-ps .datatable-body .datatable-scroll {
     height: 70vh !important;
     width: 100% !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-state-check .datatable-body .datatable-scroll {
     max-height: 20vh !important;
     width: 100% !important;
@@ -173,37 +181,60 @@
     overflow-y: scroll !important;
 }
 
-::ng-deep .cursor-wait-custom-loading{
+::ng-deep .cursor-wait-custom-loading {
     cursor: wait !important;
-    
-    input{
+
+    input {
         cursor: wait !important;
     }
-    input :disabled{
+
+    input :disabled {
         cursor: wait !important;
     }
-    button{
+
+    button {
         cursor: wait !important;
     }
-    a{
+
+    a {
         cursor: wait !important;
     }
-    .mat-chip{
+
+    .mat-chip {
         cursor: wait !important;
     }
+
     textarea {
         cursor: wait !important;
     }
-    textarea :disabled{
+
+    textarea :disabled {
         cursor: wait !important;
     }
+
     ngx-datatable {
         cursor: wait !important;
     }
-    span{
+
+    span {
         cursor: wait !important;
     }
-    div{
+
+    div {
         cursor: wait !important;
     }
+}
+
+::ng-deep .custom-label-with-hint>.mat-form-field>.mat-form-field-wrapper>.mat-form-field-flex>.mat-form-field-infix>.mat-form-field-label-wrapper {
+    top: -28px !important;
+
+    .mat-form-field-label {
+        gap: 0px !important
+    }
+}
+
+::ng-deep .mat-form-field-label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px;
 }

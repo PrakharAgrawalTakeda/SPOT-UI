@@ -35,7 +35,7 @@
         <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
             *ngIf="viewElementChecker('problemTitle')" class="w-full"
             formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
-            [Required]="callLocation == 'CreateNew'" [showHint]="true" [hint]="'random'">
+            [Required]="callLocation == 'CreateNew'">
         </spot-input>
         <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('businessCaseApprovedDate')"
             formControlName="businessCaseApprovedDate" name="businessCaseApprovedDate" [label]="'Date Approved'"

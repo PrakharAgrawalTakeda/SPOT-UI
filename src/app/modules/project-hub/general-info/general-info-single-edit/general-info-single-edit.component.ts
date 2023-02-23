@@ -6,6 +6,7 @@ import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 import {HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
@@ -73,7 +74,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService,
-    public apiService2: PortfolioApiService, private authService: MsalService, public role: RoleService) {
+    public apiService2: PortfolioApiService, private authService: MsalService, public role: RoleService, private Router: Router) {
 
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
@@ -100,7 +101,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
         }
       }
     })
-    if (this.callLocation == 'CopyProject' || this.callLocation == 'CreateNew'){
+    const url = this.Router.url;
+    if (url.substring(url.lastIndexOf('/') + 1) == 'create-new-project'){
       if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F"){
         this.generalInfoForm.controls.owningOrganization.disable()
         this.generalInfoForm.controls.localCurrency.disable()
@@ -221,6 +223,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
           for (var i = 0; i < this.localCurrencyList.length; i++) {
             this.local.push(this.localCurrencyList[i].localCurrencyAbbreviation)
           }
+          this.local.sort()
           this.filterCriteria = res
           this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
           if (history.state.data != undefined) {

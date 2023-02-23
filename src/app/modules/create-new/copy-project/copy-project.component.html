@@ -3,14 +3,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
         <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
             <div class="flex flex-col flex-auto overflow-hidden p-6">
-                <!-- <div class="text-lg font-medium tracking-tight leading-6 truncate"><b>Standard Project/Program Capture Form</b></div> -->
                 <div class="flex items-start justify-between bg-primary sidepanel-header">
                     <div class="text-on-primary" style="padding-top: 6px">Copy Project Selection</div>
-                    <div style="padding-top: 2px"><a (click)="callCreateProject()" href="javascript:void(0)"
-                            title="Close">
-                            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-                        </a>
-                    </div>
                 </div>
                 <br />
                 <mat-label>Search and select a project to be copied</mat-label>
@@ -22,6 +16,7 @@
                 </div>
                 <p class="tag">The below data will be copied to your new project when you hit Copy Project. You can
                     update/edit this data after project creation.</p>
+                <label class="font-bold text-primary text-2xl">{{projectname}}</label>
                 <form class="pl-3 w-full overflow-hidden" [formGroup]="CopyProjectForm"
                     (ngSubmit)="SubmitCopyProject($event)">
                     <div class="flex justify-between items-center mt-6 mb-6">
