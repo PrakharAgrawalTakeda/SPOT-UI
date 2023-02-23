@@ -2013,18 +2013,48 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
 
             } else {
-                if (this.projectbaselinelogDetailscurr[m].baselineFinish != '') {
+                if (this.projectbaselinelogDetailscurr[m].baselineFinish == '') {
+                    this.projectbaselinelogDetailscurr[m].baselineFinish == ''
+                    this.projectbaselinelogDetailscurr[m].baselinechange = false
+                }
+                else if (this.projectbaselinelogDetailscurr[m].baselineFinish == null) {
+                    this.projectbaselinelogDetailscurr[m].baselineFinish == ''
+                    this.projectbaselinelogDetailscurr[m].baselinechange = false
+                }
+                else
+                {
+                    
                     this.projectbaselinelogDetailscurr[m].baselinechange = true
                 }
-                if (this.projectbaselinelogDetailscurr[m].plannedFinish != '') {
+                if (this.projectbaselinelogDetailscurr[m].plannedFinish == '') {
+                    this.projectbaselinelogDetailscurr[m].plannedFinish == ''
+                    this.projectbaselinelogDetailscurr[m].plannedchange = false
+                }
+                else if (this.projectbaselinelogDetailscurr[m].plannedFinish == null) {
+                    this.projectbaselinelogDetailscurr[m].plannedFinish == ''
+                    this.projectbaselinelogDetailscurr[m].plannedchange = false
+                }
+                else
+                {
+                    
                     this.projectbaselinelogDetailscurr[m].plannedchange = true
                 }
-                if (this.projectbaselinelogDetailscurr[m].completionDate != '') {
+                if (this.projectbaselinelogDetailscurr[m].completionDate == '') {
+                    this.projectbaselinelogDetailscurr[m].completionDate == ''
+                    this.projectbaselinelogDetailscurr[m].completionchange = false
+                }
+                else if (this.projectbaselinelogDetailscurr[m].completionDate == null) {
+                    this.projectbaselinelogDetailscurr[m].completionDate == ''
+                    this.projectbaselinelogDetailscurr[m].completionchange = false
+                }
+                else
+                {
+                    
                     this.projectbaselinelogDetailscurr[m].completionchange = true
                 }
-                if (this.projectbaselinelogDetailscurr[m].indicator != '') {
+                //if (this.projectbaselinelogDetailscurr[m].indicator != '') {
                     this.projectbaselinelogDetailscurr[m].indicatorchange = true
-                }
+                //}
             }
         }
         //}
@@ -2040,16 +2070,17 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 currbaselineFinish: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).baselineFinish : 'empty',
                 currcompletionDate: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).completionDate : 'empty',
                 currindicator: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).indicator : 'empty',
-                prevplannedFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).plannedFinish : 'empty',
-                prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).baselineFinish : 'empty',
-                prevcompletionDate: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).completionDate : 'empty',
-                previndicator: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).indicator : 'empty',
+                prevplannedFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).plannedFinish : 'empty2',
+                prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).baselineFinish : 'empty2',
+                prevcompletionDate: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).completionDate : 'empty2',
+                previndicator: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).indicator : 'empty2',
                 baselinechange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).baselinechange : '',
                 plannedchange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).plannedchange : '',
                 completionchange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).completionchange : '',
                 indicatorchange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).indicatorchange : ''
             })
         }
+        console.log(this.projectbaselinelogDetailscurr)
         this.viewContent = false
         this.viewBaseline = false
         this.viewBaselineLogs = false

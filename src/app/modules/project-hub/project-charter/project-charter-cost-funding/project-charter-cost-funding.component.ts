@@ -14,7 +14,7 @@ export class ProjectCharterCostFundingComponent implements OnInit {
     this.dataloader()
   }
   dataloader() {
-    this.option = this._Activatedroute.parent.snapshot.routeConfig.path
+    //this.option = this._Activatedroute.parent.snapshot.routeConfig.path
   }
 
 }
