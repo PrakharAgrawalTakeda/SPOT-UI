@@ -7,6 +7,12 @@
   padding-right: 40%;
 
 }
+.variancecloseout {
+  text-align: right;
+
+padding-right: 40%;
+
+}
 .logID {
 text-align: right;
  color: rgba(var(--fuse-primary-rgb), var(--tw-bg-opacity));
@@ -26,6 +32,11 @@ text-align: right;
 
 padding-right: 55%;
 
+}
+.countbaseline {
+  text-align: right;
+
+  padding-right: 68%;
 }
 .row-color1 {
   background-color: var(--fuse-bg-default);
@@ -67,5 +78,18 @@ padding-right: 55%;
   background-color: #4C9BCF;
 }
 .noindicator {
+  background-color: #4C9BCF;
+}
+.noplanned1
+{
+  background-color: #4C9BCF;
+}
+.nobaselined1 {
+  background-color: #4C9BCF;
+}
+.nocompleted1 {
+  background-color: #4C9BCF;
+}
+.noindicator1 {
   background-color: #4C9BCF;
 }

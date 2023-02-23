@@ -132,9 +132,16 @@
 }
 ::ng-deep .ngx-datatable.datatable-pt-80 .datatable-body .datatable-scroll {
     height: 77vh !important;
-    overflow-x: hidden !important;
+    overflow-x: scroll !important;
     overflow-y: scroll !important;
 }
+
+::ng-deep .ngx-datatable.datatable-ll-80 .datatable-body .datatable-scroll {
+    height: 87vh !important;
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+}
+
 ::ng-deep .ngx-datatable.datatable-schedule-74 .datatable-body .datatable-scroll {
     height: 65vh !important;
     width: 100% !important;
@@ -164,4 +171,39 @@
     width: 100% !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
+}
+
+::ng-deep .cursor-wait-custom-loading{
+    cursor: wait !important;
+    
+    input{
+        cursor: wait !important;
+    }
+    input :disabled{
+        cursor: wait !important;
+    }
+    button{
+        cursor: wait !important;
+    }
+    a{
+        cursor: wait !important;
+    }
+    .mat-chip{
+        cursor: wait !important;
+    }
+    textarea {
+        cursor: wait !important;
+    }
+    textarea :disabled{
+        cursor: wait !important;
+    }
+    ngx-datatable {
+        cursor: wait !important;
+    }
+    span{
+        cursor: wait !important;
+    }
+    div{
+        cursor: wait !important;
+    }
 }

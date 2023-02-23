@@ -84,7 +84,49 @@
                             ],
                             "outputHashing": "all"
                         },
-                        "development": {
+                        "qa": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "75kb",
+                                    "maximumError": "90kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.qa.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "dev": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "75kb",
+                                    "maximumError": "90kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.dev.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "local": {
                             "buildOptimizer": false,
                             "optimization": false,
                             "vendorChunk": true,
@@ -101,11 +143,17 @@
                         "production": {
                             "browserTarget": "fuse:build:production"
                         },
-                        "development": {
-                            "browserTarget": "fuse:build:development"
+                        "qa": {
+                            "browserTarget": "fuse:build:qa"
+                        },
+                        "dev": {
+                            "browserTarget": "fuse:build:dev"
+                        },
+                        "local": {
+                            "browserTarget": "fuse:build:local"
                         }
                     },
-                    "defaultConfiguration": "development"
+                    "defaultConfiguration": "local"
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",

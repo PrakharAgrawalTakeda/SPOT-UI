@@ -5,8 +5,10 @@ import * as moment from 'moment';
 import { DatePipe } from '@angular/common'
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../project-api.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AuthService } from 'app/core/auth/auth.service';
+import {Constants} from "../../../../shared/constants";
 
 @Component({
   selector: 'app-schedule-table',
@@ -22,11 +24,11 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() baselineLog: any = {}
   @Input() lookup: any
   @Input() editable: boolean
-  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' |'Business-Case' = 'Normal'
   @ViewChild('scheduleTable') scheduleTable: any;
   getRowClass = (row) => {
     return {
-      'row-color1': row.completionDate != null,
+      'row-color1': row.completionDate != null && this.mode == 'Normal',
     };
   };
   schedulengxdata: any = []
@@ -40,33 +42,55 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   })
   milestoneForm = new FormArray([])
   scheduleData: any = []
+  lookUpData: any = []
   baselinelogTableEditStack: any = []
   constructor(public projecthubservice: ProjectHubService,
+    private authService: AuthService,
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
+    private router: Router,
     public fuseAlert: FuseConfirmationService,
     private _Activatedroute: ActivatedRoute) {
     this.projecthubservice.includeClosedItems.schedule.subscribe(res => {
       this.changeschedule(res)
       console.log(res)
     })
+
   }
-
-
-
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-    this.scheduleData = this.projectViewDetails.scheduleData
-    for (var i of this.scheduleData) {
-      i.variance = this.calculateVariance(i)
-    }
-    console.log(this.scheduleData)
-    if (this.isclosed == false) {
-      this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-    }
-    else {
-      this.schedulengxdata = this.scheduleData
-    }
+      if(this.mode=='Business-Case'){
+          this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
+          if (this.router.url.includes('recommended-option')){
+              this.schedulengxdata = this.projectViewDetails.scheduleData.filter(x => x.completionDate == null)
+          }
+          if (this.router.url.includes('option-2')){
+              this.apiService.getTimelineByOption(this.id ,Constants.OPTION_2_ID.toString()).then((res) => {
+                  this.schedulengxdata = res
+              })
+          }
+          if (this.router.url.includes('option-3')){
+              this.apiService.getTimelineByOption(this.id ,Constants.OPTION_3_ID.toString()).then((res) => {
+                  this.schedulengxdata = res
+              })
+          }
+      }else{
+          this.scheduleData = this.projectViewDetails.scheduleData
+          for (var i of this.scheduleData) {
+              i.variance = this.calculateVariance(i)
+          }
+          if (this.isclosed == false && this.mode == 'Normal') {
+              this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+          }
+          else if(this.isclosed == true && this.mode == 'Normal'){
+              this.schedulengxdata = this.scheduleData
+          }
+          else if(this.isclosed == true && this.mode == 'Normal'){
+              this.schedulengxdata = this.scheduleData
+          }
+          else{
+              this.schedulengxdata = this.scheduleData
+          }
+      }
     //this.localIncludedItems.controls.toggle.patchValue(event)
     //this.localIncludedItems.controls.toggle.markAsPristine()
   }
@@ -75,29 +99,40 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     if (!this.baselinelogTableEditStack.includes(row)) {
       this.baselinelogTableEditStack.push(row)
     }
-    console.log("456", this.baselinelogTableEditStack)
   }
-
   ngOnInit(): void {
-    //this.getCount()
-    console.log(this.mode)
-    console.log( this.projecthubservice.includeClosedItems.schedule.value )
-    if(this.mode == 'Project-Close-Out')
+    this.authService.lookupMaster().then((lookup: any) => {
+      this.lookUpData = lookup
+    })
+    if(this.mode == 'Normal')
     {
-      //event == true
-      this.schedulengxdata = this.scheduleData
+        this.schedulengxdata = this.projectViewDetails.scheduleData.filter(x => x.completionDate == null)
+    }else{
+        if(this.mode == 'Project-Close-Out')
+        {
+            this.schedulengxdata = this.scheduleData
+        }
+        if(this.mode == 'Business-Case')
+        {
+            if (this.router.url.includes('recommended-option')){
+                this.schedulengxdata = this.projectViewDetails.scheduleData
+            }
+            if (this.router.url.includes('option-2')){
+                this.apiService.getTimelineByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
+                    this.schedulengxdata = res
+                })
+            }
+            if (this.router.url.includes('option-3')){
+                this.apiService.getTimelineByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
+                    this.schedulengxdata = res
+                })
+            }
+        }
     }
     this.scheduleData = this.projectViewDetails.scheduleData
     for (var i of this.scheduleData) {
       i.includeInReport = i.projectId == this.projectid ? i.includeInReport : this.projectViewDetails.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
     }
-    // console.log(this.scheduleData)
-    if(this.mode == 'Normal')
-    {
-    this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
-    }
-    // console.log(this.scheduleData)
-    // console.log(this.schedulengxdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     for (var i of this.scheduleData) {
     this.milestoneForm.push(new FormGroup({
@@ -111,6 +146,14 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   //   return this.baselineCount.baselineCount
   // }
+
+  getLookupName(lookUpId: string): string {
+
+    var lookup = this.lookUpData.find(x => x.lookUpId == lookUpId)
+
+    return lookup ? lookup.lookUpName : ""
+
+  }
 
   toggleSchedule(event: any) {
     this.projecthubservice.includeClosedItems.schedule.next(event.checked)
@@ -214,7 +257,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
 
   getLinkType(projectId: string): string {
     return projectId == this.projectid ? 'mat_solid:link' : 'heroicons_outline:link'
-  } 
+  }
   getlinkname2(uid: string): string {
     let temp = this.projectViewDetails.links.find(x => x.linkItemId == uid)
     // console.log(this.projectViewDetails.links)

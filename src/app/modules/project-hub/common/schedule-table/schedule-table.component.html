@@ -1,6 +1,7 @@
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" *ngIf="mode== 'Normal'">Schedule</div>
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" *ngIf="mode== 'Project-Close-Out'">Milestone Variance</div>
+    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" *ngIf="mode== 'Project-Charter' || mode== 'Business-Case' ">Milestones</div>
     <div class="text-primary">
         <div class="flex items-start justify-between">
             <div>
@@ -21,10 +22,26 @@
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditCloseOut', 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
-                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Business-Case'"
+                        (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditBusinessCase', 'new', projectViewDetails.scheduleData, '', true)">
+                    <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Project-Charter'"
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditCharter', 'new', projectViewDetails.scheduleData, '', true)">
+                    <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                 </button>
                 <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Normal'" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('Schedule', 'new', [], projectid)">
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                </button>
+                <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Business-Case'" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('BusinessCaseScheduleAddNew', 'new', [], projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
@@ -40,7 +57,7 @@
     </div>
 </div>
 <div class="flex justify-between gap-8 mt-0 mb-4" *ngIf="mode== 'Normal'">
-    <h6 class="font-medium text-secondary text-md italic ml-6 mt-0">
+    <h6 class="font-medium text-default text-md italic ml-6 mt-0">
       Baseline : {{baselineLog.baselineCount?baselineLog.baselineCount:0}}
   </h6>
   </div>
@@ -51,10 +68,10 @@
     </div> -->
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-pointer" [rows]="schedulengxdata"
-        #scheduleTable [rowClass]="getRowClass">
+        class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="schedulengxdata"
+        #scheduleTable [rowClass]="getRowClass" [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }]">
         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.5" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal' || mode =='Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                     class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -66,15 +83,15 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Link" prop="indicator" [resizeable]="false" [flexGrow]="0.3" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode== 'Project-Close-Out' || mode== 'Project-Charter'" [sortable]="false">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-               
+
                 <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="5.5" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="4.2" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
                 <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong>
@@ -82,29 +99,54 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.5" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="2.0" *ngIf="mode== 'Project-Close-Out' || mode== 'Project-Charter' || mode== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
-                <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong>
-              <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
+                <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p></strong>
+              <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="0.9" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="1.25" *ngIf="mode== 'Normal' ">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="0.9" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Planned Finish" prop="plannedFinish" [flexGrow]="0.4" *ngIf="mode== 'Project-Charter' || mode== 'Business-Case'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Responsible Person" prop="responsiblePersonName" [resizeable]="false"
+          [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Project-Charter'">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+
+              <p *ngIf="value == ''">&nbsp;</p>{{value}}
+
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
+          [flexGrow]="0.8" *ngIf="mode== 'Project-Charter' || mode== 'Business-Case'">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+
+              <p *ngIf="value == ''">&nbsp;</p>
+              {{getLookupName(value)}}
+
+          </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="1.25" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name="Baseline Finish" prop="baselineFinish" [flexGrow]="0.4" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
@@ -112,29 +154,29 @@
 
 
 
-        <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="0.9" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="1.25" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name="Completion Date" prop="completionDate" [flexGrow]="0.4" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p [ngClass]="{'closed': row.completionDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
+                <p>{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        
 
-        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.49" *ngIf="mode== 'Normal'">
+
+        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.75" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p class = "variance" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
+        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.31" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p class = "variancecloseout" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p>
+                <p class = "variancecloseout">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
 
@@ -166,7 +208,15 @@
         <!-- </ng-template>
       </ngx-datatable-column> -->
 
-      <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Project-Close-Out'">
+      <ngx-datatable-column name="Comment" prop="comments" [flexGrow]="0.5" *ngIf="mode== 'Project-Close-Out'">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
+            <!-- <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong> -->
+          <p>{{value}}</p>
+        </ng-template>
+    </ngx-datatable-column>
+
+      <!-- <ngx-datatable-column name="Comment" prop="comments" [resizeable]="false" [sortable]="true" [flexGrow]="0.7" *ngIf="mode== 'Project-Close-Out'">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
           <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)"
             [ngClass]="{'closed': row.completionDate != null}">
@@ -177,24 +227,84 @@
             </spot-textarea>
           </form>
         </ng-template>
-      </ngx-datatable-column>
+      </ngx-datatable-column> -->
 
-      <ngx-datatable-column name="Include in Report (Max 20)" prop="includeInReport" [sortable]="false"
-            [resizeable]="false" [flexGrow]="0.6" *ngIf="mode== 'Project-Close-Out'">
+      <ngx-datatable-column name="Include in Close Out (Max 20)" prop="includeInCloseout" [sortable]="false"
+            [resizeable]="false" [flexGrow]="0.43" *ngIf="mode== 'Project-Close-Out'">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+              <!-- <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)"> -->
+                <!-- <p *ngIf="!value">&nbsp;</p>
+                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon> -->
+              <!-- </a> -->
+              <!-- <form [formGroup]="milestoneForm.controls[rowIndex]" class="p-2 overflow-hidden"
+                *ngIf="baselinelogTableEditStack.includes(rowIndex)"> -->
+                <!-- <div class="flex items-center justify-between p-2 overflow-hidden">
+                  <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
+                  </mat-slide-toggle>
+                </div> -->
+              <!-- </form> -->
+              <div class="flex items-center justify-between pl-2 overflow-hidden">
+              <mat-icon svgIcon="heroicons_outline:x-circle"
+              *ngIf="value == false"></mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="value == true">
+            </mat-icon>
+</div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Include in Charter (Max 10)" prop="includeInCharter" [sortable]="false"
+          [resizeable]="false" [flexGrow]="0.45" *ngIf="mode== 'Project-Charter'">
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+            <!-- <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)"> -->
+              <!-- <p *ngIf="!value">&nbsp;</p>
+              <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon> -->
+            <!-- </a> -->
+            <!-- <form [formGroup]="milestoneForm.controls[rowIndex]" class="p-2 overflow-hidden"
+              *ngIf="baselinelogTableEditStack.includes(rowIndex)"> -->
+              <!-- <div class="flex items-center justify-between p-2 overflow-hidden">
+                <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
+                </mat-slide-toggle>
+              </div> -->
+            <!-- </form> -->
+            <div class="flex items-center justify-between pl-2 overflow-hidden">
+            <mat-icon svgIcon="heroicons_outline:x-circle"
+            *ngIf="value == false"></mat-icon>
+          <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+            *ngIf="value == true">
+          </mat-icon>
+</div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Include in Business Case (Max 8)" prop="includeInBusinessCase" [sortable]="false"
+                              [resizeable]="false" [flexGrow]="0.45" *ngIf="mode== 'Business-Case'">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <div class="flex items-center justify-between pl-2 overflow-hidden">
+                    <mat-icon svgIcon="heroicons_outline:x-circle"
+                              *ngIf="value == false"></mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                              *ngIf="value == true">
+                    </mat-icon>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+          <!-- <ngx-datatable-column name="Include in Slip Chart" prop="includeSlipChart" [sortable]="false"
+            [resizeable]="false" [flexGrow]="0.6">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
               <a *ngIf="!baselinelogTableEditStack.includes(rowIndex)" (click)="baselinelogTableEditRow(rowIndex)">
                 <p *ngIf="!value">&nbsp;</p>
                 <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
               </a>
-              <form [formGroup]="milestoneForm.controls[rowIndex]" class="p-2 overflow-hidden"
+              <form [formGroup]="baselineLogForm.controls[rowIndex]" class="p-2 overflow-hidden"
                 *ngIf="baselinelogTableEditStack.includes(rowIndex)">
                 <div class="flex items-center justify-between p-2 overflow-hidden">
-                  <mat-slide-toggle name="includeInReport" [showLabel]="false" formControlName="includeInReport">
+                  <mat-slide-toggle name="includeSlipChart" [showLabel]="false" formControlName="includeSlipChart">
                   </mat-slide-toggle>
                 </div>
               </form>
             </ng-template>
-          </ngx-datatable-column>
+          </ngx-datatable-column> -->
 
 
 

@@ -55,6 +55,9 @@ export class ProjectBenefitsComponent implements OnInit {
           if (!this.projecthubservice.roleControllerControl.projectBenefits) {
             this.primaryKPIForm.controls.primaryKpi.disable()
           }
+          for (var i of this.projectViewDetails.overallPerformace) {
+            i.kpiname = kpis.find(x => x.kpiid == i.kpiid) ? kpis.find(x => x.kpiid == i.kpiid).kpiname : ''
+          }
           //View Content
           this.viewContent = true
         })

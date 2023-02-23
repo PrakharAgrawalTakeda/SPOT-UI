@@ -10,6 +10,24 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link : '/portfolio-center'
     },
     {
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create Project',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
+    },
+    {
         id   : 'spot-documents',
         title: 'SPOT Documents',
         type : 'basic',
@@ -24,6 +42,24 @@ export const compactNavigation: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
+    },
+    {
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create Project',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
     },
     {
         id   : 'spot-documents',
@@ -42,6 +78,24 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         link : '/portfolio-center'
     },
     {
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create Project',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
+    },
+    {
         id   : 'spot-documents',
         title: 'SPOT Documents',
         type : 'basic',
@@ -55,6 +109,24 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         title: 'Portfolio Center',
         type : 'basic',
         link : '/portfolio-center'
+    },
+    {
+        // id   : 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+            {
+                title: 'Create Project',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
+            }
+        ],
     },
     {
         id   : 'spot-documents',

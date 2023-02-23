@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
@@ -10,6 +10,7 @@ import { ProjectApiService } from '../../project-api.service';
   styleUrls: ['./operational-performance-edit.component.scss']
 })
 export class OperationalPerformanceEditComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   OperationalPerformance: any = {}
   formIntialized: boolean = false
   OperationalPerformanceForm = new FormGroup({
@@ -19,7 +20,9 @@ export class OperationalPerformanceEditComponent implements OnInit {
     currentState: new FormControl(''),
     targetPerformance: new FormControl(''),
     actualPerformance: new FormControl(''),
-    includeInProjectDashboard: new FormControl(false)
+    includeInProjectDashboard: new FormControl(false),
+    includeInCloseOut: new FormControl(false),
+    includeInCharter: new FormControl(false)
   })
 
 
@@ -46,13 +49,23 @@ export class OperationalPerformanceEditComponent implements OnInit {
           currentState: op.currentState,
           targetPerformance: op.targetPerformance,
           actualPerformance: op.actualPerformance,
-          includeInProjectDashboard: op.includeInProjectDashboard
+          includeInProjectDashboard: op.includeInProjectDashboard,
+          includeInCloseOut: op.includeInCloseOut,
+          includeInCharter: op.includeInCharter
         })
         if (this.projecthubservice.all.length >= 3) {
           console.log('hit 1')
           if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
             console.log('hit 2')
             this.OperationalPerformanceForm.controls.includeInProjectDashboard.disable()
+          }
+          if (this.projecthubservice.all.filter(x => x.includeInCloseOut == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCloseOut.value != true) {
+            console.log('hit 2')
+            this.OperationalPerformanceForm.controls.includeInCloseOut.disable()
+          }
+          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
+            console.log('hit 2')
+            this.OperationalPerformanceForm.controls.includeInCharter.disable()
           }
         }
         this.formIntialized = true
@@ -64,6 +77,14 @@ export class OperationalPerformanceEditComponent implements OnInit {
         if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
           console.log('hit 2')
           this.OperationalPerformanceForm.controls.includeInProjectDashboard.disable()
+        }
+        if (this.projecthubservice.all.filter(x => x.includeInCloseOut == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCloseOut.value != true) {
+          console.log('hit 2')
+          this.OperationalPerformanceForm.controls.includeInCloseOut.disable()
+        }
+        if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
+          console.log('hit 2')
+          this.OperationalPerformanceForm.controls.includeInCharter.disable()
         }
       }
       this.formIntialized = true
@@ -99,16 +120,16 @@ export class OperationalPerformanceEditComponent implements OnInit {
       includeInProjectDashboard: formValue.includeInProjectDashboard,
       //Common values end
       keySuccessUniqueId: '',
-      includeInCharter: null,
-      includeInCloseOut: null,
+      includeInCharter: formValue.includeInCharter,
+      includeInCloseOut: formValue.includeInCloseOut,
       includeinProposal: null,
       ptrbid: '',
       benefitDescriptionJustification: '',
     }
     if (this.projecthubservice.itemid != 'new') {
       mainObj.keySuccessUniqueId = this.OperationalPerformance.keySuccessUniqueId
-      mainObj.includeInCharter = this.OperationalPerformance.includeInCharter
-      mainObj.includeInCloseOut = this.OperationalPerformance.includeInCloseOut
+      mainObj.includeInCharter = formValue.includeInCharter
+      mainObj.includeInCloseOut = formValue.includeInCloseOut
       mainObj.includeinProposal = this.OperationalPerformance.includeinProposal
       mainObj.ptrbid = this.OperationalPerformance.ptrbid
       mainObj.benefitDescriptionJustification = this.OperationalPerformance.benefitDescriptionJustification

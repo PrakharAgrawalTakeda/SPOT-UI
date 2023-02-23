@@ -52,4 +52,17 @@ $square-size: 10px;
         overflow-x: visible !important;
     }
 }
+.ngx-number-header{
+    text-align: right;
+}
+
+.ngx-icon-header {
+    text-align: center;
+}
+.fast-load-table{
+    datatable-scroller {
+        width: 100% !important;
+    }
+}
+
 

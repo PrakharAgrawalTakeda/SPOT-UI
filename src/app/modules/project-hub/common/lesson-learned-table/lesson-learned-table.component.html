@@ -1,0 +1,103 @@
+<div class="p-6 pb-3 pt-0 flex items-center justify-between">
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Lesson Learned</div>
+    
+        <div class="text-primary">
+            <div class="flex items-start justify-between">
+                <div style="padding-right: 5px;">
+                    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('LessonLearnedBulkEdit', '', lessonLearned, id, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                    </button>
+                    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('LessonLearnedSingleEdit', 'new', lessonLearned, id)">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="overflow-x-auto mx-6">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class=" font-medium text-sm text-default whitespace-nowrap" [rows]="lessonLearned" #lessonLearnedTable>
+                <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1" [sortable]="false">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value| date:'dd-MMM-yyyy' }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Title" prop="leassonTitle" [flexGrow]="1.8">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Description / Details" prop="lessonDetail" [flexGrow]="2">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Type" prop="lessonType" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ getLookupName(value)}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Criticality" prop="criticality" [flexGrow]="1.4">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ getLookupName(value)}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Submitted By" prop="SubmittedByName" [flexGrow]="1.8">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Submitting Group / Role" prop="submittingGroupRole" [flexGrow]="1.8">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{ getLookupName(value)}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Suggested Action" prop="suggestedAction" [flexGrow]="1.5">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" [sortable]="false">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value| date:'dd-MMM-yyyy' }}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Function Action Owner" prop="functionActionOwner" [flexGrow]="1.7">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ getLookupName(value)}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Action Owner" prop="Actionusername" [flexGrow]="1.8">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <p>{{value}}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Close Date" prop="lessonCloseDate" [flexGrow]="1.5" [sortable]="false">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value| date:'dd-MMM-yyyy' }}
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [flexGrow]="1.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+
+                        <div class="flex items-center justify-start gap-6">
+                            <a href="javascript:void(0)" title="Edit Single"
+                                (click)="projecthubservice.toggleDrawerOpen('LessonLearnedSingleEdit', row.lessonLearnedId, lessonLearned, id)">
+                                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+
+                            </a>
+                            <a href="javascript:void(0)" title="Delete Single"
+                                (click)="deleteLL(row.lessonLearnedId)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    <!-- </div> -->
+<!-- </div> -->

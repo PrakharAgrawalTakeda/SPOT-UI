@@ -27,6 +27,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   @Input() idPointer: string = ''
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
+  @Input() Required: boolean = false
 
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
@@ -42,10 +43,11 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   });
 
   constructor(private fb: FormBuilder) {
-    this.form.controls.control.valueChanges.subscribe((res: any) => {
-      if (this.form.controls.control.value == "") {
+    this.form.controls.chipList.valueChanges.subscribe((res: any) => {
+      if (this.form.controls.chipList.value == "") {
         //this.onChange({})
-        //this.selectedOption = {}
+        //this.selectedOption = {} 
+        // this.form.controls.chipList.updateValueAndValidity()
       }
 
     })
@@ -80,6 +82,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     console.log(this.selectedOption)
     this.selectedOption.push(event.option.value)
     this.onChange(this.selectedOption)
+    this.form.controls.chipList.patchValue(this.selectedOption)
     this.form.controls.chipList.markAsDirty()
     this.input.nativeElement.blur()
     this.form.controls.control.patchValue('')
@@ -87,11 +90,13 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   }
   removeOption(item: any) {
     this.selectedOption = this.selectedOption.filter(x => x[this.idPointer] != item[this.idPointer])
+    // this.form.controls.chipList.patchValue(this.selectedOption)
     this.form.controls.chipList.markAsDirty()
+    this.form.controls.chipList.patchValue(this.selectedOption)
     this.onChange(this.selectedOption)
   }
   isOptionSelected(option: any): boolean {
-    if (this.selectedOption) {
+    if (this.selectedOption && this.selectedOption.length > 0) {
       if (this.selectedOption.some(x => x[this.idPointer] == option[this.idPointer])) {
         return false
       }
@@ -109,6 +114,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   writeValue(val: any) {
     if (val) {
       this.selectedOption = val
+      this.form.controls.chipList.patchValue(this.selectedOption)
     }
   }
 

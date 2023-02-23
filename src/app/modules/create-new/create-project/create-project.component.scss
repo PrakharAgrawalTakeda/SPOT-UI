@@ -1,48 +1,137 @@
 .example-button-toggle-label {
     display: inline-block;
     margin: 16px;
-  }
-  .mat-stepper-horizontal {
-    margin-top: 8px;
-  }
+}
 
-  .mat-mdc-form-field {
+.mat-stepper-horizontal {
+    margin-top: 8px;
+}
+
+.mat-mdc-form-field {
     margin-top: 16px;
-  }
-  .example-form {
+}
+
+.example-form {
     min-width: 150px;
     max-width: 500px;
     width: 100%;
-  }
+}
 
-  .example-full-width {
+.example-full-width {
     width: 100%;
-  }
-  .mat-form-field {
+}
+
+.mat-form-field {
     display: grid;
     position: relative;
     text-align: left;
-  }
-  .valuefill {
+}
+
+.valuefill {
     color: #ff0202c2;
     margin-left: 6px;
     font-size: 14px;
     margin-top: -10px;
     padding-bottom: 10px;
-  }
-  .custLabel {
+}
+
+.custLabel {
     top: -25px;
     font-weight: 500;
     height: auto;
     padding-top: 0;
     overflow: visible;
     pointer-events: auto;
-  }
-  .btnclas {
+}
+
+.btnclas {
     width: 130px;
     height: 33px;
     background: 59a2d2;
     border: 4c8fbb;
     font: 16pt;
-    background-color: rgb(76,155,207);
-  }
+    background-color: rgb(76, 155, 207);
+}
+
+.mat-step-header .mat-step-label .mat-step-text-label {
+    font-size: 15px;
+}
+
+.mat-step-icon {
+    border-radius: 50%;
+    height: 40px !important;
+    width: 40px !important;
+    flex-shrink: 0;
+    position: relative;
+    margin-left: 10px !important;
+    margin-top: 15px !important;
+}
+
+.mat-horizontal-stepper-header {
+    display: grid !important;
+    height: 70px;
+    align-items: center;
+    padding: 0 24px;
+    // display: none;
+}
+
+.CreateForm{
+        width: 52%;
+}
+
+
+.test {
+    display: flex;
+    // justify-content: space-between;
+    width: 100%;
+}
+
+
+.child {
+    width: 50%;
+    margin-left: 10px;
+}
+
+.parent {
+    width: 50%;
+    margin-left: 10px;
+    text-align: end;
+    font-weight: bold;
+}
+
+.ngx-datatable.datatable-qr-80 {
+    height: 22vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
+
+.box{
+    display: flex;
+    justify-content: center;
+    margin-right: 23vw;
+    background-color: rgba(76, 155, 207);
+    margin-bottom: 10px;
+    width: 11vw;
+    margin-left: 25vw;
+    color: white;
+}
+
+.ngx-datatable .datatable-header{
+    display: block;
+        overflow: hidden;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        font-weight: normal !important;
+        font-size: 0.875rem;
+        overflow-wrap: break-word;
+        white-space: pre-line;
+        align-items: center;
+        color: black;
+}
+
+.ngx-datatable .datatable-body .datatable-body-row>div{
+    color: black !important;
+    font-weight: normal !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}

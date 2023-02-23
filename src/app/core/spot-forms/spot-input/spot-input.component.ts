@@ -14,12 +14,13 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from 
 })
 export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
-  @Input() showLabel: boolean = true 
-  @Input() label: string = '' 
+  @Input() showLabel: boolean = true
+  @Input() label: string = ''
   @Input() placeholder: string = ''
-  @Input() showHint: boolean = false 
+  @Input() showHint: boolean = false
   @Input() hint: string = ''
   @Input() hintPostion: 'tooltip'|'mat-hint' = 'tooltip'
+  @Input() Required: boolean = false;
   
   
 
@@ -56,4 +57,14 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     isDisabled == true ? this.control.disable() : this.control.enable()
   }
+
+  Validate(data){
+    debugger;
+    if (data.target.value > 100){
+      data.target.value = 100
+    }
+    console.log(data);
+  }
+
+   
 }

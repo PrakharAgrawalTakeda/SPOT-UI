@@ -48,7 +48,7 @@
     </div>
     <div class="overflow-x-auto  h-[75vh]">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-            class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default" [rows]="rows">
+            class="ml-5 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="rows">
             <ngx-datatable-column name="Parent" prop="projectName" [flexGrow]="9" [resizeable]="false"
                 [draggable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>

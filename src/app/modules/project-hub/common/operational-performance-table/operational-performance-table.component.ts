@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectHubService } from '../../project-hub.service';
@@ -10,36 +11,82 @@ import { ProjectApiService } from '../project-api.service';
   templateUrl: './operational-performance-table.component.html',
   styleUrls: ['./operational-performance-table.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
   @Input() kpi: any
   @Input() editable: boolean = true
   initializationComplete: boolean = false
+  id:string=""
+  bulkEditType: string = 'OperationalPerformanceBulkEdit';
+  addSingle: string = 'OperationalPerformanceSingleEdit';
+  viewContent: boolean = false
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
-    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService) {
+    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
+    this.projecthubservice.submitbutton.subscribe(res => {
+      if (res == true) {
+        this.dataloader()
+      }
+    })
   }
 
   ngOnInit(): void {
+    console.log(this.projectViewDetails);
+    if (this.mode == 'Project-Close-Out') {
+      this.bulkEditType = 'OperationalPerformanceBulkEditCloseOut';
+      this.addSingle = 'OperationalPerformanceSingleEditCloseOut'
+    }
+    if (this.mode == 'Project-Charter') {
+      this.bulkEditType = 'OperationalPerformanceBulkEditCharter';
+      this.addSingle = 'OperationalPerformanceSingleEditCharter'
+    }
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.dataloader()
   }
   dataloader() {
+    if(this.mode != 'Normal')
+    {
+    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    this.apiService.getprojectviewdata(this.id).then((res: any) => {
+      this.projectViewDetails = res
+    for (var i of this.projectViewDetails.overallPerformace) {
+      i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
+    }
+    this.viewContent = true
+  })
+}
+else
+  {
+    this.viewContent = true
+  }
+    // if (this.mode == 'Project-Close-Out'){
+    //   this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    //   this.apiService.getprojectviewdata(this.id).then((res: any) => {
+    //         this.projectViewDetails = res
+    //   })
+    // }
+    // if (this.mode == 'Project-Charter'){
+    //   this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    //   this.apiService.getprojectviewdata(this.id).then((res: any) => {
+    //         this.projectViewDetails = res
+    //   })
+    // }
     this.initializationComplete = false
     this.initializationComplete = true
   }
   getLookUpName(lookUpId: string): string {
     return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
-  getKPIName(kpiid: string): string {
-    return this.kpi.find(x => x.kpiid == kpiid) ? this.kpi.find(x => x.kpiid == kpiid).kpiname : ''
-  }
+  // getKPIName(kpiid: string): string {
+  //   return this.kpi.find(x => x.kpiid == kpiid) ? this.kpi.find(x => x.kpiid == kpiid).kpiname : ''
+  // }
 
   getIndicator(status: string): string {
     if (status == "91F35D36-B94B-44C7-9234-4AE76DB19DBB") {

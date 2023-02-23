@@ -1,7 +1,7 @@
 import { NgModule, Component, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreateProjectComponent } from './create-project/create-project.component';
-import { Route, RouterModule } from '@angular/router';
+import { Route, RouterModule, Routes } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
@@ -25,46 +25,50 @@ import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+// import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ProjectHubModule } from '../project-hub/project-hub.module';
 import { ProjectHubService } from './../project-hub/project-hub.service';
-import { GeneralInfoSingleEditComponent } from './../project-hub/general-info/general-info-single-edit/general-info-single-edit.component';
 import { GeneralInfoComponent } from './../project-hub/general-info/general-info.component';
+import { GeneralInfoSingleEditComponent } from '../project-hub/general-info/general-info-single-edit/general-info-single-edit.component';
+import { CreateNewComponent } from './create-new.component';
 import { CopyProjectComponent } from './copy-project/copy-project.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
+import '@angular/compiler'
+import { SearchModule } from 'app/layout/common/search/search.module';
+import { FuseFullscreenModule } from '@fuse/components/fullscreen/fullscreen.module';
+import { LanguagesModule } from 'app/layout/common/languages/languages.module';
+import { ShortcutsModule } from 'app/layout/common/shortcuts/shortcuts.module';
+import { UserModule } from 'app/layout/common/user/user.module';
+import { NotificationsModule } from 'app/layout/common/notifications/notifications.module';
+import { MessagesModule } from 'app/layout/common/messages/messages.module';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
-export const projectRoutes: Route[] = [
-    {
-      path: '',
-      component: CreateProjectComponent,
-      children: [{
-        path: '',
-        pathMatch: 'full'
-      },
-      {
-        path: 'create-new-project',
-        pathMatch: 'full',
-        component:  CreateProjectComponent ,
-      },
-      {
-        path: 'copy-project',
-        pathMatch: 'full',
-        component:  CopyProjectComponent ,
-      },
-      // GeneralInfoSingleEditComponent
 
-    ],
-
-    }
-  ];
+export const projectRoutes: Routes = [
+  { path: '', component: CreateNewComponent },
+  {
+    path: 'create-new-project',
+    component: CreateProjectComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'copy-project',
+    component: CopyProjectComponent,
+    pathMatch: 'full'
+  }
+];
 
 @NgModule({
-    declarations: [
-        CreateProjectComponent,
-        CopyProjectComponent,
+  declarations: [
+    CreateProjectComponent,
+    CreateNewComponent,
+    CopyProjectComponent,
 
-      ],
+  ],
   imports: [
-    CommonModule,
+
     RouterModule.forChild(projectRoutes),
     MatButtonModule,
     // BrowserAnimationsModule,
@@ -82,15 +86,26 @@ export const projectRoutes: Route[] = [
     MatSortModule,
     MatTableModule,
     MatTabsModule,
+    MatSlideToggleModule,
     NgApexchartsModule,
     TranslocoModule,
     SharedModule,
     CommonModule,
+    SpotFormsModule,
     FuseDrawerModule,
     MatChipsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
+    NgxDatatableModule,
+    SearchModule,
+    FuseFullscreenModule,
+    LanguagesModule,
+    ShortcutsModule,
+    UserModule,
+    NotificationsModule,
+    MessagesModule,
     ProjectHubModule
-  ]
+  ],
+  exports: [RouterModule]
 })
 export class CreateNewModule { }

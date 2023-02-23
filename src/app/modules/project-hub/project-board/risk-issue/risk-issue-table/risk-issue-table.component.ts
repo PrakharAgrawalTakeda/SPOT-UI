@@ -20,10 +20,10 @@ export class RiskIssueTableComponent implements OnInit {
     @Input() links: any = []
     @Input() linksProblemCapture: any = []
     @Input() tableIndex: number = 0
+    @Input() lookupdata: any
     @Output() toggleChange = new EventEmitter();
-    lookupdata: any = []
     selected = [];
-    viewContent =false;
+    viewContent = false;
     SelectionType = SelectionType;
     getRowClass = (row) => {
         return {
@@ -38,15 +38,8 @@ export class RiskIssueTableComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.mode == 'Link') {
-            this.getllookup()
-        }
-    }
-    getllookup() {
-        this.auth.lookupMaster().then((resp: any) => {
-            this.lookupdata = resp
             this.dataloaderLink()
-            this.viewContent = true
-        })
+        }
     }
     dataloaderLink() {
         if (!this.links) {
@@ -65,6 +58,7 @@ export class RiskIssueTableComponent implements OnInit {
                 selected: temp
             })
         }
+        this.viewContent = true
     }
     islink(uid: string): boolean {
         if (!this.links) {
@@ -85,7 +79,7 @@ export class RiskIssueTableComponent implements OnInit {
     // }
     getLinkType(projectId: string): string {
         return projectId == this.projectId ? 'mat_solid:link' : 'heroicons_outline:link'
-      }
+    }
     getlinkname(uid: string): string {
         var linkItemList = this.links.filter(x => x.linkItemId == uid)
         var returnString = ''

@@ -69,6 +69,7 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
         // If the item has a children that has a matching url with the current url, expand...
         if ( this._hasActiveChild(this.item, this._router.url) )
         {
+            this.item.active = true
             this.expand();
         }
         // Otherwise...
@@ -77,6 +78,7 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
             // If the autoCollapse is on, collapse...
             if ( this.autoCollapse )
             {
+                this.item.active = false
                 this.collapse();
             }
         }
@@ -146,6 +148,7 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
                 // If the item has a children that has a matching url with the current url, expand...
                 if ( this._hasActiveChild(this.item, event.urlAfterRedirects) )
                 {
+                    this.item.active = true
                     this.expand();
                 }
                 // Otherwise...
@@ -154,9 +157,11 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
                     // If the autoCollapse is on, collapse...
                     if ( this.autoCollapse )
                     {
+                        this.item.active = false
                         this.collapse();
                     }
                 }
+                this._changeDetectorRef.markForCheck();
             });
 
         // Subscribe to onRefreshed on the navigation component
@@ -298,7 +303,7 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
             }
 
             // Check if the child has a link and is active
-            if ( child.link && this._router.isActive(child.link, child.exactMatch || false) )
+            if ( child.link, this._router.url.includes(child.link) )
             {
                 return true;
             }

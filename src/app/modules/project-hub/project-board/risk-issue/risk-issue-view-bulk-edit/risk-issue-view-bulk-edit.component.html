@@ -13,7 +13,7 @@
                     (click)="addRI()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
-            <form [formGroup]="localIncludedItems">
+            <form [formGroup]="localIncludedItems" *ngIf="viewElementChecker('includeClosedItems')">
                 <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
                                   (checked)="projectHubService.includeClosedItems.riskIssue.value" (change)="toggleRiskIssue($event)">
                     Include Closed Items
@@ -23,11 +23,11 @@
         <div class="h-[80vh] pl-3" id="askNeedTableDiv">
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                            columnMode="force"
-                           class="material datatable-ri-73 font-medium text-sm text-secondary whitespace-nowrap cursor-pointer"
+                           class="material datatable-ri-73 font-medium text-sm text-default whitespace-nowrap cursor-pointer"
                            [rows]="tableData" #riskIssueTable [rowClass]="getRowClass">
-                <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false"
+                <ngx-datatable-column name='Status' prop="indicator" [resizeable]="false" [sortable]="false" *ngIf="viewElementChecker('status')"
                                       [width]="75" [draggable]="false">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
                         <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                                   class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
                         </mat-icon>
@@ -37,7 +37,7 @@
                                   svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Type" prop="riskIssueTypeId" [width]="100" [resizeable]="false"
+                <ngx-datatable-column name="Type" prop="riskIssueTypeId" [width]="100" [resizeable]="false" *ngIf="viewElementChecker('type')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -56,7 +56,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Date Initiated" prop="logDate" [width]="135" [resizeable]="false"
+                <ngx-datatable-column name="Date Initiated" prop="logDate" [width]="135" [resizeable]="false" *ngIf="viewElementChecker('logDate')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}"
@@ -66,7 +66,7 @@
                         </a>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="If This Happens" prop="ifHappens" [width]="300" [resizeable]="false"
+                <ngx-datatable-column name="If This Happens" prop="ifHappens" [width]="300" [resizeable]="false" *ngIf="viewElementChecker('ifThisHappens')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -79,7 +79,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Probability" prop="probabilityId"  [resizeable]="false"
+                <ngx-datatable-column name="Probability" prop="probabilityId"  [resizeable]="false" *ngIf="viewElementChecker('probability')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!riTableEditStack.includes(rowIndex)" (click)="riTableEditRow(rowIndex)" [ngClass]="{'closed': row.closeDate != null}">
@@ -94,7 +94,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [width]="300" [resizeable]="false"
+                <ngx-datatable-column name="This Is The Result" prop="riskIssueResult" [width]="300" [resizeable]="false" *ngIf="viewElementChecker('thisIsTheResult')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -107,7 +107,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Impact" prop="impactId"  [resizeable]="false"
+                <ngx-datatable-column name="Impact" prop="impactId"  [resizeable]="false" *ngIf="viewElementChecker('impact')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!riTableEditStack.includes(rowIndex)" (click)="riTableEditRow(rowIndex)" [ngClass]="{'closed': row.closeDate != null}">
@@ -124,7 +124,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Mitigation" prop="mitigation" [width]="300" [resizeable]="false"
+                <ngx-datatable-column name="Mitigation" prop="mitigation" [width]="250" [resizeable]="false" *ngIf="viewElementChecker('mitigation')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -137,7 +137,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Owner" prop="ownerName" [width]="200"  [resizeable]="false"
+                <ngx-datatable-column name="Owner" prop="ownerName" [width]="200"  [resizeable]="false" *ngIf="viewElementChecker('owner')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -153,7 +153,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false"
+                <ngx-datatable-column name="Function Owner" prop="functionGroupId" [resizeable]="false" [sortable]="false" *ngIf="viewElementChecker('function')"
                                       [width]="200">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!riTableEditStack.includes(rowIndex)" (click)="riTableEditRow(rowIndex)" [ngClass]="{'closed': row.closeDate != null}">
@@ -168,7 +168,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" [resizeable]="false" *ngIf="viewElementChecker('dueDate')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -182,7 +182,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Close Date" prop="closeDate" [flexGrow]="1" [resizeable]="false"
+                <ngx-datatable-column name="Close Date" prop="closeDate" [flexGrow]="1" [resizeable]="false" *ngIf="viewElementChecker('closeDate')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -196,7 +196,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Project Dashboard (Max 3)" prop="includeInReport"
+                <ngx-datatable-column name="Included In Project Dashboard (Max 3)" prop="includeInReport" *ngIf="viewElementChecker('includeInProjectDashboard')"
                                        [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -209,6 +209,23 @@
                             <mat-slide-toggle
                                 [matTooltip]="this.riskIssueForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
                                 (change)="disabler()" class="h-full overflow-visible" formControlName="includeInReport">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Included In Project Charter (Max 5)" prop="includeInCharter" *ngIf="viewElementChecker('includeInCharter')"
+                                      [draggable]="false" [resizeable]="false" [sortable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
+                           (click)="riTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)"
+                              class="h-[45px]">
+                            <mat-slide-toggle
+                                [matTooltip]="this.riskIssueForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 5 can be selected at a time for project charter display' : null"
+                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInCharter">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>

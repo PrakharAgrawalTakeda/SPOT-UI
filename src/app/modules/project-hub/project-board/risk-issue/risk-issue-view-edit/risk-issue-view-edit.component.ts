@@ -1,4 +1,13 @@
-import { Component, HostListener, OnDestroy, OnInit, ElementRef,ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    OnDestroy,
+    OnInit,
+    ElementRef,
+    ViewChild,
+    ViewEncapsulation,
+    Input
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../../project-hub.service';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -7,7 +16,8 @@ import { AuthService } from '../../../../../core/auth/auth.service'
 import * as moment from 'moment';
 import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../../common/project-api.service';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Constants} from "../../../../../shared/constants";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -39,6 +49,7 @@ export const MY_FORMATS = {
 })
 
 export class RiskIssueViewEditComponent implements OnInit {
+  @Input() viewElements: any = ["type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard", "postMitigation"]
   formFieldHelpers: string[] = [''];
   lookupdata: any = []
   riskissue: any = {}
@@ -46,7 +57,8 @@ export class RiskIssueViewEditComponent implements OnInit {
   item: any = {}
   functionSets: any = []
   id: string = ''
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService,private _elementRef: ElementRef) {
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute,
+              public auth: AuthService,private _elementRef: ElementRef, private router: Router) {
 
     this.functionSets = this.riskIssueForm.controls['function'].valueChanges.pipe(
       startWith(''),
@@ -66,8 +78,7 @@ export class RiskIssueViewEditComponent implements OnInit {
             })
           }
         }
-        else if(this.riskIssueForm.controls.functionid.value == "")
-        {
+        else if (this.riskIssueForm.controls.functionid.value == "") {
           return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
             return a.lookUpOrder - b.lookUpOrder;
           })
@@ -93,6 +104,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     function: new FormControl(''),
     functionid: new FormControl(''),
     includeInReport: new FormControl(''),
+    includeInCharter: new FormControl(false),
     postMitigationProbability: new FormControl(''),
     postMitigationImpact: new FormControl(''),
     postMitigationComments: new FormControl('')
@@ -107,9 +119,6 @@ export class RiskIssueViewEditComponent implements OnInit {
     if (this.projecthubservice.itemid != "new") {
       this.apiService.riskIssueSingle(this.projecthubservice.itemid).then((res: any) => {
         this.riskissue = res
-        console.log(this.projecthubservice)
-        console.log('res')
-        console.log(res)
         this.riskIssueForm.patchValue({
           logDate: res.logDate ? res.logDate : this.today,
           type: res.riskIssueTypeId,
@@ -124,6 +133,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           usersingleid: res.ownerId,
           functionid: res.functionGroupId,
           includeInReport: res.includeInReport,
+          includeInCharter: res.includeInCharter,
           postMitigationProbability: res.postMitigationProbability,
           postMitigationImpact: res.postMitigationImpact,
           postMitigationComments: res.postMitigationComments
@@ -138,7 +148,13 @@ export class RiskIssueViewEditComponent implements OnInit {
               this.riskIssueForm.controls['includeInReport'].disable()
             }
           }
+          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 5) {
+              if (this.riskIssueForm.value.includeInCharter != true) {
+                  this.riskIssueForm.controls['includeInCharter'].disable()
+              }
+          }
         }
+        this.riskIssueForm.controls.function.patchValue('')
         this.projecthubservice.isFormChanged = false
       })
     }
@@ -157,6 +173,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         usersingleid: "",
         functionid: "",
         includeInReport: false,
+        includeInCharter: false,
         postMitigationProbability: "",
         postMitigationImpact: "",
         postMitigationComments: ""
@@ -169,7 +186,13 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 3) {
           this.riskIssueForm.controls['includeInReport'].disable()
         }
+        if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 5) {
+            if (this.riskIssueForm.value.includeInCharter != true) {
+                this.riskIssueForm.controls['includeInCharter'].disable()
+            }
+        }
       }
+      this.riskIssueForm.controls.function.patchValue('')
       this.projecthubservice.isFormChanged = false
     }
     this.riskIssueForm.valueChanges.subscribe(res => {
@@ -177,12 +200,15 @@ export class RiskIssueViewEditComponent implements OnInit {
     })
   }
 
+  viewElementChecker(element: string): boolean {
+      return this.viewElements.some(x => x == element)
+  }
   getllookup() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.dataloader()
-      this.riskIssueForm.controls.function.patchValue('')
+
     })
   }
   getissuetype(): any {
@@ -225,10 +251,8 @@ export class RiskIssueViewEditComponent implements OnInit {
   }
   submitriskissue() {
     this.projecthubservice.isFormChanged = false
-
     if (this.riskIssueForm.valid) {
       if (this.projecthubservice.itemid == "new") {
-        console.log(this.projecthubservice)
         var mainObjnew = {
           riskIssueUniqueId: "new",
           projectId: this.projecthubservice.projectid,
@@ -244,13 +268,13 @@ export class RiskIssueViewEditComponent implements OnInit {
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          //logDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInReport: this.riskIssueForm.value.includeInReport,
           indicator: "Grey",
-          includeInCharter: this.riskissue.includeInCharter,
+          includeInCharter: this.riskIssueForm.value.includeInCharter,
           postMitigationProbability: this.riskIssueForm.value.postMitigationProbability,
           postMitigationImpact: this.riskIssueForm.value.postMitigationImpact,
-          postMitigationComments: this.riskIssueForm.value.postMitigationComments
+          postMitigationComments: this.riskIssueForm.value.postMitigationComments,
+          businessOptionId:""
         }
         //Function when null
         if (this.riskIssueForm.controls['function'].value == "") {
@@ -259,32 +283,46 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (this.riskIssueForm.controls['includeInReport'].disabled) {
           mainObjnew.includeInReport = false
         }
+        if (this.riskIssueForm.controls['includeInCharter'].disabled) {
+            mainObjnew.includeInCharter = false
+        }
         //Log Date
         if (mainObjnew.logDate == "Invalid date") {
           mainObjnew.logDate = this.riskissue.logDate + ".000Z"
         }
         if (this.riskIssueForm.controls['usersingleid'].value == "") {
-            mainObjnew.ownerName = null
-            mainObjnew.ownerId = null
+          mainObjnew.ownerName = null
+          mainObjnew.ownerId = null
         }
-
-        // if (this.riskIssueForm.controls['logDate'].value == null) {
-        //   mainObjnew.logDate = moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-        // }
-
         if (mainObjnew.dueDate == "Invalid date") {
           mainObjnew.dueDate = null
         }
         if (mainObjnew.closeDate == "Invalid date") {
           mainObjnew.closeDate = null
         }
-        console.log("final object")
-        console.log(mainObjnew)
-        this.apiService.addRiskIssue(mainObjnew).then(() => {
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.isNavChanged.next(true)
-        })
+
+        if (this.router.url.includes('option-2')) {
+            mainObjnew.businessOptionId = Constants.OPTION_2_ID.toString();
+            this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            })
+        }else{
+            if (this.router.url.includes('option-3')) {
+                mainObjnew.businessOptionId = Constants.OPTION_3_ID.toString();
+                this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                })
+            }else{
+                this.apiService.addRiskIssue(mainObjnew).then(() => {
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.isNavChanged.next(true)
+                })
+            }
+        }
+
       }
       else {
         var mainObj = {
@@ -315,8 +353,8 @@ export class RiskIssueViewEditComponent implements OnInit {
           mainObj.functionGroupId = null
         }
         if (this.riskIssueForm.controls['usersingle'].value == "") {
-            mainObj.ownerName = null
-            mainObj.ownerId = null
+          mainObj.ownerName = null
+          mainObj.ownerId = null
         }
         //Log Date
         console.log(this.riskIssueForm.value.logDate)
@@ -324,23 +362,14 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (mainObj.logDate == "Invalid date") {
           mainObj.logDate = this.riskissue.logDate + ".000Z"
         }
-
-        // if (this.riskIssueForm.controls['logDate'].value == null) {
-        //   mainObj.logDate = this.riskissue.logDate
-        // }
-
         //Need By Date
         if (mainObj.dueDate == "Invalid date") {
           mainObj.dueDate = null
         }
-
         //Close Date
         if (mainObj.closeDate == "Invalid date") {
           mainObj.closeDate = null
         }
-
-        console.log("final object")
-        console.log(mainObj)
         this.apiService.editRiskIssue(this.id,mainObj).then(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.submitbutton.next(true)

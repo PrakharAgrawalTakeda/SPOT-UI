@@ -1,14 +1,16 @@
+<div *ngIf="viewContent">
+
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Performance</div>
 
     <div class="text-primary">
         <div class="flex items-start justify-between">
             <div style="padding-right: 5px;">
-                <button class="text-primary bg-gray-200" mat-flat-button *ngIf="editable" [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceBulkEdit', 'new', [], projectid, true)">
+                <button class="text-primary bg-gray-200" mat-flat-button *ngIf="editable" [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen(bulkEditType, 'new', [], projectid, true)">
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
                 <button class="ml-4 text-primary bg-gray-200" *ngIf="editable" mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceSingleEdit', 'new', projectViewDetails.overallPerformace , projectid)">
+                    (click)="projecthubservice.toggleDrawerOpen(addSingle, 'new', projectViewDetails.overallPerformace , projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
@@ -17,8 +19,8 @@
 </div>
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'kpiid', dir: 'asc' }]"
+        class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+        [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'kpiname', dir: 'asc' }]"
         #operationalPerformanceTable>
         <ngx-datatable-column name="Status" prop="status" [flexGrow]="1">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -30,9 +32,14 @@
                 </div>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="KPI" prop="kpiid" [flexGrow]="1">
+        <ngx-datatable-column name="KPI" prop="kpiname" [flexGrow]="1" *ngIf="mode == 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{getKPIName(value)}}
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Associated KPI" prop="kpiname" [flexGrow]="1" *ngIf="mode == 'Project-Charter'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Metric" prop="metric" [flexGrow]="1">
@@ -40,7 +47,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="1">
+        <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="1" >
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
@@ -50,7 +57,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Actual Performance" prop="actualPerformance" [flexGrow]="1">
+        <ngx-datatable-column name="Actual Performance" prop="actualPerformance" [flexGrow]="1"  *ngIf="mode == 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
@@ -61,7 +68,7 @@
 
                 <div class="flex items-center justify-start gap-6">
                     <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
-                        (click)="projecthubservice.toggleDrawerOpen('OperationalPerformanceSingleEdit', row.keySuccessUniqueId, projectViewDetails.overallPerformace, projectid)">
+                        (click)="projecthubservice.toggleDrawerOpen(addSingle, row.keySuccessUniqueId, projectViewDetails.overallPerformace, projectid)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
 
                     </a>
@@ -73,4 +80,5 @@
             </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
+</div>
 </div>
