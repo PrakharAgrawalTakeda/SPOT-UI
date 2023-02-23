@@ -35,7 +35,7 @@
         <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
             *ngIf="viewElementChecker('problemTitle')" class="w-full"
             formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
-            [Required]="callLocation == 'CreateNew'" [showHint]="true" [hint]="'random'">
+            [Required]="callLocation == 'CreateNew'">
         </spot-input>
         <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')"
                 class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
@@ -102,7 +102,7 @@
         </spot-select>
         <spot-select [Required]="callLocation == 'CreateNew'"
             *ngIf="viewElementChecker('problemType')" class="w-full" formControlName="problemType" name="problemType"
-            [label]="'Project Type'" [placeholder]="'Project Type'" [showNoneOption]="true"
+            [label]="'Project Type'" [placeholder]="'Project Type'" [showNoneOption]="false"
             [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues">
         </spot-select>
         <spot-singleselect-autocomplete class="w-full"
