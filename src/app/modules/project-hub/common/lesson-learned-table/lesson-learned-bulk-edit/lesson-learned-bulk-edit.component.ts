@@ -274,7 +274,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         this.lessonLearnedSubmit.push({
           "lessonLearnedId": x.lessonLearnedId,
           "projectUid": this.projecthubservice.projectid,
-          "actionOwner": x.actionOwner.userAdid == undefined ? "" : x.actionOwner.userAdid,
+          "actionOwner": x.actionOwner.userAdid == undefined || x.actionOwner.userAdid == null ? "" : x.actionOwner.userAdid,
           "createDetailedReviewSlide": x.createDetailedReviewSlide,
           "criticality": x.criticality.lookUpId == undefined ? x.criticality : x.criticality.lookUpId,
           "dueDate": x.dueDate ? moment(x.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
@@ -285,7 +285,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           "lessonDetail": x.lessonDetail,
           "lessonLogDate": x.lessonLogDate ? moment(x.lessonLogDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           "lessonType": x.lessonType.lookUpId == undefined ? x.lessonType : x.lessonType.lookUpId,
-          "submittedBy": x.submittedBy.userAdid == undefined ? x.submittedBy : x.submittedBy.userAdid,
+          "submittedBy": x.submittedBy.userAdid == undefined || x.submittedBy.userAdid == null ? "" : x.submittedBy.userAdid,
           "submittingGroupRole": x.submittingGroupRole.lookUpId == undefined ? x.submittingGroupRole : x.submittingGroupRole.lookUpId,
           "suggestedAction": x.suggestedAction
         })

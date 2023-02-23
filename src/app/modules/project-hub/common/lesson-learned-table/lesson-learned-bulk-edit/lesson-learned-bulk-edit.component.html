@@ -1,6 +1,6 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Lesson Learned</div>
+        <div style="width: 125%;" class="text-on-primary" style="padding-top: 6px">Bulk Edit Lesson Learned</div>
         <div style="padding-top: 2px">
             <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
                 <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -83,7 +83,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Description / Details" prop="lessonDetail" [flexGrow]="5.5">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Description / Details" prop="lessonDetail" [flexGrow]="8.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{value}}
@@ -203,7 +203,7 @@
                             date:'dd-MMM-yyyy'}}
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="lessonCloseDate" name="lessonCloseDate" [showLabel]="false">
+                            <spot-input-date formControlName="lessonCloseDate" name="lessonCloseDate" [showLabel]="false" [max]="'today'">
                             </spot-input-date>
                         </form>
                     </ng-template>

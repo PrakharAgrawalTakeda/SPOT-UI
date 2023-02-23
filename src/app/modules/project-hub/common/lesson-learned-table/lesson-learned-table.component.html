@@ -39,7 +39,7 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1" [sortable]="false">
+                <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>
@@ -80,7 +80,7 @@
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" [sortable]="false">
+                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>
@@ -95,7 +95,7 @@
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Close Date" prop="lessonCloseDate" [flexGrow]="1.5" [sortable]="false">
+                <ngx-datatable-column name="Close Date" prop="lessonCloseDate" [flexGrow]="1.5">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>
