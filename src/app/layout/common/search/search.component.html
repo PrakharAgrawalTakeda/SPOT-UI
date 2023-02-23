@@ -13,11 +13,9 @@
         @slideOutTop>
         <mat-icon
             class="absolute ml-6 sm:ml-8"
-            *ngIf="hide"
             [svgIcon]="'heroicons_outline:search'"></mat-icon>
         <input
             class="w-full h-full px-16 sm:px-18"
-            [ngStyle]="{'font-size' : !hide ? '40% !important' : '100%'}"
             [formControl]="searchControl"
             [matAutocomplete]="matAutocomplete"
             [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"

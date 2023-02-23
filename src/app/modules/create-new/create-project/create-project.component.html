@@ -263,20 +263,20 @@
                                         
                                         <div *ngIf="createProjectForm.controls['qualityReference'].value"
                                             class="flex justify-between items-start gap-6">
-                                            <div style="padding-left: 10px; margin-left: 2px;margin-right: 10px;" class="flex flex-col flex-auto w-2/5 mt-6 bg-card shadow rounded-2xl overflow-hidden">
+                                            <div style="padding-left: 10px; margin-left: 441px;margin-right: 10px;" class="flex flex-col flex-auto w-2/5 bg-card shadow rounded-2xl overflow-hidden">
                                                 <div class="">
-                                                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                                                    <ngx-datatable [headerHeight]="'10px'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                                                         class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm">
                                                         <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
-                                                            [sortable]="false" [flexGrow]="1">
+                                                            [sortable]="false" [flexGrow]="0.2">
                                                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                                                 <p>{{getLookUpName(value)}}</p>
                                                             </ng-template>
                                                         </ngx-datatable-column>
                                                         <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
-                                                            [sortable]="false" [flexGrow]="1">
+                                                            [sortable]="false" [flexGrow]="0.2">
                                                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                                                                <p>&nbsp;</p>
+                                                                <!-- <p>&nbsp;</p> -->
                                                                 <p>{{value}}</p>
                                                             </ng-template>
                                                         </ngx-datatable-column>

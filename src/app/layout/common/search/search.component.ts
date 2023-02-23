@@ -22,7 +22,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     @Output() newItemEvent = new EventEmitter<string>();
     @Input() opened: boolean = false;
     @Input() calledFrom: string = "";
-    projectid: string = "";
+    projectdata: any;
     // opened: boolean = false;
     resultSets: any[];
     budget: any = [];
@@ -183,8 +183,10 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      */
      selectedOption(event: any): void{
          if (this.calledFrom == 'Copy') {
-             this.searchControl.patchValue(event.option.value.problemTitle);
-             this.projectid = event.option.value.problemUniqueId;
+            //  this.searchControl.patchValue(event.option.value.problemTitle);
+            //  this.projectid = event.option.value.problemUniqueId;
+             this.searchControl.patchValue("")
+             this.projectdata = event.option.value
              this.addNewItem();
              this.hide = false
             //  this.getNgxDatatableNumberHeader()
@@ -202,7 +204,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     // }
 
          addNewItem() {
-             this.newItemEvent.emit(this.projectid);
+             this.newItemEvent.emit(this.projectdata);
          }
 
     onKeydown(event: KeyboardEvent): void

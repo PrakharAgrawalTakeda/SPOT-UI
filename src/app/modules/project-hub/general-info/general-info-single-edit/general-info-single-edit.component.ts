@@ -206,6 +206,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
           for (var i = 0; i < this.localCurrencyList.length; i++) {
             this.local.push(this.localCurrencyList[i].localCurrencyAbbreviation)
           }
+          this.local.sort()
           this.filterCriteria = res
           this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
           if (history.state.data != undefined) {

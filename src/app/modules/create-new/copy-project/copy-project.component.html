@@ -16,6 +16,7 @@
                 </div>
                 <p class="tag">The below data will be copied to your new project when you hit Copy Project. You can
                     update/edit this data after project creation.</p>
+                <label class="font-bold text-primary text-2xl">{{projectname}}</label>
                 <form class="pl-3 w-full overflow-hidden" [formGroup]="CopyProjectForm"
                     (ngSubmit)="SubmitCopyProject($event)">
                     <div class="flex justify-between items-center mt-6 mb-6">

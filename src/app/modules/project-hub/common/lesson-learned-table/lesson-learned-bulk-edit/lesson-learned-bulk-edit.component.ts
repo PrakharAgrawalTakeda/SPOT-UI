@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { MsalService } from '@azure/msal-angular';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
@@ -20,7 +21,8 @@ export class LessonLearnedBulkEditComponent implements OnInit {
   lookupdata:any
   lessonLearnedDb = []
   lessonLearnedSubmit = []
-  constructor(public auth: AuthService, public projecthubservice: ProjectHubService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
+  activeaccount: any
+  constructor(private authService: MsalService, public auth: AuthService, public projecthubservice: ProjectHubService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
     this.lessonLearnedForm.valueChanges.subscribe(res => {
       if (this.viewContent == true) {
         this.formValue()
@@ -126,6 +128,11 @@ export class LessonLearnedBulkEditComponent implements OnInit {
   }
 
   addLL() {
+    this.activeaccount = this.authService.instance.getActiveAccount();
+    var user = {
+      userAdid: this.activeaccount.localAccountId,
+      userDisplayName: this.activeaccount.name
+    };
     var j = [{}]
       j = [{
         lessonLearnedId: '',
@@ -142,8 +149,8 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         lessonDetail: '',
         lessonLogDate: '',
         lessonType: '',
-        submittedBy: '',
-        submittedByName: '',
+        submittedBy: user,
+        submittedByName: user.userDisplayName,
         submittingGroupRole: '',
         suggestedAction: '',
       }]
@@ -162,8 +169,8 @@ export class LessonLearnedBulkEditComponent implements OnInit {
       lessonDetail: new FormControl(''),
       lessonLogDate: new FormControl(''),
       lessonType: new FormControl(''),
-      submittedBy: new FormControl(''),
-      submittedByName: new FormControl(''),
+      submittedBy: new FormControl(user),
+      submittedByName: new FormControl(user.userDisplayName),
       submittingGroupRole: new FormControl(''),
       suggestedAction: new FormControl('')
       }))
@@ -267,7 +274,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         this.lessonLearnedSubmit.push({
           "lessonLearnedId": x.lessonLearnedId,
           "projectUid": this.projecthubservice.projectid,
-          "actionOwner": x.actionOwner.userAdid == undefined ? x.actionOwner : x.actionOwner.userAdid,
+          "actionOwner": x.actionOwner.userAdid == undefined ? "" : x.actionOwner.userAdid,
           "createDetailedReviewSlide": x.createDetailedReviewSlide,
           "criticality": x.criticality.lookUpId == undefined ? x.criticality : x.criticality.lookUpId,
           "dueDate": x.dueDate ? moment(x.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
