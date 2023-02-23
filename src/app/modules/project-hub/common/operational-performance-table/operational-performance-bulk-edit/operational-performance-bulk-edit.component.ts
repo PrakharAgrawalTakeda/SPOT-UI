@@ -43,6 +43,10 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
     this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
       this.projectViewDetails = res
       for (var i of this.projectViewDetails.overallPerformace) {
+        i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+      }
+      this.projectViewDetails.overallPerformace = this.sortbyKPIName(this.projectViewDetails.overallPerformace)
+      for (var i of this.projectViewDetails.overallPerformace) {
         this.opDb.push(i)
         this.operationalPerformanceForm.push(new FormGroup({
           keySuccessUniqueId: new FormControl(i.keySuccessUniqueId),
@@ -58,12 +62,32 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           includeInCloseOut: new FormControl(i.includeInCloseOut),
           ptrbid: new FormControl(i.ptrbid),
           benefitDescriptionJustification: new FormControl(i.benefitDescriptionJustification),
-          includeinProposal: new FormControl(i.includeinProposal)
+          includeinProposal: new FormControl(i.includeinProposal),
+          kpiname: new FormControl(i.kpiname)
         }))
       }
+
       this.disabler()
       this.viewContent = true
     })
+  }
+
+  sortbyKPIName(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.kpiname === null) {
+        return -1;
+      }
+
+      if (b.kpiname === null) {
+        return 1;
+      }
+
+      if (a.kpiname === b.kpiname) {
+        return 0;
+      }
+
+      return a.kpiname < b.kpiname ? -1 : 1;
+    }) : array
   }
 
   getLookUpName(lookUpId: string): string {
@@ -95,6 +119,14 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           i['controls']['includeInProjectDashboard'].enable()
         }
       }
+      else {
+        for (var i of this.operationalPerformanceForm.controls) {
+          if (i['controls']['includeInProjectDashboard'].value != true) {
+            i['controls']['includeInProjectDashboard'].disable()
+          }
+        }
+      }
+
       if (formValue.filter(x => x.includeInCharter == true).length < 3) {
         for (var i of this.operationalPerformanceForm.controls) {
           i['controls']['includeInCharter'].enable()
@@ -102,14 +134,12 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
       }
       else {
         for (var i of this.operationalPerformanceForm.controls) {
-          if (i['controls']['includeInProjectDashboard'].value != true) {
-            i['controls']['includeInProjectDashboard'].disable()
-          }
           if (i['controls']['includeInCharter'].value != true) {
             i['controls']['includeInCharter'].disable()
           }
         }
       }
+
       if (formValue.filter(x => x.includeInCloseOut == true).length < 3) {
         for (var i of this.operationalPerformanceForm.controls) {
           i['controls']['includeInCloseOut'].enable()
@@ -124,6 +154,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
       }
     }
   }
+
 
   changeChecker() {
     var formValue = this.operationalPerformanceForm.getRawValue()
@@ -208,7 +239,8 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         includeInCloseOut: '',
         ptrbid: '',
         benefitDescriptionJustification: '',
-        includeinProposal: ''
+        includeinProposal: '',
+        kpiname: ''
       }]
       this.operationalPerformanceForm.push(new FormGroup({
         keySuccessUniqueId: new FormControl(''),
@@ -224,7 +256,8 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         includeInCloseOut: new FormControl(false),
         ptrbid: new FormControl(''),
         benefitDescriptionJustification: new FormControl(''),
-        includeinProposal: new FormControl(false)
+        includeinProposal: new FormControl(false),
+        kpiname: new FormControl('')
       }))
       this.projectViewDetails.overallPerformace = [...this.projectViewDetails.overallPerformace, ...j]
       this.disabler()
@@ -244,14 +277,14 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
     if (JSON.stringify(this.submitObj) == JSON.stringify(this.opDb)) {
       //this.projecthubservice.submitbutton.next(true)
       //this.projecthubservice.successSave.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '',[],'',true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
       this.apiService.bulkeditKeySuccess(this.submitObj, this.projecthubservice.projectid).then(resp => {
         this.projecthubservice.isFormChanged = false
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '',[],'',true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
       })
     }
   }

@@ -28,23 +28,27 @@
                             </div>
                             <div class="w-full ">
                                     <spot-textarea class="w-full read-only" formControlName="proposalStatement" name="proposalStatement"
-                                            [label]="'Proposal Statement'">
+                                            [label]="'Proposal Statement'" [showHint]="true"
+                                            [hint]="'Single summary statement of what, how, cost and by when'">
                                     </spot-textarea>
                             </div>
                             <div class="w-full ">
                                     <spot-textarea class="w-full read-only" formControlName="detailedDescription" name="detailedDescription"
-                                            [label]="'Detailed Description'">
+                                            [label]="'Detailed Description'" [showHint]="true"
+                                            [hint]="'More detailed information of how to execute proposal'">
                                     </spot-textarea>
                             </div>
                             <div class="w-full ">
                             <spot-textarea class="w-full read-only" formControlName="inScope" name="inScope"
-                                                [label]="'In Scope'">
+                                                [label]="'In Scope'" [showHint]="true"
+                                                [hint]="'List/Statements of critical In Scope elements'">
                                         </spot-textarea>
                                 </div>
                                 
                                 <div class="w-full">
                                         <spot-textarea class="w-full read-only" formControlName="outOfScope" name="outOfScope"
-                                                [label]="'Out of Scope'">
+                                                [label]="'Out of Scope'" [showHint]="true"
+                                                [hint]="'List/Statements of critical Out of Scope elements'">
                                         </spot-textarea>
                                 </div>
                     </form>
@@ -56,7 +60,7 @@
             <div class="w-full">
                 <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
                     <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full read-only" name="primaryKpi"
-                        [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
+                        [label]="'Primary KPI'" [valuePointer]="'kpiname'"
                         [dropDownArray]="kpiMasters">
                     </spot-singleselect-autocomplete>
                 </form>
