@@ -28,11 +28,8 @@ export class CloseOutLessonsLearnedComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    if(this.role.roleMaster.securityGroupId != 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'){
+    if(this.projecthubservice.roleControllerControl.closeOut.lessonsLearnt){
       this.editable=true
-    }
-    else{
-      this.editable = false
     }
     this.dataloader();
     this.viewContent = true
