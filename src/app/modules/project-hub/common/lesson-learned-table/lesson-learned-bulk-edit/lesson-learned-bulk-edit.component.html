@@ -18,11 +18,11 @@
             </button>
         </div>
         <div class="h-[80vh] overflow-hidden pl-3">
-            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
                 class="datatable-ll-80 font-medium text-sm text-default whitespace-nowrap"
                 [rows]="lessonsLearned" #lessonLearnedTable>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Include In Single Slide Summary (Max 4)"
-                    prop="includeInCloseOutReport" [flexGrow]="4.5">
+                    prop="includeInCloseOutReport" [flexGrow]="4.5" >
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)"
                             (click)="lessonLearnedTableEditRow(rowIndex)" class="w-full">
@@ -96,7 +96,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Type" prop="lessonType"
-                    [flexGrow]="4.3">
+                    [flexGrow]="7.3" >
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
@@ -226,7 +226,6 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-    </div>
     <div class="flex items-start justify-between mt-6 px-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
             (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
