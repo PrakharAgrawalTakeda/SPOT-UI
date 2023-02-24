@@ -735,9 +735,9 @@
               &nbsp;
             </div>
             <ng-template #null55>
-              
+
                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
-             
+
             </ng-template>
 
           </ng-template>
@@ -864,7 +864,7 @@
   </div>
 </div>
 <div *ngIf="viewContent" [hidden]="!viewStandardMilestonesSets">
-    <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)" [loadContent]="viewStandardMilestonesSets"></app-standard-milestone-sets>
+    <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)" [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData"></app-standard-milestone-sets>
 </div>
 
 <!-- </div> -->

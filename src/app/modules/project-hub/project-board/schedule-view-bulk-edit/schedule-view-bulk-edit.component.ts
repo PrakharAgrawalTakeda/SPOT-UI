@@ -1103,7 +1103,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             }
             //Include in close-out Milestone Variance
 
-            
+
                 if (formValue.filter(x => x.includeInCloseout == true).length < 20) {
                     for (var i of this.milestoneForm.controls) {
                         i['controls']['includeInCloseout'].enable()
@@ -2231,12 +2231,12 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             if(this.scheduleData.scheduleData.some(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value))
             baselinedates4.push(
                 moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value).baselineFinish).format("YYYY-MM-DD HH:mm:ss")
-                
-                
+
+
                /* .map(x => {
                     return x.baselineFinish ? moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss") : x.baselineFinish
                 })*/
-            ) 
+            )
         }
         //  for(var control of this.milestoneForm.controls)
         //  {
@@ -2292,7 +2292,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             this.flag = true
             //this.insertArray(control['controls']['projectId'].value)
         }
-        //new milestone baselined 
+        //new milestone baselined
         if (!this.flag && baselinedates2 && baselinedates.length == baselinedates3.length) {
             this.flag = true
         }
@@ -2380,7 +2380,8 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                         if (control.value.milestoneType == x.milestoneType) {
                             control.patchValue({ milestone: x.milestone })
                             if (x.functionalOwnerId != null && x.functionalOwnerId != '') {
-                                control.patchValue({ functionGroupId: x.functionGroupId })
+                                control.patchValue({ functionGroupId: x.funtionalOwnerId })
+                                control.patchValue({ function: this.lookUpData.find(x => x.lookUpId == x.funtionalOwnerId) })
                             }
                             if (control.value.comments == '') {
                                 control.patchValue({ comments: x.comments })
@@ -2388,6 +2389,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (control.value.includeInReport == false) {
                                 control.patchValue({ includeInReport: x.includeInReport })
                             }
+                            control.patchValue({ templateMilestoneId: x.milestoneTemplateId})
                             this.milestoneTableEditRow(index)
                             exists = true;
                         }
@@ -2406,6 +2408,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             control.patchValue({ milestone: x.milestone })
                             if (x.functionalOwnerId != null && x.functionalOwnerId != '') {
                                 control.patchValue({ functionGroupId: x.funtionalOwnerId })
+                                control.patchValue({ function: this.lookUpData.find(x => x.lookUpId == x.funtionalOwnerId) })
                             }
                             if (control.value.comments == '') {
                                 control.patchValue({ comments: x.comment })
@@ -2413,6 +2416,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (control.value.includeInReport == false) {
                                 control.patchValue({ includeInReport: x.includeInReport })
                             }
+                            control.patchValue({ templateMilestoneId: x.milestoneTemplateId})
                             this.milestoneTableEditRow(index)
                             exists = true;
                         }
@@ -2455,14 +2459,14 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             plannedFinish: new FormControl(''),
             baselineFinish: new FormControl(''),
             responsiblePersonName: new FormControl({}),
-            function: new FormControl({}),
-            functionGroupId: new FormControl(sM.functionalOwnerId),
+            function: new FormControl(this.lookUpData.find(x => x.lookUpId == sM.funtionalOwnerId)),
+            functionGroupId: new FormControl(sM.funtionalOwnerId),
             completionDate: new FormControl(''),
             comments: new FormControl(sM.comment),
             includeInReport: new FormControl(limitPassed == false ? sM.includeInReport : false),
             includeInCharter: new FormControl(false),
             milestoneType: new FormControl(sM.milestoneType),
-            templateMilestoneId: new FormControl(''),
+            templateMilestoneId: new FormControl(sM.milestoneTemplateId),
             includeInCloseout: new FormControl(false),
             responsiblePersonId: new FormControl(''),
             indicator: new FormControl('')
@@ -2472,7 +2476,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             baselineFinish: null,
             comments: sM.comment,
             completionDate: null,
-            functionGroupId: sM.functionalOwnerId,
+            functionGroupId: sM.funtionalOwnerId,
             includeInCharter: false,
             includeInCloseout: false,
             includeInReport: limitPassed == false ? sM.includeInReport : false,
@@ -2483,7 +2487,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             projectId: this.id,
             responsiblePersonId: null,
             responsiblePersonName: null,
-            templateMilestoneId: null
+            templateMilestoneId: sM.milestoneTemplateId
         }]
         this.schedulengxdata = [...this.schedulengxdata, ...j]
         this.milestoneTableEditRow(this.schedulengxdata.length - 1)
