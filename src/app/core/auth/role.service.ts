@@ -57,6 +57,7 @@ export class RoleService {
           basicFields: false,
           porfolioOwner: false
         }
+        localroleController.closeOut.lessonsLearnt = false
       }
       else{
         localroleController.generalInfo.porfolioOwner = false

@@ -37,6 +37,10 @@
             formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
             [Required]="callLocation == 'CreateNew'">
         </spot-input>
+        <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('businessCaseApprovedDate')"
+            formControlName="businessCaseApprovedDate" name="businessCaseApprovedDate" [label]="'Date Approved'"
+            [placeholder]="'Date Approved'">
+        </spot-input-date>
         <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')"
                 class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
                 [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
@@ -119,6 +123,15 @@
                         CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
             </spot-toggle>
         </div>
+        <spot-singleselect-user-autocomplete formControlName="sponsor" *ngIf="viewElementChecker('sponsor')" [label]="'Sponsor'"
+            name="sponsor" [showLabel]="true">
+        </spot-singleselect-user-autocomplete>
+        <spot-singleselect-user-autocomplete formControlName="BCAuthor" *ngIf="viewElementChecker('BCAuthor')" [label]="'Business Case Author'"
+            name="BCAuthor" [showLabel]="true">
+        </spot-singleselect-user-autocomplete>
+        <spot-multiselect-user-autocomplete formControlName="AdditionalAuthor" *ngIf="viewElementChecker('AdditionalAuthor')"
+            [label]="'Additional Authors / Contributors'" name="AdditionalAuthor" [showLabel]="true">
+        </spot-multiselect-user-autocomplete>
         <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
             [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('primaryProduct')"
             class="w-full" formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
@@ -141,6 +154,12 @@
         </spot-textarea>
         <spot-textarea (onChange)="addNewItem()" formControlName="targetGoalSituation" *ngIf="viewElementChecker('targetGoalSituation')"
             name="targetGoalSituation" [label]="'Target End State'" [placeholder]="'Target End State'">
+        </spot-textarea>
+        <spot-textarea formControlName="StrategicRationale" *ngIf="viewElementChecker('StrategicRationale')" name="StrategicRationale" [label]="'Strategic Rationale'"
+            [placeholder]="'Strategic Rationale'">
+        </spot-textarea>
+        <spot-textarea formControlName="RiskImpact" *ngIf="viewElementChecker('RiskImpact')"
+            name="RiskImpact" [label]="'Risk / Impact of Doing Nothing'" [placeholder]="'Risk / Impact of Doing Nothing'">
         </spot-textarea>
         </div>
         <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">

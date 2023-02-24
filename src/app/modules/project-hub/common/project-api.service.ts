@@ -65,7 +65,7 @@ export class ProjectApiService {
     return response
   }
   async getGeneralInfoDataWizzard(projectid, callLocation) {
-      var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizzard="+callLocation
+      var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard="+callLocation
       const abc$ = this.http.get(url)
       const response = await lastValueFrom(abc$)
       return response
@@ -134,7 +134,7 @@ export class ProjectApiService {
       if(wizzard =="CloseOut"){
           wizzard = "ProjectCloseOut";
       }
-      var url = GlobalVariables.apiurl + "Projects/" + projectid + "?wizzard=" + wizzard
+    var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard=" + wizzard
       const abc$ = this.http.put(url, body)
       const response = await lastValueFrom(abc$)
       return response
@@ -225,6 +225,7 @@ export class ProjectApiService {
     return response
   }
    async deleteKeyAssumption(id: string){
+    console.log("inside delete api")
       var link = GlobalVariables.apiurl+"KeyAssumption/"+id
       const abc$ = this.http.delete(link)
       const response = await lastValueFrom(abc$)
@@ -554,23 +555,23 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async getTOPS(projectid:string){
+  async getTOPS(projectid: string) {
     var url = GlobalVariables.apiurl + "TOPS/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
-}
-async getFunding(projectid:string){
-  var url = GlobalVariables.apiurl + "Funding/" + projectid
+  }
+  async getFunding(projectid: string) {
+    var url = GlobalVariables.apiurl + "Funding/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
-}
-async deleteFunding(id: string){
-  var link = GlobalVariables.apiurl+"Funding/"+id
-  const abc$ = this.http.delete(link)
-  const response = await lastValueFrom(abc$)
-  return response
-}
+  }
+  async deleteFunding(id: string) {
+    var link = GlobalVariables.apiurl + "Funding/" + id
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   }
 

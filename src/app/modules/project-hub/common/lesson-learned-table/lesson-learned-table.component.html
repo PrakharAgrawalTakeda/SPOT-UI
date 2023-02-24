@@ -4,11 +4,11 @@
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
-                    <button style="margin-right: 12px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    <button style="margin-right: 12px;" *ngIf="Editable" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('LessonLearnedBulkEdit', '', lessonLearned, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
-                    <button class="min-w-26ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    <button class="min-w-26ml-4 text-primary bg-gray-200" *ngIf="Editable" mat-flat-button [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('LessonLearnedSingleEdit', 'new', lessonLearned, id)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
@@ -101,7 +101,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [flexGrow]="1.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+                <ngx-datatable-column *ngIf="Editable" [flexGrow]="1.4" [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                         <div class="flex items-center justify-start gap-6">
