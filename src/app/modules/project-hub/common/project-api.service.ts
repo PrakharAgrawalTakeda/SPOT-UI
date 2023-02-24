@@ -555,19 +555,6 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-
-  async getGeneralInfoBusinessCaseData(projectid) {
-    var url = GlobalVariables.apiurl + "GeneralInfo/BusinessCase/" + projectid
-    const abc$ = this.http.get(url)
-    const response = await lastValueFrom(abc$)
-    return response
-  }
-  async editGeneralInfoBusinessCase(projectid, body) {
-    var url = GlobalVariables.apiurl + "BusinessCase/" + projectid
-    const abc$ = this.http.put(url, body)
-    const response = await lastValueFrom(abc$)
-    return response
-  }
   async getTOPS(projectid: string) {
     var url = GlobalVariables.apiurl + "TOPS/" + projectid
     const abc$ = this.http.get(url)
