@@ -4,6 +4,7 @@ import { MsalService } from '@azure/msal-angular';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { forEach } from 'lodash';
 import moment from 'moment';
 import { ProjectApiService } from '../../project-api.service';
 
@@ -243,7 +244,22 @@ export class LessonLearnedBulkEditComponent implements OnInit {
   }
 
   getType(): any {
-    return this.lookupdata.filter(x => x.lookUpParentId == "3B747FFC-139E-4ECC-8123-85D8A730245E")
+    var type = this.lookupdata.filter(x => x.lookUpParentId == "3B747FFC-139E-4ECC-8123-85D8A730245E")
+    var object
+    var index
+    for(var i=0;i<type.length;i++){
+      if(type[i].lookUpName == "None"){
+        object = type[i]
+        index = i
+      }
+    }
+    type.splice(7, 1);
+    type.splice(0, 0, object);
+    console.log("Type dropdown data",type)
+    return type
+    // return this.lookupdata.filter(x => x.lookUpParentId == "3B747FFC-139E-4ECC-8123-85D8A730245E").sort((a, b) => {
+    //   return a.lookUpOrder - b.lookUpOrder;
+    // })
   }
 
   getCriticality(): any {

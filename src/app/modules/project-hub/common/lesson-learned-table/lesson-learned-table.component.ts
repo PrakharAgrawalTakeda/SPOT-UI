@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -14,7 +14,7 @@ import { ProjectApiService } from '../project-api.service';
 export class LessonLearnedTableComponent implements OnInit {
   id: string = ""
   lessonLearned: any = []
-  editable: boolean = false
+  @Input() Editable: boolean = false
   lookupdata:any
   // KeyTakeawayForm = new FormGroup({
   //   keyTakeaways: new FormControl('')
@@ -41,6 +41,8 @@ export class LessonLearnedTableComponent implements OnInit {
         for(var i=0;i<this.lessonLearned.length;i++){
           this.lessonLearned[i].Actionusername = res[i].actionOwner.userDisplayName
           this.lessonLearned[i].SubmittedByName = res[i].submittedBy.userDisplayName 
+          this.lessonLearned[i].actionOwner = res[i].actionOwner.userAdid == null ? '' : res[i].actionOwner.userAdid
+          this.lessonLearned[i].submittedBy = res[i].submittedBy.userAdid == null ? '' : res[i].submittedBy.userAdid
         }
         
       })
