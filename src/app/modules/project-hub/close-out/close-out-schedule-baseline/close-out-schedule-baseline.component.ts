@@ -17,6 +17,7 @@ export class CloseOutScheduleBaselineComponent implements OnInit {
   viewBaseline: boolean;
   userlist: any = {}
   logdetails: any = {}
+  @Input() editable: boolean
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' = 'Baseline-Log'
   constructor(public projecthubservice: ProjectHubService,
     private apiService: ProjectApiService,
