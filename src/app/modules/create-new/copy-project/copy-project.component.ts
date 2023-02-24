@@ -26,6 +26,7 @@ export class CopyProjectComponent implements OnInit {
   projectList: any = {};
   userid: string = "";
   projectid: string = "";
+  projectname: string = "";
   viewContent:boolean = false
   CopyProjectForm = new FormGroup({
     projectTitle: new FormControl({value: true, disabled: true}),
@@ -62,8 +63,9 @@ export class CopyProjectComponent implements OnInit {
     // this.gDatas[item].toggle = !this.gDatas[item].toggle;
   }
 
-  addItem(newItem: string) {
-    this.projectid = newItem;
+  addItem(newItem: any) {
+    this.projectid = newItem.problemUniqueId;
+    this.projectname = newItem.problemTitle
   }
 
   SubmitCopyProject(data: any) {

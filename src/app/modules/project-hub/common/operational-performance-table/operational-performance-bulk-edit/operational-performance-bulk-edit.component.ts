@@ -62,7 +62,8 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           includeInCloseOut: new FormControl(i.includeInCloseOut),
           ptrbid: new FormControl(i.ptrbid),
           benefitDescriptionJustification: new FormControl(i.benefitDescriptionJustification),
-          includeinProposal: new FormControl(i.includeinProposal)
+          includeinProposal: new FormControl(i.includeinProposal),
+          kpiname: new FormControl(i.kpiname)
         }))
       }
 
@@ -91,6 +92,9 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
 
   getLookUpName(lookUpId: string): string {
     return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
+  }
+  getKPIName(kpiid: string): string {
+    return this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid).kpiname : ''
   }
   getIndicator(status: string): string {
     if (status == "91F35D36-B94B-44C7-9234-4AE76DB19DBB") {
@@ -235,7 +239,8 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         includeInCloseOut: '',
         ptrbid: '',
         benefitDescriptionJustification: '',
-        includeinProposal: ''
+        includeinProposal: '',
+        kpiname: ''
       }]
       this.operationalPerformanceForm.push(new FormGroup({
         keySuccessUniqueId: new FormControl(''),
@@ -251,7 +256,8 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         includeInCloseOut: new FormControl(false),
         ptrbid: new FormControl(''),
         benefitDescriptionJustification: new FormControl(''),
-        includeinProposal: new FormControl(false)
+        includeinProposal: new FormControl(false),
+        kpiname: new FormControl('')
       }))
       this.projectViewDetails.overallPerformace = [...this.projectViewDetails.overallPerformace, ...j]
       this.disabler()
