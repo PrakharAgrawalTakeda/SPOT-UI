@@ -1,6 +1,7 @@
 export class RoleController{
      public projectHub: ProjectHub = new ProjectHub
      public generalInfo: GeneralInfo = new GeneralInfo
+     public closeOut: CloseOut = new CloseOut
      public projectTeam: boolean = true
      public projectBenefits: boolean = true
      public roleId: string = ''
@@ -25,4 +26,7 @@ export class ProjectBoard{
 export class GeneralInfo{
    public basicFields: boolean = true
    public porfolioOwner: boolean = true
+}
+export class CloseOut{
+    public lessonsLearnt: boolean = true
 }

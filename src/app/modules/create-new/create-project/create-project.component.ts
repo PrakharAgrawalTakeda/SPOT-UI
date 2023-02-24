@@ -368,7 +368,8 @@ export class CreateProjectComponent implements OnInit {
         "hubSettings": hubSettings,
         "projectIDTemplate": history.state.copytemplateId,
         "copyProjectParameter": history.state.lookupString,
-        "LocalCurrencyID": LocalCurrencyID
+        "LocalCurrencyID": LocalCurrencyID,
+        "copyProjectParameters": history.state.copyParameterObject
       }
     }
     else{
@@ -377,7 +378,8 @@ export class CreateProjectComponent implements OnInit {
         "hubSettings": hubSettings,
         "projectIDTemplate": projectIDTemplate,
         "copyProjectParameter": copyProjectParameter,
-        "LocalCurrencyID": LocalCurrencyID
+        "LocalCurrencyID": LocalCurrencyID,
+        "copyProjectParameters": null
       }
     }
     

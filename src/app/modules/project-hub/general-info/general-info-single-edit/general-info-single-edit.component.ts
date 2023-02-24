@@ -20,7 +20,7 @@ import { RoleService } from 'app/core/auth/role.service';
 export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
-  @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' = 'ProjectHub'
+  @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
   @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   @Input() createform: any
   @Input() portfolio
@@ -62,6 +62,11 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     projectReviewedYN: new FormControl({}),
     sponsor: new FormControl({}),
     projectManager: new FormControl({}),
+    StrategicRationale: new FormControl(''),
+    BCAuthor: new FormControl({}),
+    RiskImpact: new FormControl(''),
+    AdditionalAuthor: new FormControl([]),
+    businessCaseApprovedDate: new FormControl('')
   })
   @Output() formValue = new EventEmitter<FormGroup>();
 
@@ -155,7 +160,14 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
 
   ngOnInit(): void {
     if (this.callLocation == 'ProjectHub') {
-    this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
+      var api;
+      if (this.subCallLocation == 'BusinessCase') {
+        api = this.apiService.getGeneralInfoDataWizzard(this.projectHubService.projectid, 'BusinessCase')
+      }
+      else {
+        api = this.apiService.getGeneralInfoData(this.projectHubService.projectid)
+      }
+      api.then((res: any) => {
       this.generalInfo = res
       this.filterCriteria = this.projectHubService.all
       this.generalInfoForm.patchValue({
@@ -179,10 +191,15 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
         whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
         proposalStatement: res.projectData.proposalStatement,
         projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
-        sponsor: res.sponsor ? {
+        StrategicRationale: res.projectData.strategicRationale,
+        BCAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
+        RiskImpact: res.businessCaseImpactOfDoingNothing,
+        businessCaseApprovedDate: res.businessCaseApprovedDate,
+        AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors : [],
+        sponsor: res.sponsor.teamMemberAdId == null || res.sponsor.teamMemberAdId == undefined ? {} : {
           userAdid: res.sponsor.teamMemberAdId,
           userDisplayName: res.sponsor.teamMemberName
-        } : {},
+        },
         projectManager: {
           userAdid: res.projectData.projectManagerId,
           userDisplayName: res.portfolioCenterData.pm
@@ -190,7 +207,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
       });
       this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
       this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable():this.generalInfoForm.controls.problemType.disable()
+      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
       this.viewContent = true
     })
     }
@@ -338,7 +355,6 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   }
 
   submitLogic() {
-
     this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
@@ -362,21 +378,27 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     mainObj.projectReviewedYN = Object.keys(formValue.projectReviewedYN).length > 0 ? formValue.projectReviewedYN.lookUpId : ''
     mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
     mainObj.sponsorId =  Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
-    mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : ''
-    if(this.subCallLocation =='ProjectHub'){
-        this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-            this.projectHubService.isNavChanged.next(true)
-            this.projectHubService.submitbutton.next(true)
-            this.projectHubService.successSave.next(true)
-            this.projectHubService.toggleDrawerOpen('', '', [], '')
-        })
-    }else{
-        this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, this.subCallLocation).then(res => {
-            this.projectHubService.isNavChanged.next(true)
-            this.projectHubService.submitbutton.next(true)
-            this.projectHubService.successSave.next(true)
-            this.projectHubService.toggleDrawerOpen('', '', [], '')
-        })
+    mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
+    mainObj.strategicRationale = formValue.StrategicRationale,
+    mainObj.businessCaseImpactOfDoingNothing = formValue.RiskImpact
+    mainObj.businessCaseAuthorADId = Object.keys(formValue.BCAuthor).length > 0 ? formValue.BCAuthor.userAdid : '',
+    mainObj.businessCaseAdditionalAuthorsContributorsADIds = formValue.AdditionalAuthor.length > 0 ? formValue.AdditionalAuthor.map(x => x.userAdid).join() : ''
+    mainObj.businessCaseApprovedDate = formValue.businessCaseApprovedDate ? moment(formValue.businessCaseApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+    
+    if (this.subCallLocation == 'ProjectHub') {
+      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      })
+    } else {
+      this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, this.subCallLocation).then(res => {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      })
     }
   }
 
