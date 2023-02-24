@@ -85,10 +85,12 @@ export class CreateProjectComponent implements OnInit {
 
   
   ngOnInit(): void {
+    console.log("Inside init")
     this.auth.lookupMaster().then(res => {
       this.apiService.getLocalCurrency().then(currency => {
         this.localCurrency = currency
       this.lookupdata = res;
+        console.log("lookUpMaster", this.lookupdata)
       this.qualityType = this.lookupdata.filter(x => x.lookUpParentId == 'A4C55F7E-C213-401E-A777-3BA741FF5802');
       this.qualityType.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
@@ -162,15 +164,44 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 3) {
-      this.campaingPhaseName = event.campaignPhaseId != "" && event.campaignPhaseId != undefined ? this.campaignPhase.filter(x => x.lookUpId == event.campaignPhaseId)[0].lookUpName : ""
-      this.campaingTypeName = event.campaignTypeId != "" && event.campaignTypeId != undefined ? this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName : ""
-      this.productionStepName = event.productionStepId != "" && event.productionStepId != undefined ? this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName : ""
-      this.createProjectForm.patchValue({
-        isTechTransfer: event.isTechTransfer,
-        campaignPhase: event.campaignPhaseId,
-        campaignType: event.campaignTypeId,
-        productionSteps: event.productionStepId
-      })
+      console.log("In tech transfer", this.lookupdata)
+      if (this.campaignPhase.length == 0){
+        this.auth.lookupMaster().then(res => {
+          this.lookupdata = res;
+          this.campaignPhase = this.lookupdata.filter(x => x.lookUpParentId == '183dc1f1-06ba-4022-bd6f-ae07f70751e2');
+          this.campaignPhase.sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+          })
+          this.campaignType = this.lookupdata.filter(x => x.lookUpParentId == '01a49f16-0744-4100-ae8a-ec2e469dbf74');
+          this.campaignType.sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+          })
+          this.productionSteps = this.lookupdata.filter(x => x.lookUpParentId == 'b137412d-8008-4446-8fe6-c56a06b83174');
+          this.productionSteps.sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+          })
+          this.campaingPhaseName = event.campaignPhaseId != "" && event.campaignPhaseId != undefined ? this.campaignPhase.filter(x => x.lookUpId == event.campaignPhaseId)[0].lookUpName : ""
+          this.campaingTypeName = event.campaignTypeId != "" && event.campaignTypeId != undefined ? this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName : ""
+          this.productionStepName = event.productionStepId != "" && event.productionStepId != undefined ? this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName : ""
+          this.createProjectForm.patchValue({
+            isTechTransfer: event.isTechTransfer,
+            campaignPhase: event.campaignPhaseId,
+            campaignType: event.campaignTypeId,
+            productionSteps: event.productionStepId
+          })
+        })
+      }
+      else{
+        this.campaingPhaseName = event.campaignPhaseId != "" && event.campaignPhaseId != undefined ? this.campaignPhase.filter(x => x.lookUpId == event.campaignPhaseId)[0].lookUpName : ""
+        this.campaingTypeName = event.campaignTypeId != "" && event.campaignTypeId != undefined ? this.campaignType.filter(x => x.lookUpId == event.campaignTypeId)[0].lookUpName : ""
+        this.productionStepName = event.productionStepId != "" && event.productionStepId != undefined ? this.productionSteps.filter(x => x.lookUpId == event.productionStepId)[0].lookUpName : ""
+        this.createProjectForm.patchValue({
+          isTechTransfer: event.isTechTransfer,
+          campaignPhase: event.campaignPhaseId,
+          campaignType: event.campaignTypeId,
+          productionSteps: event.productionStepId
+        })
+      }
     }
     else if (index == 5) {
       this.createProjectForm.patchValue({
@@ -300,9 +331,12 @@ export class CreateProjectComponent implements OnInit {
     }
     mainObjCreate[0].IsTechTransfer = formValue.isTechTransfer == "" ? false : formValue.isTechTransfer
       if (mainObjCreate[0].IsTechTransfer) {
-        mainObjCreate[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
-        mainObjCreate[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
-        mainObjCreate[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
+        mainObjCreate[0].CampaignPhaseID = this.campaingPhaseName != "" && this.campaingPhaseName != undefined ? this.campaignPhase.filter(x => x.lookUpName == this.campaingPhaseName)[0].lookUpId : ""
+        mainObjCreate[0].CampaignTypeID = this.campaingTypeName != "" && this.campaingTypeName != undefined ? this.campaignType.filter(x => x.lookUpName == this.campaingTypeName)[0].lookUpId : ""
+        mainObjCreate[0].ProductionStepID = this.productionStepName != "" && this.productionStepName != undefined ? this.productionSteps.filter(x => x.lookUpName == this.productionStepName)[0].lookUpId : ""
+        // mainObjCreate[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
+        // mainObjCreate[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
+        // mainObjCreate[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
     }
     mainObjCreate[0].IsAgile = formValue.isAgile == "" ? false : formValue.isAgile
       if (mainObjCreate[0].IsAgile) {

@@ -150,7 +150,11 @@
             </ng-template>
         </ngx-datatable-column>
 
-
+        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.31" *ngIf="mode== 'Project-Close-Out'">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <p class = "variancecloseout">{{value}}</p>
+          </ng-template>
+      </ngx-datatable-column>
 
 
 
@@ -174,11 +178,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Variance" prop="variance" [flexGrow]="0.31" *ngIf="mode== 'Project-Close-Out'">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p class = "variancecloseout">{{value}}</p>
-            </ng-template>
-        </ngx-datatable-column>
+       
 
         <!-- <ngx-datatable-column name="Comment" prop="comments" [flexGrow]="0.9" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>

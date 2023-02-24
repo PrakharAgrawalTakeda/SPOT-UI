@@ -4,11 +4,11 @@
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
-                    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    <button style="margin-right: 12px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('LessonLearnedBulkEdit', '', lessonLearned, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
-                    <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    <button class="min-w-26ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('LessonLearnedSingleEdit', 'new', lessonLearned, id)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
@@ -19,7 +19,27 @@
         <div class="overflow-x-auto mx-6">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class=" font-medium text-sm text-default whitespace-nowrap" [rows]="lessonLearned" #lessonLearnedTable>
-                <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1" [sortable]="false">
+                <ngx-datatable-column name="Include In Single Slide Summary (Max 4)" prop="includeInCloseOutReport" [sortable]="false"
+                    [resizeable]="false" [flexGrow]="1.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div class="flex items-center justify-between pl-2 overflow-hidden">
+                            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                            </mat-icon>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Create Detailed Review Slides (No Max)" prop="createDetailedReviewSlide" [sortable]="false"
+                    [resizeable]="false" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div class="flex items-center justify-between pl-2 overflow-hidden">
+                            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                            </mat-icon>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>
@@ -60,7 +80,7 @@
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" [sortable]="false">
+                <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>
@@ -75,7 +95,7 @@
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Close Date" prop="lessonCloseDate" [flexGrow]="1.5" [sortable]="false">
+                <ngx-datatable-column name="Close Date" prop="lessonCloseDate" [flexGrow]="1.5">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>

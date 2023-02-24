@@ -80,35 +80,6 @@ debugger
         strategicYearID:null,
         topsData:null,
       }
-      if (history.state.quality != undefined){
-      if (history.state.quality.length != 0) {
-        this.auth.lookupMaster().then(res => {
-          this.lookupdata = res;
-          this.qualityType = this.lookupdata.filter(x => x.lookUpParentId == 'A4C55F7E-C213-401E-A777-3BA741FF5802');
-          this.qualityType.sort((a, b) => {
-            return a.lookUpOrder - b.lookUpOrder;
-          })
-          if (history.state.quality[0].qualityReferenceTypeId != "" && history.state.quality[0].qualityReference1 != ""){
-          this.qualityForm.patchValue({
-            isQualityRef: true
-          })
-          var j=0;
-            for (var i of history.state.quality) {
-              
-          this.qualityRefForm.push(new FormGroup({
-            qualityUniqueId: new FormControl(i.qualityUniqueId),
-            qualityReferenceTypeId: new FormControl(this.qualityType.find(x => x.lookUpId == i.qualityReferenceTypeId)),
-            qualityReference1: new FormControl(i.qualityReference1),
-            problemUniqueId: new FormControl(i.problemUniqueId)
-          }))
-            this.generalInfoData.qualityReferences = this.qualityRefForm.value;
-              this.generalInfoData.qualityReferences[j].qualityReferenceTypeId = i.qualityReferenceTypeId
-              j++
-        }
-        }
-        })
-      }
-      }
       this.formValueQuality.emit(this.qualityRefForm)
       this.QualityValue.emit(this.qualityForm)
       this.viewContent = true
