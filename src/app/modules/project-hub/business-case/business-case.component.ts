@@ -58,7 +58,20 @@ export class BusinessCaseComponent implements OnInit {
     else if (this.router.url.includes('general-info')) {
       this.navItem = {
         title: 'General Info',
-        children: []
+        children: [
+          {
+            title:'Recommended Option',
+            link:'business-case/recommended-option/option-info'
+          },
+          {
+            title:'Option 2',
+            link:'business-case/option-2/option-info'
+          },
+          {
+            title:'Option 3',
+            link:'business-case/option-3/option-info'
+          }
+        ]
       }
     }
     console.log(this.navItem)

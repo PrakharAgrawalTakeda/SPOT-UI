@@ -13,6 +13,8 @@
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseScheduleAddNew'" [viewElements]="['milestone','plannedFinish','functionOwner','includeInBusinessCase']" ></app-schedule-view-edit>
         <app-schedule-view-bulk-edit
             *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
+            <app-schedule-view-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'scheduleBaselineEdit'" [mode]="'Baseline-Log'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCloseOut'" [mode]="'Project-Close-Out'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCharter'" [mode]="'Project-Charter'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditBusinessCase'" [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
@@ -29,16 +31,23 @@
             [mode]="'Project-Proposal'"></app-project-team-bulk-edit>
         <app-project-team-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectTeamBulkEditProjectCharter'"
             [mode]="'Project-Charter'"></app-project-team-bulk-edit>
+            <app-project-charter-scope-single-edit
+            *ngIf="projecthubservice.itemtype == 'Project-Charter-Scope'"></app-project-charter-scope-single-edit>
+            
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
         <app-operational-performance-edit
                 *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCloseOut'" [mode]="'Project-Close-Out'"></app-operational-performance-edit>
+                <app-operational-performance-edit
+                *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCharter'" [mode]="'Project-Charter'"></app-operational-performance-edit>
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
         <app-operational-performance-bulk-edit
                 *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'" [mode]="'Project-Close-Out'"></app-operational-performance-bulk-edit>
-        <app-primary-kpi-single-edit
+                <app-operational-performance-bulk-edit
+                *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCharter'" [mode]="'Project-Charter'"></app-operational-performance-bulk-edit>
+                <app-primary-kpi-single-edit
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
@@ -84,6 +93,9 @@
         <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditRC'" [optionType]="'recommended-option'"></app-feasibility-edit>
         <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO2'" [optionType]="'option-2'"></app-feasibility-edit>
         <app-feasibility-edit *ngIf="projecthubservice.itemtype == 'FeasibilityEditO3'" [optionType]="'option-3'"></app-feasibility-edit>
+        <app-lesson-learned-bulk-edit *ngIf="projecthubservice.itemtype == 'LessonLearnedBulkEdit'"></app-lesson-learned-bulk-edit>
+        <app-lesson-learned-single-edit *ngIf="projecthubservice.itemtype == 'LessonLearnedSingleEdit'"></app-lesson-learned-single-edit>
+        <app-key-takeaway-single-edit *ngIf="projecthubservice.itemtype == 'keyTakeawaysSingleEdit'"></app-key-takeaway-single-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

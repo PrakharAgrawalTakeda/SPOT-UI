@@ -8,6 +8,7 @@ import { } from '@angular/compiler'
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Title } from '@angular/platform-browser';
 import { MsalService } from '@azure/msal-angular';
+import { CreateNewApiService } from '../create-new-api.service';
 
 
 @Component({
@@ -39,22 +40,11 @@ export class CopyProjectComponent implements OnInit {
   })
 
   constructor(public auth: AuthService, private router: Router, private apiService: PortfolioApiService,
-    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService) { }
+    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService) { }
 
   ngOnInit(): void {
     this.activeaccount = this.authService.instance.getActiveAccount();
     this.titleService.setTitle("Copy Project")
-    // this.CopyProjectForm.patchValue({
-    //   projectTitle: true,
-    //   projectType: true,
-    //   problemDescription: true,
-    //   proposedStatement: true,
-    //   keySuccess: true,
-    //   scope: true,
-    //   milestone: true,
-    //   projectTeam: true,
-    //   categoricalDriver: true
-    // })
     this.auth.lookupMaster().then(res => {
       this.lookupdata = res;
       this.lookupTemplate = this.lookupdata.filter(x => x.lookUpParentId == 'a378aa1b-dadf-4592-8dc6-fee59b75f51d');
@@ -125,8 +115,8 @@ export class CopyProjectComponent implements OnInit {
       CopyUserID: this.activeaccount.localAccountId,
       CopyProjectParameter: copyProjectParameter
     }
-    this.apiService.getTemplateInfo(dataToSend).then(res => {
-      this.apiService.getQuality(this.projectid).then(quality => {
+    this.createApiservice.getTemplateInfo(dataToSend).then(res => {
+      this.createApiservice.getQuality(this.projectid).then(quality => {
         console.log(quality);
         console.log(res);
         if (res != "") {

@@ -23,7 +23,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
@@ -135,73 +135,34 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           this.filterCriteria = filterres
           this.kpiData = kpi
           this.projectHubService.kpiMasters = kpi
-          console.log('KPI Masters', kpi)
-          this.apiService.getGeneralInfoData(this.id).then((res: any) => {
-            console.log("General Info:", res)
-            this.generalInfoData = res
-            if(this.callLocation=='CloseOut'){
-                this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
-            }
-            if(this.callLocation=='ProjectCharter'){
-                this.wizzardApprovedDate = res.projectData.approvedDate
-            }
-            if(this.callLocation=='ProjectProposal'){
-                this.wizzardApprovedDate = res.projectData.projectProposalApprovedDate
-            }
-            var oeprojectypelist = res.projectData.oeprojectType && res.projectData.oeprojectType != '' ? res.projectData.oeprojectType.split(',') : []
-            this.generalInfoForm.patchValue({
-              problemTitle: res.projectData.problemTitle,
-              problemType: res.projectData.problemType,
-              topsGroup: res.topsData ? res.topsData.topsgroup : '',
-              recordCreationDate: res.projectData.createdDate,
-              parentProgram: res.parentProject ? res.parentProject.problemTitle : '',
-              submittedBy: res.projectData.problemOwnerName,
-              projectManager: res.portfolioCenterData.pm,
-              sponsor: res.portfolioCenterData.sponsor,
-              projectDescription: res.projectData.projectDescription,
-              primaryProduct: res.primaryProduct ? res.primaryProduct.fullProductName : '',
-              otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-              portfolioOwner: res.portfolioOwner ? res.portfolioOwner.portfolioOwner : '',
-              excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-              enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio.portfolioOwner : '',
-              isOeproject: res.projectData.isOeproject,
-              oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => res.projectData.oeprojectType.includes(x.lookUpId)) : [],
-              isCapsProject: res.projectData.isCapsProject,
-              isTechTransfer: res.projectData.isTechTransfer,
-              productionStepId: res.projectData.productionStepId,
-              campaignPhaseId: res.projectData.campaignPhaseId,
-              campaignTypeId: res.projectData.campaignTypeId,
-              isQualityRef: res.qualityReferences.length != 0,
-              isArchived: res.projectData.isArchived,
-              owningOrganization: res.projectData.defaultOwningOrganizationId ? res.projectData.defaultOwningOrganizationId : [],
-              projectId: res.projectData.problemId,
-                opU:  this.filterCriteria.opuMasters.find(
-                    x => x.lookUpId == res.portfolioOwner?.opU?.toLowerCase())?.lookUpName,
-              isGoodPractise: res.projectData.isGoodPractise,
-              approvedDate: this.wizzardApprovedDate,
-              //
-              functionGroupID: lookup.find(x => x.lookUpId == res.projectData.functionGroupID?.toLowerCase())?.lookUpName,
-              whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
-              proposalStatement: res.projectData.proposalStatement,
-              projectReviewedYN: lookup.find(x => x.lookUpId == res.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
-              projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-              localCurrencyAbbreviation: res.localCurrencyAbbreviation,
-              //Stategic Drivers
-              primaryKPI: res.projectData.primaryKpi ? kpi.find(x => x.kpiid == res.projectData.primaryKpi).kpiname : '',
-              isAgile: res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream,
-              agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream.lookUpName : '',
-              agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
-              agileWave: res.agileWave ? res.agileWave.lookUpName : '',
-              isPobos: res.projectData.isPobos,
-              pobosCategory: res.pobosCategory ? res.pobosCategory : [],
-              isGmsgqltannualMustWin: res.projectData.isGmsgqltannualMustWin,
-              strategicYear: res.strategicYearID ? res.strategicYearID.lookUpName : '',
-              annualMustWinID: res.annualMustWinID ? res.annualMustWinID.lookUpName : '',
-              isSiteAssessment: res.projectData.isSiteAssessment,
-              siteAssessmentCategory: res.siteAssessmentCategory ? res.siteAssessmentCategory : [],
-            })
-            this.viewContent = true
-          })
+          if(this.callLocation=='CloseOut'){
+              this.apiService.getGeneralInfoDataWizzard(this.id,'ProjectCloseOut').then((res: any) => {
+                  this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
+                  this.generalInfoPatchValue(res)
+                  this.viewContent = true
+              })
+          }
+          if(this.callLocation=='ProjectCharter'){
+              this.apiService.getGeneralInfoDataWizzard(this.id,'ProjectCharter').then((res: any) => {
+                  this.wizzardApprovedDate = res.projectData.approvedDate
+                  this.generalInfoPatchValue(res)
+                  this.viewContent = true
+              })
+          }
+          if(this.callLocation=='ProjectProposal'){
+              this.apiService.getGeneralInfoDataWizzard(this.id,'ProjectProposal').then((res: any) => {
+                  this.wizzardApprovedDate = res.projectData.projectProposalApprovedDate
+                  this.generalInfoPatchValue(res)
+                  this.viewContent = true
+              })
+          }
+          if(this.callLocation == 'ProjectHub') {
+              this.apiService.getGeneralInfoData(this.id).then((res: any) => {
+                  this.generalInfoData = res
+                  this.generalInfoPatchValue(res)
+                  this.viewContent = true
+              })
+          }
         })
       })
     })
@@ -243,5 +204,59 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   }
   viewElementChecker(element: string): boolean {
     return this.viewElements.some(x => x == element)
+  }
+  generalInfoPatchValue(response){
+      var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
+      this.generalInfoForm.patchValue({
+          problemTitle: response.projectData.problemTitle,
+          problemType: response.projectData.problemType,
+          topsGroup: response.topsData ? response.topsData.topsgroup : '',
+          recordCreationDate: response.projectData.createdDate,
+          parentProgram: response.parentProject ? response.parentProject.problemTitle : '',
+          submittedBy: response.projectData.problemOwnerName,
+          projectManager: response.portfolioCenterData.pm,
+          sponsor: response.portfolioCenterData.sponsor,
+          projectDescription: response.projectData.projectDescription,
+          primaryProduct: response.primaryProduct ? response.primaryProduct.fullProductName : '',
+          otherImpactedProducts: response.otherImpactedProducts ? response.otherImpactedProducts : [],
+          portfolioOwner: response.portfolioOwner ? response.portfolioOwner.portfolioOwner : '',
+          excecutionScope: response.excecutionScope ? response.excecutionScope : [],
+          enviornmentalPortfolio: response.enviornmentalPortfolio ? response.enviornmentalPortfolio.portfolioOwner : '',
+          isOeproject: response.projectData.isOeproject,
+          oeprojectType: oeprojectypelist.length > 0 ? this.projectHubService.lookUpMaster.filter(x => response.projectData.oeprojectType.includes(x.lookUpId)) : [],
+          isCapsProject: response.projectData.isCapsProject,
+          isTechTransfer: response.projectData.isTechTransfer,
+          productionStepId: response.projectData.productionStepId,
+          campaignPhaseId: response.projectData.campaignPhaseId,
+          campaignTypeId: response.projectData.campaignTypeId,
+          isQualityRef: response.qualityReferences.length != 0,
+          isArchived: response.projectData.isArchived,
+          owningOrganization: response.projectData.defaultOwningOrganizationId ? response.projectData.defaultOwningOrganizationId : [],
+          projectId: response.projectData.problemId,
+          opU:  this.filterCriteria.opuMasters.find(
+              x => x.lookUpId == response.portfolioOwner?.opU?.toLowerCase())?.lookUpName,
+          isGoodPractise: response.projectData.isGoodPractise,
+          approvedDate: this.wizzardApprovedDate,
+          //
+          functionGroupID: this.lookUpData.find(x => x.lookUpId == response.projectData.functionGroupID?.toLowerCase())?.lookUpName,
+          whynotgoforNextBestAlternative: response.projectData.whynotgoforNextBestAlternative,
+          proposalStatement: response.projectData.proposalStatement,
+          projectReviewedYN: this.lookUpData.find(x => x.lookUpId == response.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
+          projectProposalApprovedDate: response.projectData.projectProposalApprovedDate,
+          localCurrencyAbbreviation: response.localCurrencyAbbreviation,
+          //Stategic Drivers
+          primaryKPI: response.projectData.primaryKpi ? this.kpiData.find(x => x.kpiid == response.projectData.primaryKpi).kpiname : '',
+          isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream,
+          agilePrimaryWorkstream: response.agilePrimaryWorkstream ? response.agilePrimaryWorkstream.lookUpName : '',
+          agileSecondaryWorkstream: response.agileSecondaryWorkstream ? response.agileSecondaryWorkstream : [],
+          agileWave: response.agileWave ? response.agileWave.lookUpName : '',
+          isPobos: response.projectData.isPobos,
+          pobosCategory: response.pobosCategory ? response.pobosCategory : [],
+          isGmsgqltannualMustWin: response.projectData.isGmsgqltannualMustWin,
+          strategicYear: response.strategicYearID ? response.strategicYearID.lookUpName : '',
+          annualMustWinID: response.annualMustWinID ? response.annualMustWinID.lookUpName : '',
+          isSiteAssessment: response.projectData.isSiteAssessment,
+          siteAssessmentCategory: response.siteAssessmentCategory ? response.siteAssessmentCategory : [],
+      })
   }
 }

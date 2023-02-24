@@ -113,9 +113,6 @@
           <spot-input class="w-full read-only" *ngIf="viewElementChecker('problemType')" formControlName="problemType"
             name="problemType" [label]="'Project Type'">
           </spot-input>
-          <spot-input class="w-full read-only" *ngIf="viewElementChecker('topsGroup')" formControlName="topsGroup"
-            name="topsGroup" [label]="'TOPS Group'">
-          </spot-input>
         </div>
         <div class="w-full " *ngIf="viewElementChecker('projectDescription')">
           <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"

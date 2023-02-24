@@ -27,9 +27,9 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
 
-                       <schedule-table [tableIndex]="i" [scheduleData]="linkDatum.schedules"
+                       <schedule-table [tableIndex]="i" [scheduleData]="linkDatum.schedules" [viewElements]="['milestone','status','plannedFinish', 'baselineFinish','completionDate','variance','link']"
                             [tableData]="linkDatum.schedules" [linksProblemCapture]="linkDatum.scheduleLinkProjectDetails"
-                            [links]="linkDatum.schedulesLink" [mode]="'Link'" [projectId]="linkDatum.projectUId"
+                            [links]="linkDatum.schedulesLink" [callLocation]="'Link'" [projectId]="linkDatum.projectUId"
                             [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleSchedule($event)">
                         </schedule-table>
                     </mat-expansion-panel>

@@ -12,7 +12,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./operational-performance-bulk-edit.component.scss']
 })
 export class OperationalPerformanceBulkEditComponent implements OnInit {
-  @Input() mode: 'Normal' | 'Project-Close-Out' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
   projectViewDetails: any = {}
   opDb = []
   submitObj = []
@@ -43,6 +43,10 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
     this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
       this.projectViewDetails = res
       for (var i of this.projectViewDetails.overallPerformace) {
+        i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+      }
+      this.projectViewDetails.overallPerformace = this.sortbyKPIName(this.projectViewDetails.overallPerformace)
+      for (var i of this.projectViewDetails.overallPerformace) {
         this.opDb.push(i)
         this.operationalPerformanceForm.push(new FormGroup({
           keySuccessUniqueId: new FormControl(i.keySuccessUniqueId),
@@ -61,16 +65,32 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           includeinProposal: new FormControl(i.includeinProposal)
         }))
       }
+
       this.disabler()
       this.viewContent = true
     })
   }
 
+  sortbyKPIName(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.kpiname === null) {
+        return -1;
+      }
+
+      if (b.kpiname === null) {
+        return 1;
+      }
+
+      if (a.kpiname === b.kpiname) {
+        return 0;
+      }
+
+      return a.kpiname < b.kpiname ? -1 : 1;
+    }) : array
+  }
+
   getLookUpName(lookUpId: string): string {
     return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
-  }
-  getKPIName(kpiid: string): string {
-    return this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == kpiid).kpiname : ''
   }
   getIndicator(status: string): string {
     if (status == "91F35D36-B94B-44C7-9234-4AE76DB19DBB") {
@@ -102,6 +122,20 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           }
         }
       }
+
+      if (formValue.filter(x => x.includeInCharter == true).length < 3) {
+        for (var i of this.operationalPerformanceForm.controls) {
+          i['controls']['includeInCharter'].enable()
+        }
+      }
+      else {
+        for (var i of this.operationalPerformanceForm.controls) {
+          if (i['controls']['includeInCharter'].value != true) {
+            i['controls']['includeInCharter'].disable()
+          }
+        }
+      }
+
       if (formValue.filter(x => x.includeInCloseOut == true).length < 3) {
         for (var i of this.operationalPerformanceForm.controls) {
           i['controls']['includeInCloseOut'].enable()
@@ -116,6 +150,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
       }
     }
   }
+
 
   changeChecker() {
     var formValue = this.operationalPerformanceForm.getRawValue()
@@ -236,14 +271,14 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
     if (JSON.stringify(this.submitObj) == JSON.stringify(this.opDb)) {
       //this.projecthubservice.submitbutton.next(true)
       //this.projecthubservice.successSave.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '',[],'',true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
       this.apiService.bulkeditKeySuccess(this.submitObj, this.projecthubservice.projectid).then(resp => {
         this.projecthubservice.isFormChanged = false
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '',[],'',true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
       })
     }
   }
