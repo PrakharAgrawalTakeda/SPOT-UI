@@ -194,10 +194,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
         RiskImpact: res.businessCaseImpactOfDoingNothing,
         businessCaseApprovedDate: res.businessCaseApprovedDate,
         AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors : [],
-        sponsor: res.sponsor ? {
+        sponsor: res.sponsor.teamMemberAdId == null || res.sponsor.teamMemberAdId == undefined ? {} : {
           userAdid: res.sponsor.teamMemberAdId,
           userDisplayName: res.sponsor.teamMemberName
-        } : {},
+        },
         projectManager: {
           userAdid: res.projectData.projectManagerId,
           userDisplayName: res.portfolioCenterData.pm

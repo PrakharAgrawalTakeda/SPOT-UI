@@ -232,7 +232,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           parentProgram: response.parentProject ? response.parentProject.problemTitle : '',
           submittedBy: response.projectData.problemOwnerName,
           projectManager: response.portfolioCenterData.pm,
-          sponsor: response.portfolioCenterData.sponsor,
+          sponsor: response.sponsor.teamMemberAdId == null || response.sponsor.teamMemberAdId == undefined ? '' : response.sponsor.teamMemberName,
           projectDescription: response.projectData.projectDescription,
           primaryProduct: response.primaryProduct ? response.primaryProduct.fullProductName : '',
           otherImpactedProducts: response.otherImpactedProducts ? response.otherImpactedProducts : [],
@@ -277,7 +277,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           StrategicRationale: response.projectData.strategicRationale,
           BCAuthor: response.businessCaseAuthor == null ? '' : response.businessCaseAuthor.userDisplayName,
           RiskImpact: response.businessCaseImpactOfDoingNothing,
-          AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors,
+        AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors == null ? [] : response.businessCaseAdditionalAuthorsContributors,
           problemId: response.projectData.problemId,
           businessCaseApprovedDate: response.businessCaseApprovedDate
       })
