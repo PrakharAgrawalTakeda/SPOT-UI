@@ -133,7 +133,9 @@ import { LessonLearnedBulkEditComponent } from './common/lesson-learned-table/le
 import { LessonLearnedSingleEditComponent } from './common/lesson-learned-table/lesson-learned-single-edit/lesson-learned-single-edit.component';
 import { KeyTakeawaySingleEditComponent } from './close-out/close-out-lessons-learned/key-takeaway-single-edit/key-takeaway-single-edit.component';
 import { ProjectCharterScopeSingleEditComponent } from './project-charter/project-charter-scope/project-charter-scope-single-edit/project-charter-scope-single-edit.component';
-import { CostFundingComponent } from './common/cost-funding/cost-funding.component';
+import { CostComponent } from './common/cost/cost.component';
+import { FundingComponent } from './common/funding/funding.component';
+import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -487,7 +489,9 @@ export const projectRoutes: Route[] = [
     KeyTakeawaySingleEditComponent,
     StandardMilestoneSetsComponent,
     ProjectCharterScopeSingleEditComponent,
-    CostFundingComponent
+    CostComponent,
+    FundingComponent,
+    FundingEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),

@@ -109,7 +109,6 @@
         </ng-template>
     </ngx-datatable-column>
 
-
         <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
           [flexGrow]="0.9" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -123,7 +122,11 @@
               <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false">
+              <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
+                <!--  -->
+                <!-- [showHint]="true" 
+                [hint]="hi" [hintPosition]="'mat-hint'" -->
+                <!-- (this.schedulengxdata.milestoneType > 0 ? (this.schedulengxdata.milestoneType == 1 ? 'Execution Start - ...' : (this.schedulengxdata.milestoneType == 2 ? 'Execution End - ...' : 'Milestone')) : ' ') -->
                 <!-- [placeholder]="'Milestone Name'" -->
               </spot-textarea>
             </form>
@@ -731,7 +734,7 @@
           [flexGrow]="0.48">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty'; else null55" class="noplanned1">
+            <div *ngIf="value == 'empty2'; else null55" class="noplanned1">
               &nbsp;
             </div>
             <ng-template #null55>
@@ -766,7 +769,7 @@
           [flexGrow]="0.48">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty'; else null11" class="nobaselined1">
+            <div *ngIf="value == 'empty2'; else null11" class="nobaselined1">
               &nbsp;
             </div>
             <ng-template #null11>
@@ -797,7 +800,7 @@
           [flexGrow]="0.55">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty'; else null22" class="nocompleted1">
+            <div *ngIf="value == 'empty2'; else null22" class="nocompleted1">
               &nbsp;
             </div>
             <ng-template #null22>
@@ -827,7 +830,7 @@
           [flexGrow]="0.39">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty' || (value == '' && row.indicatorchange); else null33" class="noindicator1">
+            <div *ngIf="value == 'empty2' || (value == '' && row.indicatorchange); else null33" class="noindicator1">
               &nbsp;
             </div>
             <ng-template #null33>

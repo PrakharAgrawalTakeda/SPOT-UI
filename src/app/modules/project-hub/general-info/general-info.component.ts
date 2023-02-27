@@ -22,9 +22,9 @@ import { Subject, takeUntil } from 'rxjs';
 export class GeneralInfoComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
-  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' = 'GeneralInfoSingleEdit'
+  @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
+  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
+  generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' | 'GeneralInfoSingleEditBusinessCase' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
   isWizzard: boolean = false
@@ -83,7 +83,13 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     annualMustWinID: new FormControl(''),
     isSiteAssessment: new FormControl(false),
     siteAssessmentCategory: new FormControl([]),
-    isGoodPractise: new FormControl(false)
+    isGoodPractise: new FormControl(false),
+    StrategicRationale: new FormControl(''),
+    BCAuthor: new FormControl({}),
+    RiskImpact: new FormControl(''),
+    AdditionalAuthor: new FormControl([]),
+    problemId: new FormControl(''),
+    businessCaseApprovedDate: new FormControl('')
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
@@ -121,6 +127,9 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
         if(this.callLocation=='ProjectProposal'){
             this.generalInfoType = 'GeneralInfoSingleEditProjectProposal';
             this.strategicDriversType = 'StrategicDriversSingleEditProjectProposal'
+        }
+        if (this.callLocation == 'BusinessCase') {
+            this.generalInfoType = 'GeneralInfoSingleEditBusinessCase'
         }
     }else{
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -162,6 +171,13 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
                   this.generalInfoPatchValue(res)
                   this.viewContent = true
               })
+          }
+          if (this.callLocation == 'BusinessCase') {
+            this.apiService.getGeneralInfoDataWizzard(this.id, 'BusinessCase').then((res: any) => {
+              // this.wizzardApprovedDate = res.projectData.closeOutApprovedDate
+              this.generalInfoPatchValue(res)
+              this.viewContent = true
+            })
           }
         })
       })
@@ -207,6 +223,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   }
   generalInfoPatchValue(response){
       var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
+      
       this.generalInfoForm.patchValue({
           problemTitle: response.projectData.problemTitle,
           problemType: response.projectData.problemType,
@@ -215,7 +232,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           parentProgram: response.parentProject ? response.parentProject.problemTitle : '',
           submittedBy: response.projectData.problemOwnerName,
           projectManager: response.portfolioCenterData.pm,
-          sponsor: response.portfolioCenterData.sponsor,
+          sponsor: response.sponsor.teamMemberAdId == null || response.sponsor.teamMemberAdId == undefined ? '' : response.sponsor.teamMemberName,
           projectDescription: response.projectData.projectDescription,
           primaryProduct: response.primaryProduct ? response.primaryProduct.fullProductName : '',
           otherImpactedProducts: response.otherImpactedProducts ? response.otherImpactedProducts : [],
@@ -257,6 +274,12 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           annualMustWinID: response.annualMustWinID ? response.annualMustWinID.lookUpName : '',
           isSiteAssessment: response.projectData.isSiteAssessment,
           siteAssessmentCategory: response.siteAssessmentCategory ? response.siteAssessmentCategory : [],
+          StrategicRationale: response.projectData.strategicRationale,
+          BCAuthor: response.businessCaseAuthor == null ? '' : response.businessCaseAuthor.userDisplayName,
+          RiskImpact: response.businessCaseImpactOfDoingNothing,
+        AdditionalAuthor: response.businessCaseAdditionalAuthorsContributors == null ? [] : response.businessCaseAdditionalAuthorsContributors,
+          problemId: response.projectData.problemId,
+          businessCaseApprovedDate: response.businessCaseApprovedDate
       })
   }
 }

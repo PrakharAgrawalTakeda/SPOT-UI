@@ -12,10 +12,10 @@
         <div class="flex items-start justify-between incuded-in-dash">
         <mat-slide-toggle 
             [matTooltip]="this.LessonLearnedForm.controls['includeInCloseOutReport'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
-            formControlName="includeInCloseOutReport">Include in Single Slide Summary</mat-slide-toggle>
+            formControlName="includeInCloseOutReport">Include in Single Slide Summary (Max 4)</mat-slide-toggle>
         </div>
         <div class="flex items-start justify-between incuded-in-dash">
-        <mat-slide-toggle formControlName="createDetailedReviewSlide">Create Detailed Review Slide</mat-slide-toggle>
+        <mat-slide-toggle formControlName="createDetailedReviewSlide">Create Detailed Review Slide (No Max)</mat-slide-toggle>
         </div>
         <div class="w-25">
             <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
@@ -63,7 +63,7 @@
             <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                 <mat-label>Close Date</mat-label>
                 <input matInput [matDatepicker]="picker3" [placeholder]="'Choose a date'"
-                    formControlName="lessonCloseDate" name="closeDate">
+                    formControlName="lessonCloseDate" name="closeDate" [max]="today">
                 <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                 <mat-datepicker #picker3></mat-datepicker>
             </mat-form-field>
