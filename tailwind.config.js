@@ -10,18 +10,18 @@ const generatePalette = require(path.resolve(__dirname, ('src/@fuse/tailwind/uti
  * Tailwind-like color palettes automatically
  */
 const customPalettes = {
-    brand: generatePalette('#4c9bcf')
+    brand: generatePalette('#2196F3')
 };
 
 /**
  * Themes
  */
 const themes = {
-    // Default theme is required for theming system to work correctly
+    // Default theme is required for theming system to work correctly!
     'default': {
         primary  : {
-            ...colors.rose,
-            DEFAULT: colors.rose[600]
+            ...colors.indigo,
+            DEFAULT: colors.indigo[600]
         },
         accent   : {
             ...colors.slate,
@@ -35,8 +35,8 @@ const themes = {
             500: colors.red['50']
         }
     },
-    // Rest of the themes will use the 'default' as the base theme
-    // and extend them with their given configuration
+    // Rest of the themes will use the 'default' as the base
+    // theme and will extend it with their given configuration.
     'brand' : {
         primary: customPalettes.brand
     },
@@ -288,7 +288,6 @@ const config = {
 
         // Other third party and/or custom plugins
         require('@tailwindcss/typography')({modifiers: ['sm', 'lg']}),
-        require('@tailwindcss/aspect-ratio'),
         require('@tailwindcss/line-clamp')
     ]
 };

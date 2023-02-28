@@ -158,8 +158,8 @@ export class LinkProjectComponent implements OnInit {
     }
 
     budgetfind(projectid: string): string {
-        if (this.resultSets != []) {
-            if (this.budget != []) {
+        if (this.resultSets.length > 0) {
+            if (this.budget.length > 0) {
                 var temp = this.budget.find(x => x.projectId == projectid)
                 if (temp != null) {
                     return temp.capitalBudgetId

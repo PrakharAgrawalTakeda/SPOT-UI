@@ -5,7 +5,7 @@
 
     <div
         class="fuse-vertical-navigation-item"
-        [ngClass]="{'fuse-vertical-navigation-item-disabled': item.disabled, 'fuse-vertical-navigation-item-active-forced': item.active}"
+        [ngClass]="{'fuse-vertical-navigation-item-disabled': item.disabled}"
         [matTooltip]="item.tooltip || ''"
         (click)="toggleCollapsable()">
 

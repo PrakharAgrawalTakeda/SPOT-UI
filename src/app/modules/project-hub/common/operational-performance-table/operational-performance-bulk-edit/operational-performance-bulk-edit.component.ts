@@ -249,7 +249,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         currentState: new FormControl(''),
         targetPerformance: new FormControl(''),
         includeInCharter: new FormControl(false),
-        kpiid: new FormControl({}),
+        kpiid: new FormControl(null),
         actualPerformance: new FormControl(''),
         includeInProjectDashboard: new FormControl(false),
         status: new FormControl(''),

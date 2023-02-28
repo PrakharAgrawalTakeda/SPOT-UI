@@ -43,14 +43,6 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   });
 
   constructor(private fb: FormBuilder) {
-    this.form.controls.chipList.valueChanges.subscribe((res: any) => {
-      if (this.form.controls.chipList.value == "") {
-        //this.onChange({})
-        //this.selectedOption = {} 
-        // this.form.controls.chipList.updateValueAndValidity()
-      }
-
-    })
     this.filteredDropDownValues = this.form.controls.control.valueChanges.pipe(
       startWith(''),
       map(value => {
@@ -74,6 +66,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
     this.input.nativeElement.value = ''
   }
   ngOnInit() {
+    console.log(this.valuePointer)
   }
   get control() {
     return this.form.get('control');
@@ -105,6 +98,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   }
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
+    this.form.valueChanges.subscribe(fn)
   }
 
   registerOnChange(fn: any): void {
@@ -121,11 +115,11 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   setDisabledState(isDisabled: boolean) {
     if (isDisabled == true) {
       this.isDisabled = true
-      this.form.controls.chipList.disable()
+      this.form.disable()
     }
     else{
       this.isDisabled = false
-      this.form.controls.chipList.enable()
+      this.form.enable()
     }
   }
 }

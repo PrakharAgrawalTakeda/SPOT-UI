@@ -131,7 +131,6 @@ export class FuseLoadingService
         {
             this._urlMap.set(url, status);
             this._show$.next(true);
-            document.getElementsByTagName('body') ? document.getElementsByTagName('body')[0].classList.add('cursor-wait-custom-loading') : ''
         }
         else if ( status === false && this._urlMap.has(url) )
         {
@@ -142,7 +141,6 @@ export class FuseLoadingService
         if ( this._urlMap.size === 0 )
         {
             this._show$.next(false);
-            document.getElementsByTagName('body') ? document.getElementsByTagName('body')[0].classList.remove('cursor-wait-custom-loading') : ''
         }
     }
 }
