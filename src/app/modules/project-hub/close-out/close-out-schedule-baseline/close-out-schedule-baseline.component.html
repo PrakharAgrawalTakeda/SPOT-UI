@@ -7,8 +7,9 @@
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div>
-                    <button *ngIf="mode== 'Baseline-Log'" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" 
-                    (click)="projecthubservice.toggleDrawerOpen('scheduleBaselineEdit', 'new', baselineLogData, '', true)">
+                    <button *ngIf="mode== 'Baseline-Log' && projecthubservice.roleControllerControl.projectHub.projectBoard.scheduleEdit" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" 
+                    (click)="projecthubservice.toggleDrawerOpen('scheduleBaselineEdit', 'new', baselineLogData, '', true)"
+                    >
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit

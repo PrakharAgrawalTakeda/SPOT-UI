@@ -1,15 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
+import { MsalService } from '@azure/msal-angular';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import moment from 'moment';
 import { ProjectApiService } from '../../project-api.service';
-
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MMM-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @Component({
   selector: 'app-lesson-learned-single-edit',
   templateUrl: './lesson-learned-single-edit.component.html',
-  styleUrls: ['./lesson-learned-single-edit.component.scss']
+  styleUrls: ['./lesson-learned-single-edit.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class LessonLearnedSingleEditComponent implements OnInit {
   today = new Date();
@@ -19,6 +44,7 @@ export class LessonLearnedSingleEditComponent implements OnInit {
   lessonLearned:any
   lessonLearnedData:any
   lessonLearnedUpdated:any
+  activeaccount:any
   LessonLearnedForm= new FormGroup({
     includeInCloseOutReport: new FormControl(false),
     createDetailedReviewSlide: new FormControl(false),
@@ -35,7 +61,7 @@ export class LessonLearnedSingleEditComponent implements OnInit {
     actionOwner: new FormControl(''),
     lessonCloseDate: new FormControl('')
   })
-  constructor(private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { }
+  constructor(private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { }
 
   ngOnInit(): void {
     this.getllookup()
@@ -48,7 +74,14 @@ export class LessonLearnedSingleEditComponent implements OnInit {
     return this.lookupdata.filter(x => x.lookUpParentId == "DFC4E626-10A1-464E-8B1A-09A223B125A1")
   }
   GetRole(): string {
-    return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
+    return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77").sort((a,b)=>{
+      if(a.lookUpName === "None"){
+        return true
+      }
+      else{
+        return false
+      }
+    })
   }
 
   getllookup() {
@@ -90,7 +123,6 @@ export class LessonLearnedSingleEditComponent implements OnInit {
             submittingGroupRole: this.lookupdata.some(x => x.lookUpId == this.lessonLearned[0].submittingGroupRole) ? this.lookupdata.find(x => x.lookUpId == this.lessonLearned[0].submittingGroupRole) : {},
             suggestedAction: this.lessonLearned[0].suggestedAction
           })
-          this.LessonLearnedForm.controls['lessonLogDate'].disable()
           // if (res.functionGroupId != null) {
           //   this.riskIssueForm.controls.function.patchValue(this.lookupdata?.find(x => x.lookUpId == res.functionGroupId)?.lookUpName)
           // }
@@ -104,6 +136,11 @@ export class LessonLearnedSingleEditComponent implements OnInit {
           this.projecthubservice.isFormChanged = false
       }
       else {
+        this.activeaccount = this.authService.instance.getActiveAccount();
+        var user = {
+          userAdid: this.activeaccount.localAccountId,
+          userDisplayName: this.activeaccount.name
+        };
         this.LessonLearnedForm.patchValue({
           lessonLearnedId: "",
           projectUid: this.projecthubservice.projectid,
@@ -118,11 +155,10 @@ export class LessonLearnedSingleEditComponent implements OnInit {
           lessonDetail: "",
           lessonLogDate: this.today,
           lessonType: "",
-          submittedBy: "",
+          submittedBy: user,
           submittingGroupRole: "",
           suggestedAction: ""
         })
-        this.LessonLearnedForm.controls['lessonLogDate'].disable()
         if (this.projecthubservice.all.length == 0) {
           console.log(this.projecthubservice.all)
         }
@@ -146,25 +182,25 @@ export class LessonLearnedSingleEditComponent implements OnInit {
       this.lessonLearnedUpdated[j].submittedBy = this.lessonLearnedData[j].submittedBy.userAdid
     }
     this.projecthubservice.isFormChanged = false
-    if (this.LessonLearnedForm.valid) {
+    // if (this.LessonLearnedForm.valid) {
       if (this.projecthubservice.itemid == "new") {
         var mainObjnew = {
           lessonLearnedId: "",
           projectUid: this.projecthubservice.projectid,
           leassonTitle: this.LessonLearnedForm.value.leassonTitle ,
-          lessonLogDate: moment(this.LessonLearnedForm.value.lessonLogDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          lessonLogDate: this.LessonLearnedForm.value.lessonLogDate == null ? null : moment(this.LessonLearnedForm.value.lessonLogDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           lessonDetail: this.LessonLearnedForm.value.lessonDetail,
-          lessonType: this.LessonLearnedForm.value.lessonType.lookUpId == undefined ? this.LessonLearnedForm.value.lessonType : this.LessonLearnedForm.value.lessonType.lookUpId,
-          lessonCloseDate: moment(this.LessonLearnedForm.value.lessonCloseDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          lessonType: this.LessonLearnedForm.value.lessonType.lookUpId == undefined ? "" : this.LessonLearnedForm.value.lessonType.lookUpId,
+          lessonCloseDate: this.LessonLearnedForm.value.lessonCloseDate == null ? null : moment(this.LessonLearnedForm.value.lessonCloseDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           includeInCloseOutReport: this.LessonLearnedForm.value.includeInCloseOutReport,
-          criticality: this.LessonLearnedForm.value.criticality.lookUpId == undefined ? this.LessonLearnedForm.value.criticality : this.LessonLearnedForm.value.criticality.lookUpId,
-          submittedBy: this.LessonLearnedForm.value.submittedBy.userAdid == undefined ? this.LessonLearnedForm.value.submittedBy : this.LessonLearnedForm.value.submittedBy.userAdid,
+          criticality: this.LessonLearnedForm.value.criticality.lookUpId == undefined ? "" : this.LessonLearnedForm.value.criticality.lookUpId,
+          submittedBy: this.LessonLearnedForm.value.submittedBy.userAdid == undefined || this.LessonLearnedForm.value.submittedBy.userAdid == null ? this.LessonLearnedForm.value.submittedBy : this.LessonLearnedForm.value.submittedBy.userAdid,
           createDetailedReviewSlide: this.LessonLearnedForm.value.createDetailedReviewSlide,
-          submittingGroupRole: this.LessonLearnedForm.value.submittingGroupRole.lookUpId == undefined ? this.LessonLearnedForm.value.submittingGroupRole : this.LessonLearnedForm.value.submittingGroupRole.lookUpId,
+          submittingGroupRole: this.LessonLearnedForm.value.submittingGroupRole.lookUpId == undefined ? "" : this.LessonLearnedForm.value.submittingGroupRole.lookUpId,
           suggestedAction: this.LessonLearnedForm.value.suggestedAction,
-          dueDate: moment(this.LessonLearnedForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          functionActionOwner: this.LessonLearnedForm.value.functionActionOwner.lookUpId == undefined ? this.LessonLearnedForm.value.functionActionOwner : this.LessonLearnedForm.value.functionActionOwner.lookUpId,
-          actionOwner: this.LessonLearnedForm.value.actionOwner.userAdid == undefined ? this.LessonLearnedForm.value.actionOwner : this.LessonLearnedForm.value.actionOwner.userAdid
+          dueDate: this.LessonLearnedForm.value.dueDate == null ? null : moment(this.LessonLearnedForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          functionActionOwner: this.LessonLearnedForm.value.functionActionOwner.lookUpId == undefined ? "" : this.LessonLearnedForm.value.functionActionOwner.lookUpId,
+          actionOwner: this.LessonLearnedForm.value.actionOwner.userAdid == undefined || this.LessonLearnedForm.value.actionOwner.userAdid == null ? "" : this.LessonLearnedForm.value.actionOwner.userAdid
         }
         
         if (this.LessonLearnedForm.controls['includeInCloseOutReport'].disabled) {
@@ -197,19 +233,19 @@ export class LessonLearnedSingleEditComponent implements OnInit {
         this.lessonLearnedUpdated[index].lessonLearnedId= this.lessonLearned[0].lessonLearnedId,
           this.lessonLearnedUpdated[index].projectUid = this.lessonLearned[0].projectUid,
           this.lessonLearnedUpdated[index].leassonTitle= this.LessonLearnedForm.value.leassonTitle,
-          this.lessonLearnedUpdated[index].lessonLogDate= moment(this.LessonLearnedForm.value.lessonLogDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          this.lessonLearnedUpdated[index].lessonLogDate = this.LessonLearnedForm.value.lessonLogDate == null ? null : moment(this.LessonLearnedForm.value.lessonLogDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           this.lessonLearnedUpdated[index].lessonDetail= this.LessonLearnedForm.value.lessonDetail,
-          this.lessonLearnedUpdated[index].lessonType = this.LessonLearnedForm.value.lessonType.lookUpId == undefined ? this.LessonLearnedForm.value.lessonType : this.LessonLearnedForm.value.lessonType.lookUpId,
-          this.lessonLearnedUpdated[index].lessonCloseDate= moment(this.LessonLearnedForm.value.lessonCloseDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          this.lessonLearnedUpdated[index].lessonType = Object.keys(this.LessonLearnedForm.value.lessonType).length == 0 ? "" : this.LessonLearnedForm.value.lessonType.lookUpId,
+          this.lessonLearnedUpdated[index].lessonCloseDate = this.LessonLearnedForm.value.lessonCloseDate == null ? null : moment(this.LessonLearnedForm.value.lessonCloseDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           this.lessonLearnedUpdated[index].includeInCloseOutReport= this.LessonLearnedForm.value.includeInCloseOutReport,
-          this.lessonLearnedUpdated[index].criticality = this.LessonLearnedForm.value.criticality.lookUpId == undefined ? this.LessonLearnedForm.value.criticality : this.LessonLearnedForm.value.criticality.lookUpId,
-          this.lessonLearnedUpdated[index].submittedBy = this.LessonLearnedForm.value.submittedBy.userAdid == undefined ? this.LessonLearnedForm.value.submittedBy : this.LessonLearnedForm.value.submittedBy.userAdid,
+          this.lessonLearnedUpdated[index].criticality = Object.keys(this.LessonLearnedForm.value.criticality).length == 0 ? "" : this.LessonLearnedForm.value.criticality.lookUpId,
+          this.lessonLearnedUpdated[index].submittedBy = this.LessonLearnedForm.value.submittedBy.userAdid == undefined || this.LessonLearnedForm.value.submittedBy.userAdid == null ? "" : this.LessonLearnedForm.value.submittedBy.userAdid,
           this.lessonLearnedUpdated[index].createDetailedReviewSlide= this.LessonLearnedForm.value.createDetailedReviewSlide,
-          this.lessonLearnedUpdated[index].submittingGroupRole = this.LessonLearnedForm.value.submittingGroupRole.lookUpId == undefined ? this.LessonLearnedForm.value.submittingGroupRole : this.LessonLearnedForm.value.submittingGroupRole.lookUpId,
+          this.lessonLearnedUpdated[index].submittingGroupRole = Object.keys(this.LessonLearnedForm.value.submittingGroupRole).length == 0 ? "" : this.LessonLearnedForm.value.submittingGroupRole.lookUpId,
           this.lessonLearnedUpdated[index].suggestedAction= this.LessonLearnedForm.value.suggestedAction,
-          this.lessonLearnedUpdated[index].dueDate= moment(this.LessonLearnedForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
-          this.lessonLearnedUpdated[index].functionActionOwner = this.LessonLearnedForm.value.functionActionOwner.lookUpId == undefined ? this.LessonLearnedForm.value.functionActionOwner : this.LessonLearnedForm.value.functionActionOwner.lookUpId,
-          this.lessonLearnedUpdated[index].actionOwner = this.LessonLearnedForm.value.actionOwner.userAdid == undefined ? this.LessonLearnedForm.value.actionOwner : this.LessonLearnedForm.value.actionOwner.userAdid
+          this.lessonLearnedUpdated[index].dueDate = this.LessonLearnedForm.value.dueDate == null ? null : moment(this.LessonLearnedForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
+          this.lessonLearnedUpdated[index].functionActionOwner = Object.keys(this.LessonLearnedForm.value.functionActionOwner).length == 0 ? "" : this.LessonLearnedForm.value.functionActionOwner.lookUpId,
+          this.lessonLearnedUpdated[index].actionOwner = this.LessonLearnedForm.value.actionOwner.userAdid == undefined || this.LessonLearnedForm.value.actionOwner.userAdid == null ? "" : this.LessonLearnedForm.value.actionOwner.userAdid
         // }
         // if (this.LessonLearnedForm.controls['actionOwner'].value == "") {
         //   mainObj.ownerName = null
@@ -234,7 +270,7 @@ export class LessonLearnedSingleEditComponent implements OnInit {
         })
 
       }
-    }
+    // }
     }
  }
 

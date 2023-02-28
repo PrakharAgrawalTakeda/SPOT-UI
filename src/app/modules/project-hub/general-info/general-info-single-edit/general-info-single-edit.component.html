@@ -8,149 +8,163 @@
         </div>
     </div>
     <form class="pl-3 w-full overflow-hidden" [formGroup]="generalInfoForm" (ngSubmit)="submitGI()">
-        <div [ngClass] = "{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
-        <p style="color:red;" *ngIf="showMessage">Error: Some of the
-            required fields are missing. Please review and correct your data below</p>
-        <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
-            class="flex justify-between items-center mt-3 mb-6">
-            <div class="flex justify-start gap-1 items-center">Is Archived?
+        <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
+            <p style="color:red;" *ngIf="showMessage">Error: Some of the
+                required fields are missing. Please review and correct your data below</p>
+            <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
+                class="flex justify-between items-center mt-3 mb-6">
+                <div class="flex justify-start gap-1 items-center">Is Archived?
+                </div>
+                <div>
+                    <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
+                </div>
             </div>
-            <div>
-                <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
-            </div>
-        </div>
-        <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-                    *ngIf="viewElementChecker('problemTitle')" class="w-full"
-                    formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
-                    [Required]="callLocation == 'CreateNew'" [showHint]="true" [hint]="'random'">
-        </spot-input>
-        <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')"
-                    class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
-                    [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
-        </app-project-single-dropdown>
-        <spot-singleselect-user-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="'true'" formControlName="SubmittedBy" *ngIf="viewElementChecker('SubmittedBy')" [label]="'Submitted By'"
-            name="SubmittedBy" [showLabel]="true" [placeholder]="'Last Name, First Name'">
-        </spot-singleselect-user-autocomplete>
-        <spot-singleselect-autocomplete class="w-full" formControlName="projectReviewedYN" name="projectReviewedYN"
-            [label]="'Project Reviewed'" [placeholder]="'Project Reviewed'" [valuePointer]="'lookUpName'"
-            [dropDownArray]="getProjectReviewedYN()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
-            *ngIf="viewElementChecker('projectReviewedYN')">
-        </spot-singleselect-autocomplete>
-        <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('projectProposalApprovedDate')"
-            formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate" [label]="'Date Approved'"
-            [placeholder]="'Date Approved'">
-        </spot-input-date>
-        <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            *ngIf="viewElementChecker('problemTitle')" class="w-full"
-            formControlName="problemTitle" name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
+            <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+                *ngIf="viewElementChecker('problemTitle') && callLocation == 'ProjectHub'" class="w-full" formControlName="problemTitle"
+                name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'">
+            </spot-input>
+            <spot-singleselect-user-autocomplete
+                (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)" [Required]="'true'"
+                formControlName="SubmittedBy" *ngIf="viewElementChecker('SubmittedBy')" [label]="'Submitted By'"
+                name="SubmittedBy" [showLabel]="true" [placeholder]="'Last Name, First Name'">
+            </spot-singleselect-user-autocomplete>
+            <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+            *ngIf="viewElementChecker('problemTitle') && callLocation == 'CreateNew'" class="w-full" formControlName="problemTitle"
+            name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'"
             [Required]="callLocation == 'CreateNew'">
         </spot-input>
-        <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')"
-                class="w-full" [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
+            <spot-singleselect-autocomplete class="w-full" formControlName="projectReviewedYN" name="projectReviewedYN"
+                [label]="'Project Reviewed'" [placeholder]="'Project Reviewed'" [valuePointer]="'lookUpName'"
+                [dropDownArray]="getProjectReviewedYN()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                *ngIf="viewElementChecker('projectReviewedYN')">
+            </spot-singleselect-autocomplete>
+            <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('projectProposalApprovedDate')"
+                formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate"
+                [label]="'Date Approved'" [placeholder]="'Date Approved'">
+            </spot-input-date>
+            <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('businessCaseApprovedDate')"
+                formControlName="businessCaseApprovedDate" name="businessCaseApprovedDate" [label]="'Date Approved'"
+                [placeholder]="'Date Approved'">
+            </spot-input-date>
+            <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')" class="w-full"
+                [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true"
                 [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
-        </app-project-single-dropdown>
-        <spot-singleselect-autocomplete class="w-full" formControlName="projectReviewedYN" name="projectReviewedYN"
-                                        [label]="'Project Reviewed'" [placeholder]="'Project Reviewed'" [valuePointer]="'lookUpName'"
-                                        [dropDownArray]="getProjectReviewedYN()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
-                                        *ngIf="viewElementChecker('projectReviewedYN')">
-        </spot-singleselect-autocomplete>
-        <div *ngIf="viewElementChecker('approvedDate')">
-            <mat-form-field class="w-full" [floatLabel]="'always'">
-                <mat-label>Date Approved</mat-label>
-                <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="approvedDate"
-                    name="approvedDate">
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-        </div>
-        <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('projectProposalApprovedDate')"
-                         formControlName="projectProposalApprovedDate" name="projectProposalApprovedDate" [label]="'Date Approved'"
-                         [placeholder]="'Date Approved'">
-        </spot-input-date>
-        <div *ngIf="viewElementChecker('closeOutApprovedDate')">
-            <mat-form-field class="w-full" [floatLabel]="'always'">
-                <mat-label>Date Approved</mat-label>
-                <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'" formControlName="closeOutApprovedDate"
-                    name="closeOutApprovedDate">
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-        </div>
+            </app-project-single-dropdown>
+            <div *ngIf="viewElementChecker('approvedDate')">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                    <mat-label>Date Approved</mat-label>
+                    <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'"
+                        formControlName="approvedDate" name="approvedDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div *ngIf="viewElementChecker('closeOutApprovedDate')">
+                <mat-form-field class="w-full" [floatLabel]="'always'">
+                    <mat-label>Date Approved</mat-label>
+                    <input matInput [matDatepicker]="picker2" [placeholder]="'Choose a date'"
+                        formControlName="closeOutApprovedDate" name="closeOutApprovedDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
 
-        <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType1')" class="w-full"
-            formControlName="problemType" name="problemType" [label]="'Project Type'" [placeholder]="'Project Type'"
-            [showNoneOption]="false" [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues" [showHint]="true" [hint]="'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
-        </spot-select>
-        <spot-singleselect-autocomplete
-            (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)" *ngIf="viewElementChecker('portfolioOwner')"
-            formControlName="portfolioOwner" class="w-full" name="portfolioOwner" [label]="'Portfolio Owner'"
-            [Required]="callLocation == 'CreateNew'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
-            [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
-            [hint]="'The group which is responsible for the oversight and process adherence of the record'">
-        </spot-singleselect-autocomplete>
-        <spot-multiselect-autocomplete *ngIf="viewElementChecker('excecutionScope')"
-            formControlName="excecutionScope" class="w-full" name="excecutionScope" [label]="'Execution Scope'"
-            [Required]="callLocation == 'CreateNew'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
-            [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
-            [sortByType]="'custom'" [customSortPointer]="'pfid'"
-            [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
-        </spot-multiselect-autocomplete>
-        <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('owningOrganization')"
-            class="w-full" formControlName="owningOrganization" name="owningOrganization"
-            [label]="'Owning Organization'" [placeholder]="'Owning Organization'" [showNoneOption]="true"
-            [dropDownArrayType]="'string'" [dropDownArray]="owningOrganizationValues" [showHint]="true"
-            [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
-        </spot-select>
-        <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('localCurrency')" class="w-full"
-            formControlName="localCurrency" name="localCurrency" [label]="'Local Currency'"
-            [placeholder]="'Local Currency'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-            [dropDownArray]="local" >
-        </spot-select>
-        <spot-select [Required]="callLocation == 'CreateNew'"
-            *ngIf="viewElementChecker('problemType')" class="w-full" formControlName="problemType" name="problemType"
-            [label]="'Project Type'" [placeholder]="'Project Type'" [showNoneOption]="false"
-            [dropDownArrayType]="'string'" [dropDownArray]="projectTypeDropDrownValues">
-        </spot-select>
-        <spot-singleselect-autocomplete class="w-full"
-            *ngIf="viewElementChecker('enviornmentalPortfolio')" formControlName="enviornmentalPortfolio"
-            name="enviornmentalPortfolio" [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'"
-            [valuePointer]="'portfolioOwner'" [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true"
-            [sortByType]="'custom'" [customSortPointer]="'pfid'"
-            [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
-        </spot-singleselect-autocomplete>
-        <div *ngIf="viewElementChecker('isCapsProject')" class="w-full mt-4 mb-6">
-            <spot-toggle class="w-full" formControlName="isCapsProject"
-                [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'CAPS Project '" [showHint]="true"
-                [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+            <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType1')"
+                class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
+                [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+                [dropDownArray]="projectTypeDropDrownValues" [showHint]="true"
+                [hint]="'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
+            </spot-select>
+            <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+                *ngIf="viewElementChecker('portfolioOwner')" formControlName="portfolioOwner" class="w-full"
+                name="portfolioOwner" [label]="'Portfolio Owner'" [Required]="callLocation == 'CreateNew'"
+                [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
+                [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'"
+                [customSortPointer]="'pfid'"
+                [hint]="'The group which is responsible for the oversight and process adherence of the record'">
+            </spot-singleselect-autocomplete>
+            <spot-multiselect-autocomplete *ngIf="viewElementChecker('excecutionScope')"
+                formControlName="excecutionScope" class="w-full" name="excecutionScope" [label]="'Execution Scope'"
+                [Required]="callLocation == 'CreateNew'" [placeholder]="'Execution Scope'"
+                [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
+                [dropDownArray]="getExcecutionScope()" [showHint]="true" [sortByType]="'custom'"
+                [customSortPointer]="'pfid'"
+                [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+            </spot-multiselect-autocomplete>
+            <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+                [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('owningOrganization')" class="w-full"
+                formControlName="owningOrganization" name="owningOrganization" [label]="'Owning Organization'"
+                [placeholder]="'Owning Organization'" [showNoneOption]="true" [dropDownArrayType]="'string'"
+                [dropDownArray]="owningOrganizationValues" [showHint]="true"
+                [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+            </spot-select>
+            <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+                [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('localCurrency')" class="w-full"
+                formControlName="localCurrency" name="localCurrency" [label]="'Local Currency'"
+                [placeholder]="'Local Currency'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+                [dropDownArray]="local">
+            </spot-select>
+            <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType')"
+                class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
+                [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+                [dropDownArray]="projectTypeDropDrownValues">
+            </spot-select>
+            <spot-singleselect-autocomplete class="w-full" *ngIf="viewElementChecker('enviornmentalPortfolio')"
+                formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+                [label]="'Environmental Portfolio'" [placeholder]="'Environmental Portfolio'"
+                [valuePointer]="'portfolioOwner'" [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true"
+                [sortByType]="'custom'" [customSortPointer]="'pfid'"
+                [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+            </spot-singleselect-autocomplete>
+            <div *ngIf="viewElementChecker('isCapsProject')" class="w-full mt-4 mb-6">
+                <spot-toggle class="w-full" formControlName="isCapsProject"
+                    [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'CAPS Project '"
+                    [showHint]="true"
+                    [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
                         CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-            </spot-toggle>
-        </div>
-        <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('primaryProduct')"
-            class="w-full" formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
-            [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
-            [dropDownArray]="filterCriteria.products" [showHint]="true"
-            [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
-        </spot-singleselect-autocomplete>
-        <spot-multiselect-autocomplete *ngIf="viewElementChecker('otherImpactedProducts')"
-            class="w-full" formControlName="otherImpactedProducts" name="otherImpactedProducts"
-            [label]="'Other Impacted Products'" [placeholder]="'Other Impacted Products'"
-            [valuePointer]="'fullProductName'" [idPointer]="'productId'" [dropDownArray]="filterCriteria.products"
-            [showHint]="true" [hint]="'Any additional products which are impacted by the project execution'">
-        </spot-multiselect-autocomplete>
+                </spot-toggle>
+            </div>
+            <spot-singleselect-user-autocomplete formControlName="sponsor" *ngIf="viewElementChecker('sponsor')"
+                [label]="'Sponsor'" name="sponsor" [showLabel]="true">
+            </spot-singleselect-user-autocomplete>
+            <spot-singleselect-user-autocomplete formControlName="BCAuthor" *ngIf="viewElementChecker('BCAuthor')"
+                [label]="'Business Case Author'" name="BCAuthor" [showLabel]="true">
+            </spot-singleselect-user-autocomplete>
+            <spot-multiselect-user-autocomplete formControlName="AdditionalAuthor"
+                *ngIf="viewElementChecker('AdditionalAuthor')" [label]="'Additional Authors / Contributors'"
+                name="AdditionalAuthor" [showLabel]="true">
+            </spot-multiselect-user-autocomplete>
+            <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+                [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('primaryProduct')" class="w-full"
+                formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
+                [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
+                [dropDownArray]="filterCriteria.products" [showHint]="true"
+                [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
+            </spot-singleselect-autocomplete>
+            <spot-multiselect-autocomplete *ngIf="viewElementChecker('otherImpactedProducts')" class="w-full"
+                formControlName="otherImpactedProducts" name="otherImpactedProducts" [label]="'Other Impacted Products'"
+                [placeholder]="'Other Impacted Products'" [valuePointer]="'fullProductName'" [idPointer]="'productId'"
+                [dropDownArray]="filterCriteria.products" [showHint]="true"
+                [hint]="'Any additional products which are impacted by the project execution'">
+            </spot-multiselect-autocomplete>
 
-        <spot-textarea (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-            [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('projectDescription')"
-            formControlName="projectDescription" name="projectDescription"
-            [label]="'Problem Description / Present Situation / Submission Description'"
-            [placeholder]="'Problem Description / Present Situation / Submission Description'" [showHint]="true" [hint]="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
-        </spot-textarea>
-        <spot-textarea (onChange)="addNewItem()" formControlName="targetGoalSituation" *ngIf="viewElementChecker('targetGoalSituation')"
-            name="targetGoalSituation" [label]="'Target End State'" [placeholder]="'Target End State'">
-        </spot-textarea>
+            <spot-textarea (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+                [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('projectDescription')"
+                formControlName="projectDescription" name="projectDescription"
+                [label]="'Problem Description / Present Situation / Submission Description'"
+                [placeholder]="'Problem Description / Present Situation / Submission Description'" [showHint]="true"
+                [hint]="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
+            </spot-textarea>
+            <spot-textarea (onChange)="addNewItem()" formControlName="targetGoalSituation"
+                *ngIf="viewElementChecker('targetGoalSituation')" name="targetGoalSituation"
+                [label]="'Target End State'" [placeholder]="'Target End State'">
+            </spot-textarea>
+            <spot-textarea formControlName="StrategicRationale" *ngIf="viewElementChecker('StrategicRationale')"
+                name="StrategicRationale" [label]="'Strategic Rationale'" [placeholder]="'Strategic Rationale'">
+            </spot-textarea>
+            <spot-textarea formControlName="RiskImpact" *ngIf="viewElementChecker('RiskImpact')" name="RiskImpact"
+                [label]="'Risk / Impact of Doing Nothing'" [placeholder]="'Risk / Impact of Doing Nothing'">
+            </spot-textarea>
         </div>
         <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"

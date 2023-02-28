@@ -20,12 +20,12 @@
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
-        <div *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" [ngClass] = "{'w-full pl-3 overflow-hidden h-[81vh]': viewType == 'SidePanel'}">
+        <div *ngIf="callLocation == 'ProjectHub' || qualityForm.controls['isQualityRef'].value" style="margin-left:10px;" [ngClass] = "{'w-full pl-3 overflow-hidden h-[81vh]': viewType == 'SidePanel'}" >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="datatable-qr-80 material font-medium text-sm text-default whitespace-nowrap"
                 [rows]="generalInfoData.qualityReferences" #qualityRefTable>
                 <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
-                    [sortable]="false" [flexGrow]="1">
+                    [sortable]="false" [flexGrow]="0.75">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!qrTableEditStack.includes(rowIndex)" (click)="qrTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
@@ -55,7 +55,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.1">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.3">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a href="javascript:void(0)" title="Delete Single" (click)="deleteQR(rowIndex)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
