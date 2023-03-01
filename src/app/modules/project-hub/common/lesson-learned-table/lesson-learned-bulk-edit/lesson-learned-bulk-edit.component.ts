@@ -4,6 +4,7 @@ import { MsalService } from '@azure/msal-angular';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { forEach } from 'lodash';
 import moment from 'moment';
 import { ProjectApiService } from '../../project-api.service';
 
@@ -97,9 +98,12 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           } : {}),
           submittedByName: new FormControl(i.submittedBy.userDisplayName),
           submittingGroupRole: new FormControl(i.submittingGroupRole),
-          suggestedAction: new FormControl(i.suggestedAction)
+          suggestedAction: new FormControl(i.suggestedAction),
+          typeName: new FormControl(i.lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == i.lessonType)[0].lookUpName)
         }))
       }
+      this.lessonsLearned = this.sortbyDateTypeName(this.lessonsLearned)
+      this.lessonsLearned = this.sortbyTypeName(this.lessonsLearned)
       this.disabler();
       this.viewContent = true
     })
@@ -153,6 +157,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         submittedByName: user.userDisplayName,
         submittingGroupRole: '',
         suggestedAction: '',
+        typeName: ''
       }]
     this.lessonLearnedForm.push(new FormGroup({
       lessonLearnedId: new FormControl(''),
@@ -172,7 +177,8 @@ export class LessonLearnedBulkEditComponent implements OnInit {
       submittedBy: new FormControl(user),
       submittedByName: new FormControl(user.userDisplayName),
       submittingGroupRole: new FormControl(''),
-      suggestedAction: new FormControl('')
+      suggestedAction: new FormControl(''),
+      typeName: new FormControl('')
       }))
     // }
     this.disabler()
@@ -189,6 +195,35 @@ export class LessonLearnedBulkEditComponent implements OnInit {
 
   }
 
+  sortbyDateTypeName(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.lessonCloseDate === null) {
+        return -1;
+      }
+
+      if (new Date(b.lessonCloseDate) === null) {
+        return 1;
+      }
+
+      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
+        return 0;
+      }
+
+      return new Date(a.lessonCloseDate) < new Date(b.lessonCloseDate) ? -1 : 1;
+    }) : array
+
+  }
+
+  sortbyTypeName(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
+        return a.typeName < b.typeName ? -1 : 1;
+      }
+      return 0;
+    }) : array
+
+  }
+  
   lessonLearnedTableEditRow(rowIndex) {
     if (!this.lessonLearnedTableEditStack.includes(rowIndex)) {
       this.lessonLearnedTableEditStack.push(rowIndex)

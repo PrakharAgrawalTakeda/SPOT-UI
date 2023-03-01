@@ -39,41 +39,42 @@ export class CreateProjectComponent implements OnInit {
   localCurrency:any = [];
   viewContent:boolean = false
   createProjectForm = new FormGroup({
-    problemTitle: new FormControl(''),
-    projectsingle: new FormControl(''),
-    projectsingleid: new FormControl(''),
+    problemTitle: new FormControl(),
+    projectsingle: new FormControl(),
+    projectsingleid: new FormControl(),
     problemType: new FormControl('Standard Project / Program'),
-    projectDescription: new FormControl(''),
-    primaryProduct: new FormControl({}),
+    projectDescription: new FormControl(),
+    primaryProduct: new FormControl(null),
     otherImpactedProducts: new FormControl([]),
-    portfolioOwner: new FormControl({}),
+    portfolioOwner: new FormControl(null),
     excecutionScope: new FormControl([]),
-    enviornmentalPortfolio: new FormControl({}),
-    isCapsProject: new FormControl(false),
-    owningOrganization: new FormControl(''),
-    SubmittedBy: new FormControl(''),
-    targetGoalSituation: new FormControl(''),
-    isOeproject: new FormControl(''),
-    qualityReference: new FormControl(''),
-    isTechTransfer: new FormControl(''),
-    primaryKPI: new FormControl(''),
-    isAgile: new FormControl(''),
-    isSiteAssessment: new FormControl(''),
-    isPobos: new FormControl(''),
-    oeProjectType: new FormControl(''),
-    campaignPhase: new FormControl(''),
-    productionSteps: new FormControl(''),
-    campaignType: new FormControl(''),
-    agilePrimaryWorkstream: new FormControl(''),
-    agileSecondaryWorkstream: new FormControl(''),
-    agileWave: new FormControl(''),
-    pobosCategory: new FormControl(''),
-    siteAssessmentCategory: new FormControl(''),
+    enviornmentalPortfolio: new FormControl(null),
+    isCapsProject: new FormControl(null),
+    owningOrganization: new FormControl(),
+    SubmittedBy: new FormControl(),
+    targetGoalSituation: new FormControl(),
+    isOeproject: new FormControl(null),
+    qualityReference: new FormControl(),
+    isTechTransfer: new FormControl(null),
+    primaryKPI: new FormControl(),
+    isAgile: new FormControl(),
+    isSiteAssessment: new FormControl(),
+    isPobos: new FormControl(),
+    oeProjectType: new FormControl(),
+    campaignPhase: new FormControl(),
+    productionSteps: new FormControl(),
+    campaignType: new FormControl(),
+    agilePrimaryWorkstream: new FormControl(),
+    agileSecondaryWorkstream: new FormControl(),
+    agileWave: new FormControl(),
+    pobosCategory: new FormControl(),
+    siteAssessmentCategory: new FormControl(),
     quality: new FormControl(new FormArray([])),
-    isGmsgqltannualMustWin: new FormControl(''),
-    strategicYear: new FormControl(''),
-    annualMustWinID: new FormControl(''),
-    localCurrency: new FormControl('')
+    isGmsgqltannualMustWin: new FormControl(),
+    strategicYear: new FormControl(),
+    annualMustWinID: new FormControl(),
+    localCurrency: new FormControl(),
+    isArchived: new FormControl()
   })
   envPortfolio:any
 
@@ -368,7 +369,8 @@ export class CreateProjectComponent implements OnInit {
         "hubSettings": hubSettings,
         "projectIDTemplate": history.state.copytemplateId,
         "copyProjectParameter": history.state.lookupString,
-        "LocalCurrencyID": LocalCurrencyID
+        "LocalCurrencyID": LocalCurrencyID,
+        "copyProjectParameters": history.state.copyParameterObject
       }
     }
     else{
@@ -377,7 +379,8 @@ export class CreateProjectComponent implements OnInit {
         "hubSettings": hubSettings,
         "projectIDTemplate": projectIDTemplate,
         "copyProjectParameter": copyProjectParameter,
-        "LocalCurrencyID": LocalCurrencyID
+        "LocalCurrencyID": LocalCurrencyID,
+        "copyProjectParameters": null
       }
     }
     

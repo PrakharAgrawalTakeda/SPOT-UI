@@ -22,7 +22,7 @@ export class TechTransferSingleEditComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() CreateProjectForm
-  @Output() formValueTech = new EventEmitter<FormGroup>();
+  @Output() formValueTech = new EventEmitter<any>();
   lookupdata: any = []; 
   campaignPhase: any = [];
   campaignType: any = [];
