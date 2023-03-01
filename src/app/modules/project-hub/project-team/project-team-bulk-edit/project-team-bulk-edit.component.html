@@ -109,7 +109,7 @@
                                 <mat-icon class="iconClass" svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                             </a>
                             <form [formGroup]="projectTeamForm.controls[rowIndex]" *ngIf="ptTableEditStack.includes(rowIndex)" class="h-[45px] iconClass">
-                                <mat-slide-toggle  class="h-full overflow-visible" formControlName="includeInCharter"></mat-slide-toggle>
+                                <mat-slide-toggle  class="h-full overflow-hidden" formControlName="includeInCharter"></mat-slide-toggle>
                             </form>
                         </ng-template>
                     </ngx-datatable-column>

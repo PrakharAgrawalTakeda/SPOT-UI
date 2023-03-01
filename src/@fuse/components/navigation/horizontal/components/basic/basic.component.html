@@ -10,6 +10,10 @@
             class="fuse-horizontal-navigation-item"
             [ngClass]="{'fuse-horizontal-navigation-item-active-forced': item.active}"
             [routerLink]="[item.link]"
+            [fragment]="item.fragment ?? null"
+            [preserveFragment]="item.preserveFragment ?? false"
+            [queryParams]="item.queryParams ?? null"
+            [queryParamsHandling]="item.queryParamsHandling ?? null"
             [routerLinkActive]="'fuse-horizontal-navigation-item-active'"
             [routerLinkActiveOptions]="isActiveMatchOptions"
             [matTooltip]="item.tooltip || ''">
@@ -25,7 +29,6 @@
             [target]="item.target || '_self'"
             [matTooltip]="item.tooltip || ''">
             <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
-            &nbsp;<mat-icon svgIcon="heroicons_outline:external-link" class="text-on-primary"></mat-icon>
         </a>
     </ng-container>
 
@@ -46,6 +49,10 @@
             class="fuse-horizontal-navigation-item"
             [ngClass]="{'fuse-horizontal-navigation-item-active-forced': item.active}"
             [routerLink]="[item.link]"
+            [fragment]="item.fragment ?? null"
+            [preserveFragment]="item.preserveFragment ?? false"
+            [queryParams]="item.queryParams ?? null"
+            [queryParamsHandling]="item.queryParamsHandling ?? null"
             [routerLinkActive]="'fuse-horizontal-navigation-item-active'"
             [routerLinkActiveOptions]="isActiveMatchOptions"
             [matTooltip]="item.tooltip || ''"

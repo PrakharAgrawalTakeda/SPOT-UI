@@ -19,7 +19,7 @@ export class ProjectBenefitsComponent implements OnInit {
   lookupMasters = []
   kpiMasters = []
   primaryKPIForm = new FormGroup({
-    primaryKpi: new FormControl({})
+    primaryKpi: new FormControl(null)
   })
   editable: boolean = false
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService) {
