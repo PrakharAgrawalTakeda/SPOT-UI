@@ -40,9 +40,9 @@ fuse-horizontal-navigation {
 
             .fuse-horizontal-navigation-item-active,
             .fuse-horizontal-navigation-item-active-forced {
-
+                border-bottom: 5px solid #E1242a;
                 .fuse-horizontal-navigation-item-title {
-                    @apply text-primary #{'!important'};
+                    @apply text-on-primary #{'!important'};
                 }
 
                 .fuse-horizontal-navigation-item-subtitle {
@@ -151,7 +151,7 @@ fuse-horizontal-navigation {
             justify-content: flex-start;
             min-height: 48px;
             width: 100%;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 500;
             text-decoration: none;
 
