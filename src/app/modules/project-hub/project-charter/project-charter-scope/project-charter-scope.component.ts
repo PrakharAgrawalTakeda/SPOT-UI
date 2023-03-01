@@ -27,7 +27,7 @@ export class ProjectCharterScopeComponent implements OnInit {
     outOfScope: new FormControl('')
   })
   primaryKPIForm = new FormGroup({
-    primaryKpi: new FormControl({})
+    primaryKpi: new FormControl(null)
   })
 //   scope2Form = new FormGroup({
     
