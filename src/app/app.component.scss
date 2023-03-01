@@ -66,33 +66,34 @@
 
 ::ng-deep
     .mat-mdc-form-field.mat-mdc-form-field-appearance-fill
-    .mat-mdc-form-field-wrapper
+    .mat-mdc-text-field-wrapper
     .mat-mdc-form-field-flex
     .mat-mdc-form-field-infix {
     font-size: 0.875rem;
 }
 
-::ng-deep .mat-option {
+::ng-deep .mat-mdc-option {
     font-size: 0.875rem;
     height: 29px !important;
+    min-height: 29px !important;
 }
 
 ::ng-deep .mat-chip.mat-standard-chip {
     font-size: 0.875rem !important;
 }
 
-::ng-deep .mat-checked {
-    .mat-slide-toggle-thumb {
+::ng-deep .mat-mdc-slide-toggle-checked {
+    .mdc-switch__shadow {
         background-color: #54b84e !important;
     }
 
-    .mat-slide-toggle-bar {
+    .mdc-switch__track::after {
         // Opacity is determined from the specs for the selection controls.
         // See: https://material.io/design/components/selection-controls.html#specs
         background-color: #99d58f !important;
     }
 
-    .mat-ripple-element {
+    .mat-mdc-ripple-element {
         // Set no opacity for the ripples because the ripple opacity will be adjusted dynamically
         // based on the type of interaction with the slide-toggle (e.g. for hover, focus)
         background-color: #1b5f17 !important;
@@ -100,13 +101,13 @@
 }
 
 ::ng-deep
-    .mat-mdc-form-field.mat-mdc-form-field-appearance-fill.ng-dirty
-    .mat-mdc-form-field-wrapper
+    .mat-mdc-form-field.mat-form-field-appearance-fill.ng-dirty
+    .mat-mdc-text-field-wrapper
     .mat-mdc-form-field-flex {
     border-left: 5px solid #eba800 !important;
 }
 
-::ng-deep .mat-slide-toggle.ng-dirty {
+::ng-deep .mat-mdc-slide-toggle.ng-dirty {
     padding-left: 10px;
     border-radius: 5px;
     border-left: 5px solid #eba800 !important;
@@ -229,14 +230,13 @@
     }
 }
 
-::ng-deep
-    .custom-label-with-hint
+::ng-deep .custom-label-with-hint
     > .mat-mdc-form-field
-    > .mat-mdc-form-field-wrapper
+    > .mat-mdc-text-field-wrapper
     > .mat-mdc-form-field-flex
     > .mat-mdc-form-field-infix
-    > .mat-mdc-form-field-label-wrapper {
-    top: -28px !important;
+    > label {
+    top: -29px !important;
 
     .mat-mdc-form-field-label {
         gap: 0px !important;

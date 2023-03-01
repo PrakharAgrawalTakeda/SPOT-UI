@@ -232,7 +232,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           parentProgram: response.parentProject ? response.parentProject.problemTitle : '',
           submittedBy: response.projectData.problemOwnerName,
           projectManager: response.portfolioCenterData.pm,
-          sponsor: response.sponsor.teamMemberAdId == null || response.sponsor.teamMemberAdId == undefined ? '' : response.sponsor.teamMemberName,
+          sponsor: response.sponsor?.teamMemberName,
           projectDescription: response.projectData.projectDescription,
           primaryProduct: response.primaryProduct ? response.primaryProduct.fullProductName : '',
           otherImpactedProducts: response.otherImpactedProducts ? response.otherImpactedProducts : [],

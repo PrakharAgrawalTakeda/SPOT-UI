@@ -52,8 +52,6 @@ export const projectRoutes: Route[] = [
     MatChipsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatChipsModule
-
   ]
 })
 export class PortfolioCenterModule { }
