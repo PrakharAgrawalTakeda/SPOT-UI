@@ -15,7 +15,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
   formIntialized: boolean = false
   OperationalPerformanceForm = new FormGroup({
     status: new FormControl(''),
-    kpiid: new FormControl({}),
+    kpiid: new FormControl(null),
     metric: new FormControl(''),
     currentState: new FormControl(''),
     targetPerformance: new FormControl(''),

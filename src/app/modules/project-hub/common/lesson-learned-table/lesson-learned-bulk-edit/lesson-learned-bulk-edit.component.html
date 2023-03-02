@@ -33,7 +33,7 @@
                             *ngIf="lessonLearnedTableEditStack.includes(rowIndex)" class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.lessonLearnedForm.controls[rowIndex]['controls']['includeInCloseOutReport'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
-                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInCloseOutReport">
+                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInCloseOutReport">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
@@ -50,7 +50,7 @@
                             class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.lessonLearnedForm.controls[rowIndex]['controls']['createDetailedReviewSlide'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
-                                class="h-full overflow-visible" formControlName="createDetailedReviewSlide">
+                                class="h-full overflow-hidden" formControlName="createDetailedReviewSlide">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>

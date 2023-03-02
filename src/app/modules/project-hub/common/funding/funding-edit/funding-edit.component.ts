@@ -14,9 +14,9 @@ export class FundingEditComponent implements OnInit {
   Funding: any = {}
   formIntialized: boolean = false
   FundingForm = new FormGroup({
-    fundingTypeId: new FormControl({}),
-    fundingSourceId: new FormControl({}),
-    fundingIntheplan: new FormControl({}),
+    fundingTypeId: new FormControl(null),
+    fundingSourceId: new FormControl(null),
+    fundingIntheplan: new FormControl(null),
     fundingAmount: new FormControl(''),
     fundingNotes: new FormControl(''),
     includeInCharter: new FormControl(false)

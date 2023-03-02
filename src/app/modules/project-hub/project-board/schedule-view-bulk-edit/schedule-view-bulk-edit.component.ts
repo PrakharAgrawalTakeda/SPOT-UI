@@ -285,19 +285,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         this.apiService.getmembersbyproject(this.id).then((res: any) => {
                             if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
 
-                           
+
                             for(var i of res)
                             {
-                                
+
                                 if(i.userId == this.msalService.instance.getActiveAccount().localAccountId)
                                 {
                                     if(i.teamPermissionId = '3448BD5C-38F4-4B3C-BA4C-C99E659DC0B0')
                                     {
                                         justificationeditflag = false
-                                        
+
                                     }
                                 }
-                                
+
                             }
                         }
                         for (let control of this.baselineLogForm.controls) {
@@ -309,7 +309,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 control['controls']['baselineComment'].disable()
                             }
                         }
-                        
+
                     })
 
                     })
@@ -984,9 +984,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 milestone: new FormControl(''),
                 plannedFinish: new FormControl(''),
                 baselineFinish: new FormControl(''),
-                responsiblePersonName: new FormControl({}),
-                function: new FormControl({}),
-                functionGroupId: new FormControl({}),
+                responsiblePersonName: new FormControl(null),
+                function: new FormControl(null),
+                functionGroupId: new FormControl(null),
                 completionDate: new FormControl(''),
                 comments: new FormControl(''),
                 includeInReport: new FormControl(false),
@@ -2023,7 +2023,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
                 else
                 {
-                    
+
                     this.projectbaselinelogDetailscurr[m].baselinechange = true
                 }
                 if (this.projectbaselinelogDetailscurr[m].plannedFinish == '') {
@@ -2036,7 +2036,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
                 else
                 {
-                    
+
                     this.projectbaselinelogDetailscurr[m].plannedchange = true
                 }
                 if (this.projectbaselinelogDetailscurr[m].completionDate == '') {
@@ -2049,7 +2049,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
                 else
                 {
-                    
+
                     this.projectbaselinelogDetailscurr[m].completionchange = true
                 }
                 //if (this.projectbaselinelogDetailscurr[m].indicator != '') {
