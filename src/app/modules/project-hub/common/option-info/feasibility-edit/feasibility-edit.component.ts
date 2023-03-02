@@ -43,15 +43,15 @@ export class FeasibilityEditComponent implements OnInit {
   }]
   viewContent = false
   optionInfoForm = new FormGroup({
-    peopleRatingId: new FormControl({}),
+    peopleRatingId: new FormControl(null),
     peopleJustification: new FormControl(''),
-    technologyRatingId: new FormControl({}),
+    technologyRatingId: new FormControl(null),
     technologyJustification: new FormControl(''),
-    businessCaseProcessId: new FormControl({}),
+    businessCaseProcessId: new FormControl(null),
     businessProcessJustification: new FormControl(''),
-    manufacturingProcessId: new FormControl({}),
+    manufacturingProcessId: new FormControl(null),
     manufacturingProcessJustification: new FormControl(''),
-    equipmentRatingId: new FormControl({}),
+    equipmentRatingId: new FormControl(null),
     equipementJustification: new FormControl(''),
   })
   constructor(private apiService: ProjectApiService,

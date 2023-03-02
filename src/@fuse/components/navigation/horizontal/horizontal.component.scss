@@ -37,13 +37,12 @@ fuse-horizontal-navigation {
 
         /* Basic - When item active (current link) */
         fuse-horizontal-navigation-basic-item {
-            
+
             .fuse-horizontal-navigation-item-active,
             .fuse-horizontal-navigation-item-active-forced {
                 border-bottom: 5px solid #E1242a;
                 .fuse-horizontal-navigation-item-title {
                     @apply text-on-primary #{'!important'};
-                    
                 }
 
                 .fuse-horizontal-navigation-item-subtitle {

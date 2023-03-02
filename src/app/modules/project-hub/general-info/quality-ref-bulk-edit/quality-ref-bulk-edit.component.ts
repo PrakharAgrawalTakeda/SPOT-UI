@@ -173,7 +173,7 @@ debugger
   addQR() {
     this.qualityRefForm.push(new FormGroup({
       qualityUniqueId: new FormControl(''),
-      qualityReferenceTypeId: new FormControl({}),
+      qualityReferenceTypeId: new FormControl(null),
       qualityReference1: new FormControl(''),
       problemUniqueId: new FormControl(this.projectHubService.projectid)
     }))

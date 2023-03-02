@@ -51,8 +51,7 @@ export const projectRoutes: Route[] = [
     FuseDrawerModule,
     MatChipsModule,
     MatAutocompleteModule,
-    MatFormFieldModule
-
+    MatFormFieldModule,
   ]
 })
 export class PortfolioCenterModule { }

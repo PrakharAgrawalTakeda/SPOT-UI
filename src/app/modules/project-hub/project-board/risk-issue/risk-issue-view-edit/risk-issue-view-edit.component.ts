@@ -90,7 +90,7 @@ export class RiskIssueViewEditComponent implements OnInit {
 
 
   riskIssueForm = new FormGroup({
-    logDate: new FormControl(''),
+    logDate: new FormControl(null),
     type: new FormControl(''),
     ifThisHappens: new FormControl(''),
     probability: new FormControl(''),
@@ -103,7 +103,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     usersingleid: new FormControl(''),
     function: new FormControl(''),
     functionid: new FormControl(''),
-    includeInReport: new FormControl(''),
+    includeInReport: new FormControl(false),
     includeInCharter: new FormControl(false),
     postMitigationProbability: new FormControl(''),
     postMitigationImpact: new FormControl(''),
@@ -142,7 +142,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (res.functionGroupId != null) {
           this.riskIssueForm.controls.function.patchValue(this.lookupdata?.find(x => x.lookUpId == res.functionGroupId)?.lookUpName)
         }
-        if (this.projecthubservice.all != []) {
+        if (this.projecthubservice.all.length > 0) {
           if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 3) {
             if (this.riskIssueForm.value.includeInReport != true) {
               this.riskIssueForm.controls['includeInReport'].disable()

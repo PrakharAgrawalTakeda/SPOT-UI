@@ -208,7 +208,7 @@
                               class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.riskIssueForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
-                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInReport">
+                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInReport">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
@@ -225,7 +225,7 @@
                               class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.riskIssueForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 5 can be selected at a time for project charter display' : null"
-                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInCharter">
+                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInCharter">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>

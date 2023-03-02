@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 
@@ -19,7 +18,7 @@ export class CloseOutLessonsLearnedComponent implements OnInit {
   KeyTakeawayForm = new FormGroup({
     keyTakeaways: new FormControl('')
   })
-  constructor(public projecthubservice: ProjectHubService, public role: RoleService, private _Activatedroute: ActivatedRoute, public projectApiService: ProjectApiService) {
+  constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public projectApiService: ProjectApiService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.dataloader()
@@ -28,11 +27,8 @@ export class CloseOutLessonsLearnedComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    if(this.role.roleMaster.securityGroupId != 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'){
+    if(this.projecthubservice.roleControllerControl.closeOut.lessonsLearnt){
       this.editable=true
-    }
-    else{
-      this.editable = false
     }
     this.dataloader();
     this.viewContent = true

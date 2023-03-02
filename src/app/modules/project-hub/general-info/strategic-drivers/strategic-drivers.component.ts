@@ -12,16 +12,16 @@ import { ProjectHubService } from '../../project-hub.service';
 })
 export class StrategicDriversComponent implements OnInit {
   strategicDriversForm = new FormGroup({
-    primaryKPI: new FormControl({}),
+    primaryKPI: new FormControl(null),
     isAgile: new FormControl(false),
-    agilePrimaryWorkstream: new FormControl({}),
+    agilePrimaryWorkstream: new FormControl(null),
     agileSecondaryWorkstream: new FormControl([]),
-    agileWave: new FormControl({}),
+    agileWave: new FormControl(null),
     isPobos: new FormControl(false),
     pobosCategory: new FormControl([]),
     isGmsgqltannualMustWin: new FormControl(false),
-    strategicYear: new FormControl({}),
-    annualMustWinID: new FormControl({}),
+    strategicYear: new FormControl(null),
+    annualMustWinID: new FormControl(null),
     isSiteAssessment: new FormControl(false),
     siteAssessmentCategory: new FormControl([]),
     isGoodPractise: new FormControl(false)
@@ -339,15 +339,15 @@ export class StrategicDriversComponent implements OnInit {
               primaryKPI: history.state.data.primaryKpi == null ? '' : history.state.data.primaryKpi[0],
               isAgile: isAgile,
               agilePrimaryWorkstream: history.state.data.agilePrimaryWorkstream == null || history.state.data.agilePrimaryWorkstream == "" || history.state.data.agilePrimaryWorkstream == undefined ? '' : history.state.data.agilePrimaryWorkstream[0],
-              agileSecondaryWorkstream: history.state.data.agileSecondaryWorkstream == null || history.state.data.agileSecondaryWorkstream == "" || history.state.data.agileSecondaryWorkstream == undefined ? '' : finaldatasecagile,
+              agileSecondaryWorkstream: history.state.data.agileSecondaryWorkstream == null || history.state.data.agileSecondaryWorkstream == "" || history.state.data.agileSecondaryWorkstream == undefined ? [] : finaldatasecagile,
               agileWave: history.state.data.agileWave == null || history.state.data.agileWave == "" || history.state.data.agileWave == undefined ? '' : history.state.data.agileWave[0],
               isPobos: history.state.data.isPobos,
-              pobosCategory: history.state.data.poboscategory == null || history.state.data.poboscategory == "" || history.state.data.poboscategory == undefined ? '' : finaldataPobos,
+              pobosCategory: history.state.data.poboscategory == null || history.state.data.poboscategory == "" || history.state.data.poboscategory == undefined ? [] : finaldataPobos,
               isGmsgqltannualMustWin: history.state.data.isGmsgqltannualMustWin,
               strategicYear: history.state.data.strategicYearId == null || history.state.data.strategicYearId == "" || history.state.data.strategicYearId == undefined ? '' : history.state.data.strategicYearId[0],
               annualMustWinID: history.state.data.annualMustWinId == null || history.state.data.annualMustWinId == "" || history.state.data.annualMustWinId == undefined ? '' : history.state.data.annualMustWinId[0],
               isSiteAssessment: history.state.data.isSiteAssessment,
-              siteAssessmentCategory: history.state.data.siteAssessmentCategory == null || history.state.data.siteAssessmentCategory == "" || history.state.data.siteAssessmentCategory == undefined ? '' : finaldataSite,
+              siteAssessmentCategory: history.state.data.siteAssessmentCategory == null || history.state.data.siteAssessmentCategory == "" || history.state.data.siteAssessmentCategory == undefined ? [] : finaldataSite,
               isGoodPractise: false
             })
             this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())

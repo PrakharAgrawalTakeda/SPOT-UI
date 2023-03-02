@@ -72,10 +72,10 @@ export class ScheduleViewEditComponent implements OnInit {
     completionDate: new FormControl(''),
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
-    function: new FormControl({}),
+    function: new FormControl(null),
     //functionid: new FormControl(''),
-    includeInReport: new FormControl(''),
-    includeInBusinessCase: new FormControl('')
+    includeInReport: new FormControl(false),
+    includeInBusinessCase: new FormControl(false)
   })
   ngOnInit(): void {
     this.getllookup()

@@ -70,7 +70,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
               user: i.userId || i.userId != "" ? new FormControl({
                 userAdid: i.userId,
                 userDisplayName: i.userName
-              }) : new FormControl({}),
+              }) : new FormControl(null),
               teamPermissionId: new FormControl(i.teamPermissionId),
               role: new FormControl(i.roleId || i.roleId != "" ? lookup.find(x => x.lookUpId == i.roleId) : {}),
               percentTime: new FormControl(i.percentTime),
@@ -334,9 +334,9 @@ export class ProjectTeamBulkEditComponent implements OnInit {
     this.disabler()
     this.projectTeamForm.push(new FormGroup({
       projectTeamUniqueId: new FormControl(''),
-      user: new FormControl({}),
+      user: new FormControl(null),
       teamPermissionId: new FormControl("BCEBDFAC-DB73-40D3-8EF0-166411B5322C"),
-      role: new FormControl({}),
+      role: new FormControl(null),
       percentTime: new FormControl(0),
       duration: new FormControl(0),
       includeInCharter: new FormControl(false),

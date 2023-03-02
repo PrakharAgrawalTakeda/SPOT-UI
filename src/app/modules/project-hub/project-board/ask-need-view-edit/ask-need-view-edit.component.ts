@@ -42,12 +42,12 @@ export class AskNeedViewEditComponent implements OnInit, OnDestroy {
   askneedform = new FormGroup({
     askNeed1: new FormControl(''),
     comments: new FormControl(''),
-    logDate: new FormControl(''),
+    logDate: new FormControl(null),
     needByDate: new FormControl(''),
     closeDate: new FormControl(''),
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
-    includeInReport: new FormControl('')
+    includeInReport: new FormControl(false)
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) {
   }
