@@ -1,5 +1,5 @@
 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-    class="pr-6 material font-medium text-default text-sm whitespace-nowrap cursor-pointer fast-load-table" [rows]="tableData"
+    class="material font-medium text-default text-sm whitespace-nowrap cursor-pointer fast-load-table" [rows]="tableData"
     [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }]" #scheduleTable [rowClass]="getRowClass" [selected]="selected"
     [selectionType]="SelectionType.checkbox" [selectAllRowsOnPage]="false" (activate)="onActivate($event)"
     (select)="onSelect($event)">
@@ -22,7 +22,7 @@
           <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '" [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
         </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Functional Owner" prop="funtionalOwnerId" [flexGrow]="1" *ngIf="viewElementChecker('functionalOwner')">
+    <ngx-datatable-column name="Functional Owner" prop="funtionalOwnerId" [flexGrow]="1.5" *ngIf="viewElementChecker('functionalOwner')">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <p >{{getLookUpName(value)}}</p>
             <!-- <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName" [ngClass]="{'closed': row.completionDate != null}">{{value}} Insert Milestone Name</p></strong>
@@ -56,7 +56,7 @@
     </ngx-datatable-column>
 
     <ngx-datatable-column name="Include in Dashboard" prop="includeInReport"
-                           [flexGrow]="1" *ngIf="viewElementChecker('includeInReport')">
+                           [flexGrow]="1.5" *ngIf="viewElementChecker('includeInReport')">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a>
                 <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
