@@ -103,7 +103,7 @@ export class ProjectHubService {
         {
           title: 'CAPS',
           type: 'basic',
-          icon: 'iconsmind:tree_4',
+          icon: 'heroicons_outline:globe',
           link: 'caps'
         },
         {

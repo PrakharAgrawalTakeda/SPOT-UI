@@ -50,7 +50,7 @@
 
 
     <div class="flex justify-end items-center gap-3 pr-6 mt-4">
-      <button mat-flat-button [color]="'primary'" type="button" class="min-w-26 text-primary bg-gray-200"
+      <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200"
             (click)="openStandardMilestonesSets()" >Standard Milestone Sets</button>
       <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
         (click)="baselineLogs()"  *ngIf="mode== 'Normal'">
@@ -109,7 +109,6 @@
         </ng-template>
     </ngx-datatable-column>
 
-
         <ngx-datatable-column name="Milestone" prop="milestone" [resizeable]="false" [sortable]="false"
           [flexGrow]="0.9" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -123,7 +122,11 @@
               <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false">
+              <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
+                <!--  -->
+                <!-- [showHint]="true" 
+                [hint]="hi" [hintPosition]="'mat-hint'" -->
+                <!-- (this.schedulengxdata.milestoneType > 0 ? (this.schedulengxdata.milestoneType == 1 ? 'Execution Start - ...' : (this.schedulengxdata.milestoneType == 2 ? 'Execution End - ...' : 'Milestone')) : ' ') -->
                 <!-- [placeholder]="'Milestone Name'" -->
               </spot-textarea>
             </form>
@@ -353,7 +356,7 @@
                     class="h-[45px]">
                   <mat-slide-toggle
                       [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 8 can be selected at a time in the project report' : null"
-                      (change)="disabler()" class="h-full overflow-visible"
+                      (change)="disabler()" class="h-full overflow-hidden"
                       formControlName="includeInReport">
                   </mat-slide-toggle>
               </form>
@@ -373,7 +376,7 @@
                       class="h-[45px]">
                     <mat-slide-toggle
                         [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
-                        (change)="disabler()" class="h-full overflow-visible"
+                        (change)="disabler()" class="h-full overflow-hidden"
                         formControlName="includeInBusinessCase">
                     </mat-slide-toggle>
                 </form>
@@ -392,7 +395,7 @@
                   class="h-[45px]">
                 <mat-slide-toggle
                     [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 20 can be selected at a time in the project close out report' : null"
-                    (change)="disabler()" class="h-full overflow-visible"
+                    (change)="disabler()" class="h-full overflow-hidden"
                     formControlName="includeInCloseout">
                 </mat-slide-toggle>
             </form>
@@ -411,7 +414,7 @@
                   class="h-[45px]">
                 <mat-slide-toggle
                     [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 10 can be selected at a time in the project charter' : null"
-                    (change)="disabler()" class="h-full overflow-visible"
+                    (change)="disabler()" class="h-full overflow-hidden"
                     formControlName="includeInCharter">
                 </mat-slide-toggle>
             </form>
@@ -631,7 +634,7 @@
                 class="p-2 overflow-hidden">
                 <div class="flex items-center justify-between">
                   <mat-slide-toggle [matTooltip]="this.baselineLogForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 10 can be selected at a time in the project close out report' : null"
-                  (change)="disabler2()"  class="h-full overflow-visible" formControlName="includeInCloseout">
+                  (change)="disabler2()"  class="h-full overflow-hidden" formControlName="includeInCloseout">
                   </mat-slide-toggle>
                 </div>
               </form>
@@ -731,7 +734,7 @@
           [flexGrow]="0.48">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty'; else null55" class="noplanned1">
+            <div *ngIf="value == 'empty2'; else null55" class="noplanned1">
               &nbsp;
             </div>
             <ng-template #null55>
@@ -766,7 +769,7 @@
           [flexGrow]="0.48">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty'; else null11" class="nobaselined1">
+            <div *ngIf="value == 'empty2'; else null11" class="nobaselined1">
               &nbsp;
             </div>
             <ng-template #null11>
@@ -797,7 +800,7 @@
           [flexGrow]="0.55">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty'; else null22" class="nocompleted1">
+            <div *ngIf="value == 'empty2'; else null22" class="nocompleted1">
               &nbsp;
             </div>
             <ng-template #null22>
@@ -827,7 +830,7 @@
           [flexGrow]="0.39">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-            <div *ngIf="value == 'empty' || (value == '' && row.indicatorchange); else null33" class="noindicator1">
+            <div *ngIf="value == 'empty2' || (value == '' && row.indicatorchange); else null33" class="noindicator1">
               &nbsp;
             </div>
             <ng-template #null33>

@@ -115,3 +115,7 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 .ngx-datatable .datatable-body-row, .ngx-datatable .datatable-header-inner, .ngx-datatable .datatable-row-center {
 align-items: flex-end;
 }
+
+.mat-primary.mdc-button{
+    color:white !important
+}

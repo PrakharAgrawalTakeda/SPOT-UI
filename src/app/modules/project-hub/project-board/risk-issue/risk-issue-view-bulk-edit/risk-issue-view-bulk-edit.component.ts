@@ -205,7 +205,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
 
     addRI() {
         this.riskIssueForm.push(new FormGroup({
-            owner: new FormControl({}),
+            owner: new FormControl(null),
             closeDate: new FormControl(""),
             dueDate: new FormControl(""),
             functionGroupId: new FormControl(""),

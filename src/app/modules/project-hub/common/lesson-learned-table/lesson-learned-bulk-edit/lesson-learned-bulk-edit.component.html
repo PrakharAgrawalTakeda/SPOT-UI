@@ -1,6 +1,6 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Lesson Learned</div>
+        <div style="width: 125%;" class="text-on-primary" style="padding-top: 6px">Bulk Edit Lesson Learned</div>
         <div style="padding-top: 2px">
             <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
                 <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -17,12 +17,12 @@
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
         </div>
-        <div class="h-[110vh] overflow-hidden pl-3">
-            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        <div class="h-[80vh] overflow-hidden pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
                 class="datatable-ll-80 font-medium text-sm text-default whitespace-nowrap"
                 [rows]="lessonsLearned" #lessonLearnedTable>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Include In Single Slide Summary (Max 4)"
-                    prop="includeInCloseOutReport" [flexGrow]="4.5">
+                    prop="includeInCloseOutReport" [flexGrow]="4.5" >
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)"
                             (click)="lessonLearnedTableEditRow(rowIndex)" class="w-full">
@@ -33,7 +33,7 @@
                             *ngIf="lessonLearnedTableEditStack.includes(rowIndex)" class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.lessonLearnedForm.controls[rowIndex]['controls']['includeInCloseOutReport'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
-                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInCloseOutReport">
+                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInCloseOutReport">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
@@ -50,7 +50,7 @@
                             class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.lessonLearnedForm.controls[rowIndex]['controls']['createDetailedReviewSlide'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
-                                class="h-full overflow-visible" formControlName="createDetailedReviewSlide">
+                                class="h-full overflow-hidden" formControlName="createDetailedReviewSlide">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
@@ -83,7 +83,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Description / Details" prop="lessonDetail" [flexGrow]="5.5">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Description / Details" prop="lessonDetail" [flexGrow]="8.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{value}}
@@ -96,7 +96,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Type" prop="lessonType"
-                    [flexGrow]="4.3">
+                    [flexGrow]="7.3" >
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
@@ -203,7 +203,7 @@
                             date:'dd-MMM-yyyy'}}
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="lessonCloseDate" name="lessonCloseDate" [showLabel]="false">
+                            <spot-input-date formControlName="lessonCloseDate" name="lessonCloseDate" [showLabel]="false" [max]="'today'">
                             </spot-input-date>
                         </form>
                     </ng-template>
@@ -226,7 +226,6 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-    </div>
     <div class="flex items-start justify-between mt-6 px-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
             (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">

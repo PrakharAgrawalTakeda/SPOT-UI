@@ -22,10 +22,11 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     @Output() newItemEvent = new EventEmitter<string>();
     @Input() opened: boolean = false;
     @Input() calledFrom: string = "";
-    projectid: string = "";
+    projectdata: any;
     // opened: boolean = false;
     resultSets: any[];
     budget: any = [];
+    hide:boolean = true
     searchControl: FormControl = new FormControl();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     temp: string = ""
@@ -151,8 +152,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     }
 
     budgetfind(projectid: string): string{
-        if(this.resultSets != []){
-            if(this.budget != []){
+        if(this.resultSets.length >0){
+            if(this.budget.length >0){
                 var temp = this.budget.find(x=>x.projectId == projectid)
                 if(temp != null){
                     return temp.capitalBudgetId
@@ -182,9 +183,13 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
      */
      selectedOption(event: any): void{
          if (this.calledFrom == 'Copy') {
-             this.searchControl.patchValue(event.option.value.problemTitle);
-             this.projectid = event.option.value.problemUniqueId;
+            //  this.searchControl.patchValue(event.option.value.problemTitle);
+            //  this.projectid = event.option.value.problemUniqueId;
+             this.searchControl.patchValue("")
+             this.projectdata = event.option.value
              this.addNewItem();
+             this.hide = false
+            //  this.getNgxDatatableNumberHeader()
          }
          else{
         this.searchControl.patchValue(this.temp)
@@ -193,8 +198,13 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
          }
      }
 
+    // getNgxDatatableNumberHeader(): any {
+    //     this.hide= true
+    //     return ' ngx-hide';
+    // }
+
          addNewItem() {
-             this.newItemEvent.emit(this.projectid);
+             this.newItemEvent.emit(this.projectdata);
          }
 
     onKeydown(event: KeyboardEvent): void

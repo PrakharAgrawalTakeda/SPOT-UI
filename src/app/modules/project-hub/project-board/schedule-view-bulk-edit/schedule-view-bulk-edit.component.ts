@@ -176,9 +176,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             if (this.viewContent == false &&
                 this.viewBaseline == false &&
                 this.viewBaselineLogs == true) {
-                //this.saveScheduleBulkEdit()
-                console.log("DB", this.baselineLogForm)
-                //console.log("SUB", this.baselineLogCloseOut)
                 if (JSON.stringify(this.baselineLogForm.getRawValue()) != JSON.stringify(this.baselineLogData)) {
 
                     this.projecthubservice.isFormChanged = true
@@ -279,12 +276,41 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
                                 this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
                             }
+                            if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F')
+                            {
+                                this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
+                            }
+                        }
+                        var justificationeditflag = true
+                        this.apiService.getmembersbyproject(this.id).then((res: any) => {
+                            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+
+                           
+                            for(var i of res)
+                            {
+                                
+                                if(i.userId == this.msalService.instance.getActiveAccount().localAccountId)
+                                {
+                                    if(i.teamPermissionId = '3448BD5C-38F4-4B3C-BA4C-C99E659DC0B0')
+                                    {
+                                        justificationeditflag = false
+                                        
+                                    }
+                                }
+                                
+                            }
                         }
                         for (let control of this.baselineLogForm.controls) {
-                            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                            if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && this.projecthubservice.roleControllerControl.roleId == 'F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F'  &&  !justificationeditflag) {
+                                control['controls']['baselineComment'].disable()
+                            }
+                            else if(!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203')
+                            {
                                 control['controls']['baselineComment'].disable()
                             }
                         }
+                        
+                    })
 
                     })
                 })
@@ -958,9 +984,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 milestone: new FormControl(''),
                 plannedFinish: new FormControl(''),
                 baselineFinish: new FormControl(''),
-                responsiblePersonName: new FormControl({}),
-                function: new FormControl({}),
-                functionGroupId: new FormControl({}),
+                responsiblePersonName: new FormControl(null),
+                function: new FormControl(null),
+                functionGroupId: new FormControl(null),
                 completionDate: new FormControl(''),
                 comments: new FormControl(''),
                 includeInReport: new FormControl(false),
@@ -1802,6 +1828,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     teamMemberAdId: i.teamMemberAdId
                 })
             }
+            console.log(this.baselineLogObj)
             this.apiService.patchBaselineLogs(this.baselineLogObj).then(res => {
                 //this.projecthubservice.isBulkEdit = true
                 // this.viewContent = false
@@ -1986,18 +2013,48 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 }
 
             } else {
-                if (this.projectbaselinelogDetailscurr[m].baselineFinish != '') {
+                if (this.projectbaselinelogDetailscurr[m].baselineFinish == '') {
+                    this.projectbaselinelogDetailscurr[m].baselineFinish == ''
+                    this.projectbaselinelogDetailscurr[m].baselinechange = false
+                }
+                else if (this.projectbaselinelogDetailscurr[m].baselineFinish == null) {
+                    this.projectbaselinelogDetailscurr[m].baselineFinish == ''
+                    this.projectbaselinelogDetailscurr[m].baselinechange = false
+                }
+                else
+                {
+                    
                     this.projectbaselinelogDetailscurr[m].baselinechange = true
                 }
-                if (this.projectbaselinelogDetailscurr[m].plannedFinish != '') {
+                if (this.projectbaselinelogDetailscurr[m].plannedFinish == '') {
+                    this.projectbaselinelogDetailscurr[m].plannedFinish == ''
+                    this.projectbaselinelogDetailscurr[m].plannedchange = false
+                }
+                else if (this.projectbaselinelogDetailscurr[m].plannedFinish == null) {
+                    this.projectbaselinelogDetailscurr[m].plannedFinish == ''
+                    this.projectbaselinelogDetailscurr[m].plannedchange = false
+                }
+                else
+                {
+                    
                     this.projectbaselinelogDetailscurr[m].plannedchange = true
                 }
-                if (this.projectbaselinelogDetailscurr[m].completionDate != '') {
+                if (this.projectbaselinelogDetailscurr[m].completionDate == '') {
+                    this.projectbaselinelogDetailscurr[m].completionDate == ''
+                    this.projectbaselinelogDetailscurr[m].completionchange = false
+                }
+                else if (this.projectbaselinelogDetailscurr[m].completionDate == null) {
+                    this.projectbaselinelogDetailscurr[m].completionDate == ''
+                    this.projectbaselinelogDetailscurr[m].completionchange = false
+                }
+                else
+                {
+                    
                     this.projectbaselinelogDetailscurr[m].completionchange = true
                 }
-                if (this.projectbaselinelogDetailscurr[m].indicator != '') {
+                //if (this.projectbaselinelogDetailscurr[m].indicator != '') {
                     this.projectbaselinelogDetailscurr[m].indicatorchange = true
-                }
+                //}
             }
         }
         //}
@@ -2013,16 +2070,17 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 currbaselineFinish: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).baselineFinish : 'empty',
                 currcompletionDate: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).completionDate : 'empty',
                 currindicator: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).indicator : 'empty',
-                prevplannedFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).plannedFinish : 'empty',
-                prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).baselineFinish : 'empty',
-                prevcompletionDate: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).completionDate : 'empty',
-                previndicator: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).indicator : 'empty',
+                prevplannedFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).plannedFinish : 'empty2',
+                prevbaselineFinish: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).baselineFinish : 'empty2',
+                prevcompletionDate: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).completionDate : 'empty2',
+                previndicator: this.projectbaselinelogDetailsprev.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailsprev.find(x => x.scheduleUniqueId == unique[k]).indicator : 'empty2',
                 baselinechange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).baselinechange : '',
                 plannedchange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).plannedchange : '',
                 completionchange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).completionchange : '',
                 indicatorchange: this.projectbaselinelogDetailscurr.some(x => x.scheduleUniqueId == unique[k]) ? this.projectbaselinelogDetailscurr.find(x => x.scheduleUniqueId == unique[k]).indicatorchange : ''
             })
         }
+        console.log(this.projectbaselinelogDetailscurr)
         this.viewContent = false
         this.viewBaseline = false
         this.viewBaselineLogs = false
@@ -2454,8 +2512,8 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             milestone: new FormControl(sM.milestone),
             plannedFinish: new FormControl(''),
             baselineFinish: new FormControl(''),
-            responsiblePersonName: new FormControl({}),
-            function: new FormControl({}),
+            responsiblePersonName: new FormControl(null),
+            function: new FormControl(null),
             functionGroupId: new FormControl(sM.functionalOwnerId),
             completionDate: new FormControl(''),
             comments: new FormControl(sM.comment),

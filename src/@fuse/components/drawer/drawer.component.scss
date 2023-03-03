@@ -1,26 +1,28 @@
 /* Variables */
-$fuse-drawer-width: 320;
+:root {
+    --fuse-drawer-width: 320px;
+}
 
 fuse-drawer {
     position: relative;
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    width: #{$fuse-drawer-width}px;
-    min-width: #{$fuse-drawer-width}px;
-    max-width: #{$fuse-drawer-width}px;
+    width: var(--fuse-drawer-width);
+    min-width: var(--fuse-drawer-width);
+    max-width: var(--fuse-drawer-width);
     z-index: 300;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .35);
     @apply bg-card;
 
     /* Animations */
     &.fuse-drawer-animations-enabled {
-        transition-duration: 300ms;
+        transition-duration: 400ms;
         transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
         transition-property: visibility, margin-left, margin-right, transform, width, max-width, min-width;
 
         .fuse-drawer-content {
-            transition-duration: 300ms;
+            transition-duration: 400ms;
             transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
             transition-property: width, max-width, min-width;
         }
@@ -43,7 +45,7 @@ fuse-drawer {
 
         /* Side mode */
         &.fuse-drawer-mode-side {
-            margin-left: -#{$fuse-drawer-width}px;
+            margin-left: calc(var(--fuse-drawer-width) * -1);
 
             &.fuse-drawer-opened {
                 margin-left: 0;
@@ -71,7 +73,7 @@ fuse-drawer {
 
         /* Side mode */
         &.fuse-drawer-mode-side {
-            margin-right: -#{$fuse-drawer-width}px;
+            margin-right: calc(var(--fuse-drawer-width) * -1);
 
             &.fuse-drawer-opened {
                 margin-right: 0;
@@ -97,13 +99,12 @@ fuse-drawer {
     /* Content */
     .fuse-drawer-content {
         position: absolute;
-        //display: flex;
         flex: 1 1 auto;
         top: 0;
         bottom: 0;
         width: 100%;
         height: 100%;
-        overflow: auto;
+        overflow: hidden;
         @apply bg-card;
     }
 }

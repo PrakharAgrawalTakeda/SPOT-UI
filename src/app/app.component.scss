@@ -7,106 +7,113 @@
 
 ::ng-deep .mat-select-disabled .mat-select-value {
     color: black !important;
-    @apply cursor-not-allowed
+    @apply cursor-not-allowed;
 }
 
 ::ng-deep .mat-chip.mat-standard-chip.mat-chip-disabled {
     opacity: 1 !important;
 }
 
-::ng-deep .mat-form-field-disabled .mat-form-field-wrapper .mat-form-field-flex {
+::ng-deep .mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex {
     background: #f1f5f9 !important;
     background-size: 1px 100% !important;
     background-repeat: repeat-x !important;
+    .mat-mdc-form-field-infix {
+        input {
+            color: black !important;
+            @apply cursor-not-allowed;
+        }
 
-    input {
-        color: black !important;
-        @apply cursor-not-allowed
-    }
+        input::placeholder {
+            color: black !important;
+        }
 
-    input::placeholder {
-        color: black !important;
-    }
+        textarea {
+            color: black !important;
+            @apply cursor-not-allowed;
+        }
 
-    textarea {
-        color: black !important;
-        @apply cursor-not-allowed;
-    }
-
-    textarea::placeholder {
-        color: black !important;
+        textarea::placeholder {
+            color: black !important;
+        }
     }
 }
 
-::ng-deep .read-only .mat-form-field-disabled .mat-form-field-wrapper .mat-form-field-flex {
+::ng-deep .read-only .mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex {
     background: white !important;
     background-size: 1px 100% !important;
     background-repeat: repeat-x !important;
+    .mat-mdc-form-field-infix {
+        input {
+            color: black !important;
+            @apply cursor-not-allowed;
+        }
 
-    input {
-        color: black !important;
-        @apply cursor-not-allowed
-    }
+        input::placeholder {
+            color: black !important;
+        }
 
-    input::placeholder {
-        color: black !important;
-    }
+        textarea {
+            color: black !important;
+            @apply cursor-not-allowed;
+        }
 
-    textarea {
-        color: black !important;
-        @apply cursor-not-allowed;
-    }
-
-    textarea::placeholder {
-        color: black !important;
+        textarea::placeholder {
+            color: black !important;
+        }
     }
 }
 
-::ng-deep .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+::ng-deep
+    .mat-mdc-form-field.mat-mdc-form-field-appearance-fill
+    .mat-mdc-text-field-wrapper
+    .mat-mdc-form-field-flex
+    .mat-mdc-form-field-infix {
     font-size: 0.875rem;
 }
 
-::ng-deep .mat-option {
+::ng-deep .mat-mdc-option {
     font-size: 0.875rem;
-    height: 29px !important;
+    //height: 29px !important;
+    min-height: 29px !important;
 }
 
 ::ng-deep .mat-chip.mat-standard-chip {
     font-size: 0.875rem !important;
 }
-
-
-::ng-deep .mat-checked {
-    .mat-slide-toggle-thumb {
+::ng-deep mat-slide-toggle{
+    display: flex !important;
+}
+::ng-deep .mat-mdc-slide-toggle-checked {
+    .mdc-switch__shadow {
         background-color: #54b84e !important;
     }
 
-    .mat-slide-toggle-bar {
+    .mdc-switch__track::after {
         // Opacity is determined from the specs for the selection controls.
         // See: https://material.io/design/components/selection-controls.html#specs
         background-color: #99d58f !important;
     }
 
-    .mat-ripple-element {
+    .mat-mdc-ripple-element {
         // Set no opacity for the ripples because the ripple opacity will be adjusted dynamically
         // based on the type of interaction with the slide-toggle (e.g. for hover, focus)
         background-color: #1b5f17 !important;
     }
 }
 
-::ng-deep .mat-form-field.mat-form-field-appearance-fill.ng-dirty .mat-form-field-wrapper .mat-form-field-flex {
+::ng-deep
+    .mat-mdc-form-field.mat-form-field-appearance-fill.ng-dirty
+    .mat-mdc-text-field-wrapper
+    .mat-mdc-form-field-flex {
     border-left: 5px solid #eba800 !important;
 }
 
-::ng-deep .mat-slide-toggle.ng-dirty {
+::ng-deep .mat-mdc-slide-toggle.ng-dirty {
     padding-left: 10px;
     border-radius: 5px;
     border-left: 5px solid #eba800 !important;
 }
-
-
-
-
 
 //DATA TABLE FIX HEADERS
 ::ng-deep .ngx-datatable.datatable-an-80 .datatable-body .datatable-scroll {
@@ -114,6 +121,7 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-ri-73 .datatable-body .datatable-scroll {
     height: 73vh !important;
     overflow-x: hidden !important;
@@ -125,11 +133,13 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-qr-80 .datatable-body .datatable-scroll {
     height: 77vh !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-pt-80 .datatable-body .datatable-scroll {
     height: 77vh !important;
     overflow-x: scroll !important;
@@ -137,8 +147,9 @@
 }
 
 ::ng-deep .ngx-datatable.datatable-ll-80 .datatable-body .datatable-scroll {
-    height: 87vh !important;
-    overflow-x: scroll !important;
+    height: 68vh !important;
+    // width: 100vw !important;
+    overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
 
@@ -148,24 +159,28 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-bl-83 .datatable-body .datatable-scroll {
     height: 80vh !important;
     width: 100% !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-dq-83 .datatable-body .datatable-scroll {
     height: 80vh !important;
     width: 100% !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-ps .datatable-body .datatable-scroll {
     height: 70vh !important;
     width: 100% !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+
 ::ng-deep .ngx-datatable.datatable-state-check .datatable-body .datatable-scroll {
     max-height: 20vh !important;
     width: 100% !important;
@@ -173,37 +188,66 @@
     overflow-y: scroll !important;
 }
 
-::ng-deep .cursor-wait-custom-loading{
+::ng-deep .cursor-wait-custom-loading {
     cursor: wait !important;
-    
-    input{
+
+    input {
         cursor: wait !important;
     }
-    input :disabled{
+
+    input :disabled {
         cursor: wait !important;
     }
-    button{
+
+    button {
         cursor: wait !important;
     }
-    a{
+
+    a {
         cursor: wait !important;
     }
-    .mat-chip{
+
+    .mat-chip {
         cursor: wait !important;
     }
+
     textarea {
         cursor: wait !important;
     }
-    textarea :disabled{
+
+    textarea :disabled {
         cursor: wait !important;
     }
+
     ngx-datatable {
         cursor: wait !important;
     }
-    span{
+
+    span {
         cursor: wait !important;
     }
-    div{
+
+    div {
         cursor: wait !important;
     }
+}
+
+::ng-deep .custom-label-with-hint
+    > .mat-mdc-form-field
+    > .mat-mdc-text-field-wrapper
+    > .mat-mdc-form-field-flex
+    > .mat-mdc-form-field-infix
+    > label {
+    top: -29px !important;
+    gap: 0px !important;
+}
+
+::ng-deep .mdc-floating-label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px;
+}
+
+::ng-deep .mdc-linear-progress__bar-inner{
+    border-color: #e1242a !important;
 }

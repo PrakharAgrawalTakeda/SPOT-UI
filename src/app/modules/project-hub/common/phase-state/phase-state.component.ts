@@ -6,7 +6,6 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../../../core/auth/auth.service";
 import {MsalService} from "@azure/msal-angular";
-const _ = require("lodash");
 
 @Component({
     selector: 'app-phase-state',

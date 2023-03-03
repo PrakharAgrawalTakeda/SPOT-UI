@@ -27,6 +27,9 @@ export class CloseOutLessonsLearnedComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    if(this.projecthubservice.roleControllerControl.closeOut.lessonsLearnt){
+      this.editable=true
+    }
     this.dataloader();
     this.viewContent = true
   }
@@ -39,6 +42,7 @@ export class CloseOutLessonsLearnedComponent implements OnInit {
       this.KeyTakeawayForm.patchValue({
         keyTakeaways: res.keyTakeaways
       })
+      this.KeyTakeawayForm.controls.keyTakeaways.disable()
     })
   }
   

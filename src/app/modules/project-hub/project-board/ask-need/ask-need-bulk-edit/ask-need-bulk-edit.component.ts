@@ -390,7 +390,7 @@ export class AskNeedBulkEditComponent implements OnInit {
       askNeedUniqueId: new FormControl(''),
       projectId: new FormControl(this.projectHubService.projectid),
       askNeed1: new FormControl(''),
-      needFrom: new FormControl({}),
+      needFrom: new FormControl(null),
       needByDate: new FormControl(''),
       comments: new FormControl(''),
       logDate: new FormControl(this.today),
