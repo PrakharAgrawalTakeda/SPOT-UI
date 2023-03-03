@@ -272,9 +272,11 @@
               {{getLookupName(value)}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
-                [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
-              </spot-singleselect-autocomplete>
+              <div class="w-full px-1">
+                  <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
+                                                  [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
+                  </spot-singleselect-autocomplete>
+              </div>
             </form>
           </ng-template>
         </ngx-datatable-column>
@@ -287,9 +289,11 @@
               {{getLookupName(value)}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
-                [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
-              </spot-singleselect-autocomplete>
+              <div class="w-full px-1">
+                  <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
+                                                  [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
+                  </spot-singleselect-autocomplete>
+              </div>
             </form>
           </ng-template>
         </ngx-datatable-column>
