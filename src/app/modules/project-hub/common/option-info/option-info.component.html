@@ -66,16 +66,20 @@
                         [flexGrow]="1">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
-                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}">
-                            </spot-input>
+                            <div class="w-full px-1">
+                                <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}">
+                                </spot-input>
+                            </div>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Justification" prop="justification" [resizeable]="false"
                         [sortable]="false" [flexGrow]="1">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
-                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}">
-                            </spot-input>
+                            <div class="w-full px-1">
+                                <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}">
+                                </spot-input>
+                            </div>
                         </ng-template>
                     </ngx-datatable-column>
                 </ngx-datatable>
