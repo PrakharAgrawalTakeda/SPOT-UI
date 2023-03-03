@@ -124,7 +124,7 @@
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
                 <!--  -->
-                <!-- [showHint]="true" 
+                <!-- [showHint]="true"
                 [hint]="hi" [hintPosition]="'mat-hint'" -->
                 <!-- (this.schedulengxdata.milestoneType > 0 ? (this.schedulengxdata.milestoneType == 1 ? 'Execution Start - ...' : (this.schedulengxdata.milestoneType == 2 ? 'Execution End - ...' : 'Milestone')) : ' ') -->
                 <!-- [placeholder]="'Milestone Name'" -->
@@ -738,9 +738,9 @@
               &nbsp;
             </div>
             <ng-template #null55>
-              
+
                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
-             
+
             </ng-template>
 
           </ng-template>
@@ -867,7 +867,7 @@
   </div>
 </div>
 <div *ngIf="viewContent" [hidden]="!viewStandardMilestonesSets">
-    <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)" [loadContent]="viewStandardMilestonesSets"></app-standard-milestone-sets>
+    <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)" [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData"></app-standard-milestone-sets>
 </div>
 
 <!-- </div> -->
