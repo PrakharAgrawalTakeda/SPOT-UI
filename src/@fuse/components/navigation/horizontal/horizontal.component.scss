@@ -62,9 +62,8 @@ fuse-horizontal-navigation {
         /* Branch - When menu open */
         fuse-horizontal-navigation-branch-item {
 
-            .fuse-horizontal-navigation-menu-active,
-            .fuse-horizontal-navigation-menu-active-forced {
-
+            .mat-mdc-tooltip-trigger.fuse-horizontal-navigation-item.fuse-horizontal-navigation-item-active-forced {
+                border-bottom: 5px solid #E1242a;
                 .fuse-horizontal-navigation-item-wrapper {
                     @apply bg-hover;
                 }

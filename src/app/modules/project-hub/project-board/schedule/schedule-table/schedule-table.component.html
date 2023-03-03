@@ -68,12 +68,12 @@
         [draggable]="false" [resizeable]="false">
         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
-            <mat-slide-toggle class="overflow-hidden" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle> <br>
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
             Link
         </ng-template>
         <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-slide-toggle class="overflow-hidden" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
         </ng-template>
     </ngx-datatable-column>
 
@@ -81,12 +81,12 @@
                           [draggable]="false" [resizeable]="false">
         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
                      let-selectFn="selectFn">
-            <mat-slide-toggle class="overflow-hidden" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle> <br>
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
             Add
         </ng-template>
         <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                      let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-slide-toggle class="overflow-hidden" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
         </ng-template>
     </ngx-datatable-column>
 

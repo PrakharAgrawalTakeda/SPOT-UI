@@ -50,7 +50,7 @@
 
 
     <div class="flex justify-end items-center gap-3 pr-6 mt-4">
-      <button mat-flat-button [color]="'primary'" type="button" class="min-w-26 text-primary bg-gray-200"[color]="'primary-200'"
+      <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200"
             (click)="openStandardMilestonesSets()" >Standard Milestone Sets</button>
       <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
         (click)="baselineLogs()"  *ngIf="mode== 'Normal'">
@@ -124,7 +124,7 @@
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
                 <!--  -->
-                <!-- [showHint]="true" 
+                <!-- [showHint]="true"
                 [hint]="hi" [hintPosition]="'mat-hint'" -->
                 <!-- (this.schedulengxdata.milestoneType > 0 ? (this.schedulengxdata.milestoneType == 1 ? 'Execution Start - ...' : (this.schedulengxdata.milestoneType == 2 ? 'Execution End - ...' : 'Milestone')) : ' ') -->
                 <!-- [placeholder]="'Milestone Name'" -->
