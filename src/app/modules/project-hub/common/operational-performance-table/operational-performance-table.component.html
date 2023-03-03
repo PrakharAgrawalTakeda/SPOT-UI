@@ -63,7 +63,7 @@
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Include in Project Close Out Report (Max 3)" prop="includeInCloseOut" [sortable]="false"
-            [resizeable]="false" [flexGrow]="2" *ngIf="mode== 'Project-Close-Out'">
+            [resizeable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                 <div class="flex items-center justify-between pl-2 overflow-hidden">
                     <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>

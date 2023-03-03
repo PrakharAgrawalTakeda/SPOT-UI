@@ -103,7 +103,6 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         }))
       }
       this.lessonsLearned = this.sortbyDateTypeName(this.lessonsLearned)
-      this.lessonsLearned = this.sortbyTypeName(this.lessonsLearned)
       this.disabler();
       this.viewContent = true
     })
@@ -197,6 +196,8 @@ export class LessonLearnedBulkEditComponent implements OnInit {
 
   sortbyDateTypeName(array: any): any {
     return array.length > 1 ? array.sort((a, b) => {
+      a.typeName = a.lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == a.lessonType)[0].lookUpName
+      b.typeName = b.lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == b.lessonType)[0].lookUpName
       if (a.lessonCloseDate === null) {
         return -1;
       }
@@ -205,24 +206,15 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         return 1;
       }
 
-      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
-        return 0;
+      if (a.lessonCloseDate === b.lessonCloseDate) {
+        return a.typeName < b.typeName ? -1 : (a.typeName > b.typeName) ? 1 : 0;
+      } else {
+        return a.lessonCloseDate < b.lessonCloseDate ? -1 : 1;
       }
-
-      return new Date(a.lessonCloseDate) < new Date(b.lessonCloseDate) ? -1 : 1;
     }) : array
 
   }
 
-  sortbyTypeName(array: any): any {
-    return array.length > 1 ? array.sort((a, b) => {
-      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
-        return a.typeName < b.typeName ? -1 : 1;
-      }
-      return 0;
-    }) : array
-
-  }
   
   lessonLearnedTableEditRow(rowIndex) {
     if (!this.lessonLearnedTableEditStack.includes(rowIndex)) {
