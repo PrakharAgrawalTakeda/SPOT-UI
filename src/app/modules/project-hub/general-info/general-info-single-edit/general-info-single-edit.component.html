@@ -21,7 +21,7 @@
             </div>
             <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
                 *ngIf="viewElementChecker('problemTitle') && callLocation == 'ProjectHub'" class="w-full" formControlName="problemTitle"
-                name="problemTitle" [label]="'Project Name'" [placeholder]="'Project Name'">
+                name="problemTitle" [label]="subCallLocation == 'BusinessCase'?'Initiative Title':'Project Name'" [placeholder]="'Project Name'">
             </spot-input>
             <spot-singleselect-user-autocomplete
                 (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)" [Required]="'true'"

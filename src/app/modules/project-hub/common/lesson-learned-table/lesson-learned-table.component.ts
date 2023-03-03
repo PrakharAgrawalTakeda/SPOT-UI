@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -16,9 +16,7 @@ export class LessonLearnedTableComponent implements OnInit {
   lessonLearned: any = []
   @Input() Editable: boolean = false
   lookupdata:any
-  // KeyTakeawayForm = new FormGroup({
-  //   keyTakeaways: new FormControl('')
-  // })
+  @ViewChild('lessonLearnedTable') lessonLearnedTable: any;
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -38,7 +36,6 @@ export class LessonLearnedTableComponent implements OnInit {
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getLessonLearnedbyProjectId(this.id).then((res:any) => {
         this.lessonLearned = res
-        this.lessonLearned = this.sortbyDateTypeName(this.lessonLearned)
         for(var i=0;i<this.lessonLearned.length;i++){
           this.lessonLearned[i].Actionusername = res[i].actionOwner.userDisplayName
           this.lessonLearned[i].SubmittedByName = res[i].submittedBy.userDisplayName 
@@ -46,39 +43,10 @@ export class LessonLearnedTableComponent implements OnInit {
           this.lessonLearned[i].submittedBy = res[i].submittedBy.userAdid == null ? '' : res[i].submittedBy.userAdid
           this.lessonLearned[i].typeName = res[i].lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == res[i].lessonType)[0].lookUpName
         }
-        this.lessonLearned = this.sortbyTypeName(this.lessonLearned)
       })
     })
   }
 
-  sortbyDateTypeName(array: any): any {
-    return array.length > 1 ? array.sort((a, b) => {
-      if (a.lessonCloseDate === null) {
-        return -1;
-      }
-
-      if (new Date(b.lessonCloseDate) === null) {
-        return 1;
-      }
-
-      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
-        return 0;
-      }
-
-      return new Date(a.lessonCloseDate) < new Date(b.lessonCloseDate) ? -1 : 1;
-    }) : array
-
-  }
-
-  sortbyTypeName(array: any): any{
-    return array.length > 1 ? array.sort((a, b) => {
-      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
-          return a.typeName < b.typeName ? -1 : 1;
-      }
-      return 0;
-    }) : array
-
-  }
 
   getLookupName(lookUpId: string): string {
     return lookUpId && lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == lookUpId).lookUpName : ''
@@ -119,4 +87,13 @@ export class LessonLearnedTableComponent implements OnInit {
     })
 
   }
+  onDetailToggle(event: any) {
+    // console.log(event)
+  }
+  
+  toggleExpandRow(row) {
+    // console.log('Toggled Expand Row!', this.scheduleTable);
+    this.lessonLearnedTable.rowDetail.toggleExpandRow(row);
+  }
+
 }

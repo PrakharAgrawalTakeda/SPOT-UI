@@ -242,7 +242,7 @@
                                             </div>
                                             <div class="test">
                                                 <div class="parent">
-                                                    <label>Production Steps</label>
+                                                    <label>Production Step</label>
                                                 </div>
                                                 <div class="child">
                                                     <label class="reviewText">{{productionStepName}}</label>
@@ -268,16 +268,16 @@
                                             class="flex justify-between items-start gap-6">
                                             <div style="padding-left: 10px; margin-left: 10px;margin-right: 10px;" class="flex flex-col flex-auto w-2/5 bg-card shadow rounded-2xl overflow-hidden">
                                                 <div class="">
-                                                    <ngx-datatable [headerHeight]="'10px'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                                                        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm">
+                                                    <ngx-datatable [headerHeight]="'10px'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
+                                                        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm" style="width: 432px;">
                                                         <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
-                                                            [sortable]="false" [flexGrow]="0.2">
+                                                            [sortable]="false" [width]="20">
                                                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                                                 <p>{{getLookUpName(value)}}</p>
                                                             </ng-template>
                                                         </ngx-datatable-column>
                                                         <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
-                                                            [sortable]="false" [flexGrow]="0.2">
+                                                            [sortable]="false" [width]="20">
                                                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                                                 <!-- <p>&nbsp;</p> -->
                                                                 <p>{{value}}</p>

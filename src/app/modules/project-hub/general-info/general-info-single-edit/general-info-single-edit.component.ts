@@ -234,7 +234,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
                   return entry.productId == history.state.data.primaryProductId
                 })
               }
-              if (history.state.data.otherImpactedProducts != null || history.state.data.otherImpactedProducts != "") {
+              if (history.state.data.otherImpactedProducts != null && history.state.data.otherImpactedProducts != "") {
                 const data = history.state.data.otherImpactedProducts.split(',');
                 var impactedproducts = {};
                 var finaldata = [];
@@ -253,7 +253,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
               problemType: history.state.data.problemType,
               projectDescription: history.state.data.projectDescription,
               primaryProduct: history.state.data.primaryProductId == null ? '' : history.state.data.primaryProductId[0],
-              otherImpactedProducts: history.state.data.otherImpactedProducts[0] == undefined ? [] : finaldata,
+              otherImpactedProducts: history.state.data.otherImpactedProducts == undefined || history.state.data.otherImpactedProducts == null || history.state.data.otherImpactedProducts == ""? [] : finaldata,
               portfolioOwner: '',
               excecutionScope: [],
               enviornmentalPortfolio: '',
