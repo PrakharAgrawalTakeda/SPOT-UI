@@ -44,7 +44,7 @@ export class OverallStatusEditComponent implements OnInit {
     overallStatusId: new FormControl(''),
     overallStatusDescription: new FormControl(''),
     recentAccomplishments: new FormControl(''),
-    statusLastUpdated: new FormControl(''),
+    statusLastUpdated: new FormControl(null),
     statusThrough: new FormControl(this.today),
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) { }

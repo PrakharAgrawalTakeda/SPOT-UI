@@ -70,7 +70,7 @@
                                                 <label>Submitted By <label style="color:red">*</label></label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.SubmittedBy.userDisplayName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.SubmittedBy?.userDisplayName}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -94,7 +94,7 @@
                                                 <label>Portfolio Owner <label style="color:red">*</label> </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.portfolioOwner.portfolioOwner}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.portfolioOwner?.portfolioOwner}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -129,7 +129,7 @@
                                                 <label>Primary Product <label style="color:red">*</label> </label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.primaryProduct.fullProductName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.primaryProduct?.fullProductName}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -176,7 +176,7 @@
                                                 <label>Environmental Portfolio</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.enviornmentalPortfolio.portfolioOwner}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.enviornmentalPortfolio?.portfolioOwner}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -242,7 +242,7 @@
                                             </div>
                                             <div class="test">
                                                 <div class="parent">
-                                                    <label>Production Steps</label>
+                                                    <label>Production Step</label>
                                                 </div>
                                                 <div class="child">
                                                     <label class="reviewText">{{productionStepName}}</label>
@@ -268,16 +268,16 @@
                                             class="flex justify-between items-start gap-6">
                                             <div style="padding-left: 10px; margin-left: 10px;margin-right: 10px;" class="flex flex-col flex-auto w-2/5 bg-card shadow rounded-2xl overflow-hidden">
                                                 <div class="">
-                                                    <ngx-datatable [headerHeight]="'10px'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                                                        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm">
+                                                    <ngx-datatable [headerHeight]="'10px'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
+                                                        class="pr-6 material font-medium text-sm text-secondary whitespace-nowrap" [rows]="qualityForm" style="width: 432px;">
                                                         <ngx-datatable-column name="Quality Reference Type" prop="qualityReferenceTypeId" [resizeable]="false"
-                                                            [sortable]="false" [flexGrow]="0.2">
+                                                            [sortable]="false" [width]="20">
                                                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                                                 <p>{{getLookUpName(value)}}</p>
                                                             </ng-template>
                                                         </ngx-datatable-column>
                                                         <ngx-datatable-column name="Quality Reference #" prop="qualityReference1" [resizeable]="false"
-                                                            [sortable]="false" [flexGrow]="0.2">
+                                                            [sortable]="false" [width]="20">
                                                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                                                 <!-- <p>&nbsp;</p> -->
                                                                 <p>{{value}}</p>
@@ -297,7 +297,7 @@
                                                 <label>Primary KPI</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.primaryKPI.kpiname}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.primaryKPI?.kpiname}}</label>
                                             </div>
                                         </div>
                                         <div class="test">
@@ -317,7 +317,7 @@
                                                     <label>AGILE Primary Workstream</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{createProjectForm.value.agilePrimaryWorkstream.lookUpName}}</label>
+                                                    <label class="reviewText">{{createProjectForm.value.agilePrimaryWorkstream?.lookUpName}}</label>
                                                 </div>
                                             </div>
                                             <div class="test">
@@ -336,7 +336,7 @@
                                                     <label>AGILE Wave</label>
                                                 </div>
                                                 <div class="child">
-                                                    <label class="reviewText">{{createProjectForm.value.agileWave.lookUpName}}</label>
+                                                    <label class="reviewText">{{createProjectForm.value.agileWave?.lookUpName}}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -378,7 +378,7 @@
                                                 <label>Strategic Year</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.strategicYear.lookUpName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.strategicYear?.lookUpName}}</label>
                                             </div>
                                         </div>
                                         <div class="test" *ngIf="createProjectForm.controls['isGmsgqltannualMustWin'].value">
@@ -386,7 +386,7 @@
                                                 <label>GMSGQ LT Annual Must Win?</label>
                                             </div>
                                             <div class="child">
-                                                <label class="reviewText">{{createProjectForm.value.annualMustWinID.lookUpName}}</label>
+                                                <label class="reviewText">{{createProjectForm.value.annualMustWinID?.lookUpName}}</label>
                                             </div>
                                         </div>
                                         <div class="test">

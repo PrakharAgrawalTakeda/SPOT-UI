@@ -50,7 +50,7 @@
 
 
     <div class="flex justify-end items-center gap-3 pr-6 mt-4">
-      <button mat-flat-button [color]="'primary'" type="button" class="min-w-26 text-primary bg-gray-200"
+      <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200"
             (click)="openStandardMilestonesSets()" >Standard Milestone Sets</button>
       <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
         (click)="baselineLogs()"  *ngIf="mode== 'Normal'">
@@ -124,7 +124,7 @@
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
               <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
                 <!--  -->
-                <!-- [showHint]="true" 
+                <!-- [showHint]="true"
                 [hint]="hi" [hintPosition]="'mat-hint'" -->
                 <!-- (this.schedulengxdata.milestoneType > 0 ? (this.schedulengxdata.milestoneType == 1 ? 'Execution Start - ...' : (this.schedulengxdata.milestoneType == 2 ? 'Execution End - ...' : 'Milestone')) : ' ') -->
                 <!-- [placeholder]="'Milestone Name'" -->
@@ -272,9 +272,11 @@
               {{getLookupName(value)}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
-                [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
-              </spot-singleselect-autocomplete>
+              <div class="w-full px-1">
+                  <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
+                                                  [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
+                  </spot-singleselect-autocomplete>
+              </div>
             </form>
           </ng-template>
         </ngx-datatable-column>
@@ -287,9 +289,11 @@
               {{getLookupName(value)}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
-                [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
-              </spot-singleselect-autocomplete>
+              <div class="w-full px-1">
+                  <spot-singleselect-autocomplete formControlName="function" [showLabel]="false"
+                                                  [valuePointer]="'lookUpName'" [dropDownArray]="getFunctionOwner()">
+                  </spot-singleselect-autocomplete>
+              </div>
             </form>
           </ng-template>
         </ngx-datatable-column>
@@ -356,7 +360,7 @@
                     class="h-[45px]">
                   <mat-slide-toggle
                       [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 8 can be selected at a time in the project report' : null"
-                      (change)="disabler()" class="h-full overflow-visible"
+                      (change)="disabler()" class="h-full overflow-hidden"
                       formControlName="includeInReport">
                   </mat-slide-toggle>
               </form>
@@ -376,7 +380,7 @@
                       class="h-[45px]">
                     <mat-slide-toggle
                         [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
-                        (change)="disabler()" class="h-full overflow-visible"
+                        (change)="disabler()" class="h-full overflow-hidden"
                         formControlName="includeInBusinessCase">
                     </mat-slide-toggle>
                 </form>
@@ -395,7 +399,7 @@
                   class="h-[45px]">
                 <mat-slide-toggle
                     [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 20 can be selected at a time in the project close out report' : null"
-                    (change)="disabler()" class="h-full overflow-visible"
+                    (change)="disabler()" class="h-full overflow-hidden"
                     formControlName="includeInCloseout">
                 </mat-slide-toggle>
             </form>
@@ -414,7 +418,7 @@
                   class="h-[45px]">
                 <mat-slide-toggle
                     [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 10 can be selected at a time in the project charter' : null"
-                    (change)="disabler()" class="h-full overflow-visible"
+                    (change)="disabler()" class="h-full overflow-hidden"
                     formControlName="includeInCharter">
                 </mat-slide-toggle>
             </form>
@@ -634,7 +638,7 @@
                 class="p-2 overflow-hidden">
                 <div class="flex items-center justify-between">
                   <mat-slide-toggle [matTooltip]="this.baselineLogForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 10 can be selected at a time in the project close out report' : null"
-                  (change)="disabler2()"  class="h-full overflow-visible" formControlName="includeInCloseout">
+                  (change)="disabler2()"  class="h-full overflow-hidden" formControlName="includeInCloseout">
                   </mat-slide-toggle>
                 </div>
               </form>
@@ -738,9 +742,9 @@
               &nbsp;
             </div>
             <ng-template #null55>
-              
+
                 <p>{{value | date:'dd-MMM-yyyy'}}</p>
-             
+
             </ng-template>
 
           </ng-template>
@@ -867,7 +871,7 @@
   </div>
 </div>
 <div *ngIf="viewContent" [hidden]="!viewStandardMilestonesSets">
-    <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)" [loadContent]="viewStandardMilestonesSets"></app-standard-milestone-sets>
+    <app-standard-milestone-sets (standardMilestonesAdded)="addStandardMilestonesToList($event)" [loadContent]="viewStandardMilestonesSets" [lookup]="lookUpData"></app-standard-milestone-sets>
 </div>
 
 <!-- </div> -->

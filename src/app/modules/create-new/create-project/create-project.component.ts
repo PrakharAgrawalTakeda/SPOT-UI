@@ -11,6 +11,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { __classPrivateFieldSet } from 'tslib';
 import { MatStepper } from '@angular/material/stepper';
 import { CreateNewApiService } from '../create-new-api.service';
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 
 
 @Component({
@@ -39,52 +40,99 @@ export class CreateProjectComponent implements OnInit {
   localCurrency:any = [];
   viewContent:boolean = false
   createProjectForm = new FormGroup({
-    problemTitle: new FormControl(''),
-    projectsingle: new FormControl(''),
-    projectsingleid: new FormControl(''),
+    problemTitle: new FormControl(),
+    projectsingle: new FormControl(),
+    projectsingleid: new FormControl(),
     problemType: new FormControl('Standard Project / Program'),
-    projectDescription: new FormControl(''),
-    primaryProduct: new FormControl({}),
+    projectDescription: new FormControl(),
+    primaryProduct: new FormControl(null),
     otherImpactedProducts: new FormControl([]),
-    portfolioOwner: new FormControl({}),
+    portfolioOwner: new FormControl(null),
     excecutionScope: new FormControl([]),
-    enviornmentalPortfolio: new FormControl({}),
-    isCapsProject: new FormControl(false),
-    owningOrganization: new FormControl(''),
-    SubmittedBy: new FormControl(''),
-    targetGoalSituation: new FormControl(''),
-    isOeproject: new FormControl(''),
-    qualityReference: new FormControl(''),
-    isTechTransfer: new FormControl(''),
-    primaryKPI: new FormControl(''),
-    isAgile: new FormControl(''),
-    isSiteAssessment: new FormControl(''),
-    isPobos: new FormControl(''),
-    oeProjectType: new FormControl(''),
-    campaignPhase: new FormControl(''),
-    productionSteps: new FormControl(''),
-    campaignType: new FormControl(''),
-    agilePrimaryWorkstream: new FormControl(''),
-    agileSecondaryWorkstream: new FormControl(''),
-    agileWave: new FormControl(''),
-    pobosCategory: new FormControl(''),
-    siteAssessmentCategory: new FormControl(''),
+    enviornmentalPortfolio: new FormControl(null),
+    isCapsProject: new FormControl(null),
+    owningOrganization: new FormControl(),
+    SubmittedBy: new FormControl(),
+    targetGoalSituation: new FormControl(),
+    isOeproject: new FormControl(null),
+    qualityReference: new FormControl(),
+    isTechTransfer: new FormControl(null),
+    primaryKPI: new FormControl(),
+    isAgile: new FormControl(),
+    isSiteAssessment: new FormControl(),
+    isPobos: new FormControl(),
+    oeProjectType: new FormControl(),
+    campaignPhase: new FormControl(),
+    productionSteps: new FormControl(),
+    campaignType: new FormControl(),
+    agilePrimaryWorkstream: new FormControl(),
+    agileSecondaryWorkstream: new FormControl(),
+    agileWave: new FormControl(),
+    pobosCategory: new FormControl(),
+    siteAssessmentCategory: new FormControl(),
     quality: new FormControl(new FormArray([])),
-    isGmsgqltannualMustWin: new FormControl(''),
-    strategicYear: new FormControl(''),
-    annualMustWinID: new FormControl(''),
-    localCurrency: new FormControl('')
+    isGmsgqltannualMustWin: new FormControl(),
+    strategicYear: new FormControl(),
+    annualMustWinID: new FormControl(),
+    localCurrency: new FormControl(),
+    isArchived: new FormControl()
   })
+  newmainnav: any = [
+    {
+      id: 'portfolio-center',
+      title: 'Portfolio Center',
+      type: 'basic',
+      link: '/portfolio-center'
+    },
+    {
+      // id: 'create-project',
+      title: 'Create Project',
+      type: 'collapsable',
+      link: '/create-project',
+      children: [
+        {
+          title: 'Create Project',
+          type: 'basic',
+          link: '/create-project/create-new-project'
+        },
+        {
+          title: 'Copy Project',
+          type: 'basic',
+          link: '/create-project/copy-project'
+        }
+      ],
+    },
+    {
+      id: 'spot-documents',
+      title: 'SPOT Resources',
+      type: 'basic',
+      externalLink: true,
+      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+      target: '_blank'
+    },
+    {
+      id: 'report-navigator',
+      title: 'Report Navigator',
+      type: 'basic',
+      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+      externalLink: true,
+      target: "_blank"
+
+    }
+  ]
   envPortfolio:any
 
   capturedValues = ['', '']
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService) {
   }
 
   
   ngOnInit(): void {
+    const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+    mainNavComponent.navigation = this.newmainnav
+    mainNavComponent.refresh()
     console.log("Inside init")
     this.auth.lookupMaster().then(res => {
       this.apiService.getLocalCurrency().then(currency => {
@@ -346,8 +394,8 @@ export class CreateProjectComponent implements OnInit {
     }
       mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
       mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-      mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
-    mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
+      mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" || formValue.primaryKPI != null? formValue.primaryKPI.kpiid : ''
+      mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
       if (mainObjCreate[0].IsPOBOS) {
         mainObjCreate[0].POBOSCategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : ''
     }
