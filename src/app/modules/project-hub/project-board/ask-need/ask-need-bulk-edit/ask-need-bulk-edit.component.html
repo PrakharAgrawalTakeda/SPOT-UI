@@ -75,9 +75,12 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value | date:'dd-MMM-yyyy'}}</p>
                         </a>
+
                         <form [formGroup]="askNeedForm.controls[rowIndex]" *ngIf="anTableEditStack.includes(rowIndex)">
-                            <spot-input-date formControlName="needByDate" [showLabel]="false">
-                            </spot-input-date>
+                            <div class="w-full px-1">
+                                <spot-input-date formControlName="needByDate" [showLabel]="false">
+                                </spot-input-date>
+                            </div>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>

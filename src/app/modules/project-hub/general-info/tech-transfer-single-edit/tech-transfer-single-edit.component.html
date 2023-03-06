@@ -11,7 +11,7 @@
         <div [ngClass] = "{'h-[84vh] overflow-hidden': viewType == 'SidePanel'}">
         <!-- <div class="w-full mt-4 mb-6"> -->
             <spot-toggle class="w-full" formControlName="isTechTransfer" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
-                [label]="'Tech Transfer'">
+                [label]="viewType == 'SidePanel'?'Tech Transfer':'Tech Transfer or Clinical Campaign'">
             </spot-toggle>
         <!-- </div> -->
         <div class="mt-6" *ngIf="generalInfoForm.controls['isTechTransfer'].value">

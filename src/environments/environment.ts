@@ -7,7 +7,7 @@ export const environment = {
     environment: 'Local',
     SPOT_UI_URL: 'http://localhost:4200/',
     SPOT_API_URL:'https://spotapi-gateway-dev.azurewebsites.net/api/'
-    //SPOT_API_URL:'https://localhost:7288/api/'
+    // SPOT_API_URL:'https://localhost:7288/api/'
 };
 
 /*

@@ -201,9 +201,11 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="riskIssueResult" [showLabel]="false"></spot-textarea>
-                        </form>
+                        <div class="w-full px-1">
+                            <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
+                                <spot-textarea formControlName="riskIssueResult" [showLabel]="false"></spot-textarea>
+                            </form>
+                        </div>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Impact" prop="impactId" [flexGrow]="1" [resizeable]="false"

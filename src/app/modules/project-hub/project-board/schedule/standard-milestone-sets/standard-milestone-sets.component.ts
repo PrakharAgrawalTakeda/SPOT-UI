@@ -12,6 +12,7 @@ import { Output, EventEmitter } from '@angular/core';
 export class StandardMilestoneSetsComponent implements OnInit {
     @Output() standardMilestonesAdded = new EventEmitter<any[]>();
     @Input() loadContent: boolean = false;
+    @Input() lookup: any
     standardMilestoneData: any = []
     standardMilestoneDBData: any = []
     standarMilestoneAdded: any = []
@@ -43,6 +44,7 @@ export class StandardMilestoneSetsComponent implements OnInit {
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
+
     }
     submitStandardMilestoneSets() {
         var returnedMilestones: any = []

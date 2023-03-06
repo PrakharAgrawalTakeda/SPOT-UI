@@ -23,6 +23,7 @@ export class SchedulesTableComponent implements OnInit {
   @Input() linksProblemCapture: any = []
   @Input() tableIndex: number = 0
   @Output() toggleChange = new EventEmitter();
+  @Input() lookup: any
   selected = [];
   SelectionType = SelectionType;
   today = new Date()
@@ -157,4 +158,7 @@ export class SchedulesTableComponent implements OnInit {
   viewElementChecker(element: string): boolean {
       return this.viewElements.some(x => x == element)
   }
+    getLookUpName(lookUpId: string): string {
+        return lookUpId && lookUpId != '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
+    }
 }

@@ -18,8 +18,8 @@
     </div>
         <div class="overflow-x-auto mx-6">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class=" font-medium text-sm text-default whitespace-nowrap" [rows]="lessonLearned" #lessonLearnedTable>
-                <ngx-datatable-column name="Include In Single Slide Summary (Max 4)" prop="includeInCloseOutReport" [sortable]="false"
+                class=" font-medium text-sm text-default whitespace-nowrap" [rows]="lessonLearned" #lessonLearnedTable [sorts]="[{ prop: 'lessonCloseDate', dir: 'asc' },{ prop: 'typeName', dir: 'asc' }]">
+                <!-- <ngx-datatable-column name="Include In Single Slide Summary (Max 4)" prop="includeInCloseOutReport" [sortable]="false"
                     [resizeable]="false" [flexGrow]="1.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <div class="flex items-center justify-between pl-2 overflow-hidden">
@@ -28,8 +28,8 @@
                             </mat-icon>
                         </div>
                     </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Create Detailed Review Slides (No Max)" prop="createDetailedReviewSlide" [sortable]="false"
+                </ngx-datatable-column> -->
+                <!-- <ngx-datatable-column name="Create Detailed Review Slides (No Max)" prop="createDetailedReviewSlide" [sortable]="false"
                     [resizeable]="false" [flexGrow]="2">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <div class="flex items-center justify-between pl-2 overflow-hidden">
@@ -38,12 +38,12 @@
                             </mat-icon>
                         </div>
                     </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1">
+                </ngx-datatable-column> -->
+                <!-- <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column> -->
                 <ngx-datatable-column name="Title" prop="leassonTitle" [flexGrow]="1.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
@@ -54,9 +54,14 @@
                         {{value}}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Type" prop="lessonType" [flexGrow]="1">
+                <!-- <ngx-datatable-column name="Type" prop="lessonType" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ getLookupName(value)}}
+                    </ng-template>
+                </ngx-datatable-column> -->
+                <ngx-datatable-column name="Type" prop="typeName" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value}}
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Criticality" prop="criticality" [flexGrow]="1.4">
@@ -70,31 +75,31 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Submitting Group / Role" prop="submittingGroupRole" [flexGrow]="1.8">
+                <!-- <ngx-datatable-column name="Submitting Group / Role" prop="submittingGroupRole" [flexGrow]="1.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{ getLookupName(value)}}</p>
                     </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Suggested Action" prop="suggestedAction" [flexGrow]="1.5">
+                </ngx-datatable-column> -->
+                <!-- <ngx-datatable-column name="Suggested Action" prop="suggestedAction" [flexGrow]="1.5">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column> -->
                 <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Function Action Owner" prop="functionActionOwner" [flexGrow]="1.7">
+                <!-- <ngx-datatable-column name="Function Action Owner" prop="functionActionOwner" [flexGrow]="1.7">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ getLookupName(value)}}
                     </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Action Owner" prop="Actionusername" [flexGrow]="1.8">
+                </ngx-datatable-column> -->
+                <!-- <ngx-datatable-column name="Action Owner" prop="Actionusername" [flexGrow]="1.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column> -->
                 <ngx-datatable-column name="Close Date" prop="lessonCloseDate" [flexGrow]="1.5">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{ value| date:'dd-MMM-yyyy' }}
@@ -105,6 +110,11 @@
                     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                         <div class="flex items-center justify-start gap-6">
+                            <a href="javascript:void(0)" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                                <mat-icon *ngIf='!expanded' svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                <mat-icon *ngIf='expanded' svgIcon="heroicons_outline:chevron-up"></mat-icon>
+                            
+                            </a>
                             <a href="javascript:void(0)" title="Edit Single"
                                 (click)="projecthubservice.toggleDrawerOpen('LessonLearnedSingleEdit', row.lessonLearnedId, lessonLearned, id)">
                                 <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
@@ -117,6 +127,79 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
+                <ngx-datatable-row-detail [rowHeight]="'auto'" #lessonLearnedRowDetail (toggle)="onDetailToggle($event)">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                
+                        <div style="padding: 10px 0 0 0;">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <strong class="strong">Log Date:</strong>
+                                    {{row.lessonLogDate| date:'dd-MMM-yyyy'}}
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div style="padding: 10px 0 0 0;">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <strong class="strong">Include In Single Slide Summary (Max 4):</strong>
+                                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="row.includeInCloseOutReport == false"></mat-icon>
+                                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="row.includeInCloseOutReport == true">
+                                    </mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div style="padding: 10px 0 0 0;">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <strong class="strong">Create Detailed Review Slides (No Max):</strong>
+                                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="row.createDetailedReviewSlide == false"></mat-icon>
+                                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="row.createDetailedReviewSlide == true">
+                                    </mat-icon>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="padding: 10px 0 0 0;">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <strong class="strong">Submitting Group / Role:</strong>
+                                    {{ getLookupName(row.submittingGroupRole)}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="padding: 10px 0 0 0;">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <strong class="strong">Suggested Action:</strong>
+                                    {{row.suggestedAction}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="padding: 10px 0 0 0;">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <strong class="strong">Function Action Owner:</strong>
+                                    {{getLookupName(row.functionActionOwner)}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="padding: 10px 0 0 0;">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <strong class="strong">Action Owner:</strong>
+                                    {{row.Actionusername}}
+                                </div>
+                            </div>
+                        </div>
+                
+                
+                    </ng-template>
+                </ngx-datatable-row-detail>
             </ngx-datatable>
         </div>
     <!-- </div> -->
