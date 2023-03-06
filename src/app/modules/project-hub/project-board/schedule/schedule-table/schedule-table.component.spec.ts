@@ -1,20 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ScheduleTableComponent } from './schedule-table.component';
+import { SchedulesTableComponent } from './schedule-table.component';
 
 describe('ScheduleTableComponent', () => {
-  let component: ScheduleTableComponent;
-  let fixture: ComponentFixture<ScheduleTableComponent>;
+  let component: SchedulesTableComponent;
+  let fixture: ComponentFixture<SchedulesTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScheduleTableComponent ]
+        declarations: [SchedulesTableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ScheduleTableComponent);
+    fixture = TestBed.createComponent(SchedulesTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

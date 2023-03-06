@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
-import { CloseOutApiService } from '../close-out.service';
 
 @Component({
     selector: 'app-close-out-outcomes',
@@ -29,7 +28,6 @@ export class CloseOutOutcomesComponent implements OnInit {
 
     constructor(
         public projectApiService: ProjectApiService,
-        public closeoutApiService: CloseOutApiService,
         public projecthubservice: ProjectHubService,
         public auth: AuthService,
         private _Activatedroute: ActivatedRoute) {
