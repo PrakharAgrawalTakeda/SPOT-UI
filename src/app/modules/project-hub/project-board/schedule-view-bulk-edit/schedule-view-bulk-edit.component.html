@@ -156,10 +156,12 @@
         [flexGrow]="1.5" *ngIf="mode== 'Project-Close-Out'">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <p *ngIf="value == ''">&nbsp;</p>
-            <strong>
-              <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class="nostartName">{{value}}
-                Insert Milestone Name</p>
-            </strong>
+            <div class="w-full px-1">
+                <strong>
+                    <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class="nostartName">{{value}}
+                        Insert Milestone Name</p>
+                </strong>
+            </div>
             <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
         </ng-template>
       </ngx-datatable-column>
@@ -379,7 +381,7 @@
                       *ngIf="milestoneTableEditStack.includes(rowIndex)"
                       class="h-[45px]">
                     <mat-slide-toggle
-                        [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
+                        [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the pbusiness case' : null"
                         (change)="disabler()" class="h-full overflow-hidden"
                         formControlName="includeInBusinessCase">
                     </mat-slide-toggle>

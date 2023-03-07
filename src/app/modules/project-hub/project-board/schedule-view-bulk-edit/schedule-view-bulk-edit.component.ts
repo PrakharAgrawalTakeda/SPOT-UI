@@ -388,6 +388,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 comments: (i.comments),
                                                 includeInReport: (i.includeInReport),
                                                 includeInCharter: (i.includeInCharter),
+                                                includeInBusinessCase: (i.includeInBusinessCase),
                                                 milestoneType: (i.milestoneType),
                                                 templateMilestoneId: (i.templateMilestoneId),
                                                 includeInCloseout: (i.includeInCloseout),
@@ -413,6 +414,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 "comments": x.comments,
                                                 "includeInReport": x.includeInReport,
                                                 "includeInCharter": x.includeInCharter,
+                                                "includeInBusinessCase": x.includeInBusinessCase,
                                                 "milestoneType": x.milestoneType,
                                                 "templateMilestoneId": x.templateMilestoneId,
 
@@ -439,6 +441,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 comments: new FormControl(i.comments),
                                                 includeInReport: new FormControl(i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport),
                                                 includeInCharter: new FormControl(i.includeInCharter),
+                                                includeInBusinessCase: new FormControl(i.includeInBusinessCase),
                                                 milestoneType: new FormControl(i.milestoneType),
                                                 templateMilestoneId: new FormControl(i.templateMilestoneId),
                                                 includeInCloseout: new FormControl(i.includeInCloseout),
@@ -991,6 +994,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 comments: new FormControl(''),
                 includeInReport: new FormControl(false),
                 includeInCharter: new FormControl(false),
+                includeInBusinessCase: new FormControl(false),
                 milestoneType: new FormControl(null),
                 templateMilestoneId: new FormControl(''),
                 includeInCloseout: new FormControl(false),
@@ -1016,6 +1020,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 completionDate: null,
                 functionGroupId: null,
                 includeInCharter: false,
+                includeInBusinessCase: false,
                 includeInCloseout: false,
                 includeInReport: false,
                 indicator: "Grey",
@@ -1512,6 +1517,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
@@ -1545,6 +1551,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
@@ -1564,6 +1571,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
@@ -1625,6 +1633,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
@@ -1647,6 +1656,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
@@ -1666,6 +1676,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
                             includeInCharter: i.includeInCharter,
+                            includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
                             templateMilestoneId: i.templateMilestoneId,
                             includeInCloseout: i.includeInCloseout,
@@ -1689,6 +1700,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         // this.viewBaselineLogs = true
                         // this.compareBaselineLogs = false
                         // this.projecthubservice.isBulkEdit = false
+                        this.projecthubservice.isNavChanged.next(true)
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.successSave.next(true)
                         this.submitjustification()
                         //this.projecthubservice.submitbutton.next(true)
                     })
@@ -2117,6 +2131,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         includeInReport: i.includeInReport,
                         functionGroupId: i.function == null ? null : i.function.lookUpId,
                         includeInCharter: i.includeInCharter,
+                        includeInBusinessCase: i.includeInBusinessCase,
                         milestoneType: i.milestoneType,
                         templateMilestoneId: i.templateMilestoneId,
                         includeInCloseout: i.includeInCloseout
@@ -2134,6 +2149,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         includeInReport: i.includeInReport,
                         functionGroupId: i.function == null ? null : i.function.lookUpId,
                         includeInCharter: i.includeInCharter,
+                        includeInBusinessCase: i.includeInBusinessCase,
                         milestoneType: i.milestoneType,
                         templateMilestoneId: i.templateMilestoneId,
                         includeInCloseout: i.includeInCloseout,
@@ -2204,6 +2220,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         includeInReport: i.includeInReport,
                         functionGroupId: i.function == null ? null : i.function.lookUpId,
                         includeInCharter: i.includeInCharter,
+                        includeInBusinessCase: i.includeInBusinessCase,
                         milestoneType: i.milestoneType,
                         templateMilestoneId: i.templateMilestoneId,
                         includeInCloseout: i.includeInCloseout
@@ -2221,6 +2238,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         includeInReport: i.includeInReport,
                         functionGroupId: i.function == null ? null : i.function.lookUpId,
                         includeInCharter: i.includeInCharter,
+                        includeInBusinessCase: i.includeInBusinessCase,
                         milestoneType: i.milestoneType,
                         templateMilestoneId: i.templateMilestoneId,
                         includeInCloseout: i.includeInCloseout,
@@ -2437,9 +2455,9 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                     for (let control of this.milestoneForm.controls) {
                         if (control.value.milestoneType == x.milestoneType) {
                             control.patchValue({ milestone: x.milestone })
-                            if (x.functionalOwnerId != null && x.functionalOwnerId != '') {
+                            if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
                                 control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.lookUpData.find(x => x.lookUpId == x.funtionalOwnerId) })
+                                control.patchValue({ function: this.lookUpData.find(y => y.lookUpId == x.funtionalOwnerId)})
                             }
                             if (control.value.comments == '') {
                                 control.patchValue({ comments: x.comments })
@@ -2464,9 +2482,9 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                     for (let control of this.milestoneForm.controls) {
                         if (control.value.milestoneType == x.milestoneType) {
                             control.patchValue({ milestone: x.milestone })
-                            if (x.functionalOwnerId != null && x.functionalOwnerId != '') {
+                            if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
                                 control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.lookUpData.find(x => x.lookUpId == x.funtionalOwnerId) })
+                                control.patchValue({ function: this.lookUpData.find(y => y.lookUpId == x.funtionalOwnerId)})
                             }
                             if (control.value.comments == '') {
                                 control.patchValue({ comments: x.comment })
@@ -2523,6 +2541,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             comments: new FormControl(sM.comment),
             includeInReport: new FormControl(limitPassed == false ? sM.includeInReport : false),
             includeInCharter: new FormControl(false),
+            includeInBusinessCase: new FormControl(false),
             milestoneType: new FormControl(sM.milestoneType),
             templateMilestoneId: new FormControl(sM.milestoneTemplateId),
             includeInCloseout: new FormControl(false),
@@ -2536,6 +2555,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             completionDate: null,
             functionGroupId: sM.funtionalOwnerId,
             includeInCharter: false,
+            includeInBusinessCase: sM.includeInBusinessCase,
             includeInCloseout: false,
             includeInReport: limitPassed == false ? sM.includeInReport : false,
             indicator: "Grey",
