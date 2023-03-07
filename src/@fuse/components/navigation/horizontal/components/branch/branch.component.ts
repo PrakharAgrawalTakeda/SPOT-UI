@@ -48,7 +48,16 @@ export class FuseHorizontalNavigationBranchItemComponent implements OnInit, OnDe
     {
         // Get the parent navigation component
         this._fuseHorizontalNavigationComponent = this._fuseNavigationService.getComponent(this.name);
-
+        if ( this._hasActiveChild(this.item, this._router.url) )
+        {
+            this.item.active = true
+        }
+        // Otherwise...
+        else
+        {
+            // If the autoCollapse is on, collapse...
+                this.item.active = false
+        }
         // Subscribe to onRefreshed on the navigation component
         this._fuseHorizontalNavigationComponent.onRefreshed.pipe(
             takeUntil(this._unsubscribeAll)
