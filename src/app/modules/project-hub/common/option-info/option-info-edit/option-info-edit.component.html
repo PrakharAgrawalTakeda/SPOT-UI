@@ -7,8 +7,8 @@
             </a>
         </div>
     </div>
-    <form class="w-full p-[20px]" [formGroup]="optionInfoForm" (ngSubmit)="submitOptionInfo()">
-        <div class="h-[84vh] overflow-hidden">
+    <form class="w-full pl-3" [formGroup]="optionInfoForm" (ngSubmit)="submitOptionInfo()">
+        <div class="h-[86.5vh] pt-3 pr-3 overflow-y-scroll overflow-x-hidden">
             <!--Enter Element here-->
             <spot-input [label]="'Name'" formControlName="optionTitle" name="optionTitle" class="w-full read-only">
             </spot-input>
