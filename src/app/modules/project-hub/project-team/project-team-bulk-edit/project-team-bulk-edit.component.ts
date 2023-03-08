@@ -23,7 +23,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
           this.projecthubservice.isFormChanged = true
         }
         else {
-          this.projecthubservice.isFormChanged = false  
+          this.projecthubservice.isFormChanged = false
         }
       }
     })
@@ -130,9 +130,9 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       this.formValue.push({
         projectTeamUniqueId: i.projectTeamUniqueId,
         problemUniqueId: i.problemUniqueId,
-        roleId: Object.keys(i.role).length > 0 ? i.role.lookUpId : '',
-        teamMemberAdId: Object.keys(i.user).length > 0 ? i.user.userAdid : '',
-        teamMemberName: Object.keys(i.user).length > 0 ? i.user.userDisplayName : '',
+        roleId: i.role?.lookUpId ? i.role.lookUpId : '',
+        teamMemberAdId: i.user?.userAdid ? i.user.userAdid: '',
+        teamMemberName: i.user?.userDisplayName? i.user.userDisplayName: '',
         teamPermissionId: i.teamPermissionId,
         percentTime: i.percentTime,
         duration: i.duration,
@@ -183,117 +183,117 @@ export class ProjectTeamBulkEditComponent implements OnInit {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else{
-    if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.formValue)) {
-      console.log(this.formValue)
-      this.projecthubservice.isFormChanged = false
-      this.submitPrep()
-      if (this.formValue.some(x => x.roleId == "")) {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "Please select a Role",
-          "message": "",
-          "icon": {
-            "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
-          },
-          "actions": {
-            "confirm": {
+    else {
+      if (JSON.stringify(this.teamMembersDb) != JSON.stringify(this.formValue)) {
+        console.log(this.formValue)
+        this.projecthubservice.isFormChanged = false
+        this.submitPrep()
+        if (this.formValue.some(x => x.roleId == "")) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Please select a Role",
+            "message": "",
+            "icon": {
               "show": true,
-              "label": "Okay",
-              "color": "primary"
+              "name": "heroicons_outline:exclamation",
+              "color": "warning"
             },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Okay",
+                "color": "primary"
+              },
+              "cancel": {
+                "show": false,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
         }
-        const alert = this.fuseAlert.open(comfirmConfig)
-      }
-      else {
-          if (this.formValue.some(x => x.percentTime >100 || x.percentTime < 0)) {
+        else {
+          if (this.formValue.some(x => x.percentTime > 100 || x.percentTime < 0)) {
+            var comfirmConfig: FuseConfirmationConfig = {
+              "title": "Percent time value cannot be greater than 100 or smaller than 0",
+              "message": "",
+              "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warning"
+              },
+              "actions": {
+                "confirm": {
+                  "show": true,
+                  "label": "Okay",
+                  "color": "primary"
+                },
+                "cancel": {
+                  "show": false,
+                  "label": "Cancel"
+                }
+              },
+              "dismissible": true
+            }
+            const alert = this.fuseAlert.open(comfirmConfig)
+          } else {
+            if (this.formValue.some(x => x.duration < 0)) {
               var comfirmConfig: FuseConfirmationConfig = {
-                  "title": "Percent time value cannot be greater than 100 or smaller than 0",
-                  "message": "",
-                  "icon": {
-                      "show": true,
-                      "name": "heroicons_outline:exclamation",
-                      "color": "warning"
+                "title": "Duration value cannot be smaller than 0",
+                "message": "",
+                "icon": {
+                  "show": true,
+                  "name": "heroicons_outline:exclamation",
+                  "color": "warning"
+                },
+                "actions": {
+                  "confirm": {
+                    "show": true,
+                    "label": "Okay",
+                    "color": "primary"
                   },
-                  "actions": {
-                      "confirm": {
-                          "show": true,
-                          "label": "Okay",
-                          "color": "primary"
-                      },
-                      "cancel": {
-                          "show": false,
-                          "label": "Cancel"
-                      }
-                  },
-                  "dismissible": true
+                  "cancel": {
+                    "show": false,
+                    "label": "Cancel"
+                  }
+                },
+                "dismissible": true
               }
               const alert = this.fuseAlert.open(comfirmConfig)
-          }else{
-              if (this.formValue.some(x =>  x.duration < 0)) {
-                  var comfirmConfig: FuseConfirmationConfig = {
-                      "title": "Duration value cannot be smaller than 0",
-                      "message": "",
-                      "icon": {
-                          "show": true,
-                          "name": "heroicons_outline:exclamation",
-                          "color": "warning"
-                      },
-                      "actions": {
-                          "confirm": {
-                              "show": true,
-                              "label": "Okay",
-                              "color": "primary"
-                          },
-                          "cancel": {
-                              "show": false,
-                              "label": "Cancel"
-                          }
-                      },
-                      "dismissible": true
-                  }
-                  const alert = this.fuseAlert.open(comfirmConfig)
-              }else{
-                  if ((this.formValue.some(x =>  x.duration % 1 != 0 || x.percentTime % 1 != 0)) && (this.mode =="Project-Proposal"|| this.mode =="Project-Charter")) {
-                      var comfirmConfig: FuseConfirmationConfig = {
-                          "title": "Duration and percent can't have decimals",
-                          "message": "",
-                          "icon": {
-                              "show": true,
-                              "name": "heroicons_outline:exclamation",
-                              "color": "warning"
-                          },
-                          "actions": {
-                              "confirm": {
-                                  "show": true,
-                                  "label": "Okay",
-                                  "color": "primary"
-                              },
-                              "cancel": {
-                                  "show": false,
-                                  "label": "Cancel"
-                              }
-                          },
-                          "dismissible": true
-                      }
-                      const alert = this.fuseAlert.open(comfirmConfig)
-                      }else{
-                            this.apiService.bulkeditProjectTeam(this.formValue, this.projecthubservice.projectid).then(res => {
-                                this.projecthubservice.isFormChanged = false
-                                this.projecthubservice.submitbutton.next(true)
-                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                                this.projecthubservice.isNavChanged.next(true)
-                                this.projecthubservice.successSave.next(true)
-                              })
-                  }
+            } else {
+              if ((this.formValue.some(x => x.duration % 1 != 0 || x.percentTime % 1 != 0)) && (this.mode == "Project-Proposal" || this.mode == "Project-Charter")) {
+                var comfirmConfig: FuseConfirmationConfig = {
+                  "title": "Duration and percent can't have decimals",
+                  "message": "",
+                  "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warning"
+                  },
+                  "actions": {
+                    "confirm": {
+                      "show": true,
+                      "label": "Okay",
+                      "color": "primary"
+                    },
+                    "cancel": {
+                      "show": false,
+                      "label": "Cancel"
+                    }
+                  },
+                  "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+              } else {
+                this.apiService.bulkeditProjectTeam(this.formValue, this.projecthubservice.projectid).then(res => {
+                  this.projecthubservice.isFormChanged = false
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  this.projecthubservice.isNavChanged.next(true)
+                  this.projecthubservice.successSave.next(true)
+                })
               }
+            }
 
           }
         }
@@ -309,7 +309,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   deleteShowLogic(rowIndex: number): boolean {
     var j = this.projectTeamForm.controls[rowIndex]['controls']['role'].value
-    if (Object.keys(j).length > 0) {
+    if (j) {
       if (j.lookUpId == '17d65016-0541-4fcc-8a9c-1db0597817cc' || j.lookUpId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8') {
         return false
       }
@@ -394,7 +394,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   ptTableEditRow(row: number) {
     if (!this.ptTableEditStack.includes(row)) {
-      if (Object.keys(this.projectTeamForm.at(row).value.user).length > 0) {
+      if (this.projectTeamForm.at(row)?.value?.user) {
         this.findRoles(this.projectTeamForm.at(row).value.user.userAdid, row)
       }
       this.ptTableEditStack.push(row)

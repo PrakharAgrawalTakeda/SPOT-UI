@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="p-6 pt-0 flex items-center justify-between">
-        <mat-form-field class="example-full-width" appearance="fill">
+        <mat-form-field class="w-5/6 pt-4" appearance="fill">
             <mat-icon class="flex-initial" [svgIcon]="'heroicons_outline:search'"></mat-icon>
             <input matInput (keydown)="onKeydown($event)" [formControl]="searchControl"
                 [matAutocomplete]="matAutocomplete"
@@ -37,7 +37,7 @@
                     </ng-container>
                 </ng-container>
             </mat-autocomplete>
-            <button type="button" mat-button *ngIf="searchControl.value!=''" matSuffix mat-icon-button
+            <button type="button"  *ngIf="searchControl.value!=''" matSuffix mat-icon-button
                 aria-label="Clear" (click)="searchControl.setValue(''); this.selectedValueExists.setValue(true)">
                 <mat-icon>close</mat-icon>
             </button>

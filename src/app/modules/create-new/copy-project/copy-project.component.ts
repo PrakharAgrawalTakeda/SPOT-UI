@@ -39,11 +39,58 @@ export class CopyProjectComponent implements OnInit {
     projectTeam: new FormControl(true),
     categoricalDriver: new FormControl(true)
   })
+  newmainnav: any = [
+    {
+      id: 'portfolio-center',
+      title: 'Portfolio Center',
+      type: 'basic',
+      link: '/portfolio-center'
+    },
+    {
+      // id: 'create-project',
+      title: 'Create Project',
+      type: 'collapsable',
+      active: true,
+      link: '/create-project',
+      children: [
+        {
+          title: 'Create Project',
+          type: 'basic',
+          link: '/create-project/create-new-project'
+        },
+        {
+          title: 'Copy Project',
+          type: 'basic',
+          link: '/create-project/copy-project'
+        }
+      ],
+    },
+    {
+      id: 'spot-documents',
+      title: 'SPOT Resources',
+      type: 'basic',
+      externalLink: true,
+      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+      target: '_blank'
+    },
+    {
+      id: 'report-navigator',
+      title: 'Report Navigator',
+      type: 'basic',
+      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+      externalLink: true,
+      target: "_blank"
+
+    }
+  ]
 
   constructor(public auth: AuthService, private router: Router, private apiService: PortfolioApiService,
     private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService) { }
 
   ngOnInit(): void {
+    const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+    mainNavComponent.navigation = this.newmainnav
+    mainNavComponent.refresh()
     this.activeaccount = this.authService.instance.getActiveAccount();
     this.titleService.setTitle("Copy Project")
     this.auth.lookupMaster().then(res => {

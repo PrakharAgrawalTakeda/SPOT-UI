@@ -263,7 +263,7 @@ export class StrategicDriversComponent implements OnInit {
                 return entry.lookUpId == history.state.data.agilePrimaryWorkstream
               })
             }
-            if (history.state.data.agileSecondaryWorkstream != null) {
+            if (history.state.data.agileSecondaryWorkstream != null && history.state.data.agileSecondaryWorkstream != "") {
               const data = history.state.data.agileSecondaryWorkstream.split(',');
               var agilesec = {};
               var finaldatasecagile = [];
@@ -287,7 +287,7 @@ export class StrategicDriversComponent implements OnInit {
             this.Pobos.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data.poboscategory != null) {
+            if (history.state.data.poboscategory != null && history.state.data.poboscategory != "") {
               const data = history.state.data.poboscategory.split(',');
               var Pobostype = {};
               var finaldataPobos = [];
@@ -320,7 +320,7 @@ export class StrategicDriversComponent implements OnInit {
             this.site.sort((a, b) => {
               return a.lookUpOrder - b.lookUpOrder;
             })
-            if (history.state.data.siteAssessmentCategory != null) {
+            if (history.state.data.siteAssessmentCategory != null && history.state.data.siteAssessmentCategory != "") {
               const data = history.state.data.siteAssessmentCategory.split(',');
               var SiteAssessmentCategory = {};
               var finaldataSite = [];
