@@ -184,7 +184,7 @@
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="functionActionOwner" name="functionActionOwner" [placeholder]="'functionActionOwner'"
                                 [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
-                                [valuePointer]="'lookUpName'">
+                                [valuePointer]="'lookUpName'">   
                             </spot-select>
                         </form>
                     </ng-template>
