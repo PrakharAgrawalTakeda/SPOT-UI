@@ -88,6 +88,7 @@ export class CreateProjectComponent implements OnInit {
       // id: 'create-project',
       title: 'Create Project',
       type: 'collapsable',
+      active: true,
       link: '/create-project',
       children: [
         {
