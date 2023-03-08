@@ -9,6 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from 'app/core/auth/auth.service';
 import {Constants} from "../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 
 @Component({
   selector: 'app-schedule-table',
@@ -26,6 +27,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() editable: boolean
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' |'Business-Case' = 'Normal'
   @ViewChild('scheduleTable') scheduleTable: any;
+  timelineEditOption: 'TimelineEditOptionO1' | 'TimelineEditOptionO2' | 'TimelineEditOptionO3'
   getRowClass = (row) => {
     return {
       'row-color1': row.completionDate != null && this.mode == 'Normal',
@@ -115,14 +117,17 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
         if(this.mode == 'Business-Case')
         {
             if (this.router.url.includes('recommended-option')){
+                this.timelineEditOption = 'TimelineEditOptionO1'
                 this.schedulengxdata = this.projectViewDetails.scheduleData
             }
             if (this.router.url.includes('option-2')){
+                this.timelineEditOption = 'TimelineEditOptionO2'
                 this.apiService.getTimelineByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
                     this.schedulengxdata = res
                 })
             }
             if (this.router.url.includes('option-3')){
+                this.timelineEditOption = 'TimelineEditOptionO3'
                 this.apiService.getTimelineByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
                     this.schedulengxdata = res
                 })

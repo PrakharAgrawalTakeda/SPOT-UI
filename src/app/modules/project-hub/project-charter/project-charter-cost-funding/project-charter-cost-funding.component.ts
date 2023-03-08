@@ -10,10 +10,12 @@ export class ProjectCharterCostFundingComponent implements OnInit {
 
   constructor(private _Activatedroute: ActivatedRoute) { }
   option: string = ''
+  viewContent: boolean = false
   ngOnInit(): void {
     this.dataloader()
   }
   dataloader() {
+    this.viewContent = true
     //this.option = this._Activatedroute.parent.snapshot.routeConfig.path
   }
 

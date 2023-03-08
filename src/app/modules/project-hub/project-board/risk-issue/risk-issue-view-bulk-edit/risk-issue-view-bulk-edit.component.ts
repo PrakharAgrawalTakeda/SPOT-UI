@@ -497,8 +497,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                     riskIssueResult: i.riskIssueResult,
                     riskIssueTypeId: i.riskIssueTypeId,
                     riskIssueUniqueId: i.riskIssueUniqueId,
-                    ownerId: Object.keys(i.owner).length > 0 ? i.owner.userAdid : null,
-                    ownerName: Object.keys(i.owner).length > 0 ? i.owner.userDisplayName : null,
+                    ownerId: i.owner?.userAdid ? i.owner.userAdid : null,
+                    ownerName: i.owner?.userDisplayName ? i.owner.userDisplayName : null,
                     probabilityId: i.probabilityId,
                     impactId: i.impactId,
                     businessOptionId: Constants.OPTION_3_ID.toString()
@@ -524,8 +524,8 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                     riskIssueResult: i.riskIssueResult,
                     riskIssueTypeId: i.riskIssueTypeId,
                     riskIssueUniqueId: i.riskIssueUniqueId,
-                    ownerId: Object.keys(i.owner).length > 0 ? i.owner.userAdid : null,
-                    ownerName: Object.keys(i.owner).length > 0 ? i.owner.userDisplayName : null,
+                    ownerId: i.owner?.userAdid ? i.owner.userAdid : null,
+                    ownerName: i.owner?.userDisplayName ? i.owner.userDisplayName : null,
                     probabilityId: i.probabilityId,
                     impactId: i.impactId,
                     businessOptionId: Constants.OPTION_2_ID.toString()

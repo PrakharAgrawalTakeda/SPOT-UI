@@ -49,30 +49,48 @@
 
 
 
-    <div class="flex justify-end items-center gap-3 pr-6 mt-4">
-      <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200"
-            (click)="openStandardMilestonesSets()" >Standard Milestone Sets</button>
-      <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-        (click)="baselineLogs()"  *ngIf="mode== 'Normal'">
-        Baseline Log
-      </button>
+    <div class="flex justify-between">
+        <form [formGroup]="optionExecutions" >
+            <div class="flex justify-end items-center gap-3 pl-6 mt-4" *ngIf="optionType=='option-2' || optionType=='option-3'">
+                    <div class="flex">
+                        <a class="self-center mr-2">Execution Start:</a>
+                        <spot-input-date formControlName="optionExecutionStart" name="optionExecutionStart" [showLabel]="true">
+                        </spot-input-date>
+                    </div>
+                    <div class="flex">
+                        <a class="self-center mr-2">Execution End:</a>
+                        <spot-input-date formControlName="optionExecutionEnd" name="optionExecutionEnd" [showLabel]="true">
+                        </spot-input-date>
+                    </div>
 
-      <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && mode== 'Normal'"
-        class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="baselineProject()">
-        Baseline Project
-      </button>
+            </div>
+        </form>
+        <div class="flex justify-end items-center gap-3 pr-6 mt-4">
+            <button mat-flat-button [color]="'primary-200'" type="button" class="min-w-26 text-primary bg-gray-200"
+                    (click)="openStandardMilestonesSets()" >Standard Milestone Sets</button>
+            <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="baselineLogs()"  *ngIf="mode== 'Normal'">
+                Baseline Log
+            </button>
+
+            <button *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit && mode== 'Normal'"
+                    class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="baselineProject()">
+                Baseline Project
+            </button>
 
 
-      <!-- *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" -->
-      <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-        (click)="addMilestoneRecord(target)"  *ngIf="mode== 'Normal' || mode== 'Business-Case'">
-        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-      </button>
+            <!-- *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit" -->
+            <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="addMilestoneRecord(target)"  *ngIf="mode== 'Normal' || mode== 'Business-Case'">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
 
-      <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-      (click)="addMilestoneRecord(target)"  *ngIf="mode== 'Project-Charter'">
-      <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-    </button>
+            <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="addMilestoneRecord(target)"  *ngIf="mode== 'Project-Charter'">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+        </div>
+
     </div>
 
 
@@ -156,10 +174,12 @@
         [flexGrow]="1.5" *ngIf="mode== 'Project-Close-Out'">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <p *ngIf="value == ''">&nbsp;</p>
-            <strong>
-              <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class="nostartName">{{value}}
-                Insert Milestone Name</p>
-            </strong>
+            <div class="w-full px-1">
+                <strong>
+                    <p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class="nostartName">{{value}}
+                        Insert Milestone Name</p>
+                </strong>
+            </div>
             <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
         </ng-template>
       </ngx-datatable-column>
@@ -325,7 +345,8 @@
 
         <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+            [ngClass]="{'closed': row.completionDate != null}">
               <p *ngIf="value == ''">&nbsp;</p>{{value}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
@@ -379,7 +400,7 @@
                       *ngIf="milestoneTableEditStack.includes(rowIndex)"
                       class="h-[45px]">
                     <mat-slide-toggle
-                        [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
+                        [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the pbusiness case' : null"
                         (change)="disabler()" class="h-full overflow-hidden"
                         formControlName="includeInBusinessCase">
                     </mat-slide-toggle>
@@ -463,7 +484,7 @@
 
     </div>
 
-    <div class="pr-6 pl-6 pt-20 flex justify-between items-center w-full" *ngIf="mode== 'Project-Close-Out'">
+    <div class="pr-6 pl-6 flex justify-between items-center w-full" *ngIf="mode== 'Project-Close-Out'">
 
       <button class="min-w-26" mat-flat-button [color]="'primary'"
         (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
@@ -475,8 +496,17 @@
       </button>
 
     </div>
+    <div class="pr-6 pl-6 flex justify-between items-center w-full" *ngIf="mode== 'Business-Case'">
+        <button class="min-w-26" mat-flat-button [color]="'primary'"
+               (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
+           Cancel
+         </button>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitScheduleBusinessCase()">
+            Submit
+        </button>
+    </div>
 
-    <div class="pr-6 pl-6 pt-11 flex justify-between items-center w-full" *ngIf="mode== 'Project-Charter' || mode == 'Business-Case'">
+    <div class="pr-6 pl-6 flex justify-between items-center w-full" *ngIf="mode== 'Project-Charter' ">
 
       <button class="min-w-26" mat-flat-button [color]="'primary'"
         (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
@@ -488,6 +518,7 @@
       </button>
 
     </div>
+
   </div>
 </div>
 

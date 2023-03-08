@@ -155,7 +155,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.generalInfoForm.patchValue({ enviornmentalPortfolio: changes.portfolio.currentValue })
+    this.generalInfoForm.patchValue({ enviornmentalPortfolio: changes.portfolio?.currentValue })
   }
 
   ngOnInit(): void {

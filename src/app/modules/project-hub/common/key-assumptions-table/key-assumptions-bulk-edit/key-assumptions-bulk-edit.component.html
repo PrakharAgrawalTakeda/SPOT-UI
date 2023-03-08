@@ -51,11 +51,14 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
-                              *ngIf="kaTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="assumptionRationale" [showLabel]="false"
-                                           [maxLength]=1000></spot-textarea>
-                        </form>
+                        <div class="w-full px-1">
+                            <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
+                                  *ngIf="kaTableEditStack.includes(rowIndex)">
+                                <spot-textarea formControlName="assumptionRationale" [showLabel]="false"
+                                               [maxLength]=1000></spot-textarea>
+                            </form>
+                        </div>
+
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Included In Charter (Max 5)" prop="includeInCharter" [flexGrow]="1" *ngIf="viewElementChecker('includeInCharter')"

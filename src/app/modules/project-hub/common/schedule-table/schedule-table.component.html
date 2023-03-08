@@ -25,7 +25,7 @@
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                 </button>
                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Business-Case'"
-                        (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditBusinessCase', 'new', projectViewDetails.scheduleData, '', true)">
+                        (click)="projecthubservice.toggleDrawerOpen(timelineEditOption, 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
@@ -178,7 +178,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-       
+
 
         <!-- <ngx-datatable-column name="Comment" prop="comments" [flexGrow]="0.9" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
