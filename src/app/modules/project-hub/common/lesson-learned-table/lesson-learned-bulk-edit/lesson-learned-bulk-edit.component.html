@@ -99,12 +99,14 @@
                     [width]="195" >
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{getLookUpName(value)}}</p>
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-autocomplete formControlName="lessonType" [showLabel]="false" [valuePointer]="'lookUpName'"
-                                [dropDownArray]="getType()">
-                            </spot-singleselect-autocomplete>
+                            <spot-select formControlName="lessonType" name="lessonType" [placeholder]="'lessonType'"
+                                [dropDownArrayType]="'object'" [dropDownArray]="getType()" [idPointer]="'lookUpId'"
+                                [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -114,9 +116,9 @@
                             <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-autocomplete formControlName="criticality" [showLabel]="false" [valuePointer]="'lookUpName'"
-                                [dropDownArray]="getCriticality()">
-                            </spot-singleselect-autocomplete>
+                            <spot-select formControlName="criticality" name="criticality" [placeholder]="'criticality'" [dropDownArrayType]="'object'"
+                                [dropDownArray]="getCriticality()" [idPointer]="'lookUpId'" [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -141,9 +143,10 @@
                             {{getLookUpName(value)}}
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-autocomplete formControlName="submittingGroupRole" [showLabel]="false" [valuePointer]="'lookUpName'"
-                                [dropDownArray]="getFunctionOwner()">
-                            </spot-singleselect-autocomplete>
+                            <spot-select formControlName="submittingGroupRole" name="submittingGroupRole" [placeholder]="'submittingGroupRole'"
+                                [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
+                                [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -179,9 +182,10 @@
                             <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
                         </a>
                         <form [formGroup]="lessonLearnedForm.controls[rowIndex]" *ngIf="lessonLearnedTableEditStack.includes(rowIndex)">
-                            <spot-singleselect-autocomplete formControlName="functionActionOwner" [showLabel]="false" [valuePointer]="'lookUpName'"
-                                [dropDownArray]="getFunctionOwner()">
-                            </spot-singleselect-autocomplete>
+                            <spot-select formControlName="functionActionOwner" name="functionActionOwner" [placeholder]="'functionActionOwner'"
+                                [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
+                                [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
