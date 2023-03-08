@@ -477,8 +477,17 @@
       </button>
 
     </div>
+    <div class="pr-6 pl-6 pt-20 flex justify-between items-center w-full" *ngIf="mode== 'Business-Case'">
+        <button class="min-w-26" mat-flat-button [color]="'primary'"
+               (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
+           Cancel
+         </button>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="submitScheduleBusinessCase()">
+            Submit
+        </button>
+    </div>
 
-    <div class="pr-6 pl-6 pt-11 flex justify-between items-center w-full" *ngIf="mode== 'Project-Charter' || mode == 'Business-Case'">
+    <div class="pr-6 pl-6 pt-11 flex justify-between items-center w-full" *ngIf="mode== 'Project-Charter' ">
 
       <button class="min-w-26" mat-flat-button [color]="'primary'"
         (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
@@ -490,6 +499,7 @@
       </button>
 
     </div>
+
   </div>
 </div>
 
