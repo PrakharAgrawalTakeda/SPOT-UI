@@ -176,7 +176,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Function Action Owner" prop="functionActionOwner"
-                    [width]="205">
+                    [width]="205">    
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!lessonLearnedTableEditStack.includes(rowIndex)" (click)="lessonLearnedTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
