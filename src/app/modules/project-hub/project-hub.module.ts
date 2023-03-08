@@ -136,6 +136,7 @@ import { ProjectCharterScopeSingleEditComponent } from './project-charter/projec
 import { CostComponent } from './common/cost/cost.component';
 import { FundingComponent } from './common/funding/funding.component';
 import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component';
+import { FundingBulkEditComponent } from './common/funding/funding-bulk-edit/funding-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -491,7 +492,8 @@ export const projectRoutes: Route[] = [
     ProjectCharterScopeSingleEditComponent,
     CostComponent,
     FundingComponent,
-    FundingEditComponent
+    FundingEditComponent,
+    FundingBulkEditComponent
   ],
     imports: [
         RouterModule.forChild(projectRoutes),
