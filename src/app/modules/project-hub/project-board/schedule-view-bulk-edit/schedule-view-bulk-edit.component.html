@@ -94,7 +94,7 @@
     </div>
 
 
-    <div class="mt-3 pl-3 h-[65vh] overflow-hidden" #target id="scheduleTableDiv">
+    <div class="mt-3 pl-3 h-[78vh] overflow-hidden" #target id="scheduleTableDiv">
       <ngx-datatable
         class="datatable-schedule-74 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
@@ -345,7 +345,8 @@
 
         <ngx-datatable-column name="Comments" prop="comments" [resizeable]="false" [sortable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)">
+            <a *ngIf="!milestoneTableEditStack.includes(rowIndex)" (click)="milestoneTableEditRow(rowIndex)"
+            [ngClass]="{'closed': row.completionDate != null}">
               <p *ngIf="value == ''">&nbsp;</p>{{value}}
             </a>
             <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
@@ -483,7 +484,7 @@
 
     </div>
 
-    <div class="pr-6 pl-6 pt-20 flex justify-between items-center w-full" *ngIf="mode== 'Project-Close-Out'">
+    <div class="pr-6 pl-6 flex justify-between items-center w-full" *ngIf="mode== 'Project-Close-Out'">
 
       <button class="min-w-26" mat-flat-button [color]="'primary'"
         (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
@@ -505,7 +506,7 @@
         </button>
     </div>
 
-    <div class="pr-6 pl-6 pt-11 flex justify-between items-center w-full" *ngIf="mode== 'Project-Charter' ">
+    <div class="pr-6 pl-6 flex justify-between items-center w-full" *ngIf="mode== 'Project-Charter' ">
 
       <button class="min-w-26" mat-flat-button [color]="'primary'"
         (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '',true)">
