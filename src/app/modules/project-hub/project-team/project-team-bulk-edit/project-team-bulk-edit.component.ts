@@ -394,7 +394,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   ptTableEditRow(row: number) {
     if (!this.ptTableEditStack.includes(row)) {
-      if (Object.keys(this.projectTeamForm.at(row).value.user).length > 0) {
+      if (this.projectTeamForm.at(row)?.value?.user) {
         this.findRoles(this.projectTeamForm.at(row).value.user.userAdid, row)
       }
       this.ptTableEditStack.push(row)
