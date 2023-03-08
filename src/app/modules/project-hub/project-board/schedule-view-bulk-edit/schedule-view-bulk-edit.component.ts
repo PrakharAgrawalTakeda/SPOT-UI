@@ -54,6 +54,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     @ViewChild('scheduleTable') scheduleTable: any;
     @ViewChild('target') private myScrollContainer: ElementRef;
     @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
+    @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
     editing = {};
     scheduleData: any = []
     ColumnMode = ColumnMode;
@@ -134,6 +135,13 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     // onResize(event){
     //   event.window.innerWidth; // window width
     // }
+    optionExecutions = new FormGroup({
+        optionExecutionStart : new FormControl(""),
+        optionExecutionEnd : new FormControl("")
+    })
+    optionExecutionStart = new FormControl("")
+    optionExecutionEnd = new FormControl("")
+    optionInfoData: any = {}
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
         private portApiService: PortfolioApiService,
@@ -364,14 +372,24 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                     // }
                                     if (this.router.url.includes('option-2')) {
                                         this.apiService.getTimelineByOption(this.id, Constants.OPTION_2_ID.toString()).then((res: any) => {
-                                            this.schedulengxdata = res
-                                            this.optionsDataLoader()
+                                            this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
+                                                this.schedulengxdata = res
+                                                this.optionsDataLoader()
+                                                this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
+                                                this.optionExecutions.controls.optionExecutionStart.patchValue( bcOptionInfo.executionEndDate)
+                                                this.optionInfoData= bcOptionInfo;
+                                            })
                                         })
                                     }else{
                                         if(this.router.url.includes('option-3')){
                                             this.apiService.getTimelineByOption(this.id, Constants.OPTION_3_ID.toString()).then((res: any) => {
-                                                this.schedulengxdata = res
-                                                this.optionsDataLoader()
+                                                this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_3_ID.toString()).then((bcOptionInfo: any) => {
+                                                    this.schedulengxdata = res
+                                                    this.optionsDataLoader()
+                                                    this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
+                                                    this.optionExecutions.controls.optionExecutionStart.patchValue( bcOptionInfo.executionStartDate)
+                                                    this.optionInfoData= bcOptionInfo;
+                                                })
                                             })
                                         }else{
                                             if (this.mode == 'Project-Close-Out') {
@@ -2218,6 +2236,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     this.projecthubservice.isNavChanged.next(true)
                 })
+                this.optionInfoData.exectutionEndDate = this.optionExecutions.controls.optionExecutionEnd.value;
+                this.optionInfoData.executionStartDate = this.optionExecutions.controls.optionExecutionStart.value;
+                // this.apiService.updateBusinessCaseOptionInfoDetails(this.optionInfoData,this.id).then(secondRes => {
+                // })
             }else{
                 this.formValueStandard()
                 this.apiService.bulkeditSchedule(this.scheduleBusinessObj, this.id).then(res => {
@@ -2345,8 +2367,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         var baselinedates4 = []
         for (var controls of this.milestoneForm.controls) {
             if(this.scheduleData.scheduleData.some(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value))
-            baselinedates4.push(
-                moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value).baselineFinish).format("YYYY-MM-DD HH:mm:ss")
+            baselinedates4.push(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value).baselineFinish ?
+                moment(this.scheduleData.scheduleData.find(x => x.scheduleUniqueId == controls['controls']['scheduleUniqueId'].value).baselineFinish).format("YYYY-MM-DD HH:mm:ss") : null
 
 
                /* .map(x => {
