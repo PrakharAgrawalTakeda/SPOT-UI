@@ -567,6 +567,14 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+
+  async getCostFunding(projectid: string) {
+    var url = GlobalVariables.apiurl + "ProjectCharterCostFunding/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   async deleteFunding(id: string) {
     var link = GlobalVariables.apiurl + "Funding/" + id
     const abc$ = this.http.delete(link)

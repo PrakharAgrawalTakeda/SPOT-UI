@@ -47,21 +47,21 @@ export class CostComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getTOPS(this.id).then((res: any) => {
+    this.apiService.getCostFunding(this.id).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
-        console.log("Cost Data", res)
-        this.costfundingData = res
+        console.log("Cost Data", res.costData)
+        this.costfundingData = res.costData
         this.projectHubService.lookUpMaster = lookup
         this.costFundingForm.patchValue({
-          durationBaseCase: res.durationBaseCase,
-          durationHighCase: res.durationHighCase,
-          peopleFtemonthsRequiredBaseCase: res.peopleFtemonthsRequiredBaseCase,
-          peopleFtemonthsRequiredHighCase: res.peopleFtemonthsRequiredHighCase,
-          totalCapExBaseCase: res.totalCapExBaseCase,
-          totalCapExHighCase: res.totalCapExHighCase,
-          totalNonFteopExBaseCase: res.totalNonFteopExBaseCase,
-          totalNonFteopExHighCase: res.totalNonFteopExHighCase,
-          functionsRequiredId: res.functionsRequiredId ? lookup.find(x => x.lookUpId == res.functionsRequiredId)?.lookUpName : ''
+          durationBaseCase: res.costData.durationBaseCase,
+          durationHighCase: res.costData.durationHighCase,
+          peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
+          peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
+          totalCapExBaseCase: res.costData.totalCapExBaseCase,
+          totalCapExHighCase: res.costData.totalCapExHighCase,
+          totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
+          totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
+          functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
 
         })
         this.costData = [{
@@ -87,7 +87,7 @@ export class CostComponent implements OnInit {
         {
           category: '# Functions Required',
           baseCase: 'functionsRequiredId',
-          highCase: ' '
+          highCase: 'functionsRequiredId'
         }]
         this.costFundingForm.disable()
         this.viewContent = true
