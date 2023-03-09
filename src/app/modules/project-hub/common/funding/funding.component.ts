@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 
@@ -23,13 +24,14 @@ export class FundingComponent implements OnInit, OnChanges {
   @Input() editable: boolean = true
   initializationComplete: boolean = false
   id:string=""
-  bulkEditType: string = 'FundingBulkEdit';
-  addSingle: string = 'FundingSingleEdit';
+  fundingbulkEditType: string = 'FundingBulkEdit';
   viewContent: boolean = false
   fundingdata: any;
+  fundingSourceData: any;
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
-    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private authService: AuthService,private _Activatedroute: ActivatedRoute) {
+    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private authService: AuthService,private _Activatedroute: ActivatedRoute,
+    private portApiService: PortfolioApiService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
         this.dataloader()
@@ -48,16 +50,25 @@ export class FundingComponent implements OnInit, OnChanges {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getCostFunding(this.id).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.fundingSourceData = po
+
+     console.log(this.fundingSourceData)
         console.log(res)
       console.log(res.fundingData)
       console.log(lookup)
        this.fundingdata = res.fundingData
-    for (var i of this.fundingdata) {
-      console.log(i)
-      //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
-      i.fundingSourceName = lookup.find(x => x.lookUpId == i.fundingSourceId) ? lookup.find(x => x.lookUpId == i.fundingSourceId).lookUpName : ''
-    }
+       if(this.fundingdata != null)
+       {
+        for (var i of this.fundingdata) {
+          console.log(i)
+          //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
+          i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+        }
+       }
+   
     this.viewContent = true
+  })
   })
 })
     this.initializationComplete = false
