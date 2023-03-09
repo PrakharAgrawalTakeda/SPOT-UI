@@ -23,6 +23,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { MsalService } from '@azure/msal-angular';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import {Constants} from "../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 
 @Component({
     selector: 'app-schedule-view-bulk-edit',
@@ -139,9 +140,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         optionExecutionStart : new FormControl(""),
         optionExecutionEnd : new FormControl("")
     })
-    optionExecutionStart = new FormControl("")
-    optionExecutionEnd = new FormControl("")
     optionInfoData: any = {}
+    optionId: string = ''
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
         private portApiService: PortfolioApiService,
@@ -329,7 +329,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             // this.viewBaseline = false
             // this.viewBaselineLogs = true
         } else {
-            //debugger
+            if (this.optionType == 'recommended-option') {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_1
+            }
+            else if (this.optionType == 'option-2') {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_2
+            }
+            else if (this.optionType == 'option-3') {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_3
+            }
             this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
             this.apiService.getProjectBaselineLog(this.id).then((log: any) => {
                 log.projectBaselineLog.sort((a, b) => {
@@ -375,9 +383,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                             this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
                                                 this.schedulengxdata = res
                                                 this.optionsDataLoader()
-                                                this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
-                                                this.optionExecutions.controls.optionExecutionStart.patchValue( bcOptionInfo.executionEndDate)
-                                                this.optionInfoData= bcOptionInfo;
+                                                this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                                                this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
+                                                this.optionInfoData = bcOptionInfo;
                                             })
                                         })
                                     }else{
@@ -2232,14 +2240,14 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
                 this.formValueForOptions()
                 this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj, this.id).then(res => {
+                    this.optionInfoData.exectutionEndDate = moment(this.optionExecutions.controls.optionExecutionEnd.value).format('YYYY-MM-DD[T]HH:mm:ss');
+                    this.optionInfoData.executionStartDate = moment(this.optionExecutions.controls.optionExecutionStart.value).format('YYYY-MM-DD[T]HH:mm:ss');
+                    this.optionInfoData.businessOptionId = this.optionInfoData.businessOptionId ? this.optionInfoData.businessOptionId : this.optionId
+                    this.apiService.updateBusinessCaseOptionInfoDetails(this.optionInfoData, this.id).then(secondRes => {})
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     this.projecthubservice.isNavChanged.next(true)
                 })
-                this.optionInfoData.exectutionEndDate = this.optionExecutions.controls.optionExecutionEnd.value;
-                this.optionInfoData.executionStartDate = this.optionExecutions.controls.optionExecutionStart.value;
-                // this.apiService.updateBusinessCaseOptionInfoDetails(this.optionInfoData,this.id).then(secondRes => {
-                // })
             }else{
                 this.formValueStandard()
                 this.apiService.bulkeditSchedule(this.scheduleBusinessObj, this.id).then(res => {

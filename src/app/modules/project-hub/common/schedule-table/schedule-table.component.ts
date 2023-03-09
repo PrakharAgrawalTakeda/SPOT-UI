@@ -46,7 +46,13 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   scheduleData: any = []
   lookUpData: any = []
   baselinelogTableEditStack: any = []
-  constructor(public projecthubservice: ProjectHubService,
+  optionExecutions = new FormGroup({
+      optionExecutionStart : new FormControl(""),
+      optionExecutionEnd : new FormControl("")
+  })
+  optionType: string = ''
+
+    constructor(public projecthubservice: ProjectHubService,
     private authService: AuthService,
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
@@ -116,20 +122,32 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
         }
         if(this.mode == 'Business-Case')
         {
+            this.optionExecutions.disable()
             if (this.router.url.includes('recommended-option')){
                 this.timelineEditOption = 'TimelineEditOptionO1'
                 this.schedulengxdata = this.projectViewDetails.scheduleData
+                this.optionType = 'recommended-option'
             }
             if (this.router.url.includes('option-2')){
                 this.timelineEditOption = 'TimelineEditOptionO2'
+                this.optionType = 'option-2'
                 this.apiService.getTimelineByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
                     this.schedulengxdata = res
+                })
+                this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
+                    this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                    this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
                 })
             }
             if (this.router.url.includes('option-3')){
                 this.timelineEditOption = 'TimelineEditOptionO3'
+                this.optionType = 'option-3'
                 this.apiService.getTimelineByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
                     this.schedulengxdata = res
+                })
+                this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_3_ID.toString()).then((bcOptionInfo: any) => {
+                    this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                    this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
                 })
             }
         }
