@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {Constants} from "../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 
 @Component({
     selector: 'app-key-assumptions-table',
@@ -16,6 +17,7 @@ export class KeyAssumptionsTableComponent implements OnInit {
     keyAssumptions: any = []
     id: string = ''
     isGrid: boolean = false
+    optionId: string = ''
     keyAssumptionsViewEditType: string = "KeyAssumptions";
     keyAssumptionsBulkEditType: string = "KeyAssumptionsBulkEdit";
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
@@ -45,16 +47,19 @@ export class KeyAssumptionsTableComponent implements OnInit {
             this.keyAssumptionsViewEditType = "BusinessCaseKeyAssumptionAddSingle"
             this.keyAssumptionsBulkEditType = "BusinessCaseKeyAssumptionBulkEdit"
             if (this.router.url.includes('recommended-option')) {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_1
                 this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
                     this.keyAssumptions = res
                 })
             }
             if (this.router.url.includes('option-2')) {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_2
                 this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
                     this.keyAssumptions = res
                 })
             }
             if (this.router.url.includes('option-3')) {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_3
                 this.apiService.getKeyAssumptionsByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
                     this.keyAssumptions = res
                 })
@@ -87,16 +92,9 @@ export class KeyAssumptionsTableComponent implements OnInit {
         keyAsumptioneAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
                 if (this.callLocation == 'Business-Case') {
-                    if (this.router.url.includes('recommended-option')) {
-                        this.apiService.deleteKeyAssumption(id).then(res => {
-                            this.projecthubservice.submitbutton.next(true)
-                        })
-                    }
-                    if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
-                        this.apiService.deleteKeyAssumptionByOption(id).then((res) => {
-                            this.projecthubservice.submitbutton.next(true)
-                        })
-                    }
+                    this.apiService.deleteKeyAssumptionByOption(id, this.optionId).then((res) => {
+                        this.projecthubservice.submitbutton.next(true)
+                    })
                 }
                 if (this.callLocation == "Project-Charter") {
                     this.apiService.deleteKeyAssumption(id).then(res => {

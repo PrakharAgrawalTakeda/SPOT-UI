@@ -135,8 +135,9 @@ import { KeyTakeawaySingleEditComponent } from './close-out/close-out-lessons-le
 import { ProjectCharterScopeSingleEditComponent } from './project-charter/project-charter-scope/project-charter-scope-single-edit/project-charter-scope-single-edit.component';
 import { CostComponent } from './common/cost/cost.component';
 import { FundingComponent } from './common/funding/funding.component';
-import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component';
+import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component'; 
 import { FundingBulkEditComponent } from './common/funding/funding-bulk-edit/funding-bulk-edit.component';
+import { LocalAttributeSingleEditComponent } from './local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -493,56 +494,57 @@ export const projectRoutes: Route[] = [
     CostComponent,
     FundingComponent,
     FundingEditComponent,
-    FundingBulkEditComponent
+    FundingBulkEditComponent,
+    LocalAttributeSingleEditComponent
   ],
-    imports: [
-        RouterModule.forChild(projectRoutes),
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatDividerModule,
-        MatIconModule,
-        MatMenuModule,
-        MatProgressBarModule,
-        MatRippleModule,
-        MatSidenavModule,
-        MatSortModule,
-        MatTableModule,
-        MatTabsModule,
-        MatExpansionModule,
-        NgApexchartsModule,
-        TranslocoModule,
-        SharedModule,
-        CommonModule,
-        FuseDrawerModule,
-        FuseNavigationModule,
-        NgScrollbarModule,
-        MatChipsModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        NgxDatatableModule,
-        MatSlideToggleModule,
-        MatDatepickerModule,
-        MatMomentDateModule,
-        MatAutocompleteModule,
-        MatTooltipModule,
-        MatSnackBarModule,
-        FuseAlertModule,
-        SpotFormsModule,
-        SearchModule,
-        LanguagesModule,
-        FuseFullscreenModule,
-        ShortcutsModule,
-        MessagesModule,
-        NotificationsModule,
-        UserModule
-    ],
-    exports:[
-      GeneralInfoSingleEditComponent,
-      QualityRefBulkEditComponent,
-      OeProjectSingleEditComponent,
-      TechTransferSingleEditComponent,
-      StrategicDriversComponent
-    ]
+  imports: [
+    RouterModule.forChild(projectRoutes),
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatDividerModule,
+    MatIconModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatExpansionModule,
+    NgApexchartsModule,
+    TranslocoModule,
+    SharedModule,
+    CommonModule,
+    FuseDrawerModule,
+    FuseNavigationModule,
+    NgScrollbarModule,
+    MatChipsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    NgxDatatableModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatAutocompleteModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    FuseAlertModule,
+    SpotFormsModule,
+    SearchModule,
+    LanguagesModule,
+    FuseFullscreenModule,
+    ShortcutsModule,
+    MessagesModule,
+    NotificationsModule,
+    UserModule
+  ],
+  exports: [
+    GeneralInfoSingleEditComponent,
+    QualityRefBulkEditComponent,
+    OeProjectSingleEditComponent,
+    TechTransferSingleEditComponent,
+    StrategicDriversComponent
+  ]
 })
 export class ProjectHubModule { }

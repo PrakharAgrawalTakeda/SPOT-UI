@@ -61,6 +61,15 @@
       Baseline : {{baselineLog.baselineCount?baselineLog.baselineCount:0}}
   </h6>
   </div>
+<form class="w-full pr-6 pl-6" [formGroup]="optionExecutions" *ngIf="optionType== 'option-2' || optionType== 'option-3'">
+    <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full"  >
+        <spot-input-date class="w-full read-only"
+                         formControlName="optionExecutionStart" name="optionExecutionStart" [label]="'Execution Start'">
+        </spot-input-date>
+        <spot-input-date class="w-full read-only" formControlName="optionExecutionEnd" name="optionExecutionEnd" [label]="'Execution End'">
+        </spot-input-date>
+    </div>
+</form>
 <!-- <div class="flex justify-start items-left w-full" style="margin:top -6px!important; margin: left 0rem!important">
     <h6 class="pl-6 pt-0 pb-4 text-md font-medium text-secondary italic">
         Baseline : {{baselineCount.baselineCount}}
