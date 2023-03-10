@@ -587,5 +587,13 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+
+  async getLocalAttributes(projectid: string) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 
