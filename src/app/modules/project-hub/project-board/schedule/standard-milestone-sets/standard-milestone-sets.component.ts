@@ -82,9 +82,9 @@ export class StandardMilestoneSetsComponent implements OnInit {
             }
             this.fuseAlert.open(limitConfig)
         }else{
-            if(startMilestonesCount>1) {
+            if(endMilestonesCount>1) {
                 var limitConfig: FuseConfirmationConfig = {
-                    "message": "The Execution Start milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once",
+                    "message": "The Execution End milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once",
                     "icon": {
                         "show": true,
                         "name": "heroicons_outline:exclamation",

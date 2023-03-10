@@ -237,8 +237,8 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
-  async deleteRiskIssueByOption(id: string, optionId: string) {
-      var link = GlobalVariables.apiurl + "BusinessCase/RiskIssue/" +optionId+"/" + id
+  async deleteRiskIssueByOption(id: string, optionId: string, projectId: string) {
+      var link = GlobalVariables.apiurl + "BusinessCase/RiskIssue/"+ projectId+ "/"  +optionId+"/" + id
       const abc$ = this.http.delete(link)
       const response = await lastValueFrom(abc$)
       return response

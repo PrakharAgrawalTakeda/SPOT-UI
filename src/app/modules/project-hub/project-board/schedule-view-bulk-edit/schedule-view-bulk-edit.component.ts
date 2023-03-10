@@ -2525,8 +2525,8 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                                 control.patchValue({ functionGroupId: x.funtionalOwnerId })
                                 control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId)})
                             }
-                            if (control.value.comments == '') {
-                                control.patchValue({ comments: x.comments })
+                            if (!control.value.comments || control.value.comments == '') {
+                                control.patchValue({ comments: x.comment })
                             }
                             if (control.value.includeInReport == false) {
                                 control.patchValue({ includeInReport: x.includeInReport })
@@ -2609,7 +2609,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             includeInCharter: new FormControl(false),
             includeInBusinessCase: new FormControl(false),
             milestoneType: new FormControl(sM.milestoneType),
-            templateMilestoneId: new FormControl(sM.milestoneTemplateId),
+            templateMilestoneId: new FormControl(sM.milestoneId),
             includeInCloseout: new FormControl(false),
             responsiblePersonId: new FormControl(''),
             indicator: new FormControl('')

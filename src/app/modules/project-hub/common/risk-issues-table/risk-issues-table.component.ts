@@ -98,13 +98,13 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
          }
          if (this.router.url.includes('option-2')) {
              this.optionId = GlobalBusinessCaseOptions.OPTION_2
-             this.apiService.getRiskIssuesByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
+             this.apiService.getRiskIssuesByOption(this.id,GlobalBusinessCaseOptions.OPTION_2).then((res) => {
                  this.riskIssuesData  = res
              })
          }
          if (this.router.url.includes('option-3')) {
              this.optionId = GlobalBusinessCaseOptions.OPTION_3
-             this.apiService.getRiskIssuesByOption(this.projecthubservice.projectid,Constants.OPTION_3_ID.toString()).then((res) => {
+             this.apiService.getRiskIssuesByOption(this.projecthubservice.projectid,GlobalBusinessCaseOptions.OPTION_3).then((res) => {
                  this.riskIssuesData  = res
              })
          }
@@ -200,7 +200,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     riskIssueAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
           if (this.callLocation == 'Business-Case') {
-              this.apiService.deleteRiskIssueByOption(id,this.optionId).then((res) => {
+              this.apiService.deleteRiskIssueByOption(id,this.optionId, this.id).then((res) => {
                   this.projecthubservice.submitbutton.next(true)
                   this.projecthubservice.isNavChanged.next(true)
             })
