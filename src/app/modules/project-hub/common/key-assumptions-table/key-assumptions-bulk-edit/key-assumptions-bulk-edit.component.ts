@@ -7,6 +7,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../..
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {Constants} from "../../../../../shared/constants";
 import {Router} from "@angular/router";
+import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
 @Component({
     selector: 'app-key-assumptions-bulk-edit',
     templateUrl: './key-assumptions-bulk-edit.component.html',
@@ -42,7 +43,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
 
     dataloader() {
         if (this.router.url.includes('recommended-option')) {
-            this.apiService.getKeyAssumptionsByProject(this.projecthubservice.projectid).then((res: any) => {
+            this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
                 this.keyAssumptions = res
                 if (this.keyAssumptions.length > 0) {
                     this.keyAssumptionsDb = this.keyAssumptions.map(x => {
@@ -71,7 +72,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
             })
         }else{
             if (this.router.url.includes('option-2')) {
-                this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,Constants.OPTION_2_ID.toString()).then((res: any) => {
+                this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,GlobalBusinessCaseOptions.OPTION_2).then((res: any) => {
                     this.keyAssumptions = res
                     if (this.keyAssumptions.length > 0) {
                         this.keyAssumptionsDb = this.keyAssumptions.map(x => {
@@ -100,7 +101,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                 })
             }else{
                 if (this.router.url.includes('option-3')) {
-                    this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,Constants.OPTION_3_ID.toString()).then((res: any) => {
+                    this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid,GlobalBusinessCaseOptions.OPTION_3.toString()).then((res: any) => {
                         this.keyAssumptions = res
                         if (this.keyAssumptions.length > 0) {
                             this.keyAssumptionsDb = this.keyAssumptions.map(x => {
@@ -222,7 +223,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                         "includeInCharter": i.includeInCharter,
                         "includeInBusinessCase": i.includeInBusinessCase,
                         "businessKeyAssumptionUniqueId":i.businessKeyAssumptionUniqueId,
-                        "businessOptionId": Constants.OPTION_3_ID.toString()
+                        "businessOptionId": GlobalBusinessCaseOptions.OPTION_3
                     })
                 }
             }
@@ -236,7 +237,21 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                         "includeInCharter": i.includeInCharter,
                         "includeInBusinessCase": i.includeInBusinessCase,
                         "businessKeyAssumptionUniqueId":i.businessKeyAssumptionUniqueId,
-                        "businessOptionId": Constants.OPTION_2_ID.toString()
+                        "businessOptionId": GlobalBusinessCaseOptions.OPTION_2
+                    })
+                }
+            }
+            if (this.router.url.includes('recommended-option')) {
+                for (var i of form) {
+                    this.keyAssumptionsSubmit.push({
+                        "keyAssumptionUniqueId": i.keyAssumptionUniqueId,
+                        "projectId": i.projectId,
+                        "keyAssumption": i.keyAssumption,
+                        "assumptionRationale": i.assumptionRationale,
+                        "includeInCharter": i.includeInCharter,
+                        "includeInBusinessCase": i.includeInBusinessCase,
+                        "businessKeyAssumptionUniqueId":i.businessKeyAssumptionUniqueId,
+                        "businessOptionId": ""
                     })
                 }
             }
@@ -350,7 +365,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
     submitKeyAssumptions() {
         if (JSON.stringify(this.keyAssumptionsDb) != JSON.stringify(this.keyAssumptionsSubmit)) {
             this.projecthubservice.isFormChanged = false
-            if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+            if (this.router.url.includes('option-2') || this.router.url.includes('option-3') || this.router.url.includes('recommended-option') ) {
                 this.formValueForOptions()
                 this.apiService.bulkEditKeyAssumptionsForOption(this.keyAssumptionsSubmit, this.projecthubservice.projectid).then(res => {
                     this.projecthubservice.submitbutton.next(true)

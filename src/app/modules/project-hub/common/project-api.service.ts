@@ -231,8 +231,8 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
    }
-  async deleteKeyAssumptionByOption(id: string) {
-      var link = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/" + id
+  async deleteKeyAssumptionByOption(id: string, optionId: string) {
+      var link = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/" +optionId+"/" + id
       const abc$ = this.http.delete(link)
       const response = await lastValueFrom(abc$)
       return response

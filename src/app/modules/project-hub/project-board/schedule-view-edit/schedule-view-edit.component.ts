@@ -14,11 +14,9 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { AuthService } from '../../../../core/auth/auth.service'
 import * as moment from 'moment';
-import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../common/project-api.service';
-import { FuseAlertService } from '@fuse/components/alert';
-import {Constants} from "../../../../shared/constants";
 import {Router} from "@angular/router";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -220,14 +218,14 @@ export class ScheduleViewEditComponent implements OnInit {
           mainObjnew.baselineFinish = null
         }
           if (this.router.url.includes('option-2')) {
-              mainObjnew.businessOptionId = Constants.OPTION_2_ID.toString();
+              mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
               this.apiService.addTimelineForOption(mainObjnew).then(res => {
                   this.projecthubservice.submitbutton.next(true)
                   this.projecthubservice.toggleDrawerOpen('', '', [], '')
               })
           }else{
               if (this.router.url.includes('option-3')) {
-                  mainObjnew.businessOptionId = Constants.OPTION_3_ID.toString();
+                  mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                   this.apiService.addTimelineForOption(mainObjnew).then(res => {
                       this.projecthubservice.submitbutton.next(true)
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')

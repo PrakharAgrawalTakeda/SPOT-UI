@@ -63,6 +63,20 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       this.changeschedule(res)
       console.log(res)
     })
+    this.projecthubservice.submitbutton.subscribe(res=>{
+        if (this.optionType=='option-2'){
+            this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
+                this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
+            })
+        }
+        if (this.optionType=='option-3'){
+            this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_3_ID.toString()).then((bcOptionInfo: any) => {
+                this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
+            })
+        }
+    })
 
   }
   ngOnChanges(changes: SimpleChanges): void {
