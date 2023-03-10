@@ -17,6 +17,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {AuthService} from "../../../../core/auth/auth.service";
 import {Constants} from "../../../../shared/constants";
 import {ActivatedRoute, Router} from "@angular/router";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 
 @Component({
   selector: 'app-risk-issues-table',
@@ -43,6 +44,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
   riskIssueViewEditType: string = "RiskIssue";
   riskIssueBulkEditType: string = "RiskIssuesBulkEdit";
   id: string = ''
+  optionId: string = ''
   constructor(public projecthubservice: ProjectHubService,
     private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService,
@@ -91,14 +93,17 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
      if(this.callLocation == 'Business-Case'){
          this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
          if (this.router.url.includes('recommended-option')) {
+             this.optionId = GlobalBusinessCaseOptions.OPTION_1
              this.riskIssuesData = this.projectViewDetails.riskIssuesData
          }
          if (this.router.url.includes('option-2')) {
+             this.optionId = GlobalBusinessCaseOptions.OPTION_2
              this.apiService.getRiskIssuesByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
                  this.riskIssuesData  = res
              })
          }
          if (this.router.url.includes('option-3')) {
+             this.optionId = GlobalBusinessCaseOptions.OPTION_3
              this.apiService.getRiskIssuesByOption(this.projecthubservice.projectid,Constants.OPTION_3_ID.toString()).then((res) => {
                  this.riskIssuesData  = res
              })
@@ -195,18 +200,10 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
     riskIssueAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
           if (this.callLocation == 'Business-Case') {
-              if (this.router.url.includes('recommended-option')) {
-                  this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
-                      this.projecthubservice.submitbutton.next(true)
-                      this.projecthubservice.isNavChanged.next(true)
-                  })
-              }
-              if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
-                  this.apiService.deleteRiskIssueByOption(id).then((res) => {
-                      this.projecthubservice.submitbutton.next(true)
-                      this.projecthubservice.isNavChanged.next(true)
-                  })
-              }
+              this.apiService.deleteRiskIssueByOption(id,this.optionId).then((res) => {
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.isNavChanged.next(true)
+            })
           }else{
               this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
                   this.projecthubservice.submitbutton.next(true)
