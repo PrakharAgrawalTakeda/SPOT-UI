@@ -39,11 +39,10 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
         detailedDescription: data1.detailedDescription,
         targetEndState: data.targetEndState,
         benefitsRealizedOutcome: data.benefitsRealizedOutcome
-    })
+      })
+        this.viewContent = true
   })
-      this.viewContent = true
   })
-      this.viewContent = true
   }
 
   submitOutcomes() {
