@@ -512,11 +512,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                             }
                                             this.disabler()
                                             //this.value = this.milestoneForm.getRawValue()
-                                            this.viewContent = true
                                         }
 
                                     }
-
+                                    this.viewContent = true
                                 })
                             })
                         })

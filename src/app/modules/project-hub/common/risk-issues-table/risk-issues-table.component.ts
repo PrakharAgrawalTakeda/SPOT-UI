@@ -63,7 +63,9 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
       if(this.callLocation=="Business-Case"){
           this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
           if (this.router.url.includes('recommended-option')) {
-              this.riskIssuesngxdata = this.projectViewDetails.riskIssuesData
+              this.apiService.getRiskIssuesByOption(this.id,GlobalBusinessCaseOptions.OPTION_1).then((res) => {
+                  this.riskIssuesngxdata  = res
+              })
           }
           if (this.router.url.includes('option-2')) {
               this.apiService.getRiskIssuesByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {

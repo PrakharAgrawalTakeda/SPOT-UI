@@ -22,6 +22,9 @@
             [mode]="'Project-Close-Out'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditCharter'"
             [mode]="'Project-Charter'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'TimelineEditOptionO1'" [optionType]="'recommended-option'" [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'TimelineEditOptionO2'" [optionType]="'option-2'" [mode]="'Business-Case'" ></app-schedule-view-bulk-edit>
+        <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'TimelineEditOptionO3'" [optionType]="'option-3'" [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBulkEditBusinessCase'"
             [mode]="'Business-Case'"></app-schedule-view-bulk-edit>
         <app-schedule-link *ngIf="projecthubservice.itemtype == 'LinkMilestones'"></app-schedule-link>
