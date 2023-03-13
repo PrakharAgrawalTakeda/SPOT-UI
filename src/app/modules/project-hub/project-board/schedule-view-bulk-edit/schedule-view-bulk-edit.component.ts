@@ -23,6 +23,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { MsalService } from '@azure/msal-angular';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import {Constants} from "../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 
 @Component({
     selector: 'app-schedule-view-bulk-edit',
@@ -139,9 +140,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         optionExecutionStart : new FormControl(""),
         optionExecutionEnd : new FormControl("")
     })
-    optionExecutionStart = new FormControl("")
-    optionExecutionEnd = new FormControl("")
     optionInfoData: any = {}
+    optionId: string = ''
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
         private portApiService: PortfolioApiService,
@@ -228,7 +228,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     }
 
     getFunctionOwner(): any {
-        return this.lookUpData.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
+        return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
     }
     dataloader() {
         if (this.mode == 'Baseline-Log') {
@@ -329,7 +329,15 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             // this.viewBaseline = false
             // this.viewBaselineLogs = true
         } else {
-            //debugger
+            if (this.optionType == 'recommended-option') {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_1
+            }
+            else if (this.optionType == 'option-2') {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_2
+            }
+            else if (this.optionType == 'option-3') {
+                this.optionId = GlobalBusinessCaseOptions.OPTION_3
+            }
             this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
             this.apiService.getProjectBaselineLog(this.id).then((log: any) => {
                 log.projectBaselineLog.sort((a, b) => {
@@ -356,7 +364,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                     }
                                     //debugger
                                     this.baselineCount = count
-                                    this.lookUpData = lookup
+                                    this.projecthubservice.lookUpMaster = lookup
                                     this.filterCriteria = filterres
                                     this.scheduleData = res
                                     this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
@@ -375,9 +383,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                             this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
                                                 this.schedulengxdata = res
                                                 this.optionsDataLoader()
-                                                this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
-                                                this.optionExecutions.controls.optionExecutionStart.patchValue( bcOptionInfo.executionEndDate)
-                                                this.optionInfoData= bcOptionInfo;
+                                                this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                                                this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
+                                                this.optionInfoData = bcOptionInfo;
                                             })
                                         })
                                     }else{
@@ -441,7 +449,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                             userDisplayName: x.responsiblePersonName
                                                         }),
                                                         "functionGroupId": x.functionGroupId,
-                                                        "function": (this.lookUpData.find(y => y.lookUpId == x.functionGroupId)),
+                                                        "function": (this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.functionGroupId)),
                                                         "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
                                                         "comments": x.comments,
                                                         "includeInReport": x.includeInReport,
@@ -468,7 +476,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                             userDisplayName: i.responsiblePersonName
                                                         }),
                                                         functionGroupId: new FormControl(i.functionGroupId),
-                                                        function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
+                                                        function: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == i.functionGroupId)),
                                                         completionDate: new FormControl(i.completionDate),
                                                         comments: new FormControl(i.comments),
                                                         includeInReport: new FormControl(i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport),
@@ -504,11 +512,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                             }
                                             this.disabler()
                                             //this.value = this.milestoneForm.getRawValue()
-                                            this.viewContent = true
                                         }
 
                                     }
-
+                                    this.viewContent = true
                                 })
                             })
                         })
@@ -1003,7 +1010,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //   }
 
     getLookupName(lookUpId: string): string {
-        var lookup = this.lookUpData.find(x => x.lookUpId == lookUpId)
+        var lookup = this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId)
         return lookup ? lookup.lookUpName : ""
     }
 
@@ -2229,27 +2236,23 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     submitScheduleBusinessCase() {
         this.projecthubservice.isFormChanged = false
-            if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
-                this.formValueForOptions()
-                this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj, this.id).then(res => {
+        this.formValueForOptions()
+        this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj, this.id).then(res => {
+            this.optionInfoData.executionEndDate = moment(this.optionExecutions.controls.optionExecutionEnd.value).format('YYYY-MM-DD[T]HH:mm:ss');
+            this.optionInfoData.executionStartDate = moment(this.optionExecutions.controls.optionExecutionStart.value).format('YYYY-MM-DD[T]HH:mm:ss');
+            this.optionInfoData.businessOptionId = this.optionInfoData.businessOptionId ? this.optionInfoData.businessOptionId : this.optionId
+            if(this.router.url.includes('option-2') || this.router.url.includes('option-3')){
+                this.apiService.updateBusinessCaseOptionInfoDetails(this.optionInfoData, this.id).then(secondRes => {
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     this.projecthubservice.isNavChanged.next(true)
                 })
-                this.optionInfoData.exectutionEndDate = this.optionExecutions.controls.optionExecutionEnd.value;
-                this.optionInfoData.executionStartDate = this.optionExecutions.controls.optionExecutionStart.value;
-                // this.apiService.updateBusinessCaseOptionInfoDetails(this.optionInfoData,this.id).then(secondRes => {
-                // })
             }else{
-                this.formValueStandard()
-                this.apiService.bulkeditSchedule(this.scheduleBusinessObj, this.id).then(res => {
-                    this.projecthubservice.isNavChanged.next(true)
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.successSave.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                })
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                this.projecthubservice.isNavChanged.next(true)
             }
-
+        })
     }
 
 
@@ -2519,10 +2522,10 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             control.patchValue({ milestone: x.milestone })
                             if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
                                 control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.lookUpData.find(y => y.lookUpId == x.funtionalOwnerId)})
+                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId)})
                             }
-                            if (control.value.comments == '') {
-                                control.patchValue({ comments: x.comments })
+                            if (!control.value.comments || control.value.comments == '') {
+                                control.patchValue({ comments: x.comment })
                             }
                             if (control.value.includeInReport == false) {
                                 control.patchValue({ includeInReport: x.includeInReport })
@@ -2546,7 +2549,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             control.patchValue({ milestone: x.milestone })
                             if (x.funtionalOwnerId && x.funtionalOwnerId != '') {
                                 control.patchValue({ functionGroupId: x.funtionalOwnerId })
-                                control.patchValue({ function: this.lookUpData.find(y => y.lookUpId == x.funtionalOwnerId)})
+                                control.patchValue({ function: this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.funtionalOwnerId)})
                             }
                             if (control.value.comments == '') {
                                 control.patchValue({ comments: x.comment })
@@ -2597,7 +2600,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             plannedFinish: new FormControl(''),
             baselineFinish: new FormControl(''),
             responsiblePersonName: new FormControl({}),
-            function: new FormControl(this.lookUpData.find(x => x.lookUpId == sM.funtionalOwnerId)),
+            function: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == sM.funtionalOwnerId)),
             functionGroupId: new FormControl(sM.funtionalOwnerId),
             completionDate: new FormControl(''),
             comments: new FormControl(sM.comment),
@@ -2605,7 +2608,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             includeInCharter: new FormControl(false),
             includeInBusinessCase: new FormControl(false),
             milestoneType: new FormControl(sM.milestoneType),
-            templateMilestoneId: new FormControl(sM.milestoneTemplateId),
+            templateMilestoneId: new FormControl(sM.milestoneId),
             includeInCloseout: new FormControl(false),
             responsiblePersonId: new FormControl(''),
             indicator: new FormControl('')
@@ -2695,7 +2698,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             userDisplayName: x.responsiblePersonName
                         }),
                         "functionGroupId": x.functionGroupId,
-                        "function": (this.lookUpData.find(y => y.lookUpId == x.functionGroupId)),
+                        "function": (this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.functionGroupId)),
                         "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
                         "comments": x.comments,
                         "includeInReport": x.includeInReport,
@@ -2722,7 +2725,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             userDisplayName: i.responsiblePersonName
                         }),
                         functionGroupId: new FormControl(i.functionGroupId),
-                        function: new FormControl(this.lookUpData.find(x => x.lookUpId == i.functionGroupId)),
+                        function: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == i.functionGroupId)),
                         completionDate: new FormControl(i.completionDate),
                         comments: new FormControl(i.comments),
                         includeInReport: new FormControl(i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport),
@@ -2799,120 +2802,70 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
         var form = this.milestoneForm.getRawValue()
         if (form.length > 0) {
             this.scheduleBusinessObj = []
+            let optionId = "";
             if (this.router.url.includes('option-3')) {
-                for (var i of form) {
-                    var milestoneName = i.milestone;
-                    if (i.milestoneType == 1) {
-                        if (!i.milestone.includes('Execution Start')) {
-                            milestoneName = 'Execution Start - '.concat(i.milestone)
-                        }
-                    }
-                    if (i.milestoneType == 2) {
-                        if (!i.milestone.includes('Execution End ')) {
-                            milestoneName = 'Execution End - '.concat(i.milestone)
-                        }
-                    }
-                    if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
-                        this.scheduleBusinessObj.push({
-                            scheduleUniqueId: i.scheduleUniqueId,
-                            projectId: i.projectId,
-                            milestone: milestoneName,
-                            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-                            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            comments: i.comments,
-                            includeInReport: i.includeInReport,
-                            functionGroupId: i.function == null ? null : i.function.lookUpId,
-                            includeInCharter: i.includeInCharter,
-                            includeInBusinessCase: i.includeInBusinessCase,
-                            milestoneType: i.milestoneType,
-                            templateMilestoneId: i.templateMilestoneId,
-                            includeInCloseout: i.includeInCloseout,
-                            businessKeyAssumptionUniqueId:i.businessKeyAssumptionUniqueId,
-                            businessOptionId: Constants.OPTION_2_ID.toString()
-                        })
-                    } else {
-                        this.scheduleBusinessObj.push({
-                            scheduleUniqueId: i.scheduleUniqueId,
-                            projectId: i.projectId,
-                            milestone: (i.milestone),
-                            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-                            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            comments: i.comments,
-                            includeInReport: i.includeInReport,
-                            functionGroupId: i.function == null ? null : i.function.lookUpId,
-                            includeInCharter: i.includeInCharter,
-                            includeInBusinessCase: i.includeInBusinessCase,
-                            milestoneType: i.milestoneType,
-                            templateMilestoneId: i.templateMilestoneId,
-                            includeInCloseout: i.includeInCloseout,
-                            responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
-                            indicator: i.indicator,
-                            businessKeyAssumptionUniqueId:i.businessKeyAssumptionUniqueId,
-                            businessOptionId: Constants.OPTION_3_ID.toString()
-                        })
-                    }
-                }
+                optionId= GlobalBusinessCaseOptions.OPTION_3
             }
             if (this.router.url.includes('option-2')) {
-                for (var i of form) {
-                    var milestoneName = i.milestone;
-                    if (i.milestoneType == 1) {
-                        if (!i.milestone.includes('Execution Start')) {
-                            milestoneName = 'Execution Start - '.concat(i.milestone)
-                        }
+                optionId= GlobalBusinessCaseOptions.OPTION_2
+            }
+            if (this.router.url.includes('recommended-option')) {
+                optionId=""
+            }
+            for (var i of form) {
+                var milestoneName = i.milestone;
+                if (i.milestoneType == 1) {
+                    if (!i.milestone.includes('Execution Start')) {
+                        milestoneName = 'Execution Start - '.concat(i.milestone)
                     }
-                    if (i.milestoneType == 2) {
-                        if (!i.milestone.includes('Execution End ')) {
-                            milestoneName = 'Execution End - '.concat(i.milestone)
-                        }
+                }
+                if (i.milestoneType == 2) {
+                    if (!i.milestone.includes('Execution End ')) {
+                        milestoneName = 'Execution End - '.concat(i.milestone)
                     }
-                    if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
-                        this.scheduleBusinessObj.push({
-                            scheduleUniqueId: i.scheduleUniqueId,
-                            projectId: i.projectId,
-                            milestone: milestoneName,
-                            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-                            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            comments: i.comments,
-                            includeInReport: i.includeInReport,
-                            functionGroupId: i.function == null ? null : i.function.lookUpId,
-                            includeInCharter: i.includeInCharter,
-                            includeInBusinessCase: i.includeInBusinessCase,
-                            milestoneType: i.milestoneType,
-                            templateMilestoneId: i.templateMilestoneId,
-                            includeInCloseout: i.includeInCloseout,
-                            businessKeyAssumptionUniqueId: i.businessKeyAssumptionUniqueId,
-                            businessOptionId: Constants.OPTION_2_ID.toString()
-                        })
-                    } else {
-                        this.scheduleBusinessObj.push({
-                            scheduleUniqueId: i.scheduleUniqueId,
-                            projectId: i.projectId,
-                            milestone: (i.milestone),
-                            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-                            completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                            comments: i.comments,
-                            includeInReport: i.includeInReport,
-                            functionGroupId: i.function == null ? null : i.function.lookUpId,
-                            includeInCharter: i.includeInCharter,
-                            includeInBusinessCase: i.includeInBusinessCase,
-                            milestoneType: i.milestoneType,
-                            templateMilestoneId: i.templateMilestoneId,
-                            includeInCloseout: i.includeInCloseout,
-                            responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
-                            indicator: i.indicator,
-                            businessKeyAssumptionUniqueId: i.businessKeyAssumptionUniqueId,
-                            businessOptionId: Constants.OPTION_2_ID.toString()
-                        })
-                    }
+                }
+                if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
+                    this.scheduleBusinessObj.push({
+                        scheduleUniqueId: i.scheduleUniqueId,
+                        projectId: i.projectId,
+                        milestone: milestoneName,
+                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+                        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        comments: i.comments,
+                        includeInReport: i.includeInReport,
+                        functionGroupId: i.function == null ? null : i.function.lookUpId,
+                        includeInCharter: i.includeInCharter,
+                        includeInBusinessCase: i.includeInBusinessCase,
+                        milestoneType: i.milestoneType,
+                        templateMilestoneId: i.templateMilestoneId,
+                        includeInCloseout: i.includeInCloseout,
+                        businessKeyAssumptionUniqueId:i.businessKeyAssumptionUniqueId,
+                        businessOptionId: optionId
+                    })
+                } else {
+                    this.scheduleBusinessObj.push({
+                        scheduleUniqueId: i.scheduleUniqueId,
+                        projectId: i.projectId,
+                        milestone: (i.milestone),
+                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
+                        completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                        comments: i.comments,
+                        includeInReport: i.includeInReport,
+                        functionGroupId: i.function == null ? null : i.function.lookUpId,
+                        includeInCharter: i.includeInCharter,
+                        includeInBusinessCase: i.includeInBusinessCase,
+                        milestoneType: i.milestoneType,
+                        templateMilestoneId: i.templateMilestoneId,
+                        includeInCloseout: i.includeInCloseout,
+                        responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
+                        indicator: i.indicator,
+                        businessKeyAssumptionUniqueId:i.businessKeyAssumptionUniqueId,
+                        businessOptionId: optionId
+                    })
                 }
             }
         } else {

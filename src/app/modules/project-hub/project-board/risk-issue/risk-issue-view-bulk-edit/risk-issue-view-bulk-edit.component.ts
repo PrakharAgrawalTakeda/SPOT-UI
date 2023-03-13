@@ -8,6 +8,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../..
 import {AuthService} from "../../../../../core/auth/auth.service";
 import {Router} from "@angular/router";
 import {Constants} from "../../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
 
 @Component({
     selector: 'app-risk-issue-view-bulk-edit',
@@ -352,7 +353,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     };
     submitRI() {
         if (this.projectHubService.isFormChanged) {
-            if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+            if (this.router.url.includes('option-2') || this.router.url.includes('option-3') || this.router.url.includes('recommended-option') ) {
                 this.submitPrepForOptions()
                 this.projectHubService.isFormChanged = false
                 this.apiService.bulkEditRiskIssuesForOption(this.formValue, this.projectHubService.projectid).then(res => {
@@ -478,59 +479,40 @@ export class RisIssueViewBulkEditComponent implements OnInit {
         if (!this.projectHubService.includeClosedItems.riskIssue.value) {
             this.formValue = this.dbRiskIssues.length > 0 ? this.dbRiskIssues.filter(x => x.closeDate != null) : []
         }
+        let optionId = "";
         if (this.router.url.includes('option-3')) {
-            for (var i of formValue) {
-                this.formValue.push({
-                    closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    functionGroupId: i.functionGroupId,
-                    ifHappens: i.ifHappens,
-                    includeInCharter: i.includeInCharter,
-                    includeInReport: i.includeInReport,
-                    indicator: i.indicator,
-                    logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    mitigation: i.mitigation,
-                    postMitigationComments: i.postMitigationComments,
-                    postMitigationImpact: i.postMitigationImpact,
-                    postMitigationProbability: i.postMitigationProbability,
-                    projectId: i.projectId,
-                    riskIssueResult: i.riskIssueResult,
-                    riskIssueTypeId: i.riskIssueTypeId,
-                    riskIssueUniqueId: i.riskIssueUniqueId,
-                    ownerId: i.owner?.userAdid ? i.owner.userAdid : null,
-                    ownerName: i.owner?.userDisplayName ? i.owner.userDisplayName : null,
-                    probabilityId: i.probabilityId,
-                    impactId: i.impactId,
-                    businessOptionId: Constants.OPTION_3_ID.toString()
-                })
-            }
+            optionId= GlobalBusinessCaseOptions.OPTION_3
         }
         if (this.router.url.includes('option-2')) {
-            for (var i of formValue) {
-                this.formValue.push({
-                    closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    functionGroupId: i.functionGroupId,
-                    ifHappens: i.ifHappens,
-                    includeInCharter: i.includeInCharter,
-                    includeInReport: i.includeInReport,
-                    indicator: i.indicator,
-                    logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    mitigation: i.mitigation,
-                    postMitigationComments: i.postMitigationComments,
-                    postMitigationImpact: i.postMitigationImpact,
-                    postMitigationProbability: i.postMitigationProbability,
-                    projectId: i.projectId,
-                    riskIssueResult: i.riskIssueResult,
-                    riskIssueTypeId: i.riskIssueTypeId,
-                    riskIssueUniqueId: i.riskIssueUniqueId,
-                    ownerId: i.owner?.userAdid ? i.owner.userAdid : null,
-                    ownerName: i.owner?.userDisplayName ? i.owner.userDisplayName : null,
-                    probabilityId: i.probabilityId,
-                    impactId: i.impactId,
-                    businessOptionId: Constants.OPTION_2_ID.toString()
-                })
-            }
+            optionId= GlobalBusinessCaseOptions.OPTION_2
+        }
+        if (this.router.url.includes('recommended-option')) {
+            optionId=""
+        }
+        for (var i of formValue) {
+            this.formValue.push({
+                closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                functionGroupId: i.functionGroupId,
+                ifHappens: i.ifHappens,
+                includeInCharter: i.includeInCharter,
+                includeInReport: i.includeInReport,
+                indicator: i.indicator,
+                logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                mitigation: i.mitigation,
+                postMitigationComments: i.postMitigationComments,
+                postMitigationImpact: i.postMitigationImpact,
+                postMitigationProbability: i.postMitigationProbability,
+                projectId: i.projectId,
+                riskIssueResult: i.riskIssueResult,
+                riskIssueTypeId: i.riskIssueTypeId,
+                riskIssueUniqueId: i.riskIssueUniqueId,
+                ownerId: i.owner?.userAdid ? i.owner.userAdid : null,
+                ownerName: i.owner?.userDisplayName ? i.owner.userDisplayName : null,
+                probabilityId: i.probabilityId,
+                impactId: i.impactId,
+                businessOptionId: optionId
+            })
         }
 
     }

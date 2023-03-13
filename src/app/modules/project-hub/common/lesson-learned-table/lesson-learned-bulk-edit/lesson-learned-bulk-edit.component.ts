@@ -50,6 +50,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         res[j].submittedByName = res[j].submittedBy.userDisplayName
       }
       this.lessonsLearned = res
+      this.lessonsLearned = this.sortbyDateTypeName(this.lessonsLearned)
       this.lessonLearnedDb = this.lessonsLearned.map(x => {
         return {
           "lessonLearnedId": x.lessonLearnedId,
@@ -72,7 +73,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           "suggestedAction": x.suggestedAction
         }
       })
-      for (var i of this.lessonLearnedData) {
+      for (var i of this.lessonsLearned) {
         // this.opDb.push(i)
         this.lessonLearnedForm.push(new FormGroup({
           lessonLearnedId: new FormControl(i.lessonLearnedId),
@@ -102,7 +103,6 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           typeName: new FormControl(i.lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == i.lessonType)[0].lookUpName)
         }))
       }
-      this.lessonsLearned = this.sortbyDateTypeName(this.lessonsLearned)
       this.disabler();
       this.viewContent = true
     })

@@ -4,9 +4,9 @@ import {ProjectHubService} from "../../../project-hub.service";
 import {AuthService} from "../../../../../core/auth/auth.service";
 import {RoleService} from "../../../../../core/auth/role.service";
 import {ProjectApiService} from "../../project-api.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
+import { FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Constants} from "../../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
 
 @Component({
     selector: 'app-key-assumptions-add-single',
@@ -74,23 +74,31 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
             businessOptionId:""
         }
         if (this.router.url.includes('option-2')) {
-            optionObj.businessOptionId = Constants.OPTION_2_ID.toString();
+            optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
             this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
         }else{
             if (this.router.url.includes('option-3')) {
-                optionObj.businessOptionId = Constants.OPTION_3_ID.toString();
+                optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                 this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 })
             }else{
-                this.apiService.addKeyAssumption(mainObj).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                })
+                if (this.router.url.includes('recommended-option')) {
+                    optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_1;
+                    this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    })
+                }else{
+                    this.apiService.addKeyAssumption(mainObj).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    })
+                }
             }
         }
 

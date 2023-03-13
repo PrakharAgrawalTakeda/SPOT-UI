@@ -36,6 +36,7 @@
           <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
             *ngIf="viewElementChecker('problemTitle')" [label]="callLocation == 'BusinessCase'?'Initiative Title':'Project Name'">
           </spot-input>
+          <div class="w-full" *ngIf="callLocation == 'BusinessCase'"></div>
           <spot-input class="w-full read-only" [ngClass]="{'read-only': callLocation != 'ProjectCharter'}"
             formControlName="parentProgram" name="parentProgram" *ngIf="viewElementChecker('parentProject')"
             [label]="'Parent Program'" [showHint]="true"
@@ -53,7 +54,7 @@
           <spot-input-date class="w-full read-only" formControlName="businessCaseApprovedDate" name="businessCaseApprovedDate"
             *ngIf="viewElementChecker('businessCaseApprovedDate')" [label]="'Date Approved'">
           </spot-input-date>
-          <div class="w-full" *ngIf="callLocation == 'CloseOut' || callLocation == 'ProjectCharter'"></div>
+          <div class="w-full" *ngIf="callLocation == 'CloseOut' || callLocation == 'ProjectCharter' || callLocation == 'BusinessCase'"></div>
           <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
             [showHint]="true"
             [hint]="'The group which is responsible for the oversight and process adherence of the record'"
@@ -107,6 +108,7 @@
             [idPointer]="'userAdid'" *ngIf="viewElementChecker('AdditionalAuthor')" formControlName="AdditionalAuthor" name="AdditionalAuthor"
             [label]="'Additional Authors / Contributors'">
           </spot-multiselect-user-autocomplete>
+          <div class="w-full" *ngIf="callLocation == 'BusinessCase'"></div>
           <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
             [label]="'Primary Product'" [showHint]="true" *ngIf="viewElementChecker('primaryProduct')"
             [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">

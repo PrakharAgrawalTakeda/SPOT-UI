@@ -18,6 +18,7 @@ import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../../common/project-api.service';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Constants} from "../../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -302,24 +303,33 @@ export class RiskIssueViewEditComponent implements OnInit {
         }
 
         if (this.router.url.includes('option-2')) {
-            mainObjnew.businessOptionId = Constants.OPTION_2_ID.toString();
+            mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
             this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
         }else{
             if (this.router.url.includes('option-3')) {
-                mainObjnew.businessOptionId = Constants.OPTION_3_ID.toString();
+                mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                 this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 })
             }else{
-                this.apiService.addRiskIssue(mainObjnew).then(() => {
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.isNavChanged.next(true)
-                })
+                if (this.router.url.includes('recommended-option')) {
+                    mainObjnew.businessOptionId = "";
+                    this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    })
+                }else{
+                    this.apiService.addRiskIssue(mainObjnew).then(() => {
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+
             }
         }
 
