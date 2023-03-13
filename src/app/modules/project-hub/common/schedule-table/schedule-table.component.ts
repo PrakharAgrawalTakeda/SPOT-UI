@@ -83,15 +83,17 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       if(this.mode=='Business-Case'){
           this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
           if (this.router.url.includes('recommended-option')){
-              this.schedulengxdata = this.projectViewDetails.scheduleData.filter(x => x.completionDate == null)
+              this.apiService.getTimelineByOption(this.id ,GlobalBusinessCaseOptions.OPTION_1).then((res) => {
+                  this.schedulengxdata = res
+              })
           }
           if (this.router.url.includes('option-2')){
-              this.apiService.getTimelineByOption(this.id ,Constants.OPTION_2_ID.toString()).then((res) => {
+              this.apiService.getTimelineByOption(this.id ,GlobalBusinessCaseOptions.OPTION_2).then((res) => {
                   this.schedulengxdata = res
               })
           }
           if (this.router.url.includes('option-3')){
-              this.apiService.getTimelineByOption(this.id ,Constants.OPTION_3_ID.toString()).then((res) => {
+              this.apiService.getTimelineByOption(this.id ,GlobalBusinessCaseOptions.OPTION_3).then((res) => {
                   this.schedulengxdata = res
               })
           }

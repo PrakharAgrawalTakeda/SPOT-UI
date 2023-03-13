@@ -367,20 +367,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                     this.projecthubservice.lookUpMaster = lookup
                                     this.filterCriteria = filterres
                                     this.scheduleData = res
-                                    this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
-                                    if (this.isclosed == false) {
-                                        this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
-                                        //this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
-                                        //this.schedulengxdata = this.sortbyBaseline(this.schedulengxdata)
-                                        // this.schedulengxdata = this.sortbyCompletion(this.schedulengxdata)
-                                    }
-                                    // if(this.isclosed == true)
-                                    // {
-                                    //   this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
-                                    // }
                                     if (this.router.url.includes('option-2')) {
-                                        this.apiService.getTimelineByOption(this.id, Constants.OPTION_2_ID.toString()).then((res: any) => {
-                                            this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
+                                        this.apiService.getTimelineByOption(this.id, GlobalBusinessCaseOptions.OPTION_2.toString()).then((res: any) => {
+                                            this.apiService.getBusinessCaseOptionInfoData(this.id, GlobalBusinessCaseOptions.OPTION_2).then((bcOptionInfo: any) => {
                                                 this.schedulengxdata = res
                                                 this.optionsDataLoader()
                                                 this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
@@ -390,8 +379,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                         })
                                     }else{
                                         if(this.router.url.includes('option-3')){
-                                            this.apiService.getTimelineByOption(this.id, Constants.OPTION_3_ID.toString()).then((res: any) => {
-                                                this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_3_ID.toString()).then((bcOptionInfo: any) => {
+                                            this.apiService.getTimelineByOption(this.id, GlobalBusinessCaseOptions.OPTION_3).then((res: any) => {
+                                                this.apiService.getBusinessCaseOptionInfoData(this.id, GlobalBusinessCaseOptions.OPTION_3.toString()).then((bcOptionInfo: any) => {
                                                     this.schedulengxdata = res
                                                     this.optionsDataLoader()
                                                     this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
@@ -400,121 +389,144 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 })
                                             })
                                         }else{
-                                            if (this.mode == 'Project-Close-Out') {
-                                                this.schedulengxdata = this.scheduleData.scheduleData
-                                                // this.schedulengxdata = this.sortbyBaselineCompletion(this.schedulengxdata)
-                                            }
-                                            if (this.mode == 'Project-Charter') {
-                                                this.schedulengxdata = this.scheduleData.scheduleData
-                                                //this.schedulengxdata = this.sortbyPlanned(this.schedulengxdata)
-                                            }
-                                            this.scheduledataDB = res.scheduleData
-                                            //res.scheduleData = this.sortbyPlannedBaseline(res.scheduleData)
-                                            if (res.scheduleData.length != 0) {
-                                                for (var i of res.scheduleData) {
-                                                    i.includeInReport = i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
-                                                    this.dbSchedule.push({
-                                                        scheduleUniqueId: i.scheduleUniqueId,
-                                                        projectId: i.projectId,
-                                                        milestone: i.milestone,
-                                                        plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                                        baselineFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                                        responsiblePersonName: (i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : {
-                                                            userAdid: i.responsiblePersonId,
-                                                            userDisplayName: i.responsiblePersonName
-                                                        }),
-                                                        functionGroupId: i.functionGroupId,
-                                                        completionDate: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                                        comments: (i.comments),
-                                                        includeInReport: (i.includeInReport),
-                                                        includeInCharter: (i.includeInCharter),
-                                                        includeInBusinessCase: (i.includeInBusinessCase),
-                                                        milestoneType: (i.milestoneType),
-                                                        templateMilestoneId: (i.templateMilestoneId),
-                                                        includeInCloseout: (i.includeInCloseout),
-                                                        responsiblePersonId: (i.responsiblePersonId),
-                                                        indicator: (i.indicator)
+                                            this.changeschedule(this.projecthubservice.includeClosedItems.schedule.value)
+                                            if(this.router.url.includes('recommended-option')){
+                                                this.apiService.getTimelineByOption(this.id, GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
+                                                    this.apiService.getBusinessCaseOptionInfoData(this.id, GlobalBusinessCaseOptions.OPTION_1).then((bcOptionInfo: any) => {
+                                                        this.schedulengxdata = res
+                                                        this.optionsDataLoader()
+                                                        this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
+                                                        this.optionExecutions.controls.optionExecutionStart.patchValue( bcOptionInfo.executionStartDate)
+                                                        this.optionInfoData= bcOptionInfo;
                                                     })
-                                                }
-                                                this.scheduledataDb = this.schedulengxdata.map(x => {
-                                                    i.includeInReport = i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
-                                                    return {
-                                                        "scheduleUniqueId": x.scheduleUniqueId,
-                                                        "projectId": x.projectId,
-                                                        "milestone": x.milestone,
-                                                        "plannedFinish": moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss"),
-                                                        "baselineFinish": moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss"),
-                                                        "responsiblePersonName": (x.responsiblePersonId == null || x.responsiblePersonId == '' ? {} : {
-                                                            userAdid: x.responsiblePersonId,
-                                                            userDisplayName: x.responsiblePersonName
-                                                        }),
-                                                        "functionGroupId": x.functionGroupId,
-                                                        "function": (this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.functionGroupId)),
-                                                        "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
-                                                        "comments": x.comments,
-                                                        "includeInReport": x.includeInReport,
-                                                        "includeInCharter": x.includeInCharter,
-                                                        "includeInBusinessCase": x.includeInBusinessCase,
-                                                        "milestoneType": x.milestoneType,
-                                                        "templateMilestoneId": x.templateMilestoneId,
-
-                                                        "includeInCloseout": x.includeInCloseout,
-                                                        "responsiblePersonId": x.responsiblePersonId,
-                                                        "indicator": x.indicator
-                                                    }
                                                 })
-                                                for (var i of this.schedulengxdata) {
-                                                    this.milestoneName = i.milestone
-                                                    this.milestoneForm.push(new FormGroup({
-                                                        scheduleUniqueId: new FormControl(i.scheduleUniqueId),
-                                                        projectId: new FormControl(i.projectId),
-                                                        milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
-                                                        plannedFinish: new FormControl(i.plannedFinish),
-                                                        baselineFinish: new FormControl(i.baselineFinish),
-                                                        responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : {
-                                                            userAdid: i.responsiblePersonId,
-                                                            userDisplayName: i.responsiblePersonName
-                                                        }),
-                                                        functionGroupId: new FormControl(i.functionGroupId),
-                                                        function: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == i.functionGroupId)),
-                                                        completionDate: new FormControl(i.completionDate),
-                                                        comments: new FormControl(i.comments),
-                                                        includeInReport: new FormControl(i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport),
-                                                        includeInCharter: new FormControl(i.includeInCharter),
-                                                        includeInBusinessCase: new FormControl(i.includeInBusinessCase),
-                                                        milestoneType: new FormControl(i.milestoneType),
-                                                        templateMilestoneId: new FormControl(i.templateMilestoneId),
-                                                        includeInCloseout: new FormControl(i.includeInCloseout),
-                                                        responsiblePersonId: new FormControl(i.responsiblePersonId),
-                                                        indicator: new FormControl(i.indicator)
-                                                    }))
-                                                    if (this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
-                                                        for (let control of this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
+                                            }else{
+                                                if (this.mode == 'Project-Close-Out') {
+                                                    this.schedulengxdata = this.scheduleData.scheduleData
+                                                    // this.schedulengxdata = this.sortbyBaselineCompletion(this.schedulengxdata)
+                                                }
+                                                if (this.mode == 'Project-Charter') {
+                                                    this.schedulengxdata = this.scheduleData.scheduleData
+                                                    //this.schedulengxdata = this.sortbyPlanned(this.schedulengxdata)
+                                                }
+                                                this.scheduledataDB = res.scheduleData
+                                                //res.scheduleData = this.sortbyPlannedBaseline(res.scheduleData)
+                                                if (res.scheduleData.length != 0) {
+                                                    for (var i of res.scheduleData) {
+                                                        i.includeInReport = i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
+                                                        this.dbSchedule.push({
+                                                            scheduleUniqueId: i.scheduleUniqueId,
+                                                            projectId: i.projectId,
+                                                            milestone: i.milestone,
+                                                            plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                                            baselineFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                                            responsiblePersonName: (i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : {
+                                                                userAdid: i.responsiblePersonId,
+                                                                userDisplayName: i.responsiblePersonName
+                                                            }),
+                                                            functionGroupId: i.functionGroupId,
+                                                            completionDate: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                                            comments: (i.comments),
+                                                            includeInReport: (i.includeInReport),
+                                                            includeInCharter: (i.includeInCharter),
+                                                            includeInBusinessCase: (i.includeInBusinessCase),
+                                                            milestoneType: (i.milestoneType),
+                                                            templateMilestoneId: (i.templateMilestoneId),
+                                                            includeInCloseout: (i.includeInCloseout),
+                                                            responsiblePersonId: (i.responsiblePersonId),
+                                                            indicator: (i.indicator)
+                                                        })
+                                                    }
+                                                    this.scheduledataDb = this.schedulengxdata.map(x => {
+                                                        i.includeInReport = i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
+                                                        return {
+                                                            "scheduleUniqueId": x.scheduleUniqueId,
+                                                            "projectId": x.projectId,
+                                                            "milestone": x.milestone,
+                                                            "plannedFinish": moment(x.plannedFinish).format("YYYY-MM-DD HH:mm:ss"),
+                                                            "baselineFinish": moment(x.baselineFinish).format("YYYY-MM-DD HH:mm:ss"),
+                                                            "responsiblePersonName": (x.responsiblePersonId == null || x.responsiblePersonId == '' ? {} : {
+                                                                userAdid: x.responsiblePersonId,
+                                                                userDisplayName: x.responsiblePersonName
+                                                            }),
+                                                            "functionGroupId": x.functionGroupId,
+                                                            "function": (this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.functionGroupId)),
+                                                            "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
+                                                            "comments": x.comments,
+                                                            "includeInReport": x.includeInReport,
+                                                            "includeInCharter": x.includeInCharter,
+                                                            "includeInBusinessCase": x.includeInBusinessCase,
+                                                            "milestoneType": x.milestoneType,
+                                                            "templateMilestoneId": x.templateMilestoneId,
+
+                                                            "includeInCloseout": x.includeInCloseout,
+                                                            "responsiblePersonId": x.responsiblePersonId,
+                                                            "indicator": x.indicator
+                                                        }
+                                                    })
+                                                    for (var i of this.schedulengxdata) {
+                                                        this.milestoneName = i.milestone
+                                                        this.milestoneForm.push(new FormGroup({
+                                                            scheduleUniqueId: new FormControl(i.scheduleUniqueId),
+                                                            projectId: new FormControl(i.projectId),
+                                                            milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
+                                                            plannedFinish: new FormControl(i.plannedFinish),
+                                                            baselineFinish: new FormControl(i.baselineFinish),
+                                                            responsiblePersonName: new FormControl(i.responsiblePersonId == null || i.responsiblePersonId == '' ? {} : {
+                                                                userAdid: i.responsiblePersonId,
+                                                                userDisplayName: i.responsiblePersonName
+                                                            }),
+                                                            functionGroupId: new FormControl(i.functionGroupId),
+                                                            function: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == i.functionGroupId)),
+                                                            completionDate: new FormControl(i.completionDate),
+                                                            comments: new FormControl(i.comments),
+                                                            includeInReport: new FormControl(i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport),
+                                                            includeInCharter: new FormControl(i.includeInCharter),
+                                                            includeInBusinessCase: new FormControl(i.includeInBusinessCase),
+                                                            milestoneType: new FormControl(i.milestoneType),
+                                                            templateMilestoneId: new FormControl(i.templateMilestoneId),
+                                                            includeInCloseout: new FormControl(i.includeInCloseout),
+                                                            responsiblePersonId: new FormControl(i.responsiblePersonId),
+                                                            indicator: new FormControl(i.indicator)
+                                                        }))
+                                                        if (this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
+                                                            for (let control of this.milestoneForm.controls.filter(x => x.value.completionDate != null)) {
+                                                                control['controls']['baselineFinish'].disable()
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
+                                                        if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
+                                                            this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
+                                                        }
+                                                    }
+                                                    if (this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
+                                                        if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
+                                                            this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
+                                                        }
+                                                    }
+                                                    for (let control of this.milestoneForm.controls) {
+                                                        if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
                                                             control['controls']['baselineFinish'].disable()
                                                         }
                                                     }
                                                 }
-                                                if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
-                                                    if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
-                                                        this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
-                                                    }
+                                                if (this.isclosed == false) {
+                                                    this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+                                                    //this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
+                                                    //this.schedulengxdata = this.sortbyBaseline(this.schedulengxdata)
+                                                    // this.schedulengxdata = this.sortbyCompletion(this.schedulengxdata)
                                                 }
-                                                if (this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
-                                                    if (this.scheduleData.projectData.problemType == 'Standard Project / Program' && this.projecthubservice.roleControllerControl.roleId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
-                                                        this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = false
-                                                    }
-                                                }
-                                                for (let control of this.milestoneForm.controls) {
-                                                    if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit) {
-                                                        control['controls']['baselineFinish'].disable()
-                                                    }
-                                                }
+                                                this.disabler()
+                                                //this.value = this.milestoneForm.getRawValue()
                                             }
-                                            this.disabler()
-                                            //this.value = this.milestoneForm.getRawValue()
                                         }
-
                                     }
+
+                                    // if(this.isclosed == true)
+                                    // {
+                                    //   this.schedulengxdata = this.sortbyPlannedBaseline(this.schedulengxdata)
+                                    // }
                                     this.viewContent = true
                                 })
                             })
@@ -2742,61 +2754,6 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
         }
         this.disabler();
         this.viewContent = true;
-    }
-    formValueStandard() {
-        var formValue = this.milestoneForm.getRawValue()
-        for (var i of formValue) {
-            var milestoneName = i.milestone;
-            if (i.milestoneType == 1) {
-                if (!i.milestone.includes('Execution Start')) {
-                    milestoneName = 'Execution Start - '.concat(i.milestone)
-                }
-            }
-            if (i.milestoneType == 2) {
-                if (!i.milestone.includes('Execution End ')) {
-                    milestoneName = 'Execution End - '.concat(i.milestone)
-                }
-            }
-            if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
-                this.scheduleBusinessObj.push({
-                    scheduleUniqueId: i.scheduleUniqueId,
-                    projectId: i.projectId,
-                    milestone: milestoneName,
-                    plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-                    completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    comments: i.comments,
-                    includeInReport: i.includeInReport,
-                    functionGroupId: i.function == null ? null : i.function.lookUpId,
-                    includeInCharter: i.includeInCharter,
-                    includeInBusinessCase: i.includeInBusinessCase,
-                    milestoneType: i.milestoneType,
-                    templateMilestoneId: i.templateMilestoneId,
-                    includeInCloseout: i.includeInCloseout
-                })
-            } else {
-                this.scheduleBusinessObj.push({
-                    scheduleUniqueId: i.scheduleUniqueId,
-                    projectId: i.projectId,
-                    milestone: (i.milestone),
-                    plannedFinish: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    baselineFinish: i.baselineFinish ? moment(i.baselineFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    responsiblePersonName: i.responsiblePersonName ? i.responsiblePersonName.userDisplayName : null,
-                    completionDate: i.completionDate ? moment(i.completionDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                    comments: i.comments,
-                    includeInReport: i.includeInReport,
-                    functionGroupId: i.function == null ? null : i.function.lookUpId,
-                    includeInCharter: i.includeInCharter,
-                    includeInBusinessCase: i.includeInBusinessCase,
-                    milestoneType: i.milestoneType,
-                    templateMilestoneId: i.templateMilestoneId,
-                    includeInCloseout: i.includeInCloseout,
-                    responsiblePersonId: i.responsiblePersonName ? i.responsiblePersonName.userAdid : null,
-                    indicator: i.indicator
-                })
-            }
-        }
     }
     formValueForOptions() {
         var form = this.milestoneForm.getRawValue()
