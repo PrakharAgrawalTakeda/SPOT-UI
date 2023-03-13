@@ -172,7 +172,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-            if (this.viewContent == true) {
+            if (this.viewContent == true && this.mode!="Business-Case") {
                 //this.saveScheduleBulkEdit()
                 if (JSON.stringify(this.scheduledataDb) != JSON.stringify(this.scheduleObj)) {
                     this.projecthubservice.isFormChanged = true
