@@ -84,6 +84,11 @@
 ::ng-deep mat-slide-toggle{
     display: flex !important;
 }
+::ng-deep .mat-mdc-slide-toggle {
+    .mdc-switch__shadow {
+        background-color: black !important;
+    }
+}
 ::ng-deep .mat-mdc-slide-toggle-checked {
     .mdc-switch__shadow {
         background-color: #54b84e !important;
