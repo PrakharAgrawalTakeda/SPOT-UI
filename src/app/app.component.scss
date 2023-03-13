@@ -39,27 +39,37 @@
     }
 }
 
-::ng-deep .read-only .mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex {
-    background: white !important;
-    background-size: 1px 100% !important;
-    background-repeat: repeat-x !important;
-    .mat-mdc-form-field-infix {
-        input {
-            color: black !important;
-            @apply cursor-not-allowed;
-        }
+::ng-deep .read-only .mat-mdc-form-field.mat-form-field-disabled {
+    @apply cursor-not-allowed;
+    .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex {
+        background: white !important;
+        background-size: 1px 100% !important;
+        background-repeat: repeat-x !important;
+        .mat-mdc-form-field-infix {
+            input {
+                color: black !important;
+                @apply cursor-not-allowed;
+            }
 
-        input::placeholder {
-            color: black !important;
-        }
+            input::placeholder {
+                color: black !important;
+            }
 
-        textarea {
-            color: black !important;
-            @apply cursor-not-allowed;
-        }
+            textarea {
+                color: black !important;
+                @apply cursor-not-allowed;
+            }
 
-        textarea::placeholder {
-            color: black !important;
+            textarea::placeholder {
+                color: black !important;
+            }
+            .mat-mdc-select .mat-mdc-select-trigger .mat-mdc-select-value {
+                color: black !important;
+            }
+
+            select::placeholder {
+                color: black !important;
+            }
         }
     }
 }
@@ -81,7 +91,7 @@
 ::ng-deep .mat-chip.mat-standard-chip {
     font-size: 0.875rem !important;
 }
-::ng-deep mat-slide-toggle{
+::ng-deep mat-slide-toggle {
     display: flex !important;
 }
 ::ng-deep .mat-mdc-slide-toggle {
@@ -237,7 +247,8 @@
     }
 }
 
-::ng-deep .custom-label-with-hint
+::ng-deep
+    .custom-label-with-hint
     > .mat-mdc-form-field
     > .mat-mdc-text-field-wrapper
     > .mat-mdc-form-field-flex
@@ -253,6 +264,6 @@
     gap: 4px;
 }
 
-::ng-deep .mdc-linear-progress__bar-inner{
+::ng-deep .mdc-linear-progress__bar-inner {
     border-color: #e1242a !important;
 }
