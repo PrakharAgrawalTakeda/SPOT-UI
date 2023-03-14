@@ -26,6 +26,8 @@ export class FundingBulkEditComponent {
   fundingdata: any;
   fundingSourceData: any;
   lookupdata: any;
+  localcurrency: any;
+  Amount: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService,
     public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, private router: Router,
     private portApiService: PortfolioApiService) {
@@ -52,6 +54,8 @@ export class FundingBulkEditComponent {
       this.portApiService.getfilterlist().then((po: any) => {
         this.auth.lookupMaster().then((resp: any) => {
           this.lookupdata = resp
+          this.localcurrency = res.localCurrency
+           this.Amount = this.localcurrency.localCurrencyAbbreviation
         console.log(this.projecthubservice.projectid)
         this.fundingSourceData = po
     //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {

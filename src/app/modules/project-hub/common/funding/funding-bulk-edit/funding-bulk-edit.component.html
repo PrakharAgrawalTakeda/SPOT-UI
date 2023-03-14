@@ -71,7 +71,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Amount" prop="fundingAmount"
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Amount ({{Amount}})" prop="fundingAmount"
                     [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">

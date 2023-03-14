@@ -18,12 +18,12 @@ export class CostEditComponent {
   costfundingData: any = {}
   id: string = ''
   costData = [{
-    category: 'Duration',
+    category: 'Duration (Months)',
     baseCase: 'durationBaseCase',
     highCase: 'durationHighCase'
   },
   {
-    category: 'People',
+    category: 'People (FTE Months)',
     baseCase: 'peopleFtemonthsRequiredBaseCase',
     highCase: 'peopleFtemonthsRequiredHighCase'
   },
@@ -54,6 +54,8 @@ export class CostEditComponent {
     totalNonFteopExHighCase: new FormControl(''),
     functionsRequiredId: new FormControl(null)
   })
+  localcurrency: any;
+  currency: any;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
@@ -76,6 +78,8 @@ export class CostEditComponent {
       this.authService.lookupMaster().then((lookup: any) => {
         console.log("Cost Data", res)
         this.costfundingData = res.costData
+        this.localcurrency = res.localCurrency
+        this.currency = this.localcurrency.localCurrencyAbbreviation
         //this.CostData = res
         this.costForm.patchValue({
           durationBaseCase: res.costData.durationBaseCase,

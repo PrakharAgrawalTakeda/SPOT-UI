@@ -16,8 +16,9 @@
                 <ngx-datatable-column name="Category" prop="category" [resizeable]="false" [sortable]="false"
                     [flexGrow]="0.6">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <p>{{value}}</p>
-                    </ng-template>
+                        <p *ngIf="value == 'Total CAPEX' || value == 'Total non-FTE OPEX'">{{value}} ({{currency}}) </p>
+                        <p *ngIf="value != 'Total CAPEX' && value != 'Total non-FTE OPEX'">{{value}}</p>
+                    </ng-template> 
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
                     [flexGrow]="1">
