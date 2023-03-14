@@ -231,11 +231,20 @@ export class ScheduleViewEditComponent implements OnInit {
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                   })
               }else{
-                  this.apiService.addSchedule(mainObjnew).then(() => {
-                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                      this.projecthubservice.submitbutton.next(true)
-                      this.projecthubservice.isNavChanged.next(true)
-                  })
+                  if (this.router.url.includes('recommended-option')) {
+                      mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_1;
+                      this.apiService.addTimelineForOption(mainObjnew).then(res => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      })
+                  }else{
+                      this.apiService.addSchedule(mainObjnew).then(() => {
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.isNavChanged.next(true)
+                      })
+                  }
+
               }
           }
       }
