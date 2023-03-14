@@ -272,6 +272,55 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     })
 
   }
+    deleteScheduleForOption(id: string) {
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Remove Milestone?",
+            "message": "Are you sure you want to remove this record permanently? ",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warn"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "Remove",
+                    "color": "warn"
+                },
+                "cancel": {
+                    "show": true,
+                    "label": "Cancel"
+                }
+            },
+            "dismissible": true
+        }
+        const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+
+        scheduleAlert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+                if (this.router.url.includes('recommended-option')){
+                    this.apiService.deleteScheduleForOption(id,GlobalBusinessCaseOptions.OPTION_1,  this.projectid).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+                if (this.router.url.includes('option-2')){
+                    this.apiService.deleteScheduleForOption(id,GlobalBusinessCaseOptions.OPTION_2,  this.projectid).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+                if (this.router.url.includes('option-3')){
+                    this.apiService.deleteScheduleForOption(id,GlobalBusinessCaseOptions.OPTION_3,  this.projectid).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+
+            }
+        })
+
+    }
   changeschedule(event: any) {
 
     // console.log(this.scheduleData)

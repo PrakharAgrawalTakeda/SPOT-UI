@@ -2542,7 +2542,8 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (control.value.includeInReport == false) {
                                 control.patchValue({ includeInReport: x.includeInReport })
                             }
-                            control.patchValue({ templateMilestoneId: x.milestoneTemplateId})
+                            console.log("Xxxxxxxxxxxxxx", x);
+                            control.patchValue({ templateMilestoneId: x.milestoneId})
                             this.milestoneTableEditRow(index)
                             exists = true;
                         }
@@ -2569,7 +2570,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (control.value.includeInReport == false) {
                                 control.patchValue({ includeInReport: x.includeInReport })
                             }
-                            control.patchValue({ templateMilestoneId: x.milestoneTemplateId})
+                            control.patchValue({ templateMilestoneId: x.milestoneId})
                             this.milestoneTableEditRow(index)
                             exists = true;
                         }
@@ -2642,7 +2643,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             projectId: this.id,
             responsiblePersonId: null,
             responsiblePersonName: null,
-            templateMilestoneId: sM.milestoneTemplateId
+            templateMilestoneId: sM.milestoneId
         }]
         this.schedulengxdata = [...this.schedulengxdata, ...j]
         this.milestoneTableEditRow(this.schedulengxdata.length - 1)

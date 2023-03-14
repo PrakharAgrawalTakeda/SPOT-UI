@@ -28,13 +28,13 @@
                         (click)="projecthubservice.toggleDrawerOpen(timelineEditOption, 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
-                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Project-Charter'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditCharter', 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
-                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
                 <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Normal'" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('Schedule', 'new', [], projectid)">
@@ -77,10 +77,10 @@
     </div> -->
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="schedulengxdata"
+        class=" material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="schedulengxdata"
         #scheduleTable [rowClass]="getRowClass" [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }]">
         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal' || mode =='Business-Case'">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                     class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -89,6 +89,12 @@
                 &nbsp;
                 <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode =='Business-Case'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                          svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
             </ng-template>
         </ngx-datatable-column>
 
@@ -345,6 +351,17 @@
                         </ng-template> -->
 
 
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [flexGrow]="0.25" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Business-Case'">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                <div class="flex items-center justify-start gap-6">
+                    <a href="javascript:void(0)" title="Delete Single" *ngIf="(row.milestoneType?!row.milestoneType >=1:true && editable && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)"
+                       (click)="deleteScheduleForOption(row.scheduleUniqueId)">
+                        <!-- && " -->
+                        <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                    </a>
                 </div>
             </ng-template>
         </ngx-datatable-column>

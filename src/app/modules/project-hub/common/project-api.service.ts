@@ -243,6 +243,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async deleteScheduleForOption(id: string, optionId: string, projectId: string) {
+      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/"+ projectId+ "/"  +optionId+"/" + id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getOperationalPerformanceSingle(itemid: string){
     var userid = GlobalVariables.apiurl+"ProjectCharterKeySuccesses/"+itemid
     const abc$ = this.http.get(userid)

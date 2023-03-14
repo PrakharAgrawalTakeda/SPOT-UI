@@ -54,7 +54,7 @@
                 Phase Change Log
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                           class="ml-3  datatable-ps material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                           class="ml-3  datatable-ps material font-medium text-sm text-default whitespace-nowrap cursor-default"
                            [rows]="phaseRows">
                 <ngx-datatable-column name="From Phase" prop="previous" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -122,7 +122,7 @@
                 State Change Log
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" columnMode="flex"
-                           class="ml-3 datatable-ps material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                           class="ml-3 datatable-ps material font-medium text-sm text-default whitespace-nowrap cursor-default"
                            [rows]="stateRows">
                 <ngx-datatable-column name="From State" prop="previous" [flexGrow]="0.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
