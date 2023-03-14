@@ -75,12 +75,17 @@
                     [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p class="amount">{{value| number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
-                            <spot-textarea name="fundingAmount" [showHint]="false"
+                            <mat-form-field [floatLabel]="'always'">
+                                <input matInput formControlName="fundingAmount" type="number" min="0" placeholder="0" (click)="numberWithDecimal($event.target.value)"
+                                    pattern="\d*" />
+                            </mat-form-field>
+                            <!-- <spot-textarea name="fundingAmount" [showHint]="false"
                             formControlName="fundingAmount" [showLabel]="false" [rows]="1">
-                            </spot-textarea>
+                            </spot-textarea> -->
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
