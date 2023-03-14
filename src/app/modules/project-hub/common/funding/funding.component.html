@@ -6,7 +6,7 @@
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
-                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="editable" [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen(bulkEditType, 'new', [], projectid, true)">
+                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="editable" [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen(fundingbulkEditType, 'new', [], id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                     </button>
                     <!-- <button class="ml-4 text-primary bg-gray-200" *ngIf="editable" mat-flat-button [color]="'primary-200'"
@@ -26,10 +26,15 @@
 
             <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CAPEX</p>
-                    <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OPEX</p>
+                    <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CapEx</p>
+                    <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OpEx</p>
                 </ng-template>
             </ngx-datatable-column>
+            <!-- <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
+            [showHint]="true"
+            [hint]="'The group which is responsible for the oversight and process adherence of the record'"
+            class="w-full read-only" *ngIf="viewElementChecker('portfolioOwner')">
+          </spot-input> -->
             <ngx-datatable-column name="Funding Source" prop="fundingSourceName" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
