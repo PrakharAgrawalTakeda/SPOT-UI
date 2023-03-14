@@ -1,0 +1,39 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Carbon</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="w-full overflow-hidden" [formGroup]="CarbonForm" (ngSubmit)="submiCarbon()"
+    style="overflow-y: scroll; height: 95vh;">
+    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+        <spot-textarea formControlName="emissionSource" name="emissionSource" [label]="'Emission Source'" [placeholder]="'Emission Source'">
+        </spot-textarea>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <input matInput formControlName="units" label="Units" type="number" max="100" min="0" placeholder="0" pattern="\d*" />
+        </mat-form-field>
+        <spot-textarea formControlName="UoM" name="UoM" [label]="'UoM'"
+            [placeholder]="'UoM'">
+        </spot-textarea>
+        <mat-form-field class="w-full" [floatLabel]="'always'">
+            <input matInput formControlName="unitCost" label="Unit Cost" type="number" max="100" min="0" placeholder="0"
+                pattern="\d*" />
+        </mat-form-field>
+        <spot-textarea formControlName="basisOfEstimate" name="basisOfEstimate" [label]="'Basis of Estimate'"
+            [placeholder]="'Basis of Estimate'">
+        </spot-textarea>
+
+
+    </div>
+    <div class="flex items-start justify-between form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
+</form>

@@ -8,7 +8,7 @@
             <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
                 <div class="flex justify-end items-end">
                     <div></div>
-                    <div>
+                    <div *ngIf="editable">
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button
                             [color]="'primary-200'"
                             (click)="projectHubService.toggleDrawerOpen('localAttributeSingleEdit', '', '' , id)">
@@ -23,7 +23,7 @@
                             <div *ngIf="item.isMulti">
                             <spot-multiselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full read-only" name={{item.uniqueId}}
                                 [label]=item.name [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
-                                [dropDownArray]="getPortfolioOwner(item.lookupParentId)">
+                                [dropDownArray]="getLookup(item.lookupParentId)">
                             </spot-multiselect-autocomplete>
                             </div>
                             <spot-input-date *ngSwitchCase="'2'" class="w-full read-only"

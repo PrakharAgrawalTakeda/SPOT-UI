@@ -14,15 +14,17 @@
                         <spot-input (focusout)="addNewItem(item.uniqueId, $event)" *ngSwitchCase="'6'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
                             [label]=item.name [placeholder]=item.name>
                         </spot-input>
+                        <div *ngIf="!item.isMulti">
                         <spot-singleselect-autocomplete (focusout)="addNewItem(item.uniqueId, $event)" *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
                             name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
-                            [dropDownArray]="getPortfolioOwner(item.lookupParentId)">
+                            [dropDownArray]="getLookup(item.lookupParentId)">
                         </spot-singleselect-autocomplete>
-                        <div *ngIf="item.linesCount != null">
+                        </div>
+                        <div *ngIf="item.isMulti">
                         <spot-multiselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}}
                             class="w-full" name={{item.uniqueId}} [label]=item.name
                             [placeholder]=item.name [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
-                            [dropDownArray]="getPortfolioOwner(item.lookupParentId)">
+                            [dropDownArray]="getLookup(item.lookupParentId)">
                         </spot-multiselect-autocomplete>
                         </div>
                         <mat-form-field (focusout)="addNewItem(item.uniqueId, $event)" *ngSwitchCase="'4'" class="w-full" [floatLabel]="'always'">
@@ -34,10 +36,12 @@
                             formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name
                             [placeholder]=item.name>
                         </spot-input-date>
+                        <div *ngIf="!item.isMulti">
                         <spot-singleselect-user-autocomplete *ngSwitchCase="'5'" formControlName={{item.uniqueId}} [label]=item.name
                             name={{item.uniqueId}} [showLabel]="true">
                         </spot-singleselect-user-autocomplete>
-                        <div *ngIf="item.linesCount != null" >
+                        </div>
+                        <div *ngIf="item.isMulti" >
                         <spot-multiselect-user-autocomplete *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
                             [label]=item.name name={{item.uniqueId}} [showLabel]="true">
                         </spot-multiselect-user-autocomplete>

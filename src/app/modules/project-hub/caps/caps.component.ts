@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { ProjectApiService } from '../common/project-api.service';
+import { ProjectHubService } from '../project-hub.service';
 
 @Component({
   selector: 'app-caps',
@@ -6,10 +10,54 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./caps.component.scss']
 })
 export class CapsComponent implements OnInit {
-
-  constructor() { }
+  viewContent = false
+  id=""
+  editable= false
+  showDefault= true
+  filterCriteria:any
+  CAPSform = new FormGroup({
+    isCapsProject: new FormControl(false),
+    enviornmentalPortfolio: new FormControl(null),
+    impactRealizationDate: new FormControl(''),
+    EmissionsImpact: new FormControl(''),
+    EnergyImpact: new FormControl(''),
+    WaterImpact: new FormControl(''),
+    TotalWasteImpact: new FormControl(''),
+    LandfilledWasteImpact: new FormControl(''),
+    EnergyCost: new FormControl(''),
+    WaterCost: new FormControl(''),
+    WasteCost: new FormControl('')
+  })
+  constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { }
 
   ngOnInit(): void {
+    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    this.apiService.getproject(this.id).then((res: any) => {
+      this.apiService.getfilterlist().then(filter => {
+        this.filterCriteria = filter
+        var emissionPortfolio = this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
+      if (res.emissionPortfolioId == "1697766e-a7bd-4470-94fb-2e851872db14"){
+        this.showDefault = false;
+      }
+        res.emissionPortfolioId = emissionPortfolio.filter(x => x.portfolioOwnerId == res.emissionPortfolioId)[0].portfolioOwner
+      this.CAPSform.patchValue({
+        isCapsProject: res.isCapsProject,
+        enviornmentalPortfolio: res.emissionPortfolioId,
+        impactRealizationDate: res.emissionsImpactRealizationDate,
+        EmissionsImpact: res.calculatedEmissionsImpact,
+        EnergyImpact: res.energyImpact,
+        WaterImpact: res.waterImpactUnits,
+        TotalWasteImpact: res.wasteImpactUnits,
+        LandfilledWasteImpact: res.wasteLandfillImpactUnits,
+        EnergyCost: res.energyCostImpactPerYear,
+        WaterCost: res.waterImpactCost,
+        WasteCost: res.wasteImpactCost
+      })
+    })
+    })
+    this.editable = true
+    this.viewContent = true
+    this.CAPSform.disable()
   }
 
 }
