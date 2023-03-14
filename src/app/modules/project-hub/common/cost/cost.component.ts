@@ -14,6 +14,7 @@ export class CostComponent implements OnInit {
   costfundingData = {}
   costData = []
   id: string = ''
+  costEditType: string = 'CostEdit';
   viewContent = false
   costFundingForm = new FormGroup({
     durationBaseCase: new FormControl(''),
@@ -24,8 +25,9 @@ export class CostComponent implements OnInit {
     totalCapExHighCase: new FormControl(''),
     totalNonFteopExBaseCase: new FormControl(''),
     totalNonFteopExHighCase: new FormControl(''),
-    functionsRequiredId: new FormControl('')
+    functionsRequiredId: new FormControl(null)
   })
+  cost: any;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private authService: AuthService,
@@ -50,6 +52,7 @@ export class CostComponent implements OnInit {
     this.apiService.getCostFunding(this.id).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
         console.log("Cost Data", res.costData)
+        this.cost = res
         this.costfundingData = res.costData
         this.projectHubService.lookUpMaster = lookup
         this.costFundingForm.patchValue({

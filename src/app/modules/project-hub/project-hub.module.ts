@@ -138,6 +138,7 @@ import { FundingComponent } from './common/funding/funding.component';
 import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component'; 
 import { FundingBulkEditComponent } from './common/funding/funding-bulk-edit/funding-bulk-edit.component';
 import { LocalAttributeSingleEditComponent } from './local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
+import { CostEditComponent } from './common/cost/cost-edit/cost-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -495,7 +496,8 @@ export const projectRoutes: Route[] = [
     FundingComponent,
     FundingEditComponent,
     FundingBulkEditComponent,
-    LocalAttributeSingleEditComponent
+    LocalAttributeSingleEditComponent,
+    CostEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
