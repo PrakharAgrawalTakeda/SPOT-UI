@@ -14,7 +14,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from 
 })
 export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() decimalCount: number = 2
-  @Input() autoAddDecimal: boolean = true
+  @Input() autoAddDecimal: boolean = false
   @Input() inputType: 'Text' | 'Number' = 'Text'
   @Input() showLabel: boolean = true
   @Input() label: string = ''
