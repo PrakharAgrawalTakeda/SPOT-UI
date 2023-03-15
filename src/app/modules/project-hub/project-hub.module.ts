@@ -138,6 +138,15 @@ import { FundingComponent } from './common/funding/funding.component';
 import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component'; 
 import { FundingBulkEditComponent } from './common/funding/funding-bulk-edit/funding-bulk-edit.component';
 import { LocalAttributeSingleEditComponent } from './local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
+import { CostEditComponent } from './common/cost/cost-edit/cost-edit.component';
+import { CarbonTableComponent } from './common/carbon-table/carbon-table.component';
+import { CarbonBulkEditComponent } from './common/carbon-table/carbon-bulk-edit/carbon-bulk-edit.component';
+import { CapsSingleEditComponent } from './caps/caps-single-edit/caps-single-edit.component';
+import { WaterWasteTableComponent } from './common/water-waste-table/water-waste-table.component';
+import { BiogenicsTableComponent } from './common/biogenics-table/biogenics-table.component';
+import { TransportationTableComponent } from './common/transportation-table/transportation-table.component';
+import { ShippingTableComponent } from './common/shipping-table/shipping-table.component';
+import { WarehousingTableComponent } from './common/warehousing-table/warehousing-table.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -495,7 +504,16 @@ export const projectRoutes: Route[] = [
     FundingComponent,
     FundingEditComponent,
     FundingBulkEditComponent,
-    LocalAttributeSingleEditComponent
+    LocalAttributeSingleEditComponent,
+    CostEditComponent,
+    CarbonTableComponent,
+    CarbonBulkEditComponent,
+    CapsSingleEditComponent,
+    WaterWasteTableComponent,
+    BiogenicsTableComponent,
+    TransportationTableComponent,
+    ShippingTableComponent,
+    WarehousingTableComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

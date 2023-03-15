@@ -106,6 +106,14 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+
+  async bulkeditFunding(body,projectId){
+    var link = GlobalVariables.apiurl+"Funding/BulkEditFunding/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  
   async addAskNeed(body){
     var link = GlobalVariables.apiurl+"AskNeed"
     const abc$ = this.http.post(link,body)
@@ -548,6 +556,14 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+
+  async updateCost(body,projectId){
+    var link = GlobalVariables.apiurl+"TOPS/" + projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+}
+
   async BulkEditProjectCharter(projectid: string, data) {
     var url = GlobalVariables.apiurl + "ProjectCharter/" + projectid
     const abc$ = this.http.put(url, data)
@@ -581,7 +597,7 @@ export class ProjectApiService {
   }
 
   async getCostFunding(projectid: string) {
-    var url = GlobalVariables.apiurl + "ProjectCharterCostFunding/" + projectid
+    var url = GlobalVariables.apiurl + "CostFunding/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response

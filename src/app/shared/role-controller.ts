@@ -10,6 +10,7 @@ export class RoleController{
 export class ProjectHub{
     public projectBoard: ProjectBoard = new ProjectBoard
     public hubSettings: boolean = true
+    public localAttributes: boolean = true
 }
 
 export class ProjectBoard{

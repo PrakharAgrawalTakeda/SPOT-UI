@@ -53,11 +53,12 @@ export class RoleService {
         localroleController.projectTeam = false
         localroleController.projectBenefits = false
         localroleController.projectHub.hubSettings = false
+        localroleController.projectHub.hubSettings = false
         localroleController.generalInfo = {
           basicFields: false,
           porfolioOwner: false
         }
-        localroleController.closeOut.lessonsLearnt = false
+        localroleController.projectHub.localAttributes = false
       }
       else{
         localroleController.generalInfo.porfolioOwner = false
