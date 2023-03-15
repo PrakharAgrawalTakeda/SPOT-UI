@@ -134,18 +134,7 @@ getfundingintheplan(): any {
 getPO(): string {
     return this.fundingSourceData ? this.fundingSourceData.portfolioOwner.filter(x => x.isPortfolioOwner == true) : ''
   }
-  // getIndicator(status: string): string {
-  //   if (status == "91F35D36-B94B-44C7-9234-4AE76DB19DBB") {
-  //     return 'Red'
-  //   }
-  //   else if (status == "7DFAAEDF-AB1C-4348-91B3-F2FE1C78237A") {
-  //     return 'Yellow'
-  //   }
-  //   else if (status == "B12BD411-EBC7-4CC0-A8C4-5F41B8C5FC17") {
-  //     return 'Green'
-  //   }
-  //   return 'Grey'
-  // }
+
   getSource(source: string): string {
     return source ? this.fundingSourceData.portfolioOwner.find(x => x.portfolioOwnerId == source).portfolioOwner : ''
   }
@@ -173,7 +162,7 @@ getPO(): string {
     var formValue = this.FundingForm.getRawValue()
     formValue.length > 0 ? this.submitObj = formValue.map(x => {
       return {
-        fundingAmount: parseInt(x.fundingAmount),
+        fundingAmount: parseFloat(x.fundingAmount),
           fundingAmountFxconv: x.fundingAmountFxconv == "" || x.fundingAmountFxconv == " " ? null :x.fundingAmountFxconv,
           fundingIntheplan: x.fundingIntheplan,
           fundingNotes: x.fundingNotes,
@@ -296,8 +285,6 @@ getPO(): string {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  numberWithDecimal(x) {
-    return x.toString().replace(/^\d*\.?\d{0,2}$/g);
-  }
+
   
 }

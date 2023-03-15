@@ -27,8 +27,12 @@
                             [valuePointer]="'lookUpName'" [dropDownArray]="getDropDownValue(value)"
                             [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'" *ngIf="row.category == '# Functions Required'">
                         </spot-singleselect-autocomplete>
-                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total')" [autoAddDecimal]="false" [inputType]="'Number'">
                         </spot-input>
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Duration') || row.category.includes('People')" [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="'1'">
+                        </spot-input>
+                        <!-- <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        </spot-input> -->
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false" [sortable]="false"
