@@ -81,7 +81,7 @@ export class ScheduleViewEditComponent implements OnInit {
 
   dataloader() {
     if (this.projecthubservice.itemid != "new") {
-      this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
+        this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
         this.schedule = res
         console.log(this.projecthubservice)
         console.log('res')
@@ -162,6 +162,7 @@ export class ScheduleViewEditComponent implements OnInit {
       this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
       this.dataloader()
       this.scheduleForm.controls.function.patchValue('')
+        this.projecthubservice.isFormChanged = false
     })
   }
   viewElementChecker(element: string): boolean {
@@ -231,11 +232,20 @@ export class ScheduleViewEditComponent implements OnInit {
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                   })
               }else{
-                  this.apiService.addSchedule(mainObjnew).then(() => {
-                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                      this.projecthubservice.submitbutton.next(true)
-                      this.projecthubservice.isNavChanged.next(true)
-                  })
+                  if (this.router.url.includes('recommended-option')) {
+                      mainObjnew.businessOptionId = "";
+                      this.apiService.addTimelineForOption(mainObjnew).then(res => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      })
+                  }else{
+                      this.apiService.addSchedule(mainObjnew).then(() => {
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.isNavChanged.next(true)
+                      })
+                  }
+
               }
           }
       }
@@ -299,4 +309,5 @@ export class ScheduleViewEditComponent implements OnInit {
   @HostListener('unloaded')
   ngOnDestroy(): void {
   }
+
 }

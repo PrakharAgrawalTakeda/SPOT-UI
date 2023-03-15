@@ -176,7 +176,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
                     }
                 }
             }
-            if (formValue.filter(x => x.includeInBusinessCase == true).length < 5) {
+            if (formValue.filter(x => x.includeInBusinessCase == true).length < 4) {
                 for (var i of this.keyAssumptionForm.controls) {
                     i['controls']['includeInBusinessCase'].enable()
                 }

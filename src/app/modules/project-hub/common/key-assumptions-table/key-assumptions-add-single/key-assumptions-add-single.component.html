@@ -22,7 +22,7 @@
     </div>
     <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInBusinessCase')">
         <mat-slide-toggle
-            [matTooltip]="this.keyAssumptionForm.controls['includeInBusinessCase'].disabled ? 'Only 5 can be selected at a time for the proposal' : null"
+            [matTooltip]="this.keyAssumptionForm.controls['includeInBusinessCase'].disabled ? 'Only 4 can be selected at a time in the business case' : null"
             formControlName="includeInBusinessCase">Include in Business Case</mat-slide-toggle>
     </div>
     <div class="flex items-start justify-between mt-6">
