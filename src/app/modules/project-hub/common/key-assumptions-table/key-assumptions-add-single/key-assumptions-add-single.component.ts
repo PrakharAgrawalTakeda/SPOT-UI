@@ -41,7 +41,7 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
                     this.keyAssumptionForm.controls['includeInCharter'].disable()
                 }
             }
-            if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 5) {
+            if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 4) {
                 if (this.keyAssumptionForm.value.includeInBusinessCase != true) {
                     this.keyAssumptionForm.controls['includeInBusinessCase'].disable()
                 }

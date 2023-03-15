@@ -52,7 +52,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" [name]="mode == 'Normal'?'KPI':'Associated KPI'" prop="kpiid" [flexGrow]="1.6">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [name]="'KPI'" prop="kpiid" [flexGrow]="1.6">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)">
@@ -60,8 +60,8 @@
                         </a>
                         <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
                             *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
-                            <spot-singleselect-autocomplete formControlName="kpiid" [showLabel]="false" [label]="mode == 'Normal'?'KPI':'Associated KPI'"
-                            [placeholder]="mode == 'Normal'?'KPI':'Associated KPI'" [valuePointer]="'kpiname'"
+                            <spot-singleselect-autocomplete formControlName="kpiid" [showLabel]="false" [label]="'KPI'"
+                            [placeholder]="'KPI'" [valuePointer]="'kpiname'"
                                 [dropDownArray]="projecthubservice.kpiMasters">
                             </spot-singleselect-autocomplete>
                         </form>

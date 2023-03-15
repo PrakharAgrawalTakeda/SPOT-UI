@@ -54,6 +54,10 @@
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
+            <app-funding-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'FundingBulkEdit'"></app-funding-bulk-edit>
+            <app-cost-edit
+            *ngIf="projecthubservice.itemtype == 'CostEdit'"></app-cost-edit>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'"
             [mode]="'Project-Close-Out'"></app-operational-performance-bulk-edit>
@@ -143,6 +147,10 @@
             *ngIf="projecthubservice.itemtype == 'keyTakeawaysSingleEdit'"></app-key-takeaway-single-edit>
         <app-local-attribute-single-edit
             *ngIf="projecthubservice.itemtype == 'localAttributeSingleEdit'"></app-local-attribute-single-edit>
+        <app-carbon-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'CarbonBulkEdit'"></app-carbon-bulk-edit>
+        <app-caps-single-edit *ngIf="projecthubservice.itemtype == 'CAPS'"></app-caps-single-edit>
+        <app-project-requirements-edit *ngIf="projecthubservice.itemtype == 'ProjectRequirementsEditPage'"></app-project-requirements-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
