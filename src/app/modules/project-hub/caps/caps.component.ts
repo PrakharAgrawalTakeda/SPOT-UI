@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Constants } from 'app/shared/constants';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 
@@ -36,7 +37,7 @@ export class CapsComponent implements OnInit {
       this.apiService.getfilterlist().then(filter => {
         this.filterCriteria = filter
         var emissionPortfolio = this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
-      if (res.emissionPortfolioId == "1697766e-a7bd-4470-94fb-2e851872db14"){
+        if (res.emissionPortfolioId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
       }
         res.emissionPortfolioId = emissionPortfolio.filter(x => x.portfolioOwnerId == res.emissionPortfolioId)[0].portfolioOwner

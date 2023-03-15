@@ -41,19 +41,6 @@
                 <p>{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-
-        <ngx-datatable-column *ngIf="Editable" [flexGrow]="1.4" [resizeable]="false" [sortable]="false"
-            [draggable]="false">
-            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-
-                <div class="flex items-center justify-start gap-6">
-                    <a href="javascript:void(0)" title="Edit Single"
-                        (click)="projecthubservice.toggleDrawerOpen('CarbonSingleEdit', row.lessonLearnedId, lessonLearned, id)">
-                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
-                    </a>
-                </div>
-            </ng-template>
-        </ngx-datatable-column>
         
     </ngx-datatable>
 </div>

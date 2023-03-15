@@ -38,9 +38,9 @@
                             <div *ngSwitchCase="'1'"
                                 class="flex justify-start w-full gap-3 items-center">
                                 {{item.name}}
-                                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!item.value"></mat-icon>
+                                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!item.data"></mat-icon>
                                 <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
-                                    *ngIf="item.value">
+                                    *ngIf="item.data">
                                 </mat-icon>
                             </div>
                             <spot-input *ngSwitchDefault class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}

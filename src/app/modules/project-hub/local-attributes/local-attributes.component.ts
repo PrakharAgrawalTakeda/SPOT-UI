@@ -30,7 +30,10 @@ export class LocalAttributesComponent implements OnInit {
         this.data = res
         this.data.forEach(i => {
           if (i.dataType == 3 && i.isMulti == true){
-            if(i.data == null){
+            if (i.data == null) {
+              i.data = []
+            }
+            else if (i.data[0] == null) {
               i.data = []
             }
             else{

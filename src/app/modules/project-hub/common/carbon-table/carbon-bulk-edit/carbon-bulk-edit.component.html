@@ -8,14 +8,21 @@
         </div>
     </div>
     <div class="w-full bg-card rounded-2xl">
-        <div class="p-3  flex items-center justify-between">
-            <div>
-            </div>
-            <button class="ml-4 text-primary bg-gray-200"
-                *ngIf="projecthubservice.roleControllerControl.projectBenefits" mat-flat-button [color]="'primary-200'"
-                (click)="addCarbon()">
+        <div class="flex items-center justify-end gap-3 pt-3 pr-3 ">
+            <form style="width:12%;" [formGroup]="CAPSForm" (ngSubmit)="submitCAPS()">
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                    <mat-label>Impact Realization Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+                        formControlName="impactRealizationDate" name="impactRealizationDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </form>
+            <button class="ml-4 text-primary bg-gray-200" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
+                mat-flat-button [color]="'primary-200'" (click)="addCarbon()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
+            
         </div>
         <div class="h-[80vh] overflow-y-hidden pl-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
