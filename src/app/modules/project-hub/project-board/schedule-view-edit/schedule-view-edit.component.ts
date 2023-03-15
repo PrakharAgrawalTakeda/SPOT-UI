@@ -162,6 +162,7 @@ export class ScheduleViewEditComponent implements OnInit {
       this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
       this.dataloader()
       this.scheduleForm.controls.function.patchValue('')
+        this.projecthubservice.isFormChanged = false
     })
   }
   viewElementChecker(element: string): boolean {
