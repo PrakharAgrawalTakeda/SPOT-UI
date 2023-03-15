@@ -79,13 +79,12 @@
                             <p class="amount">{{value| number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
-                            <mat-form-field [floatLabel]="'always'">
+                            <!-- <mat-form-field [floatLabel]="'always'">
                                 <input matInput formControlName="fundingAmount" type="number" min="0" placeholder="0" (click)="numberWithDecimal($event.target.value)"
                                     pattern="\d*"/>
-                            </mat-form-field>
-                            <!-- <spot-textarea name="fundingAmount" [showHint]="false"
-                            formControlName="fundingAmount" [showLabel]="false" [rows]="1">
-                            </spot-textarea> -->
+                            </mat-form-field> -->
+                            <spot-input [showLabel]="false" formControlName="fundingAmount" [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="'4'">
+                            </spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
