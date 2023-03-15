@@ -52,8 +52,17 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
     this.onChange = fn;
   }
 
-  writeValue(val: string) {
-    this.control.setValue(val);
+  writeValue(val: any) {
+    if (this.inputType == 'Number') {
+      let value = val.toFixed(this.decimalCount);
+      // Add commas as thousand separators
+      const formattedValue = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+
+      this.control.setValue(formattedValue);
+    }
+    else {
+      this.control.setValue(val);
+    }
   }
 
   setDisabledState(isDisabled: boolean) {
@@ -70,7 +79,8 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       if (this.decimalCount === 0) {
         // Remove any decimal points if decimalCount is 0
         value = value.replace(/\./g, '');
-      } else {
+      }
+      else {
         // Allow only one decimal point
         value = value.replace(/(\..*)\./g, '$1');
 
@@ -82,10 +92,16 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       }
 
       // Add commas as thousand separators
-      value = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+      const formattedValue = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
 
       // Update the input field value
-      event.target.value = value;
+      event.target.value = formattedValue;
+
+      // Call the onChange method with the float value
+      this.onChange(parseFloat(value));
+    }
+    else {
+      this.onChange(event.target.value)
     }
   }
 
