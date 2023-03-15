@@ -5,13 +5,24 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
-
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MMM-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @Component({
   selector: 'app-carbon-bulk-edit',
   templateUrl: './carbon-bulk-edit.component.html',
   styleUrls: ['./carbon-bulk-edit.component.scss']
 })
 export class CarbonBulkEditComponent {
+  today = new Date("2036-03-31");
   viewContent: boolean = false
   carbonForm = new FormArray([])
   carbonEditStack = []
