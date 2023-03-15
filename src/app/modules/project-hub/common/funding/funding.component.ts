@@ -16,7 +16,7 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class FundingComponent implements OnInit, OnChanges {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' |'Business-Case' = 'Project-Charter'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -50,12 +50,18 @@ export class FundingComponent implements OnInit, OnChanges {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getCostFunding(this.id).then((res: any) => {
+    console.log(this.id)
+    this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
         this.portApiService.getfilterlist().then((po: any) => {
           this.fundingSourceData = po
-          this.localcurrency = res.localCurrency
-          this.Amount = this.localcurrency.localCurrencyAbbreviation
+          if(res.localCurrency)
+          {
+            this.localcurrency = res.localCurrency
+          
+            this.Amount = this.localcurrency.localCurrencyAbbreviations
+          }
+
      console.log(this.fundingSourceData)
         console.log(res)
       console.log(res.fundingData)
