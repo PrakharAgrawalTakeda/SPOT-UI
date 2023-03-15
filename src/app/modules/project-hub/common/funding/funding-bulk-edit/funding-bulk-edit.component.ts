@@ -162,7 +162,7 @@ getPO(): string {
     var formValue = this.FundingForm.getRawValue()
     formValue.length > 0 ? this.submitObj = formValue.map(x => {
       return {
-        fundingAmount: parseFloat(x.fundingAmount),
+        fundingAmount: (x.fundingAmount),
           fundingAmountFxconv: x.fundingAmountFxconv == "" || x.fundingAmountFxconv == " " ? null :x.fundingAmountFxconv,
           fundingIntheplan: x.fundingIntheplan,
           fundingNotes: x.fundingNotes,

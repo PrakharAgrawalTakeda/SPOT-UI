@@ -26,8 +26,8 @@
 
             <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CapEx</p>
-                    <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OpEx</p>
+                    <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CAPEX</p>
+                    <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OPEX</p>
                 </ng-template>
             </ngx-datatable-column>
             <!-- <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
@@ -48,7 +48,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Amount ({{Amount}})" prop="fundingAmount" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p class="amount">{{value| number : fractionSize}}</p>
+                    <p class="amount">{{value | number:'1.0-0'}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Notes" prop="fundingNotes" [flexGrow]="1">

@@ -47,7 +47,7 @@
                         [sortable]="false" [flexGrow]="1" *ngIf="mode== 'Business-Case'">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
-                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != 'Project Spend Start' && row.category != 'Asset in Service' && row.category != 'Total non-FTE OpEx (this.Amount)'">
+                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total CAPEX')">
                             </spot-input>
                         </ng-template>
                     </ngx-datatable-column>

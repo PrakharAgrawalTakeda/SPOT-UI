@@ -26,8 +26,8 @@
                     [draggable]="false" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
-                            <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CapEx</p>
-                            <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OpEx</p>
+                            <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CAPEX</p>
+                            <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OPEX</p>
                             <p *ngIf="!value">&nbsp;</p>
                         </a>
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
@@ -76,14 +76,14 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
-                            <p class="amount">{{value| number : fractionSize}}</p>
+                            <p class="amount">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
                             <!-- <mat-form-field [floatLabel]="'always'">
                                 <input matInput formControlName="fundingAmount" type="number" min="0" placeholder="0" (click)="numberWithDecimal($event.target.value)"
                                     pattern="\d*"/>
                             </mat-form-field> -->
-                            <spot-input [showLabel]="false" formControlName="fundingAmount" [autoAddDecimal]="true" [inputType]="'Number'">
+                            <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" >
                             </spot-input>
                         </form>
                     </ng-template>

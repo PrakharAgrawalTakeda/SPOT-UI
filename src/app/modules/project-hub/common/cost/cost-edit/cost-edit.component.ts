@@ -57,12 +57,12 @@ export class CostEditComponent {
   })
   localcurrency: any;
   currency: any;
-  fuseAlert: any;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
     private authService: AuthService,
-    private projectHubService: ProjectHubService) {
+    private projectHubService: ProjectHubService,
+    public fuseAlert: FuseConfirmationService) {
     this.costForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.projectHubService.isFormChanged = true
@@ -135,8 +135,8 @@ export class CostEditComponent {
       console.log(comfirmConfig)
       const alert = this.fuseAlert.open(comfirmConfig)
       alert.afterClosed().subscribe(close => {
-        if (close == 'cancel') {
-          //this.projectHubService.
+        if (close == 'confirm') {
+          this.viewContent = true
         }
       })
     }

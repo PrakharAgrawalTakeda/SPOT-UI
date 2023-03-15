@@ -91,12 +91,12 @@ export class CostComponent implements OnInit {
           highCase: 'peopleFtemonthsRequiredHighCase'
         },
         {
-          category: 'Total CapEx'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+          category: 'Total CAPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
           baseCase: 'totalCapExBaseCase',
           highCase: 'totalCapExHighCase'
         },
         {
-          category: 'Total non-FTE OpEx'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+          category: 'Total non-FTE OPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
           baseCase: 'totalNonFteopExBaseCase',
           highCase: 'totalNonFteopExHighCase'
         },
@@ -108,7 +108,7 @@ export class CostComponent implements OnInit {
       }
       if(this.mode=='Business-Case'){
         this.costData = [{
-          category: 'Total CapEx'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+          category: 'Total CAPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
           baseCase: 'totalCapExBaseCase',
           highCase: 'totalCapExHighCase',
           curryearSpend: ''
@@ -125,7 +125,7 @@ export class CostComponent implements OnInit {
         },
         
         {
-          category: 'Total non-FTE OpEx'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+          category: 'Total non-FTE OPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
           baseCase: 'totalNonFteopExBaseCase',
           highCase: 'totalNonFteopExHighCase'
         }]
