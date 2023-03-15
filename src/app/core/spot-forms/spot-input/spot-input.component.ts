@@ -13,7 +13,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from 
   ]
 })
 export class SpotInputComponent implements OnInit, ControlValueAccessor {
-  @Input() decimalCount: number = 2
+  @Input() decimalCount: number = 0
   @Input() autoAddDecimal: boolean = false
   @Input() inputType: 'Text' | 'Number' = 'Text'
   @Input() showLabel: boolean = true
@@ -54,7 +54,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
   writeValue(val: any) {
     if (this.inputType == 'Number') {
-      let value = val.toFixed(this.decimalCount);
+      let value = this.autoAddDecimal || this.decimalCount > 0? val.toFixed(this.decimalCount) : val.toString();
       // Add commas as thousand separators
       const formattedValue = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
 
