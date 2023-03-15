@@ -110,7 +110,20 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       }
     }
   }
+  customUpdate(value: any) {
+    if (this.inputType == 'Text') {
+      this.onChange(value)
+    }
+    else {
+      // Remove commas from the value
+      const valueWithoutCommas = value.replace(/,/g, '');
 
+      // Convert the value to a float
+      const floatValue = parseFloat(valueWithoutCommas);
+
+      this.onChange(floatValue)
+    }
+  }
   Validate(data) {
     debugger;
     if (data.target.value > 100) {
