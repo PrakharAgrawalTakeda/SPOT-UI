@@ -83,7 +83,7 @@
                                 <input matInput formControlName="fundingAmount" type="number" min="0" placeholder="0" (click)="numberWithDecimal($event.target.value)"
                                     pattern="\d*"/>
                             </mat-form-field> -->
-                            <spot-input [showLabel]="false" formControlName="fundingAmount" [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="'4'">
+                            <spot-input [showLabel]="false" formControlName="fundingAmount" [autoAddDecimal]="true" [inputType]="'Number'">
                             </spot-input>
                         </form>
                     </ng-template>
