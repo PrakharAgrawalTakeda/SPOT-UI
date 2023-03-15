@@ -147,6 +147,8 @@ import { BiogenicsTableComponent } from './common/biogenics-table/biogenics-tabl
 import { TransportationTableComponent } from './common/transportation-table/transportation-table.component';
 import { ShippingTableComponent } from './common/shipping-table/shipping-table.component';
 import { WarehousingTableComponent } from './common/warehousing-table/warehousing-table.component';
+import { ProjectRequirementsComponent } from './common/project-requirements/project-requirements.component';
+import { ProjectRequirementsEditComponent } from './common/project-requirements/project-requirements-edit/project-requirements-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -513,7 +515,9 @@ export const projectRoutes: Route[] = [
     BiogenicsTableComponent,
     TransportationTableComponent,
     ShippingTableComponent,
-    WarehousingTableComponent
+    WarehousingTableComponent,
+    ProjectRequirementsComponent,
+    ProjectRequirementsEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

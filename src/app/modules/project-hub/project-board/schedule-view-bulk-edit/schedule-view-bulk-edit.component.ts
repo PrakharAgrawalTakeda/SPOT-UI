@@ -2542,7 +2542,6 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (control.value.includeInReport == false) {
                                 control.patchValue({ includeInReport: x.includeInReport })
                             }
-                            console.log("Xxxxxxxxxxxxxx", x);
                             control.patchValue({ templateMilestoneId: x.milestoneId})
                             this.milestoneTableEditRow(index)
                             exists = true;
