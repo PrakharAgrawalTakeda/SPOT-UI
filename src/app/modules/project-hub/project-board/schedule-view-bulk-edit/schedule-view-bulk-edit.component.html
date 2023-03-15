@@ -98,8 +98,8 @@
       <ngx-datatable
         class="datatable-schedule-74 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
-        [scrollbarV]="false" [rowClass]="getRowClass">
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal' || mode =='Business-Case'">
+        [scrollbarV]="false" [rowClass]="getRowClass" [sorts]="[{ prop: 'plannedFinish', dir: 'asc' }]">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
               class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}" *ngIf="row.scheduleUniqueId != 'new'">
@@ -109,6 +109,12 @@
             <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
               svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
           </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.1" *ngIf="optionType=='recommended-option'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                         svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+            </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode== 'Project-Close-Out'" [sortable]="false">

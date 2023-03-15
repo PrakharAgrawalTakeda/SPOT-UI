@@ -2250,8 +2250,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         this.projecthubservice.isFormChanged = false
         this.formValueForOptions()
         this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj, this.id).then(res => {
-            this.optionInfoData.executionEndDate = moment(this.optionExecutions.controls.optionExecutionEnd.value).format('YYYY-MM-DD[T]HH:mm:ss');
-            this.optionInfoData.executionStartDate = moment(this.optionExecutions.controls.optionExecutionStart.value).format('YYYY-MM-DD[T]HH:mm:ss');
+            this.optionInfoData.executionEndDate =this.optionExecutions.controls.optionExecutionEnd.value? moment(this.optionExecutions.controls.optionExecutionEnd.value).format('YYYY-MM-DD[T]HH:mm:ss') : null;
+            this.optionInfoData.executionStartDate =this.optionExecutions.controls.optionExecutionStart.value ?  moment(this.optionExecutions.controls.optionExecutionStart.value).format('YYYY-MM-DD[T]HH:mm:ss') : null;
             this.optionInfoData.businessOptionId = this.optionInfoData.businessOptionId ? this.optionInfoData.businessOptionId : this.optionId
             if(this.router.url.includes('option-2') || this.router.url.includes('option-3')){
                 this.apiService.updateBusinessCaseOptionInfoDetails(this.optionInfoData, this.id).then(secondRes => {

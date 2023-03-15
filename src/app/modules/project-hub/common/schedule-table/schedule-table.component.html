@@ -41,7 +41,7 @@
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
                 <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Business-Case'" mat-flat-button [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('BusinessCaseScheduleAddNew', 'new', [], projectid)">
+                        (click)="projecthubservice.toggleDrawerOpen('BusinessCaseScheduleAddNew', 'new', schedulengxdata, projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
@@ -91,7 +91,7 @@
                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode =='Business-Case'">
+        <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="optionType== 'recommended-option'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
                           svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>

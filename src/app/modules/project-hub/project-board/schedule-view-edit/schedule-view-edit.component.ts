@@ -81,7 +81,7 @@ export class ScheduleViewEditComponent implements OnInit {
 
   dataloader() {
     if (this.projecthubservice.itemid != "new") {
-      this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
+        this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
         this.schedule = res
         console.log(this.projecthubservice)
         console.log('res')
@@ -232,7 +232,7 @@ export class ScheduleViewEditComponent implements OnInit {
                   })
               }else{
                   if (this.router.url.includes('recommended-option')) {
-                      mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_1;
+                      mainObjnew.businessOptionId = "";
                       this.apiService.addTimelineForOption(mainObjnew).then(res => {
                           this.projecthubservice.submitbutton.next(true)
                           this.projecthubservice.toggleDrawerOpen('', '', [], '')
@@ -308,4 +308,5 @@ export class ScheduleViewEditComponent implements OnInit {
   @HostListener('unloaded')
   ngOnDestroy(): void {
   }
+
 }
