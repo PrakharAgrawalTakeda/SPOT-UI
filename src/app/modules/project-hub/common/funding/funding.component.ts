@@ -28,6 +28,8 @@ export class FundingComponent implements OnInit, OnChanges {
   viewContent: boolean = false
   fundingdata: any;
   fundingSourceData: any;
+  Amount: any;
+  localcurrency: any;
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
     public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private authService: AuthService,private _Activatedroute: ActivatedRoute,
@@ -52,7 +54,8 @@ export class FundingComponent implements OnInit, OnChanges {
       this.authService.lookupMaster().then((lookup: any) => {
         this.portApiService.getfilterlist().then((po: any) => {
           this.fundingSourceData = po
-
+          this.localcurrency = res.localCurrency
+          this.Amount = this.localcurrency.localCurrencyAbbreviation
      console.log(this.fundingSourceData)
         console.log(res)
       console.log(res.fundingData)

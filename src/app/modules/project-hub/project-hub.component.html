@@ -56,6 +56,8 @@
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
             <app-funding-bulk-edit
             *ngIf="projecthubservice.itemtype == 'FundingBulkEdit'"></app-funding-bulk-edit>
+            <app-cost-edit
+            *ngIf="projecthubservice.itemtype == 'CostEdit'"></app-cost-edit>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'"
             [mode]="'Project-Close-Out'"></app-operational-performance-bulk-edit>

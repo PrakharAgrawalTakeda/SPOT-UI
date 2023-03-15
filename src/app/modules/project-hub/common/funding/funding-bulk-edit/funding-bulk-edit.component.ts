@@ -26,6 +26,8 @@ export class FundingBulkEditComponent {
   fundingdata: any;
   fundingSourceData: any;
   lookupdata: any;
+  localcurrency: any;
+  Amount: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService,
     public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, private router: Router,
     private portApiService: PortfolioApiService) {
@@ -52,23 +54,28 @@ export class FundingBulkEditComponent {
       this.portApiService.getfilterlist().then((po: any) => {
         this.auth.lookupMaster().then((resp: any) => {
           this.lookupdata = resp
+          this.localcurrency = res.localCurrency
+           this.Amount = this.localcurrency.localCurrencyAbbreviation
         console.log(this.projecthubservice.projectid)
         this.fundingSourceData = po
     //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
       this.fundingdata = res.fundingData
+      
       console.log(this.fundingdata)
       if(this.fundingdata != null)
        {
       // for (var i of this.fundingdata) {
       //   i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
       // }
+      
+      for (var i of this.fundingdata) {
+          i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+      }
       this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
       for (var i of this.fundingdata) {
         this.fundingDb.push(i)
           console.log(i)
-          //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
-          i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
-        
+          
         this.FundingForm.push(new FormGroup({
           
           fundingAmount: new FormControl(i.fundingAmount),
@@ -83,9 +90,11 @@ export class FundingBulkEditComponent {
           includeInBusinessCase: new FormControl(this.fundingdata.includeInBusinessCase),
           projectId: new FormControl(this.projecthubservice.projectid)
         }))
+        //this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
       }
     }
-
+    
+        
       this.disabler()
       this.viewContent = true
   })
@@ -283,5 +292,12 @@ getPO(): string {
     }
   }
 
+  numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
 
+  numberWithDecimal(x) {
+    return x.toString().replace(/^\d*\.?\d{0,2}$/g);
+  }
+  
 }

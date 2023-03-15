@@ -138,6 +138,7 @@ import { FundingComponent } from './common/funding/funding.component';
 import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component'; 
 import { FundingBulkEditComponent } from './common/funding/funding-bulk-edit/funding-bulk-edit.component';
 import { LocalAttributeSingleEditComponent } from './local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
+import { CostEditComponent } from './common/cost/cost-edit/cost-edit.component';
 import { CarbonTableComponent } from './common/carbon-table/carbon-table.component';
 import { CarbonBulkEditComponent } from './common/carbon-table/carbon-bulk-edit/carbon-bulk-edit.component';
 import { CapsSingleEditComponent } from './caps/caps-single-edit/caps-single-edit.component';
@@ -504,6 +505,7 @@ export const projectRoutes: Route[] = [
     FundingEditComponent,
     FundingBulkEditComponent,
     LocalAttributeSingleEditComponent,
+    CostEditComponent,
     CarbonTableComponent,
     CarbonBulkEditComponent,
     CapsSingleEditComponent,
