@@ -12,33 +12,33 @@
 
     <div class="flex justify-between" *ngIf="mode== 'Normal'">
       <div *ngIf="baselineCount.baselineCount > 0; else zero">
-        <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        <h6 class="font-medium text-default text-md italic ml-4 mt-2">
           Baseline : {{baselineCount.baselineCount}}
         </h6>
       </div>
       <ng-template #zero>
-        <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        <h6 class="font-medium text-default text-md italic ml-4 mt-2">
           Baseline : 0
         </h6>
       </ng-template>
 
       <div *ngIf="log != ''; else null">
 
-        <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
 
-          <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+          <h6 class="font-medium text-default text-md italic ml-4 mt-2">
             Last Baseline: {{log.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
         </div>
       </div>
       <ng-template #null>
-        <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
 
-          <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+          <h6 class="font-medium text-default text-md italic ml-4 mt-2">
             Last Baseline: </h6>
         </div>
       </ng-template>
 
-      <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+      <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
         <form [formGroup]="localIncludedItems">
           <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
             (checked)="projecthubservice.includeClosedItems.schedule.value" (change)="toggleSchedule($event)">
