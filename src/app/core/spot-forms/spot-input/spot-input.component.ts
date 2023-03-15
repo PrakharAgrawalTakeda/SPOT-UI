@@ -14,7 +14,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup } from 
 })
 export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() decimalCount: number = 2
-  @Input() autoAddDecimal: boolean = true
+  @Input() autoAddDecimal: boolean = false
   @Input() inputType: 'Text' | 'Number' = 'Text'
   @Input() showLabel: boolean = true
   @Input() label: string = ''
@@ -67,13 +67,18 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       // Remove non-numeric and non-decimal characters
       value = value.replace(/[^\d.]/g, '');
 
-      // Allow only one decimal point
-      value = value.replace(/(\..*)\./g, '$1');
+      if (this.decimalCount === 0) {
+        // Remove any decimal points if decimalCount is 0
+        value = value.replace(/\./g, '');
+      } else {
+        // Allow only one decimal point
+        value = value.replace(/(\..*)\./g, '$1');
 
-      // Round the decimal value to decimalCount decimal places if needed
-      const decimalIndex = value.indexOf('.');
-      if (decimalIndex !== -1 && decimalIndex + this.decimalCount + 1 < value.length) {
-        value = parseFloat(value).toFixed(this.decimalCount);
+        // Round the decimal value to decimalCount decimal places if needed
+        const decimalIndex = value.indexOf('.');
+        if (decimalIndex !== -1 && decimalIndex + this.decimalCount + 1 < value.length) {
+          value = parseFloat(value).toFixed(this.decimalCount);
+        }
       }
 
       // Add commas as thousand separators
@@ -86,7 +91,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
   onBlur(event: any): void {
     this.onTouch()
-    if (this.autoAddDecimal) {
+    if (this.autoAddDecimal && this.decimalCount > 0) {
       let value = event.target.value;
 
       // Remove commas from the value
