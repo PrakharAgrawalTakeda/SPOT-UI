@@ -147,6 +147,9 @@
             *ngIf="projecthubservice.itemtype == 'keyTakeawaysSingleEdit'"></app-key-takeaway-single-edit>
         <app-local-attribute-single-edit
             *ngIf="projecthubservice.itemtype == 'localAttributeSingleEdit'"></app-local-attribute-single-edit>
+        <app-carbon-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'CarbonBulkEdit'"></app-carbon-bulk-edit>
+        <app-caps-single-edit *ngIf="projecthubservice.itemtype == 'CAPS'"></app-caps-single-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

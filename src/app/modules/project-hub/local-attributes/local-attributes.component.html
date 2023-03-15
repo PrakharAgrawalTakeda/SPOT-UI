@@ -8,7 +8,7 @@
             <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
                 <div class="flex justify-end items-end">
                     <div></div>
-                    <div>
+                    <div *ngIf="editable">
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button
                             [color]="'primary-200'"
                             (click)="projectHubService.toggleDrawerOpen('localAttributeSingleEdit', '', '' , id)">
@@ -23,7 +23,7 @@
                             <div *ngIf="item.isMulti">
                             <spot-multiselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full read-only" name={{item.uniqueId}}
                                 [label]=item.name [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
-                                [dropDownArray]="getPortfolioOwner(item.lookupParentId)">
+                                [dropDownArray]="getLookup(item.lookupParentId)">
                             </spot-multiselect-autocomplete>
                             </div>
                             <spot-input-date *ngSwitchCase="'2'" class="w-full read-only"
@@ -38,9 +38,9 @@
                             <div *ngSwitchCase="'1'"
                                 class="flex justify-start w-full gap-3 items-center">
                                 {{item.name}}
-                                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!item.value"></mat-icon>
+                                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!item.data"></mat-icon>
                                 <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
-                                    *ngIf="item.value">
+                                    *ngIf="item.data">
                                 </mat-icon>
                             </div>
                             <spot-input *ngSwitchDefault class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
