@@ -251,9 +251,20 @@ getPO(): string {
 
         
       }))
-      this.fundingdata = [...this.fundingdata, ...j]
-      this.disabler()
-      this.fundingEditStack.push(this.fundingdata.length - 1)
+      //console.log(this.fundingdata.length)
+      if(this.fundingdata != null)
+      {
+        this.fundingdata = [...this.fundingdata, ...j]
+        this.disabler()
+        this.fundingEditStack.push(this.fundingdata.length - 1)
+      }
+      else{
+        this.fundingdata = [...j]
+        this.disabler()
+        this.fundingEditStack.push(0)
+      }
+
+
       var div = document.getElementsByClassName('datatable-scroll')[0]
       setTimeout(() => {
         div.scroll({

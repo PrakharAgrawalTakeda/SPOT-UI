@@ -85,8 +85,8 @@ export class CostEditComponent {
         //this.CostData = res
         console.log(lookup)
         //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
-        if(this.costfundingData != null)
-        {
+        // if(this.costfundingData != null)
+        // {
         this.costForm.patchValue({
           durationBaseCase: res.costData.durationBaseCase,
           durationHighCase: res.costData.durationHighCase,
@@ -99,7 +99,7 @@ export class CostEditComponent {
           functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
 
         })
-      }
+      // }
         console.log(this.costForm.getRawValue())
         this.viewContent = true
       })
@@ -159,7 +159,7 @@ export class CostEditComponent {
       mainObj.totalNonFteopExHighCase= formValue.totalNonFteopExHighCase,
       mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null
       console.log("Main Cost Data",mainObj)
-      this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(secondRes => {
+      this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)

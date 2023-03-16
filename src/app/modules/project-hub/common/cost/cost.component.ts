@@ -67,8 +67,8 @@ export class CostComponent implements OnInit {
         console.log(this.Amount)
         this.costfundingData = res.costData
         this.projectHubService.lookUpMaster = lookup
-        if(this.costfundingData != null)
-        {
+        // if(this.costfundingData != null)
+        // {
           this.costFundingForm.patchValue({
             durationBaseCase: res.costData.durationBaseCase,
             durationHighCase: res.costData.durationHighCase,
@@ -81,7 +81,7 @@ export class CostComponent implements OnInit {
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
   
           })
-        }
+        // }
           if(this.mode=='Project-Charter'){
             this.costData = [{
               category: 'Duration (Months)',
