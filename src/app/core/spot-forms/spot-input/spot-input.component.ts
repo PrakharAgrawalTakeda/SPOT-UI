@@ -54,9 +54,9 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
   writeValue(val: any) {
     if (this.inputType == 'Number') {
-      let value = this.autoAddDecimal? val.toFixed(this.decimalCount) : val.toString();
+      let value = this.autoAddDecimal? val?.toFixed(this.decimalCount) : val.toString();
       // Add commas as thousand separators
-      const formattedValue = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+      const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
 
       this.control.setValue(formattedValue);
     }
@@ -87,7 +87,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
         // Round the decimal value to decimalCount decimal places if needed
         const decimalIndex = value.indexOf('.');
         if (decimalIndex !== -1 && decimalIndex + this.decimalCount + 1 < value.length) {
-          value = parseFloat(value).toFixed(this.decimalCount);
+          value = parseFloat(value)?.toFixed(this.decimalCount);
         }
       }
 
@@ -116,7 +116,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       // Check if the value has a decimal point
       if (valueWithoutCommas.indexOf('.') === -1) {
         // Add the decimal point and the required number of decimal places
-        value = parseFloat(valueWithoutCommas).toFixed(this.decimalCount);
+        value = parseFloat(valueWithoutCommas)?.toFixed(this.decimalCount);
 
         // Add commas as thousand separators
         value = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
