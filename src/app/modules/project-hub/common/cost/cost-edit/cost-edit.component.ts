@@ -96,7 +96,7 @@ export class CostEditComponent {
           totalCapExHighCase: res.costData.totalCapExHighCase,
           totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
           totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
-          functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
+          functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : ''
 
         })
       // }
