@@ -83,6 +83,10 @@ export class CostEditComponent {
         this.localcurrency = res.localCurrency
         this.currency = this.localcurrency.localCurrencyAbbreviation
         //this.CostData = res
+        console.log(lookup)
+        //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
+        if(this.costfundingData != null)
+        {
         this.costForm.patchValue({
           durationBaseCase: res.costData.durationBaseCase,
           durationHighCase: res.costData.durationHighCase,
@@ -95,12 +99,14 @@ export class CostEditComponent {
           functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
 
         })
+      }
+        console.log(this.costForm.getRawValue())
         this.viewContent = true
       })
     })
   }
-  getDropDownValue(fromControlName: string): any {
-    if (fromControlName == 'functionsRequiredId') {
+  getDropDownValue(row: string): any {
+    if (row == '# Functions Required') {
       return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '57955fe4-cede-4c81-8b00-d806193046d2')
     }
 
@@ -109,6 +115,7 @@ export class CostEditComponent {
     this.projectHubService.isFormChanged = false
     var mainObj = this.costfundingData
     var formValue = this.costForm.getRawValue()
+    console.log(formValue)
     if (formValue.durationBaseCase > formValue.durationHighCase || formValue.peopleFtemonthsRequiredBaseCase > formValue.peopleFtemonthsRequiredHighCase ||
       formValue.totalCapExBaseCase > formValue.totalCapExHighCase || formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase) {
         var comfirmConfig: FuseConfirmationConfig = {
@@ -151,6 +158,7 @@ export class CostEditComponent {
       mainObj.totalNonFteopExBaseCase= formValue.totalNonFteopExBaseCase,
       mainObj.totalNonFteopExHighCase= formValue.totalNonFteopExHighCase,
       mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null
+      console.log("Main Cost Data",mainObj)
       this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(secondRes => {
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
