@@ -107,7 +107,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
   onBlur(event: any): void {
     this.onTouch()
-    if (this.autoAddDecimal && this.decimalCount > 0) {
+    if (this.autoAddDecimal && this.decimalCount > 0 && event?.target?.value) {
       let value = event.target.value;
 
       // Remove commas from the value
