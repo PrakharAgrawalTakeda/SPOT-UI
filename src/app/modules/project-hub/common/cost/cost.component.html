@@ -1,7 +1,8 @@
 <ng-container *ngIf="viewContent">
     <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
         <!-- Enter Content here-->
-        <form class="w-full" [formGroup]="costFundingForm">
+        <!-- <form class="w-3/4" [formGroup]="costFundingForm"> -->
+            <form class="w-full" [formGroup]="costFundingForm">
 
             <!-- <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden"> -->
                 <div class="flex justify-end items-end">
@@ -22,7 +23,7 @@
                     class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costData"
                     #costTable>
                     <ngx-datatable-column name="Category" prop="category" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="0.4">
+                        [flexGrow]="0.3">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             <p>{{value}}</p>
@@ -52,16 +53,8 @@
                             </spot-input>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="" prop="highCase" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="0.6">
-                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
-                            ngx-datatable-cell-template>
-                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category == 'Test'">
-                            </spot-input>
-                        </ng-template>
-                    </ngx-datatable-column>
                     <ngx-datatable-column name="Current Year Planned Spend" prop="highCase" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="1" *ngIf="mode== 'Business-Case'">
+                        [sortable]="false" [flexGrow]="0.4" *ngIf="mode== 'Business-Case'">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total CAPEX')">

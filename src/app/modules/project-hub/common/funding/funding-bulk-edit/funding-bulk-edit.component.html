@@ -49,7 +49,15 @@
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-select formControlName="fundingSourceId"
                                 name="fundingSourceName" [placeholder]="'Funding Source'" [idPointer]="'portfolioOwnerId'"
-                                [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()" [dropDownArrayType]="'object'" [showNoneOption]="false">
+                                [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()" [dropDownArrayType]="'object'" [showNoneOption]="false"
+                                [sortByType]="'custom'" [idPointer]="'portfolioOwnerId'"
+                                    [customSortPointer]="'pfid'">
+
+                                    <!-- spot-select class="w-full" formControlName="status" [showLabel]="false"
+                                    [label]="'Status'" [placeholder]="'Status'" [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'" [dropDownArrayType]="'object'"
+                                    [dropDownArray]="getStatus()" [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'" -->
                             </spot-select>
                         </form>
                     </ng-template>

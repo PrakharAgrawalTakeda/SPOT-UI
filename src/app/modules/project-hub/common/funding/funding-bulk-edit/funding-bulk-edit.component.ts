@@ -119,6 +119,7 @@ export class FundingBulkEditComponent {
 
           console.log(this.projecthubservice.projectid)
           this.fundingSourceData = po
+          
       //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
         this.fundingdata = res.fundingData
         
@@ -196,9 +197,8 @@ getfundingintheplan(): any {
 }
 
 getPO(): string {
-    return this.fundingSourceData.portfolioOwner.filter(x => x.isPortfolioOwner == true).sort((a, b) => {
-      return a.lookUpOrder - b.lookUpOrder;
-  })
+  //return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == "2A4E375B-B9F8-4647-B4CB-71268B52A938")
+    return this.fundingSourceData.portfolioOwner.filter(x => x.isPortfolioOwner == true)
   }
 
   getSource(source: string): string {
