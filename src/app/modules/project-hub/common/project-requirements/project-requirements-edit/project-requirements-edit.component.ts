@@ -61,6 +61,7 @@ export class ProjectRequirementsEditComponent {
         localCurrencyAbbreviation: new FormControl(''),
         impactedProductsName: new FormControl(''),
         functionGroupID: new FormControl(''),
+        functionsRequiredId: new FormControl(''),
     })
     @Output() formValue = new EventEmitter<any>();
 
@@ -122,6 +123,8 @@ export class ProjectRequirementsEditComponent {
                 localCurrencyAbbreviation: res.localCurrencyAbbreviation,
                 impactedProductsName: res.impactedProductsName,
                 functionGroupID: res.functionGroupID,
+                functionsRequiredId: res.functionsRequiredId
+
             })
             this.viewContent = true
         })
@@ -173,6 +176,7 @@ export class ProjectRequirementsEditComponent {
         mainObj.localCurrencyAbbreviation = formValue.localCurrencyAbbreviation
         mainObj.impactedProductsName = formValue.impactedProductsName
         mainObj.functionGroupID = formValue.functionGroupID
+        mainObj.functionsRequiredId = formValue.functionsRequiredId
         this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
             this.projectHubService.isNavChanged.next(true)
             this.projectHubService.submitbutton.next(true)

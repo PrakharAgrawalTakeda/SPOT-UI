@@ -1,7 +1,8 @@
 <ng-container *ngIf="viewContent">
     <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
         <!-- Enter Content here-->
-        <form class="w-full" [formGroup]="costFundingForm">
+        <!-- <form class="w-3/4" [formGroup]="costFundingForm"> -->
+            <form class="w-full" [formGroup]="costFundingForm">
 
             <!-- <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden"> -->
                 <div class="flex justify-end items-end">
@@ -10,7 +11,8 @@
                         <button class="ml-4 text-primary bg-gray-200"
                             mat-flat-button
                             [color]="'primary-200'"
-                            (click)="projectHubService.toggleDrawerOpen(costEditType, '' , cost , id)">
+                            (click)="projectHubService.toggleDrawerOpen(costEditType, '' , cost , id)"
+                            *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
                     </div>
@@ -21,30 +23,38 @@
                     class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costData"
                     #costTable>
                     <ngx-datatable-column name="Category" prop="category" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="0.6">
+                        [flexGrow]="0.3">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             <p>{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="0.9">
+                        [flexGrow]="0.4">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
-                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}">
+                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category == '# Functions Required'">
                             </spot-input>
+                        <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                        </spot-input>
+                        <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Duration') || row.category.includes('People')" [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1">
+                        </spot-input>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="1">
+                        [sortable]="false" [flexGrow]="0.4">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
-                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                            <!-- <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                            </spot-input> -->
+                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total') && row.category != '# Functions Required'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            </spot-input>
+                            <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Duration') || row.category.includes('People') && row.category != '# Functions Required'" [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1">
                             </spot-input>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Current Year Planned Spend" prop="highCase" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="1" *ngIf="mode== 'Business-Case'">
+                        [sortable]="false" [flexGrow]="0.4" *ngIf="mode== 'Business-Case'">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total CAPEX')">

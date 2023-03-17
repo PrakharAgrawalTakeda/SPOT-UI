@@ -23,7 +23,7 @@
 
 
                 <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [resizeable]="false" [sortable]="false"
-                    [draggable]="false" [flexGrow]="1">
+                    [draggable]="false" [flexGrow]="0.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CAPEX</p>
@@ -41,7 +41,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Funding Source" prop="fundingSourceId" [resizeable]="false"
-                    [sortable]="false" [draggable]="false" [flexGrow]="1">
+                    [sortable]="false" [draggable]="false" [flexGrow]="1.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{getSource(value)}}
@@ -49,14 +49,22 @@
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-select formControlName="fundingSourceId"
                                 name="fundingSourceName" [placeholder]="'Funding Source'" [idPointer]="'portfolioOwnerId'"
-                                [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()" [dropDownArrayType]="'object'" [showNoneOption]="false">
+                                [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()" [dropDownArrayType]="'object'" [showNoneOption]="false"
+                                [sortByType]="'custom'" [idPointer]="'portfolioOwnerId'"
+                                    [customSortPointer]="'pfid'">
+
+                                    <!-- spot-select class="w-full" formControlName="status" [showLabel]="false"
+                                    [label]="'Status'" [placeholder]="'Status'" [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'" [dropDownArrayType]="'object'"
+                                    [dropDownArray]="getStatus()" [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'" -->
                             </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="In the Plan" prop="fundingIntheplan" [resizeable]="false" [sortable]="false"
-                    [draggable]="false" [flexGrow]="1">
+                    [draggable]="false" [flexGrow]="0.5">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
@@ -72,7 +80,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Amount ({{Amount}})" prop="fundingAmount"
-                    [flexGrow]="0.8" [draggable]="false">
+                    [flexGrow]="0.6" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
@@ -90,7 +98,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Notes" prop="fundingNotes"
-                    [flexGrow]="0.9" [draggable]="false">
+                    [flexGrow]="1.5" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{value}}
@@ -121,7 +129,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.5" [resizeable]="false"
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.2" [resizeable]="false"
                     [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                         ngx-datatable-cell-template>

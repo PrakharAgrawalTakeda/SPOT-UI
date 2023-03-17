@@ -98,7 +98,7 @@
       <ngx-datatable
         class="datatable-schedule-74 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
-        [scrollbarV]="false" [rowClass]="getRowClass" [sorts]="[{ prop: 'plannedFinish', dir: 'asc' }]">
+        [scrollbarV]="false" [rowClass]="getRowClass" >
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
@@ -672,10 +672,10 @@
                 <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
               </a>
               <form [formGroup]="baselineLogForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
-                class="p-2 overflow-hidden">
+                class="p-2">
                 <div class="flex items-center justify-between">
                   <mat-slide-toggle [matTooltip]="this.baselineLogForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 10 can be selected at a time in the project close out report' : null"
-                  (change)="disabler2()"  class="h-full overflow-hidden" formControlName="includeInCloseout">
+                  (change)="disabler2()"  class="h-full" formControlName="includeInCloseout">
                   </mat-slide-toggle>
                 </div>
               </form>

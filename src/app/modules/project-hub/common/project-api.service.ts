@@ -589,6 +589,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async editLessonLearnedTakeaway( projectid, takeaway) {
+      var url = GlobalVariables.apiurl + "LessonsLearned/" + projectid + "?takeaways=" + takeaway
+      const abc$ = this.http.patch(url, projectid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getTOPS(projectid: string) {
     var url = GlobalVariables.apiurl + "TOPS/" + projectid
     const abc$ = this.http.get(url)
