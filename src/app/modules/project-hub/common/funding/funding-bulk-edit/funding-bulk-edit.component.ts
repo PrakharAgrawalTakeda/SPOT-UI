@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -14,7 +14,8 @@ import { ProjectApiService } from '../../project-api.service';
   styleUrls: ['./funding-bulk-edit.component.scss']
 })
 export class FundingBulkEditComponent {
-  //@Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Project-Charter'
+  @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   projectViewDetails: any = {}
   fundingDb = []
   submitObj = []
@@ -49,57 +50,114 @@ export class FundingBulkEditComponent {
     this.dataloader()
   }
   dataloader() {
-    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
-      this.portApiService.getfilterlist().then((po: any) => {
-        this.auth.lookupMaster().then((resp: any) => {
-          this.lookupdata = resp
-          this.localcurrency = res.localCurrency
-           this.Amount = this.localcurrency.localCurrencyAbbreviation
-        console.log(this.projecthubservice.projectid)
-        this.fundingSourceData = po
-    //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
-      this.fundingdata = res.fundingData
-      
-      console.log(this.fundingdata)
-      if(this.fundingdata != null)
-       {
-      // for (var i of this.fundingdata) {
-      //   i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
-      // }
-      
-      for (var i of this.fundingdata) {
-          i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+    if(this.mode == 'Business-Case')
+    {
+      this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.lookupdata = resp
+            this.localcurrency = res.localCurrency
+             this.Amount = this.localcurrency.localCurrencyAbbreviation
+          console.log(this.projecthubservice.projectid)
+          this.fundingSourceData = po
+      //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
+        this.fundingdata = res.fundingData
+        
+        console.log(this.fundingdata)
+        if(this.fundingdata != null)
+         {
+        // for (var i of this.fundingdata) {
+        //   i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        // }
+        
+        for (var i of this.fundingdata) {
+            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+        }
+        this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        for (var i of this.fundingdata) {
+          this.fundingDb.push(i)
+            console.log(i)
+            
+          this.FundingForm.push(new FormGroup({
+            
+            fundingAmount: new FormControl(i.fundingAmount),
+            fundingAmountFxconv: new FormControl(this.fundingdata.fundingAmountFxconv),
+            fundingIntheplan: new FormControl(i.fundingIntheplan),
+            fundingNotes: new FormControl(i.fundingNotes),
+            fundingSourceId: new FormControl(i.fundingSourceId),
+            includeInCharter: new FormControl(i.includeInCharter),
+            fundingSourceName: new FormControl(i.fundingSourceName),
+            fundingTypeId: new FormControl(i.fundingTypeId),
+            fundingUniqueId: new FormControl(i.fundingUniqueId),
+            includeInBusinessCase: new FormControl(this.fundingdata.includeInBusinessCase),
+            projectId: new FormControl(this.projecthubservice.projectid)
+          }))
+          //this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        }
       }
-      this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
-      for (var i of this.fundingdata) {
-        this.fundingDb.push(i)
-          console.log(i)
+      
           
-        this.FundingForm.push(new FormGroup({
-          
-          fundingAmount: new FormControl(i.fundingAmount),
-          fundingAmountFxconv: new FormControl(this.fundingdata.fundingAmountFxconv),
-          fundingIntheplan: new FormControl(i.fundingIntheplan),
-          fundingNotes: new FormControl(i.fundingNotes),
-          fundingSourceId: new FormControl(i.fundingSourceId),
-          includeInCharter: new FormControl(i.includeInCharter),
-          fundingSourceName: new FormControl(i.fundingSourceName),
-          fundingTypeId: new FormControl(i.fundingTypeId),
-          fundingUniqueId: new FormControl(i.fundingUniqueId),
-          includeInBusinessCase: new FormControl(this.fundingdata.includeInBusinessCase),
-          projectId: new FormControl(this.projecthubservice.projectid)
-        }))
-        //this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        this.disabler()
+        this.viewContent = true
+    })
+      })
+      })
+    }
+    else
+    {
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getCostFunding(this.id).then((res: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.lookupdata = resp
+            this.localcurrency = res.localCurrency
+             this.Amount = this.localcurrency.localCurrencyAbbreviation
+          console.log(this.projecthubservice.projectid)
+          this.fundingSourceData = po
+      //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
+        this.fundingdata = res.fundingData
+        
+        console.log(this.fundingdata)
+        if(this.fundingdata != null)
+         {
+        // for (var i of this.fundingdata) {
+        //   i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        // }
+        
+        for (var i of this.fundingdata) {
+            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+        }
+        this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        for (var i of this.fundingdata) {
+          this.fundingDb.push(i)
+            console.log(i)
+            
+          this.FundingForm.push(new FormGroup({
+            
+            fundingAmount: new FormControl(i.fundingAmount),
+            fundingAmountFxconv: new FormControl(this.fundingdata.fundingAmountFxconv),
+            fundingIntheplan: new FormControl(i.fundingIntheplan),
+            fundingNotes: new FormControl(i.fundingNotes),
+            fundingSourceId: new FormControl(i.fundingSourceId),
+            includeInCharter: new FormControl(i.includeInCharter),
+            fundingSourceName: new FormControl(i.fundingSourceName),
+            fundingTypeId: new FormControl(i.fundingTypeId),
+            fundingUniqueId: new FormControl(i.fundingUniqueId),
+            includeInBusinessCase: new FormControl(this.fundingdata.includeInBusinessCase),
+            projectId: new FormControl(this.projecthubservice.projectid)
+          }))
+          //this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        }
       }
+      
+          
+        this.disabler()
+        this.viewContent = true
+    })
+      })
+      })
     }
     
-        
-      this.disabler()
-      this.viewContent = true
-  })
-    })
-    })
   }
 
   sortbyFundingSourceName(array: any): any {
