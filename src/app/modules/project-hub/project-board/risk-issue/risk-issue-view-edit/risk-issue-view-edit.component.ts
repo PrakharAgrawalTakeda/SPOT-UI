@@ -51,6 +51,7 @@ export const MY_FORMATS = {
 
 export class RiskIssueViewEditComponent implements OnInit {
   @Input() viewElements: any = ["type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard", "postMitigation"]
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
   formFieldHelpers: string[] = [''];
   lookupdata: any = []
   riskissue: any = {}
@@ -301,37 +302,49 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (mainObjnew.closeDate == "Invalid date") {
           mainObjnew.closeDate = null
         }
-
-        if (this.router.url.includes('option-2')) {
-            mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
-            this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
-        }else{
-            if (this.router.url.includes('option-3')) {
-                mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
+        if(this.mode == "Business-Case"){
+            if (this.router.url.includes('option-2')) {
+                mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
                 this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                     this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.isNavChanged.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 })
             }else{
-                if (this.router.url.includes('recommended-option')) {
-                    mainObjnew.businessOptionId = "";
+                if (this.router.url.includes('option-3')) {
+                    mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                     this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                         this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     })
                 }else{
-                    this.apiService.addRiskIssue(mainObjnew).then(() => {
+                    if (this.router.url.includes('recommended-option')) {
+                        mainObjnew.businessOptionId = "";
+                        this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.isNavChanged.next(true)
+                            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        })
+                    }
+                }
+            }
+        }else{
+            this.apiService.addRiskIssue(mainObjnew).then(() => {
+                if (this.mode == 'Project-Charter') {
+                    this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.isNavChanged.next(true)
                     })
+                }else{
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.isNavChanged.next(true)
                 }
-
-            }
+            })
         }
+
 
       }
       else {

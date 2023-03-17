@@ -7,9 +7,9 @@
         <app-ask-need-link *ngIf="projecthubservice.itemtype == 'LinkAskNeeds'"></app-ask-need-link>
         <app-overall-status-edit *ngIf="projecthubservice.itemtype == 'Overall'"></app-overall-status-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'RiskIssue'"></app-risk-issue-view-edit>
-        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueAddSingle'"
+        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueAddSingle'" [mode]="'Project-Charter'"
             [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter']"></app-risk-issue-view-edit>
-        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseRiskIssueAddSingle'"
+        <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseRiskIssueAddSingle'" [mode]="'Business-Case'"
             [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact','mitigation','type','owner']"></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseScheduleAddNew'"
@@ -105,8 +105,8 @@
         <app-risk-issue-view-bulk-edit
             *ngIf="projecthubservice.itemtype == 'RiskIssuesBulkEdit'"></app-risk-issue-view-bulk-edit>
         <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueBulkEdit'"
-            [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter', 'status','isLink']"></app-risk-issue-view-bulk-edit>
-        <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseIssueBulkEdit'"
+            [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter', 'status','isLink']" [mode]="'Project-Charter'"></app-risk-issue-view-bulk-edit>
+        <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseIssueBulkEdit'" [mode]="'Business-Case'"
             [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact', 'mitigation','type','owner']"></app-risk-issue-view-bulk-edit>
         <app-risk-issues-link *ngIf="projecthubservice.itemtype == 'LinkRiskIssues'"></app-risk-issues-link>
         <app-key-assumption-view-bulk-edit
@@ -115,15 +115,15 @@
             *ngIf="projecthubservice.itemtype == 'KeyAssumption'"></app-key-assumption-view-edit>
         <app-key-assumptions-add-single
             *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsAddSingle'"></app-key-assumptions-add-single>
-        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'BusinessCaseKeyAssumptionAddSingle'"
+        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'BusinessCaseKeyAssumptionAddSingle'" [mode]="'Business-Case'"
             [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInBusinessCase']"></app-key-assumptions-add-single>
-        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionAddSingle'"
+        <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionAddSingle'"[mode]="'Project-Charter'"
             [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInCharter']"></app-key-assumptions-add-single>
         <app-key-assumptions-bulk-edit
             *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsBulkEdit'"></app-key-assumptions-bulk-edit>
-        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionBulkEdit'"
+        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterKeyAssumptionBulkEdit'" [mode]="'Project-Charter'"
             [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInCharter']"></app-key-assumptions-bulk-edit>
-        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseKeyAssumptionBulkEdit'"
+        <app-key-assumptions-bulk-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseKeyAssumptionBulkEdit'" [mode]="'Business-Case'"
             [viewElements]="['keyAssumption', 'whyIsThisAssumptionValid','includeInBusinessCase']"></app-key-assumptions-bulk-edit>
         <app-standard-milestone-sets
             *ngIf="projecthubservice.itemtype == 'StandardMilestoneSets'"></app-standard-milestone-sets>
