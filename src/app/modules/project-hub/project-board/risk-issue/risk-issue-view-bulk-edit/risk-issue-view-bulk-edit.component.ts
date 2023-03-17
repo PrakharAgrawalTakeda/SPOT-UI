@@ -18,6 +18,7 @@ import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-c
 })
 export class RisIssueViewBulkEditComponent implements OnInit {
     @Input() viewElements: any = ["status", "dateInitiated", "type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard",'isLink', 'indicator', 'includeClosedItems']
+    @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
     constructor(
         public projectHubService: ProjectHubService,
         public apiService: ProjectApiService,
@@ -70,45 +71,10 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     dataloader() {
         this.viewContent = false
         if (this.projectHubService.projectid) {
-            if (this.router.url.includes('option-2')) {
-                this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,Constants.OPTION_2_ID.toString()).then((res: any) => {
-                    this.riskIssueData = res;
-                    if (this.riskIssueData.length > 0) {
-                        for (var i of this.riskIssueData) {
-                            this.dbRiskIssues.push({
-                                closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                functionGroupId: i.functionGroupId,
-                                ifHappens: i.ifHappens,
-                                impactId: i.impactId,
-                                includeInCharter: i.includeInCharter,
-                                includeInReport: i.includeInReport,
-                                indicator: i.indicator,
-                                logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                mitigation: i.mitigation,
-                                ownerId: i.ownerId,
-                                ownerName: i.ownerName,
-                                postMitigationComments: i.postMitigationComments,
-                                postMitigationImpact: i.postMitigationImpact,
-                                postMitigationProbability: i.postMitigationProbability,
-                                probabilityId: i.probabilityId,
-                                projectId: i.projectId,
-                                riskIssueResult: i.riskIssueResult,
-                                riskIssueTypeId: i.riskIssueTypeId,
-                                riskIssueUniqueId: i.riskIssueUniqueId,
-                            })
-                        }
-                        this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
-                    }
-                    this.links = res.links
-                    this.linksProblemCapture = res.linksProblemCapture
-                    this.tableData = this.riskIssueData;
-                    this.tableData.length > 0 ? this.formIntializer() : ''
-                    this.viewContent = true
-                })
-            }else{
-                if (this.router.url.includes('option-3')) {
-                    this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,Constants.OPTION_3_ID.toString()).then((res: any) => {
+            if(this.mode == "Business-Case")
+            {
+                if (this.router.url.includes('option-2')) {
+                    this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,GlobalBusinessCaseOptions.OPTION_2).then((res: any) => {
                         this.riskIssueData = res;
                         if (this.riskIssueData.length > 0) {
                             for (var i of this.riskIssueData) {
@@ -137,49 +103,125 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                             }
                             this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
                         }
+                        this.links = res.links
+                        this.linksProblemCapture = res.linksProblemCapture
                         this.tableData = this.riskIssueData;
                         this.tableData.length > 0 ? this.formIntializer() : ''
                         this.viewContent = true
                     })
-                }else{
-                    this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
-                        this.riskIssueData = res.riskIssuesData;
-                        if (res.riskIssuesData?.length > 0) {
-                            for (var i of res.riskIssuesData) {
-                                this.dbRiskIssues.push({
-                                    closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                    dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                    functionGroupId: i.functionGroupId,
-                                    ifHappens: i.ifHappens,
-                                    impactId: i.impactId,
-                                    includeInCharter: i.includeInCharter,
-                                    includeInReport: i.includeInReport,
-                                    indicator: i.indicator,
-                                    logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-                                    mitigation: i.mitigation,
-                                    ownerId: i.ownerId,
-                                    ownerName: i.ownerName,
-                                    postMitigationComments: i.postMitigationComments,
-                                    postMitigationImpact: i.postMitigationImpact,
-                                    postMitigationProbability: i.postMitigationProbability,
-                                    probabilityId: i.probabilityId,
-                                    projectId: i.projectId,
-                                    riskIssueResult: i.riskIssueResult,
-                                    riskIssueTypeId: i.riskIssueTypeId,
-                                    riskIssueUniqueId: i.riskIssueUniqueId,
-                                })
-                            }
-                            this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
-                        }
-                        this.links = res.links
-                        this.linksProblemCapture = res.linksProblemCapture
-                        this.changeRiskIssue(this.projectHubService.includeClosedItems.riskIssue.value)
-                        this.tableData = this.sortByDate(this.tableData)
-                        this.tableData.length > 0 ? this.formIntializer() : ''
-                        this.viewContent = true
-                    })
                 }
+                else{
+                    if (this.router.url.includes('option-3')) {
+                        this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,GlobalBusinessCaseOptions.OPTION_3).then((res: any) => {
+                            this.riskIssueData = res;
+                            if (this.riskIssueData.length > 0) {
+                                for (var i of this.riskIssueData) {
+                                    this.dbRiskIssues.push({
+                                        closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                        dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                        functionGroupId: i.functionGroupId,
+                                        ifHappens: i.ifHappens,
+                                        impactId: i.impactId,
+                                        includeInCharter: i.includeInCharter,
+                                        includeInReport: i.includeInReport,
+                                        indicator: i.indicator,
+                                        logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                        mitigation: i.mitigation,
+                                        ownerId: i.ownerId,
+                                        ownerName: i.ownerName,
+                                        postMitigationComments: i.postMitigationComments,
+                                        postMitigationImpact: i.postMitigationImpact,
+                                        postMitigationProbability: i.postMitigationProbability,
+                                        probabilityId: i.probabilityId,
+                                        projectId: i.projectId,
+                                        riskIssueResult: i.riskIssueResult,
+                                        riskIssueTypeId: i.riskIssueTypeId,
+                                        riskIssueUniqueId: i.riskIssueUniqueId,
+                                    })
+                                }
+                                this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
+                            }
+                            this.tableData = this.riskIssueData;
+                            this.tableData.length > 0 ? this.formIntializer() : ''
+                            this.viewContent = true
+                        })
+                    }else{
+                        if (this.router.url.includes('recommended-option')) {
+                            this.apiService.getRiskIssuesByOption(this.projectHubService.projectid,GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
+                                this.riskIssueData = res;
+                                if (this.riskIssueData.length > 0) {
+                                    for (var i of this.riskIssueData) {
+                                        this.dbRiskIssues.push({
+                                            closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                            dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                            functionGroupId: i.functionGroupId,
+                                            ifHappens: i.ifHappens,
+                                            impactId: i.impactId,
+                                            includeInCharter: i.includeInCharter,
+                                            includeInReport: i.includeInReport,
+                                            indicator: i.indicator,
+                                            logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                            mitigation: i.mitigation,
+                                            ownerId: i.ownerId,
+                                            ownerName: i.ownerName,
+                                            postMitigationComments: i.postMitigationComments,
+                                            postMitigationImpact: i.postMitigationImpact,
+                                            postMitigationProbability: i.postMitigationProbability,
+                                            probabilityId: i.probabilityId,
+                                            projectId: i.projectId,
+                                            riskIssueResult: i.riskIssueResult,
+                                            riskIssueTypeId: i.riskIssueTypeId,
+                                            riskIssueUniqueId: i.riskIssueUniqueId,
+                                        })
+                                    }
+                                    this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
+                                }
+                                this.tableData = this.riskIssueData;
+                                this.tableData.length > 0 ? this.formIntializer() : ''
+                                this.viewContent = true
+                            })
+                        }
+                    }
+                }
+            }else{
+                this.apiService.getprojectviewdata(this.projectHubService.projectid).then((res: any) => {
+                    this.riskIssueData = res.riskIssuesData;
+                    if (res.riskIssuesData?.length > 0) {
+                        for (var i of res.riskIssuesData) {
+                            this.dbRiskIssues.push({
+                                closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                functionGroupId: i.functionGroupId,
+                                ifHappens: i.ifHappens,
+                                impactId: i.impactId,
+                                includeInCharter: i.includeInCharter,
+                                includeInReport: i.includeInReport,
+                                indicator: i.indicator,
+                                logDate: i.logDate ? moment(i.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                mitigation: i.mitigation,
+                                ownerId: i.ownerId,
+                                ownerName: i.ownerName,
+                                postMitigationComments: i.postMitigationComments,
+                                postMitigationImpact: i.postMitigationImpact,
+                                postMitigationProbability: i.postMitigationProbability,
+                                probabilityId: i.probabilityId,
+                                projectId: i.projectId,
+                                riskIssueResult: i.riskIssueResult,
+                                riskIssueTypeId: i.riskIssueTypeId,
+                                riskIssueUniqueId: i.riskIssueUniqueId,
+                            })
+                        }
+                        this.dbRiskIssues = this.sortByDate(this.dbRiskIssues)
+                    }
+                    this.links = res.links
+                    this.linksProblemCapture = res.linksProblemCapture
+                    this.changeRiskIssue(this.projectHubService.includeClosedItems.riskIssue.value)
+                    this.tableData = this.sortByDate(this.tableData)
+                    this.tableData.length > 0 ? this.formIntializer() : ''
+                    this.viewContent = true
+                })
             }
+
 
         }
     }
@@ -621,7 +663,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     }
     getissuetype(): any {
         return this.lookupdata.filter(x => x.lookUpParentId == '6b4487a4-097d-43ee-890d-172c601cd09b').sort((a, b) => {
-            return a.lookUpOrder - b.lookUpOrder;
+            return b.lookUpOrder - a.lookUpOrder;
         })
     }
 }

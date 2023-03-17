@@ -306,6 +306,7 @@ export class RiskIssueViewEditComponent implements OnInit {
             mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
             this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                 this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.isNavChanged.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
         }else{
@@ -313,6 +314,7 @@ export class RiskIssueViewEditComponent implements OnInit {
                 mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                 this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                     this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.isNavChanged.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 })
             }else{
@@ -320,6 +322,7 @@ export class RiskIssueViewEditComponent implements OnInit {
                     mainObjnew.businessOptionId = "";
                     this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                         this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     })
                 }else{
