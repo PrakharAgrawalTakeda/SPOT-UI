@@ -105,13 +105,18 @@ export class FundingBulkEditComponent {
     }
     else
     {
-      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getCostFunding(this.id).then((res: any) => {
+      //console.log("ID",this._Activatedroute.parent.parent.snapshot.paramMap.get("id"))
+      //this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
         this.portApiService.getfilterlist().then((po: any) => {
           this.auth.lookupMaster().then((resp: any) => {
             this.lookupdata = resp
-            this.localcurrency = res.localCurrency
-             this.Amount = this.localcurrency.localCurrencyAbbreviation
+            if(res.localCurrency != null)
+            {
+              this.localcurrency = res.localCurrency
+              this.Amount = this.localcurrency.localCurrencyAbbreviation
+            }
+
           console.log(this.projecthubservice.projectid)
           this.fundingSourceData = po
       //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
@@ -127,6 +132,7 @@ export class FundingBulkEditComponent {
         for (var i of this.fundingdata) {
             i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
         }
+        console.log("FUNDING DATA BEFORE SORTING",this.fundingdata)
         this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
         for (var i of this.fundingdata) {
           this.fundingDb.push(i)
@@ -190,7 +196,9 @@ getfundingintheplan(): any {
 }
 
 getPO(): string {
-    return this.fundingSourceData ? this.fundingSourceData.portfolioOwner.filter(x => x.isPortfolioOwner == true) : ''
+    return this.fundingSourceData.portfolioOwner.filter(x => x.isPortfolioOwner == true).sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+  })
   }
 
   getSource(source: string): string {
