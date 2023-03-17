@@ -88,14 +88,14 @@ export class CostEditComponent {
         if(this.costfundingData != null)
         {
         this.costForm.patchValue({
-          durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : '',
-          durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : '',
-          peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : '',
-          peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : '',
-          totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : '',
-          totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : '',
-          totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : '',
-          totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : '',
+          durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+          durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+          peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+          peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+          totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+          totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+          totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+          totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
           functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : ''
 
         })
