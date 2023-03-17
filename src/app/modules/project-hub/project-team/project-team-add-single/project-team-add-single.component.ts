@@ -103,7 +103,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
   submitProjectTeam() {
     var projectTeam = this.projectTeamAddForm.getRawValue();
     if (projectTeam.includeInCharter === false) {
-      if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
+      if (Object.keys(this.projectTeamAddForm.controls.role.value || {}).length > 0) {
         if (this.projectTeamAddForm.controls.percentTime.value < 0 || this.projectTeamAddForm.controls.percentTime.value > 100) {
           var comfirmConfig: FuseConfirmationConfig = {
             "title": "Percent time value cannot be greater than 100 or smaller than 0",
@@ -203,7 +203,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
       }
       else {
         var comfirmConfig: FuseConfirmationConfig = {
-          "title": "Only 10 can be selected at a time for Team Charter slide display.",
+          "title": "Please select a role",
           "message": "",
           "icon": {
             "show": true,
