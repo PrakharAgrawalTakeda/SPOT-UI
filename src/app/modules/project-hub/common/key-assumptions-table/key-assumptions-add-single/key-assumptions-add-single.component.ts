@@ -15,6 +15,7 @@ import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-c
 })
 export class KeyAssumptionsAddSingleComponent implements OnInit {
     @Input() viewElements: any = ["keyAssumption", "whyIsThisAssumptionValid"];
+    @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
     keyAssumptionForm = new FormGroup({
         keyAssumptionName: new FormControl(''),
         assumptionRationale: new FormControl(''),
@@ -73,34 +74,45 @@ export class KeyAssumptionsAddSingleComponent implements OnInit {
             businessKeyAssumptionUniqueId:"",
             businessOptionId:""
         }
-        if (this.router.url.includes('option-2')) {
-            optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
-            this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
-        }else{
-            if (this.router.url.includes('option-3')) {
-                optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
+        if(this.mode == "Business-Case"){
+            if (this.router.url.includes('option-2')) {
+                optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
                 this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 })
             }else{
-                if (this.router.url.includes('recommended-option')) {
-                    optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_1;
+                if (this.router.url.includes('option-3')) {
+                    optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                     this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     })
                 }else{
-                    this.apiService.addKeyAssumption(mainObj).then(res => {
+                    if (this.router.url.includes('recommended-option')) {
+                        optionObj.businessOptionId = GlobalBusinessCaseOptions.OPTION_1;
+                        this.apiService.addKeyAssumptionForOption(optionObj).then(res => {
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        })
+                    }
+                }
+            }
+        }else{
+            this.apiService.addKeyAssumption(mainObj).then(res => {
+                if (this.mode == 'Project-Charter') {
+                    this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     })
+                }else{
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 }
-            }
+
+            })
         }
+
 
 
 
