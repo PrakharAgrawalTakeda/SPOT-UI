@@ -192,8 +192,16 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                 includeInProposal: projectTeam.includeInProposal
               }
               this.apiService.addProjectTeam(mainObj).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  if (this.mode == 'Project-Charter') {
+                      this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      })
+                  }  else{
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  }
+
               })
             }
 

@@ -395,7 +395,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     };
     submitRI() {
         if (this.projectHubService.isFormChanged) {
-            if (this.router.url.includes('option-2') || this.router.url.includes('option-3') || this.router.url.includes('recommended-option') ) {
+            if (this.mode == "Business-Case") {
                 this.submitPrepForOptions()
                 this.projectHubService.isFormChanged = false
                 this.apiService.bulkEditRiskIssuesForOption(this.formValue, this.projectHubService.projectid).then(res => {
@@ -407,10 +407,19 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 this.submitPrep()
                 this.projectHubService.isFormChanged = false
                 this.apiService.bulkeditRiskIssue(this.formValue, this.projectHubService.projectid).then(res => {
+                    if (this.mode == 'Project-Charter') {
+                        this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
+                            this.projectHubService.toggleDrawerOpen('', '', [], '')
+                            this.projectHubService.submitbutton.next(true)
+                            this.projectHubService.isNavChanged.next(true)
+                            this.projectHubService.successSave.next(true)
+                        })
+                    }else{
                         this.projectHubService.toggleDrawerOpen('', '', [], '')
                         this.projectHubService.submitbutton.next(true)
                         this.projectHubService.isNavChanged.next(true)
                         this.projectHubService.successSave.next(true)
+                    }
                     }
                 )
             }

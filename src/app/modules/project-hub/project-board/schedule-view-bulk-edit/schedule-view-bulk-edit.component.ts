@@ -1739,10 +1739,29 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         // this.viewBaselineLogs = true
                         // this.compareBaselineLogs = false
                         // this.projecthubservice.isBulkEdit = false
-                        this.projecthubservice.isNavChanged.next(true)
-                        this.projecthubservice.submitbutton.next(true)
-                        this.projecthubservice.successSave.next(true)
-                        this.submitjustification()
+                        if (this.mode == 'Project-Charter') {
+                            this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                                this.projecthubservice.isFormChanged = false
+                                this.projecthubservice.isNavChanged.next(true)
+                                this.projecthubservice.submitbutton.next(true)
+                                this.projecthubservice.successSave.next(true)
+                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            })
+                        }else if(this.mode == 'Project-Close-Out'){
+                            this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                                this.projecthubservice.isFormChanged = false
+                                this.projecthubservice.isNavChanged.next(true)
+                                this.projecthubservice.submitbutton.next(true)
+                                this.projecthubservice.successSave.next(true)
+                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            })
+                        }else{
+                            this.projecthubservice.isNavChanged.next(true)
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.successSave.next(true)
+                            this.submitjustification()
+                        }
+
                         //this.projecthubservice.submitbutton.next(true)
                     })
                 // } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
@@ -1883,6 +1902,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             }
             console.log(this.baselineLogObj)
             this.apiService.patchBaselineLogs(this.baselineLogObj).then(res => {
+                if (this.mode == 'Project-Close-Out') {
+                    this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                        this.projecthubservice.isNavChanged.next(true)
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.successSave.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    })
+                }else{
+                    this.projecthubservice.isNavChanged.next(true)
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.successSave.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                }
                 //this.projecthubservice.isBulkEdit = true
                 // this.viewContent = false
                 // this.viewBaseline = false

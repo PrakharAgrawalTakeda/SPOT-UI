@@ -15,6 +15,7 @@ import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-c
 })
 export class KeyAssumptionsBulkEditComponent implements OnInit {
     @Input() viewElements: any = ["keyAssumption", "whyIsThisAssumptionValid"];
+    @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService,
                 public fuseAlert: FuseConfirmationService, private router: Router) {
         this.keyAssumptionForm.valueChanges.subscribe(res => {
@@ -375,9 +376,17 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
             }else{
                 this.formValue()
                 this.apiService.bulkEditKeyAssumptions(this.keyAssumptionsSubmit, this.projecthubservice.projectid).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                    this.projecthubservice.isNavChanged.next(true)
+                    if (this.mode == 'Project-Charter') {
+                        this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                            this.projecthubservice.isNavChanged.next(true)
+                        })
+                    }else{
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.projecthubservice.isNavChanged.next(true)
+                    }
                 })
             }
         } else {
