@@ -4,7 +4,7 @@
         
             <input matInput formControlName="control" [placeholder]="placeholder"
                  (blur)="onBlur($event)" [required]=Required
-                (input)="formatInput($event)" >
+                (input)="formatInput($event)" [ngClass]="{'text-right': inputType == 'Number'}" >
         
             
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>
