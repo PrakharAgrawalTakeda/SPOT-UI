@@ -161,13 +161,13 @@ export class ProjectRequirementsEditComponent {
         mainObj.proposalStatement = formValue.proposalStatement
         mainObj.whynotgoforNextBestAlternative = formValue.whynotgoforNextBestAlternative
         mainObj.estimatedFTE = formValue.estimatedFTE
-        mainObj.shutdownRequired = formValue.shutdownRequired
-        mainObj.regulatoryApprovalNeeded = formValue.regulatoryApprovalNeeded
+        mainObj.shutdownRequired = formValue.shutdownRequired == "Yes"
+        mainObj.regulatoryApprovalNeeded = formValue.regulatoryApprovalNeeded  == "Yes"
         mainObj.totalCapExBaseCase = formValue.totalCapExBaseCase
         mainObj.totalNonFTEOpExBaseCase = formValue.totalNonFTEOpExBaseCase
-        mainObj.planFundingRequired = formValue.planFundingRequired
+        mainObj.planFundingRequired = formValue.planFundingRequired  == "Yes"
         mainObj.howMuch = formValue.howMuch
-        mainObj.budgetInPlan = formValue.budgetInPlan
+        mainObj.budgetInPlan = formValue.budgetInPlan  == "Yes"
         mainObj.approvedDate = formValue.approvedDate
         mainObj.projectReviewed = formValue.projectReviewed
         mainObj.proposedExecutionStart = formValue.proposedExecutionStart
