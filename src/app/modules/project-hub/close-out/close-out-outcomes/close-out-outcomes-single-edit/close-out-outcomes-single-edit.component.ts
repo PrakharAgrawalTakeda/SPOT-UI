@@ -58,10 +58,12 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
     mainObj.projectId = this.projectHubService.projectid
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.apiService.BulkEditProjectCharter(this.projectHubService.projectid, charterObj).then(res1 => {
-        this.projectHubService.isNavChanged.next(true)
-        this.projectHubService.submitbutton.next(true)
-        this.projectHubService.successSave.next(true)
-        this.projectHubService.toggleDrawerOpen('', '', [], '')
+         this.apiService.updateReportDates(this.projectHubService.projectid, "CloseoutModifiedDate").then(secondRes => {
+             this.projectHubService.isNavChanged.next(true)
+             this.projectHubService.submitbutton.next(true)
+             this.projectHubService.successSave.next(true)
+             this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
       })
     })
   }

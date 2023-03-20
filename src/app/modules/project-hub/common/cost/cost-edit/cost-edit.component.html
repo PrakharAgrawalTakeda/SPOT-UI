@@ -24,17 +24,25 @@
                     [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-singleselect-autocomplete formControlName="{{value}}" [showLabel]="false"
-                            [valuePointer]="'lookUpName'" [dropDownArray]="getDropDownValue(value)"
+                            [valuePointer]="'lookUpName'" [dropDownArray]="getDropDownValue(row.category)"
                             [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'" *ngIf="row.category == '# Functions Required'">
                         </spot-singleselect-autocomplete>
-                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
                         </spot-input>
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Duration') || row.category.includes('People')" [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1">
+                        </spot-input>
+                        <!-- <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        </spot-input> -->
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false" [sortable]="false"
                     [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        <!-- <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category != '# Functions Required'">
+                        </spot-input> -->
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total') && row.category != '# Functions Required'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                        </spot-input>
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Duration') || row.category.includes('People') && row.category != '# Functions Required'" [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -43,7 +51,7 @@
         <!-- Submit Actions here-->
         <div class="flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"
-                (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
+                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
                 Cancel
             </a>
             <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">

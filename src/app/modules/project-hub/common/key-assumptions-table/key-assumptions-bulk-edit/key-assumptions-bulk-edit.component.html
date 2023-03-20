@@ -80,7 +80,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Business Case (Max 5)" prop="includeInBusinessCase" [flexGrow]="1" *ngIf="viewElementChecker('includeInBusinessCase')"
+                <ngx-datatable-column name="Included In Business Case (Max 4)" prop="includeInBusinessCase" [flexGrow]="1" *ngIf="viewElementChecker('includeInBusinessCase')"
                                       [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!kaTableEditStack.includes(rowIndex)"

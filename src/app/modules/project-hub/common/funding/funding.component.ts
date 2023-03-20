@@ -16,7 +16,8 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class FundingComponent implements OnInit, OnChanges {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Project-Charter'
+  @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -25,6 +26,7 @@ export class FundingComponent implements OnInit, OnChanges {
   initializationComplete: boolean = false
   id:string=""
   fundingbulkEditType: string = 'FundingBulkEdit';
+  fundingBCbulkEditType: string = 'FundingBCBulkEdit';
   viewContent: boolean = false
   fundingdata: any;
   fundingSourceData: any;
@@ -49,33 +51,70 @@ export class FundingComponent implements OnInit, OnChanges {
     this.dataloader()
   }
   dataloader() {
-    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getCostFunding(this.id).then((res: any) => {
-      this.authService.lookupMaster().then((lookup: any) => {
-        this.portApiService.getfilterlist().then((po: any) => {
-          this.fundingSourceData = po
-          this.localcurrency = res.localCurrency
-          this.Amount = this.localcurrency.localCurrencyAbbreviation
-     console.log(this.fundingSourceData)
-        console.log(res)
-      console.log(res.fundingData)
-      console.log(lookup)
-       this.fundingdata = res.fundingData
-       if(this.fundingdata != null)
-       {
-        for (var i of this.fundingdata) {
-          console.log(i)
-          //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
-          i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
-        }
-       }
-   
-    this.viewContent = true
+  
+    console.log("ProjectHUBSERVICE",this.projecthubservice.projectid)
+    console.log("THIS>ID",this._Activatedroute.parent.parent.snapshot.paramMap.get("id"))
+    if(this.mode == 'Business-Case')
+    {
+      console.log("BUSINESS CASE")
+      this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
+        this.authService.lookupMaster().then((lookup: any) => {
+          this.portApiService.getfilterlist().then((po: any) => {
+            this.fundingSourceData = po
+            this.localcurrency = res.localCurrency
+            this.Amount = this.localcurrency.localCurrencyAbbreviation
+       console.log(this.fundingSourceData)
+          console.log(res)
+        console.log(res.fundingData)
+        console.log(lookup)
+         this.fundingdata = res.fundingData
+         if(this.fundingdata != null)
+         {
+          for (var i of this.fundingdata) {
+            console.log(i)
+            //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
+            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+          }
+         }
+     
+      this.viewContent = true
+    })
+    })
   })
+      this.initializationComplete = false
+      this.initializationComplete = true
+    }
+    else{
+      console.log("PROJECTCHARTER")
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getCostFunding(this.id).then((res: any) => {
+        this.authService.lookupMaster().then((lookup: any) => {
+          this.portApiService.getfilterlist().then((po: any) => {
+            this.fundingSourceData = po
+            this.localcurrency = res.localCurrency
+            this.Amount = this.localcurrency.localCurrencyAbbreviation
+       console.log(this.fundingSourceData)
+          console.log(res)
+        console.log(res.fundingData)
+        console.log(lookup)
+         this.fundingdata = res.fundingData
+         if(this.fundingdata != null)
+         {
+          for (var i of this.fundingdata) {
+            console.log(i)
+            //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
+            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+          }
+         }
+     
+      this.viewContent = true
+    })
+    })
   })
-})
-    this.initializationComplete = false
-    this.initializationComplete = true
+      this.initializationComplete = false
+      this.initializationComplete = true
+    }
+    
   }
   // getLookUpName(lookUpId: string): string {
   //   return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''

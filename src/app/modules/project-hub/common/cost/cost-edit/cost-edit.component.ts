@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
@@ -60,7 +61,8 @@ export class CostEditComponent {
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
     private authService: AuthService,
-    private projectHubService: ProjectHubService) {
+    private projectHubService: ProjectHubService,
+    public fuseAlert: FuseConfirmationService) {
     this.costForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.projectHubService.isFormChanged = true
@@ -81,59 +83,92 @@ export class CostEditComponent {
         this.localcurrency = res.localCurrency
         this.currency = this.localcurrency.localCurrencyAbbreviation
         //this.CostData = res
+        console.log(lookup)
+        //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
+        if(this.costfundingData != null)
+        {
         this.costForm.patchValue({
-          durationBaseCase: res.costData.durationBaseCase,
-          durationHighCase: res.costData.durationHighCase,
-          peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
-          peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
-          totalCapExBaseCase: res.costData.totalCapExBaseCase,
-          totalCapExHighCase: res.costData.totalCapExHighCase,
-          totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
-          totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
-          functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
+          durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+          durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+          peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+          peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+          totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+          totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+          totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+          totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
+          functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : ''
 
         })
+      }
+        console.log(this.costForm.getRawValue())
         this.viewContent = true
       })
     })
   }
-  getDropDownValue(fromControlName: string): any {
-    if (fromControlName == 'functionsRequiredId') {
+  getDropDownValue(row: string): any {
+    if (row == '# Functions Required') {
       return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '57955fe4-cede-4c81-8b00-d806193046d2')
     }
-  //   else if (fromControlName == 'technologyRatingId') {
-  //     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'd5ad90ec-4361-42dc-9c06-5e35114dd2db')
-  //   }
-  //   else if (fromControlName == 'businessCaseProcessId') {
-  //     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '12159b0c-c19c-4c04-b507-7d789feae7a6')
-  //   }
-  //   else if (fromControlName == 'manufacturingProcessId') {
-  //     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'b0a4469a-5808-414c-b686-3792681cc9f8')
-  //   }
-  //   else if (fromControlName == 'equipmentRatingId') {
-  //     return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '3f9fd31e-0640-4a47-985d-28637afdf121')
-  //   }
+
  }
   submitcost() {
     this.projectHubService.isFormChanged = false
     var mainObj = this.costfundingData
     var formValue = this.costForm.getRawValue()
-    mainObj.durationBaseCase= formValue.durationBaseCase,
-    mainObj.durationHighCase= formValue.durationHighCase,
-    mainObj.peopleFtemonthsRequiredBaseCase= formValue.peopleFtemonthsRequiredBaseCase,
-    mainObj.peopleFtemonthsRequiredHighCase= formValue.peopleFtemonthsRequiredHighCase,
-    mainObj.totalCapExBaseCase= formValue.totalCapExBaseCase,
-    mainObj.totalCapExHighCase= formValue.totalCapExHighCase,
-    mainObj.totalNonFteopExBaseCase= formValue.totalNonFteopExBaseCase,
-    mainObj.totalNonFteopExHighCase= formValue.totalNonFteopExHighCase,
-    mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null
-    this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(secondRes => {
-      this.projectHubService.isNavChanged.next(true)
-      this.projectHubService.submitbutton.next(true)
-      this.projectHubService.successSave.next(true)
-      this.projectHubService.toggleDrawerOpen('', '', [], '')
-    })
+    console.log(formValue)
+    if (formValue.durationBaseCase > formValue.durationHighCase || formValue.peopleFtemonthsRequiredBaseCase > formValue.peopleFtemonthsRequiredHighCase ||
+      formValue.totalCapExBaseCase > formValue.totalCapExHighCase || formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "The Base Case cannot be Higher than the High Case",
+          "message": "",
+          "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warning"
+          },
+          "actions": {
+              "confirm": {
+                  "show": true,
+                  "label": "OK",
+                  "color": "primary"
+              },
+              "cancel": {
+                  "show": false,
+                  "label": "Cancel"
+              }
+          },
+          "dismissible": true
+      }
+      console.log(comfirmConfig)
+      const alert = this.fuseAlert.open(comfirmConfig)
+      alert.afterClosed().subscribe(close => {
+        if (close == 'confirm') {
+          this.viewContent = true
+        }
+      })
+    }
+    else 
+    {
+      mainObj.durationBaseCase= formValue.durationBaseCase,
+      mainObj.durationHighCase= formValue.durationHighCase,
+      mainObj.peopleFtemonthsRequiredBaseCase= formValue.peopleFtemonthsRequiredBaseCase,
+      mainObj.peopleFtemonthsRequiredHighCase= formValue.peopleFtemonthsRequiredHighCase,
+      mainObj.totalCapExBaseCase= formValue.totalCapExBaseCase,
+      mainObj.totalCapExHighCase= formValue.totalCapExHighCase,
+      mainObj.totalNonFteopExBaseCase= formValue.totalNonFteopExBaseCase,
+      mainObj.totalNonFteopExHighCase= formValue.totalNonFteopExHighCase,
+      mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null
+      console.log("Main Cost Data",mainObj)
+      this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      })
+    }
+    
   }
+
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }

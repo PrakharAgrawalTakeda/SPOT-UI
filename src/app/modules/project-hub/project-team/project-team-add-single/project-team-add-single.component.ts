@@ -30,7 +30,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
   formInital: boolean = false
   constructor(private Router: Router, public projecthubservice: ProjectHubService, public auth: AuthService, public role: RoleService, private apiService: ProjectApiService, public fuseAlert: FuseConfirmationService) {
     this.projectTeamAddForm.valueChanges.subscribe(res => {
-      if (res.duration == null && res.percentTime == null && Object.keys(res.role).length == 0 && Object.keys(res.usersingle).length == 0) {
+      if (res.duration == null && res.percentTime == null && Object.keys(res.role || {}).length == 0 && Object.keys(res.usersingle || {}).length == 0) {
         this.formInital = false;
       }
       else {
@@ -103,7 +103,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
   submitProjectTeam() {
     var projectTeam = this.projectTeamAddForm.getRawValue();
     if (projectTeam.includeInCharter === false) {
-      if (Object.keys(this.projectTeamAddForm.controls.role.value).length > 0) {
+      if (Object.keys(this.projectTeamAddForm.controls.role.value || {}).length > 0) {
         if (this.projectTeamAddForm.controls.percentTime.value < 0 || this.projectTeamAddForm.controls.percentTime.value > 100) {
           var comfirmConfig: FuseConfirmationConfig = {
             "title": "Percent time value cannot be greater than 100 or smaller than 0",
@@ -192,8 +192,16 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                 includeInProposal: projectTeam.includeInProposal
               }
               this.apiService.addProjectTeam(mainObj).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  if (this.mode == 'Project-Charter') {
+                      this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      })
+                  }  else{
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  }
+
               })
             }
 
@@ -203,7 +211,7 @@ export class ProjectTeamAddSingleComponent implements OnInit {
       }
       else {
         var comfirmConfig: FuseConfirmationConfig = {
-          "title": "Only 10 can be selected at a time for Team Charter slide display.",
+          "title": "Please select a role",
           "message": "",
           "icon": {
             "show": true,

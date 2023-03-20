@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -11,6 +11,7 @@ import { ProjectApiService } from '../project-api.service';
   styleUrls: ['./cost.component.scss']
 })
 export class CostComponent implements OnInit {
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' |'Business-Case' = 'Project-Charter'
   costfundingData = {}
   costData = []
   id: string = ''
@@ -29,6 +30,7 @@ export class CostComponent implements OnInit {
   })
   cost: any;
   localcurrency: any;
+  Amount: any;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private authService: AuthService,
@@ -54,49 +56,88 @@ export class CostComponent implements OnInit {
       this.authService.lookupMaster().then((lookup: any) => {
         console.log("Cost Data", res.costData)
         this.cost = res
-        this.localcurrency = res.localCurrency
-        console.log(res.localcurrency)
+        console.log(res)
+        //if(res.localCurrency)
+        //{
+          this.localcurrency = res.localCurrency
+        
+          this.Amount = this.localcurrency.localCurrencyAbbreviation
+          
+        //}
+        console.log(this.Amount)
         this.costfundingData = res.costData
         this.projectHubService.lookUpMaster = lookup
-        this.costFundingForm.patchValue({
-          durationBaseCase: res.costData.durationBaseCase,
-          durationHighCase: res.costData.durationHighCase,
-          peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
-          peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
-          totalCapExBaseCase: res.costData.totalCapExBaseCase,
-          totalCapExHighCase: res.costData.totalCapExHighCase,
-          totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
-          totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
-          functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
-
-        })
-        this.costData = [{
-          category: 'Duration (Months)',
-          baseCase: 'durationBaseCase',
-          highCase: 'durationHighCase'
-        },
+        if(this.costfundingData != null)
         {
-          category: 'People (FTE Months)',
-          baseCase: 'peopleFtemonthsRequiredBaseCase',
-          highCase: 'peopleFtemonthsRequiredHighCase'
-        },
-        {
-          category: 'Total CAPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
-          baseCase: 'totalCapExBaseCase',
-          highCase: 'totalCapExHighCase'
-        },
-        {
-          category: 'Total non-FTE OPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
-          baseCase: 'totalNonFteopExBaseCase',
-          highCase: 'totalNonFteopExHighCase'
-        },
-        {
-          category: '# Functions Required',
-          baseCase: 'functionsRequiredId',
-          highCase: 'functionsRequiredId'
-        }]
-        this.costFundingForm.disable()
-        this.viewContent = true
+          this.costFundingForm.patchValue({
+            durationBaseCase: res.costData.durationBaseCase,
+            durationHighCase: res.costData.durationHighCase,
+            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
+            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
+            totalCapExBaseCase: res.costData.totalCapExBaseCase,
+            totalCapExHighCase: res.costData.totalCapExHighCase,
+            totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
+            totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
+            functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
+  
+          })
+        }
+          if(this.mode=='Project-Charter'){
+            this.costData = [{
+              category: 'Duration (Months)',
+              baseCase: 'durationBaseCase',
+              highCase: 'durationHighCase'
+            },
+            {
+              category: 'People (FTE Months)',
+              baseCase: 'peopleFtemonthsRequiredBaseCase',
+              highCase: 'peopleFtemonthsRequiredHighCase'
+            },
+            {
+              category: 'Total CAPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+              baseCase: 'totalCapExBaseCase',
+              highCase: 'totalCapExHighCase'
+            },
+            {
+              category: 'Total non-FTE OPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+              baseCase: 'totalNonFteopExBaseCase',
+              highCase: 'totalNonFteopExHighCase'
+            },
+            {
+              category: '# Functions Required',
+              baseCase: 'functionsRequiredId',
+              highCase: 'functionsRequiredId'
+            }]
+          }
+          if(this.mode=='Business-Case'){
+            this.costData = [{
+              category: 'Total CAPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+              baseCase: 'totalCapExBaseCase',
+              highCase: 'totalCapExHighCase',
+              curryearSpend: ''
+            },
+            {
+              category: 'Project Spend Start',
+              baseCase: 'peopleFtemonthsRequiredBaseCase',
+              highCase: 'peopleFtemonthsRequiredHighCase'
+            },
+            {
+              category: 'Asset in Service',
+              baseCase: 'peopleFtemonthsRequiredBaseCase',
+              highCase: 'peopleFtemonthsRequiredHighCase'
+            },
+            
+            {
+              category: 'Total non-FTE OPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
+              baseCase: 'totalNonFteopExBaseCase',
+              highCase: 'totalNonFteopExHighCase'
+            }]
+          }
+            this.costFundingForm.disable()
+            this.viewContent = true
+      
+        
+        
       })
     })
   }

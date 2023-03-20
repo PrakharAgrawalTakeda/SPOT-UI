@@ -12,33 +12,33 @@
 
     <div class="flex justify-between" *ngIf="mode== 'Normal'">
       <div *ngIf="baselineCount.baselineCount > 0; else zero">
-        <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        <h6 class="font-medium text-default text-md italic ml-4 mt-2">
           Baseline : {{baselineCount.baselineCount}}
         </h6>
       </div>
       <ng-template #zero>
-        <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+        <h6 class="font-medium text-default text-md italic ml-4 mt-2">
           Baseline : 0
         </h6>
       </ng-template>
 
       <div *ngIf="log != ''; else null">
 
-        <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
 
-          <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+          <h6 class="font-medium text-default text-md italic ml-4 mt-2">
             Last Baseline: {{log.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
         </div>
       </div>
       <ng-template #null>
-        <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+        <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
 
-          <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+          <h6 class="font-medium text-default text-md italic ml-4 mt-2">
             Last Baseline: </h6>
         </div>
       </ng-template>
 
-      <div class="font-medium text-secondary text-md italic mt-2" style="margin-right:3rem !important;">
+      <div class="font-medium text-default text-md italic mt-2" style="margin-right:3rem !important;">
         <form [formGroup]="localIncludedItems">
           <mat-slide-toggle class="primary slider-adjust" formControlName="toggle"
             (checked)="projecthubservice.includeClosedItems.schedule.value" (change)="toggleSchedule($event)">
@@ -98,8 +98,8 @@
       <ngx-datatable
         class="datatable-schedule-74 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
-        [scrollbarV]="false" [rowClass]="getRowClass">
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal' || mode =='Business-Case'">
+        [scrollbarV]="false" [rowClass]="getRowClass" >
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal'">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
               class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}" *ngIf="row.scheduleUniqueId != 'new'">
@@ -109,6 +109,12 @@
             <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
               svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
           </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.1" *ngIf="optionType=='recommended-option' && mode!= 'Project-Close-Out' && mode!= 'Project-Charter' && mode!= 'Normal'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                         svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+            </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode== 'Project-Close-Out'" [sortable]="false">
@@ -666,10 +672,10 @@
                 <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
               </a>
               <form [formGroup]="baselineLogForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)"
-                class="p-2 overflow-hidden">
+                class="p-2">
                 <div class="flex items-center justify-between">
                   <mat-slide-toggle [matTooltip]="this.baselineLogForm.controls[rowIndex]['controls']['includeInCloseout'].disabled ? 'Only 10 can be selected at a time in the project close out report' : null"
-                  (change)="disabler2()"  class="h-full overflow-hidden" formControlName="includeInCloseout">
+                  (change)="disabler2()"  class="h-full" formControlName="includeInCloseout">
                   </mat-slide-toggle>
                 </div>
               </form>
@@ -716,36 +722,36 @@
   </div>
 
   <div class="flex justify-start gap-40 items-center">
-    <div class="font-medium text-secondary text-md italic mt-2">
-      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+    <div class="font-medium text-default text-md italic mt-2">
+      <h6 class="font-medium text-default text-md italic ml-4 mt-2">
         Log ID : {{baselinelogdetails.logId}}
       </h6>
     </div>
 
-    <div class="font-medium text-secondary text-md italic mt-2">
+    <div class="font-medium text-default text-md italic mt-2">
 
-      <h6 class="font-medium text-secondary text-md italic ml-2 mt-2">
+      <h6 class="font-medium text-default text-md italic ml-2 mt-2">
         Baseline : {{baselinelogdetails.baselineCount}} </h6>
     </div>
 
 
-    <div class="font-medium text-secondary text-md italic mt-2">
+    <div class="font-medium text-default text-md italic mt-2">
 
-      <h6 class="font-medium text-secondary text-md italic ml-2 mt-2">
+      <h6 class="font-medium text-default text-md italic ml-2 mt-2">
         Baseline Date : {{baselinelogdetails.modifiedDate | date:'dd-MMM-yyyy'}} </h6>
 
     </div>
 
-    <div class="font-medium text-secondary text-md italic mt-2">
+    <div class="font-medium text-default text-md italic mt-2">
 
-      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+      <h6 class="font-medium text-default text-md italic ml-4 mt-2">
         Baseline Set By : {{getUserName(baselinelogdetails.teamMemberAdId)}}</h6>
 
     </div>
 
-    <div class="font-medium text-secondary text-md italic mt-2">
+    <div class="font-medium text-default text-md italic mt-2">
 
-      <h6 class="font-medium text-secondary text-md italic ml-4 mt-2">
+      <h6 class="font-medium text-default text-md italic ml-4 mt-2">
         Justification : {{baselinelogdetails.baselineComment}} </h6>
 
     </div>

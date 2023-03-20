@@ -64,6 +64,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getProjectRequirements(projectid) {
+      var url = GlobalVariables.apiurl + "BenefitsAndRequirements/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getGeneralInfoDataWizzard(projectid, callLocation) {
       var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard="+callLocation
       const abc$ = this.http.get(url)
@@ -113,7 +119,7 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  
+
   async addAskNeed(body){
     var link = GlobalVariables.apiurl+"AskNeed"
     const abc$ = this.http.post(link,body)
@@ -247,6 +253,12 @@ export class ProjectApiService {
   }
   async deleteRiskIssueByOption(id: string, optionId: string, projectId: string) {
       var link = GlobalVariables.apiurl + "BusinessCase/RiskIssue/"+ projectId+ "/"  +optionId+"/" + id
+      const abc$ = this.http.delete(link)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async deleteScheduleForOption(id: string, optionId: string, projectId: string) {
+      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/"+ projectId+ "/"  +optionId+"/" + id
       const abc$ = this.http.delete(link)
       const response = await lastValueFrom(abc$)
       return response
@@ -576,6 +588,12 @@ export class ProjectApiService {
     const abc$ = this.http.put(url, body)
     const response = await lastValueFrom(abc$)
     return response
+  }
+  async editLessonLearnedTakeaway( projectid, takeaway) {
+      var url = GlobalVariables.apiurl + "LessonsLearned/" + projectid + "?takeaways=" + takeaway
+      const abc$ = this.http.patch(url, projectid)
+      const response = await lastValueFrom(abc$)
+      return response
   }
   async getTOPS(projectid: string) {
     var url = GlobalVariables.apiurl + "TOPS/" + projectid
