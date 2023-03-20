@@ -128,7 +128,8 @@
         </div>
         <div class="w-full " *ngIf="viewElementChecker('projectDescription')">
           <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
-            [label]="'Problem Description / Present Situation / Submission Description'">
+            [label]="'Problem Description / Present Situation / Submission Description'"
+            [showHint]="callLocation == 'BusinessCase'" [hint]="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
           </spot-textarea>
         </div>
         <div class="w-full " *ngIf="viewElementChecker('StrategicRationale')">

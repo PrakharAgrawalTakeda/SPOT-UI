@@ -611,5 +611,12 @@ export class ProjectApiService {
     return response
   }
 
+  async editLocalAttributes(projectid, body) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/" + projectid
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 
