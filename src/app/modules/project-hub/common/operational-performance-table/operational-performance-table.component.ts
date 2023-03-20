@@ -14,7 +14,7 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -53,14 +53,30 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   dataloader() {
     // if(this.mode != 'Normal')
     // {
-    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getprojectviewdata(this.id).then((res: any) => {
-      this.projectViewDetails = res
-    for (var i of this.projectViewDetails.overallPerformace) {
-      i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
-    }
-    this.viewContent = true
-  })
+      if(this.mode != 'Business-Case'){
+          this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+          this.apiService.getprojectviewdata(this.id).then((res: any) => {
+              this.projectViewDetails = res
+              for (var i of this.projectViewDetails.overallPerformace) {
+                  i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
+              }
+              this.viewContent = true
+              this.initializationComplete = false
+              this.initializationComplete = true
+          })
+      }else{
+          this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+          this.apiService.getprojectviewdata(this.id).then((res: any) => {
+              this.projectViewDetails = res
+              for (var i of this.projectViewDetails.overallPerformace) {
+                  i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
+              }
+              this.viewContent = true
+              this.initializationComplete = false
+              this.initializationComplete = true
+          })
+      }
+
 // }
 // else
 //   {
@@ -78,8 +94,7 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     //         this.projectViewDetails = res
     //   })
     // }
-    this.initializationComplete = false
-    this.initializationComplete = true
+
   }
   getLookUpName(lookUpId: string): string {
     return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''
