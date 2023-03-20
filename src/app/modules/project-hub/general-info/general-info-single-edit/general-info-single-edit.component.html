@@ -131,7 +131,7 @@
                 [label]="'Business Case Author'" name="BCAuthor" [showLabel]="true">
             </spot-singleselect-user-autocomplete>
             <spot-multiselect-user-autocomplete formControlName="AdditionalAuthor"
-                *ngIf="viewElementChecker('AdditionalAuthor')" [label]="'Additional Authors / Contributors'"
+                *ngIf="viewElementChecker('AdditionalAuthor')" [placeholder]="'Additional Authors / Contributors'" [label]="'Additional Authors / Contributors'"
                 name="AdditionalAuthor" [showLabel]="true">
             </spot-multiselect-user-autocomplete>
             <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
@@ -160,7 +160,7 @@
                 [label]="'Target End State'" [placeholder]="'Target End State'">
             </spot-textarea>
             <spot-textarea formControlName="StrategicRationale" *ngIf="viewElementChecker('StrategicRationale')"
-                name="StrategicRationale" [label]="'Strategic Rationale'" [placeholder]="'Strategic Rationale'">
+                name="StrategicRationale" [label]="'Strategic Rationale'" [placeholder]="'Why solve the problem now?'">
             </spot-textarea>
             <spot-textarea formControlName="RiskImpact" *ngIf="viewElementChecker('RiskImpact')" name="RiskImpact"
                 [label]="'Risk / Impact of Doing Nothing'" [placeholder]="'Risk / Impact of Doing Nothing'">
