@@ -16,6 +16,7 @@ export class CostComponent implements OnInit {
   costData = []
   id: string = ''
   costEditType: string = 'CostEdit';
+  costBCbulkEditType: string = 'CostBCEdit';
   viewContent = false
   costFundingForm = new FormGroup({
     durationBaseCase: new FormControl(''),
@@ -26,7 +27,10 @@ export class CostComponent implements OnInit {
     totalCapExHighCase: new FormControl(''),
     totalNonFteopExBaseCase: new FormControl(''),
     totalNonFteopExHighCase: new FormControl(''),
-    functionsRequiredId: new FormControl(null)
+    functionsRequiredId: new FormControl(null),
+    currentYearPlannedSpend: new FormControl(''),
+    projectSpendStart: new FormControl(''),
+    apisdate: new FormControl('')
   })
   cost: any;
   localcurrency: any;
@@ -78,7 +82,10 @@ export class CostComponent implements OnInit {
             totalCapExHighCase: res.costData.totalCapExHighCase,
             totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
             totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
-            functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : ''
+            functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
+            currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
+            projectSpendStart: res.costData.projectSpendStart,
+            apisdate: res.costData.apisdate
   
           })
         }
@@ -114,23 +121,26 @@ export class CostComponent implements OnInit {
               category: 'Total CAPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
               baseCase: 'totalCapExBaseCase',
               highCase: 'totalCapExHighCase',
-              curryearSpend: ''
+              curryearSpend: 'currentYearPlannedSpend'
             },
             {
               category: 'Project Spend Start',
-              baseCase: 'peopleFtemonthsRequiredBaseCase',
-              highCase: 'peopleFtemonthsRequiredHighCase'
+              baseCase: 'projectSpendStart',
+              highCase: 'projectSpendStart',
+              curryearSpend: 'currentYearPlannedSpend'
             },
             {
               category: 'Asset in Service',
-              baseCase: 'peopleFtemonthsRequiredBaseCase',
-              highCase: 'peopleFtemonthsRequiredHighCase'
+              baseCase: 'apisdate',
+              highCase: 'apisdate',
+              curryearSpend: 'currentYearPlannedSpend'
             },
             
             {
               category: 'Total non-FTE OPEX'+' (' + this.localcurrency.localCurrencyAbbreviation + ')',
               baseCase: 'totalNonFteopExBaseCase',
-              highCase: 'totalNonFteopExHighCase'
+              highCase: 'totalNonFteopExHighCase',
+              curryearSpend: 'currentYearPlannedSpend'
             }]
           }
             this.costFundingForm.disable()

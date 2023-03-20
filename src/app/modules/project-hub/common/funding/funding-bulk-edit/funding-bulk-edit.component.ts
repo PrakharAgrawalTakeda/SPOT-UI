@@ -85,11 +85,11 @@ export class FundingBulkEditComponent {
             fundingIntheplan: new FormControl(i.fundingIntheplan),
             fundingNotes: new FormControl(i.fundingNotes),
             fundingSourceId: new FormControl(i.fundingSourceId),
-            includeInCharter: new FormControl(i.includeInCharter),
+            includeInCharter: new FormControl(this.fundingdata.includeInCharter),
             fundingSourceName: new FormControl(i.fundingSourceName),
             fundingTypeId: new FormControl(i.fundingTypeId),
             fundingUniqueId: new FormControl(i.fundingUniqueId),
-            includeInBusinessCase: new FormControl(this.fundingdata.includeInBusinessCase),
+            includeInBusinessCase: new FormControl(i.includeInBusinessCase),
             projectId: new FormControl(this.projecthubservice.projectid)
           }))
           //this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
@@ -207,19 +207,38 @@ getPO(): string {
   disabler() {
     var formValue = this.FundingForm.getRawValue()
     if (formValue.length > 0) {
+if(this.mode == 'Project-Charter')
+{
+  if (formValue.filter(x => x.includeInCharter == true).length < 3) {
+    for (var i of this.FundingForm.controls) {
+      i['controls']['includeInCharter'].enable()
+    }
+  }
+  else {
+    for (var i of this.FundingForm.controls) {
+      if (i['controls']['includeInCharter'].value != true) {
+        i['controls']['includeInCharter'].disable()
+      }
+    }
+  }
+}
 
-      if (formValue.filter(x => x.includeInCharter == true).length < 3) {
-        for (var i of this.FundingForm.controls) {
-          i['controls']['includeInCharter'].enable()
-        }
+if(this.mode == 'Business-Case')
+{
+  if (formValue.filter(x => x.includeInBusinessCase == true).length < 2) {
+    for (var i of this.FundingForm.controls) {
+      i['controls']['includeInBusinessCase'].enable()
+    }
+  }
+  else {
+    for (var i of this.FundingForm.controls) {
+      if (i['controls']['includeInBusinessCase'].value != true) {
+        i['controls']['includeInBusinessCase'].disable()
       }
-      else {
-        for (var i of this.FundingForm.controls) {
-          if (i['controls']['includeInCharter'].value != true) {
-            i['controls']['includeInCharter'].disable()
-          }
-        }
-      }
+    }
+  }
+}
+
     }
   }
 
@@ -350,10 +369,22 @@ getPO(): string {
     }
     else {
       this.apiService.bulkeditFunding(this.submitObj, this.projecthubservice.projectid).then(resp => {
-        this.projecthubservice.isFormChanged = false
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+        if (this.mode == 'Project-Charter') {
+          this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+              this.projecthubservice.isFormChanged = false
+              this.projecthubservice.isNavChanged.next(true)
+              this.projecthubservice.submitbutton.next(true)
+              this.projecthubservice.successSave.next(true)
+              this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          })
+        }
+          else{
+            this.projecthubservice.isFormChanged = false
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+          }
+        
       })
     }
   }
