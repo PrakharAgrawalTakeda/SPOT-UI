@@ -50,7 +50,7 @@
                 <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value) }}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="2" [resizeable]="false"
+        <ngx-datatable-column name="Details/Migration" prop="mitigation" [flexGrow]="2" [resizeable]="false"
             [sortable]="mode == 'Normal'" [draggable]="false">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value }}</p>
