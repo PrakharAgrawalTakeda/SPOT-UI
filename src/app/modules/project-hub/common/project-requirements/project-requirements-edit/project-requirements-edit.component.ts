@@ -177,7 +177,7 @@ export class ProjectRequirementsEditComponent {
         mainObj.impactedProductsName = formValue.impactedProductsName
         mainObj.functionGroupID = formValue.functionGroupID
         mainObj.functionsRequiredId = formValue.functionsRequiredId
-        this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+        this.apiService.editProjectRequirements(this.projectHubService.projectid, mainObj).then(res => {
             this.projectHubService.isNavChanged.next(true)
             this.projectHubService.submitbutton.next(true)
             this.projectHubService.successSave.next(true)

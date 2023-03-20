@@ -1919,10 +1919,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 // this.viewContent = false
                 // this.viewBaseline = false
                 // this.viewBaselineLogs = false
-                this.projecthubservice.isNavChanged.next(true)
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.successSave.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                // this.projecthubservice.isNavChanged.next(true)
+                // this.projecthubservice.submitbutton.next(true)
+                // this.projecthubservice.successSave.next(true)
+                // this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 //this.projecthubservice.successSave.next(true)
                 //this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 //this.projecthubservice.submitbutton.next(true)
