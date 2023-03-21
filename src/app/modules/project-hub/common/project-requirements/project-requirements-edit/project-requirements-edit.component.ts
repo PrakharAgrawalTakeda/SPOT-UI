@@ -19,7 +19,6 @@ export class ProjectRequirementsEditComponent {
     lookupdata: any = [];
     local: any = [];
     noFunctionsRequiredOptions = ["1", "2", "3", "More than 3"]
-    yesNoOptions = ["Yes", "No"]
     projectRequirementsForm = new FormGroup({
         projectID: new FormControl(''),
         financialDoesApply: new FormControl(false),
@@ -189,5 +188,8 @@ export class ProjectRequirementsEditComponent {
     }
     getYesNo(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'c58fb456-3901-4677-9ec5-f4eada7158e6')
+    }
+    getFunctionsRequired(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '57955fe4-cede-4c81-8b00-d806193046d2')
     }
 }

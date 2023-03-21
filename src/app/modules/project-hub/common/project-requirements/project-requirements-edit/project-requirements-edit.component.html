@@ -15,8 +15,9 @@
                      [placeholder]="'Choose a date'">
     </spot-input-date>
     <spot-select formControlName="shutdownRequired"  [label]="'# Functions Required'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="noFunctionsRequiredOptions">
+                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
+                 [dropDownArray]="getFunctionsRequired()" [idPointer]="'lookUpId'"
+                 [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
     </spot-select>
     <mat-form-field class="w-full" [floatLabel]="'always'">
         <mat-label>Estimated FTEs</mat-label>
