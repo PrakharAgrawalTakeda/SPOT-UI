@@ -53,11 +53,12 @@ export class FundingComponent implements OnInit, OnChanges {
   dataloader() {
   
     console.log("ProjectHUBSERVICE",this.projecthubservice.projectid)
-    console.log("THIS>ID",this._Activatedroute.parent.parent.snapshot.paramMap.get("id"))
-    if(this.mode == 'Business-Case')
+    console.log("THIS>ID",this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id"))
+    this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
+    if(this.optionType == 'recommended-option')
     {
       console.log("BUSINESS CASE")
-      this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
+      this.apiService.getCostFunding(this.id).then((res: any) => {
         this.authService.lookupMaster().then((lookup: any) => {
           this.portApiService.getfilterlist().then((po: any) => {
             this.fundingSourceData = po
@@ -84,7 +85,7 @@ export class FundingComponent implements OnInit, OnChanges {
       this.initializationComplete = false
       this.initializationComplete = true
     }
-    else{
+    if(this.mode == 'Project-Charter') {
       console.log("PROJECTCHARTER")
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getCostFunding(this.id).then((res: any) => {

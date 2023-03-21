@@ -12,14 +12,10 @@
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
                     <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" 
-                    *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && mode== 'Business-Case'" 
+                    *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && optionType== 'recommended-option'" 
                     (click)="projecthubservice.toggleDrawerOpen(fundingBCbulkEditType, 'new', [], id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
-                    <!-- <button class="ml-4 text-primary bg-gray-200" *ngIf="editable" mat-flat-button [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen(addSingle, 'new', fundingdata , projectid)">
-                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-                    </button> -->
                 </div>
             </div>
         </div>
@@ -73,7 +69,7 @@
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
     
                         </a> -->
-                        <a href="javascript:void(0)" title="Delete Single" *ngIf="editable"
+                        <a href="javascript:void(0)" title="Delete Single" *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields"
                             (click)="deleteFunding(row.fundingUniqueId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>

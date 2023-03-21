@@ -636,5 +636,12 @@ export class ProjectApiService {
     return response
   }
 
+  async getBusinessCaseCostFunding(projectid, optionid) {
+    var url = GlobalVariables.apiurl + "BusinessCaseCostFunding/"+optionid+"/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 
