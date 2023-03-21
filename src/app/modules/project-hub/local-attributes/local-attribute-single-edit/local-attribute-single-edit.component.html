@@ -16,11 +16,11 @@
                                 [mode]="'toggle'" [label]=item.name>
                             </spot-toggle>
                         </div>
-                        <div #textArea>
+                        <!-- <div #textArea> -->
                         <spot-input (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'6'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
                             [label]=item.name [placeholder]=item.name>
                         </spot-input>
-                        </div>
+                        <!-- </div> -->
                         <div *ngIf="!item.isMulti" #Lookup>
                         <spot-singleselect-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
                             name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
@@ -34,25 +34,25 @@
                             [dropDownArray]="getLookup(item.lookupParentId)">
                         </spot-multiselect-autocomplete>
                         </div>
-                        <div #number>
+                        <!-- <div #number> -->
                         <spot-input (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'4'" class="w-full"
                             formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name [decimalCount] = item.linesCount [inputType] = "'Number'" [placeholder]=item.name>
                         </spot-input>
-                        </div>
-                        <div #Date>
+                        <!-- </div> -->
+                        <!-- <div #Date> -->
                         <spot-input-date (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'2'" class="w-full read-only"
                             formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name
                             [placeholder]=item.name>
                         </spot-input-date>
-                        </div>
+                        <!-- </div> -->
                         <div *ngIf="!item.isMulti" #people>
                         <spot-singleselect-user-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'5'" formControlName={{item.uniqueId}} [label]=item.name
-                            name={{item.uniqueId}} [showLabel]="true">
+                            name={{item.uniqueId}} [showLabel]="true" [placeholder]="'Last Name, First Name'">
                         </spot-singleselect-user-autocomplete>
                         </div>
                         <div *ngIf="item.isMulti" #multiPeople>
                         <spot-multiselect-user-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
-                            [label]=item.name name={{item.uniqueId}} [showLabel]="true">
+                            [label]=item.name name={{item.uniqueId}} [showLabel]="true" [placeholder]="'Last Name, First Name'">
                         </spot-multiselect-user-autocomplete>
                         </div>
                     </div>
