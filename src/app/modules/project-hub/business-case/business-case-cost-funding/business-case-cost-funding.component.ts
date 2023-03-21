@@ -32,6 +32,7 @@ this.dataloader()
 
 dataloader() {
   this.option = this._Activatedroute.parent.snapshot.routeConfig.path
+  console.log(this.option)
 // this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
 // this.apiService.getCostFunding(this.id).then((res: any) => {
 // this.cost = res.costData

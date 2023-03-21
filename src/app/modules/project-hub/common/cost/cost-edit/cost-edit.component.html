@@ -63,8 +63,8 @@
 
 
 
-    <form class="w-full p-[20px]" [formGroup]="costForm" (ngSubmit)="submitcost()"  *ngIf="mode=='Business-Case'">
-        <div class="h-[84vh] overflow-hidden">
+    <form class="w-full p-[20px]" [formGroup]="costForm" (ngSubmit)="submitcost()"  *ngIf="mode!='Project-Charter'">
+        <div class="h-[84vh]">
             <!--Enter Element here-->
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costDataBC"
@@ -85,7 +85,7 @@
                         </spot-singleselect-autocomplete>
                         <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
                         </spot-input>
-                        <spot-input-date class="w-full read-only"
+                        <spot-input-date class="w-full"
                              formControlName="{{value}}" [showLabel]="false" *ngIf="row.category.includes('Project Spend Start') || row.category.includes('Asset in Service')"></spot-input-date>
                     </ng-template>
                 </ngx-datatable-column>
@@ -94,6 +94,10 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total') && row.category != '# Functions Required'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
                         </spot-input>
+                        <spot-toggle class="w-full" *ngIf="row.category.includes('Project Spend Start')" formControlName="isProjectSpentNa" [label]="'N/A'">
+                </spot-toggle>
+                <spot-toggle class="w-full" *ngIf="row.category.includes('Asset in Service')" formControlName="assetInServiceNa" [label]="'N/A'">
+                </spot-toggle>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Current Year Planned Spend" prop="curryearSpend" [resizeable]="false" [sortable]="false"

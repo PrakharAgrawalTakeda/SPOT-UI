@@ -6,6 +6,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
 import { ProjectApiService } from '../../project-api.service';
 
 @Component({
@@ -14,7 +15,7 @@ import { ProjectApiService } from '../../project-api.service';
   styleUrls: ['./cost-edit.component.scss']
 })
 export class CostEditComponent {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Project-Charter'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   optionId: string = ''
   costfundingData: any = {}
@@ -54,13 +55,13 @@ export class CostEditComponent {
   {
     category: 'Project Spend Start',
     baseCase: 'projectSpendStart',
-    highCase: 'projectSpendStart',
+    highCase: 'isProjectSpentNa',
     curryearSpend: 'currentYearPlannedSpend'
   },
   {
     category: 'Asset in Service',
     baseCase: 'apisdate',
-    highCase: 'apisdate',
+    highCase: 'assetInServiceNa',
     curryearSpend: 'currentYearPlannedSpend'
   },
   
@@ -84,7 +85,9 @@ export class CostEditComponent {
     functionsRequiredId: new FormControl(null),
     currentYearPlannedSpend: new FormControl(''),
     projectSpendStart: new FormControl(''),
-    apisdate: new FormControl('')
+    apisdate: new FormControl(''),
+    assetInServiceNa: new FormControl(false),
+    isProjectSpentNa: new FormControl(false)
   })
 
   localcurrency: any;
@@ -106,43 +109,158 @@ export class CostEditComponent {
     this.dataloader()
   }
   dataloader() {
-    //this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+    this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+if(this.mode == 'Project-Charter')
+{
+  this.apiService.getCostFunding(this.projectHubService.projectid).then((res: any) => {
+    this.authService.lookupMaster().then((lookup: any) => {
+      console.log(this.costDataBC)
+      console.log("Cost Data", res)
+      this.costfundingData = res.costData
+      this.localcurrency = res.localCurrency
+      this.currency = this.localcurrency.localCurrencyAbbreviation
+      //this.CostData = res
+      console.log(lookup)
+      //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
+      if(this.costfundingData != null)
+      {
+      this.costForm.patchValue({
+        durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+        durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+        peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+        peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+        totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+        totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+        totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+        totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
+        functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
+        currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+        projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+    assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+    isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
-      this.apiService.getCostFunding(this.projectHubService.projectid).then((res: any) => {
-        this.authService.lookupMaster().then((lookup: any) => {
-          console.log(this.costDataBC)
-          console.log("Cost Data", res)
-          this.costfundingData = res.costData
-          this.localcurrency = res.localCurrency
-          this.currency = this.localcurrency.localCurrencyAbbreviation
-          //this.CostData = res
-          console.log(lookup)
-          //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
-          if(this.costfundingData != null)
-          {
-          this.costForm.patchValue({
-            durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
-            durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
-            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
-            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
-            totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
-            totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
-            totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
-            totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
-            functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
-            currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-            projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-            apisdate: res.costData.apisdate ? res.costData.apisdate : null
-  
-          })
-        }
-          console.log(this.costForm.getRawValue())
-          this.viewContent = true
-        })
       })
+    }
+      console.log(this.costForm.getRawValue())
+      this.viewContent = true
+    })
+  })
+}
 
+if (this.optionType == 'recommended-option') {
+  this.apiService.getCostFunding(this.projectHubService.projectid).then((res: any) => {
+    this.authService.lookupMaster().then((lookup: any) => {
+      console.log(this.costDataBC)
+      console.log("Cost Data", res)
+      this.costfundingData = res.costData
+      this.localcurrency = res.localCurrency
+      this.currency = this.localcurrency.localCurrencyAbbreviation
+      //this.CostData = res
+      console.log(lookup)
+      //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
+      if(this.costfundingData != null)
+      {
+      this.costForm.patchValue({
+        durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+        durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+        peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+        peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+        totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+        totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+        totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+        totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
+        functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
+        currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+        projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+        assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+        isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
-    
+      })
+    }
+      console.log(this.costForm.getRawValue())
+      this.viewContent = true
+    })
+  })  
+}
+
+if (this.optionType == 'option-2') {
+  this.optionId = GlobalBusinessCaseOptions.OPTION_2
+      this.apiService.getBusinessCaseCostFunding(this.projectHubService.projectid, this.optionId).then((res: any) => {
+    this.authService.lookupMaster().then((lookup: any) => {
+      console.log(this.costDataBC)
+      console.log("Cost Data", res)
+      this.costfundingData = res.costData
+      this.localcurrency = res.localCurrency
+      this.currency = this.localcurrency.localCurrencyAbbreviation
+      //this.CostData = res
+      console.log(lookup)
+      //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
+      if(this.costfundingData != null)
+      {
+      this.costForm.patchValue({
+        durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+        durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+        peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+        peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+        totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+        totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+        totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+        totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
+        functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
+        currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+        projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+        assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+        isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
+
+      })
+    }
+      console.log(this.costForm.getRawValue())
+      this.viewContent = true
+    })
+  })  
+}
+
+if (this.optionType == 'option-3') {
+  this.optionId = GlobalBusinessCaseOptions.OPTION_3
+      this.apiService.getBusinessCaseCostFunding(this.projectHubService.projectid, this.optionId).then((res: any) => {
+    this.authService.lookupMaster().then((lookup: any) => {
+      console.log(this.costDataBC)
+      console.log("Cost Data", res)
+      this.costfundingData = res.costData
+      this.localcurrency = res.localCurrency
+      this.currency = this.localcurrency.localCurrencyAbbreviation
+      //this.CostData = res
+      console.log(lookup)
+      //console.log('Function RequiredValidator', res.costData.functionsRequiredId)
+      if(this.costfundingData != null)
+      {
+      this.costForm.patchValue({
+        durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+        durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+        peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+        peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+        totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+        totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+        totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+        totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
+        functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
+        currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+        projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+        assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+        isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
+
+      })
+    }
+      console.log(this.costForm.getRawValue())
+      this.viewContent = true
+    })
+  })  
+}
+      
   }
   getDropDownValue(row: string): any {
     if (row == '# Functions Required') {
@@ -199,7 +317,9 @@ export class CostEditComponent {
       mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
       mainObj.apisdate= formValue.apisdate,
       mainObj.projectSpendStart= formValue.projectSpendStart,
-      mainObj.currentYearPlannedSpend= formValue.currentYearPlannedSpend
+      mainObj.currentYearPlannedSpend= formValue.currentYearPlannedSpend,
+      mainObj.assetInServiceNa= formValue.assetInServiceNa,
+      mainObj.isProjectSpentNa= formValue.isProjectSpentNa
       console.log("Main Cost Data",mainObj)
       this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
         if (this.mode == 'Project-Charter') {
