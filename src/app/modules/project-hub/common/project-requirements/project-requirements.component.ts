@@ -62,6 +62,7 @@ export class ProjectRequirementsComponent implements OnInit, OnDestroy {
         localCurrencyAbbreviation: new FormControl(''),
         impactedProductsName: new FormControl(''),
         functionGroupID: new FormControl(''),
+        functionsRequiredId: new FormControl(''),
     })
     formFieldHelpers: any
 
@@ -155,6 +156,10 @@ export class ProjectRequirementsComponent implements OnInit, OnDestroy {
             localCurrencyAbbreviation: response.localCurrencyAbbreviation,
             impactedProductsName: response.impactedProductsName,
             functionGroupID: response.functionGroupID,
+            functionsRequiredId: this.getLookupName(response.functionsRequiredId)
         })
+    }
+    getLookupName(lookUpId: string): string {
+        return lookUpId && lookUpId != '' ? this.lookUpData.find(x => x.lookUpId == lookUpId).lookUpName : ''
     }
 }
