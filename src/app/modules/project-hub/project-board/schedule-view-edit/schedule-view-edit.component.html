@@ -7,7 +7,7 @@
     </div>
 </div>
 <form class="w-full overflow-y-hidden form-ask-need" [formGroup]="scheduleForm" (ngSubmit)="submitschedule()">
-    <div class="h-[77vh] overflow-y-hidden">
+    <div class="h-[77vh] overflow-x-hidden  pr-3">
         <div *ngIf="viewElementChecker('milestone')">
             <spot-textarea formControlName="milestone" name="milestone"
                 [label]="(this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Milestone (Execution Start - ...)' : (this.schedule.milestoneType == 2 ? 'Milestone (Execution End - ...)' : 'Milestone')) : 'Milestone')"
