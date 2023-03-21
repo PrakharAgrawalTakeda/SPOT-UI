@@ -337,7 +337,7 @@ if(this.mode == 'Project-Charter')
   }
 }
 
-if(this.mode == 'Business-Case')
+if(this.optionType == 'recommended-option' || this.optionType == 'option-2' || this.optionType == 'option-3')
 {
   if (formValue.filter(x => x.includeInBusinessCase == true).length < 2) {
     for (var i of this.FundingForm.controls) {
@@ -359,22 +359,87 @@ if(this.mode == 'Business-Case')
 
   changeChecker() {
     var formValue = this.FundingForm.getRawValue()
-    formValue.length > 0 ? this.submitObj = formValue.map(x => {
-      return {
-        fundingAmount: (x.fundingAmount),
-          fundingAmountFxconv: x.fundingAmountFxconv == "" || x.fundingAmountFxconv == " " ? null :x.fundingAmountFxconv,
-          fundingIntheplan: x.fundingIntheplan,
-          fundingNotes: x.fundingNotes,
-          fundingSourceId: x.fundingSourceId,
-          includeInCharter: x.includeInCharter,
-          fundingSourceName: x.fundingSourceName,
-          fundingTypeId: x.fundingTypeId,
-          fundingUniqueId: x.fundingUniqueId,
-          includeInBusinessCase: x.includeInBusinessCase,
-          projectId: x.projectId
-      }
-    }) : this.submitObj = []
+    if(this.mode == 'Project-Charter' || this.optionType == 'recommended-option')
+    {
+      formValue.length > 0 ? this.submitObj = formValue.map(x => {
+        return {
+          fundingAmount: (x.fundingAmount),
+            fundingAmountFxconv: x.fundingAmountFxconv == "" || x.fundingAmountFxconv == " " ? null :x.fundingAmountFxconv,
+            fundingIntheplan: x.fundingIntheplan,
+            fundingNotes: x.fundingNotes,
+            fundingSourceId: x.fundingSourceId,
+            includeInCharter: x.includeInCharter,
+            fundingSourceName: x.fundingSourceName,
+            fundingTypeId: x.fundingTypeId,
+            fundingUniqueId: x.fundingUniqueId,
+            includeInBusinessCase: x.includeInBusinessCase,
+            projectId: x.projectId
+        }
+      }) : this.submitObj = []
+    }
+    if(this.optionType == 'option-2')
+    {
+      this.optionId = GlobalBusinessCaseOptions.OPTION_2
+      formValue.length > 0 ? this.submitObj = formValue.map(x => {
+        return {
+          fundingAmount: (x.fundingAmount),
+            fundingAmountFxconv: x.fundingAmountFxconv == "" || x.fundingAmountFxconv == " " ? null :x.fundingAmountFxconv,
+            fundingIntheplan: x.fundingIntheplan,
+            fundingNotes: x.fundingNotes,
+            fundingSourceId: x.fundingSourceId,
+            businessOptionId: this.optionId,
+            fundingSourceName: x.fundingSourceName,
+            fundingTypeId: x.fundingTypeId,
+            fundingUniqueId: x.fundingUniqueId,
+            includeInBusinessCase: x.includeInBusinessCase,
+            projectId: x.projectId
+        }
+      }) : this.submitObj = []
+    }
+    if(this.optionType == 'option-3')
+    {
+      this.optionId = GlobalBusinessCaseOptions.OPTION_3
+      formValue.length > 0 ? this.submitObj = formValue.map(x => {
+        return {
+          fundingAmount: (x.fundingAmount),
+            fundingAmountFxconv: x.fundingAmountFxconv == "" || x.fundingAmountFxconv == " " ? null :x.fundingAmountFxconv,
+            fundingIntheplan: x.fundingIntheplan,
+            fundingNotes: x.fundingNotes,
+            fundingSourceId: x.fundingSourceId,
+            businessOptionId: this.optionId,
+            fundingSourceName: x.fundingSourceName,
+            fundingTypeId: x.fundingTypeId,
+            fundingUniqueId: x.fundingUniqueId,
+            includeInBusinessCase: x.includeInBusinessCase,
+            projectId: x.projectId
+        }
+      }) : this.submitObj = []
+    }
+
   }
+
+  // "businessFundingUniqueId": "string",
+  //   "businessOptionId": "string",
+  //   "projectId": "string",
+  //   "fundingTypeId": "string",
+  //   "fundingSourceId": "string",
+  //   "fundingIntheplan": true,
+  //   "fundingAmount": 0,
+  //   "fundingNotes": "string",
+  //   "includeInBusinessCase": true,
+  //   "fundingAmountFxconv": 0
+
+  // "fundingUniqueId": "string",
+  // "projectId": "string",
+  // "fundingTypeId": "string",
+  // "fundingSourceId": "string",
+  // "fundingIntheplan": true,
+  // "fundingAmount": 0,
+  // "fundingNotes": "string",
+  // "includeInCharter": true,
+  // "fundingAmountFxconv": 0,
+  // "includeInBusinessCase": true
+
   //Table Edit
   fundingTableEditRow(row: number) {
       if (!this.fundingEditStack.includes(row)) {
@@ -482,8 +547,9 @@ if(this.mode == 'Business-Case')
       this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
+      if (this.mode == 'Project-Charter') {
       this.apiService.bulkeditFunding(this.submitObj, this.projecthubservice.projectid).then(resp => {
-        if (this.mode == 'Project-Charter') {
+        
           this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
               this.projecthubservice.isFormChanged = false
               this.projecthubservice.isNavChanged.next(true)
@@ -491,15 +557,37 @@ if(this.mode == 'Business-Case')
               this.projecthubservice.successSave.next(true)
               this.projecthubservice.toggleDrawerOpen('', '', [], '')
           })
+        })
         }
-          else{
-            this.projecthubservice.isFormChanged = false
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.successSave.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
-          }
-        
-      })
+        if (this.optionType == 'recommended-option') {
+          this.apiService.bulkeditFunding(this.submitObj, this.projecthubservice.projectid).then(resp => {
+                  this.projecthubservice.isFormChanged = false
+                  this.projecthubservice.isNavChanged.next(true)
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.successSave.next(true)
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+              })
+            }
+        if (this.optionType == 'option-2') {
+          this.optionId = GlobalBusinessCaseOptions.OPTION_2
+          this.apiService.updateBusinessCaseFunding(this.submitObj, this.projecthubservice.projectid, this.optionId).then(resp => {
+                  this.projecthubservice.isFormChanged = false
+                  this.projecthubservice.isNavChanged.next(true)
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.successSave.next(true)
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+              })
+            }
+            if (this.optionType == 'option-3') {
+              this.optionId = GlobalBusinessCaseOptions.OPTION_3
+              this.apiService.updateBusinessCaseFunding(this.submitObj, this.projecthubservice.projectid, this.optionId).then(resp => {
+                      this.projecthubservice.isFormChanged = false
+                      this.projecthubservice.isNavChanged.next(true)
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.successSave.next(true)
+                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                  })
+                }
     }
   }
 

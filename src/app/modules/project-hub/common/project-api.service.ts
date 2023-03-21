@@ -570,6 +570,20 @@ export class ProjectApiService {
     return response
 }
 
+async updateBusinessCaseCost(body, projectId, optionid){
+  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BusinessCaseCost/"+optionid+"/" + projectId
+  const abc$ = this.http.put(url,body)
+  const response = await lastValueFrom(abc$)
+  return response
+}
+
+
+async updateBusinessCaseFunding(body, projectId, optionid){
+  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BusinessCaseFunding/" +optionid+"/" + projectId
+  const abc$ = this.http.put(url,body)
+  const response = await lastValueFrom(abc$)
+  return response
+}
   async BulkEditProjectCharter(projectid: string, data) {
     var url = GlobalVariables.apiurl + "ProjectCharter/" + projectid
     const abc$ = this.http.put(url, data)

@@ -60,7 +60,7 @@ export class CostEditComponent {
   },
   {
     category: 'Asset in Service',
-    baseCase: 'apisdate',
+    baseCase: 'assetInService',
     highCase: 'assetInServiceNa',
     curryearSpend: 'currentYearPlannedSpend'
   },
@@ -85,7 +85,7 @@ export class CostEditComponent {
     functionsRequiredId: new FormControl(null),
     currentYearPlannedSpend: new FormControl(''),
     projectSpendStart: new FormControl(''),
-    apisdate: new FormControl(''),
+    assetInService: new FormControl(''),
     assetInServiceNa: new FormControl(false),
     isProjectSpentNa: new FormControl(false)
   })
@@ -136,7 +136,7 @@ if(this.mode == 'Project-Charter')
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
     assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
     isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -173,7 +173,7 @@ if (this.optionType == 'recommended-option') {
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
         assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
         isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -211,7 +211,7 @@ if (this.optionType == 'option-2') {
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
         assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
         isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -249,7 +249,7 @@ if (this.optionType == 'option-3') {
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
         assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
         isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -315,29 +315,54 @@ if (this.optionType == 'option-3') {
       mainObj.totalNonFteopExBaseCase= formValue.totalNonFteopExBaseCase,
       mainObj.totalNonFteopExHighCase= formValue.totalNonFteopExHighCase,
       mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
-      mainObj.apisdate= formValue.apisdate,
+      mainObj.assetInService= formValue.assetInService,
       mainObj.projectSpendStart= formValue.projectSpendStart,
       mainObj.currentYearPlannedSpend= formValue.currentYearPlannedSpend,
       mainObj.assetInServiceNa= formValue.assetInServiceNa,
       mainObj.isProjectSpentNa= formValue.isProjectSpentNa
       console.log("Main Cost Data",mainObj)
-      this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
-        if (this.mode == 'Project-Charter') {
-          this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
-              this.projectHubService.isFormChanged = false
-              this.projectHubService.isNavChanged.next(true)
-              this.projectHubService.submitbutton.next(true)
-              this.projectHubService.successSave.next(true)
-              this.projectHubService.toggleDrawerOpen('', '', [], '')
+      if(this.mode == 'Project-Charter')
+      {
+        this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
+            this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
+                this.projectHubService.isFormChanged = false
+                this.projectHubService.isNavChanged.next(true)
+                this.projectHubService.submitbutton.next(true)
+                this.projectHubService.successSave.next(true)
+                this.projectHubService.toggleDrawerOpen('', '', [], '')
+            })
           })
-        }
-          else{
-        this.projectHubService.isNavChanged.next(true)
+      }
+      if(this.optionType == 'recommended-option')
+      {
+        this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
+          this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
         this.projectHubService.toggleDrawerOpen('', '', [], '')
-          }
-      })
+        })
+      }
+      if(this.optionType == 'option-2')
+      {
+        this.optionId = GlobalBusinessCaseOptions.OPTION_2
+        console.log(mainObj)
+        this.apiService.updateBusinessCaseCost(mainObj,this.projectHubService.projectid,this.optionId).then(Res => {
+          this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
+      if(this.optionType == 'option-3')
+      {
+        this.optionId = GlobalBusinessCaseOptions.OPTION_3
+        this.apiService.updateBusinessCaseCost(mainObj,this.projectHubService.projectid,this.optionId).then(Res => {
+          this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
+      }
     }
     
   }

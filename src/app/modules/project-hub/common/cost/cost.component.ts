@@ -32,7 +32,7 @@ export class CostComponent implements OnInit {
     functionsRequiredId: new FormControl(null),
     currentYearPlannedSpend: new FormControl(''),
     projectSpendStart: new FormControl(''),
-    apisdate: new FormControl(''),
+    assetInService: new FormControl(''),
     assetInServiceNa: new FormControl(false),
     isProjectSpentNa: new FormControl(false)
   })
@@ -93,7 +93,7 @@ export class CostComponent implements OnInit {
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
             currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
             projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.apisdate,
+            assetInService: res.costData.assetInService,
             assetInServiceNa: res.costData.assetInServiceNa,
             isProjectSpentNa: res.costData.isProjectSpentNa
   
@@ -114,7 +114,7 @@ export class CostComponent implements OnInit {
             },
             {
               category: 'Asset in Service',
-              baseCase: 'apisdate',
+              baseCase: 'assetInService',
               highCase: 'assetInServiceNa',
               curryearSpend: 'currentYearPlannedSpend'
             },
@@ -164,7 +164,7 @@ export class CostComponent implements OnInit {
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
             currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
             projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.apisdate,
+            assetInService: res.costData.assetInService,
             assetInServiceNa: res.costData.assetInServiceNa,
             isProjectSpentNa: res.costData.isProjectSpentNa
   
@@ -242,7 +242,7 @@ export class CostComponent implements OnInit {
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
             currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
             projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.apisdate,
+            assetInService: res.costData.assetInService,
             assetInServiceNa: res.costData.assetInServiceNa,
             isProjectSpentNa: res.costData.isProjectSpentNa
   
@@ -263,7 +263,7 @@ export class CostComponent implements OnInit {
             },
             {
               category: 'Asset in Service',
-              baseCase: 'apisdate',
+              baseCase: 'assetInService',
               highCase: 'assetInServiceNa',
               curryearSpend: 'currentYearPlannedSpend'
             },
@@ -318,7 +318,7 @@ export class CostComponent implements OnInit {
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
             currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
             projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.apisdate,
+            assetInService: res.costData.assetInService,
             assetInServiceNa: res.costData.assetInServiceNa,
             isProjectSpentNa: res.costData.isProjectSpentNa
   
@@ -339,7 +339,7 @@ export class CostComponent implements OnInit {
             },
             {
               category: 'Asset in Service',
-              baseCase: 'apisdate',
+              baseCase: 'assetInService',
               highCase: 'assetInServiceNa',
               curryearSpend: 'currentYearPlannedSpend'
             },

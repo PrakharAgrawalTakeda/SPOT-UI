@@ -86,7 +86,9 @@
                         <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
                         </spot-input>
                         <spot-input-date class="w-full"
-                             formControlName="{{value}}" [showLabel]="false" *ngIf="row.category.includes('Project Spend Start') || row.category.includes('Asset in Service')"></spot-input-date>
+                             formControlName="{{value}}" [showLabel]="false" *ngIf="row.category.includes('Project Spend Start')"></spot-input-date>
+                             <spot-input-date class="w-full"
+                             formControlName="{{value}}" [showLabel]="false" *ngIf="row.category.includes('Asset in Service')"></spot-input-date>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false" [sortable]="false"
