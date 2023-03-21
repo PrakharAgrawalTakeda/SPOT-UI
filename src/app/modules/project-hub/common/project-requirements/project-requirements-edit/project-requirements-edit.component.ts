@@ -5,6 +5,7 @@ import {ProjectApiService} from "../../project-api.service";
 import {ProjectHubService} from "../../../project-hub.service";
 import { FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {RoleService} from "../../../../../core/auth/role.service";
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
     selector: 'app-project-requirements-edit',
@@ -68,7 +69,8 @@ export class ProjectRequirementsEditComponent {
     constructor(private apiService: ProjectApiService,
                 public projectHubService: ProjectHubService,
                 public fuseAlert: FuseConfirmationService,
-                public role: RoleService) {
+                public role: RoleService,
+                private authService: MsalService) {
 
         this.projectRequirementsForm.valueChanges.subscribe(res => {
             if (this.viewContent) {
@@ -135,7 +137,7 @@ export class ProjectRequirementsEditComponent {
         this.projectHubService.isFormChanged = false
         const formValue = this.projectRequirementsForm.getRawValue();
         const mainObj = this.projectRequirements;
-        mainObj.projectID = formValue.projectID
+        mainObj.projectID = this.projectHubService.projectid
         mainObj.financialDoesApply = formValue.financialDoesApply
         mainObj.primaryProductID = formValue.primaryProductID
         mainObj.primaryProductName = formValue.primaryProductName
@@ -161,13 +163,13 @@ export class ProjectRequirementsEditComponent {
         mainObj.proposalStatement = formValue.proposalStatement
         mainObj.whynotgoforNextBestAlternative = formValue.whynotgoforNextBestAlternative
         mainObj.estimatedFTE = formValue.estimatedFTE
-        mainObj.shutdownRequired = formValue.shutdownRequired == "Yes"
-        mainObj.regulatoryApprovalNeeded = formValue.regulatoryApprovalNeeded  == "Yes"
+        mainObj.shutdownRequired = formValue.shutdownRequired
+        mainObj.regulatoryApprovalNeeded = formValue.regulatoryApprovalNeeded
         mainObj.totalCapExBaseCase = formValue.totalCapExBaseCase
         mainObj.totalNonFTEOpExBaseCase = formValue.totalNonFTEOpExBaseCase
-        mainObj.planFundingRequired = formValue.planFundingRequired  == "Yes"
+        mainObj.planFundingRequired = formValue.planFundingRequired
         mainObj.howMuch = formValue.howMuch
-        mainObj.budgetInPlan = formValue.budgetInPlan  == "Yes"
+        mainObj.budgetInPlan = formValue.budgetInPlan
         mainObj.approvedDate = formValue.approvedDate
         mainObj.projectReviewed = formValue.projectReviewed
         mainObj.proposedExecutionStart = formValue.proposedExecutionStart
@@ -177,12 +179,15 @@ export class ProjectRequirementsEditComponent {
         mainObj.impactedProductsName = formValue.impactedProductsName
         mainObj.functionGroupID = formValue.functionGroupID
         mainObj.functionsRequiredId = formValue.functionsRequiredId
-        this.apiService.editProjectRequirements(this.projectHubService.projectid, mainObj).then(res => {
+        this.apiService.editProjectRequirements(this.authService.instance.getActiveAccount().localAccountId, mainObj).then(res => {
             this.projectHubService.isNavChanged.next(true)
             this.projectHubService.submitbutton.next(true)
             this.projectHubService.successSave.next(true)
             this.projectHubService.toggleDrawerOpen('', '', [], '')
         })
 
+    }
+    getYesNo(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'c58fb456-3901-4677-9ec5-f4eada7158e6')
     }
 }

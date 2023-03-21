@@ -144,8 +144,8 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  async editProjectRequirements(projectid, body) {
-      var url = GlobalVariables.apiurl + "BenefitsAndRequirements/UpdateProjectProposal/" + projectid
+  async editProjectRequirements(userId, body) {
+      var url = GlobalVariables.apiurl + "BenefitsAndRequirements/UpdateProjectProposal/" + userId
       const abc$ = this.http.post(url, body)
       const response = await lastValueFrom(abc$)
       return response

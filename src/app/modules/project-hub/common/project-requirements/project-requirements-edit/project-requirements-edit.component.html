@@ -24,12 +24,14 @@
                pattern="\d*" />
     </mat-form-field>
     <spot-select formControlName="shutdownRequired"  [label]="'Shutdown Required'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
+                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
+                 [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                 [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
     </spot-select>
     <spot-select formControlName="regulatoryApprovalNeeded"  [label]="'Regulatory Approval Needed'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
+                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
+                 [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                 [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
     </spot-select>
     <mat-form-field class="w-full" [floatLabel]="'always'">
         <mat-label>CAPEX (Total Estimate USD)</mat-label>
@@ -42,8 +44,9 @@
                pattern="\d*" />
     </mat-form-field>
     <spot-select formControlName="planFundingRequired"  [label]="'Plan Funding Required'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
+                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
+                 [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                 [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
     </spot-select>
     <mat-form-field class="w-full" [floatLabel]="'always'">
         <mat-label>How Much (USD)</mat-label>
@@ -51,8 +54,9 @@
                pattern="\d*" />
     </mat-form-field>
     <spot-select formControlName="budgetInPlan"  [label]="'Budget in Plan'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
+                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
+                 [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                 [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
     </spot-select>
 
     <div class="flex items-start justify-between mt-6">
