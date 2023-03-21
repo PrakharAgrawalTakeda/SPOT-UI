@@ -1,0 +1,70 @@
+<div *ngIf="viewContent">
+    <div *ngIf="viewType == 'SidePanel'" class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Local Attributes</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="localAttributeForm" (ngSubmit)="submitLA($event)">
+        <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
+                <div *ngFor="let item of data">
+                    <div [ngSwitch]="item.dataType">
+                        <div *ngSwitchCase="'1'" class="w-full mt-4 mb-6" #checkbox>
+                            <spot-toggle (focusout)="clickEvent(item.name, $event.target.value)" class="w-full" formControlName={{item.uniqueId}}
+                                [mode]="'toggle'" [label]=item.name>
+                            </spot-toggle>
+                        </div>
+                        <!-- <div #textArea> -->
+                        <spot-input (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'6'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                            [label]=item.name [placeholder]=item.name>
+                        </spot-input>
+                        <!-- </div> -->
+                        <div *ngIf="!item.isMulti" #Lookup>
+                        <spot-singleselect-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
+                            name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
+                            [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                        </spot-singleselect-autocomplete>
+                        </div>
+                        <div *ngIf="item.isMulti" #multiLookup>
+                        <spot-multiselect-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'3'" formControlName={{item.uniqueId}}
+                            class="w-full" name={{item.uniqueId}} [label]=item.name
+                            [placeholder]=item.name [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                            [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                        </spot-multiselect-autocomplete>
+                        </div>
+                        <!-- <div #number> -->
+                        <spot-input (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'4'" class="w-full"
+                            formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name [decimalCount] = item.linesCount [inputType] = "'Number'" [placeholder]=item.name>
+                        </spot-input>
+                        <!-- </div> -->
+                        <!-- <div #Date> -->
+                        <spot-input-date (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'2'" class="w-full read-only"
+                            formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name
+                            [placeholder]=item.name>
+                        </spot-input-date>
+                        <!-- </div> -->
+                        <div *ngIf="!item.isMulti" #people>
+                        <spot-singleselect-user-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'5'" formControlName={{item.uniqueId}} [label]=item.name
+                            name={{item.uniqueId}} [showLabel]="true" [placeholder]="'Last Name, First Name'">
+                        </spot-singleselect-user-autocomplete>
+                        </div>
+                        <div *ngIf="item.isMulti" #multiPeople>
+                        <spot-multiselect-user-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
+                            [label]=item.name name={{item.uniqueId}} [showLabel]="true" [placeholder]="'Last Name, First Name'">
+                        </spot-multiselect-user-autocomplete>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'" (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

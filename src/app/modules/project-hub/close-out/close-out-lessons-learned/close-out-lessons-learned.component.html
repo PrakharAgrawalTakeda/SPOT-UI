@@ -2,7 +2,8 @@
     <div class="flex bg-card rounded-2xl p-3 pb-0 justify-between items-center">
         <div class="w-full">
             <form class="w-full p-6 pb-3 pt-0" [formGroup]="KeyTakeawayForm">
-                <spot-textarea class="w-full read-only" formControlName="keyTakeaways" name="keyTakeaways" [label]="'Key Takeaways'">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Key Takeaways</div>
+                <spot-textarea class="w-full read-only" formControlName="keyTakeaways" name="keyTakeaways">
                 </spot-textarea>
             </form>
         </div>

@@ -30,7 +30,7 @@
                                 <form style="margin-left: 420px;display: inline-block;width: 50%;">
                                     <div style="overflow-y: scroll;height: 65vh;">
                                     <ng-template matStepLabel>Details</ng-template>
-                                    <h2 style="color: rgba(76,155,207);font-size: 17px;"><b>Project Details</b></h2>
+                                    <h2 style="color: rgba(76,155,207);font-size: 20px;"><b>Project Details</b></h2>
                                     <app-general-info-single-edit [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
                                         [viewElements]="['enviornmentalPortfolio', 'isCapsProject', 'parentProject']" [portfolio]="envPortfolio"></app-general-info-single-edit>
                                     <div style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;"class="flex flex-col flex-auto bg-card shadow rounded-2xl">
@@ -42,7 +42,8 @@
                                     <div style="margin-left: 2px;margin-right: 4px;padding-right: 5px;margin-bottom: 12px;" class="flex flex-col flex-auto bg-card shadow rounded-2xl">
                                     <app-quality-ref-bulk-edit [qualityType] = "qualityType" [callLocation]="'CreateNew'" [viewType]="'Form'" (QualityValue) = "captureValue(6,$event)" (formValueQuality)="captureValue(4,$event)"></app-quality-ref-bulk-edit>
                                     </div>
-                                    <h2 style="color: rgba(76,155,207);font-size: 17px;"><b>Strategic Drivers</b></h2>
+                                    <hr>
+                                    <h2 style="color: rgba(76,155,207);font-size: 20px;"><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
                                     </div>
                                     <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
@@ -67,7 +68,7 @@
                                         <br />
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Submitted By <label style="color:red">*</label></label>
+                                                <label><label style="color:red">*</label>Submitted By </label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.SubmittedBy?.userDisplayName}}</label>
@@ -75,7 +76,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Project Name <label style="color:red">* </label></label>
+                                                <label><label style="color:red">* </label>Project Name </label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.problemTitle}}</label>
@@ -83,7 +84,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Project Type <label style="color:red">*</label></label>
+                                                <label><label style="color:red">*</label>Project Type </label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.problemType}}</label>
@@ -91,7 +92,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Portfolio Owner <label style="color:red">*</label> </label>
+                                                <label><label style="color:red">*</label>Portfolio Owner  </label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.portfolioOwner?.portfolioOwner}}</label>
@@ -99,7 +100,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Execution Scope <label style="color:red">*</label> </label>
+                                                <label><label style="color:red">*</label>Execution Scope  </label>
                                             </div>
                                             <div class="child">
                                                 <span *ngFor="let item of createProjectForm.value.excecutionScope; let i = index">
@@ -110,7 +111,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Owning Organization <label style="color:red">*</label> </label>
+                                                <label><label style="color:red">*</label>Owning Organization  </label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.owningOrganization}}</label>
@@ -118,7 +119,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Local Currency <label style="color:red">*</label> </label>
+                                                <label><label style="color:red">*</label>Local Currency  </label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.localCurrency}}</label>
@@ -126,7 +127,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Primary Product <label style="color:red">*</label> </label>
+                                                <label><label style="color:red">*</label>Primary Product  </label>
                                             </div>
                                             <div class="child">
                                                 <label class="reviewText">{{createProjectForm.value.primaryProduct?.fullProductName}}</label>
@@ -146,7 +147,7 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Problem Description/Present Situation/Submission Description<label style="color:red">*</label></label>
+                                                <label><label style="color:red">*</label>Problem Description/Present Situation/Submission Description</label>
                                             </div>
                                             <div class="child">
                                                 <label style="white-space: pre-wrap;" class="reviewText">{{createProjectForm.value.projectDescription}}</label>
@@ -288,7 +289,6 @@
                                             </div>
                                         </div>
                                         </div>
-                                        
                                         <br />
                                         <label style="color: rgba(76,155,207);font-size: 16px;"><b>Strategic Drivers</b></label>
                                         <br />
@@ -433,12 +433,12 @@
                                 <div *ngIf="viewContent">
                                     <div style="margin-right: 13vw;margin-left: 16vw;">
                                         <!-- <ng-template matStepLabel><span></span></ng-template> -->
-                                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px; margin-top: 42px;"><b>Please select the next page</b></label>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoProposal()" mat-button>Project Proposal</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoBC()" mat-button>Business Case</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoCharter()" mat-button>Project Charter</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RoutetoBoard()" mat-button>Project Board</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button (click)="RouteCreateProject()" mat-button>Create another Project</button></div>
+                                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px; margin-top: 42px;"><b style="margin-right: 58px;">Please select the next page</b></label>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoProposal()" mat-button>Project Proposal</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoBC()" mat-button>Business Case</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoCharter()" mat-button>Project Charter</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoBoard()" mat-button>Project Board</button></div>
+                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RouteCreateProject()" mat-button>Create another Project</button></div>
                                     </div>
                                 </div>
                             <!-- </mat-step> -->

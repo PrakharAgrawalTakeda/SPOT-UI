@@ -9,6 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from 'app/core/auth/auth.service';
 import {Constants} from "../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 
 @Component({
   selector: 'app-schedule-table',
@@ -26,6 +27,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   @Input() editable: boolean
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' |'Business-Case' = 'Normal'
   @ViewChild('scheduleTable') scheduleTable: any;
+  timelineEditOption: 'TimelineEditOptionO1' | 'TimelineEditOptionO2' | 'TimelineEditOptionO3'
   getRowClass = (row) => {
     return {
       'row-color1': row.completionDate != null && this.mode == 'Normal',
@@ -44,7 +46,13 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   scheduleData: any = []
   lookUpData: any = []
   baselinelogTableEditStack: any = []
-  constructor(public projecthubservice: ProjectHubService,
+  optionExecutions = new FormGroup({
+      optionExecutionStart : new FormControl(""),
+      optionExecutionEnd : new FormControl("")
+  })
+  optionType: string = ''
+
+    constructor(public projecthubservice: ProjectHubService,
     private authService: AuthService,
     private indicator: SpotlightIndicatorsService,
     private apiService: ProjectApiService,
@@ -55,21 +63,37 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
       this.changeschedule(res)
       console.log(res)
     })
+    this.projecthubservice.submitbutton.subscribe(res=>{
+        if (this.optionType=='option-2'){
+            this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
+                this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
+            })
+        }
+        if (this.optionType=='option-3'){
+            this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_3_ID.toString()).then((bcOptionInfo: any) => {
+                this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
+            })
+        }
+    })
 
   }
   ngOnChanges(changes: SimpleChanges): void {
       if(this.mode=='Business-Case'){
           this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
           if (this.router.url.includes('recommended-option')){
-              this.schedulengxdata = this.projectViewDetails.scheduleData.filter(x => x.completionDate == null)
+              this.apiService.getTimelineByOption(this.id ,GlobalBusinessCaseOptions.OPTION_1).then((res) => {
+                  this.schedulengxdata = res
+              })
           }
           if (this.router.url.includes('option-2')){
-              this.apiService.getTimelineByOption(this.id ,Constants.OPTION_2_ID.toString()).then((res) => {
+              this.apiService.getTimelineByOption(this.id ,GlobalBusinessCaseOptions.OPTION_2).then((res) => {
                   this.schedulengxdata = res
               })
           }
           if (this.router.url.includes('option-3')){
-              this.apiService.getTimelineByOption(this.id ,Constants.OPTION_3_ID.toString()).then((res) => {
+              this.apiService.getTimelineByOption(this.id ,GlobalBusinessCaseOptions.OPTION_3).then((res) => {
                   this.schedulengxdata = res
               })
           }
@@ -114,17 +138,32 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
         }
         if(this.mode == 'Business-Case')
         {
+            this.optionExecutions.disable()
             if (this.router.url.includes('recommended-option')){
+                this.timelineEditOption = 'TimelineEditOptionO1'
                 this.schedulengxdata = this.projectViewDetails.scheduleData
+                this.optionType = 'recommended-option'
             }
             if (this.router.url.includes('option-2')){
+                this.timelineEditOption = 'TimelineEditOptionO2'
+                this.optionType = 'option-2'
                 this.apiService.getTimelineByOption(this.id,Constants.OPTION_2_ID.toString()).then((res) => {
                     this.schedulengxdata = res
                 })
+                this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_2_ID.toString()).then((bcOptionInfo: any) => {
+                    this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                    this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
+                })
             }
             if (this.router.url.includes('option-3')){
+                this.timelineEditOption = 'TimelineEditOptionO3'
+                this.optionType = 'option-3'
                 this.apiService.getTimelineByOption(this.id,Constants.OPTION_3_ID.toString()).then((res) => {
                     this.schedulengxdata = res
+                })
+                this.apiService.getBusinessCaseOptionInfoData(this.id, Constants.OPTION_3_ID.toString()).then((bcOptionInfo: any) => {
+                    this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
+                    this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
                 })
             }
         }
@@ -233,6 +272,55 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
     })
 
   }
+    deleteScheduleForOption(id: string) {
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Remove Milestone?",
+            "message": "Are you sure you want to remove this record permanently? ",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warn"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "Remove",
+                    "color": "warn"
+                },
+                "cancel": {
+                    "show": true,
+                    "label": "Cancel"
+                }
+            },
+            "dismissible": true
+        }
+        const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+
+        scheduleAlert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+                if (this.router.url.includes('recommended-option')){
+                    this.apiService.deleteScheduleForOption(id,GlobalBusinessCaseOptions.OPTION_1,  this.projectid).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+                if (this.router.url.includes('option-2')){
+                    this.apiService.deleteScheduleForOption(id,GlobalBusinessCaseOptions.OPTION_2,  this.projectid).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+                if (this.router.url.includes('option-3')){
+                    this.apiService.deleteScheduleForOption(id,GlobalBusinessCaseOptions.OPTION_3,  this.projectid).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+
+            }
+        })
+
+    }
   changeschedule(event: any) {
 
     // console.log(this.scheduleData)

@@ -286,11 +286,30 @@ export class ProjectTeamBulkEditComponent implements OnInit {
                 const alert = this.fuseAlert.open(comfirmConfig)
               } else {
                 this.apiService.bulkeditProjectTeam(this.formValue, this.projecthubservice.projectid).then(res => {
-                  this.projecthubservice.isFormChanged = false
-                  this.projecthubservice.submitbutton.next(true)
-                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                  this.projecthubservice.isNavChanged.next(true)
-                  this.projecthubservice.successSave.next(true)
+                    if (this.mode == 'Project-Proposal') {
+                        this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                            this.projecthubservice.isFormChanged = false
+                            this.projecthubservice.isNavChanged.next(true)
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.successSave.next(true)
+                            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        })
+                    }else if (this.mode == 'Project-Charter'){
+                        this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                            this.projecthubservice.isFormChanged = false
+                            this.projecthubservice.isNavChanged.next(true)
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.successSave.next(true)
+                            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        })
+                    }else{
+                        this.projecthubservice.isFormChanged = false
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.projecthubservice.isNavChanged.next(true)
+                        this.projecthubservice.successSave.next(true)
+                    }
+
                 })
               }
             }
@@ -394,7 +413,7 @@ export class ProjectTeamBulkEditComponent implements OnInit {
   }
   ptTableEditRow(row: number) {
     if (!this.ptTableEditStack.includes(row)) {
-      if (Object.keys(this.projectTeamForm.at(row).value.user).length > 0) {
+      if (this.projectTeamForm.at(row)?.value?.user) {
         this.findRoles(this.projectTeamForm.at(row).value.user.userAdid, row)
       }
       this.ptTableEditStack.push(row)

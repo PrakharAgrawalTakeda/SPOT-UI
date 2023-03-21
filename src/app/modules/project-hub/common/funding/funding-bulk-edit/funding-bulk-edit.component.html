@@ -1,0 +1,157 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Funding</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="w-full bg-card rounded-2xl">
+        <div class="p-3  flex items-center justify-between">
+            <div>
+            </div>
+            <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                (click)="addFunding()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+        </div>
+        <div class="h-[80vh] overflow-y-hidden pl-5">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                [rows]="fundingdata" #fundingTable>
+
+
+                <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [resizeable]="false" [sortable]="false"
+                    [draggable]="false" [flexGrow]="0.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
+                            <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CAPEX</p>
+                            <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OPEX</p>
+                            <p *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
+                            <spot-select formControlName="fundingTypeId" name="fundingTypeId"
+                                [placeholder]="'Funding Type'" [dropDownArrayType]="'object'"
+                                [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
+                                [valuePointer]="'lookUpName'" [showNoneOption]="false">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Funding Source" prop="fundingSourceId" [resizeable]="false"
+                    [sortable]="false" [draggable]="false" [flexGrow]="1.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{getSource(value)}}
+                        </a>
+                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
+                            <spot-select formControlName="fundingSourceId"
+                                name="fundingSourceName" [placeholder]="'Funding Source'" [idPointer]="'portfolioOwnerId'"
+                                [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()" [dropDownArrayType]="'object'" [showNoneOption]="false"
+                                [sortByType]="'custom'" [idPointer]="'portfolioOwnerId'"
+                                    [customSortPointer]="'pfid'">
+
+                                    <!-- spot-select class="w-full" formControlName="status" [showLabel]="false"
+                                    [label]="'Status'" [placeholder]="'Status'" [valuePointer]="'lookUpName'"
+                                    [idPointer]="'lookUpId'" [dropDownArrayType]="'object'"
+                                    [dropDownArray]="getStatus()" [sortByType]="'custom'"
+                                    [customSortPointer]="'lookUpOrder'" -->
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="In the Plan" prop="fundingIntheplan" [resizeable]="false" [sortable]="false"
+                    [draggable]="false" [flexGrow]="0.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
+                            <p *ngIf="value == true">Yes</p>
+                            <p *ngIf="value == false">No</p>
+                           
+                        </a>
+                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
+                            <spot-toggle
+                                 class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'">
+                            </spot-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Amount ({{Amount}})" prop="fundingAmount"
+                    [flexGrow]="0.6" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p class="amount">{{value | number:'1.0-0'}}</p>
+                        </a>
+                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
+                            <!-- <mat-form-field [floatLabel]="'always'">
+                                <input matInput formControlName="fundingAmount" type="number" min="0" placeholder="0" (click)="numberWithDecimal($event.target.value)"
+                                    pattern="\d*"/>
+                            </mat-form-field> -->
+                            <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Notes" prop="fundingNotes"
+                    [flexGrow]="1.5" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"   class="pt-4">
+                            <spot-textarea formControlName="fundingNotes" [showLabel]="false"
+                                [placeholder]="'Notes'" [rows]="3"  [showHint]="false">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [sortable]="false"
+                    name="Include In Project Charter Report (Max 3)" prop="includeInCharter" [flexGrow]="0.4">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)"
+                            class="w-full">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"
+                            class="h-[45px]">
+                            <mat-slide-toggle
+                                [matTooltip]="this.FundingForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter report display' : null"
+                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInCharter">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.2" [resizeable]="false"
+                    [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+
+                        <div class="flex items-center justify-start">
+                            <a href="javascript:void(0)" title="Delete Single" (click)="deleteFunding(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitFunding()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

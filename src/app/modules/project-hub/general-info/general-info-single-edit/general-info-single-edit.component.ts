@@ -12,6 +12,7 @@ import { HttpParams } from "@angular/common/http";
 import { GlobalVariables } from "../../../../shared/global-variables";
 import { MsalService } from '@azure/msal-angular';
 import { RoleService } from 'app/core/auth/role.service';
+import { pairwise } from 'rxjs';
 @Component({
   selector: 'app-general-info-single-edit',
   templateUrl: './general-info-single-edit.component.html',
@@ -36,6 +37,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   local: any = [];
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
+  changeExecutionScope: boolean = false
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
@@ -152,10 +154,19 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       }
     })
 
+    this.generalInfoForm.controls.excecutionScope.valueChanges.pipe(pairwise())
+      .subscribe(([prev, next]: [any, any]) => {
+      if (this.viewContent) {
+        if(prev.length > next.length){
+        this.changeExecutionScope = true
+        }
+      }
+    })
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.generalInfoForm.patchValue({ enviornmentalPortfolio: changes.portfolio.currentValue })
+    this.generalInfoForm.patchValue({ enviornmentalPortfolio: changes.portfolio?.currentValue })
   }
 
   ngOnInit(): void {
@@ -345,13 +356,131 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         })
       }
+      else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else if (this.changeExecutionScope == true) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the execution scope will remove all the existing local attributes. Are you sure you want to update the execution scope ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
       else {
         this.submitLogic()
       }
     }
+    else{
+    if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Are you sure?",
+        "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+      alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          this.submitLogic()
+        }
+      })
+    }
+    else if (this.changeExecutionScope == true) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Are you sure?",
+        "message": "Changing the execution scope will remove all the existing local attributes. Are you sure you want to update the execution scope ?",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+      alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          this.submitLogic()
+        }
+      })
+    }
     else {
       this.submitLogic()
     }
+  }
   }
 
   submitLogic() {

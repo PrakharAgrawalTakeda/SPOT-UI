@@ -380,22 +380,22 @@ export class CreateProjectComponent implements OnInit {
     }
     mainObjCreate[0].IsTechTransfer = formValue.isTechTransfer == "" ? false : formValue.isTechTransfer
       if (mainObjCreate[0].IsTechTransfer) {
-        mainObjCreate[0].CampaignPhaseID = this.campaingPhaseName != "" && this.campaingPhaseName != undefined ? this.campaignPhase.filter(x => x.lookUpName == this.campaingPhaseName)[0].lookUpId : ""
-        mainObjCreate[0].CampaignTypeID = this.campaingTypeName != "" && this.campaingTypeName != undefined ? this.campaignType.filter(x => x.lookUpName == this.campaingTypeName)[0].lookUpId : ""
-        mainObjCreate[0].ProductionStepID = this.productionStepName != "" && this.productionStepName != undefined ? this.productionSteps.filter(x => x.lookUpName == this.productionStepName)[0].lookUpId : ""
+        mainObjCreate[0].CampaignPhaseID = this.campaingPhaseName != "" && this.campaingPhaseName != undefined && this.campaingPhaseName != null ? this.campaignPhase.filter(x => x.lookUpName == this.campaingPhaseName)[0].lookUpId : ""
+        mainObjCreate[0].CampaignTypeID = this.campaingTypeName != "" && this.campaingTypeName != undefined && this.campaingTypeName != null ? this.campaignType.filter(x => x.lookUpName == this.campaingTypeName)[0].lookUpId : ""
+        mainObjCreate[0].ProductionStepID = this.productionStepName != "" && this.productionStepName != undefined && this.productionStepName != null ? this.productionSteps.filter(x => x.lookUpName == this.productionStepName)[0].lookUpId : ""
         // mainObjCreate[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
         // mainObjCreate[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
         // mainObjCreate[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
     }
     mainObjCreate[0].IsAgile = formValue.isAgile == "" ? false : formValue.isAgile
       if (mainObjCreate[0].IsAgile) {
-        mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
+        mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null? formValue.agilePrimaryWorkstream.lookUpId : ''
         mainObjCreate[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
-        mainObjCreate[0].agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
+        mainObjCreate[0].agileWave = formValue.agileWave != "" && formValue.agileWave != undefined && formValue.agileWave != null ? formValue.agileWave.lookUpId : ''
     }
       mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
       mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-      mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" || formValue.primaryKPI != null? formValue.primaryKPI.kpiid : ''
+    mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.kpiid : ''
       mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
       if (mainObjCreate[0].IsPOBOS) {
         mainObjCreate[0].POBOSCategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : ''
@@ -406,8 +406,8 @@ export class CreateProjectComponent implements OnInit {
     }
     mainObjCreate[0].IsGMSGQLTAnnualMustWin = formValue.isGmsgqltannualMustWin == "" ? false : formValue.isGmsgqltannualMustWin
       if (mainObjCreate[0].IsGMSGQLTAnnualMustWin) {
-        mainObjCreate[0].StrategicYearID = formValue.strategicYear != "" ? formValue.strategicYear.lookUpId : ''
-        mainObjCreate[0].AnnualMustWinID = formValue.annualMustWinID != "" ? formValue.annualMustWinID.lookUpId : ''
+        mainObjCreate[0].StrategicYearID = formValue.strategicYear != "" && formValue.strategicYear != undefined && formValue.strategicYear != null ? formValue.strategicYear.lookUpId : ''
+        mainObjCreate[0].AnnualMustWinID = formValue.annualMustWinID != "" && formValue.annualMustWinID != undefined && formValue.annualMustWinID != null ? formValue.annualMustWinID.lookUpId : ''
     }
     
     var dataToSend = {}

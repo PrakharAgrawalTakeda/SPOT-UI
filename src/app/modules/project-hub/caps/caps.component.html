@@ -1,1 +1,123 @@
-<p>caps works!</p>
+<div class="w-full min-w-0 p-8 pt-0" #container>
+    <!-- <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent"> -->
+        <!-- Enter Content here-->
+        <form class="w-full" [formGroup]="CAPSform">
+            <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+                <div class="flex justify-between items-center pb-6">
+                    <div class="font-medium tracking-tight leading-6 truncate ">
+                        <h3 class="text-xl text-primary">CAPS</h3>
+                    </div>
+                    <div>
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button
+                            [color]="'primary-200'"
+                            (click)="projectHubService.toggleDrawerOpen('CAPS', '', '' , id)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
+                </div>
+                <!-- <div class="grid grid-cols-3 gap-x-6 items-center"> -->
+                    <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+                        <div class="flex justify-start gap-3 items-center w-full pt-2">
+                            <div class="flex justify-start gap-1 items-center">
+                                CAPS Project 
+                            </div>
+                            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!CAPSform.controls.isCapsProject.value">
+                            </mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                *ngIf="CAPSform.controls.isCapsProject.value">
+                            </mat-icon>
+                        </div>
+                        <spot-input class="w-full read-only" formControlName="EmissionsImpact" name="EmissionsImpact"
+                            [label]="'Emissions Impact (tCO2e/Year)'">
+                        </spot-input>
+                        <div></div>
+                        <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+                            [label]="'Environmental Portfolio'" [showHint]="true"
+                            [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+                        </spot-input>
+                        <div class="label">
+                        <spot-input class="w-full read-only" formControlName="EnergyImpact" name="EnergyImpact"
+                            [label]="'Energy Impact (per Year)'">
+                        </spot-input>
+                        <label class="Unit">GJ</label>
+                        </div>
+                        <div class="label">
+                        <spot-input class="w-full read-only" formControlName="EnergyCost" name="EnergyCost"
+                            [label]="''">
+                        </spot-input>
+                        <label class="Unit">USD</label>
+                        </div>
+                        <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"
+                            [label]="'Impact Realization Date'">
+                        </spot-input-date>
+                        <div class="label">
+                        <spot-input class="w-full read-only" formControlName="WaterImpact" name="WaterImpact"
+                            [label]="'Water Impact (per Year)'">
+                        </spot-input>
+                        <label class="Unit">m3</label>
+                        </div>
+                        <div class="label">
+                        <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''">
+                        </spot-input>
+                        <label class="Unit">USD</label>
+                        </div>
+                        <div></div>
+                        <div class="label">
+                        <spot-input class="w-full read-only" formControlName="TotalWasteImpact" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'">
+                        </spot-input>
+                        <label class="Unit">Kg</label>
+                        </div>
+                        <div class="label">
+                        <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''">
+                        </spot-input>
+                        <label class="Unit">USD</label>
+                        </div>
+                        <div></div>
+                        <div class="label">
+                        <spot-input class="w-full read-only" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
+                            [label]="'Landfilled Waste Impact (per Year)'">
+                        </spot-input>
+                        <label class="Unit">Kg</label>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </form>
+    <!-- </div> -->
+    <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+            *ngIf="viewContent">
+        <app-carbon-table [Editable]="editable"></app-carbon-table>
+    </div>
+    </div>
+    <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+            *ngIf="viewContent">
+            <app-biogenics-table [Editable]="editable"></app-biogenics-table>
+        </div>
+    </div>
+    <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+            *ngIf="viewContent">
+            <app-water-waste-table [Editable]="editable"></app-water-waste-table>
+        </div>
+    </div>
+    <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+            *ngIf="viewContent">
+            <app-transportation-table [Editable]="editable"></app-transportation-table>
+        </div>
+    </div>
+    <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+            *ngIf="viewContent">
+            <app-warehousing-table [Editable]="editable"></app-warehousing-table>
+        </div>
+    </div>
+    <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+            *ngIf="viewContent">
+            <app-shipping-table [Editable]="editable"></app-shipping-table>
+        </div>
+    </div>
+</div>

@@ -1,1 +1,54 @@
-<p>local-attributes works!</p>
+<ng-container *ngIf="viewContent">
+    <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
+        <!-- Enter Content here-->
+        <form class="w-full" [formGroup]="localAttributeForm">
+            <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+                <div class="flex justify-between items-center pb-6">
+                    <div class="font-medium tracking-tight leading-6 truncate ">
+                        <h3 class="text-xl text-primary">Local Attributes</h3>
+                    </div>
+                    <div *ngIf="editable">
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button
+                            [color]="'primary-200'"
+                            (click)="projectHubService.toggleDrawerOpen('localAttributeSingleEdit', '', '' , id)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-x-6 items-center">
+                    <!-- <div *ngFor="let item of localAttributeForm.value | keyvalue"> -->
+                        <div *ngFor="let item of data">
+                        <div [ngSwitch]="item.dataType">
+                            <div *ngIf="item.isMulti">
+                            <spot-multiselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full read-only" name={{item.uniqueId}}
+                                [label]=item.name [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                [dropDownArray]="getLookup(item.lookupParentId)">
+                            </spot-multiselect-autocomplete>
+                            </div>
+                            <spot-input-date *ngSwitchCase="'2'" class="w-full read-only"
+                                formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name>
+                            </spot-input-date>
+                            <div *ngIf="item.isMulti">
+                            <spot-multiselect-user-autocomplete *ngSwitchCase="'5'" class="w-full read-only" [valuePointer]="'userDisplayName'" [idPointer]="'userAdid'"
+                                formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                                [label]=item.name>
+                            </spot-multiselect-user-autocomplete>
+                            </div>
+                            <div *ngSwitchCase="'1'"
+                                class="flex justify-start w-full gap-3 items-center">
+                                {{item.name}}
+                                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!item.data"></mat-icon>
+                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                    *ngIf="item.data">
+                                </mat-icon>
+                            </div>
+                            <spot-input *ngSwitchDefault class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                                [label]=item.name>
+                            </spot-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-container>

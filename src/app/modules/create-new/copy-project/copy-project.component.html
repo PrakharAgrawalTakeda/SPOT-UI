@@ -14,9 +14,10 @@
                             [calledFrom]="'Copy'"></search>
                     </div>
                 </div>
+                <p *ngIf = "projectname != ''" class="projecttag">Project which will be copied :</p>
+                <label style="margin-bottom: 15px;" class="font-bold text-primary text-2xl">{{projectname}}</label>
                 <p class="tag">The below data will be copied to your new project when you hit Copy Project. You can
                     update/edit this data after project creation.</p>
-                <label class="font-bold text-primary text-2xl">{{projectname}}</label>
                 <form class="pl-3 w-full overflow-hidden" [formGroup]="CopyProjectForm"
                     (ngSubmit)="SubmitCopyProject($event)">
                     <div class="flex justify-between items-center mt-6 mb-6">
@@ -39,6 +40,8 @@
                         <mat-slide-toggle formControlName="projectTeam">{{lookupTemplate[7].lookUpName}}</mat-slide-toggle>
                     </div><div class="flex justify-between items-center mt-6 mb-6">
                         <mat-slide-toggle formControlName="categoricalDriver">{{lookupTemplate[8].lookUpName}}</mat-slide-toggle>
+                    </div><div class="flex justify-between items-center mt-6 mb-6">
+                        <mat-slide-toggle formControlName="StrategicalDriver">{{lookupTemplate[9].lookUpName}}</mat-slide-toggle>
                     </div>
                     <div style="text-align: right;">
                         <button style="background-color: rgba(76,155,207);margin-bottom: 10px;margin-right: 80px;color: white;"
