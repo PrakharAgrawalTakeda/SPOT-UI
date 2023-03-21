@@ -24,14 +24,14 @@
                         <div *ngIf="!item.isMulti" #Lookup>
                         <spot-singleselect-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
                             name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
-                            [dropDownArray]="getLookup(item.lookupParentId)">
+                            [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                         </spot-singleselect-autocomplete>
                         </div>
                         <div *ngIf="item.isMulti" #multiLookup>
                         <spot-multiselect-autocomplete (focusout)="clickEvent(item.name, $event.target.value)" *ngSwitchCase="'3'" formControlName={{item.uniqueId}}
                             class="w-full" name={{item.uniqueId}} [label]=item.name
                             [placeholder]=item.name [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
-                            [dropDownArray]="getLookup(item.lookupParentId)">
+                            [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                         </spot-multiselect-autocomplete>
                         </div>
                         <!-- <div #number> -->

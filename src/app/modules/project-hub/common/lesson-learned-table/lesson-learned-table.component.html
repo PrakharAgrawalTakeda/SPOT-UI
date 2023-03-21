@@ -19,31 +19,7 @@
         <div class="overflow-x-auto mx-6">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class=" font-medium text-sm text-default whitespace-nowrap" [rows]="lessonLearned" #lessonLearnedTable [sorts]="[{ prop: 'lessonCloseDate', dir: 'asc' },{ prop: 'typeName', dir: 'asc' }]">
-                <!-- <ngx-datatable-column name="Include In Single Slide Summary (Max 4)" prop="includeInCloseOutReport" [sortable]="false"
-                    [resizeable]="false" [flexGrow]="1.5">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <div class="flex items-center justify-between pl-2 overflow-hidden">
-                            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
-                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
-                            </mat-icon>
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column> -->
-                <!-- <ngx-datatable-column name="Create Detailed Review Slides (No Max)" prop="createDetailedReviewSlide" [sortable]="false"
-                    [resizeable]="false" [flexGrow]="2">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <div class="flex items-center justify-between pl-2 overflow-hidden">
-                            <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
-                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
-                            </mat-icon>
-                        </div>
-                    </ng-template>
-                </ngx-datatable-column> -->
-                <!-- <ngx-datatable-column name="Log Date" prop="lessonLogDate" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{ value| date:'dd-MMM-yyyy' }}
-                    </ng-template>
-                </ngx-datatable-column> -->
+                
                 <ngx-datatable-column name="Title" prop="leassonTitle" [flexGrow]="1.8">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
