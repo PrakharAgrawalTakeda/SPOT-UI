@@ -60,6 +60,10 @@
             *ngIf="projecthubservice.itemtype == 'CostEdit'" [mode]="'Project-Charter'"></app-cost-edit>
             <app-funding-bulk-edit
             *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'" [optionType]="'recommended-option'"></app-funding-bulk-edit>
+            <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO2'"
+            [optionType]="'option-2'"></app-funding-bulk-edit>
+        <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO3'"
+            [optionType]="'option-3'"></app-funding-bulk-edit>
             <app-cost-edit
             *ngIf="projecthubservice.itemtype == 'CostBCEdit'" [mode]="'Business-Case'"></app-cost-edit>
         <app-operational-performance-bulk-edit

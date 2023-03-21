@@ -130,7 +130,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [sortable]="false"
-                    name="Include In Business Case Report (Max 2)" prop="includeInBusinessCase" [flexGrow]="0.4" *ngIf="mode=='Business-Case'">
+                    name="Include In Business Case Report (Max 2)" prop="includeInBusinessCase" [flexGrow]="0.4" *ngIf="mode!= 'Project-Charter' && (optionType== 'option-2' || optionType=='option-3')">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)"
                             class="w-full">

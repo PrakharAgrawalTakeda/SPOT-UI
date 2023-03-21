@@ -5,6 +5,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
+import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 
@@ -16,7 +17,7 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class FundingComponent implements OnInit, OnChanges {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Project-Charter'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
@@ -24,17 +25,19 @@ export class FundingComponent implements OnInit, OnChanges {
   @Input() kpi: any
   @Input() editable: boolean = true
   initializationComplete: boolean = false
-  id:string=""
+  id: string = ""
   fundingbulkEditType: string = 'FundingBulkEdit';
-  fundingBCbulkEditType: string = 'FundingBCBulkEdit';
+  //fundingBCbulkEditType: string = 'FundingBCBulkEdit';
   viewContent: boolean = false
   fundingdata: any;
   fundingSourceData: any;
   Amount: any;
   localcurrency: any;
+  optionId: any;
+  fundingBCbulkEditType: string;
 
   constructor(private projecthubservice: ProjectHubService, private indicator: SpotlightIndicatorsService,
-    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private authService: AuthService,private _Activatedroute: ActivatedRoute,
+    public fuseAlert: FuseConfirmationService, private apiService: ProjectApiService, private authService: AuthService, private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res == true) {
@@ -51,41 +54,100 @@ export class FundingComponent implements OnInit, OnChanges {
     this.dataloader()
   }
   dataloader() {
-  
-    console.log("ProjectHUBSERVICE",this.projecthubservice.projectid)
-    console.log("THIS>ID",this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id"))
-    this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
-    if(this.optionType == 'recommended-option')
-    {
+    this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+    if (this.optionType == 'recommended-option') {
       console.log("BUSINESS CASE")
+      this.fundingBCbulkEditType = 'FundingBCBulkEdit'
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
       this.apiService.getCostFunding(this.id).then((res: any) => {
         this.authService.lookupMaster().then((lookup: any) => {
           this.portApiService.getfilterlist().then((po: any) => {
             this.fundingSourceData = po
             this.localcurrency = res.localCurrency
             this.Amount = this.localcurrency.localCurrencyAbbreviation
-       console.log(this.fundingSourceData)
-          console.log(res)
-        console.log(res.fundingData)
-        console.log(lookup)
-         this.fundingdata = res.fundingData
-         if(this.fundingdata != null)
-         {
-          for (var i of this.fundingdata) {
-            console.log(i)
-            //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
-            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
-          }
-         }
-     
-      this.viewContent = true
-    })
-    })
-  })
+            console.log(this.fundingSourceData)
+            console.log(res)
+            console.log(res.fundingData)
+            console.log(lookup)
+            this.fundingdata = res.fundingData
+            if (this.fundingdata != null) {
+              for (var i of this.fundingdata) {
+                console.log(i)
+                //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
+                i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+              }
+            }
+
+            this.viewContent = true
+          })
+        })
+      })
       this.initializationComplete = false
       this.initializationComplete = true
     }
-    if(this.mode == 'Project-Charter') {
+    if (this.optionType == 'option-2') {
+      console.log("BUSINESS CASE")
+      this.optionId = GlobalBusinessCaseOptions.OPTION_2
+      this.fundingBCbulkEditType = 'FundingBCEditO2'
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+      console.log("OPTION 2",this.id)
+      this.apiService.getBusinessCaseCostFunding(this.id, this.optionId).then((res: any) => {
+        this.authService.lookupMaster().then((lookup: any) => {
+          this.portApiService.getfilterlist().then((po: any) => {
+            this.fundingSourceData = po
+            this.localcurrency = res.localCurrency
+            this.Amount = this.localcurrency.localCurrencyAbbreviation
+            console.log(this.fundingSourceData)
+            console.log(res)
+            console.log(res.fundingData)
+            console.log(lookup)
+            this.fundingdata = res.fundingData
+            if (this.fundingdata != null) {
+              for (var i of this.fundingdata) {
+                console.log(i)
+                //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
+                i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+              }
+            }
+
+            this.viewContent = true
+          })
+        })
+      })
+      this.initializationComplete = false
+      this.initializationComplete = true
+    }
+    if (this.optionType == 'option-3') {
+      this.optionId = GlobalBusinessCaseOptions.OPTION_3
+      this.fundingBCbulkEditType = 'FundingBCEditO3'
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getBusinessCaseCostFunding(this.id, this.optionId).then((res: any) => {
+        this.authService.lookupMaster().then((lookup: any) => {
+          this.portApiService.getfilterlist().then((po: any) => {
+            this.fundingSourceData = po
+            this.localcurrency = res.localCurrency
+            this.Amount = this.localcurrency.localCurrencyAbbreviation
+            console.log(this.fundingSourceData)
+            console.log(res)
+            console.log(res.fundingData)
+            console.log(lookup)
+            this.fundingdata = res.fundingData
+            if (this.fundingdata != null) {
+              for (var i of this.fundingdata) {
+                console.log(i)
+                //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
+                i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+              }
+            }
+
+            this.viewContent = true
+          })
+        })
+      })
+      this.initializationComplete = false
+      this.initializationComplete = true
+    }
+    else if(this.mode == 'Project-Charter') {
       console.log("PROJECTCHARTER")
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getCostFunding(this.id).then((res: any) => {
@@ -94,28 +156,27 @@ export class FundingComponent implements OnInit, OnChanges {
             this.fundingSourceData = po
             this.localcurrency = res.localCurrency
             this.Amount = this.localcurrency.localCurrencyAbbreviation
-       console.log(this.fundingSourceData)
-          console.log(res)
-        console.log(res.fundingData)
-        console.log(lookup)
-         this.fundingdata = res.fundingData
-         if(this.fundingdata != null)
-         {
-          for (var i of this.fundingdata) {
-            console.log(i)
-            //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
-            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
-          }
-         }
-     
-      this.viewContent = true
-    })
-    })
-  })
+            console.log(this.fundingSourceData)
+            console.log(res)
+            console.log(res.fundingData)
+            console.log(lookup)
+            this.fundingdata = res.fundingData
+            if (this.fundingdata != null) {
+              for (var i of this.fundingdata) {
+                console.log(i)
+                //res.equipmentRatingId ? lookup.find(x => x.lookUpId == res.equipmentRatingId)?.lookUpName : ''
+                i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+              }
+            }
+
+            this.viewContent = true
+          })
+        })
+      })
       this.initializationComplete = false
       this.initializationComplete = true
     }
-    
+
   }
   // getLookUpName(lookUpId: string): string {
   //   return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''

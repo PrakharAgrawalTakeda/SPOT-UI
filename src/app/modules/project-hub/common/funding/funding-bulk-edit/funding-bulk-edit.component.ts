@@ -6,6 +6,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
 import { ProjectApiService } from '../../project-api.service';
 
 @Component({
@@ -14,7 +15,7 @@ import { ProjectApiService } from '../../project-api.service';
   styleUrls: ['./funding-bulk-edit.component.scss']
 })
 export class FundingBulkEditComponent {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Project-Charter'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
   projectViewDetails: any = {}
   fundingDb = []
@@ -29,6 +30,7 @@ export class FundingBulkEditComponent {
   lookupdata: any;
   localcurrency: any;
   Amount: any;
+  optionId: string;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService,
     public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService, private router: Router,
     private portApiService: PortfolioApiService) {
@@ -50,7 +52,8 @@ export class FundingBulkEditComponent {
     this.dataloader()
   }
   dataloader() {
-    if(this.mode == 'Business-Case')
+    this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+    if(this.optionType == 'recommended-option')
     {
       this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
         this.portApiService.getfilterlist().then((po: any) => {
@@ -103,7 +106,118 @@ export class FundingBulkEditComponent {
       })
       })
     }
-    else
+    if(this.optionType == 'option-2')
+    {
+      this.optionId = GlobalBusinessCaseOptions.OPTION_2
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+      console.log("OPTION 2",this.id)
+      this.apiService.getBusinessCaseCostFunding(this.projecthubservice.projectid, this.optionId).then((res: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.lookupdata = resp
+            this.localcurrency = res.localCurrency
+             this.Amount = this.localcurrency.localCurrencyAbbreviation
+          console.log(this.projecthubservice.projectid)
+          this.fundingSourceData = po
+      //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
+        this.fundingdata = res.fundingData
+        
+        console.log(this.fundingdata)
+        if(this.fundingdata != null)
+         {
+        // for (var i of this.fundingdata) {
+        //   i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        // }
+        
+        for (var i of this.fundingdata) {
+            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+        }
+        this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        for (var i of this.fundingdata) {
+          this.fundingDb.push(i)
+            console.log(i)
+            
+          this.FundingForm.push(new FormGroup({
+            
+            fundingAmount: new FormControl(i.fundingAmount),
+            fundingAmountFxconv: new FormControl(this.fundingdata.fundingAmountFxconv),
+            fundingIntheplan: new FormControl(i.fundingIntheplan),
+            fundingNotes: new FormControl(i.fundingNotes),
+            fundingSourceId: new FormControl(i.fundingSourceId),
+            includeInCharter: new FormControl(this.fundingdata.includeInCharter),
+            fundingSourceName: new FormControl(i.fundingSourceName),
+            fundingTypeId: new FormControl(i.fundingTypeId),
+            fundingUniqueId: new FormControl(i.fundingUniqueId),
+            includeInBusinessCase: new FormControl(i.includeInBusinessCase),
+            projectId: new FormControl(this.projecthubservice.projectid)
+          }))
+          //this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        }
+      }
+      
+          
+        this.disabler()
+        this.viewContent = true
+    })
+      })
+      })
+    }
+    if(this.optionType == 'option-3')
+    {
+      this.optionId = GlobalBusinessCaseOptions.OPTION_3
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+      this.apiService.getBusinessCaseCostFunding(this.projecthubservice.projectid, this.optionId).then((res: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.lookupdata = resp
+            this.localcurrency = res.localCurrency
+             this.Amount = this.localcurrency.localCurrencyAbbreviation
+          console.log(this.projecthubservice.projectid)
+          this.fundingSourceData = po
+      //this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
+        this.fundingdata = res.fundingData
+        
+        console.log(this.fundingdata)
+        if(this.fundingdata != null)
+         {
+        // for (var i of this.fundingdata) {
+        //   i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        // }
+        
+        for (var i of this.fundingdata) {
+            i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
+        }
+        this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        for (var i of this.fundingdata) {
+          this.fundingDb.push(i)
+            console.log(i)
+            
+          this.FundingForm.push(new FormGroup({
+            
+            fundingAmount: new FormControl(i.fundingAmount),
+            fundingAmountFxconv: new FormControl(this.fundingdata.fundingAmountFxconv),
+            fundingIntheplan: new FormControl(i.fundingIntheplan),
+            fundingNotes: new FormControl(i.fundingNotes),
+            fundingSourceId: new FormControl(i.fundingSourceId),
+            includeInCharter: new FormControl(this.fundingdata.includeInCharter),
+            fundingSourceName: new FormControl(i.fundingSourceName),
+            fundingTypeId: new FormControl(i.fundingTypeId),
+            fundingUniqueId: new FormControl(i.fundingUniqueId),
+            includeInBusinessCase: new FormControl(i.includeInBusinessCase),
+            projectId: new FormControl(this.projecthubservice.projectid)
+          }))
+          //this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
+        }
+      }
+      
+          
+        this.disabler()
+        this.viewContent = true
+    })
+      })
+      })
+    }
+    else if(this.mode=='Project-Charter')
     {
       //console.log("ID",this._Activatedroute.parent.parent.snapshot.paramMap.get("id"))
       //this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
