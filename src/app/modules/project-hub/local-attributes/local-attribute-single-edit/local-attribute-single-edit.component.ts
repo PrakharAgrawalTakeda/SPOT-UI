@@ -172,59 +172,84 @@ export class LocalAttributeSingleEditComponent {
       var mainObj = res
       this.projectHubService.isFormChanged = false
       var formValue = this.localAttributeForm.getRawValue()
+      var emptyObject={
+        "uniqueId": "",
+        "value": ""
+      }
       for (var i = 0; i < mainObj.length; i++) {
-        if (mainObj[i].data.length == 0){
-          var emptyData = {
-            "uniqueId": "",
-            "value": "string"
-          }
-          mainObj[i].data.push(emptyData)
+        if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1) {
+          mainObj[i].data = []
         }
-              if (mainObj[i].dataType == 2) {
-                mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-                
-              }
-              else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
-                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-                
-              }
-              else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
-                var data = []
-                if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value != null) {
-                  if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0){
+          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == ""){
+            mainObj[i].data = []
+          }
+          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+            mainObj[i].data = []
+          }
+          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
+            mainObj[i].data = []
+          }
+          else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            mainObj[i].data = []
+          }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+        }
+          else if (mainObj[i].dataType == 2) {
+          if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)){
+              mainObj[i].data[0].value = null
+            }
+            else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != ""){
+              mainObj[i].data.push(emptyObject)
+              mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            }
+            else{
+              mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            }
+          }
+          else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
+            if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined){
+              mainObj[i].data[0].value = null
+            }
+            else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined){
+              mainObj[i].data.push(emptyObject)
+              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            }
+            else{
+              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            }
+          }
+          else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
+            var data = []
+              if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value != null) {
+                for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
+                  if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
                     mainObj[i].data = []
+                    mainObj[i].data[j] = {
+                      "uniqueId": "",
+                      "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                    }
                   }
-                  else{
-                  for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
-                    if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
-                      mainObj[i].data = []
+                  else {
+                    if (mainObj[i].data[j] == undefined) {
                       mainObj[i].data[j] = {
                         "uniqueId": "",
                         "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
                       }
                     }
                     else {
-                      if (mainObj[i].data[j] == undefined) {
-                        mainObj[i].data[j] = {
-                          "uniqueId": "",
-                          "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
-                        }
-                      }
-                      else {
-                        mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
-                      }
+                      mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
                     }
                   }
                 }
-                }
-                else {
-                  mainObj[i].data = []
-                }
-              }
-              else {
-                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
-              }
-        
+            }
+            else {
+              mainObj[i].data = []
+            }
+          }
+          else {
+            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+          }
       }
       this.apiService.editLocalAttributes(this.projectHubService.projectid, mainObj).then(res => {
         this.projectHubService.toggleDrawerOpen('', '', [], '')
