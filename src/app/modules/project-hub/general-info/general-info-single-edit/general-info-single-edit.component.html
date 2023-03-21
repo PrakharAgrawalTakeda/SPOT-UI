@@ -13,7 +13,7 @@
                 required fields are missing. Please review and correct your data below</p>
             <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
                 class="flex justify-between items-center mt-3 mb-6">
-                <div class="flex justify-start gap-1 items-center">Is Archived?
+                <div class="flex justify-start gap-1 items-center font-medium">Is Archived?
                 </div>
                 <div>
                     <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
