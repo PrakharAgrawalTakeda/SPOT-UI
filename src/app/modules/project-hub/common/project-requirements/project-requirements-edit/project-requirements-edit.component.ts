@@ -18,7 +18,6 @@ export class ProjectRequirementsEditComponent {
     projectRequirements: any = {}
     lookupdata: any = [];
     local: any = [];
-    noFunctionsRequiredOptions = ["1", "2", "3", "More than 3"]
     projectRequirementsForm = new FormGroup({
         projectID: new FormControl(''),
         financialDoesApply: new FormControl(false),

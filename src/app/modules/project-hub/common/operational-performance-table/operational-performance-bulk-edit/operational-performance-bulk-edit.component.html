@@ -21,7 +21,7 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
                 [rows]="projectViewDetails.overallPerformace" #operationalPerformanceTable>
-                <ngx-datatable-column name="Status" [resizeable]="false" [sortable]="false" prop="status"
+                <ngx-datatable-column name="Status" [resizeable]="false" [sortable]="false" prop="status" *ngIf="mode != 'Project-Proposal'"
                     [flexGrow]="0.8">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
@@ -52,7 +52,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" [name]="'KPI'" prop="kpiid" [flexGrow]="1.6">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [name]="'KPI'" prop="kpiid" [flexGrow]="1.6" *ngIf="mode != 'Project-Proposal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)">
@@ -97,7 +97,38 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Target Performance"
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="PTRB" prop="ptrbid" *ngIf="mode == 'Project-Proposal'"
+                                      [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                           (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                              *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-multiselect-autocomplete class="w-full read-only" formControlName="ptrbid" *ngIf="mode == 'Project-Proposal'"
+                                                           name="ptrbid" [label]="'PTRB'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                                           [customSortPointer]="'lookUpOrder'" [dropDownArray]="getPTRB()" [sortByType]="'custom'">
+                            </spot-multiselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Benefit Description/Justification" prop="benefitDescriptionJustification"
+                                      [flexGrow]="3" *ngIf="mode == 'Project-Proposal'">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                           (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                              *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="benefitDescriptionJustification" [showLabel]="false" [label]="'Benefit Description/Justification'"
+                                           [placeholder]="'Benefit Description/Justification'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Target Performance" *ngIf="mode != 'Project-Proposal'"
                     prop="targetPerformance" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
@@ -113,7 +144,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Actual Performance"
-                    prop="actualPerformance" [flexGrow]="1"   *ngIf="mode != 'Project-Charter'">
+                    prop="actualPerformance" [flexGrow]="1"   *ngIf="mode != 'Project-Charter' && mode != 'Project-Proposal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
                             (click)="operationalPerformanceTableEditRow(rowIndex)">
@@ -140,6 +171,23 @@
                             <mat-slide-toggle
                                 [matTooltip]="this.operationalPerformanceForm.controls[rowIndex]['controls']['includeInCloseOut'].disabled ? 'Only 3 can be selected at a time for close out report display' : null"
                                 class="h-full overflow-hidden" formControlName="includeInCloseOut">
+                            </mat-slide-toggle>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="mode=='Project-Proposal'" [resizeable]="false" [sortable]="false" name="Include In Project Proposal (Max 3)"
+                                      prop="includeinProposal" [flexGrow]="0.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                           (click)="operationalPerformanceTableEditRow(rowIndex)" class="w-full">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                              *ngIf="operationalPerformanceEditStack.includes(rowIndex)" class="h-[45px]">
+                            <mat-slide-toggle
+                                [matTooltip]="this.operationalPerformanceForm.controls[rowIndex]['controls']['includeinProposal'].disabled ? 'Only 3 can be selected at a time for project proposal report display' : null"
+                                class="h-full overflow-hidden" (change)="disabler()" formControlName="includeinProposal">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>

@@ -22,7 +22,7 @@
         class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
         [rows]="projectViewDetails.overallPerformace" [sorts]="[{ prop: 'kpiname', dir: 'asc' }]"
         #operationalPerformanceTable>
-        <ngx-datatable-column name="Status" prop="status" [flexGrow]="1">
+        <ngx-datatable-column name="Status" prop="status" [flexGrow]="1" *ngIf="mode == 'Normal' || mode == 'Project-Close-Out' || mode == 'Project-Charter'" >
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <div class="flex items-center justify-start gap-6">
                     <mat-icon svgIcon="{{(indicator.getIndicators(getIndicator(value), 'circle')).icontype}}"
@@ -47,23 +47,43 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-column name="PTRB" prop="ptrbid" [flexGrow]="1" *ngIf="mode == 'Project-Proposal'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Benefit Description/Justification" prop="benefitDescriptionJustification" [flexGrow]="3" *ngIf="mode == 'Project-Proposal'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
         <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="1" >
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Target Performance" prop="targetPerformance" [flexGrow]="1">
+        <ngx-datatable-column name="Target Performance" prop="targetPerformance" [flexGrow]="1" *ngIf="mode == 'Normal' || mode == 'Project-Close-Out' || mode == 'Project-Charter'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Actual Performance" prop="actualPerformance" [flexGrow]="1"  *ngIf="mode != 'Project-Charter'">
+        <ngx-datatable-column name="Actual Performance" prop="actualPerformance" [flexGrow]="1"  *ngIf="mode == 'Normal' || mode == 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Include in Project Close Out Report (Max 3)" prop="includeInCloseOut" [sortable]="false"
             [resizeable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Close-Out'">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <div class="flex items-center justify-between pl-2 overflow-hidden">
+                    <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="value == true">
+                    </mat-icon>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Include in Proposal Slide (Max 3)" prop="includeinProposal" [sortable]="false"
+                              [resizeable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Proposal'">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                 <div class="flex items-center justify-between pl-2 overflow-hidden">
                     <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="value == false"></mat-icon>

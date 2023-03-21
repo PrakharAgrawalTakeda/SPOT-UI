@@ -14,7 +14,7 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' | 'Project-Proposal' = 'Normal'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -45,6 +45,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
       this.bulkEditType = 'OperationalPerformanceBulkEditCharter';
       this.addSingle = 'OperationalPerformanceSingleEditCharter'
     }
+    if (this.mode == 'Project-Proposal') {
+        this.bulkEditType = 'OperationalPerformanceBulkEditProposal';
+        this.addSingle = 'OperationalPerformanceSingleEditProposal'
+    }
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -53,7 +57,7 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   dataloader() {
     // if(this.mode != 'Normal')
     // {
-      if(this.mode != 'Business-Case'){
+      if(this.mode != 'Project-Proposal'){
           this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
           this.apiService.getprojectviewdata(this.id).then((res: any) => {
               this.projectViewDetails = res
@@ -142,7 +146,14 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     operationalPerformanceAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
         this.apiService.deleteOperationalPerformance(id).then(res => {
-          this.projecthubservice.submitbutton.next(true)
+            if (this.mode == 'Project-Proposal') {
+                this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                    this.projecthubservice.submitbutton.next(true)
+                })
+            }else{
+                this.projecthubservice.submitbutton.next(true)
+            }
+
         })
       }
     })

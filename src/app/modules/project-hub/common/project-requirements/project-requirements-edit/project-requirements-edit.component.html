@@ -14,7 +14,7 @@
     <spot-input-date formControlName="proposedExecutionEnd"  [label]="'Proposed Execution End'"
                      [placeholder]="'Choose a date'">
     </spot-input-date>
-    <spot-select formControlName="shutdownRequired"  [label]="'# Functions Required'"
+    <spot-select formControlName="functionsRequiredId"  [label]="'# Functions Required'"
                  [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false"
                  [dropDownArray]="getFunctionsRequired()" [idPointer]="'lookUpId'"
                  [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">

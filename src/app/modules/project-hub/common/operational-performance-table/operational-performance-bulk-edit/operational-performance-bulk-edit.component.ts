@@ -12,7 +12,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./operational-performance-bulk-edit.component.scss']
 })
 export class OperationalPerformanceBulkEditComponent implements OnInit {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Project-Proposal' = 'Normal'
   projectViewDetails: any = {}
   opDb = []
   submitObj = []
@@ -63,7 +63,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           ptrbid: new FormControl(i.ptrbid),
           benefitDescriptionJustification: new FormControl(i.benefitDescriptionJustification),
           includeinProposal: new FormControl(i.includeinProposal),
-          kpiname: new FormControl(i.kpiname)
+          kpiname: new FormControl(i.kpiname),
         }))
       }
 
@@ -151,6 +151,19 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
             i['controls']['includeInCloseOut'].disable()
           }
         }
+      }
+
+      if (formValue.filter(x => x.includeinProposal == true).length < 3) {
+          for (var i of this.operationalPerformanceForm.controls) {
+             i['controls']['includeinProposal'].enable()
+          }
+      }
+      else {
+          for (var i of this.operationalPerformanceForm.controls) {
+              if (i['controls']['includeinProposal'].value != true) {
+                  i['controls']['includeinProposal'].disable()
+              }
+          }
       }
     }
   }
@@ -281,12 +294,25 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
     }
     else {
       this.apiService.bulkeditKeySuccess(this.submitObj, this.projecthubservice.projectid).then(resp => {
-        this.projecthubservice.isFormChanged = false
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+        if (this.mode == 'Project-Proposal') {
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                this.projecthubservice.isFormChanged = false
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+            })
+        }else{
+            this.projecthubservice.isFormChanged = false
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+        }
+
       })
     }
+  }
+  getPTRB(): any {
+      return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'f48236da-2436-4403-a054-918313159c6e')
   }
 
 
