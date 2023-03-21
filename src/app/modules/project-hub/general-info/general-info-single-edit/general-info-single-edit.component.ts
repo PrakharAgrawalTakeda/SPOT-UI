@@ -356,6 +356,64 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         })
       }
+      else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else if (this.changeExecutionScope == true) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the execution scope will remove all the existing local attributes. Are you sure you want to update the execution scope ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
       else {
         this.submitLogic()
       }
