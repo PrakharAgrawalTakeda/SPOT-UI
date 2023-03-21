@@ -30,14 +30,15 @@
         </spot-textarea>
         <spot-textarea formControlName="lessonDetail" name="description" [label]="'Description / Details'" [placeholder]="'Description / Details'">
         </spot-textarea>
-        <spot-singleselect-autocomplete formControlName="lessonType" class="w-full" name="type" [label]="'Type'"
+        <!-- <spot-singleselect-autocomplete formControlName="lessonType" class="w-full" name="type" [label]="'Type'"
             [placeholder]="'Type'" [valuePointer]="'lookUpName'" [dropDownArray]="GetType()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-        </spot-singleselect-autocomplete>
-
-        <!-- <spot-singleselect-autocomplete formControlName="criticality" class="w-full" name="criticality" [label]="'Criticality'"
-            [placeholder]="'Criticality'" [valuePointer]="'lookUpName'" [dropDownArray]="GetCriticality()">
         </spot-singleselect-autocomplete> -->
 
+        <spot-select formControlName="lessonType" name="lessonType" [label]="'Type'" [placeholder]="'Type'"
+            [dropDownArrayType]="'object'" [dropDownArray]="GetType()" [idPointer]="'lookUpId'"
+            [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+        </spot-select>
+        
         <spot-select formControlName="criticality" name="criticality" [label]="'Criticality'" [placeholder]="'Criticality'"
             [dropDownArrayType]="'object'" [dropDownArray]="GetCriticality()" [idPointer]="'lookUpId'" [valuePointer]="'lookUpName'"
             [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -46,9 +47,6 @@
         <spot-singleselect-user-autocomplete formControlName="submittedBy" [label]="'Submitted By'"
             name="SubmittedBy" [showLabel]="true" [placeholder]="'Last Name, First Name'">
         </spot-singleselect-user-autocomplete>
-        <!-- <spot-singleselect-autocomplete formControlName="submittingGroupRole" class="w-full" name="submittingGroup" [label]="'Submitting Group / Role'"
-            [placeholder]="'Submitting Group / Role'" [valuePointer]="'lookUpName'" [dropDownArray]="GetRole()">
-        </spot-singleselect-autocomplete> -->
 
         <spot-select formControlName="submittingGroupRole" name="submittingGroup" [label]="'Submitting Group / Role'"
             [placeholder]="'Submitting Group / Role'" [dropDownArrayType]="'object'" [dropDownArray]="GetRole()"
