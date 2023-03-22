@@ -71,6 +71,14 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
       }else{
           this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
           this.apiService.getprojectviewdata(this.id).then((res: any) => {
+              res.overallPerformace.map( (x, index) => {
+                  var array = x.ptrbid.split(',');
+                  let finalList = "";
+                  array.forEach( ptrb =>{
+                        finalList = finalList + this.getLookUpName(ptrb) + " "
+                  })
+                  res.overallPerformace[index].ptrbid = finalList;
+              })
               this.projectViewDetails = res
               for (var i of this.projectViewDetails.overallPerformace) {
                   i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
@@ -147,7 +155,7 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
       if (close == 'confirmed') {
         this.apiService.deleteOperationalPerformance(id).then(res => {
             if (this.mode == 'Project-Proposal') {
-                this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                this.apiService.updateReportDates(this.id, "ProjectProposalModifiedDate").then(secondRes => {
                     this.projecthubservice.submitbutton.next(true)
                 })
             }else{

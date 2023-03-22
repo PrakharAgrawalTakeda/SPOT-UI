@@ -20,7 +20,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
     currentState: new FormControl(''),
     targetPerformance: new FormControl(''),
     actualPerformance: new FormControl(''),
-    ptrbid: new FormControl(''),
+    ptrbid: new FormControl([]),
     benefitDescriptionJustification: new FormControl(''),
     includeInProjectDashboard: new FormControl(false),
     includeInCloseOut: new FormControl(false),
@@ -127,7 +127,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
       includeInCharter: formValue.includeInCharter,
       includeInCloseOut: formValue.includeInCloseOut,
       includeinProposal: formValue.includeInProposal,
-      ptrbid: formValue.ptrbid,
+      ptrbid: formValue.ptrbid.length > 0 ? formValue.ptrbid.map(x => x.lookUpId).join() : '',
       benefitDescriptionJustification: formValue.benefitDescriptionJustification,
     }
     if (this.projecthubservice.itemid != 'new') {
@@ -135,7 +135,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
       mainObj.includeInCharter = formValue.includeInCharter
       mainObj.includeInCloseOut = formValue.includeInCloseOut
       mainObj.includeinProposal = formValue.includeInProposal
-      mainObj.ptrbid = formValue.ptrbid
+      mainObj.ptrbid = formValue.ptrbid.length > 0 ? formValue.ptrbid.map(x => x.lookUpId).join() : ''
       mainObj.benefitDescriptionJustification = formValue.benefitDescriptionJustification
       this.apiService.editOperationalPerformanceSingle(mainObj).then(res => {
         if (this.mode == 'Project-Proposal') {
