@@ -332,7 +332,7 @@ export class StrategicDriversComponent implements OnInit {
               }
             }
             var isAgile = false
-            if (history.state.data.agilePrimaryWorkstream != null || history.state.data.agileSecondaryWorkstream != null || history.state.data.agileWave != null){
+            if ((history.state.data.agilePrimaryWorkstream != null && history.state.data.agilePrimaryWorkstream.length != 0) || (history.state.data.agileSecondaryWorkstream != null && history.state.data.agileSecondaryWorkstream != "") || (history.state.data.agileWave != null && history.state.data.agileWave.length != 0)){
               isAgile = true
             }
             this.strategicDriversForm.patchValue({

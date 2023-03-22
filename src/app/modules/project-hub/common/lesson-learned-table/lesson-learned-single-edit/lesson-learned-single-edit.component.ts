@@ -233,6 +233,7 @@ export class LessonLearnedSingleEditComponent implements OnInit {
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.isNavChanged.next(true)
+        this.projecthubservice.successSave.next(true)
       })
     }
     else {
@@ -278,6 +279,7 @@ export class LessonLearnedSingleEditComponent implements OnInit {
         this.projecthubservice.toggleDrawerOpen('', '', [], '')
         this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.isNavChanged.next(true)
+        this.projecthubservice.successSave.next(true)
       })
 
     }
