@@ -109,6 +109,14 @@ export class OeProjectSingleEditComponent implements OnInit {
             this.formValueOE.emit(this.generalInfoForm.getRawValue())
             this.viewContent = true
           }
+          else{
+            this.generalInfoForm.patchValue({
+              isOeproject: false,
+              oeprojectType: [],
+            })
+            this.formValueOE.emit(this.generalInfoForm.getRawValue())
+            this.viewContent = true
+          }
         }
         else{
         this.formValueOE.emit(this.generalInfoForm.getRawValue())
