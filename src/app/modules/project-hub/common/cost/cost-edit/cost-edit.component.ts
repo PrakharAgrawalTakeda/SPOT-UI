@@ -60,7 +60,7 @@ export class CostEditComponent {
   },
   {
     category: 'Asset in Service',
-    baseCase: 'assetInService',
+    baseCase: 'apisdate',
     highCase: 'assetInServiceNa',
     curryearSpend: 'currentYearPlannedSpend'
   },
@@ -85,7 +85,7 @@ export class CostEditComponent {
     functionsRequiredId: new FormControl(null),
     currentYearPlannedSpend: new FormControl(''),
     projectSpendStart: new FormControl(''),
-    assetInService: new FormControl(''),
+    apisdate: new FormControl(''),
     assetInServiceNa: new FormControl(false),
     isProjectSpentNa: new FormControl(false)
   })
@@ -136,7 +136,7 @@ if(this.mode == 'Project-Charter')
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
+        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
     assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
     isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -173,7 +173,7 @@ if (this.optionType == 'recommended-option') {
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
+        apisdate: res.costData.apisdate ? res.costData.apisdate : null,
         assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
         isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -204,14 +204,14 @@ if (this.optionType == 'option-2') {
         durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
         peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
         peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
-        totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
-        totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
-        totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
-        totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
+        totalCapExBaseCase: res.costData.totalCapexBaseCase ? res.costData.totalCapexBaseCase : null,
+        totalCapExHighCase: res.costData.totalCapexHighCase ? res.costData.totalCapexHighCase : null,
+        totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase ? res.costData.totalNonFtebaseCase : null,
+        totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
+        apisdate: res.costData.assetInService ? res.costData.assetInService : null,
         assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
         isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -242,14 +242,14 @@ if (this.optionType == 'option-3') {
         durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
         peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
         peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
-        totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
-        totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
-        totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
-        totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
+        totalCapExBaseCase: res.costData.totalCapexBaseCase ? res.costData.totalCapexBaseCase : null,
+        totalCapExHighCase: res.costData.totalCapexHighCase ? res.costData.totalCapexHighCase : null,
+        totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase ? res.costData.totalNonFtebaseCase : null,
+        totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
         functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
         currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
         projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-        assetInService: res.costData.assetInService ? res.costData.assetInService : null,
+        apisdate: res.costData.assetInService ? res.costData.assetInService : null,
         assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
         isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -306,7 +306,9 @@ if (this.optionType == 'option-3') {
     }
     else 
     {
-      mainObj.durationBaseCase= formValue.durationBaseCase,
+      if(this.mode == 'Project-Charter')
+      {
+        mainObj.durationBaseCase= formValue.durationBaseCase,
       mainObj.durationHighCase= formValue.durationHighCase,
       mainObj.peopleFtemonthsRequiredBaseCase= formValue.peopleFtemonthsRequiredBaseCase,
       mainObj.peopleFtemonthsRequiredHighCase= formValue.peopleFtemonthsRequiredHighCase,
@@ -315,14 +317,12 @@ if (this.optionType == 'option-3') {
       mainObj.totalNonFteopExBaseCase= formValue.totalNonFteopExBaseCase,
       mainObj.totalNonFteopExHighCase= formValue.totalNonFteopExHighCase,
       mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
-      mainObj.assetInService= formValue.assetInService,
+      mainObj.apisdate= formValue.apisdate,
       mainObj.projectSpendStart= formValue.projectSpendStart,
       mainObj.currentYearPlannedSpend= formValue.currentYearPlannedSpend,
       mainObj.assetInServiceNa= formValue.assetInServiceNa,
       mainObj.isProjectSpentNa= formValue.isProjectSpentNa
       console.log("Main Cost Data",mainObj)
-      if(this.mode == 'Project-Charter')
-      {
         this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
             this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
                 this.projectHubService.isFormChanged = false
@@ -335,6 +335,21 @@ if (this.optionType == 'option-3') {
       }
       if(this.optionType == 'recommended-option')
       {
+        mainObj.durationBaseCase= formValue.durationBaseCase,
+      mainObj.durationHighCase= formValue.durationHighCase,
+      mainObj.peopleFtemonthsRequiredBaseCase= formValue.peopleFtemonthsRequiredBaseCase,
+      mainObj.peopleFtemonthsRequiredHighCase= formValue.peopleFtemonthsRequiredHighCase,
+      mainObj.totalCapExBaseCase= formValue.totalCapExBaseCase,
+      mainObj.totalCapExHighCase= formValue.totalCapExHighCase,
+      mainObj.totalNonFteopExBaseCase= formValue.totalNonFteopExBaseCase,
+      mainObj.totalNonFteopExHighCase= formValue.totalNonFteopExHighCase,
+      mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
+      mainObj.apisdate= formValue.apisdate,
+      mainObj.projectSpendStart= formValue.projectSpendStart,
+      mainObj.currentYearPlannedSpend= formValue.currentYearPlannedSpend,
+      mainObj.assetInServiceNa= formValue.assetInServiceNa,
+      mainObj.isProjectSpentNa= formValue.isProjectSpentNa
+      console.log("Main Cost Data",mainObj)
         this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
           this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
@@ -344,6 +359,21 @@ if (this.optionType == 'option-3') {
       }
       if(this.optionType == 'option-2')
       {
+        mainObj.durationBaseCase= formValue.durationBaseCase,
+      mainObj.durationHighCase= formValue.durationHighCase,
+      mainObj.peopleFtemonthsRequiredBaseCase= formValue.peopleFtemonthsRequiredBaseCase,
+      mainObj.peopleFtemonthsRequiredHighCase= formValue.peopleFtemonthsRequiredHighCase,
+      mainObj.totalCapexBaseCase= formValue.totalCapExBaseCase,
+      mainObj.totalCapexHighCase= formValue.totalCapExHighCase,
+      mainObj.totalNonFtebaseCase= formValue.totalNonFteopExBaseCase,
+      mainObj.totalNonFtehighCase= formValue.totalNonFteopExHighCase,
+      mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
+      mainObj.assetInService= formValue.apisdate,
+      mainObj.projectSpendStart= formValue.projectSpendStart,
+      mainObj.currentYearPlannedSpend= formValue.currentYearPlannedSpend,
+      mainObj.assetInServiceNa= formValue.assetInServiceNa,
+      mainObj.isProjectSpentNa= formValue.isProjectSpentNa
+      console.log("Main Cost Data",mainObj)
         this.optionId = GlobalBusinessCaseOptions.OPTION_2
         console.log(mainObj)
         this.apiService.updateBusinessCaseCost(mainObj,this.projectHubService.projectid,this.optionId).then(Res => {
@@ -355,6 +385,20 @@ if (this.optionType == 'option-3') {
       }
       if(this.optionType == 'option-3')
       {
+        mainObj.durationBaseCase= formValue.durationBaseCase,
+        mainObj.durationHighCase= formValue.durationHighCase,
+        mainObj.peopleFtemonthsRequiredBaseCase= formValue.peopleFtemonthsRequiredBaseCase,
+        mainObj.peopleFtemonthsRequiredHighCase= formValue.peopleFtemonthsRequiredHighCase,
+        mainObj.totalCapexBaseCase= formValue.totalCapExBaseCase,
+        mainObj.totalCapexHighCase= formValue.totalCapExHighCase,
+        mainObj.totalNonFtebaseCase= formValue.totalNonFteopExBaseCase,
+        mainObj.totalNonFtehighCase= formValue.totalNonFteopExHighCase,
+        mainObj.functionsRequiredId= Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
+        mainObj.assetInService= formValue.apisdate,
+        mainObj.projectSpendStart= formValue.projectSpendStart,
+        mainObj.currentYearPlannedSpend= formValue.currentYearPlannedSpend,
+        mainObj.assetInServiceNa= formValue.assetInServiceNa,
+        mainObj.isProjectSpentNa= formValue.isProjectSpentNa
         this.optionId = GlobalBusinessCaseOptions.OPTION_3
         this.apiService.updateBusinessCaseCost(mainObj,this.projectHubService.projectid,this.optionId).then(Res => {
           this.projectHubService.isNavChanged.next(true)

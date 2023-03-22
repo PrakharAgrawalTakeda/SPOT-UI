@@ -579,7 +579,7 @@ async updateBusinessCaseCost(body, projectId, optionid){
 
 
 async updateBusinessCaseFunding(body, projectId, optionid){
-  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BusinessCaseFunding/" +optionid+"/" + projectId
+  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BulkEditBusinessCaseFunding/"+optionid+"/" + projectId
   const abc$ = this.http.put(url,body)
   const response = await lastValueFrom(abc$)
   return response
@@ -653,6 +653,13 @@ async updateBusinessCaseFunding(body, projectId, optionid){
   async getBusinessCaseCostFunding(projectid, optionid) {
     var url = GlobalVariables.apiurl + "BusinessCaseCostFunding/"+optionid+"/" + projectid
     const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteBusinessCaseFunding(id: string) {
+    var link = GlobalVariables.apiurl + "BusinessCaseCostFunding/BusinessCaseFunding/" + id
+    const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
   }

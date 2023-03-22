@@ -186,6 +186,7 @@ export class FundingComponent implements OnInit, OnChanges {
   // }
 
   deleteFunding(id: string) {
+    console.log(id)
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Remove Funding?",
       "message": "Are you sure you want to remove this record permanently? ",
@@ -210,12 +211,28 @@ export class FundingComponent implements OnInit, OnChanges {
     const fundingAlert = this.fuseAlert.open(comfirmConfig)
 
     fundingAlert.afterClosed().subscribe(close => {
-      if (close == 'confirmed') {
+      if (close == 'confirmed' && this.mode == 'Project-Charter') {
         this.apiService.deleteFunding(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
         })
       }
+      if (close == 'confirmed' && this.optionType == 'recommended-option') {
+        this.apiService.deleteFunding(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+      if (close == 'confirmed' && this.optionType == 'option-2') {
+        console.log("DELETING OPTION 2 FUNDING")
+        this.apiService.deleteBusinessCaseFunding(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+      if (close == 'confirmed' && this.optionType == 'option-3') {
+        this.apiService.deleteBusinessCaseFunding(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
     })
-
+    
   }
 }
