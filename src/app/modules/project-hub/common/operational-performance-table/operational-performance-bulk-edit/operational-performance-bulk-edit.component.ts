@@ -179,7 +179,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         currentState: x.currentState,
         targetPerformance: x.targetPerformance,
         includeInCharter: x.includeInCharter,
-        kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
+        kpiid: Object.keys(x.kpiid || {}).length > 0 ? x.kpiid.kpiid : '',
         actualPerformance: x.actualPerformance,
         includeInProjectDashboard: x.includeInProjectDashboard,
         status: x.status,

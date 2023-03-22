@@ -121,7 +121,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
     var mainObj: any = {
       projectId: this.projecthubservice.projectid,
       status: formValue.status,
-      kpiid: Object.keys(formValue.kpiid).length > 0 ? formValue.kpiid.kpiid : '',
+      kpiid: Object.keys(formValue.kpiid || {}).length > 0 ? formValue.kpiid.kpiid : '',
       metric: formValue.metric,
       currentState: formValue.currentState,
       targetPerformance: formValue.targetPerformance,
