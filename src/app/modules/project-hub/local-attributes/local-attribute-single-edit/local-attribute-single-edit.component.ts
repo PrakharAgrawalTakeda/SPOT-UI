@@ -123,8 +123,14 @@ export class LocalAttributeSingleEditComponent {
             if (i.linesCount == null) {
               i.linesCount = 13
             }
+            if (i.data[0].value == null){
+              i.data = ""
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            }
+            else{
             i.data = i.data[0].value
             this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            }
           }
           else if (i.dataType == 5 && i.isMulti == false) {
             if (i.data.length == 0) {
@@ -132,8 +138,14 @@ export class LocalAttributeSingleEditComponent {
               this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
             }
             else {
+              if (i.data[0].value == null){
+                i.data = ""
+                this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
+              else{
               i.data = i.data[0].value
               this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
             }
           }
           else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {
@@ -250,10 +262,20 @@ export class LocalAttributeSingleEditComponent {
           else {
           if (mainObj[i].data.length == 0){
             mainObj[i].data.push(emptyObject)
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == ""){
+              mainObj[i].data[0].value = null
+            }
+            else{
             mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+            }
           }
           else{
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data[0].value = null
+            }
+            else {
             mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+            }
           }
           }
       }
@@ -261,6 +283,7 @@ export class LocalAttributeSingleEditComponent {
         this.projectHubService.toggleDrawerOpen('', '', [], '')
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.successSave.next(true)
       })
     })
     

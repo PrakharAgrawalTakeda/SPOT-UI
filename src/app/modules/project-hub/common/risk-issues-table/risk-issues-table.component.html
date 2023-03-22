@@ -75,17 +75,17 @@
         </ngx-datatable-column>
         <ngx-datatable-column name="Impact" prop="impactId" [flexGrow]="2" *ngIf="callLocation == 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{getLookUpName(value)}}</p>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter' || callLocation== 'Business-Case'">
+        <ngx-datatable-column name="Details/Migration" prop="mitigation" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter' || callLocation== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{value}}</p>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Owner" prop="ownerName" [flexGrow]="2" *ngIf="callLocation== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{value}}</p>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" *ngIf="callLocation== 'Normal'">

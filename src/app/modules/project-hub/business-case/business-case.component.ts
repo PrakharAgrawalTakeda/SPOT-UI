@@ -74,6 +74,5 @@ export class BusinessCaseComponent implements OnInit {
         ]
       }
     }
-    console.log(this.navItem)
   }
 }

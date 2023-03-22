@@ -6,8 +6,8 @@
     </a>
     </div>
 </div>
-<form class="w-full overflow-y-hidden form-ask-need" [formGroup]="scheduleForm" (ngSubmit)="submitschedule()">
-    <div class="h-[77vh] overflow-x-hidden  pr-3">
+<form class="w-full overflow-hidden" [formGroup]="scheduleForm" (ngSubmit)="submitschedule()" style="overflow-y: scroll; height: 95vh;">
+    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
         <div *ngIf="viewElementChecker('milestone')">
             <spot-textarea formControlName="milestone" name="milestone"
                 [label]="(this.schedule.milestoneType > 0 ? (this.schedule.milestoneType == 1 ? 'Milestone (Execution Start - ...)' : (this.schedule.milestoneType == 2 ? 'Milestone (Execution End - ...)' : 'Milestone')) : 'Milestone')"
@@ -62,9 +62,7 @@
         </div>
     </div>
 
-    <br>
-    <!-- <div class="flex items-start justify-between"> -->
-    <div class="mt-20 pr-6 pl-6 flex justify-between items-center w-full">
+    <div class="flex items-start justify-between form-ask-need">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
