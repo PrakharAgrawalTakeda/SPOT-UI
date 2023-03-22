@@ -262,10 +262,20 @@ export class LocalAttributeSingleEditComponent {
           else {
           if (mainObj[i].data.length == 0){
             mainObj[i].data.push(emptyObject)
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == ""){
+              mainObj[i].data[0].value = null
+            }
+            else{
             mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+            }
           }
           else{
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data[0].value = null
+            }
+            else {
             mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+            }
           }
           }
       }
