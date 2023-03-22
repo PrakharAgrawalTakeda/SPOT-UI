@@ -104,8 +104,14 @@ export class LocalAttributesComponent implements OnInit {
               this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
             }
             else{
+              if (i.data[0].value == null || i.data[0].value == ""){
+                i.data = ""
+                this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
+              else{
               i.data = i.data[0].value.userDisplayName
               this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
             }
           }
           else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {

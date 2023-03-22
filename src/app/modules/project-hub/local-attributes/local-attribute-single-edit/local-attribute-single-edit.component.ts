@@ -132,8 +132,14 @@ export class LocalAttributeSingleEditComponent {
               this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
             }
             else {
+              if (i.data[0].value == null){
+                i.data = ""
+                this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
+              else{
               i.data = i.data[0].value
               this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
             }
           }
           else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {
@@ -172,12 +178,12 @@ export class LocalAttributeSingleEditComponent {
       var mainObj = res
       this.projectHubService.isFormChanged = false
       var formValue = this.localAttributeForm.getRawValue()
-      var emptyObject={
-        "uniqueId": "",
-        "value": ""
-      }
       for (var i = 0; i < mainObj.length; i++) {
-        if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1) {
+        var emptyObject = {
+          "uniqueId": "",
+          "value": ""
+        }
+        if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
           mainObj[i].data = []
         }
           else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == ""){
@@ -221,7 +227,7 @@ export class LocalAttributeSingleEditComponent {
           }
           else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
             var data = []
-              if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value != null) {
+              if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
                 for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
                   if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
                     mainObj[i].data = []
@@ -248,7 +254,13 @@ export class LocalAttributeSingleEditComponent {
             }
           }
           else {
+          if (mainObj[i].data.length == 0){
+            mainObj[i].data.push(emptyObject)
             mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+          }
+          else{
+            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+          }
           }
       }
       this.apiService.editLocalAttributes(this.projectHubService.projectid, mainObj).then(res => {
