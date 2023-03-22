@@ -84,17 +84,17 @@
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                         <a href="javascript:void(0)" title="Delete Single"
-                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'recommended-option'"
+                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'recommended-option' && mode!= 'Project-Charter'"
                             (click)="deleteFunding(row.fundingUniqueId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                         <a href="javascript:void(0)" title="Delete Single"
-                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'option-2'"
+                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'option-2' && mode!= 'Project-Charter'"
                             (click)="deleteFunding(row.businessFundingUniqueId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                         <a href="javascript:void(0)" title="Delete Single"
-                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'option-3'"
+                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'option-3' && mode!= 'Project-Charter'"
                             (click)="deleteFunding(row.businessFundingUniqueId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>

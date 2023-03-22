@@ -707,25 +707,28 @@ debugger
         if(this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
           this.apiService.bulkeditFunding(this.submitObj, this.projecthubservice.projectid).then(resp => {
           this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.successSave.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
         })
         }
         if(this.mode != 'Project-Charter' && this.optionType == 'option-2') {
           this.apiService.updateBusinessCaseFunding(this.submitObj, this.projecthubservice.projectid,this.optionId).then(resp => {
           this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.successSave.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
         })
         }
         if(this.mode != 'Project-Charter' && this.optionType == 'option-3') {
           this.apiService.updateBusinessCaseFunding(this.submitObj, this.projecthubservice.projectid,this.optionId).then(resp => {
           this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.successSave.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
         })
         }
 

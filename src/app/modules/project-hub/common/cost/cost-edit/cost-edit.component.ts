@@ -351,7 +351,7 @@ if (this.optionType == 'option-3') {
       mainObj.isProjectSpentNa= formValue.isProjectSpentNa
       console.log("Main Cost Data",mainObj)
         this.apiService.updateCost(mainObj,this.projectHubService.projectid).then(Res => {
-          this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
         this.projectHubService.toggleDrawerOpen('', '', [], '')
@@ -377,7 +377,7 @@ if (this.optionType == 'option-3') {
         this.optionId = GlobalBusinessCaseOptions.OPTION_2
         console.log(mainObj)
         this.apiService.updateBusinessCaseCost(mainObj,this.projectHubService.projectid,this.optionId).then(Res => {
-          this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
         this.projectHubService.toggleDrawerOpen('', '', [], '')
@@ -401,7 +401,7 @@ if (this.optionType == 'option-3') {
         mainObj.isProjectSpentNa= formValue.isProjectSpentNa
         this.optionId = GlobalBusinessCaseOptions.OPTION_3
         this.apiService.updateBusinessCaseCost(mainObj,this.projectHubService.projectid,this.optionId).then(Res => {
-          this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
         this.projectHubService.toggleDrawerOpen('', '', [], '')
