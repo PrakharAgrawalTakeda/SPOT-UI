@@ -118,7 +118,6 @@ export class OperationalPerformanceEditComponent implements OnInit {
   submitop() {
     this.projecthubservice.isFormChanged = false
     var formValue = this.OperationalPerformanceForm.getRawValue()
-      console.log("Aaaaaaaaaaaaa", formValue.kpiid)
     var mainObj: any = {
       projectId: this.projecthubservice.projectid,
       status: formValue.status,
