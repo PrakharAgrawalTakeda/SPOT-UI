@@ -42,6 +42,9 @@
                                     *ngIf="item.data">
                                 </mat-icon>
                             </div>
+                            <spot-input *ngSwitchCase="'4'" class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                                [label]=item.name [decimalCount] = item.linesCount [inputType] = "'Number'">
+                            </spot-input>
                             <spot-input *ngSwitchDefault class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
                                 [label]=item.name>
                             </spot-input>
