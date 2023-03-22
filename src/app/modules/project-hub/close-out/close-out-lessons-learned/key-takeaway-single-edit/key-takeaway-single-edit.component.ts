@@ -36,6 +36,7 @@ export class KeyTakeawaySingleEditComponent implements OnInit {
     this.apiService.editLessonLearnedTakeaway(this.projecthubservice.projectid, this.DatatoSend.keyTakeaways).then(res => {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.successSave.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
     })
   }

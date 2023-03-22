@@ -12,12 +12,19 @@ import { ProjectHubService } from '../project-hub.service';
 })
 export class LocalAttributesComponent implements OnInit {
   localAttributeForm: any = new FormGroup({})
+  localAttributeFormRaw: any = new FormGroup({})
   viewContent = false
   id = ''
   data: any
   lookupData: any
   editable= false
-  constructor(private _Activatedroute: ActivatedRoute, public auth: AuthService, private projectHubService: ProjectHubService, private apiService: ProjectApiService) { }
+  constructor(private _Activatedroute: ActivatedRoute, public auth: AuthService, private projectHubService: ProjectHubService, private apiService: ProjectApiService) {
+    this.projectHubService.submitbutton.subscribe(res => {
+      if (res == true) {
+        this.ngOnInit()
+      }
+    })
+   }
 
   ngOnInit(): void {
     if (this.projectHubService.roleControllerControl.projectHub.localAttributes) {
@@ -28,37 +35,114 @@ export class LocalAttributesComponent implements OnInit {
       this.auth.lookupMaster().then(res1 => {
         this.lookupData = res1
         this.data = res
+        this.localAttributeForm = new FormGroup({})
+        this.localAttributeFormRaw = new FormGroup({})
         this.data.forEach(i => {
-          if (i.dataType == 3 && i.isMulti == true){
-            if (i.data == null) {
+          this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+        })
+        this.data.forEach(i => {
+          if(i.dataType == 1 && i.data.length == 0){
+            i.data = false
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else if (i.dataType == 1 && i.data.length > 0) {
+            i.data = i.data[0].value
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else if (i.dataType == 2 && i.data.length == 0){
+            i.data = ""
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else if (i.dataType == 2 && i.data.length > 0) {
+            i.data = i.data[0].value
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else if (i.dataType == 3 && i.isMulti == true){
+            if(i.data.length == 0){
               i.data = []
-            }
-            else if (i.data[0] == null) {
-              i.data = []
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
             }
             else{
-              if(Array.isArray(i.data)){
-                var newData = i.data
-                for (var j = 0; j < newData.length;j++){
-                  i.data[j] = this.lookupData.filter(x => x.lookUpId == newData[j])[0]
-                }
-              }
-              else{
-                var newData1 = []
-                newData1 .push(this.lookupData.filter(x => x.lookUpId == i.data)[0])
-                i.data = newData1
-              }
+            var newData = i.data
+            var dataMulti = []
+            for (var j = 0; j < newData.length;j++){
+              i.data[j] = this.lookupData.filter(x => x.lookUpId == newData[j].value)[0]
+              // dataMulti.push(i.data[j].value)
             }
+            // i.data = dataMulti
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            // this.localAttributeForm.get(i.uniqueId).patchValue(i.data);
+          }
           }
           else if (i.dataType == 3 && i.isMulti == false) {
-            if (i.data == null) {
+            if(i.data.length == 0){
               i.data = ""
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
             }
-            else {
-              i.data = this.lookupData.filter(x => x.lookUpId == i.data)[0].lookUpName
+            else{
+              if (this.lookupData.filter(x => x.lookUpId == i.data[0].value).length == 0){
+                i.data = ""
+                this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
+              else{
+              i.data = this.lookupData.filter(x => x.lookUpId == i.data[0].value)[0].lookUpName
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
             }
           }
-          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          else if(i.dataType == 4 && i.data.length == 0){
+            i.data = ""
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else if (i.dataType == 4 && i.data.length > 0) {
+            if (i.data[0].value == null) {
+              i.data = ""
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            }
+            else {
+            i.data = i.data[0].value
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            }
+          }
+          else if (i.dataType == 5 && i.isMulti == false) {
+            if (i.data.length == 0){
+              i.data = ""
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            }
+            else{
+              if (i.data[0].value == null || i.data[0].value == ""){
+                i.data = ""
+                this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
+              else{
+              i.data = i.data[0].value.userDisplayName
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+              }
+            }
+          }
+          else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {
+            if (i.data.length == 0){
+              i.data = []
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            }
+            else{
+              var newData = i.data
+              for (var j = 0; j < newData.length; j++) {
+                i.data = newData[j].value
+              }
+              this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+            }
+          }
+          else if(i.dataType == 6 && i.data.length == 0){
+            i.data = ""
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else if (i.dataType == 6 && i.data.length > 0) {
+            i.data = i.data[0].value
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          // this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          // this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
         })
         this.viewContent = true
         this.disabler()
