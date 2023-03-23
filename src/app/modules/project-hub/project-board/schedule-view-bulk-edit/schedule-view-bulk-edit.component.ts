@@ -1091,7 +1091,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     deleteSchedule(id: string, row: any, rowIndex: number) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Save Changes?",
-            "message": "Are you sure you want to delete the milestone permanently? ",
+            "message": "Are you sure you want to remove this milestone permanently? ",
             "icon": {
                 "show": true,
                 "name": "heroicons_outline:exclamation",
@@ -1100,7 +1100,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             "actions": {
                 "confirm": {
                     "show": true,
-                    "label": "Save",
+                    "label": "Remove",
                     "color": "warn"
                 },
                 "cancel": {
