@@ -72,12 +72,14 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
           this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
           this.apiService.getprojectviewdata(this.id).then((res: any) => {
               res.overallPerformace.map( (x, index) => {
-                  var array = x.ptrbid.split(',');
-                  let finalList = "";
-                  array.forEach( ptrb =>{
-                        finalList = finalList + this.getLookUpName(ptrb) + " "
-                  })
-                  res.overallPerformace[index].ptrbid = finalList;
+                  if(x.ptrbid){
+                      var array = x?.ptrbid?.split(',');
+                      let finalList = "";
+                      array.forEach( ptrb =>{
+                          finalList = finalList + this.getLookUpName(ptrb) + " "
+                      })
+                      res.overallPerformace[index].ptrbid = finalList;
+                  }
               })
               this.projectViewDetails = res
               for (var i of this.projectViewDetails.overallPerformace) {

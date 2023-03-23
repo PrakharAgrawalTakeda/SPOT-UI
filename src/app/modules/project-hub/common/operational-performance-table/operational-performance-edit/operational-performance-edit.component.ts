@@ -15,7 +15,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
   formIntialized: boolean = false
   OperationalPerformanceForm = new FormGroup({
     status: new FormControl(''),
-    kpiid: new FormControl({}),
+    kpiid: new FormControl(null),
     metric: new FormControl(''),
     currentState: new FormControl(''),
     targetPerformance: new FormControl(''),
@@ -43,8 +43,13 @@ export class OperationalPerformanceEditComponent implements OnInit {
   dataloader() {
     console.log(this.projecthubservice.all)
     if (this.projecthubservice.itemid != 'new') {
+        let ptrinInit;
       this.apiService.getOperationalPerformanceSingle(this.projecthubservice.itemid).then((op: any) => {
         this.OperationalPerformance = op
+        let ptribIdarray= op.ptrbid ? op.ptrbid.split(',') : [];
+        ptrinInit = ptribIdarray.map(x=> {
+            return this.getLookup(x);
+        })
         this.OperationalPerformanceForm.patchValue({
           status: op.status,
           kpiid: this.projecthubservice.kpiMasters.some(x => x.kpiid == op.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == op.kpiid) : {},
@@ -52,7 +57,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
           currentState: op.currentState,
           targetPerformance: op.targetPerformance,
           actualPerformance: op.actualPerformance,
-          ptrbid: op.ptrbid,
+          ptrbid: ptrinInit,
           benefitDescriptionJustification: op.benefitDescriptionJustification,
           includeInProjectDashboard: op.includeInProjectDashboard,
           includeInCloseOut: op.includeInCloseOut,
@@ -116,7 +121,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
     var mainObj: any = {
       projectId: this.projecthubservice.projectid,
       status: formValue.status,
-      kpiid: Object.keys(formValue.kpiid || {}).length > 0 ? formValue.kpiid : null,
+      kpiid: Object.keys(formValue.kpiid || {}).length > 0 ? formValue.kpiid.kpiid : '',
       metric: formValue.metric,
       currentState: formValue.currentState,
       targetPerformance: formValue.targetPerformance,
@@ -170,5 +175,8 @@ export class OperationalPerformanceEditComponent implements OnInit {
   }
   getPTRB(): any {
       return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'f48236da-2436-4403-a054-918313159c6e')
+  }
+  getLookup(lookUpId: string): any {
+      return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId) : null
   }
 }
