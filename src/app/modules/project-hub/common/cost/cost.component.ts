@@ -36,6 +36,22 @@ export class CostComponent implements OnInit {
     assetInServiceNa: new FormControl(false),
     isProjectSpentNa: new FormControl(false)
   })
+  // costFundingForm = new FormGroup({
+  //   durationBaseCase: new FormControl(null),
+  //   durationHighCase: new FormControl(null),
+  //   peopleFtemonthsRequiredBaseCase: new FormControl(null),
+  //   peopleFtemonthsRequiredHighCase: new FormControl(null),
+  //   totalCapExBaseCase: new FormControl(null),
+  //   totalCapExHighCase: new FormControl(null),
+  //   totalNonFteopExBaseCase: new FormControl(null),
+  //   totalNonFteopExHighCase: new FormControl(null),
+  //   functionsRequiredId: new FormControl(null),
+  //   currentYearPlannedSpend: new FormControl(null),
+  //   projectSpendStart: new FormControl(''),
+  //   apisdate: new FormControl(''),
+  //   assetInServiceNa: new FormControl(false),
+  //   isProjectSpentNa: new FormControl(false)
+  // })
   cost: any;
   localcurrency: any;
   Amount: any;
@@ -62,7 +78,7 @@ export class CostComponent implements OnInit {
   dataloader() {
 
     this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
-    if (this.optionType == 'recommended-option') {
+    if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
       this.costBCbulkEditType = 'CostBCEdit'
     this.apiService.getCostFunding(this.id).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
@@ -82,20 +98,20 @@ export class CostComponent implements OnInit {
         if(this.costfundingData != null)
         {
           this.costFundingForm.patchValue({
-            durationBaseCase: res.costData.durationBaseCase,
-            durationHighCase: res.costData.durationHighCase,
-            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
-            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
-            totalCapExBaseCase: res.costData.totalCapExBaseCase,
-            totalCapExHighCase: res.costData.totalCapExHighCase,
-            totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
-            totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
+            durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+            durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+            totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+            totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+            totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+            totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
-            currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
-            projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.apisdate,
-            assetInServiceNa: res.costData.assetInServiceNa,
-            isProjectSpentNa: res.costData.isProjectSpentNa
+            currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+            projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+            apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+            assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+            isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
   
           })
         }
@@ -153,20 +169,20 @@ export class CostComponent implements OnInit {
         if(this.costfundingData != null)
         {
           this.costFundingForm.patchValue({
-            durationBaseCase: res.costData.durationBaseCase,
-            durationHighCase: res.costData.durationHighCase,
-            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
-            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
-            totalCapExBaseCase: res.costData.totalCapExBaseCase,
-            totalCapExHighCase: res.costData.totalCapExHighCase,
-            totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase,
-            totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase,
+            durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+            durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+            totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+            totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+            totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+            totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
-            currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
-            projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.apisdate,
-            assetInServiceNa: res.costData.assetInServiceNa,
-            isProjectSpentNa: res.costData.isProjectSpentNa
+            currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+            projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+            apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+            assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+            isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
   
           })
         }
@@ -207,7 +223,7 @@ export class CostComponent implements OnInit {
       })
     })
   }
- if (this.optionType == 'option-2')
+ if (this.mode != 'Project-Charter' && this.optionType == 'option-2')
   {
     this.optionId = GlobalBusinessCaseOptions.OPTION_2
       this.costBCbulkEditType = 'CostBCEdit02'
@@ -231,20 +247,20 @@ export class CostComponent implements OnInit {
         if(this.costfundingData != null)
         {
           this.costFundingForm.patchValue({
-            durationBaseCase: res.costData.durationBaseCase,
-            durationHighCase: res.costData.durationHighCase,
-            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
-            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
-            totalCapExBaseCase: res.costData.totalCapexBaseCase,
-            totalCapExHighCase: res.costData.totalCapexHighCase,
-            totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase,
-            totalNonFteopExHighCase: res.costData.totalNonFtehighCase,
+            durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+            durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+            totalCapExBaseCase: res.costData.totalCapexBaseCase ? res.costData.totalCapexBaseCase : null,
+            totalCapExHighCase: res.costData.totalCapexHighCase ? res.costData.totalCapexHighCase : null,
+            totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase ? res.costData.totalNonFtebaseCase : null,
+            totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
-            currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
-            projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.assetInService,
-            assetInServiceNa: res.costData.assetInServiceNa,
-            isProjectSpentNa: res.costData.isProjectSpentNa
+            currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+            projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+            apisdate: res.costData.assetInService ? res.costData.assetInService : null,
+            assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+            isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
   
           })
         }
@@ -283,7 +299,7 @@ export class CostComponent implements OnInit {
       })
     })
   }
-  if (this.optionType == 'option-3')
+  if (this.mode != 'Project-Charter' && this.optionType == 'option-3')
   {
     this.optionId = GlobalBusinessCaseOptions.OPTION_3
       this.costBCbulkEditType = 'CostBCEdit03'
@@ -307,20 +323,20 @@ export class CostComponent implements OnInit {
         if(this.costfundingData != null)
         {
           this.costFundingForm.patchValue({
-            durationBaseCase: res.costData.durationBaseCase,
-            durationHighCase: res.costData.durationHighCase,
-            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase,
-            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase,
-            totalCapExBaseCase: res.costData.totalCapexBaseCase,
-            totalCapExHighCase: res.costData.totalCapexHighCase,
-            totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase,
-            totalNonFteopExHighCase: res.costData.totalNonFtehighCase,
+            durationBaseCase: res.costData.durationBaseCase ? res.costData.durationBaseCase : null,
+            durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
+            peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
+            peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
+            totalCapExBaseCase: res.costData.totalCapexBaseCase ? res.costData.totalCapexBaseCase : null,
+            totalCapExHighCase: res.costData.totalCapexHighCase ? res.costData.totalCapexHighCase : null,
+            totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase ? res.costData.totalNonFtebaseCase : null,
+            totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
             functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
-            currentYearPlannedSpend: res.costData.currentYearPlannedSpend,
-            projectSpendStart: res.costData.projectSpendStart,
-            apisdate: res.costData.assetInService,
-            assetInServiceNa: res.costData.assetInServiceNa,
-            isProjectSpentNa: res.costData.isProjectSpentNa
+            currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
+            projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
+            apisdate: res.costData.assetInService ? res.costData.assetInService : null,
+            assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
+            isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
   
           })
         }
