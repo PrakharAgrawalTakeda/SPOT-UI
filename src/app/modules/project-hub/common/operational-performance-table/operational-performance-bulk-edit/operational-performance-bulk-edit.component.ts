@@ -44,7 +44,9 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
       this.projectViewDetails = res
       for (var i of this.projectViewDetails.overallPerformace) {
         i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        i.ptrbid = i.ptrbid.split(',');
       }
+      console.log("aaaaaaaaaaaaaaaa", this.projectViewDetails.overallPerformace)
       this.projectViewDetails.overallPerformace = this.sortbyKPIName(this.projectViewDetails.overallPerformace)
       for (var i of this.projectViewDetails.overallPerformace) {
         this.opDb.push(i)

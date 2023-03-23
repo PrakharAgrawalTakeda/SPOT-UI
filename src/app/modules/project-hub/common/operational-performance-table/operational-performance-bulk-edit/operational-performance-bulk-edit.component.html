@@ -97,22 +97,22 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-<!--                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="PTRB" prop="ptrbid" *ngIf="mode == 'Project-Proposal'"-->
-<!--                                      [flexGrow]="1">-->
-<!--                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>-->
-<!--                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"-->
-<!--                           (click)="operationalPerformanceTableEditRow(rowIndex)">-->
-<!--                            <p *ngIf="!value">&nbsp;</p>{{value}}-->
-<!--                        </a>-->
-<!--                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"-->
-<!--                              *ngIf="operationalPerformanceEditStack.includes(rowIndex)">-->
-<!--                            <spot-multiselect-autocomplete class="w-full read-only" formControlName="ptrbid" *ngIf="mode == 'Project-Proposal'"-->
-<!--                                                           name="ptrbid" [label]="'PTRB'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"-->
-<!--                                                           [customSortPointer]="'lookUpOrder'" [dropDownArray]="getPTRB()" [sortByType]="'custom'">-->
-<!--                            </spot-multiselect-autocomplete>-->
-<!--                        </form>-->
-<!--                    </ng-template>-->
-<!--                </ngx-datatable-column>-->
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="PTRB" prop="ptrbid" *ngIf="mode == 'Project-Proposal'"
+                                      [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
+                           (click)="operationalPerformanceTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{getLookUpName(value)}}
+                        </a>
+                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
+                              *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
+                            <spot-multiselect-autocomplete class="w-full read-only" formControlName="ptrbid" *ngIf="mode == 'Project-Proposal'"
+                                                           name="ptrbid" [label]="'PTRB'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                                           [customSortPointer]="'lookUpOrder'" [dropDownArray]="getPTRB()" [sortByType]="'custom'">
+                            </spot-multiselect-autocomplete>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Benefit Description/Justification" prop="benefitDescriptionJustification"
                                       [flexGrow]="3" *ngIf="mode == 'Project-Proposal'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
