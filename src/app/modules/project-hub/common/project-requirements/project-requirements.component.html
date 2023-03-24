@@ -38,16 +38,16 @@
                     <spot-input formControlName="regulatoryApprovalNeeded"  [label]="'Regulatory Approval Needed'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <spot-input formControlName="totalCapExBaseCase"  [label]="'CAPEX (Total Estimate USD)'"
+                    <spot-input formControlName="totalCapExBaseCase"  [label]="'CAPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <spot-input formControlName="totalNonFTEOpExBaseCase"  [label]="'OPEX (Total Estimate USD)'"
+                    <spot-input formControlName="totalNonFTEOpExBaseCase"  [label]="'OPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'"
                                 class="w-full read-only" >
                     </spot-input>
                     <spot-input formControlName="planFundingRequired"  [label]="'Plan Funding Required'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <spot-input formControlName="howMuch"  [label]="'How Much (USD)'"
+                    <spot-input formControlName="howMuch"  [label]="'How Much ' + this.localCurrency.localCurrencyAbbreviation + ')'"
                                 class="w-full read-only" >
                     </spot-input>
                     <spot-input formControlName="budgetInPlan"  [label]="'Budget in Plan'"

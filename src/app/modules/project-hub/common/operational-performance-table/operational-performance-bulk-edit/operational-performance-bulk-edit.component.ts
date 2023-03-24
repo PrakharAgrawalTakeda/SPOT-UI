@@ -44,6 +44,15 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
       this.projectViewDetails = res
       for (var i of this.projectViewDetails.overallPerformace) {
         i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        if(i.ptrbid){
+            i.ptrb = i.ptrbid.split(',');
+            i.ptrbid =i.ptrb.map(x => {
+                return  this.getLookup(x);
+            })
+        }else{
+            i.ptrb = "";
+            i.ptrbid = [];
+        }
       }
       this.projectViewDetails.overallPerformace = this.sortbyKPIName(this.projectViewDetails.overallPerformace)
       for (var i of this.projectViewDetails.overallPerformace) {
@@ -251,6 +260,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         status: '',
         includeInCloseOut: '',
         ptrbid: '',
+        ptrb: '',
         benefitDescriptionJustification: '',
         includeinProposal: '',
         kpiname: ''
@@ -268,6 +278,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         status: new FormControl(''),
         includeInCloseOut: new FormControl(false),
         ptrbid: new FormControl(''),
+        ptrb: new FormControl(''),
         benefitDescriptionJustification: new FormControl(''),
         includeinProposal: new FormControl(false),
         kpiname: new FormControl('')
@@ -288,11 +299,14 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
   submitOP() {
     this.changeChecker()
     if (JSON.stringify(this.submitObj) == JSON.stringify(this.opDb)) {
-      //this.projecthubservice.submitbutton.next(true)
-      //this.projecthubservice.successSave.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
+        this.submitObj.forEach((x,index) =>{
+            if(x.ptrbid){
+                this.submitObj[index].ptrbid = x.ptrbid.length > 0 ? x.ptrbid.map(x => x.lookUpId).join() : '';
+            }
+        })
       this.apiService.bulkeditKeySuccess(this.submitObj, this.projecthubservice.projectid).then(resp => {
         if (this.mode == 'Project-Proposal') {
             this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
@@ -313,6 +327,25 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
   }
   getPTRB(): any {
       return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'f48236da-2436-4403-a054-918313159c6e')
+  }
+  showPtrbNames(ptrbArray): any {
+      let ptrbNames =  "";
+      if(ptrbArray != ""){
+          ptrbArray.forEach((x, index, array) =>{
+              if (index + 1 === array.length) {
+                  ptrbNames = ptrbNames + this.getLookUpName(x);
+              }else{
+                  ptrbNames = ptrbNames + this.getLookUpName(x)+ ", ";
+              }
+          })
+          return ptrbNames;
+      }else{
+          return [];
+      }
+
+  }
+  getLookup(lookUpId: string): any {
+      return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId) : null
   }
 
 

@@ -241,7 +241,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
   deleteSchedule(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Remove Milestone?",
-      "message": "Are you sure you want to remove this record permanently? ",
+      "message": "Are you sure you want to remove this milestone permanently? ",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",

@@ -70,6 +70,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async getBusinessCaseBenefits(projectid, optionId) {
+      var url = GlobalVariables.apiurl + "BusinessCaseBenefits/GetByProjectIdAndOptionId/" + projectid + "/" + optionId
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getGeneralInfoDataWizzard(projectid, callLocation) {
       var url = GlobalVariables.apiurl + "GeneralInfo/" + projectid + "?wizard="+callLocation
       const abc$ = this.http.get(url)
@@ -146,6 +152,12 @@ export class ProjectApiService {
   }
   async editProjectRequirements(userId, body) {
       var url = GlobalVariables.apiurl + "BenefitsAndRequirements/UpdateProjectProposal/" + userId
+      const abc$ = this.http.post(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async editBusinessCaseBenefits( body) {
+      var url = GlobalVariables.apiurl + "BusinessCaseBenefits"
       const abc$ = this.http.post(url, body)
       const response = await lastValueFrom(abc$)
       return response

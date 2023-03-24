@@ -6,6 +6,7 @@ import {ProjectHubService} from "../../../project-hub.service";
 import { FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {RoleService} from "../../../../../core/auth/role.service";
 import {MsalService} from "@azure/msal-angular";
+import {PortfolioApiService} from "../../../../portfolio-center/portfolio-api.service";
 
 @Component({
     selector: 'app-project-requirements-edit',
@@ -18,6 +19,7 @@ export class ProjectRequirementsEditComponent {
     projectRequirements: any = {}
     lookupdata: any = [];
     local: any = [];
+    localCurrency:any = [];
     projectRequirementsForm = new FormGroup({
         projectID: new FormControl(''),
         financialDoesApply: new FormControl(false),
@@ -68,7 +70,8 @@ export class ProjectRequirementsEditComponent {
                 public projectHubService: ProjectHubService,
                 public fuseAlert: FuseConfirmationService,
                 public role: RoleService,
-                private authService: MsalService) {
+                private authService: MsalService,
+                private portApiService: PortfolioApiService,) {
 
         this.projectRequirementsForm.valueChanges.subscribe(res => {
             if (this.viewContent) {
@@ -150,6 +153,10 @@ export class ProjectRequirementsEditComponent {
                 functionGroupID: res.functionGroupID,
                 functionsRequiredId: res.functionsRequiredId
             })
+            this.portApiService.getOnlyLocalCurrency(this.projectHubService.projectid).then(currency => {
+                this.localCurrency = currency
+                this.projectHubService.localCurrency = currency;
+            });
             this.viewContent = true
         })
 
@@ -214,13 +221,5 @@ export class ProjectRequirementsEditComponent {
     }
     getFunctionsRequired(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '57955fe4-cede-4c81-8b00-d806193046d2')
-    }
-    getLookupYesNo(key) {
-        if(key == "Yes"){
-            return this.projectHubService.lookUpMaster.filter(x => x.lookUpId == "0b52f476-5a54-4bbc-a2e6-da56016a36e0")
-        }else{
-            return this.projectHubService.lookUpMaster.filter(x => x.lookUpId == "17ac13d1-a591-4e4f-ba7b-00d72124b1c4")
-        }
-
     }
 }
