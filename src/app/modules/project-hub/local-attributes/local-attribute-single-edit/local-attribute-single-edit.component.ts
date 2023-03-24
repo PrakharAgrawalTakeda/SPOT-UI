@@ -182,57 +182,82 @@ export class LocalAttributeSingleEditComponent {
   submitLA(data){
     this.apiService.getLocalAttributes(this.projectHubService.projectid).then((res: any) => {
       var mainObj = res
+      var dataToSend = []
+      var i = -1;
       this.projectHubService.isFormChanged = false
       var formValue = this.localAttributeForm.getRawValue()
-      for (var i = 0; i < mainObj.length; i++) {
         var emptyObject = {
           "uniqueId": "",
           "value": ""
         }
-        if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-          mainObj[i].data = []
-        }
-          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == ""){
-            mainObj[i].data = []
-          }
-          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-            mainObj[i].data = []
-          }
-          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
-            mainObj[i].data = []
-          }
-          else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-            mainObj[i].data = []
-          }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-          mainObj[i].data = []
-        }
-          else if (mainObj[i].dataType == 2) {
-          if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)){
-              mainObj[i].data[0].value = null
+        Object.keys(this.localAttributeForm.controls).forEach((name) => {
+          const currentControl = this.localAttributeForm.controls[name];
+          i++;
+          if (currentControl.dirty) {
+            if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data = []
+              dataToSend.push(mainObj[i])
             }
-            else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != ""){
-              mainObj[i].data.push(emptyObject)
-              mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data = []
+              dataToSend.push(mainObj[i])
             }
-            else{
-              mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+              mainObj[i].data = []
+              dataToSend.push(mainObj[i])
             }
-          }
-          else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
-            if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined){
-              mainObj[i].data[0].value = null
+            else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
+              mainObj[i].data = []
+              dataToSend.push(mainObj[i])
             }
-            else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined){
-              mainObj[i].data.push(emptyObject)
-              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data = []
+              dataToSend.push(mainObj[i])
             }
-            else{
-              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data = []
+              dataToSend.push(mainObj[i])
             }
-          }
-          else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
-            var data = []
+            else if (mainObj[i].dataType == 2) {
+              if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)) {
+                mainObj[i].data[0].value = null
+                dataToSend.push(mainObj[i])
+              }
+              else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": ""
+                }
+                mainObj[i].data.push(emptyObject)
+                mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+                dataToSend.push(mainObj[i])
+              }
+              else {
+                mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+                dataToSend.push(mainObj[i])
+              }
+            }
+            else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
+              if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+                mainObj[i].data[0].value = null
+                dataToSend.push(mainObj[i])
+              }
+              else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": ""
+                }
+                mainObj[i].data.push(emptyObject)
+                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+                dataToSend.push(mainObj[i])
+              }
+              else {
+                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+                dataToSend.push(mainObj[i])
+              }
+            }
+            else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
+              var data = []
               if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
                 for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
                   if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
@@ -251,35 +276,46 @@ export class LocalAttributeSingleEditComponent {
                     }
                     else {
                       mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                      
                     }
                   }
                 }
+              }
+              else {
+                mainObj[i].data = []
+              }
+              dataToSend.push(mainObj[i])
             }
             else {
-              mainObj[i].data = []
+              if (mainObj[i].data.length == 0) {
+                emptyObject = {
+                  "uniqueId": "",
+                  "value": ""
+                }
+                mainObj[i].data.push(emptyObject)
+                if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+                  mainObj[i].data[0].value = null
+                  dataToSend.push(mainObj[i])
+                }
+                else {
+                  mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+                  dataToSend.push(mainObj[i])
+                }
+              }
+              else {
+                if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+                  mainObj[i].data[0].value = null
+                  dataToSend.push(mainObj[i])
+                }
+                else {
+                  mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+                  dataToSend.push(mainObj[i])
+                }
+              }
             }
           }
-          else {
-          if (mainObj[i].data.length == 0){
-            mainObj[i].data.push(emptyObject)
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == ""){
-              mainObj[i].data[0].value = null
-            }
-            else{
-            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
-            }
-          }
-          else{
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-              mainObj[i].data[0].value = null
-            }
-            else {
-            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
-            }
-          }
-          }
-      }
-      this.apiService.editLocalAttributes(this.projectHubService.projectid, mainObj).then(res => {
+        });
+      this.apiService.editLocalAttributes(this.projectHubService.projectid, dataToSend).then(res => {
         this.projectHubService.toggleDrawerOpen('', '', [], '')
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.isNavChanged.next(true)
@@ -287,13 +323,6 @@ export class LocalAttributeSingleEditComponent {
       })
     })
     
-  }
-
-  clickEvent(name, data){
-    if(data != ""){
-    console.log("inside clickEvent ---->", data.target.value)
-    this.localAttributeForm.controls[name].setValue(data.target.value);
-    }
   }
 
   
