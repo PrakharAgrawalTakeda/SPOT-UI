@@ -54,11 +54,22 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
   writeValue(val: any) {
     if (this.inputType == 'Number') {
-      let value = this.autoAddDecimal? val?.toFixed(this.decimalCount) : val.toString();
-      // Add commas as thousand separators
-      const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+      //if (typeof val === 'number') {
+        //let value = this.autoAddDecimal ? val.toFixed(this.decimalCount) : val.toString();
+        let value = '';
+if (val != null && val !== '') {
+  value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
+}
+
+        //let value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
+        const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
 
       this.control.setValue(formattedValue);
+        // rest of the code
+     // }
+      //let value = this.autoAddDecimal? val?.toFixed(this.decimalCount) : val?.toString();
+      // Add commas as thousand separators
+      
     }
     else {
       this.control.setValue(val);
@@ -141,7 +152,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
     }
   }
   Validate(data) {
-    debugger;
+    //debugger;
     if (data.target.value > 100) {
       data.target.value = 100
     }

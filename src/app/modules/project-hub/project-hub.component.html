@@ -51,6 +51,9 @@
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCharter'"
             [mode]="'Project-Charter'"></app-operational-performance-edit>
+        <app-operational-performance-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditProposal'"
+            [mode]="'Project-Proposal'"></app-operational-performance-edit>
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
@@ -59,15 +62,26 @@
             <app-cost-edit
             *ngIf="projecthubservice.itemtype == 'CostEdit'" [mode]="'Project-Charter'"></app-cost-edit>
             <app-funding-bulk-edit
-            *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'" [mode]="'Business-Case'"></app-funding-bulk-edit>
+            *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'" [optionType]="'recommended-option'"></app-funding-bulk-edit>
+            <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO2'"
+            [optionType]="'option-2'"></app-funding-bulk-edit>
+        <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO3'"
+            [optionType]="'option-3'"></app-funding-bulk-edit>
             <app-cost-edit
-            *ngIf="projecthubservice.itemtype == 'CostBCEdit'" [mode]="'Business-Case'"></app-cost-edit>
+            *ngIf="projecthubservice.itemtype == 'CostBCEdit'" [optionType]="'recommended-option'"></app-cost-edit>
+            <app-cost-edit
+            *ngIf="projecthubservice.itemtype == 'CostBCEdit02'" [optionType]="'option-2'"></app-cost-edit>
+            <app-cost-edit
+            *ngIf="projecthubservice.itemtype == 'CostBCEdit03'" [optionType]="'option-3'"></app-cost-edit>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'"
             [mode]="'Project-Close-Out'"></app-operational-performance-bulk-edit>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCharter'"
             [mode]="'Project-Charter'"></app-operational-performance-bulk-edit>
+        <app-operational-performance-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditProposal'"
+            [mode]="'Project-Proposal'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>

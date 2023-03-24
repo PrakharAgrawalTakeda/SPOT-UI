@@ -144,6 +144,12 @@ export class ProjectApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async editProjectRequirements(userId, body) {
+      var url = GlobalVariables.apiurl + "BenefitsAndRequirements/UpdateProjectProposal/" + userId
+      const abc$ = this.http.post(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async editGeneralInfoWizzard(projectid, body, wizzard) {
       if(wizzard =="CloseOut"){
           wizzard = "ProjectCloseOut";
@@ -245,8 +251,8 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
    }
-  async deleteKeyAssumptionByOption(id: string, optionId: string) {
-      var link = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/" +optionId+"/" + id
+  async deleteKeyAssumptionByOption(id: string, optionId: string, projectId: string) {
+      var link = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/"+ projectId+ "/"  +optionId+"/" + id
       const abc$ = this.http.delete(link)
       const response = await lastValueFrom(abc$)
       return response
@@ -570,6 +576,20 @@ export class ProjectApiService {
     return response
 }
 
+async updateBusinessCaseCost(body, projectId, optionid){
+  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BusinessCaseCost/"+optionid+"/" + projectId
+  const abc$ = this.http.put(url,body)
+  const response = await lastValueFrom(abc$)
+  return response
+}
+
+
+async updateBusinessCaseFunding(body, projectId, optionid){
+  var url = GlobalVariables.apiurl+"BusinessCaseCostFunding/BulkEditBusinessCaseFunding/"+optionid+"/" + projectId
+  const abc$ = this.http.put(url,body)
+  const response = await lastValueFrom(abc$)
+  return response
+}
   async BulkEditProjectCharter(projectid: string, data) {
     var url = GlobalVariables.apiurl + "ProjectCharter/" + projectid
     const abc$ = this.http.put(url, data)
@@ -632,6 +652,20 @@ export class ProjectApiService {
   async editLocalAttributes(projectid, body) {
     var url = GlobalVariables.apiurl + "LocalAttributes/" + projectid
     const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async getBusinessCaseCostFunding(projectid, optionid) {
+    var url = GlobalVariables.apiurl + "BusinessCaseCostFunding/"+optionid+"/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteBusinessCaseFunding(id: string) {
+    var link = GlobalVariables.apiurl + "BusinessCaseCostFunding/BusinessCaseFunding/" + id
+    const abc$ = this.http.delete(link)
     const response = await lastValueFrom(abc$)
     return response
   }

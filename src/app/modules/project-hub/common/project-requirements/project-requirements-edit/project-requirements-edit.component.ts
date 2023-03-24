@@ -5,6 +5,7 @@ import {ProjectApiService} from "../../project-api.service";
 import {ProjectHubService} from "../../../project-hub.service";
 import { FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {RoleService} from "../../../../../core/auth/role.service";
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
     selector: 'app-project-requirements-edit',
@@ -17,8 +18,6 @@ export class ProjectRequirementsEditComponent {
     projectRequirements: any = {}
     lookupdata: any = [];
     local: any = [];
-    noFunctionsRequiredOptions = ["1", "2", "3", "More than 3"]
-    yesNoOptions = ["Yes", "No"]
     projectRequirementsForm = new FormGroup({
         projectID: new FormControl(''),
         financialDoesApply: new FormControl(false),
@@ -68,7 +67,8 @@ export class ProjectRequirementsEditComponent {
     constructor(private apiService: ProjectApiService,
                 public projectHubService: ProjectHubService,
                 public fuseAlert: FuseConfirmationService,
-                public role: RoleService) {
+                public role: RoleService,
+                private authService: MsalService) {
 
         this.projectRequirementsForm.valueChanges.subscribe(res => {
             if (this.viewContent) {
@@ -80,6 +80,31 @@ export class ProjectRequirementsEditComponent {
 
     ngOnInit(): void {
         this.apiService.getProjectRequirements(this.projectHubService.projectid).then((res: any) => {
+            let newShutdownRequired = null;
+            let newRegulatoryApprovalNeeded = null;
+            let newPlanFundingRequired = null;
+            let newBudgetInPlan = null;
+            if(res.shutdownRequired == "Yes"){
+                newShutdownRequired = "0b52f476-5a54-4bbc-a2e6-da56016a36e0";
+            }else if(res.shutdownRequired == "No") {
+                newShutdownRequired = "17ac13d1-a591-4e4f-ba7b-00d72124b1c4";
+            }
+
+            if(res.regulatoryApprovalNeeded == "Yes"){
+                newRegulatoryApprovalNeeded = "0b52f476-5a54-4bbc-a2e6-da56016a36e0";
+            }else if(res.regulatoryApprovalNeeded == "No") {
+                newRegulatoryApprovalNeeded = "17ac13d1-a591-4e4f-ba7b-00d72124b1c4";
+            }
+            if(res.planFundingRequired == "Yes"){
+                newPlanFundingRequired = "0b52f476-5a54-4bbc-a2e6-da56016a36e0";
+            }else if(res.planFundingRequired == "No") {
+                newPlanFundingRequired = "17ac13d1-a591-4e4f-ba7b-00d72124b1c4";
+            }
+            if(res.budgetInPlan == "Yes"){
+                newBudgetInPlan = "0b52f476-5a54-4bbc-a2e6-da56016a36e0";
+            }else if(res.budgetInPlan == "No") {
+                newBudgetInPlan = "17ac13d1-a591-4e4f-ba7b-00d72124b1c4";
+            };
             this.projectRequirements = res
             this.projectRequirementsForm.patchValue({
                 projectID: res.projectID,
@@ -108,13 +133,13 @@ export class ProjectRequirementsEditComponent {
                 proposalStatement: res.proposalStatement,
                 whynotgoforNextBestAlternative: res.whynotgoforNextBestAlternative,
                 estimatedFTE: res.estimatedFTE,
-                shutdownRequired: res.shutdownRequired,
-                regulatoryApprovalNeeded: res.regulatoryApprovalNeeded,
+                shutdownRequired: newShutdownRequired,
+                regulatoryApprovalNeeded: newRegulatoryApprovalNeeded,
                 totalCapExBaseCase: res.totalCapExBaseCase,
                 totalNonFTEOpExBaseCase: res.totalNonFTEOpExBaseCase,
-                planFundingRequired: res.planFundingRequired,
+                planFundingRequired: newPlanFundingRequired,
                 howMuch: res.howMuch,
-                budgetInPlan: res.budgetInPlan,
+                budgetInPlan: newBudgetInPlan,
                 approvedDate: res.approvedDate,
                 projectReviewed: res.projectReviewed,
                 proposedExecutionStart: res.proposedExecutionStart,
@@ -124,7 +149,6 @@ export class ProjectRequirementsEditComponent {
                 impactedProductsName: res.impactedProductsName,
                 functionGroupID: res.functionGroupID,
                 functionsRequiredId: res.functionsRequiredId
-
             })
             this.viewContent = true
         })
@@ -135,7 +159,7 @@ export class ProjectRequirementsEditComponent {
         this.projectHubService.isFormChanged = false
         const formValue = this.projectRequirementsForm.getRawValue();
         const mainObj = this.projectRequirements;
-        mainObj.projectID = formValue.projectID
+        mainObj.projectID = this.projectHubService.projectid
         mainObj.financialDoesApply = formValue.financialDoesApply
         mainObj.primaryProductID = formValue.primaryProductID
         mainObj.primaryProductName = formValue.primaryProductName
@@ -177,12 +201,26 @@ export class ProjectRequirementsEditComponent {
         mainObj.impactedProductsName = formValue.impactedProductsName
         mainObj.functionGroupID = formValue.functionGroupID
         mainObj.functionsRequiredId = formValue.functionsRequiredId
-        this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+        this.apiService.editProjectRequirements(this.authService.instance.getActiveAccount().localAccountId, mainObj).then(res => {
             this.projectHubService.isNavChanged.next(true)
             this.projectHubService.submitbutton.next(true)
             this.projectHubService.successSave.next(true)
             this.projectHubService.toggleDrawerOpen('', '', [], '')
         })
+
+    }
+    getYesNo(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == 'c58fb456-3901-4677-9ec5-f4eada7158e6')
+    }
+    getFunctionsRequired(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '57955fe4-cede-4c81-8b00-d806193046d2')
+    }
+    getLookupYesNo(key) {
+        if(key == "Yes"){
+            return this.projectHubService.lookUpMaster.filter(x => x.lookUpId == "0b52f476-5a54-4bbc-a2e6-da56016a36e0")
+        }else{
+            return this.projectHubService.lookUpMaster.filter(x => x.lookUpId == "17ac13d1-a591-4e4f-ba7b-00d72124b1c4")
+        }
 
     }
 }

@@ -92,7 +92,7 @@ export class KeyAssumptionsTableComponent implements OnInit {
         keyAsumptioneAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
                 if (this.callLocation == 'Business-Case') {
-                    this.apiService.deleteKeyAssumptionByOption(id, this.optionId).then((res) => {
+                    this.apiService.deleteKeyAssumptionByOption(id, this.optionId, this.id).then((res) => {
                         this.projecthubservice.submitbutton.next(true)
                     })
                 }

@@ -10,7 +10,7 @@ import { ProjectApiService } from '../../project-api.service';
   styleUrls: ['./operational-performance-edit.component.scss']
 })
 export class OperationalPerformanceEditComponent implements OnInit {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Project-Proposal' = 'Normal'
   OperationalPerformance: any = {}
   formIntialized: boolean = false
   OperationalPerformanceForm = new FormGroup({
@@ -20,9 +20,12 @@ export class OperationalPerformanceEditComponent implements OnInit {
     currentState: new FormControl(''),
     targetPerformance: new FormControl(''),
     actualPerformance: new FormControl(''),
+    ptrbid: new FormControl([]),
+    benefitDescriptionJustification: new FormControl(''),
     includeInProjectDashboard: new FormControl(false),
     includeInCloseOut: new FormControl(false),
-    includeInCharter: new FormControl(false)
+    includeInCharter: new FormControl(false),
+    includeInProposal: new FormControl(false),
   })
 
 
@@ -40,8 +43,13 @@ export class OperationalPerformanceEditComponent implements OnInit {
   dataloader() {
     console.log(this.projecthubservice.all)
     if (this.projecthubservice.itemid != 'new') {
+        let ptrinInit;
       this.apiService.getOperationalPerformanceSingle(this.projecthubservice.itemid).then((op: any) => {
         this.OperationalPerformance = op
+        let ptribIdarray= op.ptrbid ? op.ptrbid.split(',') : [];
+        ptrinInit = ptribIdarray.map(x=> {
+            return this.getLookup(x);
+        })
         this.OperationalPerformanceForm.patchValue({
           status: op.status,
           kpiid: this.projecthubservice.kpiMasters.some(x => x.kpiid == op.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == op.kpiid) : {},
@@ -49,23 +57,25 @@ export class OperationalPerformanceEditComponent implements OnInit {
           currentState: op.currentState,
           targetPerformance: op.targetPerformance,
           actualPerformance: op.actualPerformance,
+          ptrbid: ptrinInit,
+          benefitDescriptionJustification: op.benefitDescriptionJustification,
           includeInProjectDashboard: op.includeInProjectDashboard,
           includeInCloseOut: op.includeInCloseOut,
-          includeInCharter: op.includeInCharter
+          includeInCharter: op.includeInCharter,
+          includeInProposal: op.includeInProposal
         })
         if (this.projecthubservice.all.length >= 3) {
-          console.log('hit 1')
           if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
-            console.log('hit 2')
             this.OperationalPerformanceForm.controls.includeInProjectDashboard.disable()
           }
           if (this.projecthubservice.all.filter(x => x.includeInCloseOut == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCloseOut.value != true) {
-            console.log('hit 2')
             this.OperationalPerformanceForm.controls.includeInCloseOut.disable()
           }
           if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
-            console.log('hit 2')
             this.OperationalPerformanceForm.controls.includeInCharter.disable()
+          }
+          if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProposal.value != true) {
+              this.OperationalPerformanceForm.controls.includeInProposal.disable()
           }
         }
         this.formIntialized = true
@@ -73,18 +83,17 @@ export class OperationalPerformanceEditComponent implements OnInit {
     }
     else {
       if (this.projecthubservice.all.length >= 3) {
-        console.log('hit 1')
         if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
-          console.log('hit 2')
           this.OperationalPerformanceForm.controls.includeInProjectDashboard.disable()
         }
         if (this.projecthubservice.all.filter(x => x.includeInCloseOut == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCloseOut.value != true) {
-          console.log('hit 2')
           this.OperationalPerformanceForm.controls.includeInCloseOut.disable()
         }
         if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
-          console.log('hit 2')
           this.OperationalPerformanceForm.controls.includeInCharter.disable()
+        }
+        if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProposal.value != true) {
+           this.OperationalPerformanceForm.controls.includeInProposal.disable()
         }
       }
       this.formIntialized = true
@@ -112,7 +121,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
     var mainObj: any = {
       projectId: this.projecthubservice.projectid,
       status: formValue.status,
-      kpiid: Object.keys(formValue.kpiid).length > 0 ? formValue.kpiid.kpiid : '',
+      kpiid: Object.keys(formValue.kpiid || {}).length > 0 ? formValue.kpiid.kpiid : '',
       metric: formValue.metric,
       currentState: formValue.currentState,
       targetPerformance: formValue.targetPerformance,
@@ -122,30 +131,52 @@ export class OperationalPerformanceEditComponent implements OnInit {
       keySuccessUniqueId: '',
       includeInCharter: formValue.includeInCharter,
       includeInCloseOut: formValue.includeInCloseOut,
-      includeinProposal: null,
-      ptrbid: '',
-      benefitDescriptionJustification: '',
+      includeinProposal: formValue.includeInProposal,
+      ptrbid: formValue.ptrbid.length > 0 ? formValue.ptrbid.map(x => x.lookUpId).join() : '',
+      benefitDescriptionJustification: formValue.benefitDescriptionJustification,
     }
     if (this.projecthubservice.itemid != 'new') {
       mainObj.keySuccessUniqueId = this.OperationalPerformance.keySuccessUniqueId
       mainObj.includeInCharter = formValue.includeInCharter
       mainObj.includeInCloseOut = formValue.includeInCloseOut
-      mainObj.includeinProposal = this.OperationalPerformance.includeinProposal
-      mainObj.ptrbid = this.OperationalPerformance.ptrbid
-      mainObj.benefitDescriptionJustification = this.OperationalPerformance.benefitDescriptionJustification
-
+      mainObj.includeinProposal = formValue.includeInProposal
+      mainObj.ptrbid = formValue.ptrbid.length > 0 ? formValue.ptrbid.map(x => x.lookUpId).join() : ''
+      mainObj.benefitDescriptionJustification = formValue.benefitDescriptionJustification
       this.apiService.editOperationalPerformanceSingle(mainObj).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        if (this.mode == 'Project-Proposal') {
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            })
+        }else{
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        }
+
       })
     }
     else {
       this.apiService.addOperationalPerformanceSingle(mainObj).then(res => {
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          if (this.mode == 'Project-Proposal') {
+              this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                  this.projecthubservice.submitbutton.next(true)
+                  this.projecthubservice.successSave.next(true)
+                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+              })
+          }else{
+              this.projecthubservice.submitbutton.next(true)
+              this.projecthubservice.successSave.next(true)
+              this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          }
       })
     }
+  }
+  getPTRB(): any {
+      return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'f48236da-2436-4403-a054-918313159c6e')
+  }
+  getLookup(lookUpId: string): any {
+      return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId) : null
   }
 }
