@@ -35,12 +35,12 @@
                  [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
     </spot-select>
     <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>CAPEX (Total Estimate USD)</mat-label>
+        <mat-label>CAPEX (Total Estimate {{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
         <input matInput formControlName="totalCapExBaseCase" type="number" min="0" placeholder="0"
                pattern="\d*" />
     </mat-form-field>
     <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>OPEX (Total Estimate USD)</mat-label>
+        <mat-label>OPEX (Total Estimate {{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
         <input matInput formControlName="totalNonFTEOpExBaseCase" type="number" min="0" placeholder="0"
                pattern="\d*" />
     </mat-form-field>
@@ -50,7 +50,7 @@
                  [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
     </spot-select>
     <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>How Much (USD)</mat-label>
+        <mat-label>How Much ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
         <input matInput formControlName="howMuch" type="number" min="0" placeholder="0"
                pattern="\d*" />
     </mat-form-field>

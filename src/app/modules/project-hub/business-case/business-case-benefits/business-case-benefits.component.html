@@ -3,11 +3,13 @@
     </div>
     <div class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden" #container>
-            <app-benefits-page class="w-full" *ngIf="viewContent" [lookup]="lookupMasters" [optionId]="optionId" >
+            <app-benefits-page class="w-full" *ngIf="viewContent" [lookup]="lookupMasters" [optionId]="optionId" [benefitsData]="benefitsData" >
             </app-benefits-page>
         </div>
     </div>
     <div class="w-full ">
-<!--        <app-project-requirements></app-project-requirements>-->
+        <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden" #container>
+                <app-operational-benefits-table class="w-full" *ngIf="viewContent" [lookup]="lookupMasters" [optionId]="optionId" [benefitsData]="benefitsData.operationalBenefits" ></app-operational-benefits-table>
+        </div>
     </div>
 </div>

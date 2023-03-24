@@ -17,6 +17,7 @@ export class BusinessCaseBenefitsComponent implements OnInit {
     optionId: string = ''
     lookupMasters = []
     kpiMasters = []
+    benefitsData:any;
 
     constructor(public projecthubservice: ProjectHubService,
                 public auth: AuthService,
@@ -42,10 +43,14 @@ export class BusinessCaseBenefitsComponent implements OnInit {
             this.optionId=GlobalBusinessCaseOptions.OPTION_1
         }
         this.auth.lookupMaster().then((lookup: any) => {
-            this.lookupMasters = lookup
-            this.projecthubservice.lookUpMaster = lookup
-            this.viewContent = true
+            this.apiService.getBusinessCaseBenefits(this.id, this.optionId).then((res: any) => {
+                this.benefitsData = res;
+                this.lookupMasters = lookup
+                this.projecthubservice.lookUpMaster = lookup
+                this.viewContent = true
+            })
         })
+
     }
 
 

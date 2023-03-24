@@ -1,4 +1,4 @@
-<ng-container *ngIf="viewContent">
+<ng-container>
     <div class="w-full min-w-0  pt-0" >
         <!-- Enter Content here-->
         <form class="w-full" [formGroup]="benefitsInfoForm">
@@ -10,7 +10,7 @@
                                 <button class="ml-4 text-primary bg-gray-200"
                                         *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
                                         [color]="'primary-200'"
-                                        (click)="projectHubService.toggleDrawerOpen('ProjectRequirementsEditPage', '', '' , id)">
+                                        (click)="projectHubService.toggleDrawerOpen('BenefitsPageEdit', '', '' , this.projectHubService.projectid)">
                                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                                 </button>
                             </div>
@@ -37,7 +37,7 @@
                                     class="w-full read-only" >
                         </spot-input>
                     </div>
-                    <spot-textarea class="w-full read-only" formControlName="strategicAlignmentJustification"
+                    <spot-textarea class="w-full read-only" formControlName="npvRationale"
                                    [placeholder]="'N/A if no NPV calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with NPV as appropriate. NPV needed for capital projects > 5 OKU TPC'">
                     </spot-textarea>
                 </div>

@@ -150,6 +150,8 @@ import { WarehousingTableComponent } from './common/warehousing-table/warehousin
 import { ProjectRequirementsComponent } from './common/project-requirements/project-requirements.component';
 import { ProjectRequirementsEditComponent } from './common/project-requirements/project-requirements-edit/project-requirements-edit.component';
 import { BenefitsPageComponent } from './common/benefits-page/benefits-page.component';
+import { OperationalBenefitsTableComponent } from './common/operational-benefits-table/operational-benefits-table.component';
+import { BenefitsPageEditComponent } from './common/benefits-page/benefits-page-edit/benefits-page-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -519,7 +521,9 @@ export const projectRoutes: Route[] = [
     WarehousingTableComponent,
     ProjectRequirementsComponent,
     ProjectRequirementsEditComponent,
-    BenefitsPageComponent
+    BenefitsPageComponent,
+    OperationalBenefitsTableComponent,
+    BenefitsPageEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
