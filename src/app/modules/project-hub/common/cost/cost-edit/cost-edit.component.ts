@@ -280,8 +280,10 @@ export class CostEditComponent {
     if (JSON.stringify(formValue) == JSON.stringify(this.costDb)) {
       this.projectHubService.toggleDrawerOpen('', '', [], '', true)
     }
-    if (formValue.durationBaseCase > formValue.durationHighCase || formValue.peopleFtemonthsRequiredBaseCase > formValue.peopleFtemonthsRequiredHighCase ||
-      formValue.totalCapExBaseCase > formValue.totalCapExHighCase || formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase) {
+    if ((formValue.durationHighCase != null && formValue.durationBaseCase > formValue.durationHighCase) || 
+    (formValue.peopleFtemonthsRequiredHighCase != null && formValue.peopleFtemonthsRequiredBaseCase > formValue.peopleFtemonthsRequiredHighCase) ||
+      (formValue.totalCapExHighCase != null && formValue.totalCapExBaseCase > formValue.totalCapExHighCase) || 
+      (formValue.totalNonFteopExHighCase != null && formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "The Base Case cannot be Higher than the High Case",
         "message": "",

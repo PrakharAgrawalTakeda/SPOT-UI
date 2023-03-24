@@ -1,0 +1,67 @@
+<div>
+    <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Operational Benefits</div>
+        <div class="text-primary" *ngIf="projectHubService.roleControllerControl.projectTeam">
+            <div class="flex items-start justify-between">
+                <div >
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projectHubService.toggleDrawerOpen('', '', benefitsData, this.projectHubService.projectid, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                    </button>
+                    <button class="mx-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projectHubService.toggleDrawerOpen('', '', '', this.projectHubService.projectid)">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+                <!-- <div>
+                    Table&nbsp;&nbsp;<mat-slide-toggle class="primary slider-adjust"></mat-slide-toggle>
+                    &nbsp;&nbsp;Grid
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="overflow-x-auto mx-6">
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                       class="pr-6 font-medium text-sm text-default whitespace-nowrap" [rows]="benefitsData"
+                       #projectTeamsTable>
+            <ngx-datatable-column name="Metric" prop="metric" [flexGrow]="3">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="3">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Target Performance" prop="targetPerformance" [flexGrow]="3">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Include in Business Case (Max 3)" prop="includeInBusinessCase" [sortable]="false"
+                                  [resizeable]="false" [flexGrow]="2" >
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-between pl-2 overflow-hidden">
+                        <mat-icon svgIcon="heroicons_outline:x-circle"
+                                  *ngIf="value == false"></mat-icon>
+                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                  *ngIf="value == true">
+                        </mat-icon>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                    <div class="flex items-center justify-start gap-6">
+                        <a href="javascript:void(0)" title="Delete Single"
+                           (click)="deleteOperationalBenefit(row.keyAssumptionUniqueId)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+        </ngx-datatable>
+    </div>
+</div>

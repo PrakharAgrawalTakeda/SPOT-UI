@@ -35,7 +35,7 @@
                             </spot-multiselect-user-autocomplete>
                             </div>
                             <div *ngSwitchCase="'1'"
-                                class="flex justify-start w-full gap-3 items-center">
+                                class="flex justify-start w-full gap-3 items-center" style="padding-bottom: 13px;">
                                 {{item.name}}
                                 <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!item.data"></mat-icon>
                                 <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
@@ -45,6 +45,11 @@
                             <spot-input *ngSwitchCase="'4'" class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
                                 [label]=item.name [decimalCount] = item.linesCount [inputType] = "'Number'">
                             </spot-input>
+                            <div *ngIf="item.isMulti" #textarea>
+                                <spot-textarea *ngSwitchCase="'6'" formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name
+                                    [placeholder]=item.name [rows]="item.linesCount">
+                                </spot-textarea>
+                            </div>
                             <spot-input *ngSwitchDefault class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
                                 [label]=item.name>
                             </spot-input>

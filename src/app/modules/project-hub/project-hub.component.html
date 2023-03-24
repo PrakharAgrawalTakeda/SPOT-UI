@@ -169,6 +169,7 @@
             *ngIf="projecthubservice.itemtype == 'CarbonBulkEdit'"></app-carbon-bulk-edit>
         <app-caps-single-edit *ngIf="projecthubservice.itemtype == 'CAPS'"></app-caps-single-edit>
         <app-project-requirements-edit *ngIf="projecthubservice.itemtype == 'ProjectRequirementsEditPage'"></app-project-requirements-edit>
+        <app-benefits-page-edit *ngIf="projecthubservice.itemtype == 'BenefitsPageEdit'" [projectId]="projecthubservice.projectid"></app-benefits-page-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

@@ -20,6 +20,7 @@ export class ProjectRequirementsComponent implements OnInit, OnDestroy {
     lookUpData: any = []
     id: string = ""
     projectRequirementsData: any = {}
+    localCurrency:any = [];
     projectRequirementsForm = new FormGroup({
         projectID: new FormControl(''),
         financialDoesApply: new FormControl(false),
@@ -98,6 +99,9 @@ export class ProjectRequirementsComponent implements OnInit, OnDestroy {
                     })
                 })
             })
+        this.portApiService.getOnlyLocalCurrency(this.id).then(currency => {
+            this.localCurrency = currency
+        });
         this.disabler()
     }
 

@@ -527,9 +527,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     submitPrepForOptions() {
         this.formValue = []
         var formValue = this.riskIssueForm.getRawValue()
-        if (!this.projectHubService.includeClosedItems.riskIssue.value) {
-            this.formValue = this.dbRiskIssues.length > 0 ? this.dbRiskIssues.filter(x => x.closeDate != null) : []
-        }
         let optionId = "";
         if (this.router.url.includes('option-3')) {
             optionId= GlobalBusinessCaseOptions.OPTION_3
@@ -565,7 +562,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
                 businessOptionId: optionId
             })
         }
-
     }
     getlinkname(uid: string): string {
         var linkItemList = this.links.filter(x => x.linkItemId == uid)
