@@ -672,7 +672,7 @@ export class FundingBulkEditComponent {
     this.fundingEditStack.push(0)
   }
 }
-debugger
+
   var div = document.getElementsByClassName('datatable-scroll')[0]
   setTimeout(() => {
     div.scroll({
