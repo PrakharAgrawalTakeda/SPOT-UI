@@ -3,9 +3,8 @@
     </div>
     <div class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden" #container>
-            <app-operational-performance-table *ngIf="viewContent"  class="w-full" [kpi]="kpiMasters" [lookup]="lookupMasters" [mode]="'Business-Case'"
-                                               [editable]="projecthubservice.roleControllerControl.projectBenefits">
-            </app-operational-performance-table>
+            <app-benefits-page class="w-full" *ngIf="viewContent" [lookup]="lookupMasters" [optionId]="optionId" >
+            </app-benefits-page>
         </div>
     </div>
     <div class="w-full ">

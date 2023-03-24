@@ -73,12 +73,8 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
           this.apiService.getprojectviewdata(this.id).then((res: any) => {
               res.overallPerformace.map( (x, index) => {
                   if(x.ptrbid){
-                      var array = x?.ptrbid?.split(',');
-                      let finalList = "";
-                      array.forEach( ptrb =>{
-                          finalList = finalList + this.getLookUpName(ptrb) + " "
-                      })
-                      res.overallPerformace[index].ptrbid = finalList;
+                      const array = x.ptrbid.split(',');
+                      res.overallPerformace[index].ptrbid = this.showPtrbNames(array);
                   }
               })
               this.projectViewDetails = res
@@ -167,6 +163,20 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
         })
       }
     })
-
+  }
+  showPtrbNames(ptrbArray): any {
+      let ptrbNames =  "";
+      if(ptrbArray != ""){
+          ptrbArray.forEach((x, index, array) =>{
+              if (index + 1 === array.length) {
+                  ptrbNames = ptrbNames + this.getLookUpName(x);
+              }else{
+                  ptrbNames = ptrbNames + this.getLookUpName(x)+ ", ";
+              }
+          })
+          return ptrbNames;
+      }else{
+          return [];
+      }
   }
 }

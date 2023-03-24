@@ -1,0 +1,48 @@
+<ng-container *ngIf="viewContent">
+    <div class="w-full min-w-0  pt-0" >
+        <!-- Enter Content here-->
+        <form class="w-full" [formGroup]="benefitsInfoForm">
+                <div class="pb-6 pt-0 flex items-center justify-between">
+                    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Benefits</div>
+                    <div class="text-primary">
+                        <div class="flex items-start justify-between">
+                            <div style="padding-right: 5px;">
+                                <button class="ml-4 text-primary bg-gray-200"
+                                        *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                                        [color]="'primary-200'"
+                                        (click)="projectHubService.toggleDrawerOpen('ProjectRequirementsEditPage', '', '' , id)">
+                                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="grid grid-cols-1 divide-y">
+                <div>
+                    <div class="text-primary">Strategic Alignment</div>
+                    <spot-textarea class="w-full read-only" formControlName="strategicAlignment"
+                                   [hint]="'Provide strategic alignment that is based on X-Matrix or business imperatives/key focus areas'">
+                    </spot-textarea>
+                    <spot-textarea class="w-full read-only" formControlName="strategicAlignmentJustification"
+                                   [placeholder]="'Justify linkage to the identified strategic element'">
+                    </spot-textarea>
+                </div>
+                <div>
+                    <div class="text-primary pt-3 pb-6">NPV</div>
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
+                        <spot-input formControlName="npvBaseCase"  [label]="'Base Case (USD)'"
+                                    class="w-full read-only" >
+                        </spot-input>
+                        <spot-input formControlName="npvHighCase"  [label]="'High Case (USD)'"
+                                    class="w-full read-only" >
+                        </spot-input>
+                    </div>
+                    <spot-textarea class="w-full read-only" formControlName="strategicAlignmentJustification"
+                                   [placeholder]="'N/A if no NPV calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with NPV as appropriate. NPV needed for capital projects > 5 OKU TPC'">
+                    </spot-textarea>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</ng-container>
