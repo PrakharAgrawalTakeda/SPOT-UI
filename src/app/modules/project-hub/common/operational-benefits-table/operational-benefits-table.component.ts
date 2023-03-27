@@ -46,7 +46,7 @@ export class OperationalBenefitsTableComponent {
         const keyAsumptioneAlert = this.fuseAlert.open(comfirmConfig)
         keyAsumptioneAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                this.apiService.deleteKeyAssumption(id).then(res => {
+                this.apiService.deleteBusinessCaseOptionDetail(id).then(res => {
                     this.projectHubService.submitbutton.next(true)
                 })
             }

@@ -152,6 +152,7 @@ import { ProjectRequirementsEditComponent } from './common/project-requirements/
 import { BenefitsPageComponent } from './common/benefits-page/benefits-page.component';
 import { OperationalBenefitsTableComponent } from './common/operational-benefits-table/operational-benefits-table.component';
 import { BenefitsPageEditComponent } from './common/benefits-page/benefits-page-edit/benefits-page-edit.component';
+import { OperationalBenefitsAddNewComponent } from './common/operational-benefits-table/operational-benefits-add-new/operational-benefits-add-new.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -523,7 +524,8 @@ export const projectRoutes: Route[] = [
     ProjectRequirementsEditComponent,
     BenefitsPageComponent,
     OperationalBenefitsTableComponent,
-    BenefitsPageEditComponent
+    BenefitsPageEditComponent,
+    OperationalBenefitsAddNewComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

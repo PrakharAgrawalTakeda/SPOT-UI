@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {ApplicationRef, Component, OnInit} from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectApiService} from "../../common/project-api.service";
 import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
     selector: 'app-business-case-benefits',
@@ -11,7 +12,7 @@ import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case
     styleUrls: ['./business-case-benefits.component.scss']
 })
 export class BusinessCaseBenefitsComponent implements OnInit {
-
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     viewContent: boolean = false
     id: string = ''
     optionId: string = ''
@@ -23,7 +24,13 @@ export class BusinessCaseBenefitsComponent implements OnInit {
                 public auth: AuthService,
                 private _Activatedroute: ActivatedRoute,
                 public apiService: ProjectApiService,
-                private router: Router) {
+                private router: Router,
+                appRef: ApplicationRef) {
+        this.projecthubservice.submitbutton.pipe(takeUntil(this._unsubscribeAll)).subscribe(res => {
+            if (this.viewContent == true) {
+                this.dataloader()
+            }
+        })
     }
 
     ngOnInit(): void {

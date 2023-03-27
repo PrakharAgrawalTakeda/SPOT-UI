@@ -579,7 +579,13 @@ export class ProjectApiService {
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response
-  }
+    }
+    async deleteBusinessCaseOptionDetail(id: string) {
+        var link = GlobalVariables.apiurl + "BusinessCaseOptionDetail/" + id
+        const abc$ = this.http.delete(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 
   async updateCost(body,projectId){
     var link = GlobalVariables.apiurl+"TOPS/" + projectId

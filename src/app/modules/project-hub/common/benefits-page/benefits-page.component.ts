@@ -1,8 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {ApplicationRef, Component, Input} from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProjectApiService} from "../project-api.service";
 import {FormControl, FormGroup} from "@angular/forms";
+import {Subject, takeUntil} from "rxjs";
 
 
 @Component({
@@ -11,6 +12,7 @@ import {FormControl, FormGroup} from "@angular/forms";
     styleUrls: ['./benefits-page.component.scss']
 })
 export class BenefitsPageComponent {
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     @Input() optionId;
     @Input() lookup: any;
     @Input() benefitsData: any;
@@ -35,7 +37,9 @@ export class BenefitsPageComponent {
     ngOnInit(): void {
         this.dataloader()
     }
-
+    ngOnChanges() {
+        this.dataloader()
+    }
     dataloader() {
         this.benefitsInfoPatchValue(this.benefitsData)
         this.benefitsInfoForm.disable()

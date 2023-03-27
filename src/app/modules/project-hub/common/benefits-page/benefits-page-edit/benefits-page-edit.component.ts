@@ -1,11 +1,12 @@
-import {Component, Input} from '@angular/core';
+import {ApplicationRef, Component, Input} from '@angular/core';
 import {ProjectApiService} from "../../project-api.service";
 import {ProjectHubService} from "../../../project-hub.service";
 import {FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {RoleService} from "../../../../../core/auth/role.service";
 import {FormControl, FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-benefits-page-edit',
@@ -13,14 +14,17 @@ import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-c
   styleUrls: ['./benefits-page-edit.component.scss']
 })
 export class BenefitsPageEditComponent {
-    @Input() projectId;
     viewContent:boolean = false;
     benefits: any = {}
+    id: string = ""
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private apiService: ProjectApiService,
                 public projectHubService: ProjectHubService,
                 public fuseAlert: FuseConfirmationService,
                 public role: RoleService,
-                private router: Router){}
+                private router: Router,
+                private _Activatedroute: ActivatedRoute,){
+    }
     benefitsInfoForm = new FormGroup({
         projectId: new FormControl(''),
         optionId: new FormControl(''),
@@ -36,22 +40,23 @@ export class BenefitsPageEditComponent {
     }
 
     dataloader() {
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         if(this.router.url.includes('option-3')){
-            this.apiService.getBusinessCaseBenefits(this.projectId, GlobalBusinessCaseOptions.OPTION_3).then((res: any) => {
+            this.apiService.getBusinessCaseBenefits(this.id, GlobalBusinessCaseOptions.OPTION_3).then((res: any) => {
                 this.benefits = res
                 this.benefitsInfoPatchValue(res)
                 this.viewContent = true
             })
         }
-        if(this.router.url.includes('option-1')){
-            this.apiService.getBusinessCaseBenefits(this.projectId, GlobalBusinessCaseOptions.OPTION_2).then((res: any) => {
+        if(this.router.url.includes('option-2')){
+            this.apiService.getBusinessCaseBenefits(this.id, GlobalBusinessCaseOptions.OPTION_2).then((res: any) => {
                 this.benefits = res
                 this.benefitsInfoPatchValue(res)
                 this.viewContent = true
             })
         }
         if(this.router.url.includes('recommended-option')){
-            this.apiService.getBusinessCaseBenefits(this.projectId, GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
+            this.apiService.getBusinessCaseBenefits(this.id, GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
                 this.benefits = res
                 this.benefitsInfoPatchValue(res)
                 this.viewContent = true
