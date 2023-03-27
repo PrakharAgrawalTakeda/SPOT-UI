@@ -52,12 +52,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Benefit Description/Justification" prop="benefitDescriptionJustification" [flexGrow]="3" *ngIf="mode == 'Project-Proposal'">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
-            </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Baseline" prop="currentState" [flexGrow]="1" >
+        <ngx-datatable-column name="Benefit Description/Justification" prop="benefitDescriptionJustification" [flexGrow]="1" *ngIf="mode == 'Project-Proposal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>

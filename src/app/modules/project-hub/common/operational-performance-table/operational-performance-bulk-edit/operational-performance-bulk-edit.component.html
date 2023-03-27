@@ -82,21 +82,6 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Baseline" prop="currentState"
-                    [flexGrow]="1">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!operationalPerformanceEditStack.includes(rowIndex)"
-                            (click)="operationalPerformanceTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>{{value}}
-                        </a>
-                        <form [formGroup]="operationalPerformanceForm.controls[rowIndex]"
-                            *ngIf="operationalPerformanceEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="currentState" [showLabel]="false" [label]="'Baseline'"
-                                [placeholder]="'Baseline'" [rows]="3">
-                            </spot-textarea>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="PTRB" prop="ptrb" *ngIf="mode == 'Project-Proposal'"
                                       [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
