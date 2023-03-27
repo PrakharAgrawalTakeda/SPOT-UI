@@ -12,7 +12,6 @@ import {Subject, takeUntil} from "rxjs";
     styleUrls: ['./benefits-page.component.scss']
 })
 export class BenefitsPageComponent {
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
     @Input() optionId;
     @Input() lookup: any;
     @Input() benefitsData: any;

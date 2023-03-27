@@ -171,6 +171,7 @@
         <app-project-requirements-edit *ngIf="projecthubservice.itemtype == 'ProjectRequirementsEditPage'"></app-project-requirements-edit>
         <app-benefits-page-edit *ngIf="projecthubservice.itemtype == 'BenefitsPageEdit'"></app-benefits-page-edit>
         <app-operational-benefits-add-new *ngIf="projecthubservice.itemtype == 'OperationalBenefitsAddNew'"></app-operational-benefits-add-new>
+        <app-operational-benefits-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalBenefitsBulkEdit'"></app-operational-benefits-bulk-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

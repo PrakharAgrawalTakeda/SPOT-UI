@@ -407,6 +407,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async bulkEditBusinessCaseOperationalBenefits(body){
+      var link = GlobalVariables.apiurl+"BusinessCaseBenefits"
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async bulkEditRiskIssuesForOption(body,projectId){
       var link = GlobalVariables.apiurl+"BusinessCase/RiskIssue/BulkEdit/" + projectId
       const abc$ = this.http.put(link,body)
@@ -580,8 +586,8 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
     }
-    async deleteBusinessCaseOptionDetail(id: string) {
-        var link = GlobalVariables.apiurl + "BusinessCaseOptionDetail/" + id
+    async deleteBusinessCaseOptionDetail(projectId: string, optionId:string,id: string) {
+        var link = GlobalVariables.apiurl + "BusinessCaseBenefits/" + projectId + "/" + optionId + "/" + id;
         const abc$ = this.http.delete(link)
         const response = await lastValueFrom(abc$)
         return response
