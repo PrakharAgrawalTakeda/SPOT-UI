@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {ProjectApiService} from "../../project-api.service";
@@ -8,13 +8,25 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../..
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-operational-benefits-bulk-edit',
-  templateUrl: './operational-benefits-bulk-edit.component.html',
-  styleUrls: ['./operational-benefits-bulk-edit.component.scss']
+    selector: 'app-operational-benefits-bulk-edit',
+    templateUrl: './operational-benefits-bulk-edit.component.html',
+    styleUrls: ['./operational-benefits-bulk-edit.component.scss']
 })
 export class OperationalBenefitsBulkEditComponent {
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, private _ActivatedRoute: ActivatedRoute,
-                public fuseAlert: FuseConfirmationService, private router: Router) {}
+                public fuseAlert: FuseConfirmationService, private router: Router) {
+        this.operationalBenefitsForm.valueChanges.subscribe(res => {
+            if (this.viewContent == true) {
+                this.formValue()
+                if (JSON.stringify(this.operationalBenefitsDb) != JSON.stringify(this.operationalBenefitsSubmit)) {
+                    this.projecthubservice.isFormChanged = true
+                } else {
+                    this.projecthubservice.isFormChanged = false
+                }
+            }
+        })
+    }
+
     viewContent: boolean = false
     id: string = ""
     operationalBenefits = []
@@ -22,7 +34,7 @@ export class OperationalBenefitsBulkEditComponent {
     operationalBenefitsForm = new FormArray([])
     obTableEditStack = []
     operationalBenefitsSubmit = []
-    benefitsSubmit : any;
+    benefitsSubmit: any;
 
     ngOnInit(): void {
         this.dataloader()
@@ -57,15 +69,15 @@ export class OperationalBenefitsBulkEditComponent {
                 this.disabler();
                 this.viewContent = true;
             })
-        }else if(this.router.url.includes('option-2')){
+        } else if (this.router.url.includes('option-2')) {
             this.apiService.getBusinessCaseBenefits(this.id, GlobalBusinessCaseOptions.OPTION_2).then((res: any) => {
                 this.benefitsSubmit = res;
-                if(res.operationalBenefits){
+                if (res.operationalBenefits) {
                     this.operationalBenefits = res.operationalBenefits;
-                }else{
+                } else {
                     this.operationalBenefits = []
                 }
-                if (this.operationalBenefits.length > 0 ) {
+                if (this.operationalBenefits.length > 0) {
                     this.operationalBenefitsDb = this.operationalBenefits.map(x => {
                         return {
                             "id": x.id,
@@ -88,12 +100,12 @@ export class OperationalBenefitsBulkEditComponent {
                 this.disabler();
                 this.viewContent = true;
             })
-        }else if(this.router.url.includes('option-3')){
+        } else if (this.router.url.includes('option-3')) {
             this.apiService.getBusinessCaseBenefits(this.id, GlobalBusinessCaseOptions.OPTION_3).then((res: any) => {
                 this.benefitsSubmit = res;
-                if(res.operationalBenefits){
+                if (res.operationalBenefits) {
                     this.operationalBenefits = res.operationalBenefits;
-                }else{
+                } else {
                     this.operationalBenefits = []
                 }
                 if (this.operationalBenefits.length > 0) {
@@ -122,6 +134,7 @@ export class OperationalBenefitsBulkEditComponent {
         }
 
     }
+
     disabler() {
         var formValue = this.operationalBenefitsForm.getRawValue()
         if (formValue.length > 0) {
@@ -138,6 +151,7 @@ export class OperationalBenefitsBulkEditComponent {
             }
         }
     }
+
     addOperationalBenefit() {
         this.operationalBenefitsForm.push(new FormGroup({
             id: new FormControl(''),
@@ -165,12 +179,14 @@ export class OperationalBenefitsBulkEditComponent {
             });
         }, 100);
     }
+
     obTableEditRow(rowIndex) {
         if (!this.obTableEditStack.includes(rowIndex)) {
             this.obTableEditStack.push(rowIndex)
         }
         this.disabler()
     }
+
     deleteOB(rowIndex: number) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
@@ -210,25 +226,26 @@ export class OperationalBenefitsBulkEditComponent {
             }
         )
     }
+
     submitOperationalBenefits() {
-        if (JSON.stringify(this.operationalBenefitsDb) != JSON.stringify(this.operationalBenefitsSubmit)) {
+        if (this.projecthubservice.isFormChanged) {
             this.projecthubservice.isFormChanged = false
-                this.formValue()
-                if(this.router.url.includes('option-2')){
-                    this.benefitsSubmit.optionId = GlobalBusinessCaseOptions.OPTION_2;
-                }
-                if(this.router.url.includes('option-3')){
-                    this.benefitsSubmit.optionId = GlobalBusinessCaseOptions.OPTION_3;
-                }
-            if(this.router.url.includes('recommended-option')){
+            this.formValue()
+            if (this.router.url.includes('option-2')) {
+                this.benefitsSubmit.optionId = GlobalBusinessCaseOptions.OPTION_2;
+            }
+            if (this.router.url.includes('option-3')) {
+                this.benefitsSubmit.optionId = GlobalBusinessCaseOptions.OPTION_3;
+            }
+            if (this.router.url.includes('recommended-option')) {
                 this.benefitsSubmit.optionId = GlobalBusinessCaseOptions.OPTION_1;
             }
-                this.benefitsSubmit.operationalBenefits =  this.operationalBenefitsSubmit;
-                this.apiService.bulkEditBusinessCaseOperationalBenefits(this.benefitsSubmit).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                    this.projecthubservice.isNavChanged.next(true)
-                })
+            this.benefitsSubmit.operationalBenefits = this.operationalBenefitsSubmit;
+            this.apiService.bulkEditBusinessCaseOperationalBenefits(this.benefitsSubmit).then(res => {
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                this.projecthubservice.isNavChanged.next(true)
+            })
 
         } else {
             this.projecthubservice.submitbutton.next(true)
@@ -247,7 +264,6 @@ export class OperationalBenefitsBulkEditComponent {
                     "currentState": i.currentState,
                     "targetPerformance": i.targetPerformance,
                     "includeInBusinessCase": i.includeInBusinessCase,
-
                 })
             }
         } else {

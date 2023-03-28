@@ -359,6 +359,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async addSingleOperationalBenefit(body, optionId,projectId){
+      var link = GlobalVariables.apiurl+"BusinessCaseBenefits/AddNew/"+ optionId + "/" + projectId
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async addRiskIssueForOption(body) {
       var link = GlobalVariables.apiurl + "BusinessCase/RiskIssue"
       const abc$ = this.http.post(link, body)
