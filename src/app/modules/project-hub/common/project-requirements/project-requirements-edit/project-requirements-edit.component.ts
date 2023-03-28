@@ -7,6 +7,7 @@ import { FuseConfirmationService} from "../../../../../../@fuse/services/confirm
 import {RoleService} from "../../../../../core/auth/role.service";
 import {MsalService} from "@azure/msal-angular";
 import {PortfolioApiService} from "../../../../portfolio-center/portfolio-api.service";
+import * as moment from "moment/moment";
 
 @Component({
     selector: 'app-project-requirements-edit',
@@ -201,8 +202,8 @@ export class ProjectRequirementsEditComponent {
         mainObj.budgetInPlan = formValue.budgetInPlan
         mainObj.approvedDate = formValue.approvedDate
         mainObj.projectReviewed = formValue.projectReviewed
-        mainObj.proposedExecutionStart = formValue.proposedExecutionStart
-        mainObj.proposedExecutionEnd = formValue.proposedExecutionEnd
+        mainObj.proposedExecutionStart = formValue.proposedExecutionStart ? moment(formValue.proposedExecutionStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
+        mainObj.proposedExecutionEnd =  formValue.proposedExecutionEnd ? moment(formValue.proposedExecutionEnd).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
         mainObj.opU = formValue.opU
         mainObj.localCurrencyAbbreviation = formValue.localCurrencyAbbreviation
         mainObj.impactedProductsName = formValue.impactedProductsName

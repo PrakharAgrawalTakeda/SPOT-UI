@@ -52,8 +52,8 @@
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter report' : null"
         formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
     <mat-slide-toggle *ngIf="mode=='Project-Proposal'"
-         [matTooltip]="this.OperationalPerformanceForm.controls['includeInProposal'].disabled ? 'Only 3 can be selected at a time for charter report' : null"
-         formControlName="includeInProposal">Include in Proposal</mat-slide-toggle>
+         [matTooltip]="this.OperationalPerformanceForm.controls['includeinProposal'].disabled ? 'Only 3 can be selected at a time for charter report' : null"
+         formControlName="includeinProposal">Include in Proposal</mat-slide-toggle>
     </div>
     <div class="flex items-start justify-between form-ask-need">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
