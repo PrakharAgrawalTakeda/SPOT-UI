@@ -152,6 +152,8 @@ import { ProjectRequirementsEditComponent } from './common/project-requirements/
 import { BenefitsPageComponent } from './common/benefits-page/benefits-page.component';
 import { OperationalBenefitsTableComponent } from './common/operational-benefits-table/operational-benefits-table.component';
 import { BenefitsPageEditComponent } from './common/benefits-page/benefits-page-edit/benefits-page-edit.component';
+import { BiogenicsBulkEditComponent } from './common/biogenics-table/biogenics-bulk-edit/biogenics-bulk-edit.component';
+import { BiogenicsSingleEditComponent } from './common/biogenics-table/biogenics-single-edit/biogenics-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -523,7 +525,9 @@ export const projectRoutes: Route[] = [
     ProjectRequirementsEditComponent,
     BenefitsPageComponent,
     OperationalBenefitsTableComponent,
-    BenefitsPageEditComponent
+    BenefitsPageEditComponent,
+    BiogenicsBulkEditComponent,
+    BiogenicsSingleEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

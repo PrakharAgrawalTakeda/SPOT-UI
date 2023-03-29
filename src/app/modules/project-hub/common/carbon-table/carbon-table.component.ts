@@ -12,7 +12,9 @@ import { ProjectApiService } from '../project-api.service';
 })
 export class CarbonTableComponent {
   id: string = ""
+  viewContent:boolean = false
   carbonngx: any = []
+  unitCost = ""
   @Input() Editable: boolean = false
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
@@ -33,6 +35,8 @@ export class CarbonTableComponent {
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getLessonLearnedbyProjectId(this.id).then((res: any) => {
         this.carbonngx = res
+        this.unitCost = "Unit Cost (USD)"
+        this.viewContent = true
       })
     })
   }
