@@ -36,7 +36,7 @@ export class OperationalBenefitsAddNewComponent {
     ngOnInit(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         if (this.projecthubservice.all.length > 0) {
-            if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 4) {
+            if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 3) {
                 if (this.operationalBenefitForm.value.includeInBusinessCase != true) {
                     this.operationalBenefitForm.controls['includeInBusinessCase'].disable()
                 }

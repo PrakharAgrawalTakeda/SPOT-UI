@@ -138,7 +138,7 @@ export class OperationalBenefitsBulkEditComponent {
     disabler() {
         var formValue = this.operationalBenefitsForm.getRawValue()
         if (formValue.length > 0) {
-            if (formValue.filter(x => x.includeInBusinessCase == true).length < 4) {
+            if (formValue.filter(x => x.includeInBusinessCase == true).length < 3) {
                 for (var i of this.operationalBenefitsForm.controls) {
                     i['controls']['includeInBusinessCase'].enable()
                 }
