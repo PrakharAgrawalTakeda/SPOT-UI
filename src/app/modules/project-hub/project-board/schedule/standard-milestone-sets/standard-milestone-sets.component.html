@@ -18,7 +18,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
 
-                        <schedule-table [tableIndex]="i" [scheduleData]="milestone.templateDetails" [viewElements]="['milestone','functionalOwner','comment', 'includeInReport','addStandardMilestone']"
+                        <schedule-table [tableIndex]="i" [scheduleData]="milestone.templateDetails" [viewElements]="['milestone','functionalOwner','comment', 'includeInReport', 'includeInBusinessCase','addStandardMilestone']"
                                         [tableData]="milestone.templateDetails" [lookup]="lookup"
                                         [callLocation]="'StandardMilestones'" [projectId]="milestone.milestoneTemplateId"
                                         [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleSchedule($event)">

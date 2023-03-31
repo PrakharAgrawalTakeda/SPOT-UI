@@ -19,7 +19,7 @@
                 </div>
             <div class="grid grid-cols-1 divide-y">
                 <div>
-                    <div class="text-primary">Strategic Alignment</div>
+                    <div class="text-primary  pl-3">Strategic Alignment</div>
                     <spot-textarea class="w-full read-only" formControlName="strategicAlignment"
                                    [hint]="'Provide strategic alignment that is based on X-Matrix or business imperatives/key focus areas'">
                     </spot-textarea>
@@ -30,10 +30,10 @@
                 <div>
                     <div class="text-primary pl-3 pt-6 pb-3">NPV</div>
                     <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
-                        <spot-input formControlName="npvBaseCase"  [label]="'Base Case (USD)'"
+                        <spot-input formControlName="npvBaseCase"  [label]="'Base Case (' + this.localCurrency.localCurrencyAbbreviation + ')'"
                                     class="w-full read-only" >
                         </spot-input>
-                        <spot-input formControlName="npvHighCase"  [label]="'High Case (USD)'"
+                        <spot-input formControlName="npvHighCase"  [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'"
                                     class="w-full read-only" >
                         </spot-input>
                     </div>

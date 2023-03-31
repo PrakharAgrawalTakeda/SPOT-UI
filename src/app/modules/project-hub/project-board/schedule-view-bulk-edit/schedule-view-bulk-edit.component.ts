@@ -2615,10 +2615,22 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
 
     addStandardMilestoneToEditStack(sM: any) {
         var formValue = this.milestoneForm.getRawValue()
-        var limitPassed = false;
+        var limitPassedNormal = false;
+        var limitPassedCharter = false;
+        var limitPassedCloseOut = false;
+        var limitPassedBusinessCase = false;
         if (formValue.length > 0) {
             if (formValue.filter(x => x.includeInReport == true).length >= 8) {
-                limitPassed = true;
+                limitPassedNormal = true;
+            }
+            if (formValue.filter(x => x.includeInCharter == true).length >= 10) {
+                limitPassedCharter = true;
+            }
+            if (formValue.filter(x => x.includeInCloseout == true).length >= 20) {
+                limitPassedCloseOut = true;
+            }
+            if (formValue.filter(x => x.includeInBusinessCase == true).length >= 8) {
+                limitPassedBusinessCase = true;
             }
         }
         this.milestoneForm.push(new FormGroup({
@@ -2632,12 +2644,12 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             functionGroupId: new FormControl(sM.funtionalOwnerId),
             completionDate: new FormControl(''),
             comments: new FormControl(sM.comment),
-            includeInReport: new FormControl(limitPassed == false ? sM.includeInReport : false),
-            includeInCharter: new FormControl(false),
-            includeInBusinessCase: new FormControl(false),
+            includeInReport: this.mode == 'Normal' ? new FormControl(limitPassedNormal == false ? sM.includeInReport : false) : new FormControl(false),
+            includeInCharter: this.mode == 'Project-Charter' ? new FormControl(limitPassedCharter == false ? sM.includeInReport : false) : new FormControl(false),
+            includeInBusinessCase: this.mode == 'Business-Case' ? new FormControl(limitPassedBusinessCase == false ? sM.includeInReport : false) : new FormControl(false),
             milestoneType: new FormControl(sM.milestoneType),
             templateMilestoneId: new FormControl(sM.milestoneId),
-            includeInCloseout: new FormControl(false),
+            includeInCloseout: this.mode == 'Project-Close-Out' ? new FormControl(limitPassedCloseOut == false ? sM.includeInReport : false) : new FormControl(false),
             responsiblePersonId: new FormControl(''),
             indicator: new FormControl('')
         }))
@@ -2647,10 +2659,10 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             comments: sM.comment,
             completionDate: null,
             functionGroupId: sM.funtionalOwnerId,
-            includeInCharter: false,
-            includeInBusinessCase: sM.includeInBusinessCase,
-            includeInCloseout: false,
-            includeInReport: limitPassed == false ? sM.includeInReport : false,
+            includeInCharter:(limitPassedCharter &&  this.mode == 'Project-Charter') ? sM.includeInReport : false,
+            includeInBusinessCase: (limitPassedBusinessCase && this.mode == 'Business-Case') ? sM.includeInReport : false,
+            includeInCloseout: (limitPassedCloseOut && this.mode == 'Project-Close-Out') ? sM.includeInReport : false,
+            includeInReport: (limitPassedNormal && this.mode == 'Normal') ? sM.includeInReport : false,
             indicator: "Grey",
             milestone: sM.milestone,
             milestoneType: sM.milestoneType,

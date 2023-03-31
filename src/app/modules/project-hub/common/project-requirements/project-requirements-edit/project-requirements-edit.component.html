@@ -20,11 +20,8 @@
                      [dropDownArray]="getFunctionsRequired()" [idPointer]="'lookUpId'"
                      [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
         </spot-select>
-        <mat-form-field class="w-full" [floatLabel]="'always'">
-            <mat-label>Estimated FTEs</mat-label>
-            <input matInput formControlName="estimatedFTE" type="number" min="0" placeholder="0"
-                   pattern="\d*" />
-        </mat-form-field>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'Estimated FTEs'" formControlName="estimatedFTE"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
         <spot-select formControlName="shutdownRequired"  [label]="'Shutdown Required'"
                      [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
                      [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
@@ -35,26 +32,17 @@
                      [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
                      [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
         </spot-select>
-        <mat-form-field class="w-full" [floatLabel]="'always'">
-            <mat-label>CAPEX (Total Estimate {{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
-            <input matInput formControlName="totalCapExBaseCase" type="number" min="0" placeholder="0"
-                   pattern="\d*" />
-        </mat-form-field>
-        <mat-form-field class="w-full" [floatLabel]="'always'">
-            <mat-label>OPEX (Total Estimate {{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
-            <input matInput formControlName="totalNonFTEOpExBaseCase" type="number" min="0" placeholder="0"
-                   pattern="\d*" />
-        </mat-form-field>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'CAPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="totalCapExBaseCase"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'OPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="totalNonFTEOpExBaseCase"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
         <spot-select formControlName="planFundingRequired"  [label]="'Plan Funding Required'"
                      [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
                      [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
                      [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
         </spot-select>
-        <mat-form-field class="w-full" [floatLabel]="'always'">
-            <mat-label>How Much ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
-            <input matInput formControlName="howMuch" type="number" min="0" placeholder="0"
-                   pattern="\d*" />
-        </mat-form-field>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'How Much ' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="howMuch"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
         <spot-select formControlName="budgetInPlan"  [label]="'Budget in Plan'"
                      [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
                      [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
