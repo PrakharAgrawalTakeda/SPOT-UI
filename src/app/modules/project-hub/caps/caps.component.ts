@@ -29,7 +29,13 @@ export class CapsComponent implements OnInit {
     WaterCost: new FormControl(''),
     WasteCost: new FormControl('')
   })
-  constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { }
+  constructor(private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
+    this.projectHubService.submitbutton.subscribe(res => {
+      if (res == true) {
+        this.ngOnInit()
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
@@ -39,6 +45,9 @@ export class CapsComponent implements OnInit {
         var emissionPortfolio = this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
         if (res.emissionPortfolioId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
+      }
+      else{
+          this.showDefault = true;
       }
         res.emissionPortfolioId = emissionPortfolio.filter(x => x.portfolioOwnerId == res.emissionPortfolioId)[0].portfolioOwner
       this.CAPSform.patchValue({
