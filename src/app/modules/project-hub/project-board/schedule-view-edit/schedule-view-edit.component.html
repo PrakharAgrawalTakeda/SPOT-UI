@@ -60,6 +60,11 @@
                 [matTooltip]="this.scheduleForm.controls['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time for dashboard report display' : null"
                 formControlName="includeInBusinessCase">Include in Business Case</mat-slide-toggle>
         </div>
+        <div class="flex items-start justify-between included-in-dash" *ngIf="viewElementChecker('includeInCharter')">
+            <mat-slide-toggle
+                [matTooltip]="this.scheduleForm.controls['includeInCharter'].disabled ? 'Only 8 can be selected at a time for dashboard report display' : null"
+                formControlName="includeInCharter">Include in Project Charter</mat-slide-toggle>
+        </div>
     </div>
 
     <div class="flex items-start justify-between form-ask-need">

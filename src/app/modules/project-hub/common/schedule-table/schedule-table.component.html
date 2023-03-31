@@ -44,6 +44,10 @@
                         (click)="projecthubservice.toggleDrawerOpen('BusinessCaseScheduleAddNew', 'new', schedulengxdata, projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
+                <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Project-Charter'" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('CharterScheduleAddNew', 'new', schedulengxdata, projectid)">
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                </button>
             </div>
             <div *ngIf="mode== 'Normal'">
                 <form [formGroup]="localIncludedItems">
