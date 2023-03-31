@@ -14,6 +14,8 @@
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseScheduleAddNew'"
             [viewElements]="['milestone','plannedFinish','functionOwner','includeInBusinessCase']"></app-schedule-view-edit>
+            <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'CharterScheduleAddNew'"
+            [viewElements]="['milestone','plannedFinish','responsiblePerson','functionOwner','includeInCharter']"></app-schedule-view-edit>
         <app-schedule-view-bulk-edit
             *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBaselineEdit'"
@@ -169,7 +171,11 @@
             *ngIf="projecthubservice.itemtype == 'CarbonBulkEdit'"></app-carbon-bulk-edit>
         <app-caps-single-edit *ngIf="projecthubservice.itemtype == 'CAPS'"></app-caps-single-edit>
         <app-project-requirements-edit *ngIf="projecthubservice.itemtype == 'ProjectRequirementsEditPage'"></app-project-requirements-edit>
-        <app-benefits-page-edit *ngIf="projecthubservice.itemtype == 'BenefitsPageEdit'" [projectId]="projecthubservice.projectid"></app-benefits-page-edit>
+        <app-biogenics-single-edit *ngIf="projecthubservice.itemtype == 'BiogenicsSingleEdit'"></app-biogenics-single-edit>
+        <app-biogenics-bulk-edit *ngIf="projecthubservice.itemtype == 'BiogenicsBulkEdit'"></app-biogenics-bulk-edit>
+        <app-benefits-page-edit *ngIf="projecthubservice.itemtype == 'BenefitsPageEdit'"></app-benefits-page-edit>
+        <app-operational-benefits-add-new *ngIf="projecthubservice.itemtype == 'OperationalBenefitsAddNew'"></app-operational-benefits-add-new>
+        <app-operational-benefits-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalBenefitsBulkEdit'"></app-operational-benefits-bulk-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

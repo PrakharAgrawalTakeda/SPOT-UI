@@ -13,6 +13,7 @@ export class OperationalBenefitsTableComponent {
     @Input() optionId;
     @Input() lookup: any;
     @Input() benefitsData: any;
+    id: string = ""
 
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projectHubService: ProjectHubService
         ,public fuseAlert: FuseConfirmationService, private router: Router) {
@@ -46,7 +47,7 @@ export class OperationalBenefitsTableComponent {
         const keyAsumptioneAlert = this.fuseAlert.open(comfirmConfig)
         keyAsumptioneAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                this.apiService.deleteKeyAssumption(id).then(res => {
+                this.apiService.deleteBusinessCaseOptionDetail(this.benefitsData.projectId,this.optionId,id).then(res => {
                     this.projectHubService.submitbutton.next(true)
                 })
             }

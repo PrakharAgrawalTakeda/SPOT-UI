@@ -25,7 +25,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
     includeInProjectDashboard: new FormControl(false),
     includeInCloseOut: new FormControl(false),
     includeInCharter: new FormControl(false),
-    includeInProposal: new FormControl(false),
+    includeinProposal: new FormControl(false),
   })
 
 
@@ -41,7 +41,6 @@ export class OperationalPerformanceEditComponent implements OnInit {
     this.dataloader()
   }
   dataloader() {
-    console.log(this.projecthubservice.all)
     if (this.projecthubservice.itemid != 'new') {
         let ptrinInit;
       this.apiService.getOperationalPerformanceSingle(this.projecthubservice.itemid).then((op: any) => {
@@ -62,7 +61,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
           includeInProjectDashboard: op.includeInProjectDashboard,
           includeInCloseOut: op.includeInCloseOut,
           includeInCharter: op.includeInCharter,
-          includeInProposal: op.includeInProposal
+          includeinProposal: op.includeinProposal
         })
         if (this.projecthubservice.all.length >= 3) {
           if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
@@ -74,8 +73,8 @@ export class OperationalPerformanceEditComponent implements OnInit {
           if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
             this.OperationalPerformanceForm.controls.includeInCharter.disable()
           }
-          if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProposal.value != true) {
-              this.OperationalPerformanceForm.controls.includeInProposal.disable()
+          if (this.projecthubservice.all.filter(x => x.includeinProposal == true).length >= 3 && this.OperationalPerformanceForm.controls.includeinProposal.value != true) {
+              this.OperationalPerformanceForm.controls.includeinProposal.disable()
           }
         }
         this.formIntialized = true
@@ -92,8 +91,8 @@ export class OperationalPerformanceEditComponent implements OnInit {
         if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
           this.OperationalPerformanceForm.controls.includeInCharter.disable()
         }
-        if (this.projecthubservice.all.filter(x => x.includeInProposal == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProposal.value != true) {
-           this.OperationalPerformanceForm.controls.includeInProposal.disable()
+        if (this.projecthubservice.all.filter(x => x.includeinProposal == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
+            this.OperationalPerformanceForm.controls.includeinProposal.disable()
         }
       }
       this.formIntialized = true
@@ -131,7 +130,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
       keySuccessUniqueId: '',
       includeInCharter: formValue.includeInCharter,
       includeInCloseOut: formValue.includeInCloseOut,
-      includeinProposal: formValue.includeInProposal,
+      includeinProposal: formValue.includeinProposal,
       ptrbid: formValue.ptrbid.length > 0 ? formValue.ptrbid.map(x => x.lookUpId).join() : '',
       benefitDescriptionJustification: formValue.benefitDescriptionJustification,
     }
@@ -139,7 +138,7 @@ export class OperationalPerformanceEditComponent implements OnInit {
       mainObj.keySuccessUniqueId = this.OperationalPerformance.keySuccessUniqueId
       mainObj.includeInCharter = formValue.includeInCharter
       mainObj.includeInCloseOut = formValue.includeInCloseOut
-      mainObj.includeinProposal = formValue.includeInProposal
+      mainObj.includeinProposal = formValue.includeinProposal
       mainObj.ptrbid = formValue.ptrbid.length > 0 ? formValue.ptrbid.map(x => x.lookUpId).join() : ''
       mainObj.benefitDescriptionJustification = formValue.benefitDescriptionJustification
       this.apiService.editOperationalPerformanceSingle(mainObj).then(res => {
