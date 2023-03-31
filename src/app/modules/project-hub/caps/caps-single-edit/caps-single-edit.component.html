@@ -7,7 +7,7 @@
             </a>
         </div>
     </div>
-    <form class="pl-3 w-full overflow-hidden" [formGroup]="CAPSForm" (ngSubmit)="submitCAPS()">
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
         <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
             <div
                 class="flex justify-between items-center mt-3 mb-6">
@@ -32,6 +32,8 @@
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
             </div>
+            <!-- <spot-input-date [label]="'Impact Realization Date'" formControlName="impactRealizationDate" name="impactRealizationDate" [showLabel]="true">
+            </spot-input-date> -->
             
         </div>
         <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">

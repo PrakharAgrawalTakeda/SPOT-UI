@@ -24,6 +24,7 @@ export const MY_FORMATS = {
 })
 export class CapsSingleEditComponent implements OnInit {
 viewType = 'SidePanel'
+  formFieldHelpers: any
   filterCriteria : any = {}
   today = new Date("2036-03-31");
   viewContent = false
@@ -32,14 +33,14 @@ viewType = 'SidePanel'
     isCapsProject: new FormControl(false),
     enviornmentalPortfolio: new FormControl(null),
     impactRealizationDate: new FormControl(''),
-    EmissionsImpact: new FormControl(''),
-    EnergyImpact: new FormControl(''),
-    WaterImpact: new FormControl(''),
-    TotalWasteImpact: new FormControl(''),
-    LandfilledWasteImpact: new FormControl(''),
-    EnergyCost: new FormControl(''),
-    WaterCost: new FormControl(''),
-    WasteCost: new FormControl('')
+    // EmissionsImpact: new FormControl(''),
+    // EnergyImpact: new FormControl(''),
+    // WaterImpact: new FormControl(''),
+    // TotalWasteImpact: new FormControl(''),
+    // LandfilledWasteImpact: new FormControl(''),
+    // EnergyCost: new FormControl(''),
+    // WaterCost: new FormControl(''),
+    // WasteCost: new FormControl('')
   })
 
   constructor(private apiService: ProjectApiService,
@@ -61,14 +62,14 @@ viewType = 'SidePanel'
           isCapsProject: res.isCapsProject,
           enviornmentalPortfolio: emissionPortfolio[0],
           impactRealizationDate: res.emissionsImpactRealizationDate,
-          EmissionsImpact: res.calculatedEmissionsImpact,
-          EnergyImpact: res.energyImpact,
-          WaterImpact: res.waterImpactUnits,
-          TotalWasteImpact: res.wasteImpactUnits,
-          LandfilledWasteImpact: res.wasteLandfillImpactUnits,
-          EnergyCost: res.energyCostImpactPerYear,
-          WaterCost: res.waterImpactCost,
-          WasteCost: res.wasteImpactCost
+          // EmissionsImpact: res.calculatedEmissionsImpact,
+          // EnergyImpact: res.energyImpact,
+          // WaterImpact: res.waterImpactUnits,
+          // TotalWasteImpact: res.wasteImpactUnits,
+          // LandfilledWasteImpact: res.wasteLandfillImpactUnits,
+          // EnergyCost: res.energyCostImpactPerYear,
+          // WaterCost: res.waterImpactCost,
+          // WasteCost: res.wasteImpactCost
         })
         this.viewContent = true
       })
@@ -86,8 +87,8 @@ viewType = 'SidePanel'
     var formValue = this.CAPSform.getRawValue()
     var mainObj = this.CAPSdata
     mainObj.isCapsProject= formValue.isCapsProject
-    mainObj.enviornmentalPortfolio = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    mainObj.impactRealizationDate = moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+    mainObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
+    mainObj.emissionsImpactRealizationDate = moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
     
     // mainObj.EmissionsImpact: formValue.calculatedEmissionsImpact
     // mainObj.EnergyImpact: formValue.energyImpact

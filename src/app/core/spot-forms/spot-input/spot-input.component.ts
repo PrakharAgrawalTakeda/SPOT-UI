@@ -23,7 +23,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() hint: string = ''
   @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
   @Input() Required: boolean = false;
-
+  @Input() callLocation: string = ""
 
 
   formFieldHelpers: any

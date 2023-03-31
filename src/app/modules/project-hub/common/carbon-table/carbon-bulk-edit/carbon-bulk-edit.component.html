@@ -9,7 +9,7 @@
     </div>
     <div class="w-full bg-card rounded-2xl">
         <div class="flex items-center justify-end gap-3 pt-3 pr-3 ">
-            <form style="width:12%;" [formGroup]="CAPSForm" (ngSubmit)="submitCAPS()">
+            <form style="width:12%;" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Impact Realization Date</mat-label>
                     <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
@@ -24,7 +24,7 @@
             </button> -->
             
         </div>
-        <div class="h-[80vh] overflow-y-hidden pl-3">
+        <div class="h-[70vh] overflow-y-hidden pl-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
                 [rows]="Carbon" #carbonTable>
@@ -53,7 +53,7 @@
                         {{ value}}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name="Unit Cost" prop="unitCost" [flexGrow]="0.25"
+                <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="unitCost" [flexGrow]="1.25"
                     [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!carbonTableEditStack.includes(rowIndex)" (click)="carbonTableEditRow(rowIndex)">

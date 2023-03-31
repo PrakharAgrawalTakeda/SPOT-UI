@@ -34,8 +34,10 @@ export class CarbonTableComponent {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getLessonLearnedbyProjectId(this.id).then((res: any) => {
+        this.apiService.getGeneralInfoData(this.id).then((response: any) => {
+          this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
+        })
         this.carbonngx = res
-        this.unitCost = "Unit Cost (USD)"
         this.viewContent = true
       })
     })
