@@ -1,0 +1,122 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Biogenics</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="w-full bg-card rounded-2xl">
+        <div class="flex items-center justify-end gap-3 pt-3 pr-3 ">
+            <form style="width:12%;" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                    <mat-label>Impact Realization Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+                        formControlName="impactRealizationDate" name="impactRealizationDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </form>
+            <button class="ml-4 text-primary bg-gray-200" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
+                mat-flat-button [color]="'primary-200'" (click)="addBiogenics()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+
+        </div>
+        <div class="h-[70vh] overflow-y-hidden pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                [rows]="Biogenics" #biogenicsTable>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Emission Source" prop="emissionSource" [flexGrow]="1.8">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{getLookUpName(value)}}</p>
+                        </a>
+                        <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="emissionSource" name="emissionSource" [placeholder]="'emissionSource'"
+                                [dropDownArrayType]="'object'" [dropDownArray]="getSource()" [idPointer]="'lookUpId'"
+                                [valuePointer]="'lookUpName'">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Emission Factor (kg CO2/kWh)" prop="emissionFactor"
+                    [flexGrow]="1.8">Emission Factor (kg CO2/kWh)
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{getLookUpName(value)}}</p>
+                        </a>
+                        <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="emissionFactor" name="emissionFactor" [placeholder]="'emissionFactor'"
+                                [dropDownArrayType]="'object'" [dropDownArray]="getFactor()" [idPointer]="'lookUpId'"
+                                [valuePointer]="'lookUpName'">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [sortable]="false" name="Units" prop="units" [flexGrow]="0.25">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                            <p *ngIf="!value && value!=0">&nbsp;</p>
+                            <p style="text-align:right">{{value}}</p>
+                        </a>
+                        <form [formGroup]="biogenicsForm.controls[rowIndex]"
+                            *ngIf="biogenicsTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="units" name="units"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+                                [placeholder]="units">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="UoM" prop="UoM" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{ value}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="unitCost" [flexGrow]="1.25">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                            <p *ngIf="!value && value!=0">&nbsp;</p>
+                            <p style="text-align:right">{{value}}</p>
+                        </a>
+                        <form [formGroup]="biogenicsForm.controls[rowIndex]"
+                            *ngIf="biogenicsTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="unitCost" name="unitCost" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false" [placeholder]="unitCost">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Basis of Estimate"
+                    prop="basisOfEstimate" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="basisOfEstimate" [showLabel]="false"
+                                [label]="'Basis of Estimate'" [placeholder]="'Basis of Estimate'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitBiogenics()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

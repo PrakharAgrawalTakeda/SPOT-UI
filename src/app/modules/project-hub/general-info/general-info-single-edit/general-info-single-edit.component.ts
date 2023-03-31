@@ -356,6 +356,30 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         })
       }
+      else if (Object.keys(formValue.portfolioOwner).length == 0){
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Please select a portfolio owner",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
       else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you sure?",
@@ -419,7 +443,31 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       }
     }
     else{
-    if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
+      if (Object.keys(formValue.portfolioOwner).length == 0) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Please select a portfolio owner",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+    else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure?",
         "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",

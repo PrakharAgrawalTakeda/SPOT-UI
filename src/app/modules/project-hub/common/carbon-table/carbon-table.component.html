@@ -1,3 +1,5 @@
+<div *ngIf="viewContent">
+
 <div class="p-6 pb-3 pt-0 flex items-center justify-between">
     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Carbon</div>
 
@@ -31,7 +33,7 @@
                 {{ value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Unit Cost" prop="unitCost" [flexGrow]="1.4">
+        <ngx-datatable-column name={{unitCost}} prop="unitCost" [flexGrow]="1.4">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>
@@ -44,5 +46,5 @@
         
     </ngx-datatable>
 </div>
-<!-- </div> -->
+</div>
 <!-- </div> -->

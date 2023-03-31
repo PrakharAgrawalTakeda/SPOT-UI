@@ -30,6 +30,7 @@ export class CarbonBulkEditComponent {
   projectViewDetails: any = {}
   carbonDb = []
   submitObj = []
+  unitCost = ""
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
   })
@@ -56,6 +57,14 @@ export class CarbonBulkEditComponent {
 
   dataloader() {
     this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
+      this.apiService.getGeneralInfoData(this.projecthubservice.projectid).then((response: any) => {
+        this.apiService.getproject(this.projecthubservice.projectid).then((res: any) => {
+          this.CAPSform.patchValue({
+            impactRealizationDate: res.emissionsImpactRealizationDate
+          })
+          this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
+        })
+      })
       // this.projectViewDetails = res
       // for (var i of this.projectViewDetails.overallPerformace) {
       //   this.carbonDb.push(i)
