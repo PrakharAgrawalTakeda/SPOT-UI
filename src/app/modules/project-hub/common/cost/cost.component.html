@@ -48,7 +48,14 @@
                         [flexGrow]="0.3">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
-                            <p>{{value}}</p>
+                            <div style="display:flex; align-items:center;">
+                                <span>{{value}}</span>
+                                <mat-icon *ngIf="row.category.includes('Total CAPEX')" matTooltip="{{ 'Please reference the Capital Request for Estimate (RFE) process prior to 
+                                entering cost estimates (Veeva Document #GD-007364)' }}"
+                                          style="font-size: 14px; margin-left: 3px;">help</mat-icon>
+                              </div>
+                            <!-- <p  [title]="'This is the category column. Each row represents an item categorized as ' + value">{{value}}</p> -->
+                            <!-- <mat-hint *ngIf="row.category.includes('Total CAPEX')">{{ 'This is the category column. Each row represents an item categorized as '}}</mat-hint> -->
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
