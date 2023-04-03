@@ -34,6 +34,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async getBudgetPerformanceById(projectid) {
+      var url = GlobalVariables.apiurl + "BudgetPerformance/GetByProjectId/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async getKeyAssumptionsByOption(projectid, optionId) {
       var url = GlobalVariables.apiurl + "BusinessCase/KeyAssumption/" + projectid+ "/"+ optionId
       const abc$ = this.http.get(url)

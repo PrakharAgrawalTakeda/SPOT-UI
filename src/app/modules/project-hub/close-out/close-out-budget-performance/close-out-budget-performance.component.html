@@ -1,1 +1,48 @@
-<p>close-out-budget-performance works!</p>
+<div class="w-full min-w-0 p-8 pt-0 space-y-6"  *ngIf="viewContent" #container >
+    <div class="flex justify-between items-start gap-6 w-full" >
+    </div>
+    <div class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden" #container>
+            <ng-container>
+                <div class="w-full min-w-0  pt-0" >
+                    <!-- Enter Content here-->
+                    <form class="w-full" [formGroup]="benefitsInfoForm">
+                        <div class="pb-6 pt-0 flex items-center justify-between">
+                            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget Performance</div>
+                            <div class="text-primary">
+                                <div class="flex items-start justify-between">
+                                    <div style="padding-right: 5px;">
+                                        <button class="ml-4 text-primary bg-gray-200"
+                                                *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                                                [color]="'primary-200'"
+                                                (click)="projectHubService.toggleDrawerOpen('BenefitsPageEdit', '', '' , this.projectHubService.projectid)">
+                                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 divide-y">
+                            <div>
+                                <div class="text-secondary pl-3">NOTE: In addition to the data below, a graph showing Plan vs. Actual over the life of the project will be included in the report</div>
+                                <div class="text-primary  pl-3">Final Requirements</div>
+                                <li  *ngFor="let fr of financialRequirements | keyvalue">
+                                    <mat-label class="items-center">{{fr}}</mat-label>
+
+                                    <div class="flex items-center justify-between pl-2 overflow-hidden">
+                                        <mat-icon svgIcon="heroicons_outline:x-circle"
+                                                  *ngIf="fr == false"></mat-icon>
+                                        <!--                                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"-->
+                                        <!--                                              *ngIf="value == true">-->
+                                        <!--                                    </mat-icon>-->
+                                    </div>
+                                </li>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ng-container>
+
+        </div>
+    </div>
+</div>

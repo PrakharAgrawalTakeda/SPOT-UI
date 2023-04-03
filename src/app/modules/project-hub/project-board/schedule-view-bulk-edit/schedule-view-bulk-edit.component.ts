@@ -372,6 +372,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                     if(this.mode!= "Business-Case"){
                                         if (this.isclosed == false) {
                                             this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+                                            this.viewContent = true
                                         }
                                     }
                                     if (this.router.url.includes('option-2')) {
@@ -382,6 +383,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
                                                 this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
                                                 this.optionInfoData = bcOptionInfo;
+                                                this.viewContent = true
                                             })
                                         })
                                     }else{
@@ -393,19 +395,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                     this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
                                                     this.optionExecutions.controls.optionExecutionStart.patchValue( bcOptionInfo.executionStartDate)
                                                     this.optionInfoData= bcOptionInfo;
+                                                    this.viewContent = true
                                                 })
                                             })
                                         }else{
                                             if (this.mode == 'Project-Close-Out') {
                                                 this.schedulengxdata = this.scheduleData.scheduleData
-                                                // this.schedulengxdata = this.sortbyBaselineCompletion(this.schedulengxdata)
+                                                this.viewContent = true
                                             }
                                             if (this.mode == 'Project-Charter') {
                                                 this.schedulengxdata = this.scheduleData.scheduleData
-                                                //this.schedulengxdata = this.sortbyPlanned(this.schedulengxdata)
+                                                this.viewContent = true
                                             }
                                             this.scheduledataDB = res.scheduleData
-                                            //res.scheduleData = this.sortbyPlannedBaseline(res.scheduleData)
                                             if (res.scheduleData.length != 0) {
                                                 for (var i of res.scheduleData) {
                                                     i.includeInReport = i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
@@ -511,7 +513,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                         }
 
                                     }
-                                    this.viewContent = true
                                 })
                             })
                         })
