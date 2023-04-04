@@ -71,7 +71,7 @@ export class ScheduleViewEditComponent implements OnInit {
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
     function: new FormControl(null),
-    //functionid: new FormControl(''),
+    includeInCharter: new FormControl(false),
     includeInReport: new FormControl(false),
     includeInBusinessCase: new FormControl(false)
   })
@@ -95,7 +95,7 @@ export class ScheduleViewEditComponent implements OnInit {
           completionDate: res.completionDate,
           usersingle: res.responsiblePersonName,
           usersingleid: res.responsiblePersonId,
-          //functionid: res.functionGroupId,
+          includeInCharter: res.includeInCharter,
           includeInReport: res.includeInReport,
           includeInBusinessCase: res.includeInBusinessCase
         })
@@ -117,6 +117,11 @@ export class ScheduleViewEditComponent implements OnInit {
                   this.scheduleForm.controls['includeInBusinessCase'].disable()
               }
           }
+          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
+            if (this.scheduleForm.value.includeInCharter != true) {
+                this.scheduleForm.controls['includeInCharter'].disable()
+            }
+        }
         }
         this.projecthubservice.isFormChanged = false
       })
@@ -130,7 +135,7 @@ export class ScheduleViewEditComponent implements OnInit {
         completionDate: null,
         usersingle: "",
         usersingleid: "",
-        //functionid: "",
+        includeInCharter: false,
         includeInReport: false,
         includeInBusinessCase: false
       })
@@ -148,6 +153,9 @@ export class ScheduleViewEditComponent implements OnInit {
           if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 8) {
               this.scheduleForm.controls['includeInBusinessCase'].disable()
           }
+          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
+            this.scheduleForm.controls['includeInCharter'].disable()
+        }
       }
       this.projecthubservice.isFormChanged = false
     }
@@ -186,7 +194,7 @@ export class ScheduleViewEditComponent implements OnInit {
           includeInReport: this.scheduleForm.value.includeInReport,
           includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
           indicator: "Grey",
-          includeInCharter: this.schedule.includeInCharter,
+          includeInCharter: this.scheduleForm.value.includeInCharter,
           milestoneType: this.schedule.milestoneType,
           templateMilestoneId: this.schedule.templateMilestoneId,
           includeInCloseout: this.schedule.includeInCloseout,
@@ -204,6 +212,9 @@ export class ScheduleViewEditComponent implements OnInit {
         if (this.scheduleForm.controls['includeInBusinessCase'].disabled) {
             mainObjnew.includeInBusinessCase = false
         }
+        if (this.scheduleForm.controls['includeInCharter'].disabled) {
+          mainObjnew.includeInBusinessCase = false
+      }
 
         // //Planned Finish
         if (mainObjnew.plannedFinish == "Invalid date") {
@@ -263,7 +274,7 @@ export class ScheduleViewEditComponent implements OnInit {
           includeInReport: this.scheduleForm.value.includeInReport,
           includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
           indicator: this.schedule.indicator,
-          includeInCharter: this.schedule.includeInCharter,
+          includeInCharter: this.scheduleForm.value.includeInCharter,
           milestoneType: this.schedule.milestoneType,
           templateMilestoneId: this.schedule.templateMilestoneId,
           includeInCloseout: this.schedule.includeInCloseout,

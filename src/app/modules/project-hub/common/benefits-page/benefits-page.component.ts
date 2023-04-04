@@ -1,8 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {ApplicationRef, Component, Input} from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProjectApiService} from "../project-api.service";
 import {FormControl, FormGroup} from "@angular/forms";
+import {Subject, takeUntil} from "rxjs";
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 
 
 @Component({
@@ -15,9 +17,11 @@ export class BenefitsPageComponent {
     @Input() lookup: any;
     @Input() benefitsData: any;
     viewContent: boolean = false
+    localCurrency:any = [];
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
+                private portApiService: PortfolioApiService,
                 public apiService: ProjectApiService,) {
     }
 
@@ -35,10 +39,15 @@ export class BenefitsPageComponent {
     ngOnInit(): void {
         this.dataloader()
     }
-
+    ngOnChanges() {
+        this.dataloader()
+    }
     dataloader() {
         this.benefitsInfoPatchValue(this.benefitsData)
         this.benefitsInfoForm.disable()
+        this.portApiService.getOnlyLocalCurrency(this.benefitsData.projectId).then(currency => {
+            this.localCurrency = currency
+        });
     }
 
     benefitsInfoPatchValue(response) {

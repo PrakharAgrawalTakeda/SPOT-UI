@@ -97,7 +97,27 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
                   this.schedulengxdata = res
               })
           }
-      }else{
+      }
+      // if(this.mode == 'Project-Charter') 
+      // {
+      //   this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id")
+      //   for (var i of this.scheduleData) {
+      //       i.variance = this.calculateVariance(i)
+      //   }
+      //   if (this.isclosed == false && this.mode == 'Project-Charter') {
+      //       this.schedulengxdata = this.scheduleData.filter(x => x.completionDate == null)
+      //   }
+      //   else if(this.isclosed == true && this.mode == 'Project-Charter'){
+      //       this.schedulengxdata = this.scheduleData
+      //   }
+      //   else if(this.isclosed == true && this.mode == 'Project-Charter'){
+      //       this.schedulengxdata = this.scheduleData
+      //   }
+      //   else{
+      //       this.schedulengxdata = this.scheduleData
+      //   }
+    //}
+    else{
           this.scheduleData = this.projectViewDetails.scheduleData
           for (var i of this.scheduleData) {
               i.variance = this.calculateVariance(i)
@@ -133,6 +153,10 @@ export class ScheduleTableComponent implements OnInit, OnChanges {
         this.schedulengxdata = this.projectViewDetails.scheduleData.filter(x => x.completionDate == null)
     }else{
         if(this.mode == 'Project-Close-Out')
+        {
+            this.schedulengxdata = this.scheduleData
+        }
+        if(this.mode == 'Project-Charter')
         {
             this.schedulengxdata = this.scheduleData
         }
