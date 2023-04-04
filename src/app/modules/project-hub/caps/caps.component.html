@@ -45,7 +45,7 @@
                         <spot-input class="w-full read-only" formControlName="EnergyCost" name="EnergyCost"
                             [label]="''">
                         </spot-input>
-                        <label class="Unit">USD</label>
+                        <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"
                             [label]="'Impact Realization Date'">
@@ -59,7 +59,7 @@
                         <div class="label">
                         <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''">
                         </spot-input>
-                        <label class="Unit">USD</label>
+                        <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
                         <div class="label">
@@ -70,7 +70,7 @@
                         <div class="label">
                         <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''">
                         </spot-input>
-                        <label class="Unit">USD</label>
+                        <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
                         <div class="label">

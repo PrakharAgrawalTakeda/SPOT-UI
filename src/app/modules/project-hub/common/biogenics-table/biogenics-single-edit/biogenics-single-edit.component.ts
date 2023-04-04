@@ -72,21 +72,6 @@ export class BiogenicsSingleEditComponent {
   dataloader() {
     this.apiService.getLessonLearnedbyProjectId(this.projecthubservice.projectid).then((res: any) => {
       this.biogenicsData = res
-      if (this.projecthubservice.itemid != "new") {
-        this.biogenics = this.biogenicsData.filter(x => { return x.lessonLearnedId == this.projecthubservice.itemid })
-        this.BiogenicsForm.patchValue({
-          biogenicsID: this.biogenics[0].biogenicsID,
-          projectUid: this.projecthubservice.projectid,
-          emissionSource: this.biogenics[0].emissionSource,
-          emissionFactor: this.biogenics[0].emissionFactor,
-          units: this.biogenics[0].units,
-          UoM: this.biogenics[0].UoM,
-          unitCost: this.biogenics[0].unitCost,
-          basisOfEstimate: this.biogenics[0].basisOfEstimate
-        })
-        this.projecthubservice.isFormChanged = false
-      }
-      else {
         this.activeaccount = this.authService.instance.getActiveAccount();
         var user = {
           userAdid: this.activeaccount.localAccountId,
@@ -103,7 +88,6 @@ export class BiogenicsSingleEditComponent {
           basisOfEstimate: ""
         })
         this.projecthubservice.isFormChanged = false
-      }
       this.BiogenicsForm.valueChanges.subscribe(res => {
         this.projecthubservice.isFormChanged = true
       })
@@ -117,7 +101,7 @@ export class BiogenicsSingleEditComponent {
   GetFactor(){
 
   }
-  
+
   submitBiogenics(){
 
   }

@@ -16,6 +16,7 @@ export class CapsComponent implements OnInit {
   editable= false
   showDefault= true
   filterCriteria:any
+  currencyLabel = ""
   CAPSform = new FormGroup({
     isCapsProject: new FormControl(false),
     enviornmentalPortfolio: new FormControl(null),
@@ -41,6 +42,8 @@ export class CapsComponent implements OnInit {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getproject(this.id).then((res: any) => {
       this.apiService.getfilterlist().then(filter => {
+        this.apiService.getGeneralInfoData(this.id).then((response: any) => {
+          this.currencyLabel = response.localCurrencyAbbreviation
         this.filterCriteria = filter
         var emissionPortfolio = this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
         if (res.emissionPortfolioId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
@@ -63,7 +66,8 @@ export class CapsComponent implements OnInit {
         WaterCost: res.waterImpactCost,
         WasteCost: res.wasteImpactCost
       })
-    })
+        })
+      })
     })
     this.editable = true
     this.viewContent = true
