@@ -156,6 +156,7 @@ import { BiogenicsBulkEditComponent } from './common/biogenics-table/biogenics-b
 import { BiogenicsSingleEditComponent } from './common/biogenics-table/biogenics-single-edit/biogenics-single-edit.component';
 import { OperationalBenefitsAddNewComponent } from './common/operational-benefits-table/operational-benefits-add-new/operational-benefits-add-new.component';
 import { OperationalBenefitsBulkEditComponent } from './common/operational-benefits-table/operational-benefits-bulk-edit/operational-benefits-bulk-edit.component';
+import { BudgetPerformanceEditComponent } from './close-out/close-out-budget-performance/budget-performance-edit/budget-performance-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -531,7 +532,8 @@ export const projectRoutes: Route[] = [
     BiogenicsBulkEditComponent,
     BiogenicsSingleEditComponent,
     OperationalBenefitsAddNewComponent,
-    OperationalBenefitsBulkEditComponent
+    OperationalBenefitsBulkEditComponent,
+    BudgetPerformanceEditComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

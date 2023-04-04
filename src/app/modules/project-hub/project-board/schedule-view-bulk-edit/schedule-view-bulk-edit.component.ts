@@ -507,6 +507,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                         control['controls']['baselineFinish'].disable()
                                                     }
                                                 }
+                                                this.viewContent = true
                                             }
                                             this.disabler()
                                             //this.value = this.milestoneForm.getRawValue()
@@ -2556,8 +2557,25 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (!control.value.comments || control.value.comments == '') {
                                 control.patchValue({ comments: x.comment })
                             }
-                            if (control.value.includeInReport == false) {
-                                control.patchValue({ includeInReport: x.includeInReport })
+                            if(this.mode == 'Project-Charter'){
+                                if (control.value.includeInCharter == false || control.value.includeInCharter==null) {
+                                    control.patchValue({ includeInCharter: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Business-Case'){
+                                if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase==null) {
+                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Project-Close-Out'){
+                                if (control.value.includeInCloseout == false || control.value.includeInCloseout==null) {
+                                    control.patchValue({ includeInCloseout: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Normal'){
+                                if (control.value.includeInReport == false || control.value.includeInReport==null) {
+                                    control.patchValue({ includeInReport: x.includeInReport })
+                                }
                             }
                             control.patchValue({ templateMilestoneId: x.milestoneId})
                             this.milestoneTableEditRow(index)
@@ -2583,8 +2601,25 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (control.value.comments == '') {
                                 control.patchValue({ comments: x.comment })
                             }
-                            if (control.value.includeInReport == false) {
-                                control.patchValue({ includeInReport: x.includeInReport })
+                            if(this.mode == 'Project-Charter'){
+                                if (control.value.includeInCharter == false || control.value.includeInCharter==null) {
+                                    control.patchValue({ includeInCharter: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Business-Case'){
+                                if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase==null) {
+                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Project-Close-Out'){
+                                if (control.value.includeInCloseout == false || control.value.includeInCloseout==null) {
+                                    control.patchValue({ includeInCloseout: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Normal'){
+                                if (control.value.includeInReport == false || control.value.includeInReport==null) {
+                                    control.patchValue({ includeInReport: x.includeInReport })
+                                }
                             }
                             control.patchValue({ templateMilestoneId: x.milestoneId})
                             this.milestoneTableEditRow(index)

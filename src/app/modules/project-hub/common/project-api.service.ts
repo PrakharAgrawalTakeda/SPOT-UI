@@ -168,6 +168,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async editBudgetPerformance(body) {
+      var url = GlobalVariables.apiurl + "BudgetPerformance"
+      const abc$ = this.http.post(url, body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async editGeneralInfoWizzard(projectid, body, wizzard) {
       if(wizzard =="CloseOut"){
           wizzard = "ProjectCloseOut";

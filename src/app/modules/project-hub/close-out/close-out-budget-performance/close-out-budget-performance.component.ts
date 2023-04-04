@@ -4,8 +4,6 @@ import {ProjectHubService} from "../../project-hub.service";
 import {ActivatedRoute} from "@angular/router";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 import {ProjectApiService} from "../../common/project-api.service";
-import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
-import {Constants} from "../../../../shared/constants";
 
 @Component({
     selector: 'app-close-out-budget-performance',
@@ -15,8 +13,9 @@ import {Constants} from "../../../../shared/constants";
 export class CloseOutBudgetPerformanceComponent implements OnInit {
     viewContent: boolean = false
     financialRequirements: any = []
+    finalRequirements: any = []
     id: string = ''
-    benefitsInfoForm = new FormGroup({
+    budgetPerformnceForm = new FormGroup({
         projectId: new FormControl(''),
         budgetCommentary: new FormControl(''),
         finalRequirementsValue: new FormControl([]),
@@ -35,8 +34,14 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
 
     dataloader() {
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-        this.apiService.getBudgetPerformanceById(this.id).then((res) => {
-            this.financialRequirements = res
+        this.apiService.getBudgetPerformanceById(this.id).then((res: any) => {
+            res.finalRequirementsValue.forEach((x, index) => {
+                this.finalRequirements.push(x);
+                this.finalRequirements[index].isSelected = !!res.selectedFields.includes(x.fieldId);
+            })
+            this.budgetPerformnceForm.patchValue({
+                budgetCommentary: res.budgetCommentary,});
+            this.financialRequirements = res.finalRequirementsValue;
             this.viewContent = true;
         })
 
