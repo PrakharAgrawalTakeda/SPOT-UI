@@ -372,6 +372,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                     if(this.mode!= "Business-Case"){
                                         if (this.isclosed == false) {
                                             this.schedulengxdata = this.scheduleData.scheduleData.filter(x => x.completionDate == null)
+                                            this.viewContent = true
                                         }
                                     }
                                     if (this.router.url.includes('option-2')) {
@@ -382,6 +383,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 this.optionExecutions.controls.optionExecutionEnd.patchValue(bcOptionInfo.executionEndDate)
                                                 this.optionExecutions.controls.optionExecutionStart.patchValue(bcOptionInfo.executionStartDate)
                                                 this.optionInfoData = bcOptionInfo;
+                                                this.viewContent = true
                                             })
                                         })
                                     }else{
@@ -393,19 +395,19 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                     this.optionExecutions.controls.optionExecutionEnd.patchValue( bcOptionInfo.executionEndDate)
                                                     this.optionExecutions.controls.optionExecutionStart.patchValue( bcOptionInfo.executionStartDate)
                                                     this.optionInfoData= bcOptionInfo;
+                                                    this.viewContent = true
                                                 })
                                             })
                                         }else{
                                             if (this.mode == 'Project-Close-Out') {
                                                 this.schedulengxdata = this.scheduleData.scheduleData
-                                                // this.schedulengxdata = this.sortbyBaselineCompletion(this.schedulengxdata)
+                                                this.viewContent = true
                                             }
                                             if (this.mode == 'Project-Charter') {
                                                 this.schedulengxdata = this.scheduleData.scheduleData
-                                                //this.schedulengxdata = this.sortbyPlanned(this.schedulengxdata)
+                                                this.viewContent = true
                                             }
                                             this.scheduledataDB = res.scheduleData
-                                            //res.scheduleData = this.sortbyPlannedBaseline(res.scheduleData)
                                             if (res.scheduleData.length != 0) {
                                                 for (var i of res.scheduleData) {
                                                     i.includeInReport = i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport
@@ -505,13 +507,13 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                         control['controls']['baselineFinish'].disable()
                                                     }
                                                 }
+                                                this.viewContent = true
                                             }
                                             this.disabler()
                                             //this.value = this.milestoneForm.getRawValue()
                                         }
 
                                     }
-                                    this.viewContent = true
                                 })
                             })
                         })
@@ -1635,7 +1637,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         //  this.viewBaselineLogs = true
                         //  this.compareBaselineLogs = false
                         //  this.projecthubservice.isBulkEdit = false
-                        this.submitjustification()
+                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                                this.projecthubservice.submitbutton.next(true)
+                                this.projecthubservice.isNavChanged.next(true)
+                        // this.submitjustification()
                         //this.projecthubservice.submitbutton.next(true)
                     })
                 // } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
@@ -2555,8 +2560,25 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (!control.value.comments || control.value.comments == '') {
                                 control.patchValue({ comments: x.comment })
                             }
-                            if (control.value.includeInReport == false) {
-                                control.patchValue({ includeInReport: x.includeInReport })
+                            if(this.mode == 'Project-Charter'){
+                                if (control.value.includeInCharter == false || control.value.includeInCharter==null) {
+                                    control.patchValue({ includeInCharter: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Business-Case'){
+                                if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase==null) {
+                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Project-Close-Out'){
+                                if (control.value.includeInCloseout == false || control.value.includeInCloseout==null) {
+                                    control.patchValue({ includeInCloseout: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Normal'){
+                                if (control.value.includeInReport == false || control.value.includeInReport==null) {
+                                    control.patchValue({ includeInReport: x.includeInReport })
+                                }
                             }
                             control.patchValue({ templateMilestoneId: x.milestoneId})
                             this.milestoneTableEditRow(index)
@@ -2582,8 +2604,25 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
                             if (control.value.comments == '') {
                                 control.patchValue({ comments: x.comment })
                             }
-                            if (control.value.includeInReport == false) {
-                                control.patchValue({ includeInReport: x.includeInReport })
+                            if(this.mode == 'Project-Charter'){
+                                if (control.value.includeInCharter == false || control.value.includeInCharter==null) {
+                                    control.patchValue({ includeInCharter: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Business-Case'){
+                                if (control.value.includeInBusinessCase == false || control.value.includeInBusinessCase==null) {
+                                    control.patchValue({ includeInBusinessCase: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Project-Close-Out'){
+                                if (control.value.includeInCloseout == false || control.value.includeInCloseout==null) {
+                                    control.patchValue({ includeInCloseout: x.includeInReport })
+                                }
+                            }
+                            if(this.mode == 'Normal'){
+                                if (control.value.includeInReport == false || control.value.includeInReport==null) {
+                                    control.patchValue({ includeInReport: x.includeInReport })
+                                }
                             }
                             control.patchValue({ templateMilestoneId: x.milestoneId})
                             this.milestoneTableEditRow(index)

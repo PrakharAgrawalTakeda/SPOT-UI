@@ -98,7 +98,14 @@ export class KeyAssumptionsTableComponent implements OnInit {
                 }
                 if (this.callLocation == "Project-Charter") {
                     this.apiService.deleteKeyAssumption(id).then(res => {
-                         this.projecthubservice.submitbutton.next(true)
+                        if (this.callLocation == 'Project-Charter') {
+                            this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                                this.projecthubservice.submitbutton.next(true)
+                            })
+                        }  else{
+                            this.projecthubservice.submitbutton.next(true)
+                        }
+
                     })
                 }
             }
