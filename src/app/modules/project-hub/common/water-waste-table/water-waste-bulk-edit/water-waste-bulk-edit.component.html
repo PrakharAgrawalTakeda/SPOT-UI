@@ -1,6 +1,6 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Biogenics</div>
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Water Waste</div>
         <div style="padding-top: 2px">
             <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
                 <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -9,7 +9,7 @@
     </div>
     <div class="w-full bg-card rounded-2xl">
         <div class="flex items-center justify-end gap-3 pt-3 pr-3 grid-cols-2">
-            <form style="width:23%;display: flex;" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
+            <form style="width:18%;display: flex;" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Impact Realization Date</mat-label>
                     <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
@@ -17,13 +17,10 @@
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
-                <div class="w-full mt-4 mb-6" style="margin-left: 47px;padding-left: 12px; padding-top: 19px;">
-                    <spot-toggle class="w-full" formControlName="NoCarbonImpact" [mode]="'toggle'" [label]="'No Carbon Impact'">
-                    </spot-toggle>
-                </div>
             </form>
-            <button class="ml-4 text-primary bg-gray-200" *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS"
-                mat-flat-button [color]="'primary-200'" (click)="addBiogenics()">
+            <button class="ml-4 text-primary bg-gray-200"
+                *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS" mat-flat-button [color]="'primary-200'"
+                (click)="addWaterWaste()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
 
@@ -31,47 +28,53 @@
         <div class="h-[70vh] overflow-y-hidden pl-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
-                [rows]="Biogenics" #biogenicsTable>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Emission Source" prop="emissionSource" [flexGrow]="1.8">
+                [rows]="WaterWaste" #waterWasteTable>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Water/Waste"
+                    prop="waterWaste" [flexGrow]="1.8">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
                             <p *ngIf="value==''">&nbsp;</p>
                             <p>{{getLookUpName(value)}}</p>
                         </a>
-                        <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
-                            <spot-select formControlName="emissionSource" name="emissionSource" [placeholder]="'emissionSource'"
-                                [dropDownArrayType]="'object'" [dropDownArray]="getSource()" [idPointer]="'lookUpId'"
-                                [valuePointer]="'lookUpName'">
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="waterWaste" name="waterWaste"
+                                [placeholder]="'waterWaste'" [dropDownArrayType]="'object'"
+                                [dropDownArray]="getWaterWaste()" [idPointer]="'lookUpId'" [valuePointer]="'lookUpName'">
                             </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Emission Factor (kg CO2/kWh)" prop="emissionFactor"
-                    [flexGrow]="1.8">Emission Factor (kg CO2/kWh)
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Type"
+                    prop="type" [flexGrow]="1.8">Type
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{value}}</p>
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{getLookUpName(value)}}</p>
                         </a>
-                        <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
-                            <spot-input class="w-full" formControlName="emissionFactor" name="emissionFactor" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="emissionFactor">
-                            </spot-input>
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="type" name="type"
+                                [placeholder]="'type'" [dropDownArrayType]="'object'"
+                                [dropDownArray]="getType()" [idPointer]="'lookUpId'" [valuePointer]="'lookUpName'">
+                            </spot-select>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [sortable]="false" name="Units" prop="units" [flexGrow]="0.25">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value}}</p>
                         </a>
-                        <form [formGroup]="biogenicsForm.controls[rowIndex]"
-                            *ngIf="biogenicsTableEditStack.includes(rowIndex)">
-                            <spot-input class="w-full" formControlName="units" name="units"
-                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-                                [placeholder]="units">
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="units" name="units" [decimalCount]="0"
+                                [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="units">
                             </spot-input>
                         </form>
                     </ng-template>
@@ -92,14 +95,15 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value}}</p>
                         </a>
-                        <form [formGroup]="biogenicsForm.controls[rowIndex]"
-                            *ngIf="biogenicsTableEditStack.includes(rowIndex)">
-                            <spot-input class="w-full" formControlName="unitCost" name="unitCost" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="unitCost">
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="unitCost" name="unitCost" [decimalCount]="0"
+                                [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="unitCost">
                             </spot-input>
                         </form>
                     </ng-template>
@@ -107,10 +111,12 @@
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Basis of Estimate"
                     prop="basisOfEstimate" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{value}}
                         </a>
-                        <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                             <spot-textarea formControlName="basisOfEstimate" [showLabel]="false"
                                 [label]="'Basis of Estimate'" [placeholder]="'Basis of Estimate'" [rows]="3">
                             </spot-textarea>
@@ -127,7 +133,7 @@
             (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
             Cancel
         </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitBiogenics()" type="button">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitWaterWaste()" type="button">
             Submit
         </button>
     </div>

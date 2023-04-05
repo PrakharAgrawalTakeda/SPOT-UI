@@ -4,6 +4,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-biogenics-table',
@@ -15,6 +16,9 @@ export class BiogenicsTableComponent {
   viewContent:boolean = false
   Biogenicsngx: any = []
   unitCost = ""
+  NoCarbonForm= new FormGroup({
+    NoCarbonImpact: new FormControl(false)
+  })
   @Input() Editable: boolean = false
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,

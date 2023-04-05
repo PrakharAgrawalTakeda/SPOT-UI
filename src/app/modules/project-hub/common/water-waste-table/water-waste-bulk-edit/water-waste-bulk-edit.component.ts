@@ -7,30 +7,29 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
 
 @Component({
-  selector: 'app-biogenics-bulk-edit',
-  templateUrl: './biogenics-bulk-edit.component.html',
-  styleUrls: ['./biogenics-bulk-edit.component.scss']
+  selector: 'app-water-waste-bulk-edit',
+  templateUrl: './water-waste-bulk-edit.component.html',
+  styleUrls: ['./water-waste-bulk-edit.component.scss']
 })
-export class BiogenicsBulkEditComponent {
+export class WaterWasteBulkEditComponent {
   unitCost = ""
   viewContent = false
-  biogenicsForm = new FormArray([])
-  biogenicsTableEditStack = []
+  waterWasteForm = new FormArray([])
+  waterWasteTableEditStack = []
   editable: boolean = false
   projectViewDetails: any = {}
-  biogenicsDb = []
+  waterWasteDb = []
   submitObj = []
   CAPSform = new FormGroup({
-    impactRealizationDate: new FormControl(''),
-    NoCarbonImpact: new FormControl(false)
+    impactRealizationDate: new FormControl('')
   })
 
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.biogenicsForm.valueChanges.subscribe(res => {
+    this.waterWasteForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.changeChecker()
-        if (JSON.stringify(this.submitObj) == JSON.stringify(this.biogenicsDb)) {
+        if (JSON.stringify(this.submitObj) == JSON.stringify(this.waterWasteDb)) {
           this.projecthubservice.isFormChanged = false
         }
         else {
@@ -39,12 +38,12 @@ export class BiogenicsBulkEditComponent {
       }
     })
   }
-  
+
   ngOnInit(): void {
     this.dataloader()
   }
 
-  dataloader(){
+  dataloader() {
     this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
       this.apiService.getGeneralInfoData(this.projecthubservice.projectid).then((response: any) => {
         this.apiService.getproject(this.projecthubservice.projectid).then((res: any) => {
@@ -58,23 +57,23 @@ export class BiogenicsBulkEditComponent {
     })
   }
 
-  addBiogenics(){
+  addWaterWaste() {
 
   }
 
   changeChecker() {
-    var formValue = this.biogenicsForm.getRawValue()
+    var formValue = this.waterWasteForm.getRawValue()
   }
 
-  biogenicsTableEditRow(row: number) {
+  waterWasteTableEditRow(row: number) {
     if (this.projecthubservice.roleControllerControl.projectHub.CAPS) {
-      if (!this.biogenicsTableEditStack.includes(row)) {
-        this.biogenicsTableEditStack.push(row)
+      if (!this.waterWasteTableEditStack.includes(row)) {
+        this.waterWasteTableEditStack.push(row)
       }
     }
   }
 
-  submitBiogenics(){
+  submitWaterWaste() {
 
   }
 }

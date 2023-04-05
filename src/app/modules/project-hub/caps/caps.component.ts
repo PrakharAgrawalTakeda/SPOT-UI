@@ -14,6 +14,7 @@ export class CapsComponent implements OnInit {
   viewContent = false
   id=""
   editable= false
+  editableEnv = true
   showDefault= true
   filterCriteria:any
   currencyLabel = ""
@@ -39,6 +40,9 @@ export class CapsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
+      this.editable = true
+    }
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getproject(this.id).then((res: any) => {
       this.apiService.getfilterlist().then(filter => {
@@ -52,7 +56,10 @@ export class CapsComponent implements OnInit {
       else{
           this.showDefault = true;
       }
-        res.emissionPortfolioId = emissionPortfolio.filter(x => x.portfolioOwnerId == res.emissionPortfolioId)[0].portfolioOwner
+      if (res.emissionPortfolioId == "" || res.emissionPortfolioId == null){
+        this.editableEnv = false
+      }
+      res.emissionPortfolioId = emissionPortfolio.filter(x => x.portfolioOwnerId == res.emissionPortfolioId)[0].portfolioOwner
       this.CAPSform.patchValue({
         isCapsProject: res.isCapsProject,
         enviornmentalPortfolio: res.emissionPortfolioId,
@@ -69,7 +76,6 @@ export class CapsComponent implements OnInit {
         })
       })
     })
-    this.editable = true
     this.viewContent = true
     this.CAPSform.disable()
   }

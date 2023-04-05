@@ -18,10 +18,6 @@
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
             </form>
-            <!-- <button class="ml-4 text-primary bg-gray-200" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
-                mat-flat-button [color]="'primary-200'" (click)="addCarbon()">
-                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-            </button> -->
             
         </div>
         <div class="h-[70vh] overflow-y-hidden pl-3">
@@ -55,15 +51,24 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="unitCost" [flexGrow]="1.25"
                     [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <div>
+                                {{column.name}}
+                                <mat-icon class="pe" style="font-size: 17px;"
+                                    matTooltip="Input the cost of each energy unit using upto 4 decimal places, positive values only.">help</mat-icon>
+                            </div>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!carbonTableEditStack.includes(rowIndex)" (click)="carbonTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value}}</p>
                         </a>
                         <form [formGroup]="carbonForm.controls[rowIndex]" *ngIf="carbonTableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="units" type="number" max="100" min="0" placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <spot-input class="w-full" formControlName="unitCost" name="unitCost" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false" [placeholder]="unitCost">
+                            </spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>

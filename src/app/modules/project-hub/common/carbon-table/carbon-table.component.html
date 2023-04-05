@@ -34,6 +34,15 @@
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name={{unitCost}} prop="unitCost" [flexGrow]="1.4">
+            <ng-template let-column="column" ngx-datatable-header-template>
+                <ng-container>
+                    <div style="margin-bottom: -23px;">
+                        {{column.name}}
+                        <mat-icon class="pe" style="font-size: 17px;"
+                            matTooltip="Input the cost of each energy unit using upto 4 decimal places, positive values only.">help</mat-icon>
+                    </div>
+                </ng-container>
+            </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{value}}
             </ng-template>

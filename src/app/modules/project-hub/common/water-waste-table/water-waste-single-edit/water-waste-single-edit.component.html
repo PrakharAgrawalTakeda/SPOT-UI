@@ -1,26 +1,26 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Biogenics</div>
+    <div class="text-on-primary" style="padding-top: 6px">Water Waste</div>
     <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
             href="javascript:void(0)" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
         </a>
     </div>
 </div>
-<form class="w-full overflow-hidden" [formGroup]="BiogenicsForm" (ngSubmit)="submitBiogenics()"
+<form class="w-full overflow-hidden" [formGroup]="waterWasteForm" (ngSubmit)="submitWaterWaste()"
     style="overflow-y: scroll; height: 95vh;">
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
-        <spot-select formControlName="emissionSource" name="emissionSource" [label]="'Emission Source'" [placeholder]="'Emission Source'"
-            [dropDownArrayType]="'object'" [dropDownArray]="GetSource()" [idPointer]="'lookUpId'"
-            [valuePointer]="'lookUpName'">
+        <spot-select formControlName="waterWaste" name="waterWaste" [label]="'Water/Waste'"
+            [placeholder]="'Water/Waste'" [dropDownArrayType]="'object'" [dropDownArray]="GetWaterWaste()"
+            [idPointer]="'lookUpId'" [valuePointer]="'lookUpName'">
         </spot-select>
 
-        <spot-input class="w-full" formControlName="emissionFactor" name="emissionFactor" [label]="'Emission Factor (kg CO2/kWh)'" [decimalCount]="0"
-            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'Emission Factor (kg CO2/kWh)'">
-        </spot-input>
-        
-        <spot-input class="w-full" formControlName="units" name="units"
-            [label]="'Units'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'units'">
+        <spot-select formControlName="type" name="type" [label]="'Type'"
+            [placeholder]="'Type'" [dropDownArrayType]="'object'" [dropDownArray]="GetType()"
+            [idPointer]="'lookUpId'" [valuePointer]="'lookUpName'">
+        </spot-select>
+
+        <spot-input class="w-full" formControlName="units" name="units" [label]="'Units'" [decimalCount]="0"
+            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'units'">
         </spot-input>
 
         <spot-input class="w-full" formControlName="UoM" name="UoM" [placeholder]="'UoM'" [label]="'UoM'">

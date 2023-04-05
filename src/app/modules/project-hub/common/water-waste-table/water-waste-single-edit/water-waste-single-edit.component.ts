@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { ActivatedRoute } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
-import { AuthService } from 'app/core/auth/auth.service';
-import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'app/core/auth/auth.service';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -19,9 +19,9 @@ export const MY_FORMATS = {
   },
 };
 @Component({
-  selector: 'app-biogenics-single-edit',
-  templateUrl: './biogenics-single-edit.component.html',
-  styleUrls: ['./biogenics-single-edit.component.scss'],
+  selector: 'app-water-waste-single-edit',
+  templateUrl: './water-waste-single-edit.component.html',
+  styleUrls: ['./water-waste-single-edit.component.scss'],
   providers: [
     // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
     // application's root module. We provide it at the component level here, due to limitations of
@@ -35,7 +35,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class BiogenicsSingleEditComponent {
+export class WaterWasteSingleEditComponent {
   unitCost = ""
   formFieldHelpers: string[] = [''];
   id: string = ""
@@ -44,11 +44,11 @@ export class BiogenicsSingleEditComponent {
   biogenicsData: any
   biogenicsUpdated: any
   activeaccount: any
-  BiogenicsForm = new FormGroup({
-    biogenicsID: new FormControl(),
+  waterWasteForm = new FormGroup({
+    waterWasteID: new FormControl(),
     projectUid: new FormControl(),
-    emissionSource: new FormControl(),
-    emissionFactor: new FormControl(),
+    waterWaste: new FormControl(),
+    type: new FormControl(),
     units: new FormControl(),
     UoM: new FormControl(),
     unitCost: new FormControl(),
@@ -56,7 +56,7 @@ export class BiogenicsSingleEditComponent {
   })
 
   constructor(private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { }
-  
+
   ngOnInit(): void {
     this.getllookup()
   }
@@ -72,33 +72,37 @@ export class BiogenicsSingleEditComponent {
   dataloader() {
     this.apiService.getLessonLearnedbyProjectId(this.projecthubservice.projectid).then((res: any) => {
       this.biogenicsData = res
-        this.activeaccount = this.authService.instance.getActiveAccount();
-        var user = {
-          userAdid: this.activeaccount.localAccountId,
-          userDisplayName: this.activeaccount.name
-        };
-        this.BiogenicsForm.patchValue({
-          biogenicsID: "",
-          projectUid: this.projecthubservice.projectid,
-          emissionSource: "",
-          emissionFactor: "",
-          units: "",
-          UoM: "KWh",
-          unitCost: "",
-          basisOfEstimate: ""
-        })
-        this.projecthubservice.isFormChanged = false
-      this.BiogenicsForm.valueChanges.subscribe(res => {
+      this.activeaccount = this.authService.instance.getActiveAccount();
+      var user = {
+        userAdid: this.activeaccount.localAccountId,
+        userDisplayName: this.activeaccount.name
+      };
+      this.waterWasteForm.patchValue({
+        waterWasteID: "",
+        projectUid: this.projecthubservice.projectid,
+        waterWaste: "",
+        type: "",
+        units: "",
+        UoM: "KWh",
+        unitCost: "",
+        basisOfEstimate: ""
+      })
+      this.projecthubservice.isFormChanged = false
+      this.waterWasteForm.valueChanges.subscribe(res => {
         this.projecthubservice.isFormChanged = true
       })
     })
   }
 
-  GetSource(){
+  GetWaterWaste() {
 
   }
 
-  submitBiogenics(){
+  GetType() {
+
+  }
+
+  submitWaterWaste() {
 
   }
 }

@@ -59,6 +59,7 @@ export class RoleService {
           porfolioOwner: false
         }
         localroleController.projectHub.localAttributes = false
+        localroleController.projectHub.CAPS = false
       }
       else{
         localroleController.generalInfo.porfolioOwner = false
