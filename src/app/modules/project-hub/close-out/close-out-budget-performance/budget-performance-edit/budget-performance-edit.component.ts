@@ -33,8 +33,7 @@ export class BudgetPerformanceEditComponent {
                 public fuseAlert: FuseConfirmationService,
                 public role: RoleService,
                 private router: Router,
-                private _Activatedroute: ActivatedRoute,
-                private portApiService: PortfolioApiService) {
+                private _Activatedroute: ActivatedRoute) {
     }
 
     ngOnInit(): void {
@@ -58,6 +57,7 @@ export class BudgetPerformanceEditComponent {
         this.budgetPerformanceForm.patchValue({
             projectId: response.projectId,
             budgetCommentary: response.budgetCommentary,
+            finalRequirementsValue: response.finalRequirementsValue,
             selectedFields: response.selectedFields,
         })
         response.finalRequirementsValue.forEach( i =>{

@@ -24,8 +24,12 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
-                private portApiService: PortfolioApiService,
                 public apiService: ProjectApiService,) {
+        this.projectHubService.submitbutton.subscribe(res => {
+            if (res == true) {
+                this.dataloader()
+            }
+        })
     }
 
     ngOnInit(): void {
@@ -33,6 +37,7 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
     }
 
     dataloader() {
+        this.finalRequirements = []
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
         this.apiService.getBudgetPerformanceById(this.id).then((res: any) => {
             res.finalRequirementsValue.forEach((x, index) => {
