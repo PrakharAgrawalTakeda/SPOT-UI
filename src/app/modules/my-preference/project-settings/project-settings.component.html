@@ -1,9 +1,10 @@
-<div class="flex flex-col min-w-0 overflow-hidden p-6 pt-20 w-full">
+<div class="flex flex-col min-w-0 overflow-hidden p-6 pt-5 w-full">
     <div class="p-6 bg-card rounded-2xl shadow w-full mb-6">
         <form class="w-full" [formGroup]="preferenceForm">
             <mat-form-field class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'">
                 <mat-label>Role</mat-label>
-                <mat-select [placeholder]="'Role'" formControlName="role" name="role" (selectionChange)="updateRole($event)">
+                <mat-select [placeholder]="'Role'" formControlName="role" name="role"
+                    (selectionChange)="updateRole($event)">
                     <mat-option *ngFor="let option of getRoles()" value="{{option.lookUpId}}">{{option.lookUpName}}
                     </mat-option>
                 </mat-select>
@@ -11,14 +12,12 @@
         </form>
     </div>
     <div class="p-6 bg-card rounded-2xl shadow w-full">
-    <form class="w-full" [formGroup]="archiveForm">
-            
-        <spot-toggle class="w-full" formControlName="includeArchiveProject"
-        [mode]="'toggle'" [label]="'Include Archived Projects '" (onChange)="updateToggleValue($event)">
-        </spot-toggle>
-   
-</form>
-</div>
-</div>
+        <form class="w-full" [formGroup]="archiveForm">
 
+            <spot-toggle class="w-full" formControlName="includeArchiveProject" [mode]="'toggle'"
+                [label]="'Include Archived Projects '" (onChange)="updateToggleValue($event)">
+            </spot-toggle>
 
+        </form>
+    </div>
+</div>

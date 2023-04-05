@@ -87,7 +87,7 @@ export class UserComponent implements OnInit, OnDestroy
         this.isMenuOpen = false
     }
     routeMyPreference():void{
-        window.open('my-preference', "_blank")
+        window.open('my-preference/project-settings', "_blank")
         
     }
 
