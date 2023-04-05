@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./project-team-add-single.component.scss']
 })
 export class ProjectTeamAddSingleComponent implements OnInit {
-  @Input() mode: string;
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Project-Proposal' = 'Normal'
   lookUpData: any = []
   Urlval: any;
   charterCount: number;
@@ -197,7 +197,14 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                           this.projecthubservice.submitbutton.next(true)
                           this.projecthubservice.toggleDrawerOpen('', '', [], '')
                       })
-                  }  else{
+                  }else if (this.mode == 'Project-Proposal'){
+                      this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.successSave.next(true)
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      })
+
+                  }else{
                       this.projecthubservice.submitbutton.next(true)
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                   }

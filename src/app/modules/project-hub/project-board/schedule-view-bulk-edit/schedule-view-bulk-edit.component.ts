@@ -1637,7 +1637,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         //  this.viewBaselineLogs = true
                         //  this.compareBaselineLogs = false
                         //  this.projecthubservice.isBulkEdit = false
-                        this.submitjustification()
+                                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                                this.projecthubservice.submitbutton.next(true)
+                                this.projecthubservice.isNavChanged.next(true)
+                        // this.submitjustification()
                         //this.projecthubservice.submitbutton.next(true)
                     })
                 // } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
