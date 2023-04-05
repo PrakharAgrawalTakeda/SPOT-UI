@@ -13,6 +13,7 @@ export class BusinessCaseComponent implements OnInit {
 
   constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, private router: Router) {
     this.projectHubService.submitbutton.subscribe(res => {
+      console.log(res)
       if (res == true) {
         this.dataloader()
       }
