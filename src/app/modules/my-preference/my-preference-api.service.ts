@@ -16,4 +16,18 @@ export class MyPreferenceApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+
+  async getuserPreference(userid: string) {
+    var url = GlobalVariables.apiurl + "UserPreference/" + userid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async updateuserPreference(userid, body){
+    var link = GlobalVariables.apiurl+"UserPreference/" + userid
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 }

@@ -156,6 +156,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
                 this.apiService.updateReportDates(this.id, "ProjectProposalModifiedDate").then(secondRes => {
                     this.projecthubservice.submitbutton.next(true)
                 })
+            }else if(this.mode == 'Project-Close-Out'){
+                this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                    this.projecthubservice.submitbutton.next(true)
+                })
             }else{
                 this.projecthubservice.submitbutton.next(true)
             }

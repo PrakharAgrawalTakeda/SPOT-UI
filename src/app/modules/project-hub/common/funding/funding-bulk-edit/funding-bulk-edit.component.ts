@@ -497,7 +497,6 @@ export class FundingBulkEditComponent {
     })
   }
   addFunding() {
- 
       {
         if(this.mode == 'Project-Charter')
         {
@@ -526,8 +525,6 @@ export class FundingBulkEditComponent {
           fundingUniqueId: new FormControl(''),
           includeInBusinessCase: new FormControl(false),
           projectId: new FormControl(this.projecthubservice.projectid)
-  
-  
         }))
         //console.log(this.fundingdata.length)
         if (this.fundingdata != null) {
@@ -613,8 +610,6 @@ export class FundingBulkEditComponent {
         includeInBusinessCase: new FormControl(false),
         projectId: new FormControl(this.projecthubservice.projectid),
         businessOptionId: new FormControl(this.optionId)
-    
-    
       }))
       //console.log(this.fundingdata.length)
       if (this.fundingdata != null) {
@@ -628,7 +623,6 @@ export class FundingBulkEditComponent {
         this.fundingEditStack.push(0)
       }
   }
-    
 
   if(this.mode != 'Project-Charter' && this.optionType == 'option-3')
 {
@@ -692,7 +686,6 @@ export class FundingBulkEditComponent {
       this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
-      
         if (this.mode == 'Project-Charter') {
           this.apiService.bulkeditFunding(this.submitObj, this.projecthubservice.projectid).then(resp => {
           this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
@@ -705,7 +698,7 @@ export class FundingBulkEditComponent {
           })
         }
         if(this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
-          this.apiService.bulkeditFunding(this.submitObj, this.projecthubservice.projectid).then(resp => {
+          this.apiService.updateBusinessCaseFunding(this.submitObj, this.projecthubservice.projectid,GlobalBusinessCaseOptions.OPTION_1).then(resp => {
           this.projecthubservice.isFormChanged = false
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.submitbutton.next(true)
@@ -731,8 +724,6 @@ export class FundingBulkEditComponent {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
         })
         }
-
-      
     }
   }
 

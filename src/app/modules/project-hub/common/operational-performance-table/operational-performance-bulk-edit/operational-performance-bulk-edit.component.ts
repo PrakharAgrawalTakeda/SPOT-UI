@@ -315,6 +315,13 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
                 this.projecthubservice.successSave.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
             })
+        }else if(this.mode == 'Project-Close-Out'){
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                this.projecthubservice.isFormChanged = false
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+            })
         }else{
             this.projecthubservice.isFormChanged = false
             this.projecthubservice.submitbutton.next(true)

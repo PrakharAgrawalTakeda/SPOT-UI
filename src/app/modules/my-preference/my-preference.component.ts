@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
+import { ProjectApiService } from '../project-hub/common/project-api.service';
+import { ProjectHubService } from '../project-hub/project-hub.service';
 import { MyPreferenceApiService } from './my-preference-api.service';
 
 @Component({
@@ -13,33 +17,53 @@ import { MyPreferenceApiService } from './my-preference-api.service';
 })
 export class MyPreferenceComponent implements OnInit {
 
-  preferenceForm = new FormGroup({
-    role: new FormControl('')
-  })
-  lookupdata: any = []
-  constructor(private titleService: Title, public auth: AuthService, private roleService: RoleService, private apiService: MyPreferenceApiService, private msalService: MsalService) { }
+  constructor(private _Activatedroute: ActivatedRoute, private router: Router) {
+    console.log("My preference top bar")
 
+    this.router.events.subscribe(res => {
+      
+      if (this.viewContent) {
+        this.navItem = null
+        this.reloadName()
+      }
+    })
+  }
+  id: string = ''
+  viewContent: boolean = false
+  navItem: any
   ngOnInit(): void {
-    this.auth.lookupMaster().then(res=>{
-      this.lookupdata =  res
-      this.preferenceForm.patchValue({
-        role: this.roleService.roleMaster.securityGroupId
-      })
-      this.titleService.setTitle("My Preferences")
-    })
-    
+    this.dataloader()
   }
-  getRoles(): any{
-    return this.lookupdata.filter(x => x.lookUpParentId == '3FF934A4-D5FC-4F92-AE75-78A5EBC64A1B' &&   !['C005FB71-C1FF-44D3-8779-5CA37643D794','BDC4DF5A-14D6-4468-9238-B933CA6C1B46','500ee862-3878-43d9-9378-53feb1832cef'].includes(x.lookUpId)  ).sort((a, b) => {
-      return a.lookUpOrder - b.lookUpOrder;
-    })
-  }
+  dataloader() {
+    this.viewContent = true
+      this.reloadName()
+      
 
-  updateRole(value: any){
-    console.log(this.msalService.instance.getActiveAccount().localAccountId)
-    console.log(value.value)
-    this.apiService.updateRole(this.msalService.instance.getActiveAccount().localAccountId,value.value).then(res=>{
-      location.reload()
-    })
+  }
+  isNavActive(link: string): boolean {
+    return this.router.url.includes(link)
+  }
+  reloadName() {
+
+    if (this.router.url.includes('project-settings')) {
+      this.navItem = {
+        title: 'My Preferences',
+        children: [
+          {
+            title:'Project Settings',
+            link:'my-preference/project-settings'
+          },
+          {
+            title:'Email Notifications',
+            link:'my-preference/email-notifications'
+          },
+          {
+            title:'Milestone Sets',
+            link:'my-preference/milestone-sets'
+          }
+        ]
+      }
+      console.log(this.navItem)
+    }
   }
 }

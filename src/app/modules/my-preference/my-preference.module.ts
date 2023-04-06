@@ -31,17 +31,26 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { MyPreferenceComponent } from './my-preference.component';
+import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
+import { ProjectSettingsComponent } from './project-settings/project-settings.component';
 export const projectRoutes: Route[] = [
   {
     path: '',
     component: MyPreferenceComponent,
+ children: [
+ 
+  {
+    path: 'project-settings',
+    component: ProjectSettingsComponent,
   }
-];
+]
+}];
 
 
 @NgModule({
   declarations: [
-    MyPreferenceComponent
+    MyPreferenceComponent,
+    ProjectSettingsComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
@@ -74,7 +83,8 @@ export const projectRoutes: Route[] = [
     MatMomentDateModule,
     MatAutocompleteModule,
     MatTooltipModule,
-    FuseAlertModule
+    FuseAlertModule,
+    SpotFormsModule
   ]
 })
 export class MyPreferenceModule { }
