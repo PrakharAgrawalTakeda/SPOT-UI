@@ -24,6 +24,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
   @Input() Required: boolean = false;
   @Input() callLocation: string = ""
+  @Input() allowNegativeValues: boolean = false
 
 
   formFieldHelpers: any
@@ -54,39 +55,37 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
   writeValue(val: any) {
     if (this.inputType == 'Number') {
-      //if (typeof val === 'number') {
-        //let value = this.autoAddDecimal ? val.toFixed(this.decimalCount) : val.toString();
-        let value = '';
-if (val != null && val !== '') {
-  value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
-}
-
-        //let value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
-        const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
-
+      let value = '';
+      if (val != null && val !== '') {
+        value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
+      }
+  
+      const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+  
       this.control.setValue(formattedValue);
-        // rest of the code
-     // }
-      //let value = this.autoAddDecimal? val?.toFixed(this.decimalCount) : val?.toString();
-      // Add commas as thousand separators
-      
     }
     else {
       this.control.setValue(val);
     }
   }
-
+  
   setDisabledState(isDisabled: boolean) {
     isDisabled == true ? this.control.disable() : this.control.enable()
   }
-
+  
   formatInput(event: any): void {
     if (this.inputType == 'Number') {
       let value = event.target.value;
-
-      // Remove non-numeric and non-decimal characters
-      value = value.replace(/[^\d.]/g, '');
-
+  
+      // Remove non-numeric, non-decimal, and non-negative sign characters
+      const regex = this.allowNegativeValues ? /[^\d.-]/g : /[^\d.]/g;
+      value = value.replace(regex, '');
+  
+      if (this.allowNegativeValues) {
+        // Allow only one negative sign and ensure it is at the beginning
+        value = value.replace(/(?!^)-/g, '');
+      }
+  
       if (this.decimalCount === 0) {
         // Remove any decimal points if decimalCount is 0
         value = value.replace(/\./g, '');
@@ -94,20 +93,20 @@ if (val != null && val !== '') {
       else {
         // Allow only one decimal point
         value = value.replace(/(\..*)\./g, '$1');
-
+  
         // Round the decimal value to decimalCount decimal places if needed
         const decimalIndex = value.indexOf('.');
         if (decimalIndex !== -1 && decimalIndex + this.decimalCount + 1 < value.length) {
           value = parseFloat(value)?.toFixed(this.decimalCount);
         }
       }
-
+  
       // Add commas as thousand separators
       const formattedValue = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
-
+  
       // Update the input field value
       event.target.value = formattedValue;
-
+  
       // Call the onChange method with the float value
       this.onChange(parseFloat(value));
     }
