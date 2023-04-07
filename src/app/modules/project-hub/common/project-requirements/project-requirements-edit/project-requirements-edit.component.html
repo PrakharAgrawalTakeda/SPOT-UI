@@ -41,7 +41,7 @@
                      [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
                      [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
         </spot-select>
-        <spot-input class="w-full read-only" [showLabel]="true" [label]="'How Much ' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="howMuch"
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'How Much (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="howMuch"
                     [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
         <spot-select formControlName="budgetInPlan"  [label]="'Budget in Plan'"
                      [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"

@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./project-team-add-single.component.scss']
 })
 export class ProjectTeamAddSingleComponent implements OnInit {
-  @Input() mode: string;
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Project-Proposal' = 'Normal'
   lookUpData: any = []
   Urlval: any;
   charterCount: number;
@@ -183,8 +183,8 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                 projectTeamUniqueId: "",
                 problemUniqueId: this.projecthubservice.projectid,
                 roleId: Object.keys(projectTeam.role).length > 0 ? projectTeam.role.lookUpId : "",
-                teamMemberAdId: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userAdid : "",
-                teamMemberName: Object.keys(projectTeam.usersingle).length > 0 ? projectTeam.usersingle.userDisplayName : "",
+                teamMemberAdId: Object.keys(projectTeam.usersingle || {}).length > 0 ? projectTeam.usersingle.userAdid : "",
+                teamMemberName: Object.keys(projectTeam.usersingle || {}).length > 0 ? projectTeam.usersingle.userDisplayName : "",
                 teamPermissionId: projectTeam.permission,
                 percentTime: projectTeam.percentTime == "" ? 0 : projectTeam.percentTime,
                 duration: projectTeam.duration == "" ? 0 : projectTeam.duration,
@@ -197,7 +197,14 @@ export class ProjectTeamAddSingleComponent implements OnInit {
                           this.projecthubservice.submitbutton.next(true)
                           this.projecthubservice.toggleDrawerOpen('', '', [], '')
                       })
-                  }  else{
+                  }else if (this.mode == 'Project-Proposal'){
+                      this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.successSave.next(true)
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      })
+
+                  }else{
                       this.projecthubservice.submitbutton.next(true)
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                   }

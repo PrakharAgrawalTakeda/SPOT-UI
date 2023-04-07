@@ -208,8 +208,16 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
             })
           }else{
               this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
-                  this.projecthubservice.submitbutton.next(true)
-                  this.projecthubservice.isNavChanged.next(true)
+                  if (this.callLocation == 'Project-Charter') {
+                      this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.isNavChanged.next(true)
+                      })
+                  }  else{
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.isNavChanged.next(true)
+                  }
+
               })
           }
 

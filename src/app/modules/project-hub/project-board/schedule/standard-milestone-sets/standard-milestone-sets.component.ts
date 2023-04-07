@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ProjectHubService} from "../../../project-hub.service";
 import {ProjectApiService} from "../../../common/project-api.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
-import {ActivatedRoute} from "@angular/router";
-import { Output, EventEmitter } from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+
 @Component({
     selector: 'app-standard-milestone-sets',
     templateUrl: './standard-milestone-sets.component.html',
@@ -18,8 +18,10 @@ export class StandardMilestoneSetsComponent implements OnInit {
     standarMilestoneAdded: any = []
     viewContent: boolean = false
     id: string = ""
-    constructor(public projectHubService: ProjectHubService,  public apiService: ProjectApiService, public fuseAlert: FuseConfirmationService,
-                private _Activatedroute: ActivatedRoute) {
+    constructor(public projectHubService: ProjectHubService,  public apiService: ProjectApiService,
+                public fuseAlert: FuseConfirmationService,
+                private _Activatedroute: ActivatedRoute,
+                private router: Router) {
     }
 
     ngOnChanges() {
@@ -38,6 +40,16 @@ export class StandardMilestoneSetsComponent implements OnInit {
         this.apiService.getStandardMilestoneSets(this.id).then(res => {
             this.standardMilestoneDBData = [...this.sortByLevel(res)]
             this.standardMilestoneData = this.sortByLevel(res)
+            let milestoneArray = []
+            if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+                this.standardMilestoneData.forEach((set, setIndex) => {
+                    milestoneArray = set.templateDetails;
+                    this.standardMilestoneData[setIndex].templateDetails = milestoneArray.filter((element) => {
+                        return element.milestoneType === null || element.milestoneType === 0;
+                    });
+                })
+            }
+
             for (var i in this.standardMilestoneData) {
                 this.standarMilestoneAdded.push([])
             }
