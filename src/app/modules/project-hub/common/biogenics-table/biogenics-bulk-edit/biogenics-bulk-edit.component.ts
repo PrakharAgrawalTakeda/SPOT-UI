@@ -52,9 +52,9 @@ export class BiogenicsBulkEditComponent {
             impactRealizationDate: res.emissionsImpactRealizationDate
           })
           this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
+          this.viewContent = true
         })
       })
-      this.viewContent = true
     })
   }
 

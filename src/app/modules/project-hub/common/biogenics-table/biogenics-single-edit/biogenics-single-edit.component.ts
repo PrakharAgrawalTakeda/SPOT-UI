@@ -71,7 +71,9 @@ export class BiogenicsSingleEditComponent {
 
   dataloader() {
     this.apiService.getLessonLearnedbyProjectId(this.projecthubservice.projectid).then((res: any) => {
+      this.apiService.getGeneralInfoData(this.projecthubservice.projectid).then((response: any) => {
       this.biogenicsData = res
+        this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
         this.activeaccount = this.authService.instance.getActiveAccount();
         var user = {
           userAdid: this.activeaccount.localAccountId,
@@ -91,6 +93,7 @@ export class BiogenicsSingleEditComponent {
       this.BiogenicsForm.valueChanges.subscribe(res => {
         this.projecthubservice.isFormChanged = true
       })
+    })
     })
   }
 

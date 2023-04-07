@@ -36,9 +36,9 @@ export class CarbonTableComponent {
       this.apiService.getLessonLearnedbyProjectId(this.id).then((res: any) => {
         this.apiService.getGeneralInfoData(this.id).then((response: any) => {
           this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
+          this.carbonngx = res
+          this.viewContent = true
         })
-        this.carbonngx = res
-        this.viewContent = true
       })
     })
   }

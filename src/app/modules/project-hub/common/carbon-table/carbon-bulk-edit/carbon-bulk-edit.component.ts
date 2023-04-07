@@ -63,6 +63,7 @@ export class CarbonBulkEditComponent {
             impactRealizationDate: res.emissionsImpactRealizationDate
           })
           this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
+          this.viewContent = true
         })
       })
       // this.projectViewDetails = res
@@ -87,7 +88,6 @@ export class CarbonBulkEditComponent {
       //   }))
       // }
 
-      this.viewContent = true
     })
   }
 

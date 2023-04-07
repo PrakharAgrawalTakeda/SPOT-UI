@@ -40,9 +40,9 @@ export class BiogenicsTableComponent {
       this.apiService.getLessonLearnedbyProjectId(this.id).then((res: any) => {
         this.apiService.getGeneralInfoData(this.id).then((response: any) => {
           this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
+          this.Biogenicsngx = res
+          this.viewContent = true
         })
-        this.Biogenicsngx = res
-        this.viewContent = true
       })
     })
   }
