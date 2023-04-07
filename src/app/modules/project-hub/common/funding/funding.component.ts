@@ -27,7 +27,7 @@ export class FundingComponent implements OnInit, OnChanges {
   initializationComplete: boolean = false
   id: string = ""
   fundingbulkEditType: string = 'FundingBulkEdit';
-  //fundingBCbulkEditType: string = 'FundingBCBulkEdit';
+  addSingle: string = 'FundingSingleEdit';
   viewContent: boolean = false
   fundingdata: any;
   fundingSourceData: any;
@@ -48,6 +48,12 @@ export class FundingComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     //console.log(this.projectViewDetails)
+    if (this.mode == 'Project-Charter') {
+      this.addSingle = 'FundingSingleEdit'
+    }
+    else if (this.optionType == 'recommended-option' || this.optionType == 'option-2' || this.optionType == 'option-3') {
+        this.addSingle = 'BCFundingSingleEdit'
+    }
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {

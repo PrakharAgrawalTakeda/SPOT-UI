@@ -377,6 +377,14 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+
+  async addFunding(body){
+    var link = GlobalVariables.apiurl+"Funding"
+    const abc$ = this.http.post(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+}
+
   async addRiskIssueForOption(body) {
       var link = GlobalVariables.apiurl + "BusinessCase/RiskIssue"
       const abc$ = this.http.post(link, body)

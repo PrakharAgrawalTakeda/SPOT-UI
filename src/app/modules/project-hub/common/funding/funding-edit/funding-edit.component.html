@@ -6,32 +6,48 @@
         </a>
     </div>
 </div>
-<form class="w-full overflow-hidden" [formGroup]="FundingForm"
-    (ngSubmit)="submitfunding()" style="overflow-y: scroll; height: 95vh;">
+<form class="w-full overflow-hidden" [formGroup]="FundingForm" (ngSubmit)="submitfunding()"
+    style="overflow-y: scroll; height: 95vh;">
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
 
-    <spot-singleselect-autocomplete formControlName="fundingTypeId" class="w-full" name="fundingTypeId" [label]="'Funding Type'"
-        [placeholder]="'Funding Type'" [valuePointer]="'fundingTypename'" [dropDownArray]="projecthubservice.kpiMasters">
-    </spot-singleselect-autocomplete>
+        <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
+            [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
+            [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
+        </spot-select>
 
-    <spot-singleselect-autocomplete formControlName="fundingSourceId" class="w-full" name="fundingSourceId" [label]="'Funding Type'"
-        [placeholder]="'Funding Source'" [valuePointer]="'fundingSourceName'" [dropDownArray]="projecthubservice.kpiMasters">
-    </spot-singleselect-autocomplete>
+        <spot-select formControlName="fundingSourceId" name="fundingSourceName" [placeholder]="'Funding Source'"
+            [idPointer]="'portfolioOwnerId'" [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()"
+            [dropDownArrayType]="'object'" [showNoneOption]="false" [sortByType]="'custom'"
+            [idPointer]="'portfolioOwnerId'" [customSortPointer]="'pfid'" [label]="'Funding Source'">
+        </spot-select>
 
-    <spot-singleselect-autocomplete formControlName="fundingIntheplan" class="w-full" name="fundingIntheplan" [label]="'In the Plan'"
-    [placeholder]="'In the Plan'" [valuePointer]="'fundingIntheplanValue'" [dropDownArray]="projecthubservice.kpiMasters">
-</spot-singleselect-autocomplete>
+        <spot-toggle class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'" [label]="'In the Plan'">
+        </spot-toggle>
 
-    <spot-textarea formControlName="fundingAmount" name="fundingAmount" [label]="'Amount'" [placeholder]="'Amount'">
-    </spot-textarea>
-    <spot-textarea formControlName="fundingNotes" name="fundingNotes" [label]="'Notes'" [placeholder]="'Notes'">
-    </spot-textarea>
+        <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2" [label]="'Amount'">
+        </spot-input>
 
-    <mat-slide-toggle
-        [matTooltip]="this.FundingForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter report' : null"
-        formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
+        <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
+            [showHint]="false" [label]="'Notes'">
+        </spot-textarea>
+
+        <mat-slide-toggle
+            [matTooltip]="this.FundingForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for the proposal' : null"
+            class="flex items-start justify-between incuded-in-dash" formControlName="includeInCharter">Include in Project Charter
+        </mat-slide-toggle>
+
+
     </div>
-    <div class="flex items-start justify-between form-ask-need">
+    <!-- <div class="flex items-start justify-between form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div> -->
+    <div class="flex items-start justify-between px-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
             (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
