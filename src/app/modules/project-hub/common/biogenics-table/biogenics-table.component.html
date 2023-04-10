@@ -9,12 +9,12 @@
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
                     <button class="text-primary bg-gray-200" mat-flat-button *ngIf="Editable" [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('BiogenicsBulkEdit', '', Biogenicsngx, id, true)">
+                        (click)="projecthubservice.toggleDrawerOpen('BiogenicsBulkEdit', '', biogenicsBulkEditData, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
-                    <button class="ml-4 text-primary bg-gray-200" *ngIf="Editable" mat-flat-button
+                    <button class="ml-4 text-primary bg-gray-200" *ngIf="Editable && !NoCarbonForm.controls.NoCarbonImpact.value" mat-flat-button
                         [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('BiogenicsSingleEdit', 'new', Biogenicsngx , projectid)">
+                        (click)="projecthubservice.toggleDrawerOpen('BiogenicsSingleEdit', 'new', biogenicsBulkEditData , id)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
                 </div>
@@ -44,23 +44,23 @@
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Emission Factor (kg CO2/kWh)" prop="emissionFactor" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader">
+            <ngx-datatable-column name="Emission Factor (kg CO2/kWh)" prop="biogenicEmissionFactor" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p style="text-align:right">{{value}}</p>
+                    {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Units" prop="units" [flexGrow]="1"
+            <ngx-datatable-column name="Units" prop="biogenicUnit" [flexGrow]="1"
                 [headerClass]="getNgxDatatableNumberHeader">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p style="text-align:right">{{value}}</p>
+                    {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="UoM" prop="UoM" [flexGrow]="1">
+            <ngx-datatable-column name="UoM" prop="standardUoM" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name={{unitCost}} prop="unitCost" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader">
+            <ngx-datatable-column name={{unitCost}} prop="biogenicUnitCost" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader">
                 <ng-template let-column="column" ngx-datatable-header-template>
                     <ng-container>
                         <div style="margin-bottom: -23px;">
@@ -71,10 +71,10 @@
                     </ng-container>
                 </ng-template>
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p style="text-align:right">{{value}}</p>
+                    {{value}}
                 </ng-template>   
             </ngx-datatable-column>
-            <ngx-datatable-column name="Basis of Estimate" prop="basisOfEstimate" [flexGrow]="1">
+            <ngx-datatable-column name="Basis of Estimate" prop="biogenicBasisOfEstimate" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
