@@ -712,5 +712,12 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async getCAPSbyProjectID(projectid) {
+    var url = GlobalVariables.apiurl + "CAPS/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 

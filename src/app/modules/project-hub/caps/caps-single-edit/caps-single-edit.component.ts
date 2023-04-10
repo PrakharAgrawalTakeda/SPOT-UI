@@ -53,24 +53,25 @@ viewType = 'SidePanel'
       })
     }
   ngOnInit(): void {
-    this.apiService.getproject(this.projectHubService.projectid).then((res: any) => {
+    this.apiService.getCAPSbyProjectID(this.projectHubService.projectid).then((res: any) => {
       this.apiService.getfilterlist().then(filter => {
         this.filterCriteria = filter
-        var emissionPortfolio = this.filterCriteria.portfolioOwner.filter(x => x.portfolioOwnerId == res.emissionPortfolioId)
         this.CAPSdata = res
         this.CAPSform.patchValue({
-          isCapsProject: res.isCapsProject,
-          enviornmentalPortfolio: emissionPortfolio[0],
-          impactRealizationDate: res.emissionsImpactRealizationDate,
-          // EmissionsImpact: res.calculatedEmissionsImpact,
-          // EnergyImpact: res.energyImpact,
-          // WaterImpact: res.waterImpactUnits,
-          // TotalWasteImpact: res.wasteImpactUnits,
-          // LandfilledWasteImpact: res.wasteLandfillImpactUnits,
-          // EnergyCost: res.energyCostImpactPerYear,
-          // WaterCost: res.waterImpactCost,
-          // WasteCost: res.wasteImpactCost
+          isCapsProject: res.projectData.isCapsProject,
+          enviornmentalPortfolio: res.envionmentPortfolio,
+          impactRealizationDate: res.projectData.emissionsImpactRealizationDate,
+          // EmissionsImpact: res.projectData.calculatedEmissionsImpact,
+          // EnergyImpact: res.projectData.energyImpact,
+          // WaterImpact: res.projectData.waterImpactUnits,
+          // TotalWasteImpact: res.projectData.wasteImpactUnits,
+          // LandfilledWasteImpact: res.projectData.wasteLandfillImpactUnits,
+          // EnergyCost: res.projectData.energyCostImpactPerYear,
+          // WaterCost: res.projectData.waterImpactCost,
+          // WasteCost: res.projectData.wasteImpactCost
         })
+        this.CAPSform.controls['isCapsProject'].disable()
+        this.CAPSform.controls['enviornmentalPortfolio'].disable()
         this.viewContent = true
       })
     })

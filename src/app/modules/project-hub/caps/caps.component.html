@@ -29,7 +29,8 @@
                             </mat-icon>
                         </div>
                         <spot-input class="w-full read-only" formControlName="EmissionsImpact" name="EmissionsImpact"
-                            [label]="'Emissions Impact (tCO2e/Year)'">
+                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <div></div>
                         <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
@@ -38,13 +39,15 @@
                         </spot-input>
                         <div class="label">
                         <spot-input class="w-full read-only" formControlName="EnergyImpact" name="EnergyImpact"
-                            [label]="'Energy Impact (per Year)'">
+                            [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">GJ</label>
                         </div>
                         <div class="label">
                         <spot-input class="w-full read-only" formControlName="EnergyCost" name="EnergyCost"
-                            [label]="''">
+                            [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
@@ -53,30 +56,35 @@
                         </spot-input-date>
                         <div class="label">
                         <spot-input class="w-full read-only" formControlName="WaterImpact" name="WaterImpact"
-                            [label]="'Water Impact (per Year)'">
+                            [label]="'Water Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">m3</label>
                         </div>
                         <div class="label">
-                        <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''">
+                        <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
                         <div class="label">
-                        <spot-input class="w-full read-only" formControlName="TotalWasteImpact" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'">
+                        <spot-input class="w-full read-only" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
                         <div class="label">
-                        <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''">
+                        <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
                         <div class="label">
                         <spot-input class="w-full read-only" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
-                            [label]="'Landfilled Waste Impact (per Year)'">
+                            [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
