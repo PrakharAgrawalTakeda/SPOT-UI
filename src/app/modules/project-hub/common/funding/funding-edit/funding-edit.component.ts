@@ -14,6 +14,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 export class FundingEditComponent implements OnInit {
   @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
   @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
+  @Input() lookup: any;
   Funding: any = {}
   formIntialized: boolean = false
   FundingForm = new FormGroup({
@@ -65,25 +66,13 @@ export class FundingEditComponent implements OnInit {
   }
 
   ngOnInit() {
-this.getlookup()
-
-  }
-
-  getlookup()
-  {
-    this.auth.lookupMaster().then((resp: any) => {
-      //this.fundingSourceData = po
-      this.lookupdata = resp
-      this.dataloader()
-    })
-  }
-
-  dataloader() {
+    
     if (this.mode == 'Project-Charter') {
       this.portApiService.getfilterlist().then((po: any) => {
-        //this.auth.lookupMaster().then((resp: any) => {
+        this.auth.lookupMaster().then((resp: any) => {
           this.fundingSourceData = po
-          //this.lookupdata = resp
+          this.lookupdata = resp
+          this.dataIntialized = true
           this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
           if (this.projecthubservice.all.length > 0) {
             if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3) {
@@ -101,7 +90,7 @@ this.getlookup()
             this.projecthubservice.isFormChanged = true
           })
         })
-     // })
+      })
     }
 
 
@@ -111,11 +100,11 @@ this.getlookup()
     // this.FundingBCForm.valueChanges.subscribe(res => {
     //   this.projecthubservice.isFormChanged = true
     // })
+
   }
 
 
   getfundingtype(): any {
-
     return this.lookupdata.filter(x => x.lookUpParentId == 'b127f31e-aeae-4940-ba32-ddd0d4e5287b').sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
     })

@@ -83,7 +83,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })
@@ -115,7 +115,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })
@@ -145,7 +145,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })
@@ -174,7 +174,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })
