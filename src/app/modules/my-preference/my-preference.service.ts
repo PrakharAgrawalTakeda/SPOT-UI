@@ -60,7 +60,7 @@ export class MyPreferenceService {
             }
         }
     }
-    toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false, fuseDrawerLarge: boolean = false): void {
+    toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false): void {
         console.log(itemtype)
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert)
