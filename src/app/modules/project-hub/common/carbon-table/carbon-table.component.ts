@@ -36,10 +36,16 @@ export class CarbonTableComponent {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+        if (res.localCurrency == null){
+          this.unitCost = "Unit Cost ()"
+        }
+        else{
         this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
+        }
         var carbonParam = res.carbonParameters
         var carbonData = res.carbonData
         var carbonngx = []
+        if (carbonParam != null && carbonData != null){
         carbonParam.forEach(function(arrayItem){
           var data = []
           var param = []
@@ -60,6 +66,7 @@ export class CarbonTableComponent {
               i.embasisOfEstimate = ""
           }
         }
+      }
         this.viewContent = true
       })
     })

@@ -20,7 +20,7 @@
         
         <spot-input class="w-full" formControlName="biogenicUnit" name="biogenicUnit"
             [label]="'Units'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'units'">
+            [placeholder]="'units'" [allowNegativeValues] = true>
         </spot-input>
 
         <spot-input class="w-full" formControlName="standardUoM" name="standardUoM" [placeholder]="'UoM'" [label]="'UoM'">

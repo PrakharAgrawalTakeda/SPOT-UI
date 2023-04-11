@@ -40,6 +40,34 @@ export class BiogenicsBulkEditComponent {
         }
       }
     })
+    this.CAPSform.controls.NoCarbonImpact.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if(res == true){
+          for(var i=0;i<this.Biogenics.length; i++){
+            if (this.Biogenics[i].biogenicDataId != "") {
+              this.Biogenics[i].biogenicEmissionFactor = '',
+                this.Biogenics[i].biogenicUnit = '',
+                this.Biogenics[i].biogenicUnitCost = '',
+                this.Biogenics[i].biogenicBasisOfEstimate = ''
+            }
+            else{
+              this.Biogenics.splice(i, 1)
+              this.biogenicsForm.removeAt(i)
+              if (this.biogenicsTableEditStack.includes(i)) {
+                this.biogenicsTableEditStack.splice(this.biogenicsTableEditStack.indexOf(i), 1)
+              }
+              this.biogenicsTableEditStack = this.biogenicsTableEditStack.map(function (value) {
+                return value > i ? value - 1 : value;
+              })
+              this.Biogenics = [...this.Biogenics]
+            }
+          }
+        }
+        else if (res == false && this.projecthubservice.all[1] == false){
+          this.Biogenics = this.projecthubservice.all[0]
+        }
+      }
+    })
   }
   
   ngOnInit(): void {
@@ -47,14 +75,14 @@ export class BiogenicsBulkEditComponent {
   }
 
   dataloader(){
-    // this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
+    this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
       this.auth.lookupMaster().then((resp: any) => {
         this.lookupdata = resp
       this.CAPSform.patchValue({
         impactRealizationDate: this.projecthubservice.all[2],
         NoCarbonImpact: this.projecthubservice.all[1]
       })
-        this.Biogenics = this.projecthubservice.all[0]
+        this.Biogenics = res.biogenicsData
       for (var i of this.Biogenics) {
         this.biogenicsDb.push(i)
         this.biogenicsForm.push(new FormGroup({
@@ -71,7 +99,7 @@ export class BiogenicsBulkEditComponent {
         this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
       this.viewContent = true
     })
-  // })
+  })
   }
 
   getSource(){

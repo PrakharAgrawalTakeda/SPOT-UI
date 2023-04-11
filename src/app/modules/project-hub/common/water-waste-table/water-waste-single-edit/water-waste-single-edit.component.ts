@@ -45,61 +45,66 @@ export class WaterWasteSingleEditComponent {
   biogenicsUpdated: any
   activeaccount: any
   waterWasteForm = new FormGroup({
-    waterWasteID: new FormControl(),
-    projectUid: new FormControl(),
-    waterWaste: new FormControl(),
-    type: new FormControl(),
-    units: new FormControl(),
-    UoM: new FormControl(),
-    unitCost: new FormControl(),
-    basisOfEstimate: new FormControl(),
+    emdataWwid: new FormControl(),
+    projectId: new FormControl(),
+    wwstream: new FormControl(),
+    emwwunit: new FormControl(),
+    emwwunitCost: new FormControl(),
+    embasisOfEstimate: new FormControl(),
+    standardUoM: new FormControl(),
+    wwtype: new FormControl(),
   })
+  waterWasteDropDrownValues = ["Water", "Waste"]
+  typeDropDrownValues = []
+  waterTypeDropDrownValues = []
+  wasteTypeDropDrownValues = []
+  waterwasteValues: any
 
-  constructor(private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { }
+  constructor(private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
+    this.waterWasteForm.controls.wwstream.valueChanges.subscribe(res => {
+      if(res == "Water"){
+        this.waterWasteForm.patchValue({ standardUoM : "m3"})
+      }
+      else if (res == "Waste") {
+        this.waterWasteForm.patchValue({ standardUoM: "kg" })
+      }
+      else{
+        this.waterWasteForm.patchValue({ standardUoM: "" })
+      }
+    })
+   }
 
   ngOnInit(): void {
-    this.getllookup()
-  }
-
-  getllookup() {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.auth.lookupMaster().then((resp: any) => {
-      this.lookupdata = resp
-      this.dataloader()
-    })
+    this.dataloader()
   }
 
   dataloader() {
-    this.apiService.getLessonLearnedbyProjectId(this.projecthubservice.projectid).then((res: any) => {
-      this.biogenicsData = res
-      this.activeaccount = this.authService.instance.getActiveAccount();
-      var user = {
-        userAdid: this.activeaccount.localAccountId,
-        userDisplayName: this.activeaccount.name
-      };
-      this.waterWasteForm.patchValue({
-        waterWasteID: "",
-        projectUid: this.projecthubservice.projectid,
-        waterWaste: "",
-        type: "",
-        units: "",
-        UoM: "KWh",
-        unitCost: "",
-        basisOfEstimate: ""
-      })
-      this.projecthubservice.isFormChanged = false
-      this.waterWasteForm.valueChanges.subscribe(res => {
-        this.projecthubservice.isFormChanged = true
-      })
+    this.biogenicsData = this.projecthubservice.all[0]
+    this.unitCost = "Unit Cost (" + this.projecthubservice.all[2] + ")"
+    this.waterwasteValues = this.projecthubservice.all[3]
+    var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
+    for (var j = 0; j < waterValues.length; j++) {
+      this.waterTypeDropDrownValues.push(waterValues[j].wwtype)
+    }
+    var wasteValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Waste")
+    for (var j = 0; j < wasteValues.length; j++) {
+      this.wasteTypeDropDrownValues.push(wasteValues[j].wwtype)
+    }
+    this.waterWasteForm.patchValue({
+      emdataWwid: "",
+      projectId: this.projecthubservice.projectid,
+      wwstream: "",
+      emwwunit: "",
+      emwwunitCost: "",
+      embasisOfEstimate: "",
+      standardUoM: "",
+      wwtype: ""
     })
-  }
-
-  GetWaterWaste() {
-
-  }
-
-  GetType() {
-
+    this.waterWasteForm.controls['standardUoM'].disable()
+    this.projecthubservice.isFormChanged = false
+    this.waterWasteForm.valueChanges.subscribe(res => {
+      this.projecthubservice.isFormChanged = true
+    })
   }
 
   submitWaterWaste() {

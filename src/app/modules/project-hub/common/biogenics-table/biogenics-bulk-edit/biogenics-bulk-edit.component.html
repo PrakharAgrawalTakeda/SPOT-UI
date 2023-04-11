@@ -71,7 +71,7 @@
                             *ngIf="biogenicsTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="biogenicUnit" name="biogenicUnit"
                                 [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-                                [placeholder]="'Units'">
+                                [placeholder]="'Units'" [allowNegativeValues] = true>
                             </spot-input>
                         </form>
                     </ng-template>

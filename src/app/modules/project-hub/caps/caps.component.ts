@@ -44,7 +44,12 @@ export class CapsComponent implements OnInit {
     }
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+      if (res.localCurrency == null){
+        this.currencyLabel = ""
+      }
+      else{
           this.currencyLabel = res.localCurrency.localCurrencyAbbreviation
+      }
         if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
       }

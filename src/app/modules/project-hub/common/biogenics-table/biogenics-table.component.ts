@@ -39,20 +39,31 @@ export class BiogenicsTableComponent {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+        if (res.localCurrency == null) {
+          this.unitCost = "Unit Cost ()"
+        }
+        else {
         this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
+        }
         this.Biogenicsngx = res.biogenicsData
         this.NoCarbonForm.patchValue({
           NoCarbonImpact: res.projectData.noCarbonImpact
         })
-        for (var i of this.Biogenicsngx) {
-          i.emissionSource = this.lookupdata.filter(x => x.lookUpId == i.biogenicMasterUniqueId)[0].lookUpName
-        }
         this.biogenicsBulkEditData.push(this.Biogenicsngx)
         this.biogenicsBulkEditData.push(res.projectData.noCarbonImpact)
         this.biogenicsBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
+        if (res.localCurrency == null) {
+          this.biogenicsBulkEditData.push("")
+        }
+        else {
         this.biogenicsBulkEditData.push(res.localCurrency.localCurrencyAbbreviation)
+        }
         this.viewContent = true
       })
     })
+  }
+
+  getLookUpName(id: any): any {
+    return id && id.lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
   }
 }

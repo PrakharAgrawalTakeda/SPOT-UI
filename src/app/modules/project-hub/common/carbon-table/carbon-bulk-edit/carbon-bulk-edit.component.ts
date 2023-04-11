@@ -62,7 +62,12 @@ export class CarbonBulkEditComponent {
       this.CAPSform.patchValue({
         impactRealizationDate: res.projectData.emissionsImpactRealizationDate
       })
+      if (res.localCurrency == null) {
+        this.unitCost = "Unit Cost ()"
+      }
+      else {
       this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
+      }
       this.noCarbon = res.projectData.noCarbonImpact
       this.Carbon = this.projecthubservice.all
       for (var i of this.Carbon) {

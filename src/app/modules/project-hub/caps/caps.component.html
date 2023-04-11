@@ -37,14 +37,15 @@
                             [label]="'Environmental Portfolio'" [showHint]="true"
                             [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
                         </spot-input>
-                        <div class="label">
+                        <div *ngIf="!this.showDefault"></div>
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="EnergyImpact" name="EnergyImpact"
                             [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">GJ</label>
                         </div>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="EnergyCost" name="EnergyCost"
                             [label]="''" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false">
@@ -54,34 +55,34 @@
                         <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"
                             [label]="'Impact Realization Date'">
                         </spot-input-date>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="WaterImpact" name="WaterImpact"
                             [label]="'Water Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">m3</label>
                         </div>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
                             [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false">
