@@ -177,6 +177,8 @@
         <app-budget-performance-edit *ngIf="projecthubservice.itemtype == 'BudgetPerformanceEdit'"></app-budget-performance-edit >
         <app-operational-benefits-add-new *ngIf="projecthubservice.itemtype == 'OperationalBenefitsAddNew'"></app-operational-benefits-add-new>
         <app-operational-benefits-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalBenefitsBulkEdit'"></app-operational-benefits-bulk-edit>
+        <app-water-waste-bulk-edit *ngIf="projecthubservice.itemtype == 'WaterWasteBulkEdit'"></app-water-waste-bulk-edit>
+        <app-water-waste-single-edit *ngIf="projecthubservice.itemtype == 'WaterWasteSingleEdit'"></app-water-waste-single-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

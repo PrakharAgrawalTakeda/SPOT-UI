@@ -1,0 +1,45 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Water Waste</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="w-full overflow-hidden" [formGroup]="waterWasteForm" (ngSubmit)="submitWaterWaste()"
+    style="overflow-y: scroll; height: 95vh;">
+    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+        <spot-select formControlName="wwstream" name="wwstream" [label]="'Water/Waste'"
+            [placeholder]="'Water/Waste'" [dropDownArrayType]="'string'" [dropDownArray]="waterWasteDropDrownValues">
+        </spot-select>
+
+        <spot-select formControlName="wwtype" name="wwtype" [label]="'Type'"
+            [placeholder]="'Type'" [dropDownArrayType]="'string'" [dropDownArray]="waterWasteForm.controls.wwstream.value == '' ? [] : waterWasteForm.controls.wwstream.value == 'Water' ? waterTypeDropDrownValues : wasteTypeDropDrownValues">
+        </spot-select>
+
+        <spot-input class="w-full" formControlName="emwwunit" name="emwwunit" [label]="'Units'" [decimalCount]="0"
+            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'units'" [allowNegativeValues] = true>
+        </spot-input>
+
+        <spot-textarea class="w-full" [rows] = 1 formControlName="standardUoM" name="standardUoM" [placeholder]="'UoM'" [label]="'UoM'">
+        </spot-textarea>
+
+        <spot-input class="w-full" formControlName="emwwunitCost" name="emwwunitCost" [label]=unitCost [decimalCount]="0"
+            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'unitCost'">
+        </spot-input>
+
+        <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
+            [placeholder]="'Basis of Estimate'">
+        </spot-textarea>
+
+    </div>
+    <div class="flex items-start justify-between form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
+</form>

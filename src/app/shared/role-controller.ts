@@ -11,6 +11,7 @@ export class ProjectHub{
     public projectBoard: ProjectBoard = new ProjectBoard
     public hubSettings: boolean = true
     public localAttributes: boolean = true
+    public CAPS: boolean = true
 }
 
 export class ProjectBoard{

@@ -10,6 +10,7 @@
                     <div>
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button
                             [color]="'primary-200'"
+                            *ngIf = "editableEnv && editable"
                             (click)="projectHubService.toggleDrawerOpen('CAPS', '', '' , id)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
@@ -28,54 +29,63 @@
                             </mat-icon>
                         </div>
                         <spot-input class="w-full read-only" formControlName="EmissionsImpact" name="EmissionsImpact"
-                            [label]="'Emissions Impact (tCO2e/Year)'">
+                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <div></div>
                         <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
                             [label]="'Environmental Portfolio'" [showHint]="true"
                             [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
                         </spot-input>
-                        <div class="label">
+                        <div *ngIf="!this.showDefault"></div>
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="EnergyImpact" name="EnergyImpact"
-                            [label]="'Energy Impact (per Year)'">
+                            [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">GJ</label>
                         </div>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="EnergyCost" name="EnergyCost"
-                            [label]="''">
+                            [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
-                        <label class="Unit">USD</label>
+                        <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"
                             [label]="'Impact Realization Date'">
                         </spot-input-date>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="WaterImpact" name="WaterImpact"
-                            [label]="'Water Impact (per Year)'">
+                            [label]="'Water Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">m3</label>
                         </div>
-                        <div class="label">
-                        <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''">
+                        <div *ngIf="this.showDefault" class="label">
+                        <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
-                        <label class="Unit">USD</label>
+                        <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
-                        <div class="label">
-                        <spot-input class="w-full read-only" formControlName="TotalWasteImpact" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'">
+                        <div *ngIf="this.showDefault" class="label">
+                        <spot-input class="w-full read-only" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
-                        <div class="label">
-                        <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''">
+                        <div *ngIf="this.showDefault" class="label">
+                        <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
-                        <label class="Unit">USD</label>
+                        <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
-                        <div class="label">
+                        <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
-                            [label]="'Landfilled Waste Impact (per Year)'">
+                            [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
@@ -87,37 +97,37 @@
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-        <app-carbon-table [Editable]="editable"></app-carbon-table>
+        <app-carbon-table [Editable]="editableEnv && editable"></app-carbon-table>
     </div>
     </div>
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-biogenics-table [Editable]="editable"></app-biogenics-table>
+            <app-biogenics-table [Editable]="editableEnv && editable"></app-biogenics-table>
         </div>
     </div>
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-water-waste-table [Editable]="editable"></app-water-waste-table>
+            <app-water-waste-table [Editable]="editableEnv && editable"></app-water-waste-table>
         </div>
     </div>
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-transportation-table [Editable]="editable"></app-transportation-table>
+            <app-transportation-table [Editable]="editableEnv && editable"></app-transportation-table>
         </div>
     </div>
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-warehousing-table [Editable]="editable"></app-warehousing-table>
+            <app-warehousing-table [Editable]="editableEnv && editable"></app-warehousing-table>
         </div>
     </div>
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-shipping-table [Editable]="editable"></app-shipping-table>
+            <app-shipping-table [Editable]="editableEnv && editable"></app-shipping-table>
         </div>
     </div>
 </div>
