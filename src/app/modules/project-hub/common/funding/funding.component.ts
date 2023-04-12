@@ -27,7 +27,7 @@ export class FundingComponent implements OnInit, OnChanges {
   initializationComplete: boolean = false
   id: string = ""
   fundingbulkEditType: string = 'FundingBulkEdit';
-  //fundingBCbulkEditType: string = 'FundingBCBulkEdit';
+  addSingle: string = 'FundingSingleEdit';
   viewContent: boolean = false
   fundingdata: any;
   fundingSourceData: any;
@@ -48,6 +48,18 @@ export class FundingComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     //console.log(this.projectViewDetails)
+    if (this.mode == 'Project-Charter') {
+      this.addSingle = 'FundingSingleEdit'
+    }
+    else if (this.optionType == 'recommended-option') {
+        this.addSingle = 'BCFundingSingleEdit'
+    }
+    else if (this.optionType == 'option-2') {
+      this.addSingle = 'BC2FundingSingleEdit'
+  }
+  else if (this.optionType == 'option-3') {
+    this.addSingle = 'BC3FundingSingleEdit'
+}
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -77,7 +89,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })
@@ -109,7 +121,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })
@@ -139,7 +151,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })
@@ -168,7 +180,7 @@ export class FundingComponent implements OnInit, OnChanges {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
             }
-
+            this.projecthubservice.lookUpMaster = lookup
             this.viewContent = true
           })
         })

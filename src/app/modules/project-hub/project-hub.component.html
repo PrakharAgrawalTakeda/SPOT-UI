@@ -47,6 +47,15 @@
 
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'FundingSingleEdit'"
+            [mode]="'Project-Charter'"></app-funding-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'BCFundingSingleEdit'" [optionType]="'recommended-option'"></app-funding-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'BC2FundingSingleEdit'" [optionType]="'option-2'"></app-funding-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'BC3FundingSingleEdit'" [optionType]="'option-3'"></app-funding-edit>
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCloseOut'"
             [mode]="'Project-Close-Out'"></app-operational-performance-edit>
