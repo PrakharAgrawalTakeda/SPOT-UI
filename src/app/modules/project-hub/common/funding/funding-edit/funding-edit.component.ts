@@ -166,7 +166,6 @@ export class FundingEditComponent implements OnInit {
     return source ? this.fundingSourceData.portfolioOwner.find(x => x.portfolioOwnerId == source).portfolioOwner : ''
   }
   submitfunding() {
-    debugger
     this.projecthubservice.isFormChanged = false
     var funding = this.FundingForm.getRawValue()
     var BCfunding = this.FundingBCForm.getRawValue()
