@@ -413,8 +413,8 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
-  async bulkEditTimelineForOption(body,projectId){
-      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/BulkEdit/" + projectId
+  async bulkEditTimelineForOption(body,optionId,projectId,){
+      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/BulkEdit/"+optionId + "/" + projectId;
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response
