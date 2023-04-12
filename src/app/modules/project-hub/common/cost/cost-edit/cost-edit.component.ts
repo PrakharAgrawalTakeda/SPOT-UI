@@ -73,6 +73,33 @@ export class CostEditComponent {
     curryearSpend: 'currentYearPlannedSpend'
   }]
 
+  costData1 = [{
+    category: 'Total CAPEX',
+    baseCase: 'totalCapExBaseCase',
+    highCase: 'totalCapExHighCase',
+    curryearSpend: 'currentYearPlannedSpend'
+  },
+  {
+    category: 'Project Spend Start',
+    baseCase: 'projectSpendStart',
+    highCase: 'isProjectSpentNa',
+    curryearSpend: 'currentYearPlannedSpend'
+  },
+  {
+    category: 'Asset in Service',
+    baseCase: 'apisdate',
+    highCase: 'assetInServiceNa',
+    curryearSpend: 'currentYearPlannedSpend'
+  }]
+
+  costData2 = [
+    {
+      category: 'Total non-FTE OPEX',
+      baseCase: 'totalNonFteopExBaseCase',
+      highCase: 'totalNonFteopExHighCase',
+      curryearSpend: 'currentYearPlannedSpend'
+    }]
+
   viewContent = false
   costForm = new FormGroup({
     durationBaseCase: new FormControl(''),
@@ -88,7 +115,10 @@ export class CostEditComponent {
     projectSpendStart: new FormControl(''),
     apisdate: new FormControl(''),
     assetInServiceNa: new FormControl(false),
-    isProjectSpentNa: new FormControl(false)
+    isProjectSpentNa: new FormControl(false),
+    capexRequired: new FormControl(false),
+    opexRequired: new FormControl(false)
+
   })
 
   localcurrency: any;
@@ -106,6 +136,95 @@ export class CostEditComponent {
       if (this.viewContent) {
 
         this.projectHubService.isFormChanged = true
+      }
+    })
+
+    this.costForm.controls.capexRequired.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the CAPEX Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.costForm.patchValue({
+                durationBaseCase: null,
+                durationHighCase:  null,
+                totalCapExBaseCase:  null,
+                totalCapExHighCase:  null,
+                currentYearPlannedSpend: null,
+                projectSpendStart:  null,
+                apisdate:  null,
+                assetInServiceNa:  false,
+                isProjectSpentNa:  false
+  
+              })
+            }
+            else {
+              this.costForm.controls.capexRequired.patchValue(true)
+            }
+          })
+        }
+      }
+    })
+
+    this.costForm.controls.opexRequired.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (res == false) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "Are you sure?",
+            "message": "Are you sure you want to remove the OPEX Information?",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warn"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Remove",
+                "color": "warn"
+              },
+              "cancel": {
+                "show": true,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          alert.afterClosed().subscribe(close => {
+            if (close == 'confirmed') {
+              this.costForm.patchValue({
+                totalNonFteopExBaseCase:  null,
+              totalNonFteopExHighCase:  null,
+  
+              })
+            }
+            else {
+              this.costForm.controls.opexRequired.patchValue(true)
+            }
+          })
+        }
       }
     })
   }
@@ -142,7 +261,9 @@ export class CostEditComponent {
               projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
               apisdate: res.costData.apisdate ? res.costData.apisdate : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
+              capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
+              opexRequired: res.costData.opexRequired ? res.costData.opexRequired : false
 
             })
           }
@@ -179,7 +300,9 @@ export class CostEditComponent {
               projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
               apisdate: res.costData.apisdate ? res.costData.apisdate : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
+              capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
+              opexRequired: res.costData.opexRequired ? res.costData.opexRequired : false
 
             })
           }
@@ -217,7 +340,9 @@ export class CostEditComponent {
               projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
               apisdate: res.costData.assetInService ? res.costData.assetInService : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
+              capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
+              opexRequired: res.costData.opexRequired ? res.costData.opexRequired : false
 
             })
           }
@@ -255,7 +380,9 @@ export class CostEditComponent {
               projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
               apisdate: res.costData.assetInService ? res.costData.assetInService : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
+              capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
+              opexRequired: res.costData.opexRequired ? res.costData.opexRequired : false
 
             })
           }
@@ -387,6 +514,7 @@ export class CostEditComponent {
       }
       if (this.mode != 'Project-Charter' && this.optionType == 'option-2') {
           let mainObj;
+          console.log(formValue.capexRequired)
           mainObj = {
               projectId: this.projectHubService.projectid,
               businessOptionId: this.optionId,
@@ -398,9 +526,12 @@ export class CostEditComponent {
               projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
               currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
               assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-              isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
+              isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+              capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
+              opexRequired: formValue.opexRequired ? formValue.opexRequired : false
           }
         this.optionId = GlobalBusinessCaseOptions.OPTION_2
+        console.log(mainObj)
         this.apiService.updateBusinessCaseCost(mainObj, this.projectHubService.projectid, this.optionId).then(Res => {
           this.projectHubService.isNavChanged.next(true)
           this.projectHubService.submitbutton.next(true)
@@ -421,7 +552,9 @@ export class CostEditComponent {
               projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
               currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
               assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-              isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
+              isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+              capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
+              opexRequired: formValue.opexRequired ? formValue.opexRequired : false
           }
         this.optionId = GlobalBusinessCaseOptions.OPTION_3
         this.apiService.updateBusinessCaseCost(mainObj, this.projectHubService.projectid, this.optionId).then(Res => {

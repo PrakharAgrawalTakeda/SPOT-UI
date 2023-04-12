@@ -114,9 +114,7 @@ export class CostComponent implements OnInit {
               projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
               apisdate: res.costData.apisdate ? res.costData.apisdate : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
-              capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
-              opexRequired: res.costData.opexRequired ? res.costData.opexRequired : false
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
             })
           }
@@ -185,9 +183,7 @@ export class CostComponent implements OnInit {
               projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
               apisdate: res.costData.apisdate ? res.costData.apisdate : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
-              capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
-              opexRequired: res.costData.opexRequired ? res.costData.opexRequired : false
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
             })
           }

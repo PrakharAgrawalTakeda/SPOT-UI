@@ -63,7 +63,7 @@
 
 
 
-    <form class="w-full p-[20px]" [formGroup]="costForm" (ngSubmit)="submitcost()"  *ngIf="mode!='Project-Charter'">
+    <form class="w-full p-[20px]" [formGroup]="costForm" (ngSubmit)="submitcost()"  *ngIf="mode!='Project-Charter' && optionType=='recommended-option'">
         <div class="h-[84vh]">
             <!--Enter Element here-->
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
@@ -111,6 +111,108 @@
                 </ngx-datatable-column> 
 
             </ngx-datatable>
+        </div>
+        <!-- Submit Actions here-->
+        <div class="flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+
+    <form class="w-full p-[20px]" [formGroup]="costForm" (ngSubmit)="submitcost()"  *ngIf="mode!='Project-Charter' && (optionType=='option-2' || optionType=='option-3')">
+        <div class="h-[84vh]">
+            <div class="w-full mt-4 mb-6">
+                <spot-toggle class="w-full" formControlName="capexRequired"
+                    [mode]="'toggle'" [label]="'CAPEX Required'">
+                </spot-toggle>
+            </div>
+            <div *ngIf="costForm.controls['capexRequired'].value">
+            <!--Enter Element here-->
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costData1"
+                #qualityRefTable>
+                <ngx-datatable-column name="Category" prop="category" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="0.6">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <p *ngIf="value == 'Total CAPEX'">{{value}} ({{currency}}) </p>
+                        <p *ngIf="value != 'Total CAPEX'">{{value}}</p>
+                    </ng-template> 
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total CAPEX')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                        </spot-input>
+                        <spot-input-date class="w-full"
+                             formControlName="{{value}}" [showLabel]="false" *ngIf="row.category.includes('Project Spend Start')"></spot-input-date>
+                             <spot-input-date class="w-full"
+                             formControlName="{{value}}" [showLabel]="false" *ngIf="row.category.includes('Asset in Service')"></spot-input-date>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total CAPEX')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                        </spot-input>
+                        <spot-toggle class="w-full" *ngIf="row.category.includes('Project Spend Start')" formControlName="isProjectSpentNa" [label]="'N/A'">
+                </spot-toggle>
+                <spot-toggle class="w-full" *ngIf="row.category.includes('Asset in Service')" formControlName="assetInServiceNa" [label]="'N/A'">
+                </spot-toggle>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Current Year Planned Spend" prop="curryearSpend" [resizeable]="false" [sortable]="false"
+                    [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total CAPEX')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                        </spot-input>
+                    </ng-template>
+                </ngx-datatable-column> 
+
+            </ngx-datatable>
+            </div>
+            <div class="w-full mt-4 mb-6">
+                <spot-toggle class="w-full" formControlName="opexRequired"
+                    [mode]="'toggle'" [label]="'OPEX Required (non-FTE)'">
+                </spot-toggle>
+            </div>
+            <div *ngIf="costForm.controls['opexRequired'].value">
+                <!--Enter Element here-->
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                    class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="costData2"
+                    #qualityRefTable>
+                    <ngx-datatable-column name="Category" prop="category" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="0.6">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <p *ngIf="value == 'Total non-FTE OPEX'">{{value}} ({{currency}}) </p>
+                        </ng-template> 
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="1">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total non-FTE')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            </spot-input>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="High Case" prop="highCase" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="1">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            <spot-input [showLabel]="false" formControlName="{{value}}" *ngIf="row.category.includes('Total non-FTE')" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            </spot-input>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name=" " prop="curryearSpend" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="1" [hidden]="true">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        </ng-template>
+                    </ngx-datatable-column> 
+    
+                </ngx-datatable>
+                </div>
         </div>
         <!-- Submit Actions here-->
         <div class="flex items-start justify-between mt-6">
