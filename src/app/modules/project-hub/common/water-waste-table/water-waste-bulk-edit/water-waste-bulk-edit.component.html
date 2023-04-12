@@ -41,7 +41,7 @@
                             *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="wwstream" name="wwstream"
                                 [placeholder]="'waterWaste'" [dropDownArrayType]="'string'"
-                                [dropDownArray]="waterWasteDropDrownValues">
+                                [dropDownArray]="waterWasteDropDrownValues" [showNoneOption]="false">
                             </spot-select>
                         </form>
                     </ng-template>
@@ -59,21 +59,21 @@
                             *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="wwtype" name="wwtype"
                                 [placeholder]="'type'" [dropDownArrayType]="'string'"
-                                [dropDownArray]="waterTypeDropDrownValues">
+                                [dropDownArray]="waterTypeDropDrownValues" [showNoneOption]="false">
                             </spot-select>
                         </form>
                         </div>
                         <div *ngIf="getData(rowIndex) == '2'">
                             <form [formGroup]="waterWasteForm.controls[rowIndex]" *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                                 <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'type'"
-                                    [dropDownArrayType]="'string'" [dropDownArray]="wasteTypeDropDrownValues">
+                                    [dropDownArrayType]="'string'" [dropDownArray]="wasteTypeDropDrownValues" [showNoneOption]="false">
                                 </spot-select>
                             </form>
                         </div>
                         <div *ngIf="getData(rowIndex) == '0'">
                             <form [formGroup]="waterWasteForm.controls[rowIndex]" *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                                 <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'type'"
-                                    [dropDownArrayType]="'string'" [dropDownArray]="typeDropDrownValues">
+                                    [dropDownArrayType]="'string'" [dropDownArray]="typeDropDrownValues" [showNoneOption]="false">
                                 </spot-select>
                             </form>
                         </div>

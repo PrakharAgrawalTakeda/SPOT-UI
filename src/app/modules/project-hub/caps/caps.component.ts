@@ -50,15 +50,17 @@ export class CapsComponent implements OnInit {
       else{
           this.currencyLabel = res.localCurrency.localCurrencyAbbreviation
       }
-        if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
+      if (res.envionmentPortfolio == "" || res.envionmentPortfolio == null) {
+        this.editableEnv = false
+      }
+      if (this.editableEnv == true){
+      if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
       }
       else{
           this.showDefault = true;
       }
-        if (res.envionmentPortfolio == "" || res.envionmentPortfolio == null){
-        this.editableEnv = false
-      }
+    }
       this.CAPSform.patchValue({
         isCapsProject: res.projectData.isCapsProject,
         enviornmentalPortfolio: res.envionmentPortfolio.portfolioOwner,

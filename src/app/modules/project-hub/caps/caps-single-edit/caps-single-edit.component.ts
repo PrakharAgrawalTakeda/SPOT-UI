@@ -86,10 +86,10 @@ viewType = 'SidePanel'
     var formValue = this.CAPSform.getRawValue()
     this.projectHubService.isFormChanged = false
     var formValue = this.CAPSform.getRawValue()
-    var mainObj = this.CAPSdata
+    var mainObj = this.CAPSdata.projectData
     mainObj.isCapsProject= formValue.isCapsProject
     mainObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    mainObj.emissionsImpactRealizationDate = moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+    mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
     
     // mainObj.EmissionsImpact: formValue.calculatedEmissionsImpact
     // mainObj.EnergyImpact: formValue.energyImpact

@@ -43,6 +43,11 @@ export class WaterWasteBulkEditComponent {
         }
       }
     })
+    this.CAPSform.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        this.projecthubservice.isFormChanged = true
+      }
+    })
   }
 
   getData(id){

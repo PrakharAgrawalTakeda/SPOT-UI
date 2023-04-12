@@ -13,7 +13,7 @@
                     </button>
                     <button class="ml-4 text-primary bg-gray-200" *ngIf="Editable" mat-flat-button
                         [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('WaterWasteSingleEdit', 'new', waterWasteBulkEditData , projectid)">
+                        (click)="projecthubservice.toggleDrawerOpen('WaterWasteSingleEdit', 'new', waterWasteBulkEditData , id)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
                 </div>
@@ -71,7 +71,7 @@
 
                     <div class="flex items-center justify-start gap-6">
                         <a href="javascript:void(0)" title="Delete Single" *ngIf="Editable"
-                            (click)="deleteWaterWaste(row.emdataWwid)">
+                            (click)="deleteWW(row.emdataWwid)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                     </div>
