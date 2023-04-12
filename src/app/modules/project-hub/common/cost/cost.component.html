@@ -138,7 +138,8 @@
             <!-- </div> -->
         </form>
     </div>
-    <form [ngClass]="mode=='Project-Charter' ? 'w-3/4' : 'w-full'" [formGroup]="costFundingForm">
+    <form [ngClass]="mode=='Project-Charter' ? 'w-3/4' : 'w-full'" [formGroup]="costFundingForm" 
+    *ngIf="mode!='Project-Charter' && (optionType == 'option-2' || optionType == 'option-3')">
         <div class="flex justify-start items-center gap-3 pb-6">
             CAPEX Required
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!costFundingForm.controls.capexRequired.value">
