@@ -11,7 +11,7 @@
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
         <spot-select formControlName="biogenicMasterUniqueId" name="biogenicMasterUniqueId" [label]="'Emission Source'" [placeholder]="'Emission Source'"
             [dropDownArrayType]="'object'" [dropDownArray]="GetSource()" [idPointer]="'lookUpId'"
-            [valuePointer]="'lookUpName'">
+            [valuePointer]="'lookUpName'" [showNoneOption]="false">
         </spot-select>
 
         <spot-input class="w-full" formControlName="biogenicEmissionFactor" name="biogenicEmissionFactor" [label]="'Emission Factor (kg CO2/kWh)'" [decimalCount]="0"

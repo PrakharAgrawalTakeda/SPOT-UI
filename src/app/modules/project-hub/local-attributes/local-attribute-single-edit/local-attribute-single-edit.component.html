@@ -22,7 +22,7 @@
                         </spot-input>
                         </div>
                         <div *ngIf="item.isMulti" #textarea>
-                        <spot-textarea *ngSwitchCase="'6'" formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [rows]="item.linesCount">
+                        <spot-textarea *ngSwitchCase="'6'" formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name [rows]="item.linesCount">
                         </spot-textarea>
                         </div>
                         <div *ngIf="!item.isMulti" #Lookup>

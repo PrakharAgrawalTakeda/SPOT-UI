@@ -46,8 +46,8 @@
                                 [label]=item.name [decimalCount] = item.linesCount [inputType] = "'Number'" [callLocation] = "'LocalAttribute'">
                             </spot-input>
                             <div *ngIf="item.isMulti" #textarea>
-                                <spot-textarea *ngSwitchCase="'6'" formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name
-                                    [placeholder]=item.name [rows]="item.linesCount">
+                                <spot-textarea class="w-full read-only" *ngSwitchCase="'6'" formControlName={{item.uniqueId}} name={{item.uniqueId}} [label]=item.name
+                                    [rows]="item.linesCount">
                                 </spot-textarea>
                             </div>
                             <spot-input *ngSwitchDefault class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}

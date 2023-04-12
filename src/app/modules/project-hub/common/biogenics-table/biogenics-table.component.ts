@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
@@ -39,16 +39,22 @@ export class BiogenicsTableComponent {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+        if(this.Editable == false){
+          this.Biogenicsngx = null
+        }
+        else{
+          this.Biogenicsngx = res.biogenicsData
+        }
         if (res.localCurrency == null) {
           this.unitCost = "Unit Cost ()"
         }
         else {
         this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
         }
-        this.Biogenicsngx = res.biogenicsData
         this.NoCarbonForm.patchValue({
           NoCarbonImpact: res.projectData.noCarbonImpact
         })
+        this.biogenicsBulkEditData=[]
         this.biogenicsBulkEditData.push(this.Biogenicsngx)
         this.biogenicsBulkEditData.push(res.projectData.noCarbonImpact)
         this.biogenicsBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
@@ -65,5 +71,38 @@ export class BiogenicsTableComponent {
 
   getLookUpName(id: any): any {
     return id && id.lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
+  }
+
+  deleteBiogenics(id: string) {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Operational Performance?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const BiogenicsAlert = this.fuseAlert.open(comfirmConfig)
+
+    BiogenicsAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.deleteBiogenics(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
   }
 }
