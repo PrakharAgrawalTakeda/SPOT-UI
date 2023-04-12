@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { MsalService } from '@azure/msal-angular';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { RoleService } from 'app/core/auth/role.service';
 import { MyPreferenceApiService } from '../my-preference-api.service';
@@ -21,17 +22,26 @@ export class ProjectSettingsComponent {
   })
   lookupdata: any = []
   private initialized = false;
+  toggle: boolean = false;
 
-  constructor(private titleService: Title, public auth: AuthService, private roleService: RoleService, private apiService: MyPreferenceApiService, private msalService: MsalService) {
+  constructor(private titleService: Title, public auth: AuthService, private roleService: RoleService, private apiService: MyPreferenceApiService, private msalService: MsalService,
+    public fuseAlert: FuseConfirmationService) {
     this.archiveForm.valueChanges.subscribe(res => {
       console.log(this.archiveForm.getRawValue())
       if (this.initialized) {
-        this.changeToggle();
+        this.changeToggle()
       } else {
         this.initialized = true;
       }
 
     })
+
+    //   this.archiveForm.controls.includeArchiveProject.valueChanges.subscribe(res => {
+    //     if (this.initialized) {
+
+
+    //   }
+    // })
   }
 
   ngOnInit(): void {
@@ -74,14 +84,63 @@ export class ProjectSettingsComponent {
   changeToggle() {
     this.initialized = false
     var archiveProject = this.archiveForm.getRawValue();
-    var mainObj = {
-      userAdid: archiveProject.userAdid,
-      includeArchiveProject: archiveProject.includeArchiveProject
+
+    if (archiveProject.includeArchiveProject == true) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Are you sure?",
+        "message": "Including archived projects in the portfolio center search may slow down the performance of SPOT and lead to increased response time. Are you sure you want to continue?",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Ok",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+      alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          this.archiveForm.patchValue({
+            includeArchiveProject: true
+
+          })
+          var archiveProject = this.archiveForm.getRawValue();
+          var mainObj = {
+            userAdid: archiveProject.userAdid,
+            includeArchiveProject: archiveProject.includeArchiveProject
+          }
+          this.apiService.updateuserPreference(this.msalService.instance.getActiveAccount().localAccountId, mainObj).then(res => {
+            location.reload()
+          })
+
+
+        }
+      })
+
     }
-    console.log(mainObj)
-    this.apiService.updateuserPreference(this.msalService.instance.getActiveAccount().localAccountId, mainObj).then(res => {
-      location.reload()
-    })
+    else{
+      var archiveProject = this.archiveForm.getRawValue();
+      var mainObj = {
+        userAdid: archiveProject.userAdid,
+        includeArchiveProject: archiveProject.includeArchiveProject
+      }
+      this.apiService.updateuserPreference(this.msalService.instance.getActiveAccount().localAccountId, mainObj).then(res => {
+        location.reload()
+      })
+    }
+
+
+
   }
 
 }

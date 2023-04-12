@@ -13,10 +13,12 @@
     </div>
     <div class="p-6 bg-card rounded-2xl shadow w-full">
         <form class="w-full" [formGroup]="archiveForm">
-
+            <label class="flex-auto w-full gt-xs:pl-3"><b>Archived Projects</b></label>
+            <div class="pl-1">
             <spot-toggle class="w-full" formControlName="includeArchiveProject" [mode]="'toggle'"
-                [label]="'Include Archived Projects '">
+                [label]="'Include Archived Projects in the Portfolio Center search '">
             </spot-toggle>
+        </div>
 
         </form>
     </div>
