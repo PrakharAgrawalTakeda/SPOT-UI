@@ -53,6 +53,7 @@ export class FundingEditComponent implements OnInit {
   Amount: any;
   optionId: any;
   dataIntialized: boolean = false
+  labelText: string;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, private portApiService: PortfolioApiService) {
     this.FundingForm.valueChanges.subscribe(res => {
       if (this.formIntialized == true) {
@@ -69,12 +70,17 @@ export class FundingEditComponent implements OnInit {
   ngOnInit() {
     
     if (this.mode == 'Project-Charter') {
+      this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
+      this.apiService.getCostFunding(this.id).then((res: any) => {
       this.portApiService.getfilterlist().then((po: any) => {
         this.auth.lookupMaster().then((resp: any) => {
           this.fundingSourceData = po
           this.lookupdata = resp
+          this.localcurrency = res.localCurrency
+          this.Amount = this.localcurrency.localCurrencyAbbreviation
+          this.labelText = `Amount (${this.Amount})`
           this.dataIntialized = true
-          this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
+          
           console.log(this.projecthubservice.all)
           if (this.projecthubservice.all) {
             if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3) {
@@ -93,16 +99,22 @@ export class FundingEditComponent implements OnInit {
           })
         })
       })
+    })
     }
 
     if (this.mode != 'Project-Charter' && (this.optionType == 'recommended-option' || this.optionType=='option-2' || 
     this.optionType == 'option-3')) {
-      this.portApiService.getfilterlist().then((po: any) => {
-        this.auth.lookupMaster().then((resp: any) => {
-          this.fundingSourceData = po
-          this.lookupdata = resp
+      this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
+      this.apiService.getCostFunding(this.id).then((res: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.fundingSourceData = po
+            this.lookupdata = resp
+            this.localcurrency = res.localCurrency
+            this.Amount = this.localcurrency.localCurrencyAbbreviation
+            this.labelText = `Amount (${this.Amount})`
           this.dataIntialized = true
-          this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
+          
           console.log(this.projecthubservice.all)
           if (this.projecthubservice.all) {
             if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3) {
@@ -121,6 +133,7 @@ export class FundingEditComponent implements OnInit {
           })
         })
       })
+    })
     }
 
 
