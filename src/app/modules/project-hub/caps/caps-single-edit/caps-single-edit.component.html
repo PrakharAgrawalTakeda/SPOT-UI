@@ -32,9 +32,33 @@
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
             </div>
-            <!-- <spot-input-date [label]="'Impact Realization Date'" formControlName="impactRealizationDate" name="impactRealizationDate" [showLabel]="true">
-            </spot-input-date> -->
-            
+            <!-- <spot-input class="w-full" formControlName="EmissionsImpact" name="EmissionsImpact"
+                [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'Emissions Impact (tCO2e/Year)'">
+            </spot-input>
+            <spot-input class="w-full" formControlName="EnergyImpact" name="EnergyImpact"
+                [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+                [placeholder]="'Energy Impact (per Year)'">
+            </spot-input>
+            <spot-input class="w-full" formControlName="EnergyCost" name="EnergyCost" [decimalCount]="0" [inputType]="'Number'"
+                [autoAddDecimal]="false" [placeholder]="'Energy Cost'">
+            </spot-input>
+            <spot-input class="w-full" formControlName="WaterImpact" name="WaterImpact" [label]="'Water Impact (per Year)'"
+                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'Water Impact (per Year)'">
+            </spot-input>
+            <spot-input class="w-full" formControlName="WaterCost" name="WaterCost" [decimalCount]="0" [inputType]="'Number'"
+                [autoAddDecimal]="false" [placeholder]="'Water Cost'">
+            </spot-input>
+            <spot-input class="w-full" formControlName="TotalWasteImpact" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'"
+                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'Total Waste Impact (per Year)'">
+            </spot-input>
+            <spot-input class="w-full" formControlName="WasteCost" name="WasteCost" [decimalCount]="0" [inputType]="'Number'"
+                [autoAddDecimal]="false" [placeholder]="'Waste Cost'">
+            </spot-input>
+            <spot-input class="w-full" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
+                [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+                [placeholder]="'Landfilled Waste Impact (per Year)'">
+            </spot-input> -->
         </div>
         <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"

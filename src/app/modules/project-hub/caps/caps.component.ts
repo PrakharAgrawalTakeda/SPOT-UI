@@ -14,8 +14,9 @@ export class CapsComponent implements OnInit {
   viewContent = false
   id=""
   editable= false
+  editableEnv = true
   showDefault= true
-  filterCriteria:any
+  currencyLabel = ""
   CAPSform = new FormGroup({
     isCapsProject: new FormControl(false),
     enviornmentalPortfolio: new FormControl(null),
@@ -38,34 +39,42 @@ export class CapsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
+      this.editable = true
+    }
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getproject(this.id).then((res: any) => {
-      this.apiService.getfilterlist().then(filter => {
-        this.filterCriteria = filter
-        var emissionPortfolio = this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
-        if (res.emissionPortfolioId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
+    this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+      if (res.localCurrency == null){
+        this.currencyLabel = ""
+      }
+      else{
+          this.currencyLabel = res.localCurrency.localCurrencyAbbreviation
+      }
+      if (res.envionmentPortfolio == "" || res.envionmentPortfolio == null) {
+        this.editableEnv = false
+      }
+      if (this.editableEnv == true){
+      if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
       }
       else{
           this.showDefault = true;
       }
-        res.emissionPortfolioId = emissionPortfolio.filter(x => x.portfolioOwnerId == res.emissionPortfolioId)[0].portfolioOwner
+    }
       this.CAPSform.patchValue({
-        isCapsProject: res.isCapsProject,
-        enviornmentalPortfolio: res.emissionPortfolioId,
-        impactRealizationDate: res.emissionsImpactRealizationDate,
-        EmissionsImpact: res.calculatedEmissionsImpact,
-        EnergyImpact: res.energyImpact,
-        WaterImpact: res.waterImpactUnits,
-        TotalWasteImpact: res.wasteImpactUnits,
-        LandfilledWasteImpact: res.wasteLandfillImpactUnits,
-        EnergyCost: res.energyCostImpactPerYear,
-        WaterCost: res.waterImpactCost,
-        WasteCost: res.wasteImpactCost
+        isCapsProject: res.projectData.isCapsProject,
+        enviornmentalPortfolio: res.envionmentPortfolio.portfolioOwner,
+        impactRealizationDate: res.projectData.emissionsImpactRealizationDate,
+        EmissionsImpact: res.projectData.calculatedEmissionsImpact,
+        EnergyImpact: res.projectData.energyImpact,
+        WaterImpact: res.projectData.waterImpactUnits,
+        TotalWasteImpact: res.projectData.wasteImpactUnits,
+        LandfilledWasteImpact: res.projectData.wasteLandfillImpactUnits,
+        EnergyCost: res.projectData.energyCostImpactPerYear,
+        WaterCost: res.projectData.waterImpactCost,
+        WasteCost: res.projectData.wasteImpactCost
       })
     })
-    })
-    this.editable = true
     this.viewContent = true
     this.CAPSform.disable()
   }

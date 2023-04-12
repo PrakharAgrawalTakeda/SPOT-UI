@@ -727,5 +727,40 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async getCAPSbyProjectID(projectid) {
+    var url = GlobalVariables.apiurl + "CAPS/" + projectid
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteWW(id: string) {
+    var link = GlobalVariables.apiurl + "CAPS/WaterWaste/" + id;
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addWW(body) {
+    var link = GlobalVariables.apiurl + "CAPS/WaterWaste"
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteBiogenics(id: string) {
+    var link = GlobalVariables.apiurl + "CAPS/Biogenics/" + id;
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addBiogenics(body) {
+    var link = GlobalVariables.apiurl + "CAPS/Biogenics"
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 

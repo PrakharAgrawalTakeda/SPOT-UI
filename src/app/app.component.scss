@@ -52,7 +52,7 @@
             }
 
             input::placeholder {
-                color: black !important;
+                @apply text-hint #{'!important'}
             }
 
             textarea {
@@ -61,7 +61,7 @@
             }
 
             textarea::placeholder {
-                color: black !important;
+                @apply text-hint #{'!important'}
             }
             .mat-mdc-select .mat-mdc-select-trigger .mat-mdc-select-value {
                 color: black !important;
@@ -147,6 +147,13 @@
     height: 70vh !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
+}
+
+::ng-deep .ngx-datatable .datatable-ww-80 .datatable-body .datatable-scroll {
+    height: 70vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+    width: 100vw !important;
 }
 
 ::ng-deep .ngx-datatable.datatable-qr-80 .datatable-body .datatable-scroll {
