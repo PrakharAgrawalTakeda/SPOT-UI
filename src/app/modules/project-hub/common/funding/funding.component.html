@@ -27,10 +27,10 @@
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                    (click)="projecthubservice.toggleDrawerOpen(addSingle, 'new', fundingdata , id)"
-                    *ngIf="editable && (mode=='Project-Charter' || optionType == 'recommended-option' || optionType == 'option-2' || optionType == 'option-3')">
-                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-                </button>
+                        (click)="projecthubservice.toggleDrawerOpen(addSingle, 'new', fundingdata , id)"
+                        *ngIf="editable && (mode=='Project-Charter' || optionType == 'recommended-option' || optionType == 'option-2' || optionType == 'option-3')">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
                 </div>
             </div>
         </div>
@@ -39,7 +39,6 @@
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
             class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="fundingdata"
             [sorts]="[{ prop: 'fundingSourceName', dir: 'asc' }]" #fundingTable>
-            <!--  -->
 
             <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [flexGrow]="0.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -47,11 +46,6 @@
                     <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OPEX</p>
                 </ng-template>
             </ngx-datatable-column>
-            <!-- <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
-            [showHint]="true"
-            [hint]="'The group which is responsible for the oversight and process adherence of the record'"
-            class="w-full read-only" *ngIf="viewElementChecker('portfolioOwner')">
-          </spot-input> -->
             <ngx-datatable-column name="Funding Source" prop="fundingSourceName" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}

@@ -1,95 +1,102 @@
 <div *ngIf="dataIntialized">
-<div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Funding</div>
-    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
-            href="javascript:void(0)" title="Close">
-            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-        </a>
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Funding</div>
+        <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+                href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
     </div>
-</div>
-<form class="w-full overflow-hidden" [formGroup]="FundingForm" (ngSubmit)="submitfunding()"
-    style="overflow-y: scroll; height: 95vh;" *ngIf="mode== 'Project-Charter'">
-    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+    <form class="w-full overflow-hidden" [formGroup]="FundingForm" (ngSubmit)="submitfunding()"
+        style="overflow-y: scroll; height: 95vh;" *ngIf="mode== 'Project-Charter'">
+        <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
 
-        <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
-            [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
-            [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
-        </spot-select>
+            <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
+                [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
+                [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
+            </spot-select>
 
-        <spot-select formControlName="fundingSourceId" name="fundingSourceName" [placeholder]="'Funding Source'"
-            [idPointer]="'portfolioOwnerId'" [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()"
-            [dropDownArrayType]="'object'" [showNoneOption]="false" [sortByType]="'custom'"
-            [idPointer]="'portfolioOwnerId'" [customSortPointer]="'pfid'" [label]="'Funding Source'">
-        </spot-select>
+            <spot-select formControlName="fundingSourceId" name="fundingSourceName" [placeholder]="'Funding Source'"
+                [idPointer]="'portfolioOwnerId'" [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()"
+                [dropDownArrayType]="'object'" [showNoneOption]="false" [sortByType]="'custom'"
+                [idPointer]="'portfolioOwnerId'" [customSortPointer]="'pfid'" [label]="'Funding Source'">
+            </spot-select>
 
-        <spot-toggle class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'" [label]="'In the Plan'">
-        </spot-toggle>
+            <spot-toggle class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'"
+                [label]="'In the Plan'">
+            </spot-toggle>
 
-        <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2" [label]="labelText">
-        </spot-input>
+            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2"
+                [label]="labelText">
+            </spot-input>
 
-        <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
-            [showHint]="false" [label]="'Notes'">
-        </spot-textarea>
+            <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
+                [showHint]="false" [label]="'Notes'">
+            </spot-textarea>
 
-        <mat-slide-toggle
-            [matTooltip]="this.FundingForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter' : null"
-            class="flex items-start justify-between incuded-in-dash" formControlName="includeInCharter">Include in Project Charter
-        </mat-slide-toggle>
-
-
-    </div>
-    <div class="flex items-start justify-between px-6">
-        <a class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
-            Cancel
-        </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
-            Submit
-        </button>
-    </div>
-</form>
-
-<form class="w-full overflow-hidden" [formGroup]="FundingBCForm" (ngSubmit)="submitfunding()"
-    style="overflow-y: scroll; height: 95vh;" *ngIf="mode!= 'Project-Charter' && (optionType== 'option-3' || optionType== 'option-2' || optionType== 'recommended-option')">
-    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
-
-        <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
-            [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
-            [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
-        </spot-select>
-
-        <spot-select formControlName="fundingSourceId" name="fundingSourceName" [placeholder]="'Funding Source'"
-            [idPointer]="'portfolioOwnerId'" [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()"
-            [dropDownArrayType]="'object'" [showNoneOption]="false" [sortByType]="'custom'"
-            [idPointer]="'portfolioOwnerId'" [customSortPointer]="'pfid'" [label]="'Funding Source'">
-        </spot-select>
-
-        <spot-toggle class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'" [label]="'In the Plan'">
-        </spot-toggle>
-
-        <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2" [label]="labelText">
-        </spot-input>
-
-        <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
-            [showHint]="false" [label]="'Notes'">
-        </spot-textarea>
-
-        <mat-slide-toggle
-            [matTooltip]="this.FundingBCForm.controls['includeInBusinessCase'].disabled ? 'Only 2 can be selected at a time for business case' : null"
-            class="flex items-start justify-between incuded-in-dash" formControlName="includeInBusinessCase">Include in Business Case
-        </mat-slide-toggle>
+            <mat-slide-toggle
+                [matTooltip]="this.FundingForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter' : null"
+                class="flex items-start justify-between incuded-in-dash" formControlName="includeInCharter">Include in
+                Project Charter
+            </mat-slide-toggle>
 
 
-    </div>
-    <div class="flex items-start justify-between px-6">
-        <a class="min-w-26" mat-flat-button [color]="'primary'"
-            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
-            Cancel
-        </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
-            Submit
-        </button>
-    </div>
-</form>
+        </div>
+        <div class="flex items-start justify-between px-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+
+    <form class="w-full overflow-hidden" [formGroup]="FundingBCForm" (ngSubmit)="submitfunding()"
+        style="overflow-y: scroll; height: 95vh;"
+        *ngIf="mode!= 'Project-Charter' && (optionType== 'option-3' || optionType== 'option-2' || optionType== 'recommended-option')">
+        <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+
+            <spot-select formControlName="fundingTypeId" name="fundingTypeId" [placeholder]="'Funding Type'"
+                [dropDownArrayType]="'object'" [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
+                [valuePointer]="'lookUpName'" [showNoneOption]="false" [label]="'Funding Type'">
+            </spot-select>
+
+            <spot-select formControlName="fundingSourceId" name="fundingSourceName" [placeholder]="'Funding Source'"
+                [idPointer]="'portfolioOwnerId'" [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()"
+                [dropDownArrayType]="'object'" [showNoneOption]="false" [sortByType]="'custom'"
+                [idPointer]="'portfolioOwnerId'" [customSortPointer]="'pfid'" [label]="'Funding Source'">
+            </spot-select>
+
+            <spot-toggle class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'"
+                [label]="'In the Plan'">
+            </spot-toggle>
+
+            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2"
+                [label]="labelText">
+            </spot-input>
+
+            <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
+                [showHint]="false" [label]="'Notes'">
+            </spot-textarea>
+
+            <mat-slide-toggle
+                [matTooltip]="this.FundingBCForm.controls['includeInBusinessCase'].disabled ? 'Only 2 can be selected at a time for business case' : null"
+                class="flex items-start justify-between incuded-in-dash" formControlName="includeInBusinessCase">Include
+                in Business Case
+            </mat-slide-toggle>
+
+
+        </div>
+        <div class="flex items-start justify-between px-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
 </div>

@@ -4,7 +4,6 @@
 
         <form class="w-full" [formGroup]="costFundingForm">
 
-            <!-- <div class="flex flex-col flex-auto bg-card p-6 pt-3 shadow rounded-2xl overflow-hidden"> -->
             <div class="flex justify-end items-end">
                 <div></div>
                 <div>
@@ -45,9 +44,7 @@
                                 entering cost estimates (Veeva Document #GD-007364)' }}"
                                 style="font-size: 14px; margin-left: 3px;">help</mat-icon>
                         </div>
-                        <!-- <p  [title]="'This is the category column. Each row represents an item categorized as ' + value">{{value}}</p> -->
-                        <!-- <mat-hint *ngIf="row.category.includes('Total CAPEX')">{{ 'This is the category column. Each row represents an item categorized as '}}</mat-hint> -->
-                    </ng-template>
+                        </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Base Case" prop="baseCase" [resizeable]="false" [sortable]="false"
                     [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
@@ -135,11 +132,10 @@
                 </ngx-datatable-column>
             </ngx-datatable>
 
-            <!-- </div> -->
         </form>
     </div>
-    <form [ngClass]="mode=='Project-Charter' ? 'w-3/4' : 'w-full'" [formGroup]="costFundingForm" 
-    *ngIf="mode!='Project-Charter' && (optionType == 'option-2' || optionType == 'option-3')">
+    <form [ngClass]="mode=='Project-Charter' ? 'w-3/4' : 'w-full'" [formGroup]="costFundingForm"
+        *ngIf="mode!='Project-Charter' && (optionType == 'option-2' || optionType == 'option-3')">
         <div class="flex justify-start items-center gap-3 pb-6">
             CAPEX Required
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!costFundingForm.controls.capexRequired.value">

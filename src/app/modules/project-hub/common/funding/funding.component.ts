@@ -52,14 +52,14 @@ export class FundingComponent implements OnInit, OnChanges {
       this.addSingle = 'FundingSingleEdit'
     }
     else if (this.optionType == 'recommended-option') {
-        this.addSingle = 'BCFundingSingleEdit'
+      this.addSingle = 'BCFundingSingleEdit'
     }
     else if (this.optionType == 'option-2') {
       this.addSingle = 'BC2FundingSingleEdit'
-  }
-  else if (this.optionType == 'option-3') {
-    this.addSingle = 'BC3FundingSingleEdit'
-}
+    }
+    else if (this.optionType == 'option-3') {
+      this.addSingle = 'BC3FundingSingleEdit'
+    }
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -102,7 +102,7 @@ export class FundingComponent implements OnInit, OnChanges {
       this.optionId = GlobalBusinessCaseOptions.OPTION_2
       this.fundingBCbulkEditType = 'FundingBCEditO2'
       this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
-      console.log("OPTION 2",this.id)
+      console.log("OPTION 2", this.id)
       this.apiService.getBusinessCaseCostFunding(this.id, this.optionId).then((res: any) => {
         this.authService.lookupMaster().then((lookup: any) => {
           this.portApiService.getfilterlist().then((po: any) => {
@@ -159,7 +159,7 @@ export class FundingComponent implements OnInit, OnChanges {
       this.initializationComplete = false
       this.initializationComplete = true
     }
-    else if(this.mode == 'Project-Charter') {
+    else if (this.mode == 'Project-Charter') {
       console.log("PROJECTCHARTER")
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       this.apiService.getCostFunding(this.id).then((res: any) => {
@@ -229,18 +229,18 @@ export class FundingComponent implements OnInit, OnChanges {
         })
       }
       if (close == 'confirmed' && this.optionType == 'recommended-option' && this.mode != 'Project-Charter') {
-        this.apiService.deleteFundingBusinessCase(this.id,this.optionId,id).then(res => {
+        this.apiService.deleteFundingBusinessCase(this.id, this.optionId, id).then(res => {
           this.projecthubservice.submitbutton.next(true)
         })
       }
       if (close == 'confirmed' && this.optionType == 'option-2' && this.mode != 'Project-Charter') {
         console.log("DELETING OPTION 2 FUNDING")
-        this.apiService.deleteBusinessCaseFunding(this.id,GlobalBusinessCaseOptions.OPTION_2,id).then(res => {
+        this.apiService.deleteBusinessCaseFunding(this.id, GlobalBusinessCaseOptions.OPTION_2, id).then(res => {
           this.projecthubservice.submitbutton.next(true)
         })
       }
       if (close == 'confirmed' && this.optionType == 'option-3' && this.mode != 'Project-Charter') {
-        this.apiService.deleteBusinessCaseFunding(this.id,GlobalBusinessCaseOptions.OPTION_3,id).then(res => {
+        this.apiService.deleteBusinessCaseFunding(this.id, GlobalBusinessCaseOptions.OPTION_3, id).then(res => {
           this.projecthubservice.submitbutton.next(true)
         })
       }

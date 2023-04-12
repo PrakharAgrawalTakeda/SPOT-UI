@@ -132,7 +132,7 @@ export class CostEditComponent {
     public fuseAlert: FuseConfirmationService) {
 
     this.costForm.valueChanges.subscribe(res => {
-     // debugger
+      // debugger
       if (this.viewContent) {
 
         this.projectHubService.isFormChanged = true
@@ -168,15 +168,15 @@ export class CostEditComponent {
             if (close == 'confirmed') {
               this.costForm.patchValue({
                 durationBaseCase: null,
-                durationHighCase:  null,
-                totalCapExBaseCase:  null,
-                totalCapExHighCase:  null,
+                durationHighCase: null,
+                totalCapExBaseCase: null,
+                totalCapExHighCase: null,
                 currentYearPlannedSpend: null,
-                projectSpendStart:  null,
-                apisdate:  null,
-                assetInServiceNa:  false,
-                isProjectSpentNa:  false
-  
+                projectSpendStart: null,
+                apisdate: null,
+                assetInServiceNa: false,
+                isProjectSpentNa: false
+
               })
             }
             else {
@@ -215,9 +215,9 @@ export class CostEditComponent {
           alert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
               this.costForm.patchValue({
-                totalNonFteopExBaseCase:  null,
-              totalNonFteopExHighCase:  null,
-  
+                totalNonFteopExBaseCase: null,
+                totalNonFteopExHighCase: null,
+
               })
             }
             else {
@@ -408,7 +408,7 @@ export class CostEditComponent {
       this.projectHubService.toggleDrawerOpen('', '', [], '', true)
     }
     if ((formValue.durationHighCase != null && formValue.durationBaseCase > formValue.durationHighCase) ||
-    (formValue.peopleFtemonthsRequiredHighCase != null && formValue.peopleFtemonthsRequiredBaseCase > formValue.peopleFtemonthsRequiredHighCase) ||
+      (formValue.peopleFtemonthsRequiredHighCase != null && formValue.peopleFtemonthsRequiredBaseCase > formValue.peopleFtemonthsRequiredHighCase) ||
       (formValue.totalCapExHighCase != null && formValue.totalCapExBaseCase > formValue.totalCapExHighCase) ||
       (formValue.totalNonFteopExHighCase != null && formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase)) {
       var comfirmConfig: FuseConfirmationConfig = {
@@ -490,21 +490,21 @@ export class CostEditComponent {
           })
         })
       }
-       if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
-           let mainObj;
-           mainObj = {
-               projectId: this.projectHubService.projectid,
-               businessOptionId: this.optionId,
-               totalCapexBaseCase: typeof formValue.totalCapExBaseCase === 'string' ? Number(formValue.totalCapExBaseCase) : formValue.totalCapExBaseCase,
-               totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
-               totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
-               totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
-               assetInService: formValue.apisdate ? formValue.apisdate : null,
-               projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
-               currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
-               assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-               isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
-           }
+      if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
+        let mainObj;
+        mainObj = {
+          projectId: this.projectHubService.projectid,
+          businessOptionId: this.optionId,
+          totalCapexBaseCase: typeof formValue.totalCapExBaseCase === 'string' ? Number(formValue.totalCapExBaseCase) : formValue.totalCapExBaseCase,
+          totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
+          totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
+          totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
+          assetInService: formValue.apisdate ? formValue.apisdate : null,
+          projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
+          currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
+          assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
+          isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
+        }
         this.apiService.updateBusinessCaseCost(mainObj, this.projectHubService.projectid, GlobalBusinessCaseOptions.OPTION_1).then(Res => {
           this.projectHubService.isNavChanged.next(true)
           this.projectHubService.submitbutton.next(true)
@@ -513,23 +513,23 @@ export class CostEditComponent {
         })
       }
       if (this.mode != 'Project-Charter' && this.optionType == 'option-2') {
-          let mainObj;
-          console.log(formValue.capexRequired)
-          mainObj = {
-              projectId: this.projectHubService.projectid,
-              businessOptionId: this.optionId,
-              totalCapexBaseCase: typeof formValue.totalCapExBaseCase === 'string' ? Number(formValue.totalCapExBaseCase) : formValue.totalCapExBaseCase,
-              totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
-              totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
-              totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
-              assetInService: formValue.apisdate ? formValue.apisdate : null,
-              projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
-              currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
-              assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-              isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
-              capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
-              opexRequired: formValue.opexRequired ? formValue.opexRequired : false
-          }
+        let mainObj;
+        console.log(formValue.capexRequired)
+        mainObj = {
+          projectId: this.projectHubService.projectid,
+          businessOptionId: this.optionId,
+          totalCapexBaseCase: typeof formValue.totalCapExBaseCase === 'string' ? Number(formValue.totalCapExBaseCase) : formValue.totalCapExBaseCase,
+          totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
+          totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
+          totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
+          assetInService: formValue.apisdate ? formValue.apisdate : null,
+          projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
+          currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
+          assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
+          isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+          capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
+          opexRequired: formValue.opexRequired ? formValue.opexRequired : false
+        }
         this.optionId = GlobalBusinessCaseOptions.OPTION_2
         console.log(mainObj)
         this.apiService.updateBusinessCaseCost(mainObj, this.projectHubService.projectid, this.optionId).then(Res => {
@@ -540,22 +540,22 @@ export class CostEditComponent {
         })
       }
       if (this.mode != 'Project-Charter' && this.optionType == 'option-3') {
-          let mainObj;
-          mainObj = {
-              projectId: this.projectHubService.projectid,
-              businessOptionId: this.optionId,
-              totalCapexBaseCase: typeof formValue.totalCapExBaseCase === 'string' ? Number(formValue.totalCapExBaseCase) : formValue.totalCapExBaseCase,
-              totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
-              totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
-              totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
-              assetInService: formValue.apisdate ? formValue.apisdate : null,
-              projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
-              currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
-              assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-              isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
-              capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
-              opexRequired: formValue.opexRequired ? formValue.opexRequired : false
-          }
+        let mainObj;
+        mainObj = {
+          projectId: this.projectHubService.projectid,
+          businessOptionId: this.optionId,
+          totalCapexBaseCase: typeof formValue.totalCapExBaseCase === 'string' ? Number(formValue.totalCapExBaseCase) : formValue.totalCapExBaseCase,
+          totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
+          totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
+          totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
+          assetInService: formValue.apisdate ? formValue.apisdate : null,
+          projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
+          currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
+          assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
+          isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+          capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
+          opexRequired: formValue.opexRequired ? formValue.opexRequired : false
+        }
         this.optionId = GlobalBusinessCaseOptions.OPTION_3
         this.apiService.updateBusinessCaseCost(mainObj, this.projectHubService.projectid, this.optionId).then(Res => {
           this.projectHubService.isNavChanged.next(true)
