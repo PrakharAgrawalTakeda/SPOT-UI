@@ -5,6 +5,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
+import { forEach } from 'lodash';
 
 @Component({
   selector: 'app-biogenics-bulk-edit',
@@ -21,6 +22,7 @@ export class BiogenicsBulkEditComponent {
   biogenicsDb = []
   submitObj = []
   Biogenics = []
+  noCarbonBiogenics = []
   lookupdata: any
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
@@ -40,31 +42,43 @@ export class BiogenicsBulkEditComponent {
         }
       }
     })
+    this.CAPSform.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+          this.projecthubservice.isFormChanged = true
+      }
+    })
     this.CAPSform.controls.NoCarbonImpact.valueChanges.subscribe(res => {
       if (this.viewContent) {
         if(res == true){
-          for(var i=0;i<this.Biogenics.length; i++){
-            if (this.Biogenics[i].biogenicDataId != "") {
-              this.Biogenics[i].biogenicEmissionFactor = '',
-                this.Biogenics[i].biogenicUnit = '',
-                this.Biogenics[i].biogenicUnitCost = '',
-                this.Biogenics[i].biogenicBasisOfEstimate = ''
-            }
-            else{
-              this.Biogenics.splice(i, 1)
-              this.biogenicsForm.removeAt(i)
-              if (this.biogenicsTableEditStack.includes(i)) {
-                this.biogenicsTableEditStack.splice(this.biogenicsTableEditStack.indexOf(i), 1)
-              }
-              this.biogenicsTableEditStack = this.biogenicsTableEditStack.map(function (value) {
-                return value > i ? value - 1 : value;
-              })
-              this.Biogenics = [...this.Biogenics]
-            }
+          for (var j of this.noCarbonBiogenics) {
+            j.biogenicEmissionFactor = '',
+              j.biogenicUnit = '',
+              j.biogenicUnitCost = '',
+              j.biogenicBasisOfEstimate = ''
           }
+          // for(var i=0;i<this.Biogenics.length; i++){
+          //   if (this.Biogenics[i].biogenicDataId != "") {
+          //     this.Biogenics[i].biogenicEmissionFactor = '',
+          //       this.Biogenics[i].biogenicUnit = '',
+          //       this.Biogenics[i].biogenicUnitCost = '',
+          //       this.Biogenics[i].biogenicBasisOfEstimate = ''
+          //   }
+          //   else{
+          //     this.Biogenics.splice(i, 1)
+          //     this.biogenicsForm.removeAt(i)
+          //     if (this.biogenicsTableEditStack.includes(i)) {
+          //       this.biogenicsTableEditStack.splice(this.biogenicsTableEditStack.indexOf(i), 1)
+          //     }
+          //     this.biogenicsTableEditStack = this.biogenicsTableEditStack.map(function (value) {
+          //       return value > i ? value - 1 : value;
+          //     })
+          //     this.Biogenics = [...this.Biogenics]
+          //   }
+          // }
+          this.Biogenics = this.noCarbonBiogenics
         }
-        else if (res == false && this.projecthubservice.all[1] == false){
-          this.Biogenics = this.projecthubservice.all[0]
+        else if (res == false && (this.projecthubservice.all[1] == false || this.projecthubservice.all[1] == null)) {
+          this.Biogenics = Object.assign([{}], this.projecthubservice.all[0])
         }
       }
     })
@@ -83,6 +97,7 @@ export class BiogenicsBulkEditComponent {
         NoCarbonImpact: this.projecthubservice.all[1]
       })
         this.Biogenics = res.biogenicsData
+        this.noCarbonBiogenics = res.biogenicsData
       for (var i of this.Biogenics) {
         this.biogenicsDb.push(i)
         this.biogenicsForm.push(new FormGroup({

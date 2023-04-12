@@ -10,11 +10,11 @@
     style="overflow-y: scroll; height: 95vh;">
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
         <spot-select formControlName="wwstream" name="wwstream" [label]="'Water/Waste'"
-            [placeholder]="'Water/Waste'" [dropDownArrayType]="'string'" [dropDownArray]="waterWasteDropDrownValues">
+            [placeholder]="'Water/Waste'" [dropDownArrayType]="'string'" [dropDownArray]="waterWasteDropDrownValues" [showNoneOption]="false">
         </spot-select>
 
         <spot-select formControlName="wwtype" name="wwtype" [label]="'Type'"
-            [placeholder]="'Type'" [dropDownArrayType]="'string'" [dropDownArray]="waterWasteForm.controls.wwstream.value == '' ? [] : waterWasteForm.controls.wwstream.value == 'Water' ? waterTypeDropDrownValues : wasteTypeDropDrownValues">
+            [placeholder]="'Type'" [dropDownArrayType]="'string'" [showNoneOption]="false" [dropDownArray]="waterWasteForm.controls.wwstream.value == '' ? [] : waterWasteForm.controls.wwstream.value == 'Water' ? waterTypeDropDrownValues : wasteTypeDropDrownValues">
         </spot-select>
 
         <spot-input class="w-full" formControlName="emwwunit" name="emwwunit" [label]="'Units'" [decimalCount]="0"

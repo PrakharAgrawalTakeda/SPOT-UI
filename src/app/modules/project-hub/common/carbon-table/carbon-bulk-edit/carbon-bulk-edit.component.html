@@ -31,6 +31,15 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [sortable]="false" name="Units" prop="emunit" [flexGrow]="0.25"
                     [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <div>
+                                {{column.name}}
+                                <mat-icon class="pe" style="font-size: 17px;"
+                                    matTooltip="Input gross change in emissions type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.">help</mat-icon>
+                            </div>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!carbonTableEditStack.includes(rowIndex)" (click)="carbonTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -38,7 +47,7 @@
                         </a>
                         <form [formGroup]="carbonForm.controls[rowIndex]" *ngIf="carbonTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="emunit" name="emunit" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="units">
+                                [autoAddDecimal]="false" [placeholder]="units" [allowNegativeValues] = true>
                             </spot-input>
                         </form>
                     </ng-template>

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ProjectHubService } from '../../project-hub.service';
 import { ActivatedRoute } from '@angular/router';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../project-api.service';
 
@@ -41,8 +41,10 @@ export class WaterWasteTableComponent {
         else{
         this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
         }
-        // this.WaterWastengx = res.waterWasteData
-
+        if(this.Editable == false){
+          this.WaterWastengx = null
+        }
+        else{
         var wwParam = res.waterWasteParameter
         var wwData = res.waterWasteData
         var WaterWastengx = []
@@ -58,6 +60,8 @@ export class WaterWasteTableComponent {
           }
           this.WaterWastengx = WaterWastengx
         }
+      }
+        this.waterWasteBulkEditData=[]
         this.waterWasteBulkEditData.push(this.WaterWastengx)
         this.waterWasteBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
         if (res.localCurrency == null) {
@@ -75,4 +79,38 @@ export class WaterWasteTableComponent {
   getLookupName(lookUpId: string): string {
     return lookUpId && lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == lookUpId).lookUpName : ''
   }
+
+  deleteWW(id: string) {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Operational Performance?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const WWAlert = this.fuseAlert.open(comfirmConfig)
+
+    WWAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.deleteWW(id).then(res => {
+            this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
+  }
+
 }

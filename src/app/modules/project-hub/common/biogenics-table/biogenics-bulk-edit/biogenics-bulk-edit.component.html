@@ -41,7 +41,7 @@
                         <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="biogenicMasterUniqueId" name="biogenicMasterUniqueId" [placeholder]="'Emission Source'"
                                 [dropDownArrayType]="'object'" [dropDownArray]="getSource()" [idPointer]="'lookUpId'"
-                                [valuePointer]="'lookUpName'">
+                                [valuePointer]="'lookUpName'" [showNoneOption]="false">
                             </spot-select>
                         </form>
                     </ng-template>
