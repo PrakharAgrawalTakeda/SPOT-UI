@@ -13,6 +13,7 @@ export class OperationalBenefitsTableComponent {
     @Input() optionId;
     @Input() lookup: any;
     @Input() benefitsData: any;
+    @Input() editable: boolean
     id: string = ""
 
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projectHubService: ProjectHubService

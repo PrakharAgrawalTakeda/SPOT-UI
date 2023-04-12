@@ -23,6 +23,7 @@ export class ProjectBoard{
     public baselineproject: boolean = false
     public phaseState:boolean = true
     public keyAssumptionsEdit: boolean = true
+    public operationalBenefitsEdit: boolean = true
 }
 
 export class GeneralInfo{

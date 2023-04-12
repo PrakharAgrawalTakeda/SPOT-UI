@@ -10,7 +10,7 @@
     <form class="w-full overflow-hidden" [formGroup]="benefitsInfoForm" (ngSubmit)="submitBenefitsEdit()"
           style="overflow-y: scroll; height: 95vh;">
         <div class=" form-ask-need h-[87vh] overflow-y-scroll">
-            <div class="text-primary">Strategic Alignment</div>
+            <div><a class="text-primary w-2/6" [matTooltip]="'Provide strategic alignment that is based on X-Matrix or business imperatives/key focus areas'">Strategic Alignment</a></div>
             <spot-textarea formControlName="strategicAlignment">
             </spot-textarea>
             <spot-textarea formControlName="strategicAlignmentJustification"
@@ -19,11 +19,13 @@
             <br>
             <div class="text-primary">NPV</div>
             <spot-input class="w-full read-only" [showLabel]="true" [label]="'Base Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="npvBaseCase"
-                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
+                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                        [showHint]="true" [hint]="'Provide NPV calculation if applicable (base case)'"> </spot-input>
             <spot-input class="w-full read-only" [showLabel]="true" [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="npvHighCase"
-                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
+                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                        [showHint]="true" [hint]="'Provide NPV calculation if applicable (high case)'"> </spot-input>
             <spot-textarea formControlName="npvRationale"
-                        [placeholder]="'Justify linkage to the identified strategic element'">
+                        [placeholder]="'N/A if no NPV calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with NPV as appropriate. NPV needed for capital projects > 5 OKU TPC'">
             </spot-textarea>
         </div>
         <div class="flex items-start justify-between  form-ask-need">

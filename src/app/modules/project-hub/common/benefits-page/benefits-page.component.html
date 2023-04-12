@@ -19,7 +19,7 @@
                 </div>
             <div class="grid grid-cols-1 divide-y">
                 <div>
-                    <div class="text-primary  pl-3">Strategic Alignment</div>
+                    <div><a class="text-primary w-2/6" [matTooltip]="'Provide strategic alignment that is based on X-Matrix or business imperatives/key focus areas'">Strategic Alignment</a></div>
                     <spot-textarea class="w-full read-only" formControlName="strategicAlignment"
                                    [hint]="'Provide strategic alignment that is based on X-Matrix or business imperatives/key focus areas'">
                     </spot-textarea>
@@ -31,9 +31,11 @@
                     <div class="text-primary pl-3 pt-6 pb-3">NPV</div>
                     <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
                         <spot-input formControlName="npvBaseCase"  [label]="'Base Case (' + this.localCurrency.localCurrencyAbbreviation + ')'"
+                                    [showHint]="true" [hint]="'Provide NPV calculation if applicable (base case)'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
                                     class="w-full read-only" >
                         </spot-input>
-                        <spot-input formControlName="npvHighCase"  [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'"
+                        <spot-input formControlName="npvHighCase"  [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                                    [showHint]="true" [hint]="'Provide NPV calculation if applicable (high case)'"
                                     class="w-full read-only" >
                         </spot-input>
                     </div>

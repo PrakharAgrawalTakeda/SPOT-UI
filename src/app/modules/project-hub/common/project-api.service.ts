@@ -428,8 +428,8 @@ async addBCFunding(body,optionId,projectId){
       const response = await lastValueFrom(abc$)
       return response
   }
-  async bulkEditTimelineForOption(body,projectId){
-      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/BulkEdit/" + projectId
+  async bulkEditTimelineForOption(body,optionId,projectId,){
+      var link = GlobalVariables.apiurl+"BusinessCase/Timeline/BulkEdit/"+optionId + "/" + projectId;
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response
@@ -698,6 +698,12 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     const response = await lastValueFrom(abc$)
     return response
   }
+    async deleteFundingBusinessCase(projectId: string, optionId: string,id: string) {
+        var link = GlobalVariables.apiurl + "BusinessCaseCostFunding/BusinessCaseFunding/" +projectId + '/' + optionId + '/'+ id
+        const abc$ = this.http.delete(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 
   async getLocalAttributes(projectid: string) {
     var url = GlobalVariables.apiurl + "LocalAttributes/" + projectid
