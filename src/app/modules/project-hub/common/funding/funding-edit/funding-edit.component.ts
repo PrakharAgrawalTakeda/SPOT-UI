@@ -76,7 +76,7 @@ export class FundingEditComponent implements OnInit {
           this.dataIntialized = true
           this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
           console.log(this.projecthubservice.all)
-          if (this.projecthubservice.all.length > 0) {
+          if (this.projecthubservice.all) {
             if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3) {
               if (this.FundingForm.value.includeInCharter != true) {
                 this.FundingForm.controls['includeInCharter'].disable()
@@ -104,7 +104,7 @@ export class FundingEditComponent implements OnInit {
           this.dataIntialized = true
           this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
           console.log(this.projecthubservice.all)
-          if (this.projecthubservice.all.length > 0) {
+          if (this.projecthubservice.all) {
             if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3) {
               if (this.FundingForm.value.includeInCharter != true) {
                 this.FundingForm.controls['includeInCharter'].disable()
@@ -153,9 +153,11 @@ export class FundingEditComponent implements OnInit {
     return source ? this.fundingSourceData.portfolioOwner.find(x => x.portfolioOwnerId == source).portfolioOwner : ''
   }
   submitfunding() {
+    debugger
     this.projecthubservice.isFormChanged = false
     var funding = this.FundingForm.getRawValue()
     var BCfunding = this.FundingBCForm.getRawValue()
+    console.log(this.optionType)
     if (this.mode == 'Project-Charter') {
       var mainObj = {
         fundingUniqueId: "",
@@ -233,6 +235,7 @@ export class FundingEditComponent implements OnInit {
         fundingAmountFxconv: BCfunding.fundingAmountFxconv,
         includeInBusinessCase: BCfunding.includeInBusinessCase
       }
+      console.log(submitObj)
       this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_3,this.projecthubservice.projectid).then(res => {
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')

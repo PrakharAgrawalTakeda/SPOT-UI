@@ -51,9 +51,15 @@ export class FundingComponent implements OnInit, OnChanges {
     if (this.mode == 'Project-Charter') {
       this.addSingle = 'FundingSingleEdit'
     }
-    else if (this.optionType == 'recommended-option' || this.optionType == 'option-2' || this.optionType == 'option-3') {
+    else if (this.optionType == 'recommended-option') {
         this.addSingle = 'BCFundingSingleEdit'
     }
+    else if (this.optionType == 'option-2') {
+      this.addSingle = 'BC2FundingSingleEdit'
+  }
+  else if (this.optionType == 'option-3') {
+    this.addSingle = 'BC3FundingSingleEdit'
+}
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
