@@ -438,6 +438,35 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         })
       }
+      else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
       else {
         this.submitLogic()
       }
@@ -525,6 +554,35 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
       })
     }
+      else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
     else {
       this.submitLogic()
     }

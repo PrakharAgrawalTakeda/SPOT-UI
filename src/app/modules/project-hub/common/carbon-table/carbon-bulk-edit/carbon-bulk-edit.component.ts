@@ -25,12 +25,14 @@ export class CarbonBulkEditComponent {
   today = new Date("2036-03-31");
   viewContent: boolean = false
   carbonForm = new FormArray([])
-  carbonEditStack = []
+  carbonTableEditStack = []
   editable: boolean = false
   projectViewDetails: any = {}
   carbonDb = []
   submitObj = []
   unitCost = ""
+  Carbon  = []
+  noCarbon: boolean = false
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
   })
@@ -56,67 +58,69 @@ export class CarbonBulkEditComponent {
   }
 
   dataloader() {
-    this.apiService.getprojectviewdata(this.projecthubservice.projectid).then((res: any) => {
-      this.apiService.getGeneralInfoData(this.projecthubservice.projectid).then((response: any) => {
-        this.apiService.getproject(this.projecthubservice.projectid).then((res: any) => {
-          this.CAPSform.patchValue({
-            impactRealizationDate: res.emissionsImpactRealizationDate
-          })
-          this.unitCost = "Unit Cost (" + response.localCurrencyAbbreviation + ")"
-        })
+    this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
+      this.CAPSform.patchValue({
+        impactRealizationDate: res.projectData.emissionsImpactRealizationDate
       })
-      // this.projectViewDetails = res
-      // for (var i of this.projectViewDetails.overallPerformace) {
-      //   this.carbonDb.push(i)
-      //   this.carbonForm.push(new FormGroup({
-      //     emissionSource: new FormControl(i.emissionSource),
-      //     projectId: new FormControl(this.projecthubservice.projectid),
-      //     metric: new FormControl(i.metric),
-      //     currentState: new FormControl(i.currentState),
-      //     targetPerformance: new FormControl(i.targetPerformance),
-      //     includeInCharter: new FormControl(i.includeInCharter),
-      //     kpiid: new FormControl(i.kpiid && i.kpiid != '' ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) : {}),
-      //     actualPerformance: new FormControl(i.actualPerformance),
-      //     includeInProjectDashboard: new FormControl(i.includeInProjectDashboard),
-      //     status: new FormControl(i.status),
-      //     includeInCloseOut: new FormControl(i.includeInCloseOut),
-      //     ptrbid: new FormControl(i.ptrbid),
-      //     benefitDescriptionJustification: new FormControl(i.benefitDescriptionJustification),
-      //     includeinProposal: new FormControl(i.includeinProposal),
-      //     kpiname: new FormControl(i.kpiname)
-      //   }))
-      // }
-
+      if (res.localCurrency == null) {
+        this.unitCost = "Unit Cost ()"
+      }
+      else {
+      this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
+      }
+      this.noCarbon = res.projectData.noCarbonImpact
+      this.Carbon = this.projecthubservice.all
+      for (var i of this.Carbon) {
+        this.carbonDb.push(i)
+        this.carbonForm.push(new FormGroup({
+          emsourceMasterUniqueId: new FormControl(i.emsourceMasterUniqueId),
+          // source: new FormControl(i.source),
+          // emscope: new FormControl(i.emscope),
+          // isActive: new FormControl(i.isActive),
+          // emtype: new FormControl(i.emtype),
+          emsourceId: new FormControl(i.emsourceId),
+          emsourceName: new FormControl(i.emsourceName),
+          standardUoM: new FormControl(i.standardUoM),
+          // comments: new FormControl(i.comments),
+          // gjequivalent: new FormControl(i.gjequivalent),
+          // correspondingFactor: new FormControl(i.correspondingFactor),
+          // correspondingFactorName: new FormControl(i.correspondingFactorName),
+          emdataUniqueId: new FormControl(i.emdataUniqueId),
+          projectId: new FormControl(this.projecthubservice.projectid),
+          emportfolioOwnerId: new FormControl(i.emportfolioOwnerId),
+          emunit: new FormControl(i.emunit),
+          emimpactTonsCo2year: new FormControl(i.emimpactTonsCo2year),
+          embasisOfEstimate: new FormControl(i.embasisOfEstimate),
+          unitCost: new FormControl(i.unitCost)
+        }))
+      }
       this.viewContent = true
     })
   }
 
   changeChecker() {
     var formValue = this.carbonForm.getRawValue()
-    // formValue.length > 0 ? this.submitObj = formValue.map(x => {
-    //   return {
-    //     keySuccessUniqueId: x.keySuccessUniqueId,
-    //     projectId: x.projectId,
-    //     metric: x.metric,
-    //     currentState: x.currentState,
-    //     targetPerformance: x.targetPerformance,
-    //     includeInCharter: x.includeInCharter,
-    //     kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
-    //     actualPerformance: x.actualPerformance,
-    //     includeInProjectDashboard: x.includeInProjectDashboard,
-    //     status: x.status,
-    //     includeInCloseOut: x.includeInCloseOut,
-    //     ptrbid: x.ptrbid,
-    //     benefitDescriptionJustification: x.benefitDescriptionJustification,
-    //     includeinProposal: x.includeinProposal
-    //   }
-    // }) : this.submitObj = []
+    formValue.length > 0 ? this.submitObj = formValue.map(x => {
+      return {
+        emsourceMasterUniqueId: x.emsourceMasterUniqueId,
+        projectId: x.projectId,
+        emsourceId: x.emsourceId,
+        emsourceName: x.emsourceName,
+        standardUoM: x.standardUoM,
+        emdataUniqueId: x.emdataUniqueId,
+        emportfolioOwnerId: x.emportfolioOwnerId,
+        emunit: x.emunit,
+        emimpactTonsCo2year: x.emimpactTonsCo2year,
+        embasisOfEstimate: x.embasisOfEstimate,
+        unitCost: x.unitCost
+      }
+    }) : this.submitObj = []
   }
 
   carbonTableEditRow(row: number) {
-    if (this.projecthubservice.roleControllerControl.projectBenefits) {
-      if (!this.carbonEditStack.includes(row)) {
-        this.carbonEditStack.push(row)
+    if (this.projecthubservice.roleControllerControl.projectHub.CAPS && !this.noCarbon) {
+      if (!this.carbonTableEditStack.includes(row)) {
+        this.carbonTableEditStack.push(row)
       }
     }
   }

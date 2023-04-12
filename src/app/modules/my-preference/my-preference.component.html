@@ -1,5 +1,13 @@
+<fuse-drawer [name]="'rightDrawer'" [opened]="myPreferenceService.drawerOpenedright"
+             (openedChanged)="myPreferenceService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
+             [ngClass]="{'fuse-drawer-large':myPreferenceService.fuseDrawerLarge}">
+    <div>
+        <app-milestone-set-view-edit *ngIf="myPreferenceService.itemtype == 'MilestoneSetsAddNew'"></app-milestone-set-view-edit>
+    </div>
+</fuse-drawer>
+
 <div *ngIf="viewContent" class="w-full pt-20">
-    <div class="flex flex-col bg-card p-6 pt-3 pb-4 m-8 mb-5 mt-0 shadow rounded-2xl">
+    <div class="flex flex-col bg-card p-6 pt-3 pb-4 m-6 mb-5 mt-0 shadow rounded-2xl">
         <div class="flex justify-between items-start w-full">
             <div class="w-[73%]">
                 <span class="font-bold text-primary text-2xl">My Preferences
