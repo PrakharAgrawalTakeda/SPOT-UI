@@ -40,11 +40,6 @@ export class WaterWasteSingleEditComponent {
   unitCost = ""
   formFieldHelpers: string[] = [''];
   id: string = ""
-  lookupdata: any
-  biogenics: any
-  biogenicsData: any
-  biogenicsUpdated: any
-  activeaccount: any
   impactRealizationDate: any
   waterWasteForm = new FormGroup({
     emdataWwid: new FormControl(),
@@ -81,9 +76,8 @@ export class WaterWasteSingleEditComponent {
   }
 
   dataloader() {
-    this.biogenicsData = this.projecthubservice.all[0]
     this.unitCost = "Unit Cost (" + this.projecthubservice.all[2] + ")"
-    this.impactRealizationDate = this.projecthubservice.all[1]
+    this.impactRealizationDate = this.projecthubservice.all[1].emissionsImpactRealizationDate
     this.waterwasteValues = this.projecthubservice.all[3]
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
     for (var j = 0; j < waterValues.length; j++) {
@@ -113,9 +107,11 @@ export class WaterWasteSingleEditComponent {
   submitWaterWaste() {
     this.projecthubservice.isFormChanged = false
     var formValue = this.waterWasteForm.getRawValue()
+    formValue.emwwunit = isNaN(formValue.emwwunit) ? null : formValue.emwwunit
+    formValue.emwwunitCost = isNaN(formValue.emwwunitCost) ? null : formValue.emwwunitCost
     if (formValue.wwstream == "") {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a value in Water/Waste",
+        "title": "Please select a value in Water/Waste.",
         "message": "",
         "icon": {
           "show": true,
@@ -139,7 +135,7 @@ export class WaterWasteSingleEditComponent {
     }
     else if (formValue.wwtype == "") {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a Type",
+        "title": "Please select a Type.",
         "message": "",
         "icon": {
           "show": true,

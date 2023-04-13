@@ -8,11 +8,11 @@
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
-                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="Editable" [color]="'primary-200'"
+                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="Editable && !noCarbonImpact" [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('BiogenicsBulkEdit', '', biogenicsBulkEditData, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
-                    <button class="ml-4 text-primary bg-gray-200" *ngIf="Editable && !NoCarbonForm.controls.NoCarbonImpact.value" mat-flat-button
+                    <button class="ml-4 text-primary bg-gray-200" *ngIf="Editable && !noCarbonImpact" mat-flat-button
                         [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('BiogenicsSingleEdit', 'new', biogenicsBulkEditData , id)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -21,20 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="w-full">
-        <form class="w-full p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
-            <div class="flex justify-start gap-3 items-center w-full pt-2">
-                <div class="flex justify-start gap-1 items-center">
-                    No Carbon Impact
-                </div>
-                <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!NoCarbonForm.controls.NoCarbonImpact.value">
-                </mat-icon>
-                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
-                    *ngIf="NoCarbonForm.controls.NoCarbonImpact.value">
-                </mat-icon>
-            </div>
-        </form>
-    </div>
+    
     <div class="overflow-x-auto mx-6">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
             class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
@@ -46,13 +33,13 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Emission Factor (kg CO2/kWh)" prop="biogenicEmissionFactor" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="emission">{{value | number:'1.3-3'}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Units" prop="biogenicUnit" [flexGrow]="1"
+            <ngx-datatable-column name="Units" prop="biogenicUnit" [flexGrow]="0.7"
                 [headerClass]="getNgxDatatableNumberHeader">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="unit">{{value | number:'1.0-0'}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="UoM" prop="standardUoM" [flexGrow]="1">
@@ -60,7 +47,7 @@
                     {{ value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name={{unitCost}} prop="biogenicUnitCost" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader">
+            <ngx-datatable-column name={{unitCost}} prop="biogenicUnitCost" [flexGrow]="0.8" [headerClass]="getNgxDatatableNumberHeader">
                 <ng-template let-column="column" ngx-datatable-header-template>
                     <ng-container>
                         <div style="margin-bottom: -23px;">
@@ -71,7 +58,7 @@
                     </ng-container>
                 </ng-template>
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="cost">{{value | number:'1.4-4'}}</p>
                 </ng-template>   
             </ngx-datatable-column>
             <ngx-datatable-column name="Basis of Estimate" prop="biogenicBasisOfEstimate" [flexGrow]="1">

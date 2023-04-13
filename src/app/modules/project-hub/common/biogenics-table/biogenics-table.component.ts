@@ -16,9 +16,10 @@ export class BiogenicsTableComponent {
   viewContent:boolean = false
   Biogenicsngx: any = []
   unitCost = ""
-  NoCarbonForm= new FormGroup({
-    NoCarbonImpact: new FormControl(false)
-  })
+  // NoCarbonForm= new FormGroup({
+  //   NoCarbonImpact: new FormControl(false)
+  // })
+  noCarbonImpact: boolean = false
   biogenicsBulkEditData: any = []
   @Input() Editable: boolean = false
   lookupdata: any
@@ -51,18 +52,27 @@ export class BiogenicsTableComponent {
         else {
         this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
         }
-        this.NoCarbonForm.patchValue({
-          NoCarbonImpact: res.projectData.noCarbonImpact
-        })
+        this.noCarbonImpact = res.projectData.noCarbonImpact
+        // this.NoCarbonForm.patchValue({
+        //   NoCarbonImpact: res.projectData.noCarbonImpact
+        // })
         this.biogenicsBulkEditData=[]
         this.biogenicsBulkEditData.push(this.Biogenicsngx)
         this.biogenicsBulkEditData.push(res.projectData.noCarbonImpact)
-        this.biogenicsBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
+        this.biogenicsBulkEditData.push(res.projectData)
         if (res.localCurrency == null) {
           this.biogenicsBulkEditData.push("")
         }
         else {
         this.biogenicsBulkEditData.push(res.localCurrency.localCurrencyAbbreviation)
+        }
+        if (res.projectData.noCarbonImpact == true) {
+          for (var i of this.Biogenicsngx) {
+            i.biogenicEmissionFactor = null
+            i.biogenicUnit = null,
+              i.biogenicUnitCost = null,
+              i.biogenicBasisOfEstimate = ""
+          }
         }
         this.viewContent = true
       })
