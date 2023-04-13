@@ -63,7 +63,7 @@ export class WaterWasteTableComponent {
       }
         this.waterWasteBulkEditData=[]
         this.waterWasteBulkEditData.push(this.WaterWastengx)
-        this.waterWasteBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
+        this.waterWasteBulkEditData.push(res.projectData)
         if (res.localCurrency == null) {
           this.waterWasteBulkEditData.push("")
         }

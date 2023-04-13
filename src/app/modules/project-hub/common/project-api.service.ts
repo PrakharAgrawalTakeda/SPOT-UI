@@ -747,5 +747,26 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async bulkeditWW(body, projectId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditWaterWaste/" + projectId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkeditBiogenics(body, projectId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditBiogenics/" + projectId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkeditCarbon(body, projectId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditCarbon/" + projectId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 

@@ -88,7 +88,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
                             [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0'">
+                                [autoAddDecimal]="false">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
@@ -97,6 +97,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
             </div>
         </form>
     <!-- </div> -->
+    <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
@@ -107,6 +108,18 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
             <app-biogenics-table [Editable]="editableEnv && editable"></app-biogenics-table>
+        </div>
+    </div>
+    <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
+            *ngIf="viewContent">
+            <form class="p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
+                <!-- <spot-toggle style="border-left: 5px solid #fff !important;" class="w-full primary slider-adjust" formControlName="NoCarbonImpact" [mode]="'toggle'" [label]="'No Carbon Impact'">
+                </spot-toggle> -->
+                <mat-slide-toggle class="primary slider-adjust" formControlName="NoCarbonImpact">
+                    No Carbon Impact</mat-slide-toggle>
+            </form>
+        </div>
         </div>
     </div>
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">

@@ -35,8 +35,17 @@
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Units" prop="emwwunit" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                    <ng-container>
+                        <div style="margin-bottom: -23px;">
+                            {{column.name}}
+                            <mat-icon class="pe" style="font-size: 17px;"
+                                matTooltip="Input gross change in emissions type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.">help</mat-icon>
+                        </div>
+                    </ng-container>
+                </ng-template>
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
+                    <p class="unit">{{value | number:'1.0-0'}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="UoM" prop="standardUoM" [flexGrow]="1">
@@ -56,7 +65,7 @@
                     </ng-container>
                 </ng-template>
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
+                    <p class="unit">{{value | number:'1.4-4'}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1">

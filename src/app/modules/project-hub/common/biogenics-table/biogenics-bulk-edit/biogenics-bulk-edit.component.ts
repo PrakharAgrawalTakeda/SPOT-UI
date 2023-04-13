@@ -6,6 +6,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
 import { forEach } from 'lodash';
+import moment from 'moment';
 
 @Component({
   selector: 'app-biogenics-bulk-edit',
@@ -23,10 +24,11 @@ export class BiogenicsBulkEditComponent {
   submitObj = []
   Biogenics = []
   noCarbonBiogenics = []
+  ProjectData: any
   lookupdata: any
   CAPSform = new FormGroup({
-    impactRealizationDate: new FormControl(''),
-    NoCarbonImpact: new FormControl(false)
+    impactRealizationDate: new FormControl('')
+    // NoCarbonImpact: new FormControl(false)
   })
 
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
@@ -47,41 +49,22 @@ export class BiogenicsBulkEditComponent {
           this.projecthubservice.isFormChanged = true
       }
     })
-    this.CAPSform.controls.NoCarbonImpact.valueChanges.subscribe(res => {
-      if (this.viewContent) {
-        if(res == true){
-          for (var j of this.noCarbonBiogenics) {
-            j.biogenicEmissionFactor = '',
-              j.biogenicUnit = '',
-              j.biogenicUnitCost = '',
-              j.biogenicBasisOfEstimate = ''
-          }
-          // for(var i=0;i<this.Biogenics.length; i++){
-          //   if (this.Biogenics[i].biogenicDataId != "") {
-          //     this.Biogenics[i].biogenicEmissionFactor = '',
-          //       this.Biogenics[i].biogenicUnit = '',
-          //       this.Biogenics[i].biogenicUnitCost = '',
-          //       this.Biogenics[i].biogenicBasisOfEstimate = ''
-          //   }
-          //   else{
-          //     this.Biogenics.splice(i, 1)
-          //     this.biogenicsForm.removeAt(i)
-          //     if (this.biogenicsTableEditStack.includes(i)) {
-          //       this.biogenicsTableEditStack.splice(this.biogenicsTableEditStack.indexOf(i), 1)
-          //     }
-          //     this.biogenicsTableEditStack = this.biogenicsTableEditStack.map(function (value) {
-          //       return value > i ? value - 1 : value;
-          //     })
-          //     this.Biogenics = [...this.Biogenics]
-          //   }
-          // }
-          this.Biogenics = this.noCarbonBiogenics
-        }
-        else if (res == false && (this.projecthubservice.all[1] == false || this.projecthubservice.all[1] == null)) {
-          this.Biogenics = Object.assign([{}], this.projecthubservice.all[0])
-        }
-      }
-    })
+    // this.CAPSform.controls.NoCarbonImpact.valueChanges.subscribe(res => {
+    //   if (this.viewContent) {
+    //     if(res == true){
+    //       for (var j of this.noCarbonBiogenics) {
+    //         j.biogenicEmissionFactor = '',
+    //           j.biogenicUnit = '',
+    //           j.biogenicUnitCost = '',
+    //           j.biogenicBasisOfEstimate = ''
+    //       }
+    //       this.Biogenics = this.noCarbonBiogenics
+    //     }
+    //     else if (res == false && (this.projecthubservice.all[1] == false || this.projecthubservice.all[1] == null)) {
+    //       this.Biogenics = Object.assign([{}], this.projecthubservice.all[0])
+    //     }
+    //   }
+    // })
   }
   
   ngOnInit(): void {
@@ -93,11 +76,12 @@ export class BiogenicsBulkEditComponent {
       this.auth.lookupMaster().then((resp: any) => {
         this.lookupdata = resp
       this.CAPSform.patchValue({
-        impactRealizationDate: this.projecthubservice.all[2],
-        NoCarbonImpact: this.projecthubservice.all[1]
+        impactRealizationDate: this.projecthubservice.all[2].emissionsImpactRealizationDate
+        // NoCarbonImpact: this.projecthubservice.all[1]
       })
         this.Biogenics = res.biogenicsData
         this.noCarbonBiogenics = res.biogenicsData
+        this.ProjectData = this.projecthubservice.all[2]
       for (var i of this.Biogenics) {
         this.biogenicsDb.push(i)
         this.biogenicsForm.push(new FormGroup({
@@ -176,7 +160,7 @@ export class BiogenicsBulkEditComponent {
   }
 
   biogenicsTableEditRow(row: number) {
-      if (this.projecthubservice.roleControllerControl.projectHub.CAPS && !this.CAPSform.controls.NoCarbonImpact.value) {
+      if (this.projecthubservice.roleControllerControl.projectHub.CAPS) {
       if (!this.biogenicsTableEditStack.includes(row)) {
         this.biogenicsTableEditStack.push(row)
       }
@@ -222,7 +206,101 @@ export class BiogenicsBulkEditComponent {
     )
   }
 
-  submitBiogenics(){
+  submitBiogenics() {
+    this.submitPrep()
+    if (this.biogenicsDb.filter(x => x.biogenicMasterUniqueId == "").length > 0) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please select a value for Emission Source.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else if ((this.biogenicsDb.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please enter a value for Impact Realization Date.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else {
+      console.log(this.biogenicsDb)
+      this.projecthubservice.isFormChanged = false
+      this.submitPrep()
+      this.apiService.bulkeditBiogenics(this.biogenicsDb, this.projecthubservice.projectid).then(res => {
+        if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
+          var formValue = this.CAPSform.getRawValue()
+          var mainObj = this.ProjectData
+
+          mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+
+          this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+            this.projecthubservice.isFormChanged = false
+            this.projecthubservice.isNavChanged.next(true)
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          })
+        }
+        else {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.successSave.next(true)
+        }
+      })
+    }
+  }
+
+  submitPrep() {
+    this.biogenicsDb = []
+    var formValue = this.biogenicsForm.getRawValue()
+    for (var i of formValue) {
+      this.biogenicsDb.push({
+        biogenicDataId: i.biogenicDataId,
+        projectId: this.projecthubservice.projectid,
+        biogenicMasterUniqueId: i.biogenicMasterUniqueId,
+        biogenicEmissionFactor: i.biogenicEmissionFactor == "" ? null : i.biogenicEmissionFactor,
+        biogenicUnit: i.biogenicUnit == "" || isNaN(i.biogenicUnit) ? null : i.biogenicUnit,
+        standardUoM: i.standardUoM,
+        biogenicUnitCost: i.biogenicUnitCost == "" || isNaN(i.biogenicUnitCost) ? null : i.biogenicUnitCost,
+        biogenicBasisOfEstimate: i.biogenicBasisOfEstimate
+      })
+    }
 
   }
 }
