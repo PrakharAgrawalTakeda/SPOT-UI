@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
+import { AuthService } from 'app/core/auth/auth.service';
+import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
 
 @Component({
   selector: 'app-funding-edit',
@@ -10,138 +13,246 @@ import { ProjectApiService } from '../../project-api.service';
   styleUrls: ['./funding-edit.component.scss']
 })
 export class FundingEditComponent implements OnInit {
-
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' = 'Normal'
+  @Input() optionType: 'recommended-option' | 'option-2' | 'option-3' = 'recommended-option'
+  @Input() lookup: any;
   Funding: any = {}
   formIntialized: boolean = false
   FundingForm = new FormGroup({
-    fundingTypeId: new FormControl(null),
-    fundingSourceId: new FormControl(null),
+    fundingTypeId: new FormControl(''),
+    fundingSourceId: new FormControl(''),
+    fundingSourceName: new FormControl(''),
     fundingIntheplan: new FormControl(null),
-    fundingAmount: new FormControl(''),
+    fundingAmount: new FormControl(0),
+    fundingAmountFxconv: new FormControl(null),
+    fundingUniqueId: new FormControl(''),
     fundingNotes: new FormControl(''),
-    includeInCharter: new FormControl(false)
+    includeInCharter: new FormControl(false),
+    includeInBusinessCase: new FormControl(false),
+    projectId: new FormControl(''),
   })
-  id:string=""
 
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute) {
+  FundingBCForm = new FormGroup({
+    businessOptionId: new FormControl(''),
+    businessFundingUniqueId: new FormControl(''),
+    fundingAmount: new FormControl(0),
+    fundingAmountFxconv: new FormControl(null),
+    fundingIntheplan: new FormControl(null),
+    fundingNotes: new FormControl(''),
+    fundingSourceId: new FormControl(''),
+    fundingSourceName: new FormControl(''),
+    fundingTypeId: new FormControl(''),
+    includeInBusinessCase: new FormControl(false)
+  })
+
+  id: string = ""
+  fundingdata: any;
+  fundingSourceData: any;
+  lookupdata: any;
+  localcurrency: any;
+  Amount: any;
+  optionId: any;
+  dataIntialized: boolean = false
+  labelText: string;
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, private portApiService: PortfolioApiService) {
     this.FundingForm.valueChanges.subscribe(res => {
+      if (this.formIntialized == true) {
+        this.projecthubservice.isFormChanged = true
+      }
+    })
+    this.FundingBCForm.valueChanges.subscribe(res => {
       if (this.formIntialized == true) {
         this.projecthubservice.isFormChanged = true
       }
     })
   }
 
-  ngOnInit(): void {
-    this.dataloader()
-  }
-   dataloader() {
-  //   console.log(this.projecthubservice.all)
-  //   this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-  //   if (this.projecthubservice.itemid != 'new') {
-  //     this.apiService.getFunding(this.id).then((res: any) => {
-  //       this.Funding = res
-  //       this.FundingForm.patchValue({
-  //         fundingTypeId: res.fundingIntheplan == 'Yes' ? true : false,
-  //   fundingSourceId: this.projecthubservice.lookUpMaster.some(x => x.lookUpId == res.fundingSourceId) ? this.projecthubservice.lookUpMaster.find(x => x.kpiid == res.fundingSourceId) : {},
-  //   fundingIntheplan: res.fundingIntheplan == 'Yes' ? true : false,
-  //   fundingAmount: res.fundingAmount,
-  //   fundingNotes: res.fundingNotes,
-  //   includeInCharter: res.includeInCharter
-  //       })
-  //       if (this.projecthubservice.all.length >= 3) {
-  //         console.log('hit 1')
-  //         if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
-  //           console.log('hit 2')
-  //           this.OperationalPerformanceForm.controls.includeInProjectDashboard.disable()
-  //         }
-  //         if (this.projecthubservice.all.filter(x => x.includeInCloseOut == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCloseOut.value != true) {
-  //           console.log('hit 2')
-  //           this.OperationalPerformanceForm.controls.includeInCloseOut.disable()
-  //         }
-  //         if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
-  //           console.log('hit 2')
-  //           this.OperationalPerformanceForm.controls.includeInCharter.disable()
-  //         }
-  //       }
-  //       this.formIntialized = true
-  //     })
-  //   }
-  //   else {
-  //     if (this.projecthubservice.all.length >= 3) {
-  //       console.log('hit 1')
-  //       if (this.projecthubservice.all.filter(x => x.includeInProjectDashboard == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInProjectDashboard.value != true) {
-  //         console.log('hit 2')
-  //         this.OperationalPerformanceForm.controls.includeInProjectDashboard.disable()
-  //       }
-  //       if (this.projecthubservice.all.filter(x => x.includeInCloseOut == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCloseOut.value != true) {
-  //         console.log('hit 2')
-  //         this.OperationalPerformanceForm.controls.includeInCloseOut.disable()
-  //       }
-  //       if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3 && this.OperationalPerformanceForm.controls.includeInCharter.value != true) {
-  //         console.log('hit 2')
-  //         this.OperationalPerformanceForm.controls.includeInCharter.disable()
-  //       }
-  //     }
-  //     this.formIntialized = true
-  //   }
+  ngOnInit() {
 
-   }
-  getStatus(): any {
-    return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == "2A4E375B-B9F8-4647-B4CB-71268B52A938")
+    if (this.mode == 'Project-Charter') {
+      this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
+      this.apiService.getCostFunding(this.id).then((res: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.fundingSourceData = po
+            this.lookupdata = resp
+            this.localcurrency = res.localCurrency
+            this.Amount = this.localcurrency.localCurrencyAbbreviation
+            this.labelText = `Amount (${this.Amount})`
+            this.dataIntialized = true
+
+            console.log(this.projecthubservice.all)
+            if (this.projecthubservice.all) {
+              if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3) {
+                if (this.FundingForm.value.includeInCharter != true) {
+                  this.FundingForm.controls['includeInCharter'].disable()
+                }
+              }
+              if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 2) {
+                if (this.FundingBCForm.value.includeInBusinessCase != true) {
+                  this.FundingBCForm.controls['includeInBusinessCase'].disable()
+                }
+              }
+            }
+            this.FundingForm.valueChanges.subscribe(res => {
+              this.projecthubservice.isFormChanged = true
+            })
+          })
+        })
+      })
+    }
+
+    if (this.mode != 'Project-Charter' && (this.optionType == 'recommended-option' || this.optionType == 'option-2' ||
+      this.optionType == 'option-3')) {
+      this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
+      this.apiService.getCostFunding(this.id).then((res: any) => {
+        this.portApiService.getfilterlist().then((po: any) => {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.fundingSourceData = po
+            this.lookupdata = resp
+            this.localcurrency = res.localCurrency
+            this.Amount = this.localcurrency.localCurrencyAbbreviation
+            this.labelText = `Amount (${this.Amount})`
+            this.dataIntialized = true
+
+            console.log(this.projecthubservice.all)
+            if (this.projecthubservice.all) {
+              if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 3) {
+                if (this.FundingForm.value.includeInCharter != true) {
+                  this.FundingForm.controls['includeInCharter'].disable()
+                }
+              }
+              if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 2) {
+                if (this.FundingBCForm.value.includeInBusinessCase != true) {
+                  this.FundingBCForm.controls['includeInBusinessCase'].disable()
+                }
+              }
+            }
+            this.FundingBCForm.valueChanges.subscribe(res => {
+              this.projecthubservice.isFormChanged = true
+            })
+          })
+        })
+      })
+    }
+
+
+
+
+
+    // this.FundingBCForm.valueChanges.subscribe(res => {
+    //   this.projecthubservice.isFormChanged = true
+    // })
+
   }
-  getIndicator(status: string): string {
-    if (status == "91F35D36-B94B-44C7-9234-4AE76DB19DBB") {
-      return 'Red'
-    }
-    else if (status == "7DFAAEDF-AB1C-4348-91B3-F2FE1C78237A") {
-      return 'Yellow'
-    }
-    else if (status == "B12BD411-EBC7-4CC0-A8C4-5F41B8C5FC17") {
-      return 'Green'
-    }
-    return 'Grey'
+
+
+  getfundingtype(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == 'b127f31e-aeae-4940-ba32-ddd0d4e5287b').sort((a, b) => {
+      return a.lookUpOrder - b.lookUpOrder;
+    })
+  }
+  getfundingintheplan(): any {
+    return this.lookupdata.filter(x => x.lookUpParentId == 'c58fb456-3901-4677-9ec5-f4eada7158e6').sort((a, b) => {
+      return b.lookUpOrder - a.lookUpOrder;
+    })
+  }
+
+  getPO(): string {
+    return this.fundingSourceData.portfolioOwner.filter(x => x.isPortfolioOwner == true)
+  }
+
+  getSource(source: string): string {
+    return source ? this.fundingSourceData.portfolioOwner.find(x => x.portfolioOwnerId == source).portfolioOwner : ''
   }
   submitfunding() {
-  //   this.projecthubservice.isFormChanged = false
-  //   var formValue = this.OperationalPerformanceForm.getRawValue()
-  //   var mainObj: any = {
-  //     projectId: this.projecthubservice.projectid,
-  //     status: formValue.status,
-  //     kpiid: Object.keys(formValue.kpiid).length > 0 ? formValue.kpiid.kpiid : '',
-  //     metric: formValue.metric,
-  //     currentState: formValue.currentState,
-  //     targetPerformance: formValue.targetPerformance,
-  //     actualPerformance: formValue.actualPerformance,
-  //     includeInProjectDashboard: formValue.includeInProjectDashboard,
-  //     //Common values end
-  //     keySuccessUniqueId: '',
-  //     includeInCharter: formValue.includeInCharter,
-  //     includeInCloseOut: formValue.includeInCloseOut,
-  //     includeinProposal: null,
-  //     ptrbid: '',
-  //     benefitDescriptionJustification: '',
-  //   }
-  //   if (this.projecthubservice.itemid != 'new') {
-  //     mainObj.keySuccessUniqueId = this.OperationalPerformance.keySuccessUniqueId
-  //     mainObj.includeInCharter = formValue.includeInCharter
-  //     mainObj.includeInCloseOut = formValue.includeInCloseOut
-  //     mainObj.includeinProposal = this.OperationalPerformance.includeinProposal
-  //     mainObj.ptrbid = this.OperationalPerformance.ptrbid
-  //     mainObj.benefitDescriptionJustification = this.OperationalPerformance.benefitDescriptionJustification
+    this.projecthubservice.isFormChanged = false
+    var funding = this.FundingForm.getRawValue()
+    var BCfunding = this.FundingBCForm.getRawValue()
+    console.log(this.optionType)
+    if (this.mode == 'Project-Charter') {
+      var mainObj = {
+        fundingUniqueId: "",
+        projectId: this.projecthubservice.projectid,
+        fundingTypeId: funding.fundingTypeId,
+        fundingSourceId: funding.fundingSourceId,
+        fundingIntheplan: funding.fundingIntheplan,
+        fundingAmount: funding.fundingAmount,
+        fundingNotes: funding.fundingNotes,
+        includeInCharter: funding.includeInCharter,
+        fundingAmountFxconv: funding.fundingAmountFxconv,
+        includeInBusinessCase: false
+      }
+      this.apiService.addFunding(mainObj).then(res => {
+        this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        })
 
-  //     this.apiService.editOperationalPerformanceSingle(mainObj).then(res => {
-  //       this.projecthubservice.submitbutton.next(true)
-  //       this.projecthubservice.successSave.next(true)
-  //       this.projecthubservice.toggleDrawerOpen('', '', [], '')
-  //     })
-  //   }
-  //   else {
-  //     this.apiService.addOperationalPerformanceSingle(mainObj).then(res => {
-  //       this.projecthubservice.submitbutton.next(true)
-  //       this.projecthubservice.successSave.next(true)
-  //       this.projecthubservice.toggleDrawerOpen('', '', [], '')
-  //     })
-  //   }
-   }
+      })
+    }
+    if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
+      var submitObj = {
+        fundingUniqueId: "",
+        businessFundingUniqueId: "",
+        businessOptionId: GlobalBusinessCaseOptions.OPTION_1,
+        projectId: this.projecthubservice.projectid,
+        fundingTypeId: BCfunding.fundingTypeId,
+        fundingSourceId: BCfunding.fundingSourceId,
+        fundingIntheplan: BCfunding.fundingIntheplan,
+        fundingAmount: BCfunding.fundingAmount,
+        fundingNotes: BCfunding.fundingNotes,
+        includeInCharter: false,
+        fundingAmountFxconv: BCfunding.fundingAmountFxconv,
+        includeInBusinessCase: BCfunding.includeInBusinessCase
+      }
+      this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_1, this.projecthubservice.projectid).then(res => {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      })
+    }
+
+    if (this.mode != 'Project-Charter' && this.optionType == 'option-2') {
+      var submitObj = {
+        fundingUniqueId: "",
+        businessFundingUniqueId: "",
+        businessOptionId: GlobalBusinessCaseOptions.OPTION_2,
+        projectId: this.projecthubservice.projectid,
+        fundingTypeId: BCfunding.fundingTypeId,
+        fundingSourceId: BCfunding.fundingSourceId,
+        fundingIntheplan: BCfunding.fundingIntheplan,
+        fundingAmount: BCfunding.fundingAmount,
+        fundingNotes: BCfunding.fundingNotes,
+        includeInCharter: false,
+        fundingAmountFxconv: BCfunding.fundingAmountFxconv,
+        includeInBusinessCase: BCfunding.includeInBusinessCase
+      }
+      this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_2, this.projecthubservice.projectid).then(res => {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      })
+    }
+    if (this.mode != 'Project-Charter' && this.optionType == 'option-3') {
+      var submitObj = {
+        fundingUniqueId: "",
+        businessFundingUniqueId: "",
+        businessOptionId: GlobalBusinessCaseOptions.OPTION_3,
+        projectId: this.projecthubservice.projectid,
+        fundingTypeId: BCfunding.fundingTypeId,
+        fundingSourceId: BCfunding.fundingSourceId,
+        fundingIntheplan: BCfunding.fundingIntheplan,
+        fundingAmount: BCfunding.fundingAmount,
+        fundingNotes: BCfunding.fundingNotes,
+        includeInCharter: false,
+        fundingAmountFxconv: BCfunding.fundingAmountFxconv,
+        includeInBusinessCase: BCfunding.includeInBusinessCase
+      }
+      console.log(submitObj)
+      this.apiService.addBCFunding(submitObj, GlobalBusinessCaseOptions.OPTION_3, this.projecthubservice.projectid).then(res => {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      })
+    }
+  }
 
 }

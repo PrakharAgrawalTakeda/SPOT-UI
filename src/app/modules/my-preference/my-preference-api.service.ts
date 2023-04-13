@@ -30,4 +30,10 @@ export class MyPreferenceApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async getMasterStandardMilestoneSets(userId: string){
+      var userid = GlobalVariables.apiurl+"StandardMilestoneSet/GetMasterTemplates/"+ userId
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
 }

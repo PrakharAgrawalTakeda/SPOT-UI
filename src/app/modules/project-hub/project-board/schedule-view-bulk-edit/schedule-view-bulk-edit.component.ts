@@ -2270,7 +2270,17 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     submitScheduleBusinessCase() {
         this.projecthubservice.isFormChanged = false
         this.formValueForOptions()
-        this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj, this.id).then(res => {
+        let optionId = "";
+        if (this.router.url.includes('option-3')) {
+            optionId= GlobalBusinessCaseOptions.OPTION_3
+        }
+        if (this.router.url.includes('option-2')) {
+            optionId= GlobalBusinessCaseOptions.OPTION_2
+        }
+        if (this.router.url.includes('recommended-option')) {
+            optionId== GlobalBusinessCaseOptions.OPTION_1
+        }
+        this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj,optionId, this.id).then(res => {
             this.optionInfoData.executionEndDate =this.optionExecutions.controls.optionExecutionEnd.value? moment(this.optionExecutions.controls.optionExecutionEnd.value).format('YYYY-MM-DD[T]HH:mm:ss') : null;
             this.optionInfoData.executionStartDate =this.optionExecutions.controls.optionExecutionStart.value ?  moment(this.optionExecutions.controls.optionExecutionStart.value).format('YYYY-MM-DD[T]HH:mm:ss') : null;
             this.optionInfoData.businessOptionId = this.optionInfoData.businessOptionId ? this.optionInfoData.businessOptionId : this.optionId
@@ -2682,7 +2692,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             function: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == sM.funtionalOwnerId)),
             functionGroupId: new FormControl(sM.funtionalOwnerId),
             completionDate: new FormControl(''),
-            comments: new FormControl(sM.comment),
+            comments: this.mode != 'Normal' ? new FormControl('') : new FormControl(sM.comment),
             includeInReport: this.mode == 'Normal' ? new FormControl(limitPassedNormal == false ? sM.includeInReport : false) : new FormControl(false),
             includeInCharter: this.mode == 'Project-Charter' ? new FormControl(limitPassedCharter == false ? sM.includeInReport : false) : new FormControl(false),
             includeInBusinessCase: this.mode == 'Business-Case' ? new FormControl(limitPassedBusinessCase == false ? sM.includeInReport : false) : new FormControl(false),
@@ -2703,7 +2713,7 @@ console.log("NEW MILESTONE BASELINE DATE", JSON.stringify(baselinedates2))
             includeInCloseout: (limitPassedCloseOut && this.mode == 'Project-Close-Out') ? sM.includeInReport : false,
             includeInReport: (limitPassedNormal && this.mode == 'Normal') ? sM.includeInReport : false,
             indicator: "Grey",
-            milestone: sM.milestone,
+            milestone: this.mode != 'Normal' ? "" : new FormControl(sM.comment),
             milestoneType: sM.milestoneType,
             plannedFinish: null,
             projectId: this.id,
