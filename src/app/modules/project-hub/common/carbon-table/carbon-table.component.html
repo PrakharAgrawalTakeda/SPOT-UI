@@ -23,7 +23,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Units" prop="emunit" [flexGrow]="2">
+        <ngx-datatable-column name="Units" prop="emunit" [flexGrow]="1">
             <ng-template let-column="column" ngx-datatable-header-template>
                 <ng-container>
                     <div style="margin-bottom: -23px;">
@@ -34,7 +34,7 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p class="unit">{{value | number:'1.0-0'}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="UoM" prop="standardUoM" [flexGrow]="1">
@@ -53,7 +53,7 @@
                 </ng-container>
             </ng-template>
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p class="unit">{{value | number:'1.4-4'}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1.8">

@@ -5,6 +5,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-water-waste-bulk-edit',
@@ -19,9 +20,11 @@ export class WaterWasteBulkEditComponent {
   editable: boolean = false
   projectViewDetails: any = {}
   waterWasteDb = []
+  waterwasteFormValue = []
   submitObj = []
   WaterWaste = []
   waterwasteValues: any
+  ProjectData: any
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl('')
   })
@@ -72,9 +75,11 @@ export class WaterWasteBulkEditComponent {
 
   dataloader() {
     this.CAPSform.patchValue({
-      impactRealizationDate: this.projecthubservice.all[1]
+      impactRealizationDate: this.projecthubservice.all[1].emissionsImpactRealizationDate
     })
+    this.ProjectData = this.projecthubservice.all[1]
     this.WaterWaste = this.projecthubservice.all[0]
+    this.WaterWaste = this.sortbyNameandType(this.WaterWaste)
     this.waterwasteValues = this.projecthubservice.all[3]
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
     for(var j=0;j<waterValues.length;j++){
@@ -100,6 +105,23 @@ export class WaterWasteBulkEditComponent {
     }
     this.viewContent = true
   }
+
+  sortbyNameandType(array: any): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if (a.wwstream === "") {
+        return -1;
+      }
+      if (b.wwstream == "") {
+        return 1;
+      }
+      if (a.wwstream === b.wwstream) {
+        return a.wwtype < b.wwtype ? -1 : (a.wwtype > b.wwtype) ? 1 : 0;
+      } else {
+        return a.wwstream < b.wwstream ? -1 : 1;
+      }
+    }) : array
+  }
+  
 
   addWaterWaste() {
     var j = [{}]
@@ -199,6 +221,134 @@ export class WaterWasteBulkEditComponent {
   }
 
   submitWaterWaste() {
+    this.submitPrep()
+    if (this.waterwasteFormValue.filter(x => x.wwstream == "").length > 0) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please select a value in Water/Waste.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else if (this.waterwasteFormValue.filter(x => x.wwtype == "").length > 0) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please select a Type.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else if ((this.waterWasteDb.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0 ) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please enter a value for Impact Realization Date.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else {
+        console.log(this.waterWasteDb)
+        this.projecthubservice.isFormChanged = false
+        this.submitPrep()
+        this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
+          if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
+            var formValue = this.CAPSform.getRawValue()
+            var mainObj = this.ProjectData
+            
+            mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+
+            this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+              this.projecthubservice.isFormChanged = false
+              this.projecthubservice.isNavChanged.next(true)
+              this.projecthubservice.submitbutton.next(true)
+              this.projecthubservice.successSave.next(true)
+              this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            })
+          }
+          else {
+            this.projecthubservice.isFormChanged = false
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            this.projecthubservice.isNavChanged.next(true)
+            this.projecthubservice.successSave.next(true)
+          }
+        })
+    }
+  }
+
+  submitPrep() {
+    this.waterWasteDb = []
+    this.waterwasteFormValue = []
+    var formValue = this.waterWasteForm.getRawValue()
+    for (var i of formValue) {
+      var id = i.wwstream == "" || i.wwtype == "" ? "" : this.waterwasteValues.filter(x => x.wwstream == i.wwstream && x.wwtype == i.wwtype)[0].wwsourceMasterUniqueId;
+      this.waterWasteDb.push({
+        emdataWwid: i.emdataWwid,
+        projectId: this.projecthubservice.projectid,
+        wwsourceMasterUniqueId: id,
+        emwwunit: i.emwwunit == "" ? null : i.emwwunit,
+        emwwunitCost: i.emwwunitCost == "" ? null : i.emwwunitCost,
+        embasisOfEstimate: i.embasisOfEstimate
+      })
+      this.waterwasteFormValue.push({
+        emdataWwid: i.emdataWwid,
+        projectId: this.projecthubservice.projectid,
+        wwsourceMasterUniqueId: id,
+        emwwunit: i.emwwunit,
+        emwwunitCost: i.emwwunitCost,
+        embasisOfEstimate: i.embasisOfEstimate,
+        wwtype: i.wwtype,
+        wwstream: i.wwstream
+      })
+    }
 
   }
 }

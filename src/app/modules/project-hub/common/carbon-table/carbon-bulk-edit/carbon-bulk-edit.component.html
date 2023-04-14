@@ -43,7 +43,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!carbonTableEditStack.includes(rowIndex)" (click)="carbonTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{value}}</p>
+                            <p class="unit">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="carbonForm.controls[rowIndex]" *ngIf="carbonTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="emunit" name="emunit" [decimalCount]="0" [inputType]="'Number'"
@@ -70,11 +70,11 @@
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!carbonTableEditStack.includes(rowIndex)" (click)="carbonTableEditRow(rowIndex)">
-                            <!-- <p *ngIf="!value && value!=0">&nbsp;</p> -->
-                            <p style="text-align:right">{{value}}</p>
+                            <p *ngIf="!value && value!=0">&nbsp;</p>
+                            <p class="unit">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="carbonForm.controls[rowIndex]" *ngIf="carbonTableEditStack.includes(rowIndex)">
-                            <spot-input class="w-full" formControlName="unitCost" name="unitCost" [decimalCount]="0" [inputType]="'Number'"
+                            <spot-input class="w-full" formControlName="unitCost" name="unitCost" [decimalCount]="4" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="unitCost">
                             </spot-input>
                         </form>
