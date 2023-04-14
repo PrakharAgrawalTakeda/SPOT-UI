@@ -11,6 +11,24 @@
         <div class="flex justify-between items-center">
             <div></div>
             <div class="flex justify-between items-center gap-3">
+                <form [formGroup]="standardMilestonesDetailsForm" >
+                    <div class="flex justify-end items-center gap-3 pl-6 mt-4">
+                        <div class="flex">
+                            <a class="self-center mr-2">Milestone Set</a>
+                            <spot-input class="w-64" formControlName="milestoneSetName"  [showLabel]="true">
+                            </spot-input>
+                        </div>
+                        <spot-singleselect-autocomplete
+                            formControlName="portfolioOwner" class="w-full"
+                                                         [label]="'Portfolio Owner'"
+                                                        [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
+                                                        [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'"
+                                                        [customSortPointer]="'pfid'"
+                                                        [hint]="'The group which is responsible for the oversight and process adherence of the record'">
+                        </spot-singleselect-autocomplete>
+
+                    </div>
+                </form>
                 <div class="pr-3">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                             [color]="'primary-200'"
@@ -20,81 +38,75 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-y-hidden h-[80vh] pl-3" id="keyAssumptionsTableDiv" >
+        <div  class="overflow-y-hidden h-[80vh] pl-3"  >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
-                           [rows]="standardMilestones"
-                           #keyAssumptionsTable>
-                <ngx-datatable-column name="Key Assumption" prop="keyAssumption" [flexGrow]="5"
+                           [rows]="standardMilestones">
+                <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="5"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!kaTableEditStack.includes(rowIndex)"
-                           (click)="kaTableEditRow(rowIndex)">
+                        <a *ngIf="!smTableEditStack.includes(rowIndex)"
+                           (click)="smTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
-                              *ngIf="kaTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="keyAssumption" [showLabel]="false"
+                        <form [formGroup]="standardMilestonesForm.controls[rowIndex]"
+                              *ngIf="smTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="milestone" [showLabel]="false"
                                            [maxLength]=1000></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Why is This Assumption Valid" prop="assumptionRationale" [flexGrow]="5" *ngIf="viewElementChecker('whyIsThisAssumptionValid')"
+                <ngx-datatable-column name="Functional Owner" prop="funtionalOwnerId" [resizeable]="false" [sortable]="false"
+                                      [width]="200">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!smTableEditStack.includes(rowIndex)" (click)="smTableEditRow(rowIndex)">
+                            <p *ngIf="value == ''">&nbsp;</p>
+                            {{getLookUpName(value)}}
+                        </a>
+                        <form [formGroup]="standardMilestonesForm.controls[rowIndex]" *ngIf="smTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="funtionalOwnerId"  [placeholder]="'Function'"
+                                         [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
+                                         [valuePointer]="'lookUpName'">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Comment" prop="comment" [flexGrow]="5"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!kaTableEditStack.includes(rowIndex)"
-                           (click)="kaTableEditRow(rowIndex)">
+                        <a *ngIf="!smTableEditStack.includes(rowIndex)"
+                           (click)="smTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
                         <div class="w-full px-1">
-                            <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
-                                  *ngIf="kaTableEditStack.includes(rowIndex)">
-                                <spot-textarea formControlName="assumptionRationale" [showLabel]="false"
+                            <form [formGroup]="standardMilestonesForm.controls[rowIndex]"
+                                  *ngIf="smTableEditStack.includes(rowIndex)">
+                                <spot-textarea formControlName="comment" [showLabel]="false"
                                                [maxLength]=1000></spot-textarea>
                             </form>
                         </div>
 
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Charter (Max 5)" prop="includeInCharter" [flexGrow]="1" *ngIf="viewElementChecker('includeInCharter')"
+                <ngx-datatable-column name="Included In Dashboard" prop="includeInReport" [flexGrow]="1"
                                       [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!kaTableEditStack.includes(rowIndex)"
-                           (click)="kaTableEditRow(rowIndex)">
+                        <a *ngIf="!smTableEditStack.includes(rowIndex)"
+                           (click)="smTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
                             <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                         </a>
-                        <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
-                              *ngIf="kaTableEditStack.includes(rowIndex)"
+                        <form [formGroup]="standardMilestonesForm.controls[rowIndex]"
+                              *ngIf="smTableEditStack.includes(rowIndex)"
                               class="h-[45px]">
                             <mat-slide-toggle
-                                [matTooltip]="this.keyAssumptionForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 5 can be selected at a time in the charter' : null"
-                                (change)="disabler()" class="h-full overflow-hidden"
-                                formControlName="includeInCharter">
-                            </mat-slide-toggle>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Business Case (Max 4)" prop="includeInBusinessCase" [flexGrow]="1" *ngIf="viewElementChecker('includeInBusinessCase')"
-                                      [draggable]="false" [resizeable]="false" [sortable]="false">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!kaTableEditStack.includes(rowIndex)"
-                           (click)="kaTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>
-                            <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
-                        </a>
-                        <form [formGroup]="keyAssumptionForm.controls[rowIndex]"
-                              *ngIf="kaTableEditStack.includes(rowIndex)"
-                              class="h-[45px]">
-                            <mat-slide-toggle
-                                [matTooltip]="this.keyAssumptionForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 4 can be selected at a time in the business case' : null"
-                                (change)="disabler()" class="h-full overflow-hidden"
-                                formControlName="includeInBusinessCase">
+                                class="h-full overflow-hidden"
+                                formControlName="includeInReport">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
