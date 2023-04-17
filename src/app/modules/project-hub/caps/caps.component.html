@@ -51,7 +51,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="EnergyCost" name="EnergyCost"
                             [label]="''" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false">
+                                [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
@@ -67,7 +67,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         </div>
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false">
+                                [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
@@ -80,7 +80,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         </div>
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false">
+                                [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
@@ -88,7 +88,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <div *ngIf="this.showDefault" class="label">
                         <spot-input class="w-full read-only" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
                             [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false">
+                                [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
@@ -101,13 +101,13 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-        <app-carbon-table [Editable]="editableEnv && editable"></app-carbon-table>
+        <app-carbon-table [Editable]="editableEnv && editable" [data]="carbonngx" [ProjectData]="CAPSdata"></app-carbon-table>
     </div>
     </div>
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-biogenics-table [Editable]="editableEnv && editable"></app-biogenics-table>
+            <app-biogenics-table [Editable]="editableEnv && editable" [data]="Biogenicsngx" [ProjectData]="CAPSdata"></app-biogenics-table>
         </div>
     </div>
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
@@ -125,7 +125,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-water-waste-table [Editable]="editableEnv && editable"></app-water-waste-table>
+            <app-water-waste-table [Editable]="editableEnv && editable" [data]="WaterWastengx" [ProjectData]="CAPSdata" [WaterWasteParam]="WaterWasteParam"></app-water-waste-table>
         </div>
     </div>
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
