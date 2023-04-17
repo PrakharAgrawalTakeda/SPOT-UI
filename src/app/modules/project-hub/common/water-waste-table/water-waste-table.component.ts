@@ -17,6 +17,9 @@ export class WaterWasteTableComponent {
   unitCost = ""
   waterWasteBulkEditData:any = []
   @Input() Editable: boolean = false
+  @Input() data: any
+  @Input() ProjectData: any
+  @Input() WaterWasteParam: any
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
@@ -34,45 +37,29 @@ export class WaterWasteTableComponent {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
-        if (res.localCurrency == null){
+      if (this.ProjectData.localCurrency == null){
           this.unitCost = "Unit Cost ()"
         }
         else{
-        this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
+        this.unitCost = "Unit Cost (" + this.ProjectData.localCurrency.localCurrencyAbbreviation + ")"
         }
         if(this.Editable == false){
           this.WaterWastengx = null
         }
         else{
-        var wwParam = res.waterWasteParameter
-        var wwData = res.waterWasteData
-        var WaterWastengx = []
-        if (wwParam != null && wwData != null) {
-          for (var i = 0; i < wwData.length; i++){
-            var data = []
-            data = wwParam.filter(x => x.wwsourceMasterUniqueId == wwData[i].wwsourceMasterUniqueId)
-            var wwObject = {
-              ...data[0],
-              ...wwData[i]
-            }
-            WaterWastengx.push(wwObject)
-          }
-          this.WaterWastengx = WaterWastengx
-        }
+          this.WaterWastengx = this.data
       }
         this.waterWasteBulkEditData=[]
         this.waterWasteBulkEditData.push(this.WaterWastengx)
-        this.waterWasteBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
-        if (res.localCurrency == null) {
+      this.waterWasteBulkEditData.push(this.ProjectData)
+      if (this.ProjectData.localCurrency == null) {
           this.waterWasteBulkEditData.push("")
         }
         else {
-        this.waterWasteBulkEditData.push(res.localCurrency.localCurrencyAbbreviation)
+        this.waterWasteBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
         }
-        this.waterWasteBulkEditData.push(res.waterWasteParameter)
+      this.waterWasteBulkEditData.push(this.WaterWasteParam)
         this.viewContent = true
-      })
     })
   }
 

@@ -17,12 +17,12 @@
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
-                <div class="w-full mt-4 mb-6" style="margin-left: 47px;padding-left: 12px; padding-top: 19px;">
+                <!-- <div class="w-full mt-4 mb-6" style="margin-left: 47px;padding-left: 12px; padding-top: 19px;">
                     <spot-toggle class="w-full" formControlName="NoCarbonImpact" [mode]="'toggle'" [label]="'No Carbon Impact'">
                     </spot-toggle>
-                </div>
+                </div> -->
             </form>
-            <button class="ml-4 text-primary bg-gray-200" *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS && !CAPSform.controls.NoCarbonImpact.value"
+            <button class="ml-4 text-primary bg-gray-200" *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS"
                 mat-flat-button [color]="'primary-200'" (click)="addBiogenics()">
                 <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
             </button>
@@ -51,10 +51,10 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p class="emission">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
-                            <spot-input class="w-full" formControlName="biogenicEmissionFactor" name="biogenicEmissionFactor" [decimalCount]="0" [inputType]="'Number'"
+                            <spot-input class="w-full" formControlName="biogenicEmissionFactor" name="biogenicEmissionFactor" [decimalCount]="3" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'Emission Factor (kg CO2/kWh)'">
                             </spot-input>
                         </form>
@@ -65,7 +65,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p class="unit">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]"
                             *ngIf="biogenicsTableEditStack.includes(rowIndex)">
@@ -94,11 +94,11 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p class="cost">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]"
                             *ngIf="biogenicsTableEditStack.includes(rowIndex)">
-                            <spot-input class="w-full" formControlName="biogenicUnitCost" name="biogenicUnitCost" [decimalCount]="0" [inputType]="'Number'"
+                            <spot-input class="w-full" formControlName="biogenicUnitCost" name="biogenicUnitCost" [decimalCount]="4" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'Unit Cost'">
                             </spot-input>
                         </form>

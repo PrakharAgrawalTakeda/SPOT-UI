@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
+import moment from 'moment';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -32,6 +33,8 @@ export class CarbonBulkEditComponent {
   submitObj = []
   unitCost = ""
   Carbon  = []
+  envPortfolio: any
+  ProjectData: any
   noCarbon: boolean = false
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
@@ -58,33 +61,21 @@ export class CarbonBulkEditComponent {
   }
 
   dataloader() {
-    this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
       this.CAPSform.patchValue({
-        impactRealizationDate: res.projectData.emissionsImpactRealizationDate
+        impactRealizationDate: this.projecthubservice.all[2].emissionsImpactRealizationDate
       })
-      if (res.localCurrency == null) {
-        this.unitCost = "Unit Cost ()"
-      }
-      else {
-      this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
-      }
-      this.noCarbon = res.projectData.noCarbonImpact
-      this.Carbon = this.projecthubservice.all
+      this.ProjectData = this.projecthubservice.all[2]
+      this.envPortfolio = this.projecthubservice.all[4]
+      this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
+      this.noCarbon = this.projecthubservice.all[1]
+      this.Carbon = this.projecthubservice.all[0]
       for (var i of this.Carbon) {
         this.carbonDb.push(i)
         this.carbonForm.push(new FormGroup({
           emsourceMasterUniqueId: new FormControl(i.emsourceMasterUniqueId),
-          // source: new FormControl(i.source),
-          // emscope: new FormControl(i.emscope),
-          // isActive: new FormControl(i.isActive),
-          // emtype: new FormControl(i.emtype),
           emsourceId: new FormControl(i.emsourceId),
           emsourceName: new FormControl(i.emsourceName),
           standardUoM: new FormControl(i.standardUoM),
-          // comments: new FormControl(i.comments),
-          // gjequivalent: new FormControl(i.gjequivalent),
-          // correspondingFactor: new FormControl(i.correspondingFactor),
-          // correspondingFactorName: new FormControl(i.correspondingFactorName),
           emdataUniqueId: new FormControl(i.emdataUniqueId),
           projectId: new FormControl(this.projecthubservice.projectid),
           emportfolioOwnerId: new FormControl(i.emportfolioOwnerId),
@@ -95,7 +86,6 @@ export class CarbonBulkEditComponent {
         }))
       }
       this.viewContent = true
-    })
   }
 
   changeChecker() {
@@ -125,7 +115,76 @@ export class CarbonBulkEditComponent {
     }
   }
 
-  submitCarbon(){
+  submitCarbon() {
+    this.submitPrep()
+    if ((this.carbonDb.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please enter a value for Impact Realization Date.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else {
+      console.log(this.carbonDb)
+      this.projecthubservice.isFormChanged = false
+      this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
+        if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
+          var formValue = this.CAPSform.getRawValue()
+          var mainObj = this.ProjectData
+
+          mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+
+          this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+            this.projecthubservice.isFormChanged = false
+            this.projecthubservice.isNavChanged.next(true)
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          })
+        }
+        else {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.successSave.next(true)
+        }
+      })
+    }
+  }
+
+  submitPrep() {
+    this.carbonDb = []
+    var formValue = this.carbonForm.getRawValue()
+    for (var i of formValue) {
+      this.carbonDb.push({
+        emdataUniqueId: i.emdataUniqueId == null || i.emdataUniqueId == "" ? "" : i.emdataUniqueId,
+        projectId: this.projecthubservice.projectid,
+        emsourceId: i.emsourceId,
+        emunit: i.emunit == "" || isNaN(i.emunit) ? null : i.emunit,
+        unitCost: i.unitCost == "" || isNaN(i.unitCost) ? null : i.unitCost,
+        emimpactTonsCo2year: i.emimpactTonsCo2year == "" || isNaN(i.emimpactTonsCo2year) ? null : i.emimpactTonsCo2year,
+        embasisOfEstimate : i.embasisOfEstimate,
+        emportfolioOwnerId: this.envPortfolio
+      })
+    }
 
   }
 

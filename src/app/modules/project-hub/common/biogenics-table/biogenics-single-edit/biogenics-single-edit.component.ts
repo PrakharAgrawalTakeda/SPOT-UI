@@ -46,10 +46,9 @@ export class BiogenicsSingleEditComponent {
   }
 
   dataloader() {
-    // this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
       this.biogenicsData = this.projecthubservice.all[0]
       this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
-    this.impactRealizationDate = this.projecthubservice.all[2]
+    this.impactRealizationDate = this.projecthubservice.all[2].projectData.emissionsImpactRealizationDate
         this.BiogenicsForm.patchValue({
           biogenicDataId: "",
           projectId: this.projecthubservice.projectid,
@@ -65,7 +64,6 @@ export class BiogenicsSingleEditComponent {
       this.BiogenicsForm.valueChanges.subscribe(res => {
         this.projecthubservice.isFormChanged = true
       })
-    // })
   }
 
   GetSource(){
@@ -75,6 +73,9 @@ export class BiogenicsSingleEditComponent {
   submitBiogenics(){
     this.projecthubservice.isFormChanged = false
     var formValue = this.BiogenicsForm.getRawValue()
+    formValue.biogenicUnit = isNaN(formValue.biogenicUnit) ? null : formValue.biogenicUnit
+    formValue.biogenicEmissionFactor = isNaN(formValue.biogenicEmissionFactor) ? null : formValue.biogenicEmissionFactor
+    formValue.biogenicUnitCost = isNaN(formValue.biogenicUnitCost) ? null : formValue.biogenicUnitCost
     if (formValue.biogenicMasterUniqueId == "") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please select a value for Emission Source.",
