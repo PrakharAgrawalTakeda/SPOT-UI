@@ -54,4 +54,10 @@ export class MyPreferenceApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async editStandardMilestoneSet(body,projectId){
+      var link = GlobalVariables.apiurl+"StandardMilestoneSet/Edit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
 }

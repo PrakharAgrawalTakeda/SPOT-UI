@@ -43,7 +43,7 @@
                            columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="standardMilestones">
-                <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="5"
+                <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="1"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -60,7 +60,7 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Functional Owner" prop="funtionalOwnerId" [resizeable]="false" [sortable]="false"
-                                      [width]="200">
+                                      [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!smTableEditStack.includes(rowIndex)" (click)="smTableEditRow(rowIndex)">
                             <p *ngIf="value == ''">&nbsp;</p>
@@ -74,7 +74,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Comment" prop="comment" [flexGrow]="5"
+                <ngx-datatable-column name="Comment" prop="comment" [flexGrow]="1"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -93,7 +93,7 @@
 
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Dashboard" prop="includeInReport" [flexGrow]="1"
+                <ngx-datatable-column name="Included In Dashboard" prop="includeInReport" [flexGrow]="0.5"
                                       [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!smTableEditStack.includes(rowIndex)"
@@ -111,7 +111,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [resizeable]="false" [sortable]="false" [draggable]="false" [flexGrow]="1">
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [draggable]="false" [flexGrow]="0.2">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                                  ngx-datatable-cell-template>
                         <div class="flex justify-start items-center gap-6">
