@@ -77,7 +77,7 @@ export class WaterWasteSingleEditComponent {
 
   dataloader() {
     this.unitCost = "Unit Cost (" + this.projecthubservice.all[2] + ")"
-    this.impactRealizationDate = this.projecthubservice.all[1].emissionsImpactRealizationDate
+    this.impactRealizationDate = this.projecthubservice.all[1].projectData.emissionsImpactRealizationDate
     this.waterwasteValues = this.projecthubservice.all[3]
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
     for (var j = 0; j < waterValues.length; j++) {

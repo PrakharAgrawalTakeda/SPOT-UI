@@ -75,7 +75,7 @@ export class WaterWasteBulkEditComponent {
 
   dataloader() {
     this.CAPSform.patchValue({
-      impactRealizationDate: this.projecthubservice.all[1].emissionsImpactRealizationDate
+      impactRealizationDate: this.projecthubservice.all[1].projectData.emissionsImpactRealizationDate
     })
     this.ProjectData = this.projecthubservice.all[1]
     this.WaterWaste = this.projecthubservice.all[0]
@@ -299,9 +299,9 @@ export class WaterWasteBulkEditComponent {
         this.projecthubservice.isFormChanged = false
         this.submitPrep()
         this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
-          if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
+          if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
             var formValue = this.CAPSform.getRawValue()
-            var mainObj = this.ProjectData
+            var mainObj = this.ProjectData.projectData
             
             mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
 
