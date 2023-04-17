@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { ProjectApiService } from "../../../project-hub/common/project-api.service";
-import { AuthService } from "../../../../core/auth/auth.service";
-import { RoleService } from "../../../../core/auth/role.service";
-import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../../@fuse/services/confirmation";
-import { Router } from "@angular/router";
-import { MyPreferenceService } from "../../my-preference.service";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import {Component} from '@angular/core';
+import {ProjectApiService} from "../../../project-hub/common/project-api.service";
+import {AuthService} from "../../../../core/auth/auth.service";
+import {RoleService} from "../../../../core/auth/role.service";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {Router} from "@angular/router";
+import {MyPreferenceService} from "../../my-preference.service";
+import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {MyPreferenceApiService} from "../../my-preference-api.service";
 import {MsalService} from "@azure/msal-angular";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
@@ -17,8 +17,8 @@ import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.servi
 })
 export class MilestoneSetViewEditComponent {
     constructor(public myPreferenceApiService: MyPreferenceApiService, public apiService: ProjectApiService, public myPreferenceService: MyPreferenceService, public authService: AuthService,
-                public role: RoleService,private msalService: MsalService,  private portApiService: PortfolioApiService,
-        public fuseAlert: FuseConfirmationService, private router: Router) {
+                public role: RoleService, private msalService: MsalService, private portApiService: PortfolioApiService,
+                public fuseAlert: FuseConfirmationService, private router: Router) {
         this.standardMilestonesForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
                 this.formValue()
@@ -41,8 +41,18 @@ export class MilestoneSetViewEditComponent {
     mainObj: any = {}
     standardMilestonesForm = new FormArray([])
     standardMilestonesDetailsForm = new FormGroup({
-        milestoneSetName : new FormControl(""),
-        portfolioOwner : new FormControl(null)
+        milestoneTemplateId: new FormControl(""),
+        milestonesetId: new FormControl(""),
+        portfolioId: new FormControl(""),
+        portfolioOwner: new FormControl(null),
+        milestoneSet: new FormControl(""),
+        templateOwner: new FormControl(""),
+        templateOwnerName: new FormControl(""),
+        createdDate: new FormControl(""),
+        templateIsGlobal: new FormControl(null),
+        modifiedTemplateOwner: new FormControl(""),
+        modifiedDate: new FormControl(""),
+        templateDetails: new FormArray([])
     })
 
     ngOnInit(): void {
@@ -52,39 +62,59 @@ export class MilestoneSetViewEditComponent {
     dataloader() {
         this.portApiService.getfilterlist().then(filterres => {
             this.filterCriteria = filterres
-
-            if (this.standardMilestones.length > 0) {
-                this.standardMilestonesDb = this.standardMilestones.map(x => {
-                    return {
-                        "milestoneTemplateId": x.keyAssumptionUniqueId,
-                        "milestoneId": x.milestoneTemplateId,
-                        "milestoneInternalId": x.milestoneInternalId,
-                        "milestone": x.milestone,
-                        "funtionalOwnerId": x.funtionalOwnerId,
-                        "comment": x.comment,
-                        "includeInReport": x.includeInReport,
-                        "sortOrder": x.sortOrder,
-                        "milestoneType": x.milestoneType,
-                    }
+            if (this.myPreferenceService.itemid != "new") {
+                this.myPreferenceApiService.getDetails(this.myPreferenceService.itemid).then((res: any) => {
+                    this.mainObj = res
+                    this.standardMilestonesDetailsForm.patchValue({
+                        milestoneTemplateId: res.milestoneTemplateId,
+                        milestonesetId: res.milestonesetId,
+                        portfolioId: res.portfolioId,
+                        portfolioOwner: res.portfolioOwner,
+                        milestoneSet: res.milestoneSet,
+                        templateOwner: res.templateOwner,
+                        templateOwnerName: res.templateOwnerName,
+                        createdDate: res.createdDate,
+                        templateIsGlobal: res.templateIsGlobal,
+                        modifiedTemplateOwner: res.modifiedTemplateOwner,
+                        modifiedDate: res.modifiedDate,
+                        templateDetails: res.templateDetails
+                    })
+                    this.standardMilestones = res.templateDetails;
+                    this.myPreferenceService.isFormChanged = false
+                    this.viewContent = true;
                 })
-                for (var i of this.standardMilestones) {
-                    this.standardMilestones.push(new FormGroup({
-                        milestoneTemplateId: new FormControl(i.milestoneTemplateId),
-                        milestoneId: new FormControl(i.milestoneId),
-                        milestoneInternalId: new FormControl(i.milestoneInternalId),
-                        milestone: new FormControl(i.milestone),
-                        funtionalOwnerId: new FormControl(i.funtionalOwnerId),
-                        comment: new FormControl(i.comment),
-                        includeInReport: new FormControl(i.includeInReport),
-                        sortOrder: new FormControl(i.sortOrder),
-                        milestoneType: new FormControl(i.milestoneType),
-                    }))
+            } else {
+                if (this.standardMilestones.length > 0) {
+                    this.standardMilestonesDb = this.standardMilestones.map(x => {
+                        return {
+                            "milestoneTemplateId": x.keyAssumptionUniqueId,
+                            "milestoneId": x.milestoneTemplateId,
+                            "milestoneInternalId": x.milestoneInternalId,
+                            "milestone": x.milestone,
+                            "funtionalOwnerId": x.funtionalOwnerId,
+                            "comment": x.comment,
+                            "includeInReport": x.includeInReport,
+                            "sortOrder": x.sortOrder,
+                            "milestoneType": x.milestoneType,
+                        }
+                    })
+                    for (var i of this.standardMilestones) {
+                        this.standardMilestones.push(new FormGroup({
+                            milestoneTemplateId: new FormControl(i.milestoneTemplateId),
+                            milestoneId: new FormControl(i.milestoneId),
+                            milestoneInternalId: new FormControl(i.milestoneInternalId),
+                            milestone: new FormControl(i.milestone),
+                            funtionalOwnerId: new FormControl(i.funtionalOwnerId),
+                            comment: new FormControl(i.comment),
+                            includeInReport: new FormControl(i.includeInReport),
+                            sortOrder: new FormControl(i.sortOrder),
+                            milestoneType: new FormControl(i.milestoneType),
+                        }))
+                    }
                 }
+                this.viewContent = true;
             }
-            this.viewContent = true;
-        })
-
-
+        });
     }
 
     formValue() {
@@ -113,7 +143,7 @@ export class MilestoneSetViewEditComponent {
             milestonesetId: '',
             portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner.portfolioOwnerId,
             portfolioOwner: "",
-            milestoneSet: this.standardMilestonesDetailsForm.value.milestoneSetName,
+            milestoneSet: this.standardMilestonesDetailsForm.value.milestoneSet,
             templateOwner: this.msalService.instance.getActiveAccount().localAccountId,
             templateOwnerName: "",
             createdDate: "",
@@ -132,7 +162,7 @@ export class MilestoneSetViewEditComponent {
             milestone: '',
             funtionalOwnerId: '',
             comment: '',
-            includeInReport:false,
+            includeInReport: false,
             sortOrder: '',
             milestoneType: '',
         }]
@@ -143,7 +173,7 @@ export class MilestoneSetViewEditComponent {
             milestone: new FormControl(''),
             funtionalOwnerId: new FormControl(''),
             comment: new FormControl(''),
-            includeInReport:new FormControl(false),
+            includeInReport: new FormControl(false),
             sortOrder: new FormControl(''),
             milestoneType: new FormControl(''),
         }))
@@ -191,18 +221,18 @@ export class MilestoneSetViewEditComponent {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
-            if (close == 'confirmed') {
-                this.standardMilestones.splice(rowIndex, 1)
-                this.standardMilestonesForm.removeAt(rowIndex)
-                if (this.smTableEditStack.includes(rowIndex)) {
-                    this.smTableEditStack.splice(this.smTableEditStack.indexOf(rowIndex), 1)
+                if (close == 'confirmed') {
+                    this.standardMilestones.splice(rowIndex, 1)
+                    this.standardMilestonesForm.removeAt(rowIndex)
+                    if (this.smTableEditStack.includes(rowIndex)) {
+                        this.smTableEditStack.splice(this.smTableEditStack.indexOf(rowIndex), 1)
+                    }
+                    this.smTableEditStack = this.smTableEditStack.map(function (value) {
+                        return value > rowIndex ? value - 1 : value;
+                    })
+                    this.standardMilestones = [...this.standardMilestones]
                 }
-                this.smTableEditStack = this.smTableEditStack.map(function (value) {
-                    return value > rowIndex ? value - 1 : value;
-                })
-                this.standardMilestones = [...this.standardMilestones]
             }
-        }
         )
     }
 
@@ -218,18 +248,22 @@ export class MilestoneSetViewEditComponent {
         }
 
     }
+
     getPortfolioOwner(): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
         // return "";
     }
+
     getFunctionOwner(): any {
         return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77").sort((a, b) => {
             return a.lookUpOrder - b.lookUpOrder;
         })
     }
+
     getLookUpName(id: string): string {
         return id && id != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
     }
+
     getllookup() {
         this.authService.lookupMaster().then((resp: any) => {
             this.lookupdata = resp
