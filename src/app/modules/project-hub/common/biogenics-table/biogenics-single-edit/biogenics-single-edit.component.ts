@@ -46,10 +46,9 @@ export class BiogenicsSingleEditComponent {
   }
 
   dataloader() {
-    // this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
       this.biogenicsData = this.projecthubservice.all[0]
       this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
-    this.impactRealizationDate = this.projecthubservice.all[2].emissionsImpactRealizationDate
+    this.impactRealizationDate = this.projecthubservice.all[2].projectData.emissionsImpactRealizationDate
         this.BiogenicsForm.patchValue({
           biogenicDataId: "",
           projectId: this.projecthubservice.projectid,
@@ -65,7 +64,6 @@ export class BiogenicsSingleEditComponent {
       this.BiogenicsForm.valueChanges.subscribe(res => {
         this.projecthubservice.isFormChanged = true
       })
-    // })
   }
 
   GetSource(){
