@@ -21,6 +21,7 @@ export class BiogenicsTableComponent {
   @Input() Editable: boolean = false
   @Input() data: any
   @Input() ProjectData: any
+  @Input() editCost: any
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
@@ -61,6 +62,8 @@ export class BiogenicsTableComponent {
         else {
           this.biogenicsBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
         }
+
+      this.biogenicsBulkEditData.push(this.editCost)
         if (this.noCarbonImpact == true) {
           for (var i of this.Biogenicsngx) {
             i.biogenicEmissionFactor = null

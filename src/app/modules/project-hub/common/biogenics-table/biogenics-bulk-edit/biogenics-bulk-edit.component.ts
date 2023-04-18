@@ -57,13 +57,13 @@ export class BiogenicsBulkEditComponent {
   }
 
   dataloader(){
-    if (this.projecthubservice.all[3][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+    if (this.projecthubservice.all[4][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
       this.editCarbonBiogenic = true
     }
-    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
+    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
       this.editCarbonBiogenic = true
     }
-    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
       this.editCarbonBiogenic = false
     }
       this.auth.lookupMaster().then((resp: any) => {
