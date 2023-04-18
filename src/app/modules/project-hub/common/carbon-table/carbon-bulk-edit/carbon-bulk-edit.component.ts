@@ -36,6 +36,7 @@ export class CarbonBulkEditComponent {
   envPortfolio: any
   ProjectData: any
   noCarbon: boolean = false
+  editCarbonBiogenic: boolean = true
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
   })
@@ -61,6 +62,15 @@ export class CarbonBulkEditComponent {
   }
 
   dataloader() {
+    if (this.projecthubservice.all[5][0] == false && (this.projecthubservice.all[2].energyCostImpactPerYear != "" && this.projecthubservice.all[2].energyCostImpactPerYear != null && this.projecthubservice.all[2].energyCostImpactPerYear != 0)) {
+      this.editCarbonBiogenic = true
+    }
+    else if (this.projecthubservice.all[5][0] == true && (this.projecthubservice.all[2].energyCostImpactPerYear == "" || this.projecthubservice.all[2].energyCostImpactPerYear == null || this.projecthubservice.all[2].energyCostImpactPerYear == 0)) {
+      this.editCarbonBiogenic = true
+    }
+    else if (this.projecthubservice.all[5][0]  == true && (this.projecthubservice.all[2].energyCostImpactPerYear != "" && this.projecthubservice.all[2].energyCostImpactPerYear != null && this.projecthubservice.all[2].energyCostImpactPerYear != 0)) {
+      this.editCarbonBiogenic = false
+    }
       this.CAPSform.patchValue({
         impactRealizationDate: this.projecthubservice.all[2].emissionsImpactRealizationDate
       })

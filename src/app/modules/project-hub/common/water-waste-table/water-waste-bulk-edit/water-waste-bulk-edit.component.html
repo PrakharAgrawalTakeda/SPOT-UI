@@ -9,7 +9,7 @@
     </div>
     <div class="w-full bg-card rounded-2xl">
         <div class="flex items-center justify-end gap-3 pt-3 pr-3 grid-cols-2">
-            <form style="width:18%;display: flex;" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
+            <form class="date" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Impact Realization Date</mat-label>
                     <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
@@ -128,13 +128,14 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                        <p *ngIf="!editWaterWaste">{{value}}</p>
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex) && editWaterWaste"
                             (click)="waterWasteTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p class="unit">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
-                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex) && editWaterWaste">
                             <spot-input class="w-full" formControlName="emwwunitCost" name="emwwunitCost" [decimalCount]="4"
                                 [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="unitCost">
                             </spot-input>
