@@ -2278,7 +2278,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             optionId= GlobalBusinessCaseOptions.OPTION_2
         }
         if (this.router.url.includes('recommended-option')) {
-            optionId== GlobalBusinessCaseOptions.OPTION_1
+            optionId= GlobalBusinessCaseOptions.OPTION_1
         }
         this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj,optionId, this.id).then(res => {
             this.optionInfoData.executionEndDate =this.optionExecutions.controls.optionExecutionEnd.value? moment(this.optionExecutions.controls.optionExecutionEnd.value).format('YYYY-MM-DD[T]HH:mm:ss') : null;

@@ -40,6 +40,7 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
         this.finalRequirements = []
         this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
         this.apiService.getBudgetPerformanceById(this.id).then((res: any) => {
+            this.finalRequirements = []
             res.finalRequirementsValue.forEach((x, index) => {
                 this.finalRequirements.push(x);
                 this.finalRequirements[index].isSelected = !!res.selectedFields.includes(x.fieldId);
