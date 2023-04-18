@@ -47,6 +47,18 @@ export class FundingBulkEditComponent {
       }
     })
 
+    this.FundingBCForm.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        this.changeChecker()
+        if (JSON.stringify(this.submitObj) == JSON.stringify(this.fundingDb)) {
+          this.projecthubservice.isFormChanged = false
+        }
+        else {
+          this.projecthubservice.isFormChanged = true
+        }
+      }
+    })
+
   }
 
   ngOnInit(): void {
