@@ -223,13 +223,14 @@ export class FundingComponent implements OnInit, OnChanges {
     const fundingAlert = this.fuseAlert.open(comfirmConfig)
 
     fundingAlert.afterClosed().subscribe(close => {
+      debugger
       if (close == 'confirmed' && this.mode == 'Project-Charter') {
         this.apiService.deleteFunding(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
         })
       }
       if (close == 'confirmed' && this.optionType == 'recommended-option' && this.mode != 'Project-Charter') {
-        this.apiService.deleteFundingBusinessCase(this.id, this.optionId, id).then(res => {
+        this.apiService.deleteFundingBusinessCase(this.id, GlobalBusinessCaseOptions.OPTION_1, id).then(res => {
           this.projecthubservice.submitbutton.next(true)
         })
       }
