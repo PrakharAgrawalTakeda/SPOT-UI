@@ -26,6 +26,7 @@ export class BiogenicsBulkEditComponent {
   noCarbonBiogenics = []
   ProjectData: any
   lookupdata: any
+  editCarbonBiogenic:boolean = true
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl('')
     // NoCarbonImpact: new FormControl(false)
@@ -56,6 +57,15 @@ export class BiogenicsBulkEditComponent {
   }
 
   dataloader(){
+    if (this.projecthubservice.all[3][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+      this.editCarbonBiogenic = true
+    }
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
+      this.editCarbonBiogenic = true
+    }
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+      this.editCarbonBiogenic = false
+    }
       this.auth.lookupMaster().then((resp: any) => {
         this.lookupdata = resp
       this.CAPSform.patchValue({
@@ -77,7 +87,12 @@ export class BiogenicsBulkEditComponent {
           biogenicBasisOfEstimate: new FormControl(i.biogenicBasisOfEstimate)
         }))
       }
-        this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
+        if (this.projecthubservice.all[2].localCurrency == null) {
+          this.unitCost = "Unit Cost ()"
+        }
+        else {
+          this.unitCost = "Unit Cost (" + this.projecthubservice.all[2].localCurrency.localCurrencyAbbreviation + ")"
+        }
       this.viewContent = true
     })
   // })

@@ -37,12 +37,14 @@ export class CapsComponent implements OnInit {
   Biogenicsngx: any
   WaterWastengx: any
   WaterWasteParam: any
+  costEdit: any = []
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
   })
   constructor(public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
+        this.viewContent = false
         this.ngOnInit()
       }
     })
@@ -173,52 +175,65 @@ export class CapsComponent implements OnInit {
         WasteCost: res.projectData.wasteImpactCost
       })
 
-
-      //carbon data
-      var carbonParam = res.carbonParameters
-      var carbonData = res.carbonData
-      var carbonngx = []
-      if (carbonParam != null && carbonData != null) {
-        carbonParam.forEach(function (arrayItem) {
-          var data = []
-          var param = []
-          data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
-          param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
-          var carbonObject = {
-            ...data[0],
-            ...param[0]
-          }
-          carbonngx.push(carbonObject)
-        })
-        this.carbonngx = carbonngx
-      }
-      this.Biogenicsngx = res.biogenicsData
-      if (this.editable == false) {
-        this.WaterWastengx = null
-      }
-      else {
-        var wwParam = res.waterWasteParameter
-        var wwData = res.waterWasteData
-        var WaterWastengx = []
-        if (wwParam != null && wwData != null) {
-          for (var i = 0; i < wwData.length; i++) {
+      if (this.showDefault == true){
+        //carbon data
+        var carbonParam = res.carbonParameters
+        var carbonData = res.carbonData
+        var carbonngx = []
+        if (carbonParam != null && carbonData != null) {
+          carbonParam.forEach(function (arrayItem) {
             var data = []
-            data = wwParam.filter(x => x.wwsourceMasterUniqueId == wwData[i].wwsourceMasterUniqueId)
-            var wwObject = {
+            var param = []
+            data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
+            param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
+            var carbonObject = {
               ...data[0],
-              ...wwData[i]
+              ...param[0]
             }
-            WaterWastengx.push(wwObject)
-          }
-          this.WaterWastengx = WaterWastengx
+            carbonngx.push(carbonObject)
+          })
+          this.carbonngx = carbonngx
         }
-      }
-      this.WaterWasteParam = res.waterWasteParameter
+        this.Biogenicsngx = res.biogenicsData
+        
+        //water waste data
+        if (this.editable == false) {
+          this.WaterWastengx = null
+        }
+        else {
+          var wwParam = res.waterWasteParameter
+          var wwData = res.waterWasteData
+          var WaterWastengx = []
+          if (wwParam != null && wwData != null) {
+            for (var i = 0; i < wwData.length; i++) {
+              var data = []
+              data = wwParam.filter(x => x.wwsourceMasterUniqueId == wwData[i].wwsourceMasterUniqueId)
+              var wwObject = {
+                ...data[0],
+                ...wwData[i]
+              }
+              WaterWastengx.push(wwObject)
+            }
+            this.WaterWastengx = WaterWastengx
+          }
+        }
+        this.costEdit = []
+        this.Biogenicsngx.filter(x => x.biogenicUnitCost != "" && x.biogenicUnitCost != null && x.biogenicUnitCost != 0).length > 0 || this.carbonngx.filter(x => x.unitCost != "" && x.unitCost != null && x.unitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
+        this.WaterWastengx.filter(x => x.wwstream == "Water" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
+        this.WaterWastengx.filter(x => x.wwstream == "Waste" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
+        this.WaterWasteParam = res.waterWasteParameter
+
+        
+    }
+    else{
+
+      //Transportation, Warehousing, Shipping API call
+    }
       this.noCarbonImpact = res.projectData.noCarbonImpact
       this.NoCarbonForm.patchValue({ NoCarbonImpact: res.projectData.noCarbonImpact })
+      this.viewContent = true
+      this.CAPSform.disable()
     })
-    this.viewContent = true
-    this.CAPSform.disable()
   }
 
 }

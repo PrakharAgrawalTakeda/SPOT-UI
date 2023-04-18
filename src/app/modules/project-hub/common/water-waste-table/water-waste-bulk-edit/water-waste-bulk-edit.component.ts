@@ -25,6 +25,7 @@ export class WaterWasteBulkEditComponent {
   WaterWaste = []
   waterwasteValues: any
   ProjectData: any
+  editWaterWaste: boolean = true
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl('')
   })
@@ -51,6 +52,7 @@ export class WaterWasteBulkEditComponent {
         this.projecthubservice.isFormChanged = true
       }
     })
+    
   }
 
   getData(id){
@@ -74,6 +76,12 @@ export class WaterWasteBulkEditComponent {
   }
 
   dataloader() {
+    if (this.projecthubservice.all[4][1] == true && (this.projecthubservice.all[1].projectData.waterImpactCost != "" && this.projecthubservice.all[1].projectData.waterImpactCost != null && this.projecthubservice.all[1].projectData.waterImpactCost != 0)) {
+      this.editWaterWaste = false
+    }
+    else if (this.projecthubservice.all[4][2] == true && (this.projecthubservice.all[1].projectData.wasteImpactCost != "" && this.projecthubservice.all[1].projectData.wasteImpactCost != null && this.projecthubservice.all[1].projectData.wasteImpactCost != 0)) {
+      this.editWaterWaste = false
+    }
     this.CAPSform.patchValue({
       impactRealizationDate: this.projecthubservice.all[1].projectData.emissionsImpactRealizationDate
     })

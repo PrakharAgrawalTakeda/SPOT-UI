@@ -20,6 +20,7 @@ export class WaterWasteTableComponent {
   @Input() data: any
   @Input() ProjectData: any
   @Input() WaterWasteParam: any
+  @Input() editCost: boolean
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
@@ -59,6 +60,7 @@ export class WaterWasteTableComponent {
         this.waterWasteBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
         }
       this.waterWasteBulkEditData.push(this.WaterWasteParam)
+      this.waterWasteBulkEditData.push(this.editCost)
         this.viewContent = true
     })
   }

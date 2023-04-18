@@ -9,20 +9,7 @@
     </div>
     <form class="pl-3 w-full overflow-hidden" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
         <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
-            <div
-                class="flex justify-between items-center mt-3 mb-6">
-                <div class="flex justify-start gap-1 items-center font-medium">CAPS Project
-                </div>
-                <div>
-                    <mat-slide-toggle formControlName="isCapsProject"></mat-slide-toggle>
-                </div>
-            </div>
-            <spot-singleselect-autocomplete class="w-full"
-                formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio" [label]="'Environmental Portfolio'"
-                [placeholder]="'Environmental Portfolio'" [valuePointer]="'portfolioOwner'"
-                [dropDownArray]="getEnviornmentPortfolio()" [showHint]="true" [sortByType]="'custom'" [customSortPointer]="'pfid'"
-                [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
-            </spot-singleselect-autocomplete>
+            
             <div class="w-25">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Impact Realization Date</mat-label>
@@ -32,33 +19,15 @@
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
             </div>
-            <!-- <spot-input class="w-full" formControlName="EmissionsImpact" name="EmissionsImpact"
-                [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'Emissions Impact (tCO2e/Year)'">
-            </spot-input>
-            <spot-input class="w-full" formControlName="EnergyImpact" name="EnergyImpact"
-                [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-                [placeholder]="'Energy Impact (per Year)'">
-            </spot-input>
             <spot-input class="w-full" formControlName="EnergyCost" name="EnergyCost" [decimalCount]="0" [inputType]="'Number'"
-                [autoAddDecimal]="false" [placeholder]="'Energy Cost'">
-            </spot-input>
-            <spot-input class="w-full" formControlName="WaterImpact" name="WaterImpact" [label]="'Water Impact (per Year)'"
-                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'Water Impact (per Year)'">
+                [autoAddDecimal]="false" [placeholder]="'0'" [label]="'Energy Impact (per Year)'">
             </spot-input>
             <spot-input class="w-full" formControlName="WaterCost" name="WaterCost" [decimalCount]="0" [inputType]="'Number'"
-                [autoAddDecimal]="false" [placeholder]="'Water Cost'">
-            </spot-input>
-            <spot-input class="w-full" formControlName="TotalWasteImpact" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'"
-                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'Total Waste Impact (per Year)'">
+                [autoAddDecimal]="false" [placeholder]="'0'" [label]="'Water Impact (per Year)'">
             </spot-input>
             <spot-input class="w-full" formControlName="WasteCost" name="WasteCost" [decimalCount]="0" [inputType]="'Number'"
-                [autoAddDecimal]="false" [placeholder]="'Waste Cost'">
+                [autoAddDecimal]="false" [placeholder]="'0'" [label]="'Total Waste Impact (per Year)'">
             </spot-input>
-            <spot-input class="w-full" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
-                [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-                [placeholder]="'Landfilled Waste Impact (per Year)'">
-            </spot-input> -->
         </div>
         <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"
