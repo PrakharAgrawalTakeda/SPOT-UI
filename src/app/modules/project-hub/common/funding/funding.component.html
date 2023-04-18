@@ -28,7 +28,7 @@
                     </button>
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen(addSingle, 'new', fundingdata , id)"
-                        *ngIf="editable && (mode=='Project-Charter' || optionType == 'recommended-option' || optionType == 'option-2' || optionType == 'option-3')">
+                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && (mode=='Project-Charter' || optionType == 'recommended-option' || optionType == 'option-2' || optionType == 'option-3')">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
                 </div>
