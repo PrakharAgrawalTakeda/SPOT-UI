@@ -9,17 +9,13 @@
     </div>
     <div class="py-3 px-0">
         <div class="flex justify-between items-center">
-            <div></div>
-            <div class="flex justify-between items-center gap-3">
+            <div>
                 <form [formGroup]="standardMilestonesDetailsForm" >
-                    <div class="flex justify-end items-center gap-3 pl-6 mt-4">
-                        <div class="flex">
-                            <a class="self-center mr-2">Milestone Set</a>
-                            <spot-input class="w-64" formControlName="milestoneSet"  [showLabel]="true">
-                            </spot-input>
-                        </div>
+                    <div class="flex items-center gap-3 pl-6 mt-4">
+                        <spot-input class="w-64"  formControlName="milestoneSet"  [showLabel]="true" [label]="'Milestone Set'">
+                         </spot-input>
                         <spot-singleselect-autocomplete
-                            formControlName="portfolioOwner" class="w-full"
+                            formControlName="portfolioOwner" class="w-64"
                                                          [label]="'Portfolio Owner'"
                                                         [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                                                         [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'"
@@ -29,6 +25,8 @@
 
                     </div>
                 </form>
+            </div>
+            <div class="flex justify-between items-center gap-3">
                 <div class="pr-3">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                             [color]="'primary-200'"
@@ -123,7 +121,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="flex items-start justify-between mt-6 px-3">
+        <div class="flex items-start justify-between  px-3">
             <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
                (click)="this.myPreferenceService.toggleDrawerOpen('', '',[],'',true)">
                 Cancel

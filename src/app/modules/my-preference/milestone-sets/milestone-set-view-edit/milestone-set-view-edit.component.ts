@@ -150,18 +150,19 @@ export class MilestoneSetViewEditComponent {
         var form = this.standardMilestonesForm.getRawValue()
         if (form.length > 0) {
             this.standardMilestonesSubmit = []
+            let sortOrder = 100;
             for (var i of form) {
                 this.standardMilestonesSubmit.push({
                     "milestoneTemplateId": i.milestoneTemplateId,
                     "milestoneId": i.milestoneTemplateId,
-                    "milestoneInternalId": i.milestoneInternalId,
                     "milestone": i.milestone,
                     "funtionalOwnerId": i.funtionalOwnerId,
                     "comment": i.comment ? i.comment : "",
                     "includeInReport": i.includeInReport,
-                    "sortOrder": i.sortOrder,
-                    "milestoneType": i.milestoneType,
+                    "sortOrder": sortOrder,
+                    "milestoneType": i.milestoneType ? i.milestoineType : "0",
                 })
+                sortOrder = sortOrder + 100;
             }
         } else {
             this.standardMilestonesSubmit = []
@@ -169,13 +170,11 @@ export class MilestoneSetViewEditComponent {
         if (this.myPreferenceService.itemid == "new") {
             this.mainObj = {
                 milestoneTemplateId: "",
-                milestonesetId: '',
                 portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwnerId,
                 portfolioOwner: "",
                 milestoneSet: this.standardMilestonesDetailsForm.value.milestoneSet,
                 templateOwner: this.msalService.instance.getActiveAccount().localAccountId,
                 templateOwnerName: "",
-                createdDate: "",
                 modifiedTemplateOwner: this.msalService.instance.getActiveAccount().localAccountId,
                 modifiedDate: moment(),
                 templateDetails: this.standardMilestonesSubmit
