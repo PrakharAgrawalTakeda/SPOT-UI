@@ -60,9 +60,27 @@ export class WaterWasteSingleEditComponent {
   constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
     this.waterWasteForm.controls.wwstream.valueChanges.subscribe(res => {
       if(res == "Water"){
+        if (this.projecthubservice.all[4][1] == false && (this.projecthubservice.all[1].projectData.waterImpactCost != "" && this.projecthubservice.all[1].projectData.waterImpactCost != null && this.projecthubservice.all[1].projectData.waterImpactCost != 0)) {
+          this.waterWasteForm.controls['emwwunitCost'].enable()
+        }
+        else if (this.projecthubservice.all[4][1] == true && (this.projecthubservice.all[1].projectData.waterImpactCost == "" || this.projecthubservice.all[1].projectData.waterImpactCost == null || this.projecthubservice.all[1].projectData.waterImpactCost == 0)) {
+          this.waterWasteForm.controls['emwwunitCost'].enable()
+        }
+        else if (this.projecthubservice.all[4][1] == true && (this.projecthubservice.all[1].projectData.waterImpactCost != "" && this.projecthubservice.all[1].projectData.waterImpactCost != null && this.projecthubservice.all[1].projectData.waterImpactCost != 0)) {
+          this.waterWasteForm.controls['emwwunitCost'].disable()
+        }
         this.waterWasteForm.patchValue({ standardUoM : "m3"})
       }
       else if (res == "Waste") {
+        if (this.projecthubservice.all[4][2] == false && (this.projecthubservice.all[1].projectData.wasteImpactCost != "" && this.projecthubservice.all[1].projectData.wasteImpactCost != null && this.projecthubservice.all[1].projectData.wasteImpactCost != 0)) {
+          this.waterWasteForm.controls['emwwunitCost'].enable()
+        }
+        else if (this.projecthubservice.all[4][2] == true && (this.projecthubservice.all[1].projectData.wasteImpactCost == "" || this.projecthubservice.all[1].projectData.wasteImpactCost == null || this.projecthubservice.all[1].projectData.wasteImpactCost == 0)) {
+          this.waterWasteForm.controls['emwwunitCost'].enable()
+        }
+        else if (this.projecthubservice.all[4][2] == true && (this.projecthubservice.all[1].projectData.wasteImpactCost != "" && this.projecthubservice.all[1].projectData.wasteImpactCost != null && this.projecthubservice.all[1].projectData.wasteImpactCost != 0)) {
+          this.waterWasteForm.controls['emwwunitCost'].disable()
+        }
         this.waterWasteForm.patchValue({ standardUoM: "kg" })
       }
       else{
