@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
+import moment from 'moment';
 import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../project-api.service';
 
@@ -111,8 +112,8 @@ export class CostComponent implements OnInit {
               totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.apisdate ? moment(res.costData.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -144,6 +145,7 @@ export class CostComponent implements OnInit {
             highCase: 'totalNonFteopExHighCase',
             curryearSpend: 'currentYearPlannedSpend'
           }]
+          console.log(this.costFundingForm.getRawValue())
           this.costFundingForm.disable()
           this.viewContent = true
 
@@ -180,8 +182,8 @@ export class CostComponent implements OnInit {
               totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.apisdate ? moment(res.costData.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
@@ -256,8 +258,8 @@ export class CostComponent implements OnInit {
               totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.assetInService ? res.costData.assetInService : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.assetInService ? moment(res.costData.assetInService).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
               capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
@@ -333,8 +335,8 @@ export class CostComponent implements OnInit {
               totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.assetInService ? res.costData.assetInService : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.assetInService ? moment(res.costData.assetInService).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
               capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
