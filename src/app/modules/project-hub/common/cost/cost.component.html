@@ -17,16 +17,6 @@
                         *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields && optionType== 'recommended-option' && mode!= 'Project-Charter'">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                     </button>
-                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                        (click)="projectHubService.toggleDrawerOpen(costBCbulkEditType, '' , cost , id)"
-                        *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields && optionType== 'option-2' && mode!= 'Project-Charter'">
-                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-                    </button>
-                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                        (click)="projectHubService.toggleDrawerOpen(costBCbulkEditType, '' , cost , id)"
-                        *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields && optionType== 'option-3' && mode!= 'Project-Charter'">
-                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-                    </button>
                 </div>
             </div>
         </form>
@@ -134,6 +124,30 @@
 
         </form>
     </div>
+    <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
+    <form class="w-full" [formGroup]="costFundingForm">
+        <div class="pb-3 pt-0 flex items-start justify-between">
+        <div class="mr-4 text-xl font-medium text-primary pb-3" 
+        *ngIf="mode!='Project-Charter' && (optionType == 'option-2' || optionType == 'option-3')">CAPEX</div>
+        
+        <div class="flex justify-end items-end">
+            <div></div>
+            <div>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="projectHubService.toggleDrawerOpen(costBCbulkEditType, '' , cost , id)"
+                    *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields && optionType== 'option-2' && mode!= 'Project-Charter'">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="projectHubService.toggleDrawerOpen(costBCbulkEditType, '' , cost , id)"
+                    *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields && optionType== 'option-3' && mode!= 'Project-Charter'">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
+            </div>
+        </div>
+    </div>
+    </form>
+   
     <form [ngClass]="mode=='Project-Charter' ? 'w-3/4' : 'w-full'" [formGroup]="costFundingForm"
         *ngIf="mode!='Project-Charter' && (optionType == 'option-2' || optionType == 'option-3')">
         <div class="flex justify-start items-center gap-3 pb-6">
@@ -212,6 +226,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary pb-6 pt-8">Non-FTE OPEX</div>
         <div class="flex justify-start items-center gap-3 pb-6">
             OPEX Required (non-FTE)
             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!costFundingForm.controls.opexRequired.value">
@@ -261,4 +276,5 @@
             </ngx-datatable>
         </div>
     </form>
+</div>
 </ng-container>

@@ -16,12 +16,12 @@ export class BiogenicsTableComponent {
   viewContent:boolean = false
   Biogenicsngx: any = []
   unitCost = ""
-  // NoCarbonForm= new FormGroup({
-  //   NoCarbonImpact: new FormControl(false)
-  // })
   noCarbonImpact: boolean = false
   biogenicsBulkEditData: any = []
   @Input() Editable: boolean = false
+  @Input() data: any
+  @Input() ProjectData: any
+  @Input() editCost: any
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
@@ -39,34 +39,32 @@ export class BiogenicsTableComponent {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
         if(this.Editable == false){
           this.Biogenicsngx = null
         }
         else{
-          this.Biogenicsngx = res.biogenicsData
+          this.Biogenicsngx = this.data
         }
-        if (res.localCurrency == null) {
+        if (this.ProjectData.localCurrency == null) {
           this.unitCost = "Unit Cost ()"
         }
         else {
-        this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
+          this.unitCost = "Unit Cost (" + this.ProjectData.localCurrency.localCurrencyAbbreviation + ")"
         }
-        this.noCarbonImpact = res.projectData.noCarbonImpact
-        // this.NoCarbonForm.patchValue({
-        //   NoCarbonImpact: res.projectData.noCarbonImpact
-        // })
+        this.noCarbonImpact = this.ProjectData.projectData.noCarbonImpact
         this.biogenicsBulkEditData=[]
         this.biogenicsBulkEditData.push(this.Biogenicsngx)
-        this.biogenicsBulkEditData.push(res.projectData.noCarbonImpact)
-        this.biogenicsBulkEditData.push(res.projectData)
-        if (res.localCurrency == null) {
+        this.biogenicsBulkEditData.push(this.noCarbonImpact)
+        this.biogenicsBulkEditData.push(this.ProjectData)
+        if (this.ProjectData.localCurrency == null) {
           this.biogenicsBulkEditData.push("")
         }
         else {
-        this.biogenicsBulkEditData.push(res.localCurrency.localCurrencyAbbreviation)
+          this.biogenicsBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
         }
-        if (res.projectData.noCarbonImpact == true) {
+
+      this.biogenicsBulkEditData.push(this.editCost)
+        if (this.noCarbonImpact == true) {
           for (var i of this.Biogenicsngx) {
             i.biogenicEmissionFactor = null
             i.biogenicUnit = null,
@@ -75,7 +73,6 @@ export class BiogenicsTableComponent {
           }
         }
         this.viewContent = true
-      })
     })
   }
 

@@ -47,6 +47,18 @@ export class FundingBulkEditComponent {
       }
     })
 
+    this.FundingBCForm.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        this.changeChecker()
+        if (JSON.stringify(this.submitObj) == JSON.stringify(this.fundingDb)) {
+          this.projecthubservice.isFormChanged = false
+        }
+        else {
+          this.projecthubservice.isFormChanged = true
+        }
+      }
+    })
+
   }
 
   ngOnInit(): void {
@@ -308,7 +320,9 @@ export class FundingBulkEditComponent {
           }
         }
       }
+    }
       var formValue2 = this.FundingBCForm.getRawValue()
+      if (formValue2.length > 0) {
       if (this.mode != 'Project-Charter' && (this.optionType == 'option-2' || this.optionType == 'option-3')) {
         if (formValue2.filter(x => x.includeInBusinessCase == true).length < 2) {
           for (var i of this.FundingBCForm.controls) {

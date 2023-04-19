@@ -36,6 +36,7 @@ export class CarbonBulkEditComponent {
   envPortfolio: any
   ProjectData: any
   noCarbon: boolean = false
+  editCarbonBiogenic: boolean = true
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
   })
@@ -61,20 +62,23 @@ export class CarbonBulkEditComponent {
   }
 
   dataloader() {
-    this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
+    if (this.projecthubservice.all[5][0] == false && (this.projecthubservice.all[2].energyCostImpactPerYear != "" && this.projecthubservice.all[2].energyCostImpactPerYear != null && this.projecthubservice.all[2].energyCostImpactPerYear != 0)) {
+      this.editCarbonBiogenic = true
+    }
+    else if (this.projecthubservice.all[5][0] == true && (this.projecthubservice.all[2].energyCostImpactPerYear == "" || this.projecthubservice.all[2].energyCostImpactPerYear == null || this.projecthubservice.all[2].energyCostImpactPerYear == 0)) {
+      this.editCarbonBiogenic = true
+    }
+    else if (this.projecthubservice.all[5][0]  == true && (this.projecthubservice.all[2].energyCostImpactPerYear != "" && this.projecthubservice.all[2].energyCostImpactPerYear != null && this.projecthubservice.all[2].energyCostImpactPerYear != 0)) {
+      this.editCarbonBiogenic = false
+    }
       this.CAPSform.patchValue({
-        impactRealizationDate: res.projectData.emissionsImpactRealizationDate
+        impactRealizationDate: this.projecthubservice.all[2].emissionsImpactRealizationDate
       })
-      this.ProjectData = res.projectData
-      this.envPortfolio = res.envionmentPortfolio.portfolioOwnerId
-      if (res.localCurrency == null) {
-        this.unitCost = "Unit Cost ()"
-      }
-      else {
-      this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
-      }
-      this.noCarbon = res.projectData.noCarbonImpact
-      this.Carbon = this.projecthubservice.all
+      this.ProjectData = this.projecthubservice.all[2]
+      this.envPortfolio = this.projecthubservice.all[4]
+      this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
+      this.noCarbon = this.projecthubservice.all[1]
+      this.Carbon = this.projecthubservice.all[0]
       for (var i of this.Carbon) {
         this.carbonDb.push(i)
         this.carbonForm.push(new FormGroup({
@@ -92,7 +96,6 @@ export class CarbonBulkEditComponent {
         }))
       }
       this.viewContent = true
-    })
   }
 
   changeChecker() {
@@ -151,7 +154,6 @@ export class CarbonBulkEditComponent {
     else {
       console.log(this.carbonDb)
       this.projecthubservice.isFormChanged = false
-      this.submitPrep()
       this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
         if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
           var formValue = this.CAPSform.getRawValue()
@@ -183,7 +185,7 @@ export class CarbonBulkEditComponent {
     var formValue = this.carbonForm.getRawValue()
     for (var i of formValue) {
       this.carbonDb.push({
-        emdataUniqueId: i.emdataUniqueId,
+        emdataUniqueId: i.emdataUniqueId == null || i.emdataUniqueId == "" ? "" : i.emdataUniqueId,
         projectId: this.projecthubservice.projectid,
         emsourceId: i.emsourceId,
         emunit: i.emunit == "" || isNaN(i.emunit) ? null : i.emunit,

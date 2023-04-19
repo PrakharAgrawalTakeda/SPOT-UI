@@ -29,18 +29,14 @@ viewType = 'SidePanel'
   today = new Date("2036-03-31");
   viewContent = false
   CAPSdata : any
+  energyCost: any
+  waterCost: any
+  wasteCost: any
   CAPSform = new FormGroup({
-    isCapsProject: new FormControl(false),
-    enviornmentalPortfolio: new FormControl(null),
     impactRealizationDate: new FormControl(''),
-    // EmissionsImpact: new FormControl(''),
-    // EnergyImpact: new FormControl(''),
-    // WaterImpact: new FormControl(''),
-    // TotalWasteImpact: new FormControl(''),
-    // LandfilledWasteImpact: new FormControl(''),
-    // EnergyCost: new FormControl(''),
-    // WaterCost: new FormControl(''),
-    // WasteCost: new FormControl('')
+    EnergyCost: new FormControl(null),
+    WaterCost: new FormControl(null),
+    WasteCost: new FormControl(null)
   })
 
   constructor(private apiService: ProjectApiService,
@@ -58,20 +54,22 @@ viewType = 'SidePanel'
         this.filterCriteria = filter
         this.CAPSdata = res
         this.CAPSform.patchValue({
-          isCapsProject: res.projectData.isCapsProject,
-          enviornmentalPortfolio: res.envionmentPortfolio,
           impactRealizationDate: res.projectData.emissionsImpactRealizationDate,
-          // EmissionsImpact: res.projectData.calculatedEmissionsImpact,
-          // EnergyImpact: res.projectData.energyImpact,
-          // WaterImpact: res.projectData.waterImpactUnits,
-          // TotalWasteImpact: res.projectData.wasteImpactUnits,
-          // LandfilledWasteImpact: res.projectData.wasteLandfillImpactUnits,
-          // EnergyCost: res.projectData.energyCostImpactPerYear,
-          // WaterCost: res.projectData.waterImpactCost,
-          // WasteCost: res.projectData.wasteImpactCost
+          EnergyCost: res.projectData.energyCostImpactPerYear,
+          WaterCost: res.projectData.waterImpactCost,
+          WasteCost: res.projectData.wasteImpactCost
         })
-        this.CAPSform.controls['isCapsProject'].disable()
-        this.CAPSform.controls['enviornmentalPortfolio'].disable()
+        this.energyCost = res.projectData.energyCostImpactPerYear
+        this.waterCost = res.projectData.waterImpactCost
+        this.wasteCost = res.projectData.wasteImpactCost
+
+        if (this.projectHubService.all[0] == false){
+          this.CAPSform.controls['EnergyCost'].disable()
+        }
+        if (this.projectHubService.all[1] == false || this.projectHubService.all[2] == false) {
+          this.CAPSform.controls['WaterCost'].disable()
+          this.CAPSform.controls['WasteCost'].disable()
+        }
         this.viewContent = true
       })
     })
@@ -79,7 +77,6 @@ viewType = 'SidePanel'
 
   getEnviornmentPortfolio(): any {
     return this.filterCriteria.portfolioOwner.filter(x => x.isEmissionPortfolio == true)
-    // return "";
   }
     
   submitCAPS(){
@@ -87,18 +84,11 @@ viewType = 'SidePanel'
     this.projectHubService.isFormChanged = false
     var formValue = this.CAPSform.getRawValue()
     var mainObj = this.CAPSdata.projectData
-    mainObj.isCapsProject= formValue.isCapsProject
-    mainObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
     
-    // mainObj.EmissionsImpact: formValue.calculatedEmissionsImpact
-    // mainObj.EnergyImpact: formValue.energyImpact
-    // mainObj.WaterImpact: res.waterImpactUnits
-    // mainObj.TotalWasteImpact: res.wasteImpactUnits
-    // mainObj.LandfilledWasteImpact: res.wasteLandfillImpactUnits
-    // mainObj.EnergyCost: res.energyCostImpactPerYear
-    // mainObj.WaterCost: res.waterImpactCost
-    // mainObj.WasteCost: res.wasteImpactCost
+    mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+    mainObj.energyCostImpactPerYear = formValue.EnergyCost
+    mainObj.waterImpactCost = formValue.WaterCost
+    mainObj.wasteImpactCost = formValue.WasteCost
     this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
       this.projectHubService.isNavChanged.next(true)
       this.projectHubService.submitbutton.next(true)

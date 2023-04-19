@@ -17,12 +17,16 @@ export class CarbonTableComponent {
   carbonngx: any = []
   unitCost = ""
   @Input() Editable: boolean = false
+  @Input() data : any
+  noCarbon: boolean = false
+  @Input() ProjectData: any
+  @Input() editCost: any
   lookupdata: any
-  noCarbon = false
+  carbonBulkEditData: any = []
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
-      if (res == true) {
+      if (res == true && this.viewContent == true) {
         this.dataloader()
       }
     })
@@ -35,31 +39,17 @@ export class CarbonTableComponent {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
-        if (res.localCurrency == null){
+      if (this.ProjectData.localCurrency == null){
           this.unitCost = "Unit Cost ()"
         }
         else{
-        this.unitCost = "Unit Cost (" + res.localCurrency.localCurrencyAbbreviation + ")"
+        this.unitCost = "Unit Cost (" + this.ProjectData.localCurrency.localCurrencyAbbreviation + ")"
         }
-        var carbonParam = res.carbonParameters
-        var carbonData = res.carbonData
-        var carbonngx = []
-        if (carbonParam != null && carbonData != null){
-        carbonParam.forEach(function(arrayItem){
-          var data = []
-          var param = []
-          data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
-          param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
-          var carbonObject = {
-            ...data[0],
-            ...param[0]
-          }
-          carbonngx.push(carbonObject)
-        })
-        this.carbonngx = carbonngx
-        this.noCarbon = res.projectData.noCarbonImpact
-        if (res.projectData.noCarbonImpact == true) {
+        if (this.data != null){
+        this.carbonngx = this.data
+          this.noCarbon = this.ProjectData.projectData.noCarbonImpact
+          
+          if (this.noCarbon == true) {
           for (var i of this.carbonngx) {
             i.emunit = null,
               i.unitCost = null,
@@ -67,8 +57,14 @@ export class CarbonTableComponent {
           }
         }
       }
-        this.viewContent = true
-      })
+      this.carbonBulkEditData = []
+      this.carbonBulkEditData.push(this.carbonngx)
+      this.carbonBulkEditData.push(this.noCarbon)
+      this.carbonBulkEditData.push(this.ProjectData.projectData)
+      this.carbonBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
+      this.carbonBulkEditData.push(this.ProjectData.envionmentPortfolio.portfolioOwnerId)
+      this.carbonBulkEditData.push(this.editCost)
+      this.viewContent = true
     })
   }
 

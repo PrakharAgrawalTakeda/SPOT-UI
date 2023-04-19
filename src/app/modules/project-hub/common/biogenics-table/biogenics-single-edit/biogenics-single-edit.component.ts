@@ -46,10 +46,14 @@ export class BiogenicsSingleEditComponent {
   }
 
   dataloader() {
-    // this.apiService.getCAPSbyProjectID(this.projecthubservice.projectid).then((res: any) => {
       this.biogenicsData = this.projecthubservice.all[0]
-      this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
-    this.impactRealizationDate = this.projecthubservice.all[2].emissionsImpactRealizationDate
+    if (this.projecthubservice.all[2].localCurrency == null) {
+      this.unitCost = "Unit Cost ()"
+    }
+    else {
+      this.unitCost = "Unit Cost (" + this.projecthubservice.all[2].localCurrency.localCurrencyAbbreviation + ")"
+    }
+    this.impactRealizationDate = this.projecthubservice.all[2].projectData.emissionsImpactRealizationDate
         this.BiogenicsForm.patchValue({
           biogenicDataId: "",
           projectId: this.projecthubservice.projectid,
@@ -61,11 +65,24 @@ export class BiogenicsSingleEditComponent {
           biogenicBasisOfEstimate: ""
         })
       this.BiogenicsForm.controls['standardUoM'].disable()
+
+    if (this.projecthubservice.all[4][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+      this.BiogenicsForm.controls['biogenicUnitCost'].enable()
+    }
+    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
+      this.BiogenicsForm.controls['biogenicUnitCost'].enable()
+    }
+    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+      this.BiogenicsForm.controls['biogenicUnitCost'].disable()
+    }
+
+    // if (localStorage.getItem('EnergyCost') == 'true') {
+    //   this.BiogenicsForm.controls['biogenicUnitCost'].disable()
+    // }
         this.projecthubservice.isFormChanged = false
       this.BiogenicsForm.valueChanges.subscribe(res => {
         this.projecthubservice.isFormChanged = true
       })
-    // })
   }
 
   GetSource(){

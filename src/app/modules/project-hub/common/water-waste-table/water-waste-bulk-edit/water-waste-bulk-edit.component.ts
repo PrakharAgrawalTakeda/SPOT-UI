@@ -25,6 +25,7 @@ export class WaterWasteBulkEditComponent {
   WaterWaste = []
   waterwasteValues: any
   ProjectData: any
+  editWaterWaste: boolean = true
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl('')
   })
@@ -51,6 +52,7 @@ export class WaterWasteBulkEditComponent {
         this.projecthubservice.isFormChanged = true
       }
     })
+    
   }
 
   getData(id){
@@ -74,8 +76,14 @@ export class WaterWasteBulkEditComponent {
   }
 
   dataloader() {
+    if (this.projecthubservice.all[4][1] == true && (this.projecthubservice.all[1].projectData.waterImpactCost != "" && this.projecthubservice.all[1].projectData.waterImpactCost != null && this.projecthubservice.all[1].projectData.waterImpactCost != 0)) {
+      this.editWaterWaste = false
+    }
+    else if (this.projecthubservice.all[4][2] == true && (this.projecthubservice.all[1].projectData.wasteImpactCost != "" && this.projecthubservice.all[1].projectData.wasteImpactCost != null && this.projecthubservice.all[1].projectData.wasteImpactCost != 0)) {
+      this.editWaterWaste = false
+    }
     this.CAPSform.patchValue({
-      impactRealizationDate: this.projecthubservice.all[1].emissionsImpactRealizationDate
+      impactRealizationDate: this.projecthubservice.all[1].projectData.emissionsImpactRealizationDate
     })
     this.ProjectData = this.projecthubservice.all[1]
     this.WaterWaste = this.projecthubservice.all[0]
@@ -299,9 +307,9 @@ export class WaterWasteBulkEditComponent {
         this.projecthubservice.isFormChanged = false
         this.submitPrep()
         this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
-          if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
+          if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
             var formValue = this.CAPSform.getRawValue()
-            var mainObj = this.ProjectData
+            var mainObj = this.ProjectData.projectData
             
             mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
 
