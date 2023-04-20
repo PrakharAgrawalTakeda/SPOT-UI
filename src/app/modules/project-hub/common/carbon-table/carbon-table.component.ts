@@ -21,6 +21,8 @@ export class CarbonTableComponent {
   noCarbon: boolean = false
   @Input() ProjectData: any
   @Input() editCost: any
+  sortDir = ""
+  sortDirCost = ""
   lookupdata: any
   carbonBulkEditData: any = []
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
@@ -66,6 +68,24 @@ export class CarbonTableComponent {
       this.carbonBulkEditData.push(this.editCost)
       this.viewContent = true
     })
+  }
+
+  sortasc() {
+    if (this.sortDir == "" || this.sortDir == "desc") {
+      return this.sortDir = "asc"
+    }
+    else if (this.sortDir == "asc") {
+      return this.sortDir = "desc"
+    }
+  }
+
+  sortascCost() {
+    if (this.sortDirCost == "" || this.sortDirCost == "desc") {
+      return this.sortDirCost = "asc"
+    }
+    else if (this.sortDirCost == "asc") {
+      return this.sortDirCost = "desc"
+    }
   }
 
 }
