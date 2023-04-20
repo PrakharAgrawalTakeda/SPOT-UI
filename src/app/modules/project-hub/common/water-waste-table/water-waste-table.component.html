@@ -38,10 +38,14 @@
                 <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                     <ng-container>
                         <span class="datatable-header-cell-wrapper" (click)="sort()">
-                        <div style="margin-bottom: -23px;">
+                        <div style="margin-bottom: -22px;" (click)="sortasc()">
                             {{column.name}}
                             <mat-icon class="pe" style="font-size: 17px;"
                                 matTooltip="Input gross change in emissions type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.">help</mat-icon>
+                            <button type="button" (click)="sortasc()">
+                                <i class="material-icons"
+                                    [innerText]="sortDir ? (sortDir === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
+                            </button>
                         </div>
                         </span>
                     </ng-container>
@@ -59,10 +63,14 @@
                 <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                     <ng-container>
                         <span class="datatable-header-cell-wrapper" (click)="sort()">
-                        <div style="margin-bottom: -23px;">
+                        <div style="margin-bottom: -22px;" (click)="sortascCost()">
                             {{column.name}}
                             <mat-icon class="pe" style="font-size: 17px;"
                                 matTooltip="Input the cost of each energy unit using upto 4 decimal places, positive values only.">help</mat-icon>
+                            <button type="button" (click)="sortasc()">
+                                <i class="material-icons"
+                                    [innerText]="sortDirCost ? (sortDirCost === 'asc' ? 'expand_less' : 'expand_more') : 'unfold_more'"></i>
+                            </button>
                         </div>
                         </span>
                     </ng-container>
