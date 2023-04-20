@@ -74,7 +74,7 @@
             </spot-toggle>
 
             <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2"
-                [label]="labelText" *ngIf="mode!= 'Project-Charter' && optionType == 'recommended-option'">
+                [label]="labelText" *ngIf="mode!= 'Project-Charter' && optionType == 'recommended-option'" [callLocation]="'View'">
             </spot-input>
 
             <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0"
