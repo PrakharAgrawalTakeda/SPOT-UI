@@ -455,7 +455,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                         "includeInBusinessCase": x.includeInBusinessCase,
                                                         "milestoneType": x.milestoneType,
                                                         "templateMilestoneId": x.templateMilestoneId,
-
                                                         "includeInCloseout": x.includeInCloseout,
                                                         "responsiblePersonId": x.responsiblePersonId,
                                                         "indicator": x.indicator
@@ -510,9 +509,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 this.viewContent = true
                                             }
                                             this.disabler()
+                                            this.projecthubservice.isFormChanged = false
                                             //this.value = this.milestoneForm.getRawValue()
                                         }
-
                                     }
                                 })
                             })

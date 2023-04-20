@@ -55,7 +55,7 @@
         </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column name="Include in Dashboard" prop="includeInReport"
+    <ngx-datatable-column name="Include in {{includeInText}}" prop="includeInReport"
                            [flexGrow]="1.5" *ngIf="viewElementChecker('includeInReport')">
         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
             <a>

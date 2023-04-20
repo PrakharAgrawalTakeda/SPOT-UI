@@ -88,7 +88,11 @@ export class StandardMilestoneSetsComponent implements OnInit {
                         "show": true,
                         "label": "OK",
                         "color": "warn"
+                    },
+                    "cancel": {
+                        "show": false,
                     }
+
                 },
                 "dismissible": true
             }
@@ -96,7 +100,7 @@ export class StandardMilestoneSetsComponent implements OnInit {
         }else{
             if(endMilestonesCount>1) {
                 var limitConfig: FuseConfirmationConfig = {
-                    "message": "The Execution End milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once",
+                    "message": "The Execution End milestone has been selected multiple times from different Milestone Sets. Please limit your selection to include it only once.",
                     "icon": {
                         "show": true,
                         "name": "heroicons_outline:exclamation",
@@ -107,6 +111,9 @@ export class StandardMilestoneSetsComponent implements OnInit {
                             "show": true,
                             "label": "OK",
                             "color": "warn"
+                        },
+                        "cancel": {
+                            "show": false,
                         }
                     },
                     "dismissible": true
