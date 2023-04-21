@@ -275,8 +275,7 @@ export class CostEditComponent {
     }
 
     if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
-      this.optionId = GlobalBusinessCaseOptions.OPTION_1
-      this.apiService.getBusinessCaseCostFunding(this.projectHubService.projectid, this.optionId).then((res: any) => {
+        this.apiService.getCostFunding(this.projectHubService.projectid).then((res: any) => {
         this.authService.lookupMaster().then((lookup: any) => {
           console.log(this.costDataBC)
           console.log("Cost Data", res)
@@ -292,16 +291,18 @@ export class CostEditComponent {
               durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
               peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
               peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
-              totalCapExBaseCase: res.costData.totalCapexBaseCase ? res.costData.totalCapexBaseCase : null,
-              totalCapExHighCase: res.costData.totalCapexHighCase ? res.costData.totalCapexHighCase : null,
-              totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase ? res.costData.totalNonFtebaseCase : null,
-              totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
+              totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+              totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+              totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+              totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
               projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              apisdate: res.costData.assetInService ? moment(res.costData.assetInService).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.apisdate ? moment(res.costData.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
-              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
+              isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
+              capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
+              opexRequired: res.costData.opexRequired ? res.costData.opexRequired : false
 
             })
           }

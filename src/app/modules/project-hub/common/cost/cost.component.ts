@@ -84,11 +84,9 @@ export class CostComponent implements OnInit {
 
     this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
     if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
-      this.costBCbulkEditType = 'CostBCEdit'
-      this.optionId = GlobalBusinessCaseOptions.OPTION_1
-      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getBusinessCaseCostFunding(this.id, this.optionId).then((res: any) => {
+      this.apiService.getCostFunding(this.id).then((res: any) => {
         this.authService.lookupMaster().then((lookup: any) => {
+          this.costBCbulkEditType = 'CostBCEdit'
           console.log("Cost Data", res.costData)
           this.cost = res
           console.log(res)
@@ -108,14 +106,14 @@ export class CostComponent implements OnInit {
               durationHighCase: res.costData.durationHighCase ? res.costData.durationHighCase : null,
               peopleFtemonthsRequiredBaseCase: res.costData.peopleFtemonthsRequiredBaseCase ? res.costData.peopleFtemonthsRequiredBaseCase : null,
               peopleFtemonthsRequiredHighCase: res.costData.peopleFtemonthsRequiredHighCase ? res.costData.peopleFtemonthsRequiredHighCase : null,
-              totalCapExBaseCase: res.costData.totalCapexBaseCase ? res.costData.totalCapexBaseCase : null,
-              totalCapExHighCase: res.costData.totalCapexHighCase ? res.costData.totalCapexHighCase : null,
-              totalNonFteopExBaseCase: res.costData.totalNonFtebaseCase ? res.costData.totalNonFtebaseCase : null,
-              totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
+              totalCapExBaseCase: res.costData.totalCapExBaseCase ? res.costData.totalCapExBaseCase : null,
+              totalCapExHighCase: res.costData.totalCapExHighCase ? res.costData.totalCapExHighCase : null,
+              totalNonFteopExBaseCase: res.costData.totalNonFteopExBaseCase ? res.costData.totalNonFteopExBaseCase : null,
+              totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId)?.lookUpName : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
               projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-              apisdate: res.costData.assetInService ? moment(res.costData.assetInService).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.apisdate ? moment(res.costData.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false
 
