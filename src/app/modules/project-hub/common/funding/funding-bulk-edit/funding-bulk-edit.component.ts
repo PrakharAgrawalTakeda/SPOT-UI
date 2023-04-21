@@ -66,15 +66,18 @@ export class FundingBulkEditComponent {
   }
   dataloader() {
     if (this.optionType == 'recommended-option' && this.mode != 'Project-Charter') {
-      this.optionId = GlobalBusinessCaseOptions.OPTION_1
-      this.apiService.getBusinessCaseCostFunding(this.projecthubservice.projectid, this.optionId).then((res: any) => {
+      this.apiService.getCostFunding(this.projecthubservice.projectid).then((res: any) => {
         this.portApiService.getfilterlist().then((po: any) => {
           this.auth.lookupMaster().then((resp: any) => {
             this.lookupdata = resp
-            this.localcurrency = res.localCurrency
-            this.Amount = this.localcurrency.localCurrencyAbbreviation
+            if (res.localCurrency != null) {
+              this.localcurrency = res.localCurrency
+              this.Amount = this.localcurrency.localCurrencyAbbreviation
+            }
+
             console.log(this.projecthubservice.projectid)
             this.fundingSourceData = po
+
             this.fundingdata = res.fundingData
 
             console.log(this.fundingdata)
@@ -82,13 +85,14 @@ export class FundingBulkEditComponent {
               for (var i of this.fundingdata) {
                 i.fundingSourceName = i.fundingSourceId ? po.portfolioOwner.find(x => x.portfolioOwnerId == i.fundingSourceId).portfolioOwner : ''
               }
+              console.log("FUNDING DATA BEFORE SORTING", this.fundingdata)
               this.fundingdata = this.sortbyFundingSourceName(this.fundingdata)
               for (var i of this.fundingdata) {
                 this.fundingDb.push(i)
                 console.log(i)
 
                 this.FundingBCForm.push(new FormGroup({
-                  businessOptionId: new FormControl(i.businessOptionId),
+                  businessOptionId: new FormControl(GlobalBusinessCaseOptions.OPTION_1),
                   businessFundingUniqueId: new FormControl(i.businessFundingUniqueId),
                   fundingAmount: new FormControl(i.fundingAmount),
                   fundingAmountFxconv: new FormControl(this.fundingdata.fundingAmountFxconv),

@@ -68,11 +68,9 @@ export class FundingComponent implements OnInit, OnChanges {
   dataloader() {
     this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
     if (this.optionType == 'recommended-option') {
-      console.log("BUSINESS CASE")
+      console.log("Rec optn")
       this.fundingBCbulkEditType = 'FundingBCBulkEdit'
-      this.optionId = GlobalBusinessCaseOptions.OPTION_1
-      console.log(this.optionId)
-      this.apiService.getBusinessCaseCostFunding(this.id, this.optionId).then((res: any) => {
+      this.apiService.getCostFunding(this.id).then((res: any) => {
         this.authService.lookupMaster().then((lookup: any) => {
           this.portApiService.getfilterlist().then((po: any) => {
             this.fundingSourceData = po
