@@ -168,15 +168,8 @@ export class CostEditComponent {
           alert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
               this.costForm.patchValue({
-                durationBaseCase: null,
-                durationHighCase: null,
                 totalCapExBaseCase: null,
-                totalCapExHighCase: null,
-                currentYearPlannedSpend: null,
-                projectSpendStart: null,
-                apisdate: null,
-                assetInServiceNa: false,
-                isProjectSpentNa: false
+                totalCapExHighCase: null
 
               })
             }
@@ -556,7 +549,10 @@ export class CostEditComponent {
               projectSpendStart : formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               currentYearPlannedSpend : typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
               assetInServiceNa : formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-              isProjectSpentNa : formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false}
+              isProjectSpentNa : formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+            
+              capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
+              opexRequired: formValue.opexRequired ? formValue.opexRequired : false}
         } else if (formValue) {
           mainObj.durationBaseCase = formValue.durationBaseCase ? formValue.durationBaseCase : null,
           mainObj.durationHighCase = formValue.durationHighCase ? formValue.durationHighCase : null,
@@ -571,7 +567,10 @@ export class CostEditComponent {
             mainObj.projectSpendStart = formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
             mainObj.currentYearPlannedSpend = formValue.currentYearPlannedSpend ? formValue.currentYearPlannedSpend : null,
             mainObj.assetInServiceNa = formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-            mainObj.isProjectSpentNa = formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
+            mainObj.isProjectSpentNa = formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+            
+            mainObj.capexRequired = formValue.capexRequired ? formValue.capexRequired : false,
+            mainObj.opexRequired = formValue.opexRequired ? formValue.opexRequired : false
         }
         console.log("Main Cost Data", mainObj)
         console.log(mainObj)
@@ -602,7 +601,10 @@ export class CostEditComponent {
               projectSpendStart : formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               currentYearPlannedSpend : typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
               assetInServiceNa : formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-              isProjectSpentNa : formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false}
+              isProjectSpentNa : formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+            
+          capexRequired: formValue.capexRequired ? formValue.capexRequired : false,
+          opexRequired: formValue.opexRequired ? formValue.opexRequired : false}
         } else if (formValue) {
           mainObj.durationBaseCase = formValue.durationBaseCase ? formValue.durationBaseCase : null,
           mainObj.durationHighCase = formValue.durationHighCase ? formValue.durationHighCase : null,
@@ -617,7 +619,10 @@ export class CostEditComponent {
             mainObj.projectSpendStart = formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
             mainObj.currentYearPlannedSpend = formValue.currentYearPlannedSpend ? formValue.currentYearPlannedSpend : null,
             mainObj.assetInServiceNa = formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
-            mainObj.isProjectSpentNa = formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
+            mainObj.isProjectSpentNa = formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
+            
+          mainObj.capexRequired = formValue.capexRequired ? formValue.capexRequired : false,
+          mainObj.opexRequired = formValue.opexRequired ? formValue.opexRequired : false
         }
         this.apiService.updateBusinessCaseCost(mainObj, this.projectHubService.projectid, this.optionId).then(Res => {
           this.projectHubService.isNavChanged.next(true)
