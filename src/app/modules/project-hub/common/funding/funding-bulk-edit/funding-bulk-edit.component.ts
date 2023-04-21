@@ -93,7 +93,7 @@ export class FundingBulkEditComponent {
 
                 this.FundingBCForm.push(new FormGroup({
                   businessOptionId: new FormControl(GlobalBusinessCaseOptions.OPTION_1),
-                  businessFundingUniqueId: new FormControl(i.businessFundingUniqueId),
+                  businessFundingUniqueId: new FormControl(i.fundingUniqueId),
                   fundingAmount: new FormControl(i.fundingAmount),
                   fundingAmountFxconv: new FormControl(this.fundingdata.fundingAmountFxconv),
                   fundingIntheplan: new FormControl(i.fundingIntheplan),
@@ -372,7 +372,7 @@ export class FundingBulkEditComponent {
       formValue.length > 0 ? this.submitObj = formValue.map(x => {
         return {
           businessOptionId: (x.businessOptionId),
-          businessFundingUniqueId: (x.businessFundingUniqueId),
+          fundingUniqueId: (x.businessFundingUniqueId),
           fundingAmount: (x.fundingAmount),
           fundingAmountFxconv: x.fundingAmountFxconv == "" || x.fundingAmountFxconv == " " ? null : x.fundingAmountFxconv,
           fundingIntheplan: x.fundingIntheplan,
