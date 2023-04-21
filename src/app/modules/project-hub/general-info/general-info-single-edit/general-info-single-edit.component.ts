@@ -156,12 +156,12 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
 
     this.generalInfoForm.controls.excecutionScope.valueChanges.pipe(pairwise())
       .subscribe(([prev, next]: [any, any]) => {
-      if (this.viewContent) {
-        if(prev.length > next.length){
-        this.changeExecutionScope = true
+        if (this.viewContent) {
+          if (prev.length > next.length) {
+            this.changeExecutionScope = true
+          }
         }
-      }
-    })
+      })
 
   }
 
@@ -264,7 +264,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
               problemType: history.state.data.problemType,
               projectDescription: history.state.data.projectDescription,
               primaryProduct: history.state.data.primaryProductId == null ? '' : history.state.data.primaryProductId[0],
-              otherImpactedProducts: history.state.data.otherImpactedProducts == undefined || history.state.data.otherImpactedProducts == null || history.state.data.otherImpactedProducts == ""? [] : finaldata,
+              otherImpactedProducts: history.state.data.otherImpactedProducts == undefined || history.state.data.otherImpactedProducts == null || history.state.data.otherImpactedProducts == "" ? [] : finaldata,
               portfolioOwner: '',
               excecutionScope: [],
               enviornmentalPortfolio: '',
@@ -356,7 +356,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         })
       }
-      else if (Object.keys(formValue.portfolioOwner).length == 0){
+      else if (Object.keys(formValue.portfolioOwner).length == 0) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Please select a portfolio owner",
           "message": "",
@@ -471,7 +471,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         this.submitLogic()
       }
     }
-    else{
+    else {
       if (Object.keys(formValue.portfolioOwner).length == 0) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Please select a portfolio owner",
@@ -496,64 +496,64 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
         const alert = this.fuseAlert.open(comfirmConfig)
       }
-    else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Are you sure?",
-        "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warn"
-        },
-        "actions": {
-          "confirm": {
+      else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",
+          "icon": {
             "show": true,
-            "label": "Okay",
+            "name": "heroicons_outline:exclamation",
             "color": "warn"
           },
-          "cancel": {
-            "show": true,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-      alert.afterClosed().subscribe(close => {
-        if (close == 'confirmed') {
-          this.submitLogic()
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
         }
-      })
-    }
-    else if (this.changeExecutionScope == true) {
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Are you sure?",
-        "message": "Changing the execution scope will remove all the existing local attributes. Are you sure you want to update the execution scope ?",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warn"
-        },
-        "actions": {
-          "confirm": {
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else if (this.changeExecutionScope == true) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the execution scope will remove all the existing local attributes. Are you sure you want to update the execution scope ?",
+          "icon": {
             "show": true,
-            "label": "Okay",
+            "name": "heroicons_outline:exclamation",
             "color": "warn"
           },
-          "cancel": {
-            "show": true,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-      alert.afterClosed().subscribe(close => {
-        if (close == 'confirmed') {
-          this.submitLogic()
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
         }
-      })
-    }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
       else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio && (this.generalInfo.enviornmentalPortfolio != null || Object.keys(formValue.enviornmentalPortfolio).length == 0)) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you sure?",
@@ -583,10 +583,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         })
       }
-    else {
-      this.submitLogic()
+      else {
+        this.submitLogic()
+      }
     }
-  }
   }
 
   submitLogic() {
@@ -598,9 +598,9 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     mainObj.problemType = formValue.problemType
     mainObj.projectDescription = formValue.projectDescription
     mainObj.parentProgramId = formValue.projectsingleid
-    mainObj.portfolioOwnerId = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
-    mainObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    mainObj.primaryProductId = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
+    mainObj.portfolioOwnerId = formValue.portfolioOwner?.portfolioOwnerId
+    mainObj.emissionPortfolioId = formValue.enviornmentalPortfolio?.portfolioOwnerId
+    mainObj.primaryProductId = formValue.primaryProduct?.productId
     mainObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
@@ -610,14 +610,14 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     mainObj.approvedDate = formValue.approvedDate ? moment(formValue.approvedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
     mainObj.whynotgoforNextBestAlternative = formValue.whynotgoforNextBestAlternative
     mainObj.proposalStatement = formValue.proposalStatement
-    mainObj.projectReviewedYN = Object.keys(formValue.projectReviewedYN).length > 0 ? formValue.projectReviewedYN.lookUpId : ''
-    mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
-    mainObj.sponsorId = Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
-    mainObj.projectManagerId = Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
-      mainObj.strategicRationale = formValue.StrategicRationale,
-      mainObj.businessCaseImpactOfDoingNothing = formValue.RiskImpact
-    mainObj.businessCaseAuthorADId = Object.keys(formValue.BCAuthor).length > 0 ? formValue.BCAuthor.userAdid : '',
-      mainObj.businessCaseAdditionalAuthorsContributorsADIds = formValue.AdditionalAuthor.length > 0 ? formValue.AdditionalAuthor.map(x => x.userAdid).join() : ''
+    mainObj.projectReviewedYN = formValue.projectReviewedYN?.lookUpId
+    mainObj.functionGroupID = formValue.functionGroupID?.lookUpId
+    mainObj.sponsorId = formValue.sponsor?.userAdid
+    mainObj.projectManagerId = formValue.projectManager?.userAdid
+    mainObj.strategicRationale = formValue.StrategicRationale
+    mainObj.businessCaseImpactOfDoingNothing = formValue.RiskImpact
+    mainObj.businessCaseAuthorADId = formValue.BCAuthor?.userAdid
+    mainObj.businessCaseAdditionalAuthorsContributorsADIds = formValue.AdditionalAuthor.length > 0 ? formValue.AdditionalAuthor.map(x => x.userAdid).join() : ''
     mainObj.businessCaseApprovedDate = formValue.businessCaseApprovedDate ? moment(formValue.businessCaseApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
 
     if (this.subCallLocation == 'ProjectHub') {
