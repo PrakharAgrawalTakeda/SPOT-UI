@@ -428,7 +428,7 @@ async addBCFunding(body,optionId,projectId){
       const response = await lastValueFrom(abc$)
       return response
   }
-  async bulkEditTimelineForOption(body,optionId,projectId,){
+  async bulkEditTimelineForOption(body,optionId,projectId){
       var link = GlobalVariables.apiurl+"BusinessCase/Timeline/BulkEdit/"+optionId + "/" + projectId;
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)

@@ -22,6 +22,7 @@ export class BiogenicsTableComponent {
   @Input() data: any
   @Input() ProjectData: any
   @Input() editCost: any
+  sortDir = ""
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
@@ -111,5 +112,14 @@ export class BiogenicsTableComponent {
         })
       }
     })
+  }
+
+  sortasc(){
+    if (this.sortDir == "" || this.sortDir == "desc"){
+      return this.sortDir = "asc"
+    }
+    else if(this.sortDir == "asc"){
+      return this.sortDir = "desc"
+    }
   }
 }

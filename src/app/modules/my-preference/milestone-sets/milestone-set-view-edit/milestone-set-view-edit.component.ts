@@ -1,13 +1,15 @@
 import {Component} from '@angular/core';
 import {ProjectApiService} from "../../../project-hub/common/project-api.service";
-import {ProjectHubService} from "../../../project-hub/project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
 import {RoleService} from "../../../../core/auth/role.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {Router} from "@angular/router";
 import {MyPreferenceService} from "../../my-preference.service";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
+import {MyPreferenceApiService} from "../../my-preference-api.service";
+import {MsalService} from "@azure/msal-angular";
+import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
+import moment from "moment";
 
 @Component({
     selector: 'app-milestone-set-view-edit',
@@ -15,12 +17,13 @@ import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case
     styleUrls: ['./milestone-set-view-edit.component.scss']
 })
 export class MilestoneSetViewEditComponent {
-    constructor(public apiService: ProjectApiService, public myPreferenceService: MyPreferenceService, public authService: AuthService, public role: RoleService,
+    constructor(public myPreferenceApiService: MyPreferenceApiService, public apiService: ProjectApiService, public myPreferenceService: MyPreferenceService, public authService: AuthService,
+                public role: RoleService, private msalService: MsalService, private portApiService: PortfolioApiService,
                 public fuseAlert: FuseConfirmationService, private router: Router) {
-        this.standardMilestonesForm.valueChanges.subscribe(res => {
+        this.standardMilestonesTableForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
                 this.formValue()
-                if (JSON.stringify(this.standardMilestonesDb) != JSON.stringify(this.standardMilestonesSubmit)) {
+                if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
                     this.myPreferenceService.isFormChanged = true
                 } else {
                     this.myPreferenceService.isFormChanged = false
@@ -29,88 +32,221 @@ export class MilestoneSetViewEditComponent {
         })
     }
 
-    standardMilestones = []
-    standardMilestonesDb = []
-    standardMilestonesSubmit = []
+    standardMilestonesTableData = []
+    standardMilestonesTableDataDb = []
+    standardMilestonesTableDataSubmit = []
     viewContent: boolean = false
     lookupdata: any[]
     smTableEditStack = []
-    standardMilestonesForm = new FormArray([])
+    filterCriteria: any = {}
+    mainObj: any = {}
+    editedSet: any = {}
+    standardMilestonesTableForm = new FormArray([])
+    standardMilestonesDetailsForm = new FormGroup({
+        milestoneTemplateId: new FormControl(""),
+        milestonesetId: new FormControl(""),
+        portfolioId: new FormControl(""),
+        portfolioOwner: new FormControl(null),
+        milestoneSet: new FormControl(""),
+        templateOwner: new FormControl(""),
+        templateOwnerName: new FormControl(""),
+        createdDate: new FormControl(""),
+        templateIsGlobal: new FormControl(null),
+        modifiedTemplateOwner: new FormControl(""),
+        modifiedDate: new FormControl(""),
+        templateDetails: new FormArray([])
+    })
 
     ngOnInit(): void {
-        this.dataloader()
+        this.getllookup();
     }
 
     dataloader() {
-        this.apiService.getKeyAssumptionsByOption(this.myPreferenceService.projectid, GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
-            this.standardMilestones = res
-            if (this.standardMilestones.length > 0) {
-                this.standardMilestonesDb = this.standardMilestones.map(x => {
-                    return {
-                        "keyAssumptionUniqueId": x.keyAssumptionUniqueId,
-                        "projectId": x.projectId,
-                        "keyAssumption": x.keyAssumption,
-                        "includeInCharter": x.includeInCharter,
-                        "includeInBusinessCase": x.includeInBusinessCase,
-                        "assumptionRationale": x.assumptionRationale,
+        this.portApiService.getfilterlist().then(filterres => {
+            this.filterCriteria = filterres
+            if (this.myPreferenceService.itemid != "new") {
+                this.myPreferenceApiService.getDetails(this.myPreferenceService.itemid).then((res: any) => {
+                    this.editedSet = res
+                    this.standardMilestonesDetailsForm.patchValue({
+                        milestoneTemplateId: res.milestoneTemplateId,
+                        milestonesetId: res.milestonesetId,
+                        portfolioId: res.portfolioId,
+                        portfolioOwner:  this.getPortfolioOwnerById(res.portfolioId),
+                        milestoneSet: res.milestoneSet,
+                        templateOwner: res.templateOwner,
+                        templateOwnerName: res.templateOwnerName,
+                        createdDate: res.createdDate,
+                        templateIsGlobal: res.templateIsGlobal,
+                        modifiedTemplateOwner: res.modifiedTemplateOwner,
+                        modifiedDate: res.modifiedDate,
+                        templateDetails: res.templateDetails
+                    })
+                    this.standardMilestonesTableDataDb = res.templateDetails.map(x => {
+                        return {
+                            "milestoneTemplateId": x.keyAssumptionUniqueId,
+                            "milestoneId": x.milestoneTemplateId,
+                            "milestoneInternalId": x.milestoneInternalId,
+                            "milestone": x.milestone,
+                            "funtionalOwnerId": x.funtionalOwnerId,
+                            "comment": x.comment,
+                            "includeInReport": x.includeInReport,
+                            "sortOrder": x.sortOrder,
+                            "milestoneType": x.milestoneType,
+                        }
+                    })
+                    for (var i of res.templateDetails) {
+                        this.standardMilestonesTableForm.push(new FormGroup({
+                            milestoneTemplateId: new FormControl(i.milestoneTemplateId),
+                            milestoneId: new FormControl(i.milestoneId),
+                            milestoneInternalId: new FormControl(i.milestoneInternalId),
+                            milestone: new FormControl(i.milestone),
+                            funtionalOwnerId: new FormControl(i.funtionalOwnerId),
+                            comment: new FormControl(i.comment),
+                            includeInReport: new FormControl(i.includeInReport),
+                            sortOrder: new FormControl(i.sortOrder),
+                            milestoneType: new FormControl(i.milestoneType),
+                        }))
                     }
+                    console.log("aaaaaaaaaaaaaa", res.templateDetails)
+                    this.standardMilestonesTableData = res.templateDetails;
+                    this.myPreferenceService.isFormChanged = false
+                    this.viewContent = true;
                 })
-                for (var i of this.standardMilestones) {
-                    this.standardMilestones.push(new FormGroup({
-                        keyAssumptionUniqueId: new FormControl(i.keyAssumptionUniqueId),
-                        projectId: new FormControl(i.projectId),
-                        keyAssumption: new FormControl(i.keyAssumption),
-                        includeInCharter: new FormControl(i.includeInCharter),
-                        includeInBusinessCase: new FormControl(i.includeInBusinessCase),
-                        assumptionRationale: new FormControl(i.assumptionRationale),
-                    }))
+            } else {
+                let executionMilestones = [
+                    {
+                        milestoneTemplateId: '',
+                        milestoneId: '',
+                        milestoneInternalId: '',
+                        milestone: 'Execution Start - ',
+                        funtionalOwnerId: '',
+                        comment: '',
+                        includeInReport: false,
+                        sortOrder: '',
+                        milestoneType: 1,
+                    },
+                    {   milestoneTemplateId: '',
+                        milestoneId: '',
+                        milestoneInternalId: '',
+                        milestone: 'Execution End - ',
+                        funtionalOwnerId: '',
+                        comment: '',
+                        includeInReport: false,
+                        sortOrder: '',
+                        milestoneType: 2  }
+                ];
+                this.standardMilestonesTableData = executionMilestones;
+                if (this.standardMilestonesTableData.length > 0) {
+                    this.standardMilestonesTableDataDb = this.standardMilestonesTableData.map(x => {
+                        return {
+                            "milestoneTemplateId": x.keyAssumptionUniqueId,
+                            "milestoneId": x.milestoneTemplateId,
+                            "milestoneInternalId": x.milestoneInternalId,
+                            "milestone": x.milestone,
+                            "funtionalOwnerId": x.funtionalOwnerId,
+                            "comment": x.comment,
+                            "includeInReport": x.includeInReport,
+                            "sortOrder": x.sortOrder,
+                            "milestoneType": x.milestoneType,
+                        }
+                    })
+                    for (var i of this.standardMilestonesTableData) {
+                        this.standardMilestonesTableForm.push(new FormGroup({
+                            milestoneTemplateId: new FormControl(i.milestoneTemplateId),
+                            milestoneId: new FormControl(i.milestoneId),
+                            milestoneInternalId: new FormControl(i.milestoneInternalId),
+                            milestone: new FormControl(i.milestone),
+                            funtionalOwnerId: new FormControl(i.funtionalOwnerId),
+                            comment: new FormControl(i.comment),
+                            includeInReport: new FormControl(i.includeInReport),
+                            sortOrder: new FormControl(i.sortOrder),
+                            milestoneType: new FormControl(i.milestoneType),
+                        }))
+                    }
                 }
+                this.viewContent = true;
             }
-            this.viewContent = true;
-        })
+        });
     }
 
     formValue() {
-        var form = this.standardMilestonesForm.getRawValue()
+        var form = this.standardMilestonesTableForm.getRawValue()
         if (form.length > 0) {
-            this.standardMilestonesSubmit = []
+            this.standardMilestonesTableDataSubmit = []
+            let sortOrder = 100;
             for (var i of form) {
-                this.standardMilestonesSubmit.push({
-                    "keyAssumptionUniqueId": i.keyAssumptionUniqueId,
-                    "projectId": i.projectId,
-                    "keyAssumption": i.keyAssumption,
-                    "assumptionRationale": i.assumptionRationale,
-                    "includeInCharter": i.includeInCharter,
-                    "includeInBusinessCase": i.includeInBusinessCase,
-
+                this.standardMilestonesTableDataSubmit.push({
+                    "milestoneTemplateId": i.milestoneTemplateId,
+                    "milestoneId": i.milestoneTemplateId,
+                    "milestone": i.milestone,
+                    "funtionalOwnerId": i.funtionalOwnerId,
+                    "comment": i.comment ? i.comment : "",
+                    "includeInReport": i.includeInReport,
+                    "sortOrder": sortOrder,
+                    "milestoneType": i.milestoneType ? i.milestoneType : "0",
                 })
+                sortOrder = sortOrder + 100;
             }
         } else {
-            this.standardMilestonesSubmit = []
+            this.standardMilestonesTableDataSubmit = []
+        }
+        if (this.myPreferenceService.itemid == "new") {
+            this.mainObj = {
+                milestoneTemplateId: "",
+                portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwnerId,
+                portfolioOwner: "",
+                milestoneSet: this.standardMilestonesDetailsForm.value.milestoneSet,
+                templateOwner: this.msalService.instance.getActiveAccount().localAccountId,
+                templateOwnerName: "",
+                modifiedTemplateOwner: this.msalService.instance.getActiveAccount().localAccountId,
+                modifiedDate: moment(),
+                templateDetails: this.standardMilestonesTableDataSubmit
+            }
+        }else{
+            this.mainObj = {
+                milestoneTemplateId: this.editedSet.milestoneTemplateId,
+                milestonesetId: this.editedSet.milestonesetId,
+                portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwnerId,
+                portfolioOwner: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwner,
+                milestoneSet: this.standardMilestonesDetailsForm.value.milestoneSet,
+                templateOwner: this.editedSet.templateOwner,
+                templateOwnerName: this.editedSet.templateOwnerName,
+                createdDate: this.editedSet.createdDate,
+                modifiedTemplateOwner: this.msalService.instance.getActiveAccount().localAccountId,
+                modifiedDate: moment(),
+                templateIsGlobal: this.editedSet.templateIsGlobal,
+                templateDetails: this.standardMilestonesTableDataSubmit
+            }
         }
     }
 
     addSM() {
         var j = [{}]
         j = [{
-            keyAssumptionUniqueId: '',
-            projectId: '',
-            keyAssumption: '',
-            assumptionRationale: '',
-            includeInCharter: false,
-            includeInBusinessCase: false,
+            milestoneTemplateId: '',
+            milestoneId: '',
+            milestoneInternalId: '',
+            milestone: '',
+            funtionalOwnerId: '',
+            comment: '',
+            includeInReport: false,
+            sortOrder: '',
+            milestoneType: '',
         }]
-        this.standardMilestonesForm.push(new FormGroup({
-            keyAssumptionUniqueId: new FormControl(''),
-            projectId: new FormControl(this.myPreferenceService.projectid),
-            keyAssumption: new FormControl(''),
-            assumptionRationale: new FormControl(''),
-            includeInCharter: new FormControl(false),
-            includeInBusinessCase: new FormControl(false),
+        this.standardMilestonesTableForm.push(new FormGroup({
+            milestoneTemplateId: new FormControl(''),
+            milestoneId: new FormControl(''),
+            milestoneInternalId: new FormControl(''),
+            milestone: new FormControl(''),
+            funtionalOwnerId: new FormControl(''),
+            comment: new FormControl(''),
+            includeInReport: new FormControl(false),
+            sortOrder: new FormControl(''),
+            milestoneType: new FormControl(''),
         }))
 
-        this.standardMilestones = [...this.standardMilestones, ...j]
-        this.smTableEditStack.push(this.standardMilestones.length - 1)
+        this.standardMilestonesTableData = [...this.standardMilestonesTableData, ...j]
+        this.smTableEditStack.push(this.standardMilestonesTableData.length - 1)
         var div = document.getElementsByClassName('datatable-scroll')[0]
         setTimeout(() => {
             div.scroll({
@@ -153,30 +289,71 @@ export class MilestoneSetViewEditComponent {
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
                 if (close == 'confirmed') {
-                    this.standardMilestones.splice(rowIndex, 1)
-                    this.standardMilestonesForm.removeAt(rowIndex)
+                    this.standardMilestonesTableData.splice(rowIndex, 1)
+                    this.standardMilestonesTableForm.removeAt(rowIndex)
                     if (this.smTableEditStack.includes(rowIndex)) {
                         this.smTableEditStack.splice(this.smTableEditStack.indexOf(rowIndex), 1)
                     }
                     this.smTableEditStack = this.smTableEditStack.map(function (value) {
                         return value > rowIndex ? value - 1 : value;
                     })
-                    this.standardMilestones = [...this.standardMilestones]
+                    this.standardMilestonesTableData = [...this.standardMilestonesTableData]
                 }
             }
         )
     }
 
     submitStandardMilestones() {
-        if (JSON.stringify(this.standardMilestonesDb) != JSON.stringify(this.standardMilestonesSubmit)) {
-            this.myPreferenceService.isFormChanged = false
-            this.formValue()
-            this.apiService.bulkEditKeyAssumptions(this.standardMilestonesSubmit, this.myPreferenceService.projectid).then(res => {
+        if (this.myPreferenceService.itemid != 'new') {
+            if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
+                this.myPreferenceService.isFormChanged = false
+                this.formValue()
+                this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(res => {
+                    // this.myPreferenceService.submitbutton.next(true)
+                    // this.myPreferenceService.isNavChanged.next(true)
+                    this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                })
+            } else {
                 // this.myPreferenceService.submitbutton.next(true)
-                this.myPreferenceService.toggleDrawerOpen('', '', [], '')
                 // this.myPreferenceService.isNavChanged.next(true)
-            });
-        }
+                this.myPreferenceService.toggleDrawerOpen('', '', [], '')
 
+            }
+        }else{
+            if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
+                this.myPreferenceService.isFormChanged = false
+                this.formValue()
+                this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj, '1').then(res => {
+                    // this.myPreferenceService.submitbutton.next(true)
+                    this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                    // this.myPreferenceService.isNavChanged.next(true)
+                });
+            }
+        }
+    }
+
+    getPortfolioOwner(): any {
+        return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
+        // return "";
+    }
+    getPortfolioOwnerById(portfolioId: string): any {
+        return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true && x.portfolioOwnerId == portfolioId)[0];
+    }
+
+    getFunctionOwner(): any {
+        return this.lookupdata.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77").sort((a, b) => {
+            return a.lookUpOrder - b.lookUpOrder;
+        })
+    }
+
+    getLookUpName(id: string): string {
+        return id && id != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
+    }
+
+    getllookup() {
+        this.authService.lookupMaster().then((resp: any) => {
+            this.lookupdata = resp
+            this.dataloader()
+        })
     }
 }

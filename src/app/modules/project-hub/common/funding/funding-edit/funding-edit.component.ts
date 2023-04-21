@@ -69,7 +69,7 @@ export class FundingEditComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.mode == 'Project-Charter') {
+    if (this.mode == 'Project-Charter' || this.optionType == 'recommended-option') {
       this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
       this.apiService.getCostFunding(this.id).then((res: any) => {
         this.portApiService.getfilterlist().then((po: any) => {
@@ -102,10 +102,24 @@ export class FundingEditComponent implements OnInit {
       })
     }
 
-    if (this.mode != 'Project-Charter' && (this.optionType == 'recommended-option' || this.optionType == 'option-2' ||
+    if (this.mode != 'Project-Charter' && (this.optionType == 'option-2' ||
       this.optionType == 'option-3')) {
       this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
-      this.apiService.getCostFunding(this.id).then((res: any) => {
+      // if(this.optionType == 'recommended-option')
+      // {
+      //   this.optionId = GlobalBusinessCaseOptions.OPTION_1
+      // }
+      if(this.optionType == 'option-2')
+      {
+        this.optionId = GlobalBusinessCaseOptions.OPTION_2
+      }
+     
+      else if(this.optionType == 'option-3')
+      {
+        this.optionId = GlobalBusinessCaseOptions.OPTION_3
+      }
+     
+      this.apiService.getBusinessCaseCostFunding(this.id, this.optionId).then((res: any) => {
         this.portApiService.getfilterlist().then((po: any) => {
           this.auth.lookupMaster().then((resp: any) => {
             this.fundingSourceData = po
@@ -169,7 +183,7 @@ export class FundingEditComponent implements OnInit {
     this.projecthubservice.isFormChanged = false
     var funding = this.FundingForm.getRawValue()
     var BCfunding = this.FundingBCForm.getRawValue()
-    console.log(this.optionType)
+    console.log(BCfunding)
     if (this.mode == 'Project-Charter') {
       var mainObj = {
         fundingUniqueId: "",

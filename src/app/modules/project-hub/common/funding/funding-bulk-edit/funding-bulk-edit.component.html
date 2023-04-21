@@ -47,7 +47,7 @@
                             <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OPEX</p>
                             <p *ngIf="!value">&nbsp;</p>
                         </a>
-                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
+                        <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-select formControlName="fundingTypeId" name="fundingTypeId"
                                 [placeholder]="'Funding Type'" [dropDownArrayType]="'object'"
                                 [dropDownArray]="getfundingtype()" [idPointer]="'lookUpId'"
@@ -116,7 +116,7 @@
                     <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                         <p *ngIf="!value">&nbsp;</p>{{getSource(value)}}
                     </a>
-                    <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
+                    <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                         <spot-select formControlName="fundingSourceId"
                             name="fundingSourceName" [placeholder]="'Funding Source'" [idPointer]="'portfolioOwnerId'"
                             [valuePointer]="'portfolioOwner'" [dropDownArray]="getPO()" [dropDownArrayType]="'object'" [showNoneOption]="false"
@@ -167,7 +167,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
@@ -183,9 +183,9 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
-                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
+                        <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
                                  class="h-full overflow-hidden" formControlName="fundingIntheplan" [mode]="'dropDown'">
                             </spot-toggle>
@@ -199,7 +199,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
                         <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
@@ -215,7 +215,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
                         <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
@@ -246,7 +246,7 @@
                         <p *ngIf="!value">&nbsp;</p>
                         <p class="amount">{{value | number:'1.0-0'}}</p>
                     </a>
-                    <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
+                    <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
                         <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2">
                         </spot-input>
                     </form>
@@ -301,7 +301,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>{{value}}
                         </a>
-                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"   class="pt-4">
+                        <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"   class="pt-4">
                             <spot-textarea formControlName="fundingNotes" [showLabel]="false"
                                 [placeholder]="'Notes'" [rows]="3"  [showHint]="false">
                             </spot-textarea>
@@ -338,7 +338,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [sortable]="false"
-                    name="Include In Project Charter Report (Max 3)" prop="includeInCharter" [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
+                    name="Include in Charter (Max 3)" prop="includeInCharter" [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)"
                             class="w-full">
@@ -363,10 +363,10 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
                         </a>
-                        <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"
+                        <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"
                             class="h-[45px]">
                             <mat-slide-toggle
-                                [matTooltip]="this.FundingForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 2 can be selected at a time for business case report display' : null"
+                                [matTooltip]="this.FundingBCForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 2 can be selected at a time for business case report display' : null"
                                 (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInBusinessCase">
                             </mat-slide-toggle>
                         </form>
@@ -374,7 +374,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [sortable]="false"
-                    name="Include In Business Case Report (Max 2)" prop="includeInBusinessCase" [flexGrow]="0.4" *ngIf="mode!= 'Project-Charter' && (optionType== 'option-2' || optionType=='option-3')">
+                    name="Include in Business Case (Max 2)" prop="includeInBusinessCase" [flexGrow]="0.4" *ngIf="mode!= 'Project-Charter' && (optionType== 'option-2' || optionType=='option-3')">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)"
                             class="w-full">
@@ -403,7 +403,7 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                
+
             </ngx-datatable>
         </div>
     </div>

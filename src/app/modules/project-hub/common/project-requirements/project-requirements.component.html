@@ -28,7 +28,7 @@
                     <spot-input formControlName="functionsRequiredId" [label]="'# Functions Required'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <spot-input formControlName="estimatedFTE"  [label]="'Estimated FTEs'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                    <spot-input formControlName="estimatedFTE"  [label]="'Estimated FTEs'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'"
                                 class="w-full read-only" >
                     </spot-input>
                     <spot-input formControlName="shutdownRequired"  [label]="'Shutdown Required'"
@@ -38,16 +38,16 @@
                                 class="w-full read-only" >
                     </spot-input>
                     <spot-input formControlName="totalCapExBaseCase"  [label]="'CAPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'"
-                                class="w-full read-only" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" >
+                                class="w-full read-only" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'" >
                     </spot-input>
                     <spot-input formControlName="totalNonFTEOpExBaseCase"  [label]="'OPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'"
-                                class="w-full read-only"  [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                                class="w-full read-only"  [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'">
                     </spot-input>
                     <spot-input formControlName="planFundingRequired"  [label]="'Plan Funding Required'"
                                 class="w-full read-only" >
                     </spot-input>
                     <spot-input formControlName="howMuch"  [label]="'How Much (' + this.localCurrency.localCurrencyAbbreviation + ')'"
-                                class="w-full read-only" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" >
+                                class="w-full read-only" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'">
                     </spot-input>
                     <spot-input formControlName="budgetInPlan"  [label]="'Budget in Plan'"
                                 class="w-full read-only" >

@@ -1,6 +1,7 @@
 <div>
-    <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-        <a class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary" [matTooltip]="'Document the high level outcomes expected to consider the proposed solution successful'">Operational Benefits</a>
+    <div class="pb-2 pt-0 flex items-center justify-between">
+        <a class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary"  [matTooltip]="'Document the high level outcomes expected to consider the proposed solution successful'">
+            Operational Benefits</a>
         <div class="text-primary" *ngIf="projectHubService.roleControllerControl.projectTeam">
             <div class="flex items-start justify-between">
                 <div >
@@ -20,7 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="overflow-x-auto mx-6">
+    <div class="overflow-x-auto">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                        class="pr-6 font-medium text-sm text-default whitespace-nowrap" [rows]="benefitsData"
                        #projectTeamsTable>

@@ -20,7 +20,6 @@ export class OperationalBenefitsTableComponent {
         ,public fuseAlert: FuseConfirmationService, private router: Router) {
     }
     ngOnInit(): void {
-
     }
 
     deleteOperationalBenefit(id: string) {
@@ -48,7 +47,7 @@ export class OperationalBenefitsTableComponent {
         const keyAsumptioneAlert = this.fuseAlert.open(comfirmConfig)
         keyAsumptioneAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                this.apiService.deleteBusinessCaseOptionDetail(this.benefitsData.projectId,this.optionId,id).then(res => {
+                this.apiService.deleteBusinessCaseOptionDetail(this.projectHubService.projectid,this.optionId,id).then(res => {
                     this.projectHubService.submitbutton.next(true)
                 })
             }
