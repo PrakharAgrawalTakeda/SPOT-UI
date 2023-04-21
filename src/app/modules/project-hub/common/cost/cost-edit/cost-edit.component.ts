@@ -7,6 +7,7 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { GlobalBusinessCaseOptions } from 'app/shared/global-business-case-options';
+import moment from 'moment';
 import { ProjectApiService } from '../../project-api.service';
 
 @Component({
@@ -258,8 +259,8 @@ export class CostEditComponent {
               totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.apisdate ? moment(res.costData.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
               capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
@@ -297,8 +298,8 @@ export class CostEditComponent {
               totalNonFteopExHighCase: res.costData.totalNonFteopExHighCase ? res.costData.totalNonFteopExHighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.apisdate ? res.costData.apisdate : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.apisdate ? moment(res.costData.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
               capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
@@ -337,8 +338,8 @@ export class CostEditComponent {
               totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.assetInService ? res.costData.assetInService : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.assetInService ? moment(res.costData.assetInService).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
               capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
@@ -377,8 +378,8 @@ export class CostEditComponent {
               totalNonFteopExHighCase: res.costData.totalNonFtehighCase ? res.costData.totalNonFtehighCase : null,
               functionsRequiredId: res.costData.functionsRequiredId ? lookup.find(x => x.lookUpId == res.costData.functionsRequiredId) : '',
               currentYearPlannedSpend: res.costData.currentYearPlannedSpend ? res.costData.currentYearPlannedSpend : null,
-              projectSpendStart: res.costData.projectSpendStart ? res.costData.projectSpendStart : null,
-              apisdate: res.costData.assetInService ? res.costData.assetInService : null,
+              projectSpendStart: res.costData.projectSpendStart ? moment(res.costData.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+              apisdate: res.costData.assetInService ? moment(res.costData.assetInService).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
               assetInServiceNa: res.costData.assetInServiceNa ? res.costData.assetInServiceNa : false,
               isProjectSpentNa: res.costData.isProjectSpentNa ? res.costData.isProjectSpentNa : false,
               capexRequired: res.costData.capexRequired ? res.costData.capexRequired : false,
@@ -412,7 +413,7 @@ export class CostEditComponent {
       (formValue.totalCapExHighCase != null && formValue.totalCapExBaseCase > formValue.totalCapExHighCase) ||
       (formValue.totalNonFteopExHighCase != null && formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase)) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "The Base Case cannot be Higher than the High Case",
+        "title": "The Base Case cannot be higher than the High Case",
         "message": "",
         "icon": {
           "show": true,
@@ -456,8 +457,8 @@ export class CostEditComponent {
             totalNonFteopExBaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
             totalNonFteopExHighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
             functionsRequiredId: formValue.functionsRequiredId && Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
-            apisdate: formValue.apisdate ? formValue.apisdate : null,
-            projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
+            apisdate: formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            projectSpendStart: formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
             currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
             assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
             isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
@@ -472,8 +473,8 @@ export class CostEditComponent {
             mainObj.totalNonFteopExBaseCase = formValue.totalNonFteopExBaseCase ? formValue.totalNonFteopExBaseCase : null,
             mainObj.totalNonFteopExHighCase = formValue.totalNonFteopExHighCase ? formValue.totalNonFteopExHighCase : null,
             mainObj.functionsRequiredId = Object.keys(formValue.functionsRequiredId).length > 0 ? formValue.functionsRequiredId.lookUpId : null,
-            mainObj.apisdate = formValue.apisdate ? formValue.apisdate : null,
-            mainObj.projectSpendStart = formValue.projectSpendStart ? formValue.projectSpendStart : null,
+            mainObj.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+            mainObj.projectSpendStart = formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
             mainObj.currentYearPlannedSpend = formValue.currentYearPlannedSpend ? formValue.currentYearPlannedSpend : null,
             mainObj.assetInServiceNa = formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
             mainObj.isProjectSpentNa = formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
@@ -492,6 +493,7 @@ export class CostEditComponent {
       }
       if (this.mode != 'Project-Charter' && this.optionType == 'recommended-option') {
         let mainObj;
+        console.log(formValue)
         mainObj = {
           projectId: this.projectHubService.projectid,
           businessOptionId: this.optionId,
@@ -499,13 +501,13 @@ export class CostEditComponent {
           totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
           totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
           totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
-          assetInService: formValue.apisdate ? formValue.apisdate : null,
-          projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
+          apisdate: formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          projectSpendStart: formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
           assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
           isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false
         }
-        this.apiService.updateBusinessCaseCost(mainObj, this.projectHubService.projectid, GlobalBusinessCaseOptions.OPTION_1).then(Res => {
+        this.apiService.updateCost(mainObj, this.projectHubService.projectid).then(Res => {
           this.projectHubService.isNavChanged.next(true)
           this.projectHubService.submitbutton.next(true)
           this.projectHubService.successSave.next(true)
@@ -522,8 +524,8 @@ export class CostEditComponent {
           totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
           totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
           totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
-          assetInService: formValue.apisdate ? formValue.apisdate : null,
-          projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
+          assetInService: formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          projectSpendStart: formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
           assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
           isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,
@@ -548,8 +550,8 @@ export class CostEditComponent {
           totalCapexHighCase: typeof formValue.totalCapExHighCase === 'string' ? Number(formValue.totalCapExHighCase) : formValue.totalCapExHighCase,
           totalNonFtebaseCase: typeof formValue.totalNonFteopExBaseCase === 'string' ? Number(formValue.totalNonFteopExBaseCase) : formValue.totalNonFteopExBaseCase,
           totalNonFtehighCase: typeof formValue.totalNonFteopExHighCase === 'string' ? Number(formValue.totalNonFteopExHighCase) : formValue.totalNonFteopExHighCase,
-          assetInService: formValue.apisdate ? formValue.apisdate : null,
-          projectSpendStart: formValue.projectSpendStart ? formValue.projectSpendStart : null,
+          assetInService: formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+          projectSpendStart: formValue.projectSpendStart ? moment(formValue.projectSpendStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           currentYearPlannedSpend: typeof formValue.currentYearPlannedSpend === 'string' ? Number(formValue.currentYearPlannedSpend) : formValue.currentYearPlannedSpend,
           assetInServiceNa: formValue.assetInServiceNa ? formValue.assetInServiceNa : false,
           isProjectSpentNa: formValue.isProjectSpentNa ? formValue.isProjectSpentNa : false,

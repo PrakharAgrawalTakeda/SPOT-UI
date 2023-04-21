@@ -1,5 +1,5 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Water Waste</div>
+    <div class="text-on-primary" style="padding-top: 6px">Water and Waste</div>
     <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
             href="javascript:void(0)" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -18,7 +18,7 @@
         </spot-select>
 
         <spot-input class="w-full" formControlName="emwwunit" name="emwwunit" [label]="'Units'" [decimalCount]="0"
-            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'units'" [allowNegativeValues] = true [showHint]="true"
+            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'0'" [allowNegativeValues] = true [showHint]="true"
                 [hint]="'Input gross change in emissions type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.'">
         </spot-input>
 
@@ -26,7 +26,7 @@
         </spot-textarea>
 
         <spot-input class="w-full" formControlName="emwwunitCost" name="emwwunitCost" [label]=unitCost [decimalCount]="4"
-            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'unitCost'" [showHint]="true"
+            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true"
                 [hint]="'Input the cost of each energy unit using upto 4 decimal places, positive values only.'">
         </spot-input>
 

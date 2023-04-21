@@ -698,6 +698,12 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     const response = await lastValueFrom(abc$)
     return response
   }
+    async deleteFundingBusinessCase(projectId: string, optionId: string,id: string) {
+        var link = GlobalVariables.apiurl + "BusinessCaseCostFunding/BusinessCaseFunding/" + projectId + '/' + optionId + '/'+ id
+        const abc$ = this.http.delete(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 
   async getLocalAttributes(projectid: string) {
     var url = GlobalVariables.apiurl + "LocalAttributes/" + projectid

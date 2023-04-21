@@ -20,12 +20,15 @@ export class CarbonTableComponent {
   @Input() data : any
   noCarbon: boolean = false
   @Input() ProjectData: any
+  @Input() editCost: any
+  sortDir = ""
+  sortDirCost = ""
   lookupdata: any
   carbonBulkEditData: any = []
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
-      if (res == true) {
+      if (res == true && this.viewContent == true) {
         this.dataloader()
       }
     })
@@ -62,8 +65,27 @@ export class CarbonTableComponent {
       this.carbonBulkEditData.push(this.ProjectData.projectData)
       this.carbonBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
       this.carbonBulkEditData.push(this.ProjectData.envionmentPortfolio.portfolioOwnerId)
+      this.carbonBulkEditData.push(this.editCost)
       this.viewContent = true
     })
+  }
+
+  sortasc() {
+    if (this.sortDir == "" || this.sortDir == "desc") {
+      return this.sortDir = "asc"
+    }
+    else if (this.sortDir == "asc") {
+      return this.sortDir = "desc"
+    }
+  }
+
+  sortascCost() {
+    if (this.sortDirCost == "" || this.sortDirCost == "desc") {
+      return this.sortDirCost = "asc"
+    }
+    else if (this.sortDirCost == "asc") {
+      return this.sortDirCost = "desc"
+    }
   }
 
 }

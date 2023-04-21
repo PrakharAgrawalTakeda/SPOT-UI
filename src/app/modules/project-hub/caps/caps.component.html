@@ -1,6 +1,4 @@
 <div class="w-full min-w-0 p-8 pt-0" #container>
-    <!-- <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent"> -->
-        <!-- Enter Content here-->
         <form class="w-full" [formGroup]="CAPSform">
             <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
                 <div class="flex justify-between items-center pb-6">
@@ -11,18 +9,45 @@
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button
                             [color]="'primary-200'"
                             *ngIf = "editableEnv && editable"
-                            (click)="projectHubService.toggleDrawerOpen('CAPS', '', '' , id)">
+                            (click)="projectHubService.toggleDrawerOpen('CAPS', '', costEdit , id)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
                     </div>
                 </div>
-                <!-- <div class="grid grid-cols-3 gap-x-6 items-center"> -->
                     <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+                        <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+                            [label]="'Environmental Portfolio'" [showHint]="true"
+                            [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
+                        </spot-input>
+                        <spot-input class="w-full read-only custom" formControlName="EmissionsImpact" name="EmissionsImpact"
+                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false" [placeholder]="'0.0'">
+                        </spot-input>
+                        <div></div>
+                        <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"
+                            [label]="'Impact Realization Date'" [showHint]="true"
+                            [hint]="'The expected date for when the project activity will begin to impact GHG emissions, fresh water withdrawal, or waste generated.'">
+                        </spot-input-date>
+                        <div *ngIf="!this.showDefault"></div><div *ngIf="!this.showDefault"></div>
+                        <div *ngIf="this.showDefault" class="label">
+                        <spot-input class="w-full read-only custom" formControlName="EnergyImpact" name="EnergyImpact"
+                            [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false" [placeholder]="'0'">
+                        </spot-input>
+                        <label class="Unit">GJ</label>
+                        </div>
+                        <div *ngIf="this.showDefault" class="label">
+                        <spot-input class="w-full read-only customCost" formControlName="EnergyCost" name="EnergyCost"
+                            [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                                [autoAddDecimal]="false" [placeholder]="'0'">
+                        </spot-input>
+                        <label class="Unit">{{currencyLabel}}</label>
+                        </div>
                         <div class="flex justify-start gap-3 items-center w-full pt-2">
                             <div class="flex justify-start gap-1 items-center">
                                 CAPS Project <mat-icon class="pe icon-size-4"
                                     matTooltip="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
-CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
+                                                CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
                                     help</mat-icon>
                             </div>
                             <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="!CAPSform.controls.isCapsProject.value">
@@ -31,101 +56,60 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                 *ngIf="CAPSform.controls.isCapsProject.value">
                             </mat-icon>
                         </div>
-                        <spot-input class="w-full read-only" formControlName="EmissionsImpact" name="EmissionsImpact"
-                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0.0'">
-                        </spot-input>
-                        <div></div>
-                        <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
-                            [label]="'Environmental Portfolio'" [showHint]="true"
-                            [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
-                        </spot-input>
-                        <div *ngIf="!this.showDefault"></div><div *ngIf="!this.showDefault"></div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only" formControlName="EnergyImpact" name="EnergyImpact"
-                            [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0'">
-                        </spot-input>
-                        <label class="Unit">GJ</label>
-                        </div>
-                        <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only" formControlName="EnergyCost" name="EnergyCost"
-                            [label]="''" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0'">
-                        </spot-input>
-                        <label class="Unit">{{currencyLabel}}</label>
-                        </div>
-                        <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"
-                            [label]="'Impact Realization Date'" [showHint]="true" [hint]="'The expected date for when the project activity will begin to impact GHG emissions, fresh water withdrawal, or waste generated.'">
-                        </spot-input-date>
-                        <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only" formControlName="WaterImpact" name="WaterImpact"
+                        <spot-input class="w-full read-only custom" formControlName="WaterImpact" name="WaterImpact"
                             [label]="'Water Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">m3</label>
                         </div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only" formControlName="WaterCost" name="WaterCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                        <spot-input class="w-full read-only customCost" formControlName="WaterCost" name="WaterCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
+                        <spot-input class="w-full read-only custom" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only" formControlName="WasteCost" name="WasteCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
+                        <spot-input class="w-full read-only customCost" formControlName="WasteCost" name="WasteCost" [label]="''" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">{{currencyLabel}}</label>
                         </div>
                         <div></div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
+                        <spot-input class="w-full read-only custom" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
                             [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">Kg</label>
                         </div>
                     </div>
-                <!-- </div> -->
             </div>
         </form>
-    <!-- </div> -->
-    <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
-        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
-            *ngIf="viewContent">
-        <app-carbon-table [Editable]="editableEnv && editable" [data]="carbonngx" [ProjectData]="CAPSdata"></app-carbon-table>
+    <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container *ngIf="viewContent">
+        
+        <app-carbon-table [Editable]="editableEnv && editable" [data]="carbonngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-carbon-table>
+        <br><br>
+        <app-biogenics-table [Editable]="editableEnv && editable" [data]="Biogenicsngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-biogenics-table>
+        <br><br>
+        <form class="p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
+            <mat-slide-toggle class="primary slider-adjust" formControlName="NoCarbonImpact">
+                No Carbon Impact</mat-slide-toggle>
+        </form>
     </div>
     </div>
     <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-biogenics-table [Editable]="editableEnv && editable" [data]="Biogenicsngx" [ProjectData]="CAPSdata"></app-biogenics-table>
-        </div>
-    </div>
-    <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
-        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
-            *ngIf="viewContent">
-            <form class="p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
-                <!-- <spot-toggle style="border-left: 5px solid #fff !important;" class="w-full primary slider-adjust" formControlName="NoCarbonImpact" [mode]="'toggle'" [label]="'No Carbon Impact'">
-                </spot-toggle> -->
-                <mat-slide-toggle class="primary slider-adjust" formControlName="NoCarbonImpact">
-                    No Carbon Impact</mat-slide-toggle>
-            </form>
-        </div>
-        </div>
-    </div>
-    <div *ngIf="showDefault" class="flex justify-between items-start gap-6 w-full">
-        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
-            *ngIf="viewContent">
-            <app-water-waste-table [Editable]="editableEnv && editable" [data]="WaterWastengx" [ProjectData]="CAPSdata" [WaterWasteParam]="WaterWasteParam"></app-water-waste-table>
+            <app-water-waste-table [Editable]="editableEnv && editable" [data]="WaterWastengx" [ProjectData]="CAPSdata" [WaterWasteParam]="WaterWasteParam" [editCost]="costEdit"></app-water-waste-table>
         </div>
     </div>
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">

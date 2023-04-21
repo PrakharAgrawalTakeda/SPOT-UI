@@ -1,6 +1,6 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Biogenics</div>
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Biogenic</div>
         <div style="padding-top: 2px">
             <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
                 <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -9,7 +9,7 @@
     </div>
     <div class="w-full bg-card rounded-2xl">
         <div class="flex items-center justify-end gap-3 pt-3 pr-3 grid-cols-2">
-            <form style="width:23%;display: flex;" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
+            <form class="date" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
                     <mat-label>Impact Realization Date</mat-label>
                     <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
@@ -17,10 +17,6 @@
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
-                <!-- <div class="w-full mt-4 mb-6" style="margin-left: 47px;padding-left: 12px; padding-top: 19px;">
-                    <spot-toggle class="w-full" formControlName="NoCarbonImpact" [mode]="'toggle'" [label]="'No Carbon Impact'">
-                    </spot-toggle>
-                </div> -->
             </form>
             <button class="ml-4 text-primary bg-gray-200" *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS"
                 mat-flat-button [color]="'primary-200'" (click)="addBiogenics()">
@@ -92,12 +88,13 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
+                        <p *ngIf="!editCarbonBiogenic">{{ value}}</p>
+                        <a *ngIf="!biogenicsTableEditStack.includes(rowIndex) && editCarbonBiogenic" (click)="biogenicsTableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p class="cost">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]"
-                            *ngIf="biogenicsTableEditStack.includes(rowIndex)">
+                            *ngIf="biogenicsTableEditStack.includes(rowIndex) && editCarbonBiogenic">
                             <spot-input class="w-full" formControlName="biogenicUnitCost" name="biogenicUnitCost" [decimalCount]="4" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'Unit Cost'">
                             </spot-input>

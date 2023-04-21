@@ -125,6 +125,11 @@ export class ProjectSettingsComponent {
 
 
         }
+        else
+        {
+          
+          location.reload()
+        }
       })
 
     }
