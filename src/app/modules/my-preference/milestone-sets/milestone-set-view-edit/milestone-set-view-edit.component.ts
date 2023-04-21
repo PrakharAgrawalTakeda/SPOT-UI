@@ -20,10 +20,10 @@ export class MilestoneSetViewEditComponent {
     constructor(public myPreferenceApiService: MyPreferenceApiService, public apiService: ProjectApiService, public myPreferenceService: MyPreferenceService, public authService: AuthService,
                 public role: RoleService, private msalService: MsalService, private portApiService: PortfolioApiService,
                 public fuseAlert: FuseConfirmationService, private router: Router) {
-        this.standardMilestonesForm.valueChanges.subscribe(res => {
+        this.standardMilestonesTableForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
                 this.formValue()
-                if (JSON.stringify(this.standardMilestonesDb) != JSON.stringify(this.standardMilestonesSubmit)) {
+                if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
                     this.myPreferenceService.isFormChanged = true
                 } else {
                     this.myPreferenceService.isFormChanged = false
@@ -32,16 +32,16 @@ export class MilestoneSetViewEditComponent {
         })
     }
 
-    standardMilestones = []
-    standardMilestonesDb = []
-    standardMilestonesSubmit = []
+    standardMilestonesTableData = []
+    standardMilestonesTableDataDb = []
+    standardMilestonesTableDataSubmit = []
     viewContent: boolean = false
     lookupdata: any[]
     smTableEditStack = []
     filterCriteria: any = {}
     mainObj: any = {}
     editedSet: any = {}
-    standardMilestonesForm = new FormArray([])
+    standardMilestonesTableForm = new FormArray([])
     standardMilestonesDetailsForm = new FormGroup({
         milestoneTemplateId: new FormControl(""),
         milestonesetId: new FormControl(""),
@@ -81,7 +81,7 @@ export class MilestoneSetViewEditComponent {
                         modifiedDate: res.modifiedDate,
                         templateDetails: res.templateDetails
                     })
-                    this.standardMilestonesDb = res.templateDetails.map(x => {
+                    this.standardMilestonesTableDataDb = res.templateDetails.map(x => {
                         return {
                             "milestoneTemplateId": x.keyAssumptionUniqueId,
                             "milestoneId": x.milestoneTemplateId,
@@ -95,7 +95,7 @@ export class MilestoneSetViewEditComponent {
                         }
                     })
                     for (var i of res.templateDetails) {
-                        this.standardMilestonesForm.push(new FormGroup({
+                        this.standardMilestonesTableForm.push(new FormGroup({
                             milestoneTemplateId: new FormControl(i.milestoneTemplateId),
                             milestoneId: new FormControl(i.milestoneId),
                             milestoneInternalId: new FormControl(i.milestoneInternalId),
@@ -107,14 +107,37 @@ export class MilestoneSetViewEditComponent {
                             milestoneType: new FormControl(i.milestoneType),
                         }))
                     }
-                    this.standardMilestones = res.templateDetails;
+                    console.log("aaaaaaaaaaaaaa", res.templateDetails)
+                    this.standardMilestonesTableData = res.templateDetails;
                     this.myPreferenceService.isFormChanged = false
-
                     this.viewContent = true;
                 })
             } else {
-                if (this.standardMilestones.length > 0) {
-                    this.standardMilestonesDb = this.standardMilestones.map(x => {
+                let executionMilestones = [
+                    {
+                        milestoneTemplateId: '',
+                        milestoneId: '',
+                        milestoneInternalId: '',
+                        milestone: 'Execution Start - ',
+                        funtionalOwnerId: '',
+                        comment: '',
+                        includeInReport: false,
+                        sortOrder: '',
+                        milestoneType: 1,
+                    },
+                    {   milestoneTemplateId: '',
+                        milestoneId: '',
+                        milestoneInternalId: '',
+                        milestone: 'Execution End - ',
+                        funtionalOwnerId: '',
+                        comment: '',
+                        includeInReport: false,
+                        sortOrder: '',
+                        milestoneType: 2  }
+                ];
+                this.standardMilestonesTableData = executionMilestones;
+                if (this.standardMilestonesTableData.length > 0) {
+                    this.standardMilestonesTableDataDb = this.standardMilestonesTableData.map(x => {
                         return {
                             "milestoneTemplateId": x.keyAssumptionUniqueId,
                             "milestoneId": x.milestoneTemplateId,
@@ -127,8 +150,8 @@ export class MilestoneSetViewEditComponent {
                             "milestoneType": x.milestoneType,
                         }
                     })
-                    for (var i of this.standardMilestones) {
-                        this.standardMilestones.push(new FormGroup({
+                    for (var i of this.standardMilestonesTableData) {
+                        this.standardMilestonesTableForm.push(new FormGroup({
                             milestoneTemplateId: new FormControl(i.milestoneTemplateId),
                             milestoneId: new FormControl(i.milestoneId),
                             milestoneInternalId: new FormControl(i.milestoneInternalId),
@@ -147,12 +170,12 @@ export class MilestoneSetViewEditComponent {
     }
 
     formValue() {
-        var form = this.standardMilestonesForm.getRawValue()
+        var form = this.standardMilestonesTableForm.getRawValue()
         if (form.length > 0) {
-            this.standardMilestonesSubmit = []
+            this.standardMilestonesTableDataSubmit = []
             let sortOrder = 100;
             for (var i of form) {
-                this.standardMilestonesSubmit.push({
+                this.standardMilestonesTableDataSubmit.push({
                     "milestoneTemplateId": i.milestoneTemplateId,
                     "milestoneId": i.milestoneTemplateId,
                     "milestone": i.milestone,
@@ -160,12 +183,12 @@ export class MilestoneSetViewEditComponent {
                     "comment": i.comment ? i.comment : "",
                     "includeInReport": i.includeInReport,
                     "sortOrder": sortOrder,
-                    "milestoneType": i.milestoneType ? i.milestoineType : "0",
+                    "milestoneType": i.milestoneType ? i.milestoneType : "0",
                 })
                 sortOrder = sortOrder + 100;
             }
         } else {
-            this.standardMilestonesSubmit = []
+            this.standardMilestonesTableDataSubmit = []
         }
         if (this.myPreferenceService.itemid == "new") {
             this.mainObj = {
@@ -177,7 +200,7 @@ export class MilestoneSetViewEditComponent {
                 templateOwnerName: "",
                 modifiedTemplateOwner: this.msalService.instance.getActiveAccount().localAccountId,
                 modifiedDate: moment(),
-                templateDetails: this.standardMilestonesSubmit
+                templateDetails: this.standardMilestonesTableDataSubmit
             }
         }else{
             this.mainObj = {
@@ -192,7 +215,7 @@ export class MilestoneSetViewEditComponent {
                 modifiedTemplateOwner: this.msalService.instance.getActiveAccount().localAccountId,
                 modifiedDate: moment(),
                 templateIsGlobal: this.editedSet.templateIsGlobal,
-                templateDetails: this.standardMilestonesSubmit
+                templateDetails: this.standardMilestonesTableDataSubmit
             }
         }
     }
@@ -210,7 +233,7 @@ export class MilestoneSetViewEditComponent {
             sortOrder: '',
             milestoneType: '',
         }]
-        this.standardMilestonesForm.push(new FormGroup({
+        this.standardMilestonesTableForm.push(new FormGroup({
             milestoneTemplateId: new FormControl(''),
             milestoneId: new FormControl(''),
             milestoneInternalId: new FormControl(''),
@@ -222,8 +245,8 @@ export class MilestoneSetViewEditComponent {
             milestoneType: new FormControl(''),
         }))
 
-        this.standardMilestones = [...this.standardMilestones, ...j]
-        this.smTableEditStack.push(this.standardMilestones.length - 1)
+        this.standardMilestonesTableData = [...this.standardMilestonesTableData, ...j]
+        this.smTableEditStack.push(this.standardMilestonesTableData.length - 1)
         var div = document.getElementsByClassName('datatable-scroll')[0]
         setTimeout(() => {
             div.scroll({
@@ -266,15 +289,15 @@ export class MilestoneSetViewEditComponent {
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
                 if (close == 'confirmed') {
-                    this.standardMilestones.splice(rowIndex, 1)
-                    this.standardMilestonesForm.removeAt(rowIndex)
+                    this.standardMilestonesTableData.splice(rowIndex, 1)
+                    this.standardMilestonesTableForm.removeAt(rowIndex)
                     if (this.smTableEditStack.includes(rowIndex)) {
                         this.smTableEditStack.splice(this.smTableEditStack.indexOf(rowIndex), 1)
                     }
                     this.smTableEditStack = this.smTableEditStack.map(function (value) {
                         return value > rowIndex ? value - 1 : value;
                     })
-                    this.standardMilestones = [...this.standardMilestones]
+                    this.standardMilestonesTableData = [...this.standardMilestonesTableData]
                 }
             }
         )
@@ -282,7 +305,7 @@ export class MilestoneSetViewEditComponent {
 
     submitStandardMilestones() {
         if (this.myPreferenceService.itemid != 'new') {
-            if (JSON.stringify(this.standardMilestonesDb) != JSON.stringify(this.standardMilestonesSubmit)) {
+            if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
                 this.myPreferenceService.isFormChanged = false
                 this.formValue()
                 this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(res => {
@@ -297,7 +320,7 @@ export class MilestoneSetViewEditComponent {
 
             }
         }else{
-            if (JSON.stringify(this.standardMilestonesDb) != JSON.stringify(this.standardMilestonesSubmit)) {
+            if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
                 this.myPreferenceService.isFormChanged = false
                 this.formValue()
                 this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj, '1').then(res => {
