@@ -70,8 +70,9 @@ export class FundingComponent implements OnInit, OnChanges {
     if (this.optionType == 'recommended-option') {
       console.log("BUSINESS CASE")
       this.fundingBCbulkEditType = 'FundingBCBulkEdit'
-      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
-      this.apiService.getCostFunding(this.id).then((res: any) => {
+      this.optionId = GlobalBusinessCaseOptions.OPTION_1
+      console.log(this.optionId)
+      this.apiService.getBusinessCaseCostFunding(this.id, this.optionId).then((res: any) => {
         this.authService.lookupMaster().then((lookup: any) => {
           this.portApiService.getfilterlist().then((po: any) => {
             this.fundingSourceData = po
@@ -190,12 +191,7 @@ export class FundingComponent implements OnInit, OnChanges {
     }
 
   }
-  // getLookUpName(lookUpId: string): string {
-  //   return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''
-  // }
-  // getKPIName(kpiid: string): string {
-  //   return this.kpi.find(x => x.kpiid == kpiid) ? this.kpi.find(x => x.kpiid == kpiid).kpiname : ''
-  // }
+
 
   deleteFunding(id: string) {
     console.log(id)
@@ -223,7 +219,6 @@ export class FundingComponent implements OnInit, OnChanges {
     const fundingAlert = this.fuseAlert.open(comfirmConfig)
 
     fundingAlert.afterClosed().subscribe(close => {
-      debugger
       if (close == 'confirmed' && this.mode == 'Project-Charter') {
         this.apiService.deleteFunding(id).then(res => {
           this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
