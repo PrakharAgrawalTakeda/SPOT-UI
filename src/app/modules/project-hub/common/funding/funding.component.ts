@@ -228,12 +228,12 @@ export class FundingComponent implements OnInit, OnChanges {
         this.apiService.deleteFunding(id).then(res => {
           this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
             this.projecthubservice.submitbutton.next(true)
-          
+
         })
       })
       }
       if (close == 'confirmed' && this.optionType == 'recommended-option' && this.mode != 'Project-Charter') {
-        this.apiService.deleteFundingBusinessCase(this.id, GlobalBusinessCaseOptions.OPTION_1, id).then(res => {
+        this.apiService.deleteBusinessCaseFunding(this.id, GlobalBusinessCaseOptions.OPTION_1, id).then(res => {
           this.projecthubservice.submitbutton.next(true)
         })
       }

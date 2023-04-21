@@ -455,7 +455,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                         "includeInBusinessCase": x.includeInBusinessCase,
                                                         "milestoneType": x.milestoneType,
                                                         "templateMilestoneId": x.templateMilestoneId,
-
                                                         "includeInCloseout": x.includeInCloseout,
                                                         "responsiblePersonId": x.responsiblePersonId,
                                                         "indicator": x.indicator
@@ -510,9 +509,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                 this.viewContent = true
                                             }
                                             this.disabler()
+                                            this.projecthubservice.isFormChanged = false
                                             //this.value = this.milestoneForm.getRawValue()
                                         }
-
                                     }
                                 })
                             })
@@ -2278,7 +2277,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             optionId= GlobalBusinessCaseOptions.OPTION_2
         }
         if (this.router.url.includes('recommended-option')) {
-            optionId== GlobalBusinessCaseOptions.OPTION_1
+            optionId= GlobalBusinessCaseOptions.OPTION_1
         }
         this.apiService.bulkEditTimelineForOption(this.scheduleBusinessObj,optionId, this.id).then(res => {
             this.optionInfoData.executionEndDate =this.optionExecutions.controls.optionExecutionEnd.value? moment(this.optionExecutions.controls.optionExecutionEnd.value).format('YYYY-MM-DD[T]HH:mm:ss') : null;

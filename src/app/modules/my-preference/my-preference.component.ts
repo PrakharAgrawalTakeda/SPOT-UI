@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {MyPreferenceService} from "./my-preference.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-my-preference',
@@ -10,8 +11,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class MyPreferenceComponent implements OnInit {
 
-  constructor(private _Activatedroute: ActivatedRoute, private router: Router,
-              public myPreferenceService: MyPreferenceService) {
+  constructor(private _Activatedroute: ActivatedRoute,
+              private router: Router,
+              public myPreferenceService: MyPreferenceService,
+              private titleService: Title,) {
       // this.myPreferenceService.successSave.subscribe(res => {
       //     if (res == true) {
       //         this.snack.open("The information has been saved successfully", "", {
@@ -36,7 +39,8 @@ export class MyPreferenceComponent implements OnInit {
   }
   dataloader() {
     this.viewContent = true
-      this.reloadName()
+    this.titleService.setTitle( "Standard Milestones Edit")
+    this.reloadName()
 
 
   }
