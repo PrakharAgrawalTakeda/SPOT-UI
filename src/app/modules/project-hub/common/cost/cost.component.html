@@ -40,7 +40,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <div style="display:flex; align-items:center;">
                             <span>{{value}}</span>
-                            <mat-icon *ngIf="row.category.includes('Total CAPEX')" matTooltip="{{ 'Please reference the Capital Request for Estimate (RFE) process prior to 
+                            <mat-icon *ngIf="row.category.includes('Total CAPEX')" matTooltip="{{ 'Please reference the Capital Request for Estimate (RFE) process prior to
                                 entering cost estimates (Veeva Document #GD-007364)' }}"
                                 style="font-size: 14px; margin-left: 3px;">help</mat-icon>
                         </div>
@@ -54,11 +54,11 @@
                         </spot-input>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total')" [autoAddDecimal]="false" [inputType]="'Number'"
-                            [decimalCount]="0">
+                            [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Duration') || row.category.includes('People')"
-                            [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1">
+                            [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -70,7 +70,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total')" [autoAddDecimal]="false" [inputType]="'Number'"
-                            [decimalCount]="0">
+                            [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                         <spot-input-date class="w-full read-only" formControlName="{{value}}" [showLabel]="false"
                             *ngIf="row.category.includes('Project Spend Start') || row.category.includes('Asset in Service')"></spot-input-date>
@@ -85,11 +85,11 @@
                             </spot-input> -->
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total') && row.category != '# Functions Required'"
-                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Duration') || row.category.includes('People') && row.category != '# Functions Required'"
-                            [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1">
+                            [autoAddDecimal]="true" [inputType]="'Number'" [decimalCount]="1" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -115,7 +115,7 @@
                         </mat-icon>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total') && row.category != '# Functions Required'"
-                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -126,7 +126,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total CAPEX')" [autoAddDecimal]="false" [inputType]="'Number'"
-                            [decimalCount]="0">
+                            [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -152,7 +152,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <div style="display:flex; align-items:center;">
                             <span>{{value}}</span>
-                            <mat-icon *ngIf="row.category.includes('Total CAPEX')" matTooltip="{{ 'Please reference the Capital Request for Estimate (RFE) process prior to 
+                            <mat-icon *ngIf="row.category.includes('Total CAPEX')" matTooltip="{{ 'Please reference the Capital Request for Estimate (RFE) process prior to
                                 entering cost estimates (Veeva Document #GD-007364)' }}"
                                 style="font-size: 14px; margin-left: 3px;">help</mat-icon>
                         </div>
@@ -166,7 +166,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total CAPEX')" [autoAddDecimal]="false" [inputType]="'Number'"
-                            [decimalCount]="0">
+                            [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                         <spot-input-date class="w-full read-only" formControlName="{{value}}" [showLabel]="false"
                             *ngIf="row.category.includes('Project Spend Start') || row.category.includes('Asset in Service')"></spot-input-date>
@@ -195,7 +195,7 @@
                         </mat-icon>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total CAPEX') && row.category != '# Functions Required'"
-                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -206,7 +206,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
                             *ngIf="row.category.includes('Total CAPEX')" [autoAddDecimal]="false" [inputType]="'Number'"
-                            [decimalCount]="0">
+                            [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -238,7 +238,7 @@
                     [flexGrow]="0.4" *ngIf="mode!='Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
-                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>
@@ -248,7 +248,7 @@
                     [flexGrow]="0.4" *ngIf="mode!='Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <spot-input class="w-full read-only" [showLabel]="false" formControlName="{{value}}"
-                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'cost'">
                         </spot-input>
                     </ng-template>
                 </ngx-datatable-column>

@@ -67,7 +67,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Include in Project Close Out Report (Max 3)" prop="includeInCloseOut" [sortable]="false"
+        <ngx-datatable-column name="Include in Close Out Report (Max 3)" prop="includeInCloseOut" [sortable]="false"
             [resizeable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                 <div class="flex items-center justify-between pl-2 overflow-hidden">
@@ -77,7 +77,7 @@
                 </div>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Include in Proposal Slide (Max 3)" prop="includeinProposal" [sortable]="false"
+        <ngx-datatable-column name="Include in Proposal (Max 3)" prop="includeinProposal" [sortable]="false"
                               [resizeable]="false" [flexGrow]="1" *ngIf="mode== 'Project-Proposal'">
             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                 <div class="flex items-center justify-between pl-2 overflow-hidden">

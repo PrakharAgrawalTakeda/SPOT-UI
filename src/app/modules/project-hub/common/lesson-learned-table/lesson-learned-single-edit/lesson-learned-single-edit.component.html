@@ -10,9 +10,9 @@
     style="overflow-y: scroll; height: 95vh;">
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
         <div class="flex items-start justify-between incuded-in-dash">
-        <mat-slide-toggle 
+        <mat-slide-toggle
             [matTooltip]="this.LessonLearnedForm.controls['includeInCloseOutReport'].disabled ? 'Only 4 can be selected at a time for close out report display' : null"
-            formControlName="includeInCloseOutReport">Include in Single Slide Summary (Max 4)</mat-slide-toggle>
+            formControlName="includeInCloseOutReport">Include in Single Slide Summary</mat-slide-toggle>
         </div>
         <div class="flex items-start justify-between incuded-in-dash">
         <mat-slide-toggle formControlName="createDetailedReviewSlide">Create Detailed Review Slide (No Max)</mat-slide-toggle>
@@ -38,7 +38,7 @@
             [dropDownArrayType]="'object'" [dropDownArray]="GetType()" [idPointer]="'lookUpId'"
             [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
         </spot-select>
-        
+
         <spot-select formControlName="criticality" name="criticality" [label]="'Criticality'" [placeholder]="'Criticality'"
             [dropDownArrayType]="'object'" [dropDownArray]="GetCriticality()" [idPointer]="'lookUpId'" [valuePointer]="'lookUpName'"
             [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -86,7 +86,7 @@
             </mat-form-field>
         </div>
 
-        
+
     </div>
     <div class="flex items-start justify-between form-ask-need">
         <a class="min-w-26" mat-flat-button [color]="'primary'"

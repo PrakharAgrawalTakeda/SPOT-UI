@@ -111,7 +111,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Project Dashboard (Max 1)" prop="includeInReport"
+                <ngx-datatable-column name="Included In Project (Max 1)" prop="includeInReport"
                     [flexGrow]="0.6" [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"

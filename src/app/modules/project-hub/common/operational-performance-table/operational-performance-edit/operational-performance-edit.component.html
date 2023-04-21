@@ -44,10 +44,10 @@
     </spot-textarea>
     <mat-slide-toggle *ngIf="mode=='Normal'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInProjectDashboard'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
-        formControlName="includeInProjectDashboard">Include in Project Dashboard</mat-slide-toggle>
+        formControlName="includeInProjectDashboard">Include in Dashboard</mat-slide-toggle>
     <mat-slide-toggle *ngIf="mode=='Project-Close-Out'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInCloseOut'].disabled ? 'Only 3 can be selected at a time for close out report display' : null"
-        formControlName="includeInCloseOut">Include in Project Close Out</mat-slide-toggle>
+        formControlName="includeInCloseOut">Include in Close Out</mat-slide-toggle>
     <mat-slide-toggle *ngIf="mode=='Project-Charter'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter report' : null"
         formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
