@@ -37,8 +37,8 @@
                         </a>
                         <form [formGroup]="operationalBenefitsForm.controls[rowIndex]"
                               *ngIf="obTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="metric" [showLabel]="false"
-                                           [maxLength]=1000></spot-textarea>
+                            <spot-textarea formControlName="metric" [showLabel]="false" [rows]="1"
+                                           ></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -55,7 +55,7 @@
                             <form [formGroup]="operationalBenefitsForm.controls[rowIndex]"
                                   *ngIf="obTableEditStack.includes(rowIndex)">
                                 <spot-textarea formControlName="currentState" [showLabel]="false"
-                                               [maxLength]=1000></spot-textarea>
+                                               [rows]="1"></spot-textarea>
                             </form>
                         </div>
 
@@ -74,7 +74,7 @@
                             <form [formGroup]="operationalBenefitsForm.controls[rowIndex]"
                                   *ngIf="obTableEditStack.includes(rowIndex)">
                                 <spot-textarea formControlName="targetPerformance" [showLabel]="false"
-                                               [maxLength]=1000></spot-textarea>
+                                               [rows]="1"></spot-textarea>
                             </form>
                         </div>
 

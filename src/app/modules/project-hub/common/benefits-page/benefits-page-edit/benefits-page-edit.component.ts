@@ -27,6 +27,11 @@ export class BenefitsPageEditComponent {
                 private router: Router,
                 private _Activatedroute: ActivatedRoute,
                 private portApiService: PortfolioApiService){
+        this.benefitsInfoForm.valueChanges.subscribe(res => {
+            if (this.viewContent) {
+                this.projectHubService.isFormChanged = true
+            }
+        })
     }
     benefitsInfoForm = new FormGroup({
         projectId: new FormControl(''),
@@ -102,7 +107,7 @@ export class BenefitsPageEditComponent {
         }
         this.projectHubService.isFormChanged = false
         const formValue = this.benefitsInfoForm.getRawValue();
-        if(formValue.npvBaseCase>formValue.npvHighCase){
+        if(formValue.npvBaseCase>formValue.npvHighCase && formValue.npvHighCase && formValue.npvBaseCase){
             this.fuseAlert.open(comfirmConfig)
         }else{
             const mainObj = this.benefits;

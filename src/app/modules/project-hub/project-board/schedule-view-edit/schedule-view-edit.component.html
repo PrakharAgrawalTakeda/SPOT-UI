@@ -53,7 +53,7 @@
         <div class="flex items-start justify-between included-in-dash" *ngIf="viewElementChecker('includeInReport')">
             <mat-slide-toggle
                 [matTooltip]="this.scheduleForm.controls['includeInReport'].disabled ? 'Only 8 can be selected at a time for dashboard report display' : null"
-                formControlName="includeInReport">Include in Project Dashboard</mat-slide-toggle>
+                formControlName="includeInReport">Include in Dashboard</mat-slide-toggle>
         </div>
         <div class="flex items-start justify-between included-in-dash" *ngIf="viewElementChecker('includeInBusinessCase')">
             <mat-slide-toggle
@@ -63,7 +63,7 @@
         <div class="flex items-start justify-between included-in-dash" *ngIf="viewElementChecker('includeInCharter')">
             <mat-slide-toggle
                 [matTooltip]="this.scheduleForm.controls['includeInCharter'].disabled ? 'Only 8 can be selected at a time for dashboard report display' : null"
-                formControlName="includeInCharter">Include in Project Charter</mat-slide-toggle>
+                formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
         </div>
     </div>
 

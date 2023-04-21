@@ -36,4 +36,28 @@ export class MyPreferenceApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  async checkAccess(userId: string){
+      var userid = GlobalVariables.apiurl+"StandardMilestoneSet/CheckAccess/"+ userId
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async getDetails(userId: string){
+      var userid = GlobalVariables.apiurl+"StandardMilestoneSet/GetDetails/"+ userId
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async addStandardMilestoneSet(body,id){
+      var link = GlobalVariables.apiurl+"StandardMilestoneSet/"+id;
+      const abc$ = this.http.post(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async editStandardMilestoneSet(body,projectId){
+      var link = GlobalVariables.apiurl+"StandardMilestoneSet/Edit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
 }

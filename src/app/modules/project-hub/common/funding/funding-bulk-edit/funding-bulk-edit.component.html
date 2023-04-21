@@ -167,7 +167,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
                         <form [formGroup]="FundingForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
@@ -183,7 +183,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
                         <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
@@ -199,7 +199,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
                         <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
@@ -215,7 +215,7 @@
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)">
                             <p *ngIf="value == true">Yes</p>
                             <p *ngIf="value == false">No</p>
-                           
+
                         </a>
                         <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)">
                             <spot-toggle
@@ -338,7 +338,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [sortable]="false"
-                    name="Include In Project Charter Report (Max 3)" prop="includeInCharter" [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
+                    name="Include in Charter (Max 3)" prop="includeInCharter" [flexGrow]="0.4" *ngIf="mode=='Project-Charter'">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)"
                             class="w-full">
@@ -374,7 +374,7 @@
                 </ngx-datatable-column>
 
                 <ngx-datatable-column [resizeable]="false" [sortable]="false"
-                    name="Include In Business Case Report (Max 2)" prop="includeInBusinessCase" [flexGrow]="0.4" *ngIf="mode!= 'Project-Charter' && (optionType== 'option-2' || optionType=='option-3')">
+                    name="Include in Business Case (Max 2)" prop="includeInBusinessCase" [flexGrow]="0.4" *ngIf="mode!= 'Project-Charter' && (optionType== 'option-2' || optionType=='option-3')">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fundingEditStack.includes(rowIndex)" (click)="fundingTableEditRow(rowIndex)"
                             class="w-full">
@@ -403,7 +403,7 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                
+
             </ngx-datatable>
         </div>
     </div>

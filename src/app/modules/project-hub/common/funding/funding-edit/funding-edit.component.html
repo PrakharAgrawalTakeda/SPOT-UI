@@ -26,7 +26,7 @@
                 [label]="'In the Plan'">
             </spot-toggle>
 
-            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2"
+            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2" [callLocation]="'funding'"
                 [label]="labelText">
             </spot-input>
 
@@ -36,8 +36,7 @@
 
             <mat-slide-toggle
                 [matTooltip]="this.FundingForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter' : null"
-                class="flex items-start justify-between incuded-in-dash" formControlName="includeInCharter">Include in
-                Project Charter
+                class="flex items-start justify-between incuded-in-dash" formControlName="includeInCharter">Include in Charter
             </mat-slide-toggle>
 
 
@@ -73,12 +72,8 @@
                 [label]="'In the Plan'">
             </spot-toggle>
 
-            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2"
-                [label]="labelText" *ngIf="mode!= 'Project-Charter' && optionType == 'recommended-option'" [callLocation]="'View'">
-            </spot-input>
-
-            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0"
-                [label]="labelText" *ngIf="mode!= 'Project-Charter' && optionType != 'recommended-option'">
+            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2" [callLocation]="'funding'"
+                [label]="labelText">
             </spot-input>
 
             <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"
