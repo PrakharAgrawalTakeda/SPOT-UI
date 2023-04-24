@@ -41,7 +41,7 @@ export class StandardMilestoneSetsComponent implements OnInit {
             this.standardMilestoneDBData = [...this.sortByLevel(res)]
             this.standardMilestoneData = this.sortByLevel(res)
             let milestoneArray = []
-            if (this.router.url.includes('option-2') || this.router.url.includes('option-3')) {
+            if (this.router.url.includes('business-case')) {
                 this.standardMilestoneData.forEach((set, setIndex) => {
                     milestoneArray = set.templateDetails;
                     this.standardMilestoneData[setIndex].templateDetails = milestoneArray.filter((element) => {
