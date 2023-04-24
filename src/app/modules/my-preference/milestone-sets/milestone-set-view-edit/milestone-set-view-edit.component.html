@@ -40,7 +40,12 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
-                           [rows]="standardMilestonesTableData">
+                           [rows]="standardMilestonesTableData"
+                           [dragulaName]="'bag'"
+                           [dragulaModel]="data"
+                           [classSelector]=""
+                           (directiveDrop)="onDropOne($event)"
+                           (directiveDrag)="onDragOne($event)">
                 <ngx-datatable-column name="Milestone" prop="milestone" [flexGrow]="1"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
