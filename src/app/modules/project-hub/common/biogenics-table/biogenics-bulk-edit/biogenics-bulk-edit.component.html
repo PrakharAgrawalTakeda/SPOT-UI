@@ -46,8 +46,8 @@
                     [width]="60">Emission Factor (kg CO2/kWh)
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p class="emission">{{value | number:'1.0-0'}}</p>
+                            <p class="emission" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <!-- <p class="emission">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="biogenicEmissionFactor" name="biogenicEmissionFactor" [decimalCount]="3" [inputType]="'Number'"
@@ -60,8 +60,8 @@
                 <ngx-datatable-column [sortable]="false" name="Units" prop="biogenicUnit" [width]="30">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p class="unit">{{value | number:'1.0-0'}}</p>
+                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <!-- <p class="unit">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]"
                             *ngIf="biogenicsTableEditStack.includes(rowIndex)">
@@ -90,8 +90,8 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <p *ngIf="!editCarbonBiogenic">{{ value}}</p>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex) && editCarbonBiogenic" (click)="biogenicsTableEditRow(rowIndex)">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p class="cost">{{value | number:'1.0-0'}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <!-- <p class="cost">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]"
                             *ngIf="biogenicsTableEditStack.includes(rowIndex) && editCarbonBiogenic">
