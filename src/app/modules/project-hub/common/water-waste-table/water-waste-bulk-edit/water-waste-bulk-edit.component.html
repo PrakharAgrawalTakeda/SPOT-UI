@@ -93,8 +93,8 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
                             (click)="waterWasteTableEditRow(rowIndex)">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p class="unit">{{value | number:'1.0-0'}}</p>
+                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <!-- <p class="unit">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex)">
@@ -117,7 +117,7 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="emwwunitCost" [width]="100">
+                <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="emwwunitCost" [width]="90">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <div>
@@ -131,8 +131,8 @@
                         <p *ngIf="!editWaterWaste">{{value}}</p>
                         <a *ngIf="!waterWasteTableEditStack.includes(rowIndex) && editWaterWaste"
                             (click)="waterWasteTableEditRow(rowIndex)">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p class="unit">{{value | number:'1.0-0'}}</p>
+                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <!-- <p class="unit">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex) && editWaterWaste">

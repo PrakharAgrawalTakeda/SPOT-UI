@@ -196,7 +196,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Project (Max 3)" prop="includeInReport" *ngIf="viewElementChecker('includeInProjectDashboard')"
+                <ngx-datatable-column name="Include In Dashboard (Max 3)" prop="includeInReport" *ngIf="viewElementChecker('includeInProjectDashboard')"
                                        [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
