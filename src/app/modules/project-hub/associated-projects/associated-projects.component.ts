@@ -98,6 +98,9 @@ export class AssociatedProjectsComponent implements OnInit {
     getCellClass(): any {
         return 'first-column-datatable';
     }
+    alignRight(): any {
+        return 'align-right';
+    }
     getGraphCellClass(): any {
         return 'graph-cell-datatable';
     }
