@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MsalService } from '@azure/msal-angular';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
@@ -84,17 +84,42 @@ viewType = 'SidePanel'
     this.projectHubService.isFormChanged = false
     var formValue = this.CAPSform.getRawValue()
     var mainObj = this.CAPSdata.projectData
-    
-    mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-    mainObj.energyCostImpactPerYear = formValue.EnergyCost
-    mainObj.waterImpactCost = formValue.WaterCost
-    mainObj.wasteImpactCost = formValue.WasteCost
-    this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
-      this.projectHubService.isNavChanged.next(true)
-      this.projectHubService.submitbutton.next(true)
-      this.projectHubService.successSave.next(true)
-      this.projectHubService.toggleDrawerOpen('', '', [], '')
-    })
+    if (this.projectHubService.all[3] && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please enter a value for Impact Realization Date.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else{
+      mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+      mainObj.energyCostImpactPerYear = formValue.EnergyCost
+      mainObj.waterImpactCost = formValue.WaterCost
+      mainObj.wasteImpactCost = formValue.WasteCost
+      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.successSave.next(true)
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+      })
+    }
   }
 }
 

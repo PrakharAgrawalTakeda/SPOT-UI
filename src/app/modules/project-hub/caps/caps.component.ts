@@ -37,6 +37,7 @@ export class CapsComponent implements OnInit {
   Biogenicsngx: any
   WaterWastengx: any
   WaterWasteParam: any
+  DateRequired: boolean = false
   costEdit: any = []
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
@@ -217,10 +218,14 @@ export class CapsComponent implements OnInit {
             this.WaterWastengx = WaterWastengx
           }
         }
+        if (((this.carbonngx.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0) || (this.Biogenicsngx.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0) || (this.WaterWastengx.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0))) {
+          this.DateRequired = true
+        }
         this.costEdit = []
         this.Biogenicsngx.filter(x => x.biogenicUnitCost != "" && x.biogenicUnitCost != null && x.biogenicUnitCost != 0).length > 0 || this.carbonngx.filter(x => x.unitCost != "" && x.unitCost != null && x.unitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
         this.WaterWastengx.filter(x => x.wwstream == "Water" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
         this.WaterWastengx.filter(x => x.wwstream == "Waste" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
+        this.costEdit.push(this.DateRequired)
         this.WaterWasteParam = res.waterWasteParameter
 
         
