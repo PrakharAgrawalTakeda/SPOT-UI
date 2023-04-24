@@ -50,6 +50,11 @@ $square-size: 10px;
 .first-column-datatable{
     margin-left: 10px;
 }
+.align-right{
+    .datatable-body-cell-label {
+        float: right !important;
+    }
+}
 .graph-cell-datatable{
     overflow-x: visible !important;
     &.ngx-datatable .datatable-header-cell {
@@ -68,5 +73,4 @@ $square-size: 10px;
         width: 100% !important;
     }
 }
-
 

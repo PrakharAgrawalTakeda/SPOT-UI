@@ -30,7 +30,7 @@ export class SchedulesTableComponent implements OnInit {
   SelectionType = SelectionType;
   today = new Date()
   wizzard: string = ''
-  includeInText: 'Dashboard' | 'Charter' = 'Dashboard'
+  includeInText: 'Dashboard' | 'Charter' | 'Business Case' = 'Dashboard'
   getRowClass = (row) => {
     console.log(row)
     return {
@@ -50,6 +50,9 @@ export class SchedulesTableComponent implements OnInit {
     }
     if (this.router.url.includes('business-case')) {
         this.wizzard= "business-case"
+        if (this.router.url.includes('option-2') ||this.router.url.includes('option-3')) {
+            this.includeInText = 'Business Case'
+        }
     }
   }
 
