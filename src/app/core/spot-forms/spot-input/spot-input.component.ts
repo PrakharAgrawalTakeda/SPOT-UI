@@ -73,48 +73,38 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
     isDisabled == true ? this.control.disable() : this.control.enable()
   }
   
+  removeCommas(value: string): string {
+    return value.replace(/,/g, '');
+  }
+  
   formatInput(event: any): void {
     const isFocused = document.activeElement === event.target;
     if (this.inputType === 'Number') {
-      let value = event.target.value;
-  
-      // Remove non-numeric, non-decimal, and non-negative sign characters
-      const regex = this.allowNegativeValues ? /[^\d.-]/g : /[^\d.]/g;
-      value = value.replace(regex, '');
-  
-      if (this.allowNegativeValues) {
-        // Allow only one negative sign and ensure it is at the beginning
-        value = value.replace(/(?!^)-/g, '');
-      }
-  
-      if (this.decimalCount === 0) {
-        // Remove any decimal points if decimalCount is 0
-        value = value.replace(/\./g, '');
+      let value = this.removeCommas(event.target.value);
+      // ... rest of the code
+      if (isFocused) {
+        // Remove commas when the field is focused
+        value = value.replace(/,/g, '');
       } else {
-        // Allow only one decimal point
-        value = value.replace(/(\..*)\./g, '$1');
-  
-        // Round the decimal value to decimalCount decimal places if needed
-        const decimalIndex = value.indexOf('.');
-        if (decimalIndex !== -1 && decimalIndex + this.decimalCount + 1 < value.length) {
-          value = parseFloat(value)?.toFixed(this.decimalCount);
-        }
-      }
-  
-      // Add commas as thousand separators only when the field is blurred
-      if (!isFocused) {
+        // Add commas as thousand separators when the field is blurred
         value = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
       }
-  
       // Update the input field value
       event.target.value = value;
   
       // Call the onChange method with the float value
-      this.onChange(parseFloat(value));
+      this.onChange(parseFloat(this.removeCommas(value)));
     } else {
       this.onChange(event.target.value);
     }
   }
+  
+  
+  onFocus(event: any): void {
+    // Remove commas when the field is focused
+    event.target.value = this.removeCommas(event.target.value);
+  }
+  
   
   onBlur(event: any): void {
     this.onTouch();

@@ -405,7 +405,7 @@ export class CostEditComponent {
       (formValue.totalCapExHighCase != null && formValue.totalCapExBaseCase > formValue.totalCapExHighCase) || 
       (formValue.totalNonFteopExHighCase != null && formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase)) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "The Base Case cannot be Higher than the High Case",
+        "title": "The Base Case cannot be higher than the High Case",
         "message": "",
         "icon": {
           "show": true,
