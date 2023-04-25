@@ -21,9 +21,9 @@ export class CarbonTableComponent {
   noCarbon: boolean = false
   @Input() ProjectData: any
   @Input() editCost: any
+  @Input() DateMandatory: boolean
   sortDir = ""
   sortDirCost = ""
-  lookupdata: any
   carbonBulkEditData: any = []
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
@@ -38,8 +38,6 @@ export class CarbonTableComponent {
     this.dataloader()
   }
   dataloader() {
-    this.auth.lookupMaster().then((resp: any) => {
-      this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       if (this.ProjectData.localCurrency == null){
           this.unitCost = "Unit Cost ()"
@@ -61,13 +59,12 @@ export class CarbonTableComponent {
       }
       this.carbonBulkEditData = []
       this.carbonBulkEditData.push(this.carbonngx)
+      this.carbonBulkEditData.push(this.ProjectData)
       this.carbonBulkEditData.push(this.noCarbon)
-      this.carbonBulkEditData.push(this.ProjectData.projectData)
-      this.carbonBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
-      this.carbonBulkEditData.push(this.ProjectData.envionmentPortfolio.portfolioOwnerId)
       this.carbonBulkEditData.push(this.editCost)
+      this.carbonBulkEditData.push(this.DateMandatory)
       this.viewContent = true
-    })
+    
   }
 
   sortasc() {
