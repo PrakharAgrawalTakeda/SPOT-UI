@@ -48,8 +48,8 @@ export class MyPreferenceApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
-  async addStandardMilestoneSet(body,id){
-      var link = GlobalVariables.apiurl+"StandardMilestoneSet/"+id;
+  async addStandardMilestoneSet(body){
+      var link = GlobalVariables.apiurl+"StandardMilestoneSet/1";
       const abc$ = this.http.post(link,body)
       const response = await lastValueFrom(abc$)
       return response
@@ -60,10 +60,10 @@ export class MyPreferenceApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
-  // async getDetails(userId: string){
-  //     var userid = GlobalVariables.apiurl+"StandardMilestoneSet/GetDetails/"+ userId
-  //     const abc$ = this.http.get(userid)
-  //     const response = await lastValueFrom(abc$)
-  //     return response
-  // }
+  async GetPortfolioOwnerForPreferences(){
+      var link = GlobalVariables.apiurl+"PortfolioOwner/GetPortfolioOwnersForPreferences"
+      const abc$ = this.http.get(link)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
 }
