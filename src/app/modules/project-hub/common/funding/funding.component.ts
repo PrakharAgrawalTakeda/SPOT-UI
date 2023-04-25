@@ -219,7 +219,7 @@ export class FundingComponent implements OnInit, OnChanges {
     fundingAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed' && this.mode == 'Project-Charter') {
         this.apiService.deleteFunding(id).then(res => {
-          this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+          this.apiService.updateReportDates(this.id, "ModifiedDate").then(secondRes => {
             this.projecthubservice.submitbutton.next(true)
 
         })
