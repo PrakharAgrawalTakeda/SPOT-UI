@@ -51,7 +51,7 @@ export class WaterWasteSingleEditComponent {
     standardUoM: new FormControl(),
     wwtype: new FormControl(),
   })
-  waterWasteDropDrownValues = ["Water", "Waste"]
+  waterWasteDropDrownValues = ["Waste", "Water"]
   typeDropDrownValues = []
   waterTypeDropDrownValues = []
   wasteTypeDropDrownValues = []
@@ -101,10 +101,12 @@ export class WaterWasteSingleEditComponent {
     for (var j = 0; j < waterValues.length; j++) {
       this.waterTypeDropDrownValues.push(waterValues[j].wwtype)
     }
+    this.waterTypeDropDrownValues.sort()
     var wasteValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Waste")
     for (var j = 0; j < wasteValues.length; j++) {
       this.wasteTypeDropDrownValues.push(wasteValues[j].wwtype)
     }
+    this.wasteTypeDropDrownValues.sort()
     this.waterWasteForm.patchValue({
       emdataWwid: "",
       projectId: this.projecthubservice.projectid,
@@ -175,7 +177,7 @@ export class WaterWasteSingleEditComponent {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else if ((formValue.emwwunit != null && formValue.emwwunit != 0) && (this.impactRealizationDate == "" || this.impactRealizationDate == null)) {
+    else if (((formValue.emwwunit != null && formValue.emwwunit != 0) || (this.projecthubservice.all[5])) && (this.impactRealizationDate == "" || this.impactRealizationDate == null)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please enter a value for Impact Realization Date.",
         "message": "",

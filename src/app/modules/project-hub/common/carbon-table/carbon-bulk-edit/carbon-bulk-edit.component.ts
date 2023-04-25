@@ -62,22 +62,28 @@ export class CarbonBulkEditComponent {
   }
 
   dataloader() {
-    if (this.projecthubservice.all[5][0] == false && (this.projecthubservice.all[2].energyCostImpactPerYear != "" && this.projecthubservice.all[2].energyCostImpactPerYear != null && this.projecthubservice.all[2].energyCostImpactPerYear != 0)) {
+    if (this.projecthubservice.all[3][0] == false && (this.projecthubservice.all[1].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[1].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[1].projectData.energyCostImpactPerYear != 0)) {
       this.editCarbonBiogenic = true
     }
-    else if (this.projecthubservice.all[5][0] == true && (this.projecthubservice.all[2].energyCostImpactPerYear == "" || this.projecthubservice.all[2].energyCostImpactPerYear == null || this.projecthubservice.all[2].energyCostImpactPerYear == 0)) {
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[1].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[1].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[1].projectData.energyCostImpactPerYear == 0)) {
       this.editCarbonBiogenic = true
     }
-    else if (this.projecthubservice.all[5][0]  == true && (this.projecthubservice.all[2].energyCostImpactPerYear != "" && this.projecthubservice.all[2].energyCostImpactPerYear != null && this.projecthubservice.all[2].energyCostImpactPerYear != 0)) {
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[1].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[1].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[1].projectData.energyCostImpactPerYear != 0)) {
       this.editCarbonBiogenic = false
     }
       this.CAPSform.patchValue({
-        impactRealizationDate: this.projecthubservice.all[2].emissionsImpactRealizationDate
+        impactRealizationDate: this.projecthubservice.all[1].projectData.emissionsImpactRealizationDate
       })
-      this.ProjectData = this.projecthubservice.all[2]
-      this.envPortfolio = this.projecthubservice.all[4]
-      this.unitCost = "Unit Cost (" + this.projecthubservice.all[3] + ")"
-      this.noCarbon = this.projecthubservice.all[1]
+      this.ProjectData = this.projecthubservice.all[1].projectData
+      this.envPortfolio = this.projecthubservice.all[1].envionmentPortfolio.portfolioOwnerId
+    if (this.projecthubservice.all[1].localCurrency == null) {
+      this.unitCost = "Unit Cost ()"
+    }
+    else {
+      this.unitCost = "Unit Cost (" + this.projecthubservice.all[1].localCurrency.localCurrencyAbbreviation + ")"
+    }
+      // this.unitCost = "Unit Cost (" + this.projecthubservice.all[1].localCurrency.localCurrencyAbbreviation + ")"
+      this.noCarbon = this.projecthubservice.all[2]
       this.Carbon = this.projecthubservice.all[0]
       for (var i of this.Carbon) {
         this.carbonDb.push(i)
@@ -127,7 +133,7 @@ export class CarbonBulkEditComponent {
 
   submitCarbon() {
     this.submitPrep()
-    if ((this.carbonDb.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+    if (((this.carbonDb.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0) || (this.projecthubservice.all[4])) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please enter a value for Impact Realization Date.",
         "message": "",
@@ -188,9 +194,9 @@ export class CarbonBulkEditComponent {
         emdataUniqueId: i.emdataUniqueId == null || i.emdataUniqueId == "" ? "" : i.emdataUniqueId,
         projectId: this.projecthubservice.projectid,
         emsourceId: i.emsourceId,
-        emunit: i.emunit == "" || isNaN(i.emunit) ? null : i.emunit,
-        unitCost: i.unitCost == "" || isNaN(i.unitCost) ? null : i.unitCost,
-        emimpactTonsCo2year: i.emimpactTonsCo2year == "" || isNaN(i.emimpactTonsCo2year) ? null : i.emimpactTonsCo2year,
+        emunit: (i.emunit == "" || isNaN(i.emunit)) && i.emunit != 0 ? null : i.emunit,
+        unitCost: (i.unitCost == "" || isNaN(i.unitCost)) && i.unitCost != 0 ? null : i.unitCost,
+        emimpactTonsCo2year: (i.emimpactTonsCo2year == "" || isNaN(i.emimpactTonsCo2year)) && i.emimpactTonsCo2year != 0 ? null : i.emimpactTonsCo2year,
         embasisOfEstimate : i.embasisOfEstimate,
         emportfolioOwnerId: this.envPortfolio
       })

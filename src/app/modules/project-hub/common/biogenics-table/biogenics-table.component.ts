@@ -22,6 +22,7 @@ export class BiogenicsTableComponent {
   @Input() data: any
   @Input() ProjectData: any
   @Input() editCost: any
+  @Input() DateMandatory: boolean
   sortDir = ""
   lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
@@ -57,14 +58,8 @@ export class BiogenicsTableComponent {
         this.biogenicsBulkEditData.push(this.Biogenicsngx)
         this.biogenicsBulkEditData.push(this.noCarbonImpact)
         this.biogenicsBulkEditData.push(this.ProjectData)
-        if (this.ProjectData.localCurrency == null) {
-          this.biogenicsBulkEditData.push("")
-        }
-        else {
-          this.biogenicsBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
-        }
-
-      this.biogenicsBulkEditData.push(this.editCost)
+        this.biogenicsBulkEditData.push(this.editCost)
+        this.biogenicsBulkEditData.push(this.DateMandatory)
         if (this.noCarbonImpact == true) {
           for (var i of this.Biogenicsngx) {
             i.biogenicEmissionFactor = null
@@ -83,7 +78,7 @@ export class BiogenicsTableComponent {
 
   deleteBiogenics(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Operational Performance?",
+      "title": "Remove Biogenic?",
       "message": "Are you sure you want to remove this record permanently? ",
       "icon": {
         "show": true,
