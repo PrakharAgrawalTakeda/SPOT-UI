@@ -32,6 +32,9 @@ viewType = 'SidePanel'
   energyCost: any
   waterCost: any
   wasteCost: any
+  energyLabel: string = ""
+  waterLabel:string = ""
+  wasteLabel:string = ""
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl(''),
     EnergyCost: new FormControl(null),
@@ -63,13 +66,16 @@ viewType = 'SidePanel'
         this.waterCost = res.projectData.waterImpactCost
         this.wasteCost = res.projectData.wasteImpactCost
 
-        if (this.projectHubService.all[0] == false){
+        if (this.projectHubService.all[0] == false || this.CAPSdata.projectData.noCarbonImpact == true){
           this.CAPSform.controls['EnergyCost'].disable()
         }
         if (this.projectHubService.all[1] == false || this.projectHubService.all[2] == false) {
           this.CAPSform.controls['WaterCost'].disable()
           this.CAPSform.controls['WasteCost'].disable()
         }
+        this.energyLabel = "Energy Impact per Year (" + this.projectHubService.all[4] + ")"
+        this.waterLabel = "Water Impact per Year (" + this.projectHubService.all[4] + ")"
+        this.wasteLabel = "Total Waste Impact per Year (" + this.projectHubService.all[4] + ")"
         this.viewContent = true
       })
     })

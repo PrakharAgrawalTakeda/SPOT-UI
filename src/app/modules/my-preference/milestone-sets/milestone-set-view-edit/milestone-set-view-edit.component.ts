@@ -41,6 +41,7 @@ export class MilestoneSetViewEditComponent {
     filterCriteria: any = {}
     mainObj: any = {}
     editedSet: any = {}
+    portfolioOwnerList =[];
     standardMilestonesTableForm = new FormArray([])
     standardMilestonesDetailsForm = new FormGroup({
         milestoneTemplateId: new FormControl(""),
@@ -107,7 +108,6 @@ export class MilestoneSetViewEditComponent {
                             milestoneType: new FormControl(i.milestoneType),
                         }))
                     }
-                    console.log("aaaaaaaaaaaaaa", res.templateDetails)
                     this.standardMilestonesTableData = res.templateDetails;
                     this.myPreferenceService.isFormChanged = false
                     this.viewContent = true;
@@ -164,6 +164,10 @@ export class MilestoneSetViewEditComponent {
                         }))
                     }
                 }
+                this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((res: any) => {
+                    this.portfolioOwnerList = res;
+                })
+
                 this.viewContent = true;
             }
         });
@@ -193,8 +197,8 @@ export class MilestoneSetViewEditComponent {
         if (this.myPreferenceService.itemid == "new") {
             this.mainObj = {
                 milestoneTemplateId: "",
-                portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwnerId,
-                portfolioOwner: "",
+                portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwnerID,
+                portfolioOwner: this.standardMilestonesDetailsForm.value.portfolioOwner?.portolioOwner,
                 milestoneSet: this.standardMilestonesDetailsForm.value.milestoneSet,
                 templateOwner: this.msalService.instance.getActiveAccount().localAccountId,
                 templateOwnerName: "",
@@ -323,7 +327,7 @@ export class MilestoneSetViewEditComponent {
             if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
                 this.myPreferenceService.isFormChanged = false
                 this.formValue()
-                this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj, '1').then(res => {
+                this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj).then(res => {
                     // this.myPreferenceService.submitbutton.next(true)
                     this.myPreferenceService.toggleDrawerOpen('', '', [], '')
                     // this.myPreferenceService.isNavChanged.next(true)
@@ -332,10 +336,6 @@ export class MilestoneSetViewEditComponent {
         }
     }
 
-    getPortfolioOwner(): any {
-        return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true)
-        // return "";
-    }
     getPortfolioOwnerById(portfolioId: string): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true && x.portfolioOwnerId == portfolioId)[0];
     }

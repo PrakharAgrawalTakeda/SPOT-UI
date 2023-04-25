@@ -40,7 +40,7 @@
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="wwstream" name="wwstream"
-                                [placeholder]="'waterWaste'" [dropDownArrayType]="'string'"
+                                [placeholder]="'Water/Waste'" [dropDownArrayType]="'string'"
                                 [dropDownArray]="waterWasteDropDrownValues" [showNoneOption]="false">
                             </spot-select>
                         </form>
@@ -58,21 +58,21 @@
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="wwtype" name="wwtype"
-                                [placeholder]="'type'" [dropDownArrayType]="'string'"
+                                [placeholder]="'Type'" [dropDownArrayType]="'string'"
                                 [dropDownArray]="waterTypeDropDrownValues" [showNoneOption]="false">
                             </spot-select>
                         </form>
                         </div>
                         <div *ngIf="getData(rowIndex) == '2'">
                             <form [formGroup]="waterWasteForm.controls[rowIndex]" *ngIf="waterWasteTableEditStack.includes(rowIndex)">
-                                <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'type'"
+                                <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'Type'"
                                     [dropDownArrayType]="'string'" [dropDownArray]="wasteTypeDropDrownValues" [showNoneOption]="false">
                                 </spot-select>
                             </form>
                         </div>
                         <div *ngIf="getData(rowIndex) == '0'">
                             <form [formGroup]="waterWasteForm.controls[rowIndex]" *ngIf="waterWasteTableEditStack.includes(rowIndex)">
-                                <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'type'"
+                                <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'Type'"
                                     [dropDownArrayType]="'string'" [dropDownArray]="typeDropDrownValues" [showNoneOption]="false">
                                 </spot-select>
                             </form>
@@ -99,7 +99,7 @@
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="emwwunit" name="emwwunit" [decimalCount]="0"
-                                [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="units" [allowNegativeValues] = true>
+                                [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0" [allowNegativeValues] = true>
                             </spot-input>
                         </form>
                     </ng-template>
@@ -131,13 +131,13 @@
                         <p *ngIf="!editWaterWaste">{{value}}</p>
                         <a *ngIf="!waterWasteTableEditStack.includes(rowIndex) && editWaterWaste"
                             (click)="waterWasteTableEditRow(rowIndex)">
-                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.4-4'}}
                             <!-- <p class="unit">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex) && editWaterWaste">
                             <spot-input class="w-full" formControlName="emwwunitCost" name="emwwunitCost" [decimalCount]="4"
-                                [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="unitCost">
+                                [inputType]="'Number'" [autoAddDecimal]="true" [placeholder]="0">
                             </spot-input>
                         </form>
                     </ng-template>

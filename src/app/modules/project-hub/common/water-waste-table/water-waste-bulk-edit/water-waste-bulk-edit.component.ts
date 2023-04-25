@@ -29,7 +29,7 @@ export class WaterWasteBulkEditComponent {
   CAPSform = new FormGroup({
     impactRealizationDate: new FormControl('')
   })
-  waterWasteDropDrownValues = ["Water", "Waste"]
+  waterWasteDropDrownValues = ["Waste", "Water"]
   typeDropDrownValues = []
   waterTypeDropDrownValues = []
   wasteTypeDropDrownValues = []
@@ -93,10 +93,12 @@ export class WaterWasteBulkEditComponent {
     for(var j=0;j<waterValues.length;j++){
       this.waterTypeDropDrownValues.push(waterValues[j].wwtype)
     }
+    this.waterTypeDropDrownValues.sort()
     var wasteValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Waste")
     for (var j = 0; j < wasteValues.length; j++) {
       this.wasteTypeDropDrownValues.push(wasteValues[j].wwtype)
     }
+    this.wasteTypeDropDrownValues.sort()
     this.unitCost = "Unit Cost (" + this.projecthubservice.all[2] + ")"
     for (var i of this.WaterWaste) {
       this.waterWasteDb.push(i)
@@ -278,7 +280,7 @@ export class WaterWasteBulkEditComponent {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else if ((this.waterWasteDb.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0 ) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+    else if (((this.waterWasteDb.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0 ) || (this.projecthubservice.all[5])) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please enter a value for Impact Realization Date.",
         "message": "",
@@ -342,8 +344,8 @@ export class WaterWasteBulkEditComponent {
         emdataWwid: i.emdataWwid,
         projectId: this.projecthubservice.projectid,
         wwsourceMasterUniqueId: id,
-        emwwunit: i.emwwunit == "" ? null : i.emwwunit,
-        emwwunitCost: i.emwwunitCost == "" ? null : i.emwwunitCost,
+        emwwunit: i.emwwunit == "" && i.emwwunit != 0 ? null : i.emwwunit,
+        emwwunitCost: i.emwwunitCost == "" && i.emwwunitCost != 0 ? null : i.emwwunitCost,
         embasisOfEstimate: i.embasisOfEstimate
       })
       this.waterwasteFormValue.push({

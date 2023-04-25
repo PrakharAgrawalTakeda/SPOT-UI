@@ -38,6 +38,9 @@ export class CapsComponent implements OnInit {
   WaterWastengx: any
   WaterWasteParam: any
   DateRequired: boolean = false
+  carbonUnitData: boolean = false
+  biogenicUnitData: boolean = false
+  wwUnitData: boolean = false
   costEdit: any = []
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
@@ -80,6 +83,7 @@ export class CapsComponent implements OnInit {
               if (close == 'confirmed') {
                 var mainObj = this.CAPSdata.projectData
                 mainObj.NoCarbonImpact = res
+                mainObj.energyCostImpactPerYear = null
                 this.apiService.editGeneralInfo(this.id, mainObj).then(res1 => {
 
                   //carbon data
@@ -121,6 +125,9 @@ export class CapsComponent implements OnInit {
                   })
                 // }
                 })
+              }
+              else{
+                this.NoCarbonForm.patchValue({ NoCarbonImpact: false })
               }
             })
           }
@@ -218,7 +225,20 @@ export class CapsComponent implements OnInit {
             this.WaterWastengx = WaterWastengx
           }
         }
-        if (((this.carbonngx.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0) || (this.Biogenicsngx.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0) || (this.WaterWastengx.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0))) {
+        this.carbonUnitData = false
+        this.biogenicUnitData = false
+        this.wwUnitData = false
+        this.DateRequired = false
+        if ((this.carbonngx.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0)){
+          this.carbonUnitData = true
+        }
+        if ((this.Biogenicsngx.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0)) {
+          this.biogenicUnitData = true
+        }
+        if ((this.WaterWastengx.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0)) {
+          this.wwUnitData = true
+        }
+        if (this.carbonUnitData || this.biogenicUnitData || this.wwUnitData){
           this.DateRequired = true
         }
         this.costEdit = []
@@ -226,6 +246,7 @@ export class CapsComponent implements OnInit {
         this.WaterWastengx.filter(x => x.wwstream == "Water" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
         this.WaterWastengx.filter(x => x.wwstream == "Waste" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
         this.costEdit.push(this.DateRequired)
+        this.costEdit.push(this.currencyLabel)
         this.WaterWasteParam = res.waterWasteParameter
 
         

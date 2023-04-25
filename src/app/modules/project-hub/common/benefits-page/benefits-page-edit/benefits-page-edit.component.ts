@@ -90,20 +90,25 @@ export class BenefitsPageEditComponent {
     submitBenefitsEdit() {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Invalid input",
-            "message": "High case must be greater than base case.",
-            "icon": {
-                "show": true,
-                "name": "heroicons_outline:exclamation",
-                "color": "warn"
-            },
-            "actions": {
-                "confirm": {
-                    "show": true,
-                    "label": "OK",
-                    "color": "warn"
-                },
-            },
-            "dismissible": true
+        "message": "High Case must be greater than Base Case",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "OK",
+            "color": "warn"
+          }
+          ,
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
         }
         this.projectHubService.isFormChanged = false
         const formValue = this.benefitsInfoForm.getRawValue();
