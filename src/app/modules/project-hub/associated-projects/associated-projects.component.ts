@@ -76,6 +76,9 @@ export class AssociatedProjectsComponent implements OnInit {
     getHeaderClass(): any {
         return ' vertical-header-class';
     }
+    getTotalCapexHeaderClass(): any {
+        return ' total-capex-header-class';
+    }
     onTreeAction(row: any) {
         if (row.treeStatus === 'collapsed') {
             row.treeStatus = 'expanded';

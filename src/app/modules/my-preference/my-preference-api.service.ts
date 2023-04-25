@@ -60,4 +60,10 @@ export class MyPreferenceApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+  // async getDetails(userId: string){
+  //     var userid = GlobalVariables.apiurl+"StandardMilestoneSet/GetDetails/"+ userId
+  //     const abc$ = this.http.get(userid)
+  //     const response = await lastValueFrom(abc$)
+  //     return response
+  // }
 }

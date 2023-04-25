@@ -183,13 +183,18 @@
                                         }"></apx-chart>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [cellClass]="alignRight"   name="Total CAPEX Approved / Forecast" [flexGrow]="3" [sortable]="false">
-                        <ng-template  let-row="row" let-value="value" ngx-datatable-cell-template>
-                            {{
-                            row.totalApprovedCapex ? row.totalApprovedCapex : 0
-                            }}
-                            &nbsp; USD <br />
-                            {{ row.forecast ? row.forecast : 0 }} &nbsp; USD
+                    <ngx-datatable-column [cellClass]="alignRight"  [headerClass]="getTotalCapexHeaderClass"  name="Total CAPEX Approved / Forecast" [flexGrow]="3" [sortable]="false">
+                        <ng-template   let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div class="grid grid-cols-1 text-right">
+                                {{
+                                row.totalApprovedCapex ? row.totalApprovedCapex : 0
+                                }} &nbsp; USD
+                            </div>
+                            <br />
+                            <div class="text-right">
+                                {{ row.forecast ? row.forecast : 0 }} &nbsp; USD
+                            </div>
+
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [flexGrow]="3" [sortable]="false">
@@ -198,13 +203,13 @@
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate"
-                        [flexGrow]="3" [sortable]="false">
+                        [flexGrow]="2.5" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Planned Project Complete Date" prop="projectPlannedFinishDate"
-                        [flexGrow]="3" [sortable]="false">
+                        [flexGrow]="2.5" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
