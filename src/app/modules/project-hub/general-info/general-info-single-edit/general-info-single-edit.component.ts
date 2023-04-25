@@ -8,16 +8,17 @@ import { ProjectHubService } from '../../project-hub.service';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 
-import {HttpParams} from "@angular/common/http";
-import {GlobalVariables} from "../../../../shared/global-variables";
+import { HttpParams } from "@angular/common/http";
+import { GlobalVariables } from "../../../../shared/global-variables";
 import { MsalService } from '@azure/msal-angular';
 import { RoleService } from 'app/core/auth/role.service';
+import { pairwise } from 'rxjs';
 @Component({
   selector: 'app-general-info-single-edit',
   templateUrl: './general-info-single-edit.component.html',
   styleUrls: ['./general-info-single-edit.component.scss']
 })
-export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
+export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
@@ -27,48 +28,49 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   activeaccount: any;
   flag = 0
   @Output() eventName = new EventEmitter<EventType>();
-  viewContent:boolean = false
+  viewContent: boolean = false
   showMessage: boolean = false;
   filterCriteria: any = {}
   generalInfo: any = {}
   lookupdata: any = [];
   localCurrencyList: any = [];
-  local:any=[];
+  local: any = [];
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   owningOrganizationValues = []
+  changeExecutionScope: boolean = false
   generalInfoForm = new FormGroup({
     problemTitle: new FormControl(''),
     projectsingle: new FormControl(''),
     projectsingleid: new FormControl(''),
     problemType: new FormControl('Standard Project / Program'),
     projectDescription: new FormControl(''),
-    primaryProduct: new FormControl({}),
+    primaryProduct: new FormControl(null),
     otherImpactedProducts: new FormControl([]),
-    portfolioOwner: new FormControl({}),
+    portfolioOwner: new FormControl(null),
     excecutionScope: new FormControl([]),
-    enviornmentalPortfolio: new FormControl({}),
+    enviornmentalPortfolio: new FormControl(null),
     isArchived: new FormControl(false),
     isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
     projectProposalApprovedDate: new FormControl(''),
     approvedDate: new FormControl(''),
-    SubmittedBy: new FormControl(''),
+    SubmittedBy: new FormControl(null),
     targetGoalSituation: new FormControl(''),
     localCurrency: new FormControl(''),
-    functionGroupID: new FormControl({}),
+    functionGroupID: new FormControl(null),
     whynotgoforNextBestAlternative: new FormControl(''),
     proposalStatement: new FormControl(''),
-    projectReviewedYN: new FormControl({}),
-    sponsor: new FormControl({}),
-    projectManager: new FormControl({}),
+    projectReviewedYN: new FormControl(null),
+    sponsor: new FormControl(null),
+    projectManager: new FormControl(null),
     StrategicRationale: new FormControl(''),
-    BCAuthor: new FormControl({}),
+    BCAuthor: new FormControl(null),
     RiskImpact: new FormControl(''),
     AdditionalAuthor: new FormControl([]),
     businessCaseApprovedDate: new FormControl('')
   })
-  @Output() formValue = new EventEmitter<FormGroup>();
+  @Output() formValue = new EventEmitter<any>();
 
 
   constructor(private apiService: ProjectApiService,
@@ -81,16 +83,16 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
         if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
           this.projectHubService.isFormChanged = true
         }
-        else if (this.callLocation == 'CreateNew'){
+        else if (this.callLocation == 'CreateNew') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
           if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
             this.generalInfoForm.controls.localCurrency.enable()
           }
-          else{
+          else {
             this.generalInfoForm.controls.localCurrency.disable()
           }
         }
-        else if (history.state.callLocation == 'CopyProject'){
+        else if (history.state.callLocation == 'CopyProject') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
           if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
             this.generalInfoForm.controls.localCurrency.enable()
@@ -102,29 +104,29 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
       }
     })
     const url = this.Router.url;
-    if (url.substring(url.lastIndexOf('/') + 1) == 'create-new-project'){
-      if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F"){
+    if (url.substring(url.lastIndexOf('/') + 1) == 'create-new-project') {
+      if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
         this.generalInfoForm.controls.owningOrganization.disable()
         this.generalInfoForm.controls.localCurrency.disable()
       }
-      else{
+      else {
         this.generalInfoForm.controls.owningOrganization.enable()
         this.generalInfoForm.controls.localCurrency.disable()
       }
     }
-    else{
-    if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
-      this.generalInfoForm.controls.owningOrganization.disable()
-      this.generalInfoForm.controls.localCurrency.disable()
-      this.generalInfoForm.controls.sponsor.disable()
-      this.generalInfoForm.controls.projectManager.disable()
-    } else {
-      this.generalInfoForm.controls.owningOrganization.enable()
-      this.generalInfoForm.controls.localCurrency.disable()
-      this.generalInfoForm.controls.sponsor.enable()
-      this.generalInfoForm.controls.projectManager.enable()
+    else {
+      if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
+        this.generalInfoForm.controls.owningOrganization.disable()
+        this.generalInfoForm.controls.localCurrency.disable()
+        this.generalInfoForm.controls.sponsor.disable()
+        this.generalInfoForm.controls.projectManager.disable()
+      } else {
+        this.generalInfoForm.controls.owningOrganization.enable()
+        this.generalInfoForm.controls.localCurrency.disable()
+        this.generalInfoForm.controls.sponsor.enable()
+        this.generalInfoForm.controls.projectManager.enable()
+      }
     }
-  }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
         if (res == 'Standard Project / Program') {
@@ -140,7 +142,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
 
     this.generalInfoForm.controls.portfolioOwner.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        var portfolio=[]
+        var portfolio = []
         portfolio.push(res)
         var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
         this.generalInfoForm.patchValue({
@@ -152,10 +154,19 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
       }
     })
 
+    this.generalInfoForm.controls.excecutionScope.valueChanges.pipe(pairwise())
+      .subscribe(([prev, next]: [any, any]) => {
+        if (this.viewContent) {
+          if (prev.length > next.length) {
+            this.changeExecutionScope = true
+          }
+        }
+      })
+
   }
 
-  ngOnChanges(changes: SimpleChanges): void{
-    this.generalInfoForm.patchValue({ enviornmentalPortfolio: changes.portfolio.currentValue })
+  ngOnChanges(changes: SimpleChanges): void {
+    this.generalInfoForm.patchValue({ enviornmentalPortfolio: changes.portfolio?.currentValue })
   }
 
   ngOnInit(): void {
@@ -168,48 +179,48 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
         api = this.apiService.getGeneralInfoData(this.projectHubService.projectid)
       }
       api.then((res: any) => {
-      this.generalInfo = res
-      this.filterCriteria = this.projectHubService.all
-      this.generalInfoForm.patchValue({
-        problemTitle: res.projectData.problemTitle,
-        problemType: res.projectData.problemType,
-        projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
-        projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
-        projectDescription: res.projectData.projectDescription,
-        primaryProduct: res.primaryProduct ? res.primaryProduct : {},
-        otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
-        portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
-        excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-        enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
-        isArchived: res.projectData.isArchived,
-        isCapsProject: res.projectData.isCapsProject,
-        owningOrganization: res.projectData.defaultOwningOrganizationId,
-        closeOutApprovedDate: res.projectData.closeOutApprovedDate,
-        projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
-        approvedDate: res.projectData.approvedDate,
-        functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
-        whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
-        proposalStatement: res.projectData.proposalStatement,
-        projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
-        StrategicRationale: res.projectData.strategicRationale,
-        BCAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
-        RiskImpact: res.businessCaseImpactOfDoingNothing,
-        businessCaseApprovedDate: res.businessCaseApprovedDate,
-        AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors : [],
-        sponsor: res.sponsor.teamMemberAdId == null || res.sponsor.teamMemberAdId == undefined ? {} : {
-          userAdid: res.sponsor.teamMemberAdId,
-          userDisplayName: res.sponsor.teamMemberName
-        },
-        projectManager: {
-          userAdid: res.projectData.projectManagerId,
-          userDisplayName: res.portfolioCenterData.pm
-        }
-      });
-      this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-      this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
-      this.viewContent = true
-    })
+        this.generalInfo = res
+        this.filterCriteria = this.projectHubService.all
+        this.generalInfoForm.patchValue({
+          problemTitle: res.projectData.problemTitle,
+          problemType: res.projectData.problemType,
+          projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+          projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
+          projectDescription: res.projectData.projectDescription,
+          primaryProduct: res.primaryProduct ? res.primaryProduct : {},
+          otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
+          portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
+          excecutionScope: res.excecutionScope ? res.excecutionScope : [],
+          enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+          isArchived: res.projectData.isArchived,
+          isCapsProject: res.projectData.isCapsProject,
+          owningOrganization: res.projectData.defaultOwningOrganizationId,
+          closeOutApprovedDate: res.projectData.closeOutApprovedDate,
+          projectProposalApprovedDate: res.projectData.projectProposalApprovedDate,
+          approvedDate: res.projectData.approvedDate,
+          functionGroupID: res.projectData.functionGroupID ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.functionGroupID.toLowerCase()) : {},
+          whynotgoforNextBestAlternative: res.projectData.whynotgoforNextBestAlternative,
+          proposalStatement: res.projectData.proposalStatement,
+          projectReviewedYN: res.projectData.projectReviewedYN ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == res.projectData.projectReviewedYN.toLowerCase()) : {},
+          StrategicRationale: res.projectData.strategicRationale,
+          BCAuthor: res.businessCaseAuthor ? res.businessCaseAuthor : {},
+          RiskImpact: res.businessCaseImpactOfDoingNothing,
+          businessCaseApprovedDate: res.businessCaseApprovedDate,
+          AdditionalAuthor: res.businessCaseAdditionalAuthorsContributors ? res.businessCaseAdditionalAuthorsContributors : [],
+          sponsor: res.sponsor ? {
+            userAdid: res.sponsor.teamMemberAdId,
+            userDisplayName: res.sponsor.teamMemberName
+          } : {},
+          projectManager: {
+            userAdid: res.projectData.projectManagerId,
+            userDisplayName: res.portfolioCenterData.pm
+          }
+        });
+        this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
+        this.viewContent = true
+      })
     }
     else {
       this.activeaccount = this.authService.instance.getActiveAccount();
@@ -227,52 +238,52 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
           this.filterCriteria = res
           this.owningOrganizationValues = this.filterCriteria.defaultOwningOrganizations;
           if (history.state.data != undefined) {
-            if(this.flag == 0){
-            if (history.state.data.primaryProductId != null || history.state.data.primaryProductId != "") {
-              this.flag = 1;
-              history.state.data.primaryProductId = this.filterCriteria.products.filter(function (entry) {
-                return entry.productId == history.state.data.primaryProductId
+            if (this.flag == 0) {
+              if (history.state.data.primaryProductId != null || history.state.data.primaryProductId != "") {
+                this.flag = 1;
+                history.state.data.primaryProductId = this.filterCriteria.products.filter(function (entry) {
+                  return entry.productId == history.state.data.primaryProductId
+                })
+              }
+              if (history.state.data.otherImpactedProducts != null && history.state.data.otherImpactedProducts != "") {
+                const data = history.state.data.otherImpactedProducts.split(',');
+                var impactedproducts = {};
+                var finaldata = [];
+                for (var i = 0; i < data.length; i++) {
+                  impactedproducts = this.filterCriteria.products.filter(function (entry) {
+                    return entry.productId == data[i]
                   })
-                }
-            if (history.state.data.otherImpactedProducts != null || history.state.data.otherImpactedProducts != "") {
-                  const data = history.state.data.otherImpactedProducts.split(',');
-                  var impactedproducts = {};
-                  var finaldata = [];
-                  for (var i = 0; i < data.length; i++) {
-                    impactedproducts = this.filterCriteria.products.filter(function (entry) {
-                      return entry.productId == data[i]
-                    })
-                    finaldata.push(impactedproducts[0]);
-                  }
+                  finaldata.push(impactedproducts[0]);
                 }
               }
-                this.generalInfoForm.patchValue({
-                  problemTitle: history.state.data.problemTitle,
-                  projectsingle: '',
-                  projectsingleid: '',
-                  problemType: history.state.data.problemType,
-                  projectDescription: history.state.data.projectDescription,
-                  primaryProduct: history.state.data.primaryProductId == null ? '' : history.state.data.primaryProductId[0],
-                  otherImpactedProducts: history.state.data.otherImpactedProducts[0] == undefined ? '' : finaldata,
-                  portfolioOwner: '',
-                  excecutionScope: '',
-                  enviornmentalPortfolio: '',
-                  isArchived: false,
-                  isCapsProject: false,
-                  owningOrganization: '',
-                  SubmittedBy: user,
-                  targetGoalSituation: history.state.data.targetEndState == null ? '' : history.state.data.targetEndState,
-                  localCurrency: ''
-                })
-                this.formValue.emit(this.generalInfoForm.getRawValue())
-                this.viewContent = true
+            }
+            this.generalInfoForm.patchValue({
+              problemTitle: history.state.data.problemTitle,
+              projectsingle: '',
+              projectsingleid: '',
+              problemType: history.state.data.problemType,
+              projectDescription: history.state.data.projectDescription,
+              primaryProduct: history.state.data.primaryProductId == null ? '' : history.state.data.primaryProductId[0],
+              otherImpactedProducts: history.state.data.otherImpactedProducts == undefined || history.state.data.otherImpactedProducts == null || history.state.data.otherImpactedProducts == "" ? [] : finaldata,
+              portfolioOwner: '',
+              excecutionScope: [],
+              enviornmentalPortfolio: '',
+              isArchived: false,
+              isCapsProject: false,
+              owningOrganization: '',
+              SubmittedBy: user,
+              targetGoalSituation: history.state.data.targetEndState == null ? '' : history.state.data.targetEndState,
+              localCurrency: ''
+            })
+            this.formValue.emit(this.generalInfoForm.getRawValue())
+            this.viewContent = true
           }
-          else{
-          this.generalInfoForm.patchValue({
-            SubmittedBy: user
-          })
-          this.formValue.emit(this.generalInfoForm.getRawValue())
-          this.viewContent = true
+          else {
+            this.generalInfoForm.patchValue({
+              SubmittedBy: user
+            })
+            this.formValue.emit(this.generalInfoForm.getRawValue())
+            this.viewContent = true
           }
         })
       })
@@ -304,10 +315,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
   }
 
   clickEvent(value: string, name: string) {
-    if ((name == "Project Name *" || name == "Portfolio Ownerhelp *" || name == "None\nOwning Organizationhelp *" || name == "Submitted By *" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)){
+    if ((name == "Project Name *" || name == "Portfolio Ownerhelp *" || name == "None\nOwning Organizationhelp *" || name == "Submitted By *" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)) {
       this.showMessage = true
     }
-    else{
+    else {
       this.showMessage = false
     }
   }
@@ -345,12 +356,236 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
           }
         })
       }
+      else if (Object.keys(formValue.portfolioOwner).length == 0) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Please select a portfolio owner",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+      else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else if (this.changeExecutionScope == true) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the execution scope will remove all the existing local attributes. Are you sure you want to update the execution scope ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio && (this.generalInfo.enviornmentalPortfolio != null || Object.keys(formValue.enviornmentalPortfolio).length == 0)) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
       else {
         this.submitLogic()
       }
     }
     else {
-      this.submitLogic()
+      if (Object.keys(formValue.portfolioOwner).length == 0) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Please select a portfolio owner",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+      else if (this.generalInfo.portfolioOwner != formValue.portfolioOwner) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the portfolio owner will remove all the existing local attributes. Are you sure you want to update the portfolio owner ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else if (this.changeExecutionScope == true) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "Changing the execution scope will remove all the existing local attributes. Are you sure you want to update the execution scope ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio && (this.generalInfo.enviornmentalPortfolio != null || Object.keys(formValue.enviornmentalPortfolio).length == 0)) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you sure?",
+          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        alert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            this.submitLogic()
+          }
+        })
+      }
+      else {
+        this.submitLogic()
+      }
     }
   }
 
@@ -363,9 +598,9 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     mainObj.problemType = formValue.problemType
     mainObj.projectDescription = formValue.projectDescription
     mainObj.parentProgramId = formValue.projectsingleid
-    mainObj.portfolioOwnerId = Object.keys(formValue.portfolioOwner).length > 0 ? formValue.portfolioOwner.portfolioOwnerId : ''
-    mainObj.emissionPortfolioId = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    mainObj.primaryProductId = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
+    mainObj.portfolioOwnerId = formValue.portfolioOwner?.portfolioOwnerId
+    mainObj.emissionPortfolioId = formValue.enviornmentalPortfolio?.portfolioOwnerId
+    mainObj.primaryProductId = formValue.primaryProduct?.productId
     mainObj.otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
     mainObj.executionScope = formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : ''
     mainObj.isCapsProject = formValue.isCapsProject
@@ -375,16 +610,16 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges{
     mainObj.approvedDate = formValue.approvedDate ? moment(formValue.approvedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
     mainObj.whynotgoforNextBestAlternative = formValue.whynotgoforNextBestAlternative
     mainObj.proposalStatement = formValue.proposalStatement
-    mainObj.projectReviewedYN = Object.keys(formValue.projectReviewedYN).length > 0 ? formValue.projectReviewedYN.lookUpId : ''
-    mainObj.functionGroupID = Object.keys(formValue.functionGroupID).length > 0 ? formValue.functionGroupID.lookUpId : ''
-    mainObj.sponsorId =  Object.keys(formValue.sponsor).length > 0 ? formValue.sponsor.userAdid : ''
-    mainObj.projectManagerId =  Object.keys(formValue.projectManager).length > 0 ? formValue.projectManager.userAdid : '',
-    mainObj.strategicRationale = formValue.StrategicRationale,
+    mainObj.projectReviewedYN = formValue.projectReviewedYN?.lookUpId
+    mainObj.functionGroupID = formValue.functionGroupID?.lookUpId
+    mainObj.sponsorId = formValue.sponsor?.userAdid
+    mainObj.projectManagerId = formValue.projectManager?.userAdid
+    mainObj.strategicRationale = formValue.StrategicRationale
     mainObj.businessCaseImpactOfDoingNothing = formValue.RiskImpact
-    mainObj.businessCaseAuthorADId = Object.keys(formValue.BCAuthor).length > 0 ? formValue.BCAuthor.userAdid : '',
+    mainObj.businessCaseAuthorADId = formValue.BCAuthor?.userAdid
     mainObj.businessCaseAdditionalAuthorsContributorsADIds = formValue.AdditionalAuthor.length > 0 ? formValue.AdditionalAuthor.map(x => x.userAdid).join() : ''
     mainObj.businessCaseApprovedDate = formValue.businessCaseApprovedDate ? moment(formValue.businessCaseApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
-    
+
     if (this.subCallLocation == 'ProjectHub') {
       this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
         this.projectHubService.isNavChanged.next(true)

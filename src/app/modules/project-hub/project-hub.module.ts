@@ -136,6 +136,30 @@ import { ProjectCharterScopeSingleEditComponent } from './project-charter/projec
 import { CostComponent } from './common/cost/cost.component';
 import { FundingComponent } from './common/funding/funding.component';
 import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component';
+import { FundingBulkEditComponent } from './common/funding/funding-bulk-edit/funding-bulk-edit.component';
+import { LocalAttributeSingleEditComponent } from './local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
+import { CostEditComponent } from './common/cost/cost-edit/cost-edit.component';
+import { CarbonTableComponent } from './common/carbon-table/carbon-table.component';
+import { CarbonBulkEditComponent } from './common/carbon-table/carbon-bulk-edit/carbon-bulk-edit.component';
+import { CapsSingleEditComponent } from './caps/caps-single-edit/caps-single-edit.component';
+import { WaterWasteTableComponent } from './common/water-waste-table/water-waste-table.component';
+import { BiogenicsTableComponent } from './common/biogenics-table/biogenics-table.component';
+import { TransportationTableComponent } from './common/transportation-table/transportation-table.component';
+import { ShippingTableComponent } from './common/shipping-table/shipping-table.component';
+import { WarehousingTableComponent } from './common/warehousing-table/warehousing-table.component';
+import { ProjectRequirementsComponent } from './common/project-requirements/project-requirements.component';
+import { ProjectRequirementsEditComponent } from './common/project-requirements/project-requirements-edit/project-requirements-edit.component';
+import { BenefitsPageComponent } from './common/benefits-page/benefits-page.component';
+import { OperationalBenefitsTableComponent } from './common/operational-benefits-table/operational-benefits-table.component';
+import { BenefitsPageEditComponent } from './common/benefits-page/benefits-page-edit/benefits-page-edit.component';
+import { BiogenicsBulkEditComponent } from './common/biogenics-table/biogenics-bulk-edit/biogenics-bulk-edit.component';
+import { BiogenicsSingleEditComponent } from './common/biogenics-table/biogenics-single-edit/biogenics-single-edit.component';
+import { OperationalBenefitsAddNewComponent } from './common/operational-benefits-table/operational-benefits-add-new/operational-benefits-add-new.component';
+import { OperationalBenefitsBulkEditComponent } from './common/operational-benefits-table/operational-benefits-bulk-edit/operational-benefits-bulk-edit.component';
+import { BudgetPerformanceEditComponent } from './close-out/close-out-budget-performance/budget-performance-edit/budget-performance-edit.component';
+import { WaterWasteBulkEditComponent } from './common/water-waste-table/water-waste-bulk-edit/water-waste-bulk-edit.component';
+import { WaterWasteSingleEditComponent } from './common/water-waste-table/water-waste-single-edit/water-waste-single-edit.component';
+import {MyPreferenceModule} from "../my-preference/my-preference.module";
 
 export const projectRoutes: Route[] = [
   {
@@ -491,56 +515,79 @@ export const projectRoutes: Route[] = [
     ProjectCharterScopeSingleEditComponent,
     CostComponent,
     FundingComponent,
-    FundingEditComponent
+    FundingEditComponent,
+    FundingBulkEditComponent,
+    LocalAttributeSingleEditComponent,
+    CostEditComponent,
+    CarbonTableComponent,
+    CarbonBulkEditComponent,
+    CapsSingleEditComponent,
+    WaterWasteTableComponent,
+    BiogenicsTableComponent,
+    TransportationTableComponent,
+    ShippingTableComponent,
+    WarehousingTableComponent,
+    ProjectRequirementsComponent,
+    ProjectRequirementsEditComponent,
+    BenefitsPageComponent,
+    OperationalBenefitsTableComponent,
+    BenefitsPageEditComponent,
+    BiogenicsBulkEditComponent,
+    BiogenicsSingleEditComponent,
+    OperationalBenefitsAddNewComponent,
+    OperationalBenefitsBulkEditComponent,
+    BudgetPerformanceEditComponent,
+    WaterWasteBulkEditComponent,
+    WaterWasteSingleEditComponent
   ],
     imports: [
-        RouterModule.forChild(projectRoutes),
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatDividerModule,
-        MatIconModule,
-        MatMenuModule,
-        MatProgressBarModule,
-        MatRippleModule,
-        MatSidenavModule,
-        MatSortModule,
-        MatTableModule,
-        MatTabsModule,
-        MatExpansionModule,
-        NgApexchartsModule,
-        TranslocoModule,
-        SharedModule,
-        CommonModule,
-        FuseDrawerModule,
-        FuseNavigationModule,
-        NgScrollbarModule,
-        MatChipsModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        NgxDatatableModule,
-        MatSlideToggleModule,
-        MatDatepickerModule,
-        MatMomentDateModule,
-        MatAutocompleteModule,
-        MatTooltipModule,
-        MatSnackBarModule,
-        FuseAlertModule,
-        SpotFormsModule,
-        SearchModule,
-        LanguagesModule,
-        FuseFullscreenModule,
-        ShortcutsModule,
-        MessagesModule,
-        NotificationsModule,
-        UserModule
+    RouterModule.forChild(projectRoutes),
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatDividerModule,
+    MatIconModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatExpansionModule,
+    NgApexchartsModule,
+    TranslocoModule,
+    SharedModule,
+    CommonModule,
+    FuseDrawerModule,
+    FuseNavigationModule,
+    NgScrollbarModule,
+    MatChipsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    NgxDatatableModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatAutocompleteModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    FuseAlertModule,
+    SpotFormsModule,
+    SearchModule,
+    LanguagesModule,
+    FuseFullscreenModule,
+    ShortcutsModule,
+    MessagesModule,
+    NotificationsModule,
+    UserModule
     ],
-    exports:[
-      GeneralInfoSingleEditComponent,
-      QualityRefBulkEditComponent,
-      OeProjectSingleEditComponent,
-      TechTransferSingleEditComponent,
-      StrategicDriversComponent
-    ]
+  exports: [
+    GeneralInfoSingleEditComponent,
+    QualityRefBulkEditComponent,
+    OeProjectSingleEditComponent,
+    TechTransferSingleEditComponent,
+    StrategicDriversComponent
+  ]
 })
 export class ProjectHubModule { }

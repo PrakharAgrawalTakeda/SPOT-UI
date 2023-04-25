@@ -21,7 +21,7 @@ export class OeProjectSingleEditComponent implements OnInit {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   
-  @Output() formValueOE = new EventEmitter<FormGroup>();
+  @Output() formValueOE = new EventEmitter<any>();
   oeProjectType: any = [];
   lookupdata: any = [];
   constructor(private apiService: ProjectApiService,
@@ -104,7 +104,15 @@ export class OeProjectSingleEditComponent implements OnInit {
             }
             this.generalInfoForm.patchValue({
               isOeproject: history.state.data.isOeproject ,
-              oeprojectType: history.state.data.oeprojectType == null || history.state.data.oeprojectType == "" || history.state.data.oeprojectType == undefined ? '' : finaldataoe,
+              oeprojectType: history.state.data.oeprojectType == null || history.state.data.oeprojectType == "" || history.state.data.oeprojectType == undefined ? [] : finaldataoe,
+            })
+            this.formValueOE.emit(this.generalInfoForm.getRawValue())
+            this.viewContent = true
+          }
+          else{
+            this.generalInfoForm.patchValue({
+              isOeproject: false,
+              oeprojectType: [],
             })
             this.formValueOE.emit(this.generalInfoForm.getRawValue())
             this.viewContent = true

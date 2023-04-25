@@ -1,13 +1,10 @@
 <ng-container *ngIf="viewContent">
   <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
-    <div class="pb-6 pl-2 font-medium tracking-tight leading-6 truncate ">
-      <h3 class="text-xl text-primary">General Info</h3>
-    </div>
     <!-- Enter Content here-->
     <form class="w-full" [formGroup]="generalInfoForm">
       <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
-        <div class="flex justify-end items-end">
-          <div></div>
+        <div class="flex justify-between items-center pb-6">
+          <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">General Info</h3>
           <div>
             <button class="ml-4 text-primary bg-gray-200"
               *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
@@ -17,12 +14,13 @@
             </button>
           </div>
         </div>
-        <div
-          class="grid grid-cols-2 gap-x-6 items-center">
+        <div class="grid grid-cols-2 gap-x-6 items-center">
           <spot-input formControlName="localCurrencyAbbreviation" name="localCurrencyAbbreviation"
-          [label]="'Local Currency'">
-         </spot-input>
-          <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')" class="flex justify-start w-full gap-3 items-center">
+            [label]="'Local Currency'">
+          </spot-input>
+          <div
+            *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
+            class="flex justify-start w-full gap-3 items-center">
             Is Archived?
             <mat-icon svgIcon="heroicons_outline:x-circle"
               *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
@@ -33,10 +31,11 @@
         </div>
 
         <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
-          <spot-input class="w-full" formControlName="problemId" name="problemId" [label]="'Problem Id'" *ngIf="viewElementChecker('problemId')"></spot-input>
-          <spot-input class="w-full read-only" formControlName="problemTitle" name="problemTitle"
-            *ngIf="viewElementChecker('problemTitle')" [label]="'Project Name'">
+          <spot-input class="w-full read-only text-default" formControlName="problemTitle" name="problemTitle"
+            *ngIf="viewElementChecker('problemTitle')"
+            [label]="callLocation == 'BusinessCase'?'Initiative Title':'Project Name'">
           </spot-input>
+          <div class="w-full" *ngIf="callLocation == 'BusinessCase'"></div>
           <spot-input class="w-full read-only" [ngClass]="{'read-only': callLocation != 'ProjectCharter'}"
             formControlName="parentProgram" name="parentProgram" *ngIf="viewElementChecker('parentProject')"
             [label]="'Parent Program'" [showHint]="true"
@@ -51,10 +50,13 @@
           <spot-input-date class="w-full read-only" formControlName="approvedDate" name="approvedDate"
             *ngIf="viewElementChecker('approvedDate')" [label]="'Date Approved'">
           </spot-input-date>
-          <spot-input-date class="w-full read-only" formControlName="businessCaseApprovedDate" name="businessCaseApprovedDate"
-            *ngIf="viewElementChecker('businessCaseApprovedDate')" [label]="'Date Approved'">
+          <spot-input-date class="w-full read-only" formControlName="businessCaseApprovedDate"
+            name="businessCaseApprovedDate" *ngIf="viewElementChecker('businessCaseApprovedDate')"
+            [label]="'Date Approved'">
           </spot-input-date>
-          <div class="w-full" *ngIf="callLocation == 'CloseOut' || callLocation == 'ProjectCharter'"></div>
+          <div class="w-full"
+            *ngIf="callLocation == 'CloseOut' || callLocation == 'ProjectCharter' || callLocation == 'BusinessCase'">
+          </div>
           <spot-input formControlName="portfolioOwner" name="portfolioOwner" [label]="'Portfolio Owner'"
             [showHint]="true"
             [hint]="'The group which is responsible for the oversight and process adherence of the record'"
@@ -101,13 +103,14 @@
             [ngClass]="{'read-only': callLocation == 'CloseOut'}" formControlName="sponsor" name="sponsor"
             [label]="'Sponsor'">
           </spot-input>
-          <spot-input class="w-full read-only" *ngIf="viewElementChecker('BCAuthor')"
-            formControlName="BCAuthor" name="BCAuthor" [label]="'Business Case Author'">
+          <spot-input class="w-full read-only" *ngIf="viewElementChecker('BCAuthor')" formControlName="BCAuthor"
+            name="BCAuthor" [label]="'Business Case Author'">
           </spot-input>
-          <spot-multiselect-user-autocomplete class="w-full read-only"  [valuePointer]="'userDisplayName'"
-            [idPointer]="'userAdid'" *ngIf="viewElementChecker('AdditionalAuthor')" formControlName="AdditionalAuthor" name="AdditionalAuthor"
-            [label]="'Additional Authors / Contributors'">
+          <spot-multiselect-user-autocomplete class="w-full read-only" [valuePointer]="'userDisplayName'"
+            [idPointer]="'userAdid'" *ngIf="viewElementChecker('AdditionalAuthor')" formControlName="AdditionalAuthor"
+            name="AdditionalAuthor" [label]="'Additional Authors / Contributors'">
           </spot-multiselect-user-autocomplete>
+          <div class="w-full" *ngIf="callLocation == 'BusinessCase'"></div>
           <spot-input class="w-full read-only" formControlName="primaryProduct" name="primaryProduct"
             [label]="'Primary Product'" [showHint]="true" *ngIf="viewElementChecker('primaryProduct')"
             [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
@@ -127,7 +130,8 @@
         </div>
         <div class="w-full " *ngIf="viewElementChecker('projectDescription')">
           <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
-            [label]="'Problem Description / Present Situation / Submission Description'">
+            [label]="'Problem Description / Present Situation / Submission Description'"
+            [showHint]="callLocation == 'BusinessCase'" [hint]="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
           </spot-textarea>
         </div>
         <div class="w-full " *ngIf="viewElementChecker('StrategicRationale')">
@@ -263,22 +267,18 @@
         </div>
 
         <!--STRATEGIC DRIVERS-->
-        <div class="pt-6 pl-2 font-medium tracking-tight leading-6 truncate "
-          *ngIf="viewElementChecker('StrategicDrivers')">
-          <h3 class="text-xl text-primary">Strategic Drivers</h3>
-        </div>
-        <div class="flex justify-between items-start gap-6" *ngIf="viewElementChecker('StrategicDrivers')">
+
+        <div class="flex justify-between items-start gap-6 pt-3" *ngIf="viewElementChecker('StrategicDrivers')">
           <div class="flex flex-col flex-auto w-2/5 bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden">
-            <div class="flex justify-between items-center">
-              <div class="flex justify-start items-center gap-3">
-              </div>
-              <div class="flex justify-between items-center gap-3">
-                <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                  *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
-                  (click)="projectHubService.toggleDrawerOpen(strategicDriversType, '', filterCriteria , id)">
-                  <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-                </button>
-              </div>
+            <div class="flex justify-between items-center pb-6">
+              <h3 class="text-xl text-primary font-medium tracking-tight leading-6 truncate ">Strategic
+                Drivers
+              </h3>
+              <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields"
+                (click)="projectHubService.toggleDrawerOpen(strategicDriversType, '', filterCriteria , id)">
+                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+              </button>
             </div>
             <div class="flex justify-between items-center gap-6" *ngIf="viewElementChecker('primaryKPI')">
               <spot-input class="w-full read-only" formControlName="primaryKPI" name="primaryKPI"

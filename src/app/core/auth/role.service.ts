@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { GlobalVariables } from 'app/shared/global-variables';
 import { RoleController } from 'app/shared/role-controller';
 import { lastValueFrom } from 'rxjs';
+import {F} from "@angular/cdk/keycodes";
 
 @Injectable({
   providedIn: 'root'
@@ -49,15 +50,18 @@ export class RoleService {
           baselineproject: true,
           phaseState: false,
           keyAssumptionsEdit: false,
+          operationalBenefitsEdit:false,
         }
         localroleController.projectTeam = false
         localroleController.projectBenefits = false
+        localroleController.projectHub.hubSettings = false
         localroleController.projectHub.hubSettings = false
         localroleController.generalInfo = {
           basicFields: false,
           porfolioOwner: false
         }
-        localroleController.closeOut.lessonsLearnt = false
+        localroleController.projectHub.localAttributes = false
+        localroleController.projectHub.CAPS = false
       }
       else{
         localroleController.generalInfo.porfolioOwner = false

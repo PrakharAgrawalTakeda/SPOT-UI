@@ -76,6 +76,9 @@ export class AssociatedProjectsComponent implements OnInit {
     getHeaderClass(): any {
         return ' vertical-header-class';
     }
+    getTotalCapexHeaderClass(): any {
+        return ' total-capex-header-class';
+    }
     onTreeAction(row: any) {
         if (row.treeStatus === 'collapsed') {
             row.treeStatus = 'expanded';
@@ -97,6 +100,9 @@ export class AssociatedProjectsComponent implements OnInit {
 
     getCellClass(): any {
         return 'first-column-datatable';
+    }
+    alignRight(): any {
+        return 'align-right';
     }
     getGraphCellClass(): any {
         return 'graph-cell-datatable';

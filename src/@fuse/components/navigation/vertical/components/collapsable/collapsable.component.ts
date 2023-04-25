@@ -48,10 +48,12 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
      */
     @HostBinding('class') get classList(): any
     {
+        /* eslint-disable @typescript-eslint/naming-convention */
         return {
             'fuse-vertical-navigation-item-collapsed': this.isCollapsed,
             'fuse-vertical-navigation-item-expanded' : this.isExpanded
         };
+        /* eslint-enable @typescript-eslint/naming-convention */
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -161,7 +163,6 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
                         this.collapse();
                     }
                 }
-                this._changeDetectorRef.markForCheck();
             });
 
         // Subscribe to onRefreshed on the navigation component
@@ -303,7 +304,7 @@ export class FuseVerticalNavigationCollapsableItemComponent implements OnInit, O
             }
 
             // Check if the child has a link and is active
-            if ( child.link, this._router.url.includes(child.link) )
+            if ( child.link && this._router.url.includes(child.link) )
             {
                 return true;
             }

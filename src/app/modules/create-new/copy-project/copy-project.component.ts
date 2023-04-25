@@ -9,6 +9,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 import { Title } from '@angular/platform-browser';
 import { MsalService } from '@azure/msal-angular';
 import { CreateNewApiService } from '../create-new-api.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 
 @Component({
@@ -37,13 +38,61 @@ export class CopyProjectComponent implements OnInit {
     scope: new FormControl(true),
     milestone: new FormControl(true),
     projectTeam: new FormControl(true),
-    categoricalDriver: new FormControl(true)
+    categoricalDriver: new FormControl(true),
+    StrategicalDriver: new FormControl(true)
   })
+  newmainnav: any = [
+    {
+      id: 'portfolio-center',
+      title: 'Portfolio Center',
+      type: 'basic',
+      link: '/portfolio-center'
+    },
+    {
+      // id: 'create-project',
+      title: 'Create Project',
+      type: 'collapsable',
+      active: true,
+      link: '/create-project',
+      children: [
+        {
+          title: 'Create Project',
+          type: 'basic',
+          link: '/create-project/create-new-project'
+        },
+        {
+          title: 'Copy Project',
+          type: 'basic',
+          link: '/create-project/copy-project'
+        }
+      ],
+    },
+    {
+      id: 'spot-documents',
+      title: 'SPOT Resources',
+      type: 'basic',
+      externalLink: true,
+      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+      target: '_blank'
+    },
+    {
+      id: 'report-navigator',
+      title: 'Report Navigator',
+      type: 'basic',
+      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+      externalLink: true,
+      target: "_blank"
+
+    }
+  ]
 
   constructor(public auth: AuthService, private router: Router, private apiService: PortfolioApiService,
-    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService) { }
+    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService, public fuseAlert: FuseConfirmationService) { }
 
   ngOnInit(): void {
+    const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+    mainNavComponent.navigation = this.newmainnav
+    mainNavComponent.refresh()
     this.activeaccount = this.authService.instance.getActiveAccount();
     this.titleService.setTitle("Copy Project")
     this.auth.lookupMaster().then(res => {
@@ -69,6 +118,31 @@ export class CopyProjectComponent implements OnInit {
   }
 
   SubmitCopyProject(data: any) {
+    if (this.projectid == ""){
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "You must select a project to copy.",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else{
     console.log(this.CopyProjectForm)
     for (var i = 0; i < data.currentTarget.length; i++) {
       if (data.currentTarget[i].checked == true) {
@@ -108,6 +182,9 @@ export class CopyProjectComponent implements OnInit {
     if (!this.CopyProjectForm.value.categoricalDriver) {
       copyProjectParameter.categoricalData = false
     }
+    if (!this.CopyProjectForm.value.StrategicalDriver) {
+      copyProjectParameter.strategicDriverDetails = false
+    }
     for (var i = 0; i < this.finalIndex.length; i++) {
       this.finalData.push(this.lookupTemplate[i].lookUpId);
       console.log(this.finalData);
@@ -126,6 +203,7 @@ export class CopyProjectComponent implements OnInit {
         }
       })
     })
+  }
   }
 
   callCreateProject() {

@@ -18,6 +18,7 @@ import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../../common/project-api.service';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Constants} from "../../../../../shared/constants";
+import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -50,6 +51,7 @@ export const MY_FORMATS = {
 
 export class RiskIssueViewEditComponent implements OnInit {
   @Input() viewElements: any = ["type", "logDate", "ifThisHappens", "probability", "thisIsTheResult", "impact", "mitigation", "owner", "function", "dueDate", "closeDate", "includeInProjectDashboard", "postMitigation"]
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Baseline-Log' | 'Business-Case' = 'Normal'
   formFieldHelpers: string[] = [''];
   lookupdata: any = []
   riskissue: any = {}
@@ -90,7 +92,7 @@ export class RiskIssueViewEditComponent implements OnInit {
 
 
   riskIssueForm = new FormGroup({
-    logDate: new FormControl(''),
+    logDate: new FormControl(null),
     type: new FormControl(''),
     ifThisHappens: new FormControl(''),
     probability: new FormControl(''),
@@ -103,7 +105,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     usersingleid: new FormControl(''),
     function: new FormControl(''),
     functionid: new FormControl(''),
-    includeInReport: new FormControl(''),
+    includeInReport: new FormControl(false),
     includeInCharter: new FormControl(false),
     postMitigationProbability: new FormControl(''),
     postMitigationImpact: new FormControl(''),
@@ -142,7 +144,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (res.functionGroupId != null) {
           this.riskIssueForm.controls.function.patchValue(this.lookupdata?.find(x => x.lookUpId == res.functionGroupId)?.lookUpName)
         }
-        if (this.projecthubservice.all != []) {
+        if (this.projecthubservice.all.length > 0) {
           if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 3) {
             if (this.riskIssueForm.value.includeInReport != true) {
               this.riskIssueForm.controls['includeInReport'].disable()
@@ -300,28 +302,49 @@ export class RiskIssueViewEditComponent implements OnInit {
         if (mainObjnew.closeDate == "Invalid date") {
           mainObjnew.closeDate = null
         }
-
-        if (this.router.url.includes('option-2')) {
-            mainObjnew.businessOptionId = Constants.OPTION_2_ID.toString();
-            this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
-        }else{
-            if (this.router.url.includes('option-3')) {
-                mainObjnew.businessOptionId = Constants.OPTION_3_ID.toString();
+        if(this.mode == "Business-Case"){
+            if (this.router.url.includes('option-2')) {
+                mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
                 this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
                     this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.isNavChanged.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                 })
             }else{
-                this.apiService.addRiskIssue(mainObjnew).then(() => {
+                if (this.router.url.includes('option-3')) {
+                    mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
+                    this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    })
+                }else{
+                    if (this.router.url.includes('recommended-option')) {
+                        mainObjnew.businessOptionId = "";
+                        this.apiService.addRiskIssueForOption(mainObjnew).then(res => {
+                            this.projecthubservice.submitbutton.next(true)
+                            this.projecthubservice.isNavChanged.next(true)
+                            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        })
+                    }
+                }
+            }
+        }else{
+            this.apiService.addRiskIssue(mainObjnew).then(() => {
+                if (this.mode == 'Project-Charter') {
+                    this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }else{
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
                     this.projecthubservice.submitbutton.next(true)
                     this.projecthubservice.isNavChanged.next(true)
-                })
-            }
+                }
+            })
         }
+
 
       }
       else {

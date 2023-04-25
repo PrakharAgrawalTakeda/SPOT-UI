@@ -2,6 +2,10 @@
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
 $circle-size: 10px;
 $square-size: 10px;
 .text-red-green{
@@ -40,11 +44,19 @@ $square-size: 10px;
     transform: rotate(-180deg);
     left:10px;
 }
+.total-capex-header-class {
+    text-align: end;
+}
 .current-project{
     background-color: var(--fuse-primary-200);
 }
 .first-column-datatable{
     margin-left: 10px;
+}
+.align-right{
+    .datatable-body-cell-label {
+        float: right !important;
+    }
 }
 .graph-cell-datatable{
     overflow-x: visible !important;
@@ -64,5 +76,4 @@ $square-size: 10px;
         width: 100% !important;
     }
 }
-
 

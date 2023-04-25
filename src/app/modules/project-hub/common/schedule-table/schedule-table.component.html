@@ -22,26 +22,30 @@
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditCloseOut', 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
-                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Business-Case'"
-                        (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditBusinessCase', 'new', projectViewDetails.scheduleData, '', true)">
+                        (click)="projecthubservice.toggleDrawerOpen(timelineEditOption, 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
-                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="editable && mode== 'Project-Charter'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEditCharter', 'new', projectViewDetails.scheduleData, '', true)">
                     <!-- <a href="javascript:void(0)" *ngIf="editable" class="ml-4 text-primary" title="Edit Bulk" [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('scheduleBulkEdit', 'new', projectViewDetails.scheduleData, '', true)"> -->
-                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                 </button>
                 <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Normal'" mat-flat-button [color]="'primary-200'"
                     (click)="projecthubservice.toggleDrawerOpen('Schedule', 'new', [], projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
                 <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Business-Case'" mat-flat-button [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('BusinessCaseScheduleAddNew', 'new', [], projectid)">
+                        (click)="projecthubservice.toggleDrawerOpen('BusinessCaseScheduleAddNew', 'new', schedulengxdata, projectid)">
+                    <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                </button>
+                <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable  && mode== 'Project-Charter'" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('CharterScheduleAddNew', 'new', schedulengxdata, projectid)">
                     <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                 </button>
             </div>
@@ -61,6 +65,20 @@
       Baseline : {{baselineLog.baselineCount?baselineLog.baselineCount:0}}
   </h6>
   </div>
+<form class="w-full pr-6 pl-6" [formGroup]="optionExecutions" *ngIf="optionType== 'option-2' || optionType== 'option-3'">
+    <div class="grid grid-cols-2 w-full"  >
+        <div class="flex w-full gap-6">
+            <spot-input-date class="w-64 read-only"
+                             formControlName="optionExecutionStart" name="optionExecutionStart" [label]="'Execution Start'">
+            </spot-input-date>
+            <spot-input-date class=" w-64 read-only" formControlName="optionExecutionEnd" name="optionExecutionEnd" [label]="'Execution End'">
+            </spot-input-date>
+        </div>
+        <div class="w-full">
+        </div>
+
+    </div>
+</form>
 <!-- <div class="flex justify-start items-left w-full" style="margin:top -6px!important; margin: left 0rem!important">
     <h6 class="pl-6 pt-0 pb-4 text-md font-medium text-secondary italic">
         Baseline : {{baselineCount.baselineCount}}
@@ -68,10 +86,10 @@
     </div> -->
 <div class="overflow-x-auto mx-6">
     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="schedulengxdata"
+        class=" material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="schedulengxdata"
         #scheduleTable [rowClass]="getRowClass" [sorts]="[{ prop: 'plannedFinish', dir: 'asc' },{ prop: 'baselineFinish', dir: 'asc' },{ prop: 'completionDate', dir: 'asc' }]">
         <!-- [sorts]="[{ prop: 'variance', dir: 'asc' }]" -->
-        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal' || mode =='Business-Case'">
+        <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [flexGrow]="0.7" *ngIf="mode== 'Normal'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
                     class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
@@ -80,6 +98,12 @@
                 &nbsp;
                 <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
                 svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="optionType== 'recommended-option'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"
+                          svgIcon="{{getLinkType(row.projectId)}}"></mat-icon>
             </ng-template>
         </ngx-datatable-column>
 
@@ -178,7 +202,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-       
+
 
         <!-- <ngx-datatable-column name="Comment" prop="comments" [flexGrow]="0.9" *ngIf="mode== 'Project-Close-Out'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -336,6 +360,17 @@
                         </ng-template> -->
 
 
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [flexGrow]="0.25" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Business-Case'">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                <div class="flex items-center justify-start gap-6">
+                    <a href="javascript:void(0)" title="Delete Single" *ngIf="(row.milestoneType?!row.milestoneType >=1:true && editable && !islink(row.scheduleUniqueId)) || islink(row.scheduleUniqueId)"
+                       (click)="deleteScheduleForOption(row.scheduleUniqueId)">
+                        <!-- && " -->
+                        <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                    </a>
                 </div>
             </ng-template>
         </ngx-datatable-column>

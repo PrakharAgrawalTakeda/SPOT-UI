@@ -34,7 +34,7 @@
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Include in Business Case (Max 8)" prop="includeInBusinessCase" [sortable]="false"
+            <ngx-datatable-column name="Include in Business Case (Max 4)" prop="includeInBusinessCase" [sortable]="false"
                                   [resizeable]="false" [flexGrow]="2" *ngIf="callLocation== 'Business-Case'">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                     <div class="flex items-center justify-between pl-2 overflow-hidden">
@@ -46,7 +46,7 @@
                     </div>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Include in Project Charter (Max 5)" prop="includeInCharter" [sortable]="false"
+            <ngx-datatable-column name="Include in Charter (Max 5)" prop="includeInCharter" [sortable]="false"
                                   [resizeable]="false" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter'">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                     <div class="flex items-center justify-between pl-2 overflow-hidden">

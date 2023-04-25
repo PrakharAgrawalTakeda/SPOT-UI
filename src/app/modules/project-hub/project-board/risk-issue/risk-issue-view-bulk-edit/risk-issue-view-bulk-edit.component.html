@@ -51,7 +51,7 @@
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="riskIssueTypeId" name="type" [placeholder]="'Type'"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getissuetype()" [idPointer]="'lookUpId'"
-                                         [valuePointer]="'lookUpName'">
+                                         [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                             </spot-select>
                         </form>
                     </ng-template>
@@ -124,7 +124,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Mitigation" prop="mitigation" [width]="250" [resizeable]="false" *ngIf="viewElementChecker('mitigation')"
+                <ngx-datatable-column name="Details/Mitigation" prop="mitigation" [width]="250" [resizeable]="false" *ngIf="viewElementChecker('mitigation')"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -196,7 +196,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Project Dashboard (Max 3)" prop="includeInReport" *ngIf="viewElementChecker('includeInProjectDashboard')"
+                <ngx-datatable-column name="Include In Dashboard (Max 3)" prop="includeInReport" *ngIf="viewElementChecker('includeInProjectDashboard')"
                                        [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -208,12 +208,12 @@
                               class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.riskIssueForm.controls[rowIndex]['controls']['includeInReport'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
-                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInReport">
+                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInReport">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Project Charter (Max 5)" prop="includeInCharter" *ngIf="viewElementChecker('includeInCharter')"
+                <ngx-datatable-column name="Included In Charter (Max 5)" prop="includeInCharter" *ngIf="viewElementChecker('includeInCharter')"
                                       [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!riTableEditStack.includes(rowIndex)"
@@ -225,7 +225,7 @@
                               class="h-[45px]">
                             <mat-slide-toggle
                                 [matTooltip]="this.riskIssueForm.controls[rowIndex]['controls']['includeInCharter'].disabled ? 'Only 5 can be selected at a time for project charter display' : null"
-                                (change)="disabler()" class="h-full overflow-visible" formControlName="includeInCharter">
+                                (change)="disabler()" class="h-full overflow-hidden" formControlName="includeInCharter">
                             </mat-slide-toggle>
                         </form>
                     </ng-template>

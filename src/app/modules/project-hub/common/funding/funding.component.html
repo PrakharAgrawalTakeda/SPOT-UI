@@ -1,16 +1,34 @@
 <div *ngIf="viewContent">
 
     <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Funding</div>
-    
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Funding Plan</div>
+
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
-                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="editable" [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen(bulkEditType, 'new', [], projectid, true)">
+                    <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && mode== 'Project-Charter'"
+                        (click)="projecthubservice.toggleDrawerOpen(fundingbulkEditType, 'new', [], id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
-                    <button class="ml-4 text-primary bg-gray-200" *ngIf="editable" mat-flat-button [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen(addSingle, 'new', fundingdata , projectid)">
+                    <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && optionType== 'recommended-option' && mode!= 'Project-Charter'"
+                        (click)="projecthubservice.toggleDrawerOpen(fundingBCbulkEditType, 'new', [], id, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                    </button>
+                    <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && optionType== 'option-2' && mode!= 'Project-Charter'"
+                        (click)="projecthubservice.toggleDrawerOpen(fundingBCbulkEditType, 'new', [], id, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                    </button>
+                    <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && optionType== 'option-3' && mode!= 'Project-Charter'"
+                        (click)="projecthubservice.toggleDrawerOpen(fundingBCbulkEditType, 'new', [], id, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                    </button>
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen(addSingle, 'new', fundingdata , id)"
+                        *ngIf="projecthubservice.roleControllerControl.generalInfo.basicFields && editable && (mode=='Project-Charter' || optionType == 'recommended-option' || optionType == 'option-2' || optionType == 'option-3')">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
                 </div>
@@ -19,12 +37,10 @@
     </div>
     <div class="overflow-x-auto mx-6">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-            class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
-            [rows]="fundingdata" [sorts]="[{ prop: 'fundingSourceName', dir: 'asc' }]"
-            #fundingTable>
-            <!--  -->
+            class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="fundingdata"
+            [sorts]="[{ prop: 'fundingSourceName', dir: 'asc' }]" #fundingTable>
 
-            <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [flexGrow]="1">
+            <ngx-datatable-column name="Funding Type" prop="fundingTypeId" [flexGrow]="0.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="value == '512e284b-eb1c-4184-aa26-685fefa2bc8c'">CAPEX</p>
                     <p *ngIf="value == 'c30f2902-757d-4e89-b91f-7577cd46b5ab'">OPEX</p>
@@ -35,15 +51,15 @@
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="In the Plan" prop="fundingIntheplan" [flexGrow]="1" >
+            <ngx-datatable-column name="In the Plan" prop="fundingIntheplan" [flexGrow]="0.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="value == true">Yes</p>
-                <p *ngIf="value == false">No</p>
+                    <p *ngIf="value == false">No</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Amount" prop="fundingAmount" [flexGrow]="1">
+            <ngx-datatable-column name="Amount ({{Amount}})" prop="fundingAmount" [flexGrow]="0.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="amount">{{value | number:'1.0-0'}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Notes" prop="fundingNotes" [flexGrow]="1">
@@ -51,18 +67,29 @@
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-    
-            <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+
+            <ngx-datatable-column [flexGrow]="0.1" [resizeable]="false" [sortable]="false" [draggable]="false">
                 <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-    
+
                     <div class="flex items-center justify-start gap-6">
-                        <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
-                            (click)="projecthubservice.toggleDrawerOpen(addSingle, row.fundingUniqueId, fundingdata, projectid)">
-                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
-    
-                        </a>
-                        <a href="javascript:void(0)" title="Delete Single" *ngIf="editable"
+                        <a href="javascript:void(0)" title="Delete Single"
+                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && mode== 'Project-Charter'"
                             (click)="deleteFunding(row.fundingUniqueId)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                        <a href="javascript:void(0)" title="Delete Single"
+                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'recommended-option' && mode!= 'Project-Charter'"
+                            (click)="deleteFunding(row.fundingUniqueId)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                        <a href="javascript:void(0)" title="Delete Single"
+                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'option-2' && mode!= 'Project-Charter'"
+                            (click)="deleteFunding(row.businessFundingUniqueId)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                        <a href="javascript:void(0)" title="Delete Single"
+                            *ngIf="editable && projecthubservice.roleControllerControl.generalInfo.basicFields && optionType== 'option-3' && mode!= 'Project-Charter'"
+                            (click)="deleteFunding(row.businessFundingUniqueId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                     </div>
@@ -70,4 +97,4 @@
             </ngx-datatable-column>
         </ngx-datatable>
     </div>
-    </div>
+</div>

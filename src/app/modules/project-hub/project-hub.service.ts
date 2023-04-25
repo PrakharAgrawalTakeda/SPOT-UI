@@ -18,6 +18,7 @@ export class ProjectHubService {
   lookUpMaster: any = []
   kpiMasters: any = []
   projectid: string = ""
+  localCurrency:any = [];
   hasChildren: boolean = false
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
@@ -103,7 +104,7 @@ export class ProjectHubService {
         {
           title: 'CAPS',
           type: 'basic',
-          icon: 'iconsmind:tree_4',
+          icon: 'heroicons_outline:globe',
           link: 'caps'
         },
         {

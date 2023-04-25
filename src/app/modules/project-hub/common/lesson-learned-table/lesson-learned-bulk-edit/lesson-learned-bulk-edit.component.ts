@@ -50,6 +50,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         res[j].submittedByName = res[j].submittedBy.userDisplayName
       }
       this.lessonsLearned = res
+      this.lessonsLearned = this.sortbyDateTypeName(this.lessonsLearned)
       this.lessonLearnedDb = this.lessonsLearned.map(x => {
         return {
           "lessonLearnedId": x.lessonLearnedId,
@@ -72,7 +73,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           "suggestedAction": x.suggestedAction
         }
       })
-      for (var i of this.lessonLearnedData) {
+      for (var i of this.lessonsLearned) {
         // this.opDb.push(i)
         this.lessonLearnedForm.push(new FormGroup({
           lessonLearnedId: new FormControl(i.lessonLearnedId),
@@ -102,8 +103,6 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           typeName: new FormControl(i.lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == i.lessonType)[0].lookUpName)
         }))
       }
-      this.lessonsLearned = this.sortbyDateTypeName(this.lessonsLearned)
-      this.lessonsLearned = this.sortbyTypeName(this.lessonsLearned)
       this.disabler();
       this.viewContent = true
     })
@@ -197,6 +196,8 @@ export class LessonLearnedBulkEditComponent implements OnInit {
 
   sortbyDateTypeName(array: any): any {
     return array.length > 1 ? array.sort((a, b) => {
+      a.typeName = a.lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == a.lessonType)[0].lookUpName
+      b.typeName = b.lessonType == "" ? "" : this.lookupdata.filter(x => x.lookUpId == b.lessonType)[0].lookUpName
       if (a.lessonCloseDate === null) {
         return -1;
       }
@@ -205,24 +206,15 @@ export class LessonLearnedBulkEditComponent implements OnInit {
         return 1;
       }
 
-      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
-        return 0;
+      if (a.lessonCloseDate === b.lessonCloseDate) {
+        return a.typeName < b.typeName ? -1 : (a.typeName > b.typeName) ? 1 : 0;
+      } else {
+        return a.lessonCloseDate < b.lessonCloseDate ? -1 : 1;
       }
-
-      return new Date(a.lessonCloseDate) < new Date(b.lessonCloseDate) ? -1 : 1;
     }) : array
 
   }
 
-  sortbyTypeName(array: any): any {
-    return array.length > 1 ? array.sort((a, b) => {
-      if (a.lessonCloseDate === new Date(b.lessonCloseDate)) {
-        return a.typeName < b.typeName ? -1 : 1;
-      }
-      return 0;
-    }) : array
-
-  }
   
   lessonLearnedTableEditRow(rowIndex) {
     if (!this.lessonLearnedTableEditStack.includes(rowIndex)) {
@@ -311,17 +303,17 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           "projectUid": this.projecthubservice.projectid,
           "actionOwner": x.actionOwner.userAdid == undefined || x.actionOwner.userAdid == null ? "" : x.actionOwner.userAdid,
           "createDetailedReviewSlide": x.createDetailedReviewSlide,
-          "criticality": x.criticality.lookUpId == undefined ? x.criticality : x.criticality.lookUpId,
+          "criticality": x.criticality == null ? x.criticality : x.criticality.lookUpId == undefined ? x.criticality : x.criticality.lookUpId,
           "dueDate": x.dueDate ? moment(x.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-          "functionActionOwner": x.functionActionOwner.lookUpId == undefined ? x.functionActionOwner : x.functionActionOwner.lookUpId,
+          "functionActionOwner": x.functionActionOwner == null ? x.functionActionOwner : x.functionActionOwner.lookUpId == undefined ? x.functionActionOwner : x.functionActionOwner.lookUpId,
           "includeInCloseOutReport": x.includeInCloseOutReport,
           "leassonTitle": x.leassonTitle,
           "lessonCloseDate": x.lessonCloseDate ? moment(x.lessonCloseDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           "lessonDetail": x.lessonDetail,
           "lessonLogDate": x.lessonLogDate ? moment(x.lessonLogDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-          "lessonType": x.lessonType.lookUpId == undefined ? x.lessonType : x.lessonType.lookUpId,
+          "lessonType": x.lessonType == null ? x.lessonType : x.lessonType.lookUpId == undefined ? x.lessonType : x.lessonType.lookUpId,
           "submittedBy": x.submittedBy.userAdid == undefined || x.submittedBy.userAdid == null ? "" : x.submittedBy.userAdid,
-          "submittingGroupRole": x.submittingGroupRole.lookUpId == undefined ? x.submittingGroupRole : x.submittingGroupRole.lookUpId,
+          "submittingGroupRole": x.submittingGroupRole == null ? x.submittingGroupRole : x.submittingGroupRole.lookUpId == undefined ? x.submittingGroupRole : x.submittingGroupRole.lookUpId,
           "suggestedAction": x.suggestedAction
         })
       }

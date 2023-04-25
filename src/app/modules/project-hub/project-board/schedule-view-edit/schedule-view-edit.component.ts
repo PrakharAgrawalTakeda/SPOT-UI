@@ -14,11 +14,9 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { AuthService } from '../../../../core/auth/auth.service'
 import * as moment from 'moment';
-import { startWith, map } from 'rxjs';
 import { ProjectApiService } from '../../common/project-api.service';
-import { FuseAlertService } from '@fuse/components/alert';
-import {Constants} from "../../../../shared/constants";
 import {Router} from "@angular/router";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -72,10 +70,10 @@ export class ScheduleViewEditComponent implements OnInit {
     completionDate: new FormControl(''),
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
-    function: new FormControl({}),
-    //functionid: new FormControl(''),
-    includeInReport: new FormControl(''),
-    includeInBusinessCase: new FormControl('')
+    function: new FormControl(null),
+    includeInCharter: new FormControl(false),
+    includeInReport: new FormControl(false),
+    includeInBusinessCase: new FormControl(false)
   })
   ngOnInit(): void {
     this.getllookup()
@@ -83,7 +81,7 @@ export class ScheduleViewEditComponent implements OnInit {
 
   dataloader() {
     if (this.projecthubservice.itemid != "new") {
-      this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
+        this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
         this.schedule = res
         console.log(this.projecthubservice)
         console.log('res')
@@ -97,7 +95,7 @@ export class ScheduleViewEditComponent implements OnInit {
           completionDate: res.completionDate,
           usersingle: res.responsiblePersonName,
           usersingleid: res.responsiblePersonId,
-          //functionid: res.functionGroupId,
+          includeInCharter: res.includeInCharter,
           includeInReport: res.includeInReport,
           includeInBusinessCase: res.includeInBusinessCase
         })
@@ -119,6 +117,11 @@ export class ScheduleViewEditComponent implements OnInit {
                   this.scheduleForm.controls['includeInBusinessCase'].disable()
               }
           }
+          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
+            if (this.scheduleForm.value.includeInCharter != true) {
+                this.scheduleForm.controls['includeInCharter'].disable()
+            }
+        }
         }
         this.projecthubservice.isFormChanged = false
       })
@@ -132,7 +135,7 @@ export class ScheduleViewEditComponent implements OnInit {
         completionDate: null,
         usersingle: "",
         usersingleid: "",
-        //functionid: "",
+        includeInCharter: false,
         includeInReport: false,
         includeInBusinessCase: false
       })
@@ -150,6 +153,9 @@ export class ScheduleViewEditComponent implements OnInit {
           if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 8) {
               this.scheduleForm.controls['includeInBusinessCase'].disable()
           }
+          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
+            this.scheduleForm.controls['includeInCharter'].disable()
+        }
       }
       this.projecthubservice.isFormChanged = false
     }
@@ -164,6 +170,7 @@ export class ScheduleViewEditComponent implements OnInit {
       this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
       this.dataloader()
       this.scheduleForm.controls.function.patchValue('')
+        this.projecthubservice.isFormChanged = false
     })
   }
   viewElementChecker(element: string): boolean {
@@ -187,7 +194,7 @@ export class ScheduleViewEditComponent implements OnInit {
           includeInReport: this.scheduleForm.value.includeInReport,
           includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
           indicator: "Grey",
-          includeInCharter: this.schedule.includeInCharter,
+          includeInCharter: this.scheduleForm.value.includeInCharter,
           milestoneType: this.schedule.milestoneType,
           templateMilestoneId: this.schedule.templateMilestoneId,
           includeInCloseout: this.schedule.includeInCloseout,
@@ -205,6 +212,9 @@ export class ScheduleViewEditComponent implements OnInit {
         if (this.scheduleForm.controls['includeInBusinessCase'].disabled) {
             mainObjnew.includeInBusinessCase = false
         }
+        if (this.scheduleForm.controls['includeInCharter'].disabled) {
+          mainObjnew.includeInBusinessCase = false
+      }
 
         // //Planned Finish
         if (mainObjnew.plannedFinish == "Invalid date") {
@@ -220,24 +230,33 @@ export class ScheduleViewEditComponent implements OnInit {
           mainObjnew.baselineFinish = null
         }
           if (this.router.url.includes('option-2')) {
-              mainObjnew.businessOptionId = Constants.OPTION_2_ID.toString();
+              mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
               this.apiService.addTimelineForOption(mainObjnew).then(res => {
                   this.projecthubservice.submitbutton.next(true)
                   this.projecthubservice.toggleDrawerOpen('', '', [], '')
               })
           }else{
               if (this.router.url.includes('option-3')) {
-                  mainObjnew.businessOptionId = Constants.OPTION_3_ID.toString();
+                  mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
                   this.apiService.addTimelineForOption(mainObjnew).then(res => {
                       this.projecthubservice.submitbutton.next(true)
                       this.projecthubservice.toggleDrawerOpen('', '', [], '')
                   })
               }else{
-                  this.apiService.addSchedule(mainObjnew).then(() => {
-                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                      this.projecthubservice.submitbutton.next(true)
-                      this.projecthubservice.isNavChanged.next(true)
-                  })
+                  if (this.router.url.includes('recommended-option')) {
+                      mainObjnew.businessOptionId = "";
+                      this.apiService.addTimelineForOption(mainObjnew).then(res => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                      })
+                  }else{
+                      this.apiService.addSchedule(mainObjnew).then(() => {
+                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.isNavChanged.next(true)
+                      })
+                  }
+
               }
           }
       }
@@ -255,7 +274,7 @@ export class ScheduleViewEditComponent implements OnInit {
           includeInReport: this.scheduleForm.value.includeInReport,
           includeInBusinessCase: this.scheduleForm.value.includeInBusinessCase,
           indicator: this.schedule.indicator,
-          includeInCharter: this.schedule.includeInCharter,
+          includeInCharter: this.scheduleForm.value.includeInCharter,
           milestoneType: this.schedule.milestoneType,
           templateMilestoneId: this.schedule.templateMilestoneId,
           includeInCloseout: this.schedule.includeInCloseout,
@@ -301,4 +320,5 @@ export class ScheduleViewEditComponent implements OnInit {
   @HostListener('unloaded')
   ngOnDestroy(): void {
   }
+
 }

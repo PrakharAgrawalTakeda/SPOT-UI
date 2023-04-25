@@ -33,9 +33,10 @@ export class KeyTakeawaySingleEditComponent implements OnInit {
   submitkTA() {
     this.projecthubservice.isFormChanged = false
     this.DatatoSend.keyTakeaways = this.KeyTakeawayForm.controls.keyTakeaways.value
-    this.apiService.editGeneralInfo(this.projecthubservice.projectid, this.DatatoSend).then(res => {
+    this.apiService.editLessonLearnedTakeaway(this.projecthubservice.projectid, this.DatatoSend.keyTakeaways).then(res => {
       this.projecthubservice.submitbutton.next(true)
       this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.successSave.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
     })
   }

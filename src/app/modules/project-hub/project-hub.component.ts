@@ -143,7 +143,7 @@ export class ProjectHubComponent implements OnInit {
                     }
                 ]
             }
-         
+
         console.log(this.projecthubservice.roleControllerControl)
         var appSetting = JSON.parse(localStorage.getItem('app-setting'))
         console.log("App Setting", appSetting)

@@ -18,8 +18,8 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
 
-                        <schedule-table [tableIndex]="i" [scheduleData]="milestone.templateDetails" [viewElements]="['milestone','functionalOwner','comment', 'includeInReport','addStandardMilestone']"
-                                        [tableData]="milestone.templateDetails"
+                        <schedule-table [tableIndex]="i" [scheduleData]="milestone.templateDetails" [viewElements]="['milestone','functionalOwner','comment', 'includeInReport', 'includeInBusinessCase','addStandardMilestone']"
+                                        [tableData]="milestone.templateDetails" [lookup]="lookup"
                                         [callLocation]="'StandardMilestones'" [projectId]="milestone.milestoneTemplateId"
                                         [parentProjectId]="projectHubService.projectid" (toggleChange)="toggleSchedule($event)">
                         </schedule-table>
@@ -34,7 +34,7 @@
             Cancel
         </a>
         <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitStandardMilestoneSets()" type="button">
-            Submit
+            Add
         </button>
     </div>
 </div>

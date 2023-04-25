@@ -9,7 +9,7 @@
                 <!-- Portfolio Owner -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Portfolio Owner</mat-label>
-                    <mat-chip-list #portownList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #portownList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let owner of filtersnew.portfolioOwner" (removed)="removeoption(owner,'PortfolioOwner')">
                             {{owner.portfolioOwner}}
                             <button matChipRemove>
@@ -19,7 +19,7 @@
                         <input placeholder="Portfolio Owner" #portownInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="portownList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectoption($event,'PortfolioOwner')">
                         <mat-option *ngFor="let filteroption of filterlist.portfolioOwner" [value]="filteroption">
                             {{filteroption.portfolioOwner}}
@@ -29,7 +29,7 @@
                 <!-- People -->
                 <mat-form-field class="example-chip-list" appearance="fill" disabled>
                     <mat-label>People (In Progress)</mat-label>
-                    <mat-chip-list #peopleList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #peopleList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let person of defaultfilter.people" (removed)="remove(fruit)">
                             {{person}}
                             <button matChipRemove>
@@ -38,7 +38,7 @@
                         </mat-chip>
                         <input placeholder="People" #peopleInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
                             [matChipInputFor]="peopleList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" disabled>
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -48,7 +48,7 @@
                 <!-- Excecution Scope -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Excecution Scope</mat-label>
-                    <mat-chip-list #exscList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #exscList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let scope of filtersnew.executionScope" (removed)="removeoption(scope, 'Excecution')">
                             {{scope.portfolioOwner}}
                             <button matChipRemove>
@@ -58,7 +58,7 @@
                         <input placeholder="Excecution Scope" #exscInput [formControl]="fruitCtrl"
                             [matAutocomplete]="exec" [matChipInputFor]="exscList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #exec="matAutocomplete" (optionSelected)="selectoption($event,'Excecution')">
                         <mat-option *ngFor="let execoption of filterlist.executionScope" [value]="execoption">
                             {{execoption.portfolioOwner}}
@@ -68,7 +68,7 @@
                 <!-- Phase -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Phase</mat-label>
-                    <mat-chip-list #phaseList class="chiplist">
+                    <mat-chip-grid #phaseList class="chiplist">
                         <mat-chip *ngFor="let ph of filtersnew.phase" (removed)="removeoption(ph, 'Phase')">
                             {{ph.lookUpName}}
                             <button matChipRemove>
@@ -77,7 +77,7 @@
                         </mat-chip>
                         <input placeholder="Phase" #phaseInput [formControl]="phaseCtrl" [matAutocomplete]="phase"
                             [matChipInputFor]="phaseList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #phase="matAutocomplete" (optionSelected)="selectoption($event,'Phase')">
                         <mat-option *ngFor="let pha of filterlist.phase" [value]="pha">
                             {{pha.lookUpName}}
@@ -87,7 +87,7 @@
                 <!-- Products -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Product(s)</mat-label>
-                    <mat-chip-list #productList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #productList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let product of filtersnew.products" (removed)="removeoption(product ,'Product')">
                             {{product.fullProductName}}
                             <button matChipRemove>
@@ -96,7 +96,7 @@
                         </mat-chip>
                         <input placeholder="Product(s)" #productInput [formControl]="fruitCtrl" [matAutocomplete]="prod"
                             [matChipInputFor]="productList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #prod="matAutocomplete" (optionSelected)="selectoption($event,'Product')">
                         <mat-option *ngFor="let produ of filterlist.products" [value]="produ">
                             {{produ.fullProductName}}
@@ -106,7 +106,7 @@
                 <!-- Project State -->
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project State</mat-label>
-                    <mat-chip-list #stateList class="chiplist">
+                    <mat-chip-grid #stateList class="chiplist">
                         <mat-chip *ngFor="let stat of filtersnew.state" (removed)="removeoption(stat, 'State')">
                             {{stat.lookUpName}}
                             <button matChipRemove>
@@ -116,7 +116,7 @@
                         <input placeholder="Project State" #stateInput [formControl]="stateCtrl"
                             [matAutocomplete]="state" [matChipInputFor]="stateList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #state="matAutocomplete" (optionSelected)="selectoption($event,'State')">
                         <mat-option *ngFor="let sta of filterlist.state" [value]="sta">
                             {{sta.lookUpName}}
@@ -126,7 +126,7 @@
                 <!-- Total Capex -->
                 <mat-form-field class="example-chip-list" appearance="fill" disabled>
                     <mat-label>Total CAPEX (In Progress)</mat-label>
-                    <mat-chip-list #totcapList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #totcapList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let cap of defaultfilter.totalCAPEX" (removed)="remove(fruit)">
                             {{cap}}
                             <button matChipRemove>
@@ -136,7 +136,7 @@
                         <input placeholder="New fruit..." #totcapInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="totcapList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes" disabled>
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -146,7 +146,7 @@
                 <!-- GMS Budget Owner 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>GMS Budget Owner</mat-label>
-                    <mat-chip-list #gmsbowList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #gmsbowList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let bown of defaultfilter.gmsBudgetOwner" (removed)="remove(fruit)">
                             {{bown}}
                             <button matChipRemove>
@@ -156,7 +156,7 @@
                         <input placeholder="New fruit..." #gmsbowInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="gmsbowList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -166,7 +166,7 @@
                 <!-- OE Project Type 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>OE Project Type</mat-label>
-                    <mat-chip-list #oeptList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #oeptList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let oept of defaultfilter.oeProjectType" (removed)="remove(fruit)">
                             {{oept}}
                             <button matChipRemove>
@@ -175,7 +175,7 @@
                         </mat-chip>
                         <input placeholder="New fruit..." #oeptInput [formControl]="fruitCtrl" [matAutocomplete]="auto"
                             [matChipInputFor]="oeptList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -185,7 +185,7 @@
                 <!-- Project Type 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project Type</mat-label>
-                    <mat-chip-list #projtypeList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #projtypeList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let pt of defaultfilter.projectType" (removed)="remove(fruit)">
                             {{pt}}
                             <button matChipRemove>
@@ -195,7 +195,7 @@
                         <input placeholder="New fruit..." #projtypeInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="projtypeList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -205,7 +205,7 @@
                 <!-- Funding Status 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Funding Status</mat-label>
-                    <mat-chip-list #fundstatList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #fundstatList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let fstat of defaultfilter.fundingStatus" (removed)="remove(fruit)">
                             {{fstat}}
                             <button matChipRemove>
@@ -215,7 +215,7 @@
                         <input placeholder="New fruit..." #fundstatInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="fundstatList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -226,7 +226,7 @@
                 <!-- AGILE Workstream 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>AGILE Workstream</mat-label>
-                    <mat-chip-list #agileworkstList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #agileworkstList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let awork of defaultfilter.agileWorkstream" (removed)="remove(fruit)">
                             {{awork}}
                             <button matChipRemove>
@@ -236,7 +236,7 @@
                         <input placeholder="New fruit..." #agileworkstInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="agileworkstList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -246,7 +246,7 @@
                 <!-- AGILE Wave 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>AGILE Wave</mat-label>
-                    <mat-chip-list #agilewaveList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #agilewaveList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let awave of defaultfilter.agileWave" (removed)="remove(fruit)">
                             {{awave}}
                             <button matChipRemove>
@@ -256,7 +256,7 @@
                         <input placeholder="New fruit..." #agilewaveInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="agilewaveList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -267,7 +267,7 @@
                 <!-- Primary KPI 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Primary KPI</mat-label>
-                    <mat-chip-list #primarykpiList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #primarykpiList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let kpi of defaultfilter.primaryKPI" (removed)="remove(fruit)">
                             {{kpi}}
                             <button matChipRemove>
@@ -277,7 +277,7 @@
                         <input placeholder="New fruit..." #primarykpiInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="primarykpiList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -287,7 +287,7 @@
                 <!-- Strategic Year 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Strategic Year</mat-label>
-                    <mat-chip-list #stratyrList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #stratyrList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let year of defaultfilter.startegicYear" (removed)="remove(fruit)">
                             {{year}}
                             <button matChipRemove>
@@ -297,7 +297,7 @@
                         <input placeholder="New fruit..." #stratyrInput [formControl]="fruitCtrl"
                             [matAutocomplete]="stratyr" [matChipInputFor]="stratyrList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #stratyr="matAutocomplete" (optionSelected)="selected($event,'Strategic Year')">
                         <mat-option *ngFor="let styr of filterInputs.startegicYear" [value]="styr.lookUpId">
                             {{styr.lookUpName}}
@@ -307,7 +307,7 @@
                 <!-- Annual Initiatives 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Annual Initiatives</mat-label>
-                    <mat-chip-list #annualinList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #annualinList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let initiative of defaultfilter.annualInitiatives" (removed)="remove(fruit)">
                             {{initiative}}
                             <button matChipRemove>
@@ -317,7 +317,7 @@
                         <input placeholder="New fruit..." #annualinInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="annualinList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -327,7 +327,7 @@
                 <!-- TOPS Group 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>TOPS Group</mat-label>
-                    <mat-chip-list #topsgpList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #topsgpList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let group of defaultfilter.topsGroup" (removed)="remove(fruit)">
                             {{group}}
                             <button matChipRemove>
@@ -337,7 +337,7 @@
                         <input placeholder="New fruit..." #topsgpInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="topsgpList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -347,7 +347,7 @@
                 <!-- CAPS Project 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>CAPS Project</mat-label>
-                    <mat-chip-list #capsprojList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #capsprojList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let cap of defaultfilter.capsProject" (removed)="remove(fruit)">
                             {{cap}}
                             <button matChipRemove>
@@ -357,7 +357,7 @@
                         <input placeholder="New fruit..." #capsprojInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="capsprojList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -367,7 +367,7 @@
                 <!-- Project / Program 
                 <mat-form-field class="example-chip-list" appearance="fill">
                     <mat-label>Project / Program</mat-label>
-                    <mat-chip-list #projprogList aria-label="Fruit selection" class="chiplist">
+                    <mat-chip-grid #projprogList aria-label="Fruit selection" class="chiplist">
                         <mat-chip *ngFor="let name of defaultfilter.projectName" (removed)="remove(fruit)">
                             {{name}}
                             <button matChipRemove>
@@ -377,7 +377,7 @@
                         <input placeholder="New fruit..." #projprogInput [formControl]="fruitCtrl"
                             [matAutocomplete]="auto" [matChipInputFor]="projprogList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                    </mat-chip-list>
+                    </mat-chip-grid>
                     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event,'Priority')">
                         <mat-option *ngFor="let fruit of allFruits" [value]="fruit">
                             {{fruit}}
@@ -447,7 +447,7 @@
                             </div>-->
                         </div>
                         <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary'" (click)="matDrawerRight.toggle()">
+                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
                                 View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
                             </button>
                         </div>
@@ -468,7 +468,7 @@
                             </div>
                         </div>
                         <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary'" (click)="matDrawerRight.toggle()">
+                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
                                 View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
                             </button>
                         </div>
@@ -487,7 +487,7 @@
                             </ng-container>
                         </div>
                         <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary'" (click)="matDrawerRight.toggle()">
+                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
                                 View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
                             </button>
                         </div>
@@ -516,7 +516,7 @@
 
                         </div>
                         <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary'" (click)="matDrawerRight.toggle()">
+                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
                                 View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
                             </button>
                         </div>
@@ -537,7 +537,7 @@
                             </div>
                         </div>
                         <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary'" (click)="matDrawerRight.toggle()">
+                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
                                 View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
                             </button>
                         </div>
@@ -559,7 +559,7 @@
                             </div>
                         </div>
                         <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary'" (click)="matDrawerRight.toggle()">
+                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
                                 View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
                             </button>
                         </div>

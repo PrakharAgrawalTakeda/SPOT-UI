@@ -11,6 +11,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { __classPrivateFieldSet } from 'tslib';
 import { MatStepper } from '@angular/material/stepper';
 import { CreateNewApiService } from '../create-new-api.service';
+import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 
 
 @Component({
@@ -39,52 +40,100 @@ export class CreateProjectComponent implements OnInit {
   localCurrency:any = [];
   viewContent:boolean = false
   createProjectForm = new FormGroup({
-    problemTitle: new FormControl(''),
-    projectsingle: new FormControl(''),
-    projectsingleid: new FormControl(''),
+    problemTitle: new FormControl(),
+    projectsingle: new FormControl(),
+    projectsingleid: new FormControl(),
     problemType: new FormControl('Standard Project / Program'),
-    projectDescription: new FormControl(''),
-    primaryProduct: new FormControl({}),
+    projectDescription: new FormControl(),
+    primaryProduct: new FormControl(null),
     otherImpactedProducts: new FormControl([]),
-    portfolioOwner: new FormControl({}),
+    portfolioOwner: new FormControl(null),
     excecutionScope: new FormControl([]),
-    enviornmentalPortfolio: new FormControl({}),
-    isCapsProject: new FormControl(false),
-    owningOrganization: new FormControl(''),
-    SubmittedBy: new FormControl(''),
-    targetGoalSituation: new FormControl(''),
-    isOeproject: new FormControl(''),
-    qualityReference: new FormControl(''),
-    isTechTransfer: new FormControl(''),
-    primaryKPI: new FormControl(''),
-    isAgile: new FormControl(''),
-    isSiteAssessment: new FormControl(''),
-    isPobos: new FormControl(''),
-    oeProjectType: new FormControl(''),
-    campaignPhase: new FormControl(''),
-    productionSteps: new FormControl(''),
-    campaignType: new FormControl(''),
-    agilePrimaryWorkstream: new FormControl(''),
-    agileSecondaryWorkstream: new FormControl(''),
-    agileWave: new FormControl(''),
-    pobosCategory: new FormControl(''),
-    siteAssessmentCategory: new FormControl(''),
+    enviornmentalPortfolio: new FormControl(null),
+    isCapsProject: new FormControl(null),
+    owningOrganization: new FormControl(),
+    SubmittedBy: new FormControl(),
+    targetGoalSituation: new FormControl(),
+    isOeproject: new FormControl(null),
+    qualityReference: new FormControl(),
+    isTechTransfer: new FormControl(null),
+    primaryKPI: new FormControl(),
+    isAgile: new FormControl(),
+    isSiteAssessment: new FormControl(),
+    isPobos: new FormControl(),
+    oeProjectType: new FormControl(),
+    campaignPhase: new FormControl(),
+    productionSteps: new FormControl(),
+    campaignType: new FormControl(),
+    agilePrimaryWorkstream: new FormControl(),
+    agileSecondaryWorkstream: new FormControl(),
+    agileWave: new FormControl(),
+    pobosCategory: new FormControl(),
+    siteAssessmentCategory: new FormControl(),
     quality: new FormControl(new FormArray([])),
-    isGmsgqltannualMustWin: new FormControl(''),
-    strategicYear: new FormControl(''),
-    annualMustWinID: new FormControl(''),
-    localCurrency: new FormControl('')
+    isGmsgqltannualMustWin: new FormControl(),
+    strategicYear: new FormControl(),
+    annualMustWinID: new FormControl(),
+    localCurrency: new FormControl(),
+    isArchived: new FormControl()
   })
+  newmainnav: any = [
+    {
+      id: 'portfolio-center',
+      title: 'Portfolio Center',
+      type: 'basic',
+      link: '/portfolio-center'
+    },
+    {
+      // id: 'create-project',
+      title: 'Create Project',
+      type: 'collapsable',
+      active: true,
+      link: '/create-project',
+      children: [
+        {
+          title: 'Create Project',
+          type: 'basic',
+          link: '/create-project/create-new-project'
+        },
+        {
+          title: 'Copy Project',
+          type: 'basic',
+          link: '/create-project/copy-project'
+        }
+      ],
+    },
+    {
+      id: 'spot-documents',
+      title: 'SPOT Resources',
+      type: 'basic',
+      externalLink: true,
+      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+      target: '_blank'
+    },
+    {
+      id: 'report-navigator',
+      title: 'Report Navigator',
+      type: 'basic',
+      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+      externalLink: true,
+      target: "_blank"
+
+    }
+  ]
   envPortfolio:any
 
   capturedValues = ['', '']
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService) {
   }
 
   
   ngOnInit(): void {
+    const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+    mainNavComponent.navigation = this.newmainnav
+    mainNavComponent.refresh()
     console.log("Inside init")
     this.auth.lookupMaster().then(res => {
       this.apiService.getLocalCurrency().then(currency => {
@@ -331,23 +380,23 @@ export class CreateProjectComponent implements OnInit {
     }
     mainObjCreate[0].IsTechTransfer = formValue.isTechTransfer == "" ? false : formValue.isTechTransfer
       if (mainObjCreate[0].IsTechTransfer) {
-        mainObjCreate[0].CampaignPhaseID = this.campaingPhaseName != "" && this.campaingPhaseName != undefined ? this.campaignPhase.filter(x => x.lookUpName == this.campaingPhaseName)[0].lookUpId : ""
-        mainObjCreate[0].CampaignTypeID = this.campaingTypeName != "" && this.campaingTypeName != undefined ? this.campaignType.filter(x => x.lookUpName == this.campaingTypeName)[0].lookUpId : ""
-        mainObjCreate[0].ProductionStepID = this.productionStepName != "" && this.productionStepName != undefined ? this.productionSteps.filter(x => x.lookUpName == this.productionStepName)[0].lookUpId : ""
+        mainObjCreate[0].CampaignPhaseID = this.campaingPhaseName != "" && this.campaingPhaseName != undefined && this.campaingPhaseName != null ? this.campaignPhase.filter(x => x.lookUpName == this.campaingPhaseName)[0].lookUpId : ""
+        mainObjCreate[0].CampaignTypeID = this.campaingTypeName != "" && this.campaingTypeName != undefined && this.campaingTypeName != null ? this.campaignType.filter(x => x.lookUpName == this.campaingTypeName)[0].lookUpId : ""
+        mainObjCreate[0].ProductionStepID = this.productionStepName != "" && this.productionStepName != undefined && this.productionStepName != null ? this.productionSteps.filter(x => x.lookUpName == this.productionStepName)[0].lookUpId : ""
         // mainObjCreate[0].CampaignPhaseID = formValue.campaignPhase != "" ? formValue.campaignPhase : ''
         // mainObjCreate[0].ProductionStepID = formValue.productionSteps != "" ? formValue.productionSteps : ''
         // mainObjCreate[0].CampaignTypeID = formValue.campaignType != "" ? formValue.campaignType : ''
     }
     mainObjCreate[0].IsAgile = formValue.isAgile == "" ? false : formValue.isAgile
       if (mainObjCreate[0].IsAgile) {
-        mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" ? formValue.agilePrimaryWorkstream.lookUpId : ''
+        mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null? formValue.agilePrimaryWorkstream.lookUpId : ''
         mainObjCreate[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
-        mainObjCreate[0].agileWave = formValue.agileWave != "" ? formValue.agileWave.lookUpId : ''
+        mainObjCreate[0].agileWave = formValue.agileWave != "" && formValue.agileWave != undefined && formValue.agileWave != null ? formValue.agileWave.lookUpId : ''
     }
       mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
       mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-      mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" ? formValue.primaryKPI.kpiid : ''
-    mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
+    mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.kpiid : ''
+      mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
       if (mainObjCreate[0].IsPOBOS) {
         mainObjCreate[0].POBOSCategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : ''
     }
@@ -357,8 +406,8 @@ export class CreateProjectComponent implements OnInit {
     }
     mainObjCreate[0].IsGMSGQLTAnnualMustWin = formValue.isGmsgqltannualMustWin == "" ? false : formValue.isGmsgqltannualMustWin
       if (mainObjCreate[0].IsGMSGQLTAnnualMustWin) {
-        mainObjCreate[0].StrategicYearID = formValue.strategicYear != "" ? formValue.strategicYear.lookUpId : ''
-        mainObjCreate[0].AnnualMustWinID = formValue.annualMustWinID != "" ? formValue.annualMustWinID.lookUpId : ''
+        mainObjCreate[0].StrategicYearID = formValue.strategicYear != "" && formValue.strategicYear != undefined && formValue.strategicYear != null ? formValue.strategicYear.lookUpId : ''
+        mainObjCreate[0].AnnualMustWinID = formValue.annualMustWinID != "" && formValue.annualMustWinID != undefined && formValue.annualMustWinID != null ? formValue.annualMustWinID.lookUpId : ''
     }
     
     var dataToSend = {}

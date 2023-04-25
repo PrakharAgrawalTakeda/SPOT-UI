@@ -5,6 +5,8 @@ import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotli
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import moment from 'moment';
+import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -23,9 +25,12 @@ export class SchedulesTableComponent implements OnInit {
   @Input() linksProblemCapture: any = []
   @Input() tableIndex: number = 0
   @Output() toggleChange = new EventEmitter();
+  @Input() lookup: any
   selected = [];
   SelectionType = SelectionType;
   today = new Date()
+  wizzard: string = ''
+  includeInText: 'Dashboard' | 'Charter' | 'Business Case' = 'Dashboard'
   getRowClass = (row) => {
     console.log(row)
     return {
@@ -33,12 +38,21 @@ export class SchedulesTableComponent implements OnInit {
     };
   };
   @ViewChild('scheduleTable') table: any;
-  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService, public indicator: SpotlightIndicatorsService
-    , public fuseAlert: FuseConfirmationService) { }
-
+  constructor(public projectHubService: ProjectHubService, public apiService: ProjectApiService,
+              public indicator: SpotlightIndicatorsService, private router: Router, public fuseAlert: FuseConfirmationService) { }
   ngOnInit(): void {
     if (this.callLocation == 'Link') {
       this.dataloaderLink()
+    }
+    if (this.router.url.includes('project-charter')) {
+        this.wizzard= "project-charter"
+        this.includeInText = 'Charter'
+    }
+    if (this.router.url.includes('business-case')) {
+        this.wizzard= "business-case"
+        if (this.router.url.includes('option-2') ||this.router.url.includes('option-3')) {
+            this.includeInText = 'Business Case'
+        }
     }
   }
 
@@ -157,4 +171,7 @@ export class SchedulesTableComponent implements OnInit {
   viewElementChecker(element: string): boolean {
       return this.viewElements.some(x => x == element)
   }
+    getLookUpName(lookUpId: string): string {
+        return lookUpId && lookUpId != '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId == lookUpId).lookUpName : ''
+    }
 }

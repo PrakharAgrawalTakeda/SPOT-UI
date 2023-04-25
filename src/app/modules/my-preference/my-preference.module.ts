@@ -31,50 +31,71 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseAlertModule } from '@fuse/components/alert';
 import { MyPreferenceComponent } from './my-preference.component';
+import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
+import { ProjectSettingsComponent } from './project-settings/project-settings.component';
+import { MilestoneSetsComponent } from './milestone-sets/milestone-sets.component';
+import { MilestoneSetViewEditComponent } from './milestone-sets/milestone-set-view-edit/milestone-set-view-edit.component';
 export const projectRoutes: Route[] = [
   {
     path: '',
     component: MyPreferenceComponent,
+ children: [
+
+  {
+    path: 'project-settings',
+    component: ProjectSettingsComponent,
+  },
+  {
+      path: 'milestone-sets',
+      component: MilestoneSetsComponent,
   }
-];
+]
+}];
 
 
 @NgModule({
-  declarations: [
-    MyPreferenceComponent
-  ],
-  imports: [
-    RouterModule.forChild(projectRoutes),
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDividerModule,
-    MatIconModule,
-    MatMenuModule,
-    MatProgressBarModule,
-    MatRippleModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatExpansionModule,
-    NgApexchartsModule,
-    TranslocoModule,
-    SharedModule,
-    CommonModule,
-    FuseDrawerModule,
-    FuseNavigationModule,
-    NgScrollbarModule,
-    MatChipsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    NgxDatatableModule,
-    MatSlideToggleModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    FuseAlertModule
-  ]
+    declarations: [
+        MyPreferenceComponent,
+        ProjectSettingsComponent,
+        MilestoneSetsComponent,
+        MilestoneSetViewEditComponent
+    ],
+    exports: [
+        MilestoneSetViewEditComponent
+    ],
+    imports: [
+        RouterModule.forChild(projectRoutes),
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDividerModule,
+        MatIconModule,
+        MatMenuModule,
+        MatProgressBarModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
+        MatTabsModule,
+        MatExpansionModule,
+        NgApexchartsModule,
+        TranslocoModule,
+        SharedModule,
+        CommonModule,
+        FuseDrawerModule,
+        FuseNavigationModule,
+        NgScrollbarModule,
+        MatChipsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        NgxDatatableModule,
+        MatSlideToggleModule,
+        MatDatepickerModule,
+        MatMomentDateModule,
+        MatAutocompleteModule,
+        MatTooltipModule,
+        FuseAlertModule,
+        SpotFormsModule
+    ]
 })
 export class MyPreferenceModule { }
