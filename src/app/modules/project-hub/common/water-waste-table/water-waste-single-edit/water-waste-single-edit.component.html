@@ -19,7 +19,7 @@
 
         <spot-input class="w-full" formControlName="emwwunit" name="emwwunit" [label]="'Units'" [decimalCount]="0"
             [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'0'" [allowNegativeValues] = true [showHint]="true"
-                [hint]="'Input gross change in emissions type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.'">
+                [hint]="'Input gross change in emissions type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.'" [callLocation]="'View'">
         </spot-input>
 
         <spot-textarea class="w-full" [rows] = 1 formControlName="standardUoM" name="standardUoM" [placeholder]="'UoM'" [label]="'UoM'">
@@ -27,7 +27,7 @@
 
         <spot-input class="w-full" formControlName="emwwunitCost" name="emwwunitCost" [label]=unitCost [decimalCount]="4"
             [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true"
-                [hint]="'Input the cost of each energy unit using upto 4 decimal places, positive values only.'">
+                [hint]="'Input the cost of each energy unit using upto 4 decimal places, positive values only.'" [callLocation]="'View'">
         </spot-input>
 
         <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
