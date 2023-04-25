@@ -21,9 +21,9 @@ export class WaterWasteTableComponent {
   @Input() ProjectData: any
   @Input() WaterWasteParam: any
   @Input() editCost: boolean
+  @Input() DateMandatory: boolean
   sortDir = ""
   sortDirCost = ""
-  lookupdata: any
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -37,8 +37,6 @@ export class WaterWasteTableComponent {
     this.dataloader()
   }
   dataloader() {
-    this.auth.lookupMaster().then((resp: any) => {
-      this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
       if (this.ProjectData.localCurrency == null){
           this.unitCost = "Unit Cost ()"
@@ -62,18 +60,15 @@ export class WaterWasteTableComponent {
         this.waterWasteBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
         }
       this.waterWasteBulkEditData.push(this.WaterWasteParam)
-      this.waterWasteBulkEditData.push(this.editCost)
+    this.waterWasteBulkEditData.push(this.editCost)
+    this.waterWasteBulkEditData.push(this.DateMandatory)
         this.viewContent = true
-    })
   }
 
-  getLookupName(lookUpId: string): string {
-    return lookUpId && lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == lookUpId).lookUpName : ''
-  }
 
   deleteWW(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Operational Performance?",
+      "title": "Remove Water/Waste?",
       "message": "Are you sure you want to remove this record permanently? ",
       "icon": {
         "show": true,

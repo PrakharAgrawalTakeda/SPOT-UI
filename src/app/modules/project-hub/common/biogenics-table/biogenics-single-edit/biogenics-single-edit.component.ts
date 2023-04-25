@@ -66,13 +66,13 @@ export class BiogenicsSingleEditComponent {
         })
       this.BiogenicsForm.controls['standardUoM'].disable()
 
-    if (this.projecthubservice.all[4][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+    if (this.projecthubservice.all[3][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
       this.BiogenicsForm.controls['biogenicUnitCost'].enable()
     }
-    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
       this.BiogenicsForm.controls['biogenicUnitCost'].enable()
     }
-    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
       this.BiogenicsForm.controls['biogenicUnitCost'].disable()
     }
 
@@ -119,7 +119,7 @@ export class BiogenicsSingleEditComponent {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else if ((formValue.biogenicUnit != null && formValue.biogenicUnit != 0) && (this.impactRealizationDate == "" || this.impactRealizationDate == null)) {
+    else if (((formValue.biogenicUnit != null && formValue.biogenicUnit != 0) || (this.projecthubservice.all[4]) ) && (this.impactRealizationDate == "" || this.impactRealizationDate == null)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please enter a value for Impact Realization Date.",
         "message": "",

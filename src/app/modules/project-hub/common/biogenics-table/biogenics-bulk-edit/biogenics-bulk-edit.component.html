@@ -46,12 +46,12 @@
                     [width]="60">Emission Factor (kg CO2/kWh)
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex)" (click)="biogenicsTableEditRow(rowIndex)">
-                            <p class="emission" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <p class="emission" *ngIf="!value">&nbsp;</p>{{value | number:'1.3-3'}}
                             <!-- <p class="emission">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]" *ngIf="biogenicsTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="biogenicEmissionFactor" name="biogenicEmissionFactor" [decimalCount]="3" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'Emission Factor (kg CO2/kWh)'">
+                                [autoAddDecimal]="true" [placeholder]="'Emission Factor (kg CO2/kWh)'">
                             </spot-input>
                         </form>
                     </ng-template>
@@ -90,13 +90,13 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <p *ngIf="!editCarbonBiogenic">{{ value}}</p>
                         <a *ngIf="!biogenicsTableEditStack.includes(rowIndex) && editCarbonBiogenic" (click)="biogenicsTableEditRow(rowIndex)">
-                            <p class="cost" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
+                            <p class="cost" *ngIf="!value">&nbsp;</p>{{value | number:'1.4-4'}}
                             <!-- <p class="cost">{{value | number:'1.0-0'}}</p> -->
                         </a>
                         <form [formGroup]="biogenicsForm.controls[rowIndex]"
                             *ngIf="biogenicsTableEditStack.includes(rowIndex) && editCarbonBiogenic">
                             <spot-input class="w-full" formControlName="biogenicUnitCost" name="biogenicUnitCost" [decimalCount]="4" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'Unit Cost'">
+                                [autoAddDecimal]="true" [placeholder]="'Unit Cost'">
                             </spot-input>
                         </form>
                     </ng-template>

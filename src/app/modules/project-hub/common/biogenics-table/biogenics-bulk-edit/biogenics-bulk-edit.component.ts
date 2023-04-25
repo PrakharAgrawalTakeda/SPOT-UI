@@ -57,13 +57,13 @@ export class BiogenicsBulkEditComponent {
   }
 
   dataloader(){
-    if (this.projecthubservice.all[4][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+    if (this.projecthubservice.all[3][0] == false && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
       this.editCarbonBiogenic = true
     }
-    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear == "" || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == null || this.projecthubservice.all[2].projectData.energyCostImpactPerYear == 0)) {
       this.editCarbonBiogenic = true
     }
-    else if (this.projecthubservice.all[4][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
+    else if (this.projecthubservice.all[3][0] == true && (this.projecthubservice.all[2].projectData.energyCostImpactPerYear != "" && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != null && this.projecthubservice.all[2].projectData.energyCostImpactPerYear != 0)) {
       this.editCarbonBiogenic = false
     }
       this.auth.lookupMaster().then((resp: any) => {
@@ -229,7 +229,7 @@ export class BiogenicsBulkEditComponent {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else if ((this.biogenicsDb.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
+    else if (((this.biogenicsDb.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0) || (this.projecthubservice.all[4]) ) && (this.CAPSform.value.impactRealizationDate == "" || this.CAPSform.value.impactRealizationDate == null)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please enter a value for Impact Realization Date.",
         "message": "",
@@ -291,10 +291,10 @@ export class BiogenicsBulkEditComponent {
         biogenicDataId: i.biogenicDataId,
         projectId: this.projecthubservice.projectid,
         biogenicMasterUniqueId: i.biogenicMasterUniqueId,
-        biogenicEmissionFactor: i.biogenicEmissionFactor == "" ? null : i.biogenicEmissionFactor,
-        biogenicUnit: i.biogenicUnit == "" || isNaN(i.biogenicUnit) ? null : i.biogenicUnit,
+        biogenicEmissionFactor: i.biogenicEmissionFactor == "" && i.biogenicEmissionFactor != 0 ? null : i.biogenicEmissionFactor,
+        biogenicUnit: (i.biogenicUnit == "" || isNaN(i.biogenicUnit)) && i.biogenicUnit != 0  ? null : i.biogenicUnit,
         standardUoM: i.standardUoM,
-        biogenicUnitCost: i.biogenicUnitCost == "" || isNaN(i.biogenicUnitCost) ? null : i.biogenicUnitCost,
+        biogenicUnitCost: (i.biogenicUnitCost == "" || isNaN(i.biogenicUnitCost)) && i.biogenicUnitCost != 0 ? null : i.biogenicUnitCost,
         biogenicBasisOfEstimate: i.biogenicBasisOfEstimate
       })
     }
