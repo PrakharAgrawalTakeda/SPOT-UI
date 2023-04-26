@@ -312,7 +312,7 @@ export class MilestoneSetViewEditComponent {
             if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
                 this.myPreferenceService.isFormChanged = false
                 this.formValue()
-                this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(res => {
+                this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.mainObj.milestoneTemplateId).then(res => {
                     // this.myPreferenceService.submitbutton.next(true)
                     // this.myPreferenceService.isNavChanged.next(true)
                     this.myPreferenceService.toggleDrawerOpen('', '', [], '')
