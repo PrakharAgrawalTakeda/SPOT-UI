@@ -59,7 +59,10 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       if (val != null && val !== '') {
         value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
       }
-  
+      if (this.decimalCount === 0) {
+        // Remove any decimal points if decimalCount is 0
+        value = value.replace(/\..*/, '');
+      }
       const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
   
       this.control.setValue(formattedValue);
@@ -74,7 +77,8 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   }
   
   formatInput(event: any): void {
-    if (this.inputType == 'Number') {
+    const isFocused = document.activeElement === event.target;
+    if (this.inputType === 'Number') {
       let value = event.target.value;
   
       // Remove non-numeric, non-decimal, and non-negative sign characters
@@ -88,9 +92,8 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   
       if (this.decimalCount === 0) {
         // Remove any decimal points if decimalCount is 0
-        value = value.replace(/\./g, '');
-      }
-      else {
+        value = value.replace(/\..*/, '');
+      } else {
         // Allow only one decimal point
         value = value.replace(/(\..*)\./g, '$1');
   
@@ -101,39 +104,47 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
         }
       }
   
-      // Add commas as thousand separators
-      const formattedValue = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+      // Add commas as thousand separators only when the field is blurred
+      if (!isFocused) {
+        value = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+      }
   
       // Update the input field value
-      event.target.value = formattedValue;
+      event.target.value = value;
   
       // Call the onChange method with the float value
       this.onChange(parseFloat(value));
-    }
-    else {
-      this.onChange(event.target.value)
+    } else {
+      this.onChange(event.target.value);
     }
   }
 
   onBlur(event: any): void {
-    this.onTouch()
+    this.onTouch();
+  
     if (this.autoAddDecimal && this.decimalCount > 0 && event?.target?.value) {
       let value = event.target.value;
-
+  
       // Remove commas from the value
       const valueWithoutCommas = value.replace(/,/g, '');
-
+  
       // Check if the value has a decimal point
       if (valueWithoutCommas.indexOf('.') === -1) {
         // Add the decimal point and the required number of decimal places
         value = parseFloat(valueWithoutCommas)?.toFixed(this.decimalCount);
-
+  
         // Add commas as thousand separators
         value = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
-
+  
         // Update the input field value
         event.target.value = value;
       }
+    }
+  
+    // Add commas as thousand separators when the field is blurred
+    if (event?.target?.value) {
+      const value = event.target.value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+      event.target.value = value;
     }
   }
   customUpdate(value: any) {
