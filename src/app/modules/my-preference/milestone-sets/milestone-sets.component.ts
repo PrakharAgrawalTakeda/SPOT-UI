@@ -60,11 +60,9 @@ export class MilestoneSetsComponent {
         const milestoneSetDeleteAlert = this.fuseAlert.open(comfirmConfig)
         milestoneSetDeleteAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                // this.apiService.deleteKeyAssumption(id).then(res => {
-                //     this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
-                //         this.projecthubservice.submitbutton.next(true)
-                //     })
-                // })
+                this.apiService.deleteMilestone(id).then(res => {
+                    this.projecthubservice.submitbutton.next(true)
+                })
             }
         })
     }

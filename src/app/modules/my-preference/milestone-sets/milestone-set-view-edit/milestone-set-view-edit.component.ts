@@ -110,6 +110,9 @@ export class MilestoneSetViewEditComponent {
                     }
                     this.standardMilestonesTableData = res.templateDetails;
                     this.myPreferenceService.isFormChanged = false
+                    this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((res: any) => {
+                        this.portfolioOwnerList = res;
+                    })
                     this.viewContent = true;
                 })
             } else {
