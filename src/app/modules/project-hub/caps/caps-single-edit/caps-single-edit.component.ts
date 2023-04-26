@@ -6,6 +6,7 @@ import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 import moment from 'moment';
+import { Constants } from 'app/shared/constants';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -28,6 +29,7 @@ viewType = 'SidePanel'
   filterCriteria : any = {}
   today = new Date("2036-03-31");
   viewContent = false
+  showDefault= true
   CAPSdata : any
   energyCost: any
   waterCost: any
@@ -54,6 +56,12 @@ viewType = 'SidePanel'
   ngOnInit(): void {
     this.apiService.getCAPSbyProjectID(this.projectHubService.projectid).then((res: any) => {
       this.apiService.getfilterlist().then(filter => {
+        if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
+          this.showDefault = false;
+        }
+        else{
+            this.showDefault = true;
+        }
         this.filterCriteria = filter
         this.CAPSdata = res
         this.CAPSform.patchValue({
