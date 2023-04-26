@@ -189,11 +189,11 @@
                             <div class="grid grid-cols-1 text-right">
                                 {{
                                 row.totalApprovedCapex ? row.totalApprovedCapex.toLocaleString() : 0
-                                }} &nbsp; USD
+                                }} &nbsp; {{this.localCurrency.localCurrencyAbbreviation}}
                             </div>
                             <br />
                             <div class="text-right">
-                                {{ row.forecast ? row.forecast.toLocaleString() : 0 }} &nbsp; USD
+                                {{ row.forecast ? row.forecast.toLocaleString() : 0 }} &nbsp; {{this.localCurrency.localCurrencyAbbreviation}}
                             </div>
 
                         </ng-template>
