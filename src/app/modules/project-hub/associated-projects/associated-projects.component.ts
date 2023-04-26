@@ -76,6 +76,9 @@ export class AssociatedProjectsComponent implements OnInit {
     getHeaderClass(): any {
         return ' vertical-header-class';
     }
+    alignHeaderMiddleClass(): any {
+        return ' align-header-middle-class';
+    }
     getTotalCapexHeaderClass(): any {
         return ' total-capex-header-class';
     }

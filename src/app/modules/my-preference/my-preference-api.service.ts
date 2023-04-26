@@ -49,7 +49,7 @@ export class MyPreferenceApiService {
       return response
   }
   async addStandardMilestoneSet(body){
-      var link = GlobalVariables.apiurl+"StandardMilestoneSet/1";
+      var link = GlobalVariables.apiurl+"StandardMilestoneSet";
       const abc$ = this.http.post(link,body)
       const response = await lastValueFrom(abc$)
       return response

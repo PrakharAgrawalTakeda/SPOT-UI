@@ -20,11 +20,12 @@ export class OperationalBenefitsTableComponent {
         ,public fuseAlert: FuseConfirmationService, private router: Router) {
     }
     ngOnInit(): void {
+        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
 
     deleteOperationalBenefit(id: string) {
         var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Remove Operational benefit?",
+            "title": "Remove Operational Benefit?",
             "message": "Are you sure you want to remove this record permanently? ",
             "icon": {
                 "show": true,
@@ -47,7 +48,7 @@ export class OperationalBenefitsTableComponent {
         const keyAsumptioneAlert = this.fuseAlert.open(comfirmConfig)
         keyAsumptioneAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                this.apiService.deleteBusinessCaseOptionDetail(this.projectHubService.projectid,this.optionId,id).then(res => {
+                this.apiService.deleteBusinessCaseOptionDetail(this.id,this.optionId,id).then(res => {
                     this.projectHubService.submitbutton.next(true)
                 })
             }
