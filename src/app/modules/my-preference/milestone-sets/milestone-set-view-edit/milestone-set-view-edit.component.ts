@@ -66,55 +66,56 @@ export class MilestoneSetViewEditComponent {
         this.portApiService.getfilterlist().then(filterres => {
             this.filterCriteria = filterres
             if (this.myPreferenceService.itemid != "new") {
-                this.myPreferenceApiService.getDetails(this.myPreferenceService.itemid).then((res: any) => {
-                    this.editedSet = res
-                    this.standardMilestonesDetailsForm.patchValue({
-                        milestoneTemplateId: res.milestoneTemplateId,
-                        milestonesetId: res.milestonesetId,
-                        portfolioId: res.portfolioId,
-                        portfolioOwner:  this.getPortfolioOwnerById(res.portfolioId),
-                        milestoneSet: res.milestoneSet,
-                        templateOwner: res.templateOwner,
-                        templateOwnerName: res.templateOwnerName,
-                        createdDate: res.createdDate,
-                        templateIsGlobal: res.templateIsGlobal,
-                        modifiedTemplateOwner: res.modifiedTemplateOwner,
-                        modifiedDate: res.modifiedDate,
-                        templateDetails: res.templateDetails
-                    })
-                    this.standardMilestonesTableDataDb = res.templateDetails.map(x => {
-                        return {
-                            "milestoneTemplateId": x.keyAssumptionUniqueId,
-                            "milestoneId": x.milestoneTemplateId,
-                            "milestoneInternalId": x.milestoneInternalId,
-                            "milestone": x.milestone,
-                            "funtionalOwnerId": x.funtionalOwnerId,
-                            "comment": x.comment,
-                            "includeInReport": x.includeInReport,
-                            "sortOrder": x.sortOrder,
-                            "milestoneType": x.milestoneType,
+                this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((res: any) => {
+                    this.portfolioOwnerList = res;
+                    this.myPreferenceApiService.getDetails(this.myPreferenceService.itemid).then((res: any) => {
+                        this.editedSet = res
+                        this.standardMilestonesDetailsForm.patchValue({
+                            milestoneTemplateId: res.milestoneTemplateId,
+                            milestonesetId: res.milestonesetId,
+                            portfolioId: res.portfolioId,
+                            portfolioOwner:  this.getPortfolioOwnerById(res.portfolioId),
+                            milestoneSet: res.milestoneSet,
+                            templateOwner: res.templateOwner,
+                            templateOwnerName: res.templateOwnerName,
+                            createdDate: res.createdDate,
+                            templateIsGlobal: res.templateIsGlobal,
+                            modifiedTemplateOwner: res.modifiedTemplateOwner,
+                            modifiedDate: res.modifiedDate,
+                            templateDetails: res.templateDetails
+                        })
+                        this.standardMilestonesTableDataDb = res.templateDetails.map(x => {
+                            return {
+                                "milestoneTemplateId": x.keyAssumptionUniqueId,
+                                "milestoneId": x.milestoneTemplateId,
+                                "milestoneInternalId": x.milestoneInternalId,
+                                "milestone": x.milestone,
+                                "funtionalOwnerId": x.funtionalOwnerId,
+                                "comment": x.comment,
+                                "includeInReport": x.includeInReport,
+                                "sortOrder": x.sortOrder,
+                                "milestoneType": x.milestoneType,
+                            }
+                        })
+                        for (var i of res.templateDetails) {
+                            this.standardMilestonesTableForm.push(new FormGroup({
+                                milestoneTemplateId: new FormControl(i.milestoneTemplateId),
+                                milestoneId: new FormControl(i.milestoneId),
+                                milestoneInternalId: new FormControl(i.milestoneInternalId),
+                                milestone: new FormControl(i.milestone),
+                                funtionalOwnerId: new FormControl(i.funtionalOwnerId),
+                                comment: new FormControl(i.comment),
+                                includeInReport: new FormControl(i.includeInReport),
+                                sortOrder: new FormControl(i.sortOrder),
+                                milestoneType: new FormControl(i.milestoneType),
+                            }))
                         }
+                        this.standardMilestonesTableData = res.templateDetails;
+                        this.myPreferenceService.isFormChanged = false
+                        this.viewContent = true;
                     })
-                    for (var i of res.templateDetails) {
-                        this.standardMilestonesTableForm.push(new FormGroup({
-                            milestoneTemplateId: new FormControl(i.milestoneTemplateId),
-                            milestoneId: new FormControl(i.milestoneId),
-                            milestoneInternalId: new FormControl(i.milestoneInternalId),
-                            milestone: new FormControl(i.milestone),
-                            funtionalOwnerId: new FormControl(i.funtionalOwnerId),
-                            comment: new FormControl(i.comment),
-                            includeInReport: new FormControl(i.includeInReport),
-                            sortOrder: new FormControl(i.sortOrder),
-                            milestoneType: new FormControl(i.milestoneType),
-                        }))
-                    }
-                    this.standardMilestonesTableData = res.templateDetails;
-                    this.myPreferenceService.isFormChanged = false
-                    this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((res: any) => {
-                        this.portfolioOwnerList = res;
-                    })
-                    this.viewContent = true;
                 })
+
             } else {
                 let executionMilestones = [
                     {
@@ -184,7 +185,7 @@ export class MilestoneSetViewEditComponent {
             for (var i of form) {
                 this.standardMilestonesTableDataSubmit.push({
                     "milestoneTemplateId": i.milestoneTemplateId,
-                    "milestoneId": i.milestoneTemplateId,
+                    "milestoneId": i.milestoneId,
                     "milestone": i.milestone,
                     "funtionalOwnerId": i.funtionalOwnerId,
                     "comment": i.comment ? i.comment : "",
@@ -213,7 +214,7 @@ export class MilestoneSetViewEditComponent {
             this.mainObj = {
                 milestoneTemplateId: this.editedSet.milestoneTemplateId,
                 milestonesetId: this.editedSet.milestonesetId,
-                portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwnerId,
+                portfolioId: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwnerID,
                 portfolioOwner: this.standardMilestonesDetailsForm.value.portfolioOwner?.portfolioOwner,
                 milestoneSet: this.standardMilestonesDetailsForm.value.milestoneSet,
                 templateOwner: this.editedSet.templateOwner,
@@ -315,6 +316,7 @@ export class MilestoneSetViewEditComponent {
             if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
                 this.myPreferenceService.isFormChanged = false
                 this.formValue()
+                console.log("yyyyyyyy", this.mainObj)
                 this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.mainObj.milestoneTemplateId).then(res => {
                     // this.myPreferenceService.submitbutton.next(true)
                     // this.myPreferenceService.isNavChanged.next(true)
@@ -340,7 +342,7 @@ export class MilestoneSetViewEditComponent {
     }
 
     getPortfolioOwnerById(portfolioId: string): any {
-        return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true && x.portfolioOwnerId == portfolioId)[0];
+        return this.portfolioOwnerList.filter(x =>  x.portfolioOwnerID == portfolioId)[0];
     }
 
     getFunctionOwner(): any {
