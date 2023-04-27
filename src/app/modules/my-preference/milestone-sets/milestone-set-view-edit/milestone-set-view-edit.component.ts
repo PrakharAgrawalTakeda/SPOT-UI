@@ -317,13 +317,11 @@ export class MilestoneSetViewEditComponent {
                 this.myPreferenceService.isFormChanged = false
                 this.formValue()
                 this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.mainObj.milestoneTemplateId).then(res => {
-                    // this.myPreferenceService.submitbutton.next(true)
-                    // this.myPreferenceService.isNavChanged.next(true)
+                    this.myPreferenceService.submitbutton.next(true)
                     this.myPreferenceService.toggleDrawerOpen('', '', [], '')
                 })
             } else {
-                // this.myPreferenceService.submitbutton.next(true)
-                // this.myPreferenceService.isNavChanged.next(true)
+                this.myPreferenceService.submitbutton.next(true)
                 this.myPreferenceService.toggleDrawerOpen('', '', [], '')
 
             }
@@ -332,9 +330,8 @@ export class MilestoneSetViewEditComponent {
                 this.myPreferenceService.isFormChanged = false
                 this.formValue()
                 this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj).then(res => {
-                    // this.myPreferenceService.submitbutton.next(true)
+                    this.myPreferenceService.submitbutton.next(true)
                     this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-                    // this.myPreferenceService.isNavChanged.next(true)
                 });
             }
         }
