@@ -291,13 +291,17 @@ export class BiogenicsBulkEditComponent {
         biogenicDataId: i.biogenicDataId,
         projectId: this.projecthubservice.projectid,
         biogenicMasterUniqueId: i.biogenicMasterUniqueId,
-        biogenicEmissionFactor: i.biogenicEmissionFactor == "" && i.biogenicEmissionFactor != 0 ? null : i.biogenicEmissionFactor,
-        biogenicUnit: (i.biogenicUnit == "" || isNaN(i.biogenicUnit)) && i.biogenicUnit != 0  ? null : i.biogenicUnit,
+        biogenicEmissionFactor: i.biogenicEmissionFactor == "" && i.biogenicEmissionFactor !== 0 ? null : i.biogenicEmissionFactor,
+        biogenicUnit: (i.biogenicUnit == "" || isNaN(i.biogenicUnit)) && i.biogenicUnit !== 0  ? null : i.biogenicUnit,
         standardUoM: i.standardUoM,
-        biogenicUnitCost: (i.biogenicUnitCost == "" || isNaN(i.biogenicUnitCost)) && i.biogenicUnitCost != 0 ? null : i.biogenicUnitCost,
+        biogenicUnitCost: (i.biogenicUnitCost == "" || isNaN(i.biogenicUnitCost)) && i.biogenicUnitCost !== 0 ? null : i.biogenicUnitCost,
         biogenicBasisOfEstimate: i.biogenicBasisOfEstimate
       })
     }
 
+  }
+
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
   }
 }

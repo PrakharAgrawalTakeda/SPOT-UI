@@ -6,6 +6,8 @@ import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
 import { MsalService } from '@azure/msal-angular';
+import {GlobalBusinessCaseOptions} from "../../../shared/global-business-case-options";
+import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
 @Component({
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
@@ -14,6 +16,7 @@ import { MsalService } from '@azure/msal-angular';
 })
 export class AssociatedProjectsComponent implements OnInit {
     single: any[];
+    localCurrency:any = [];
     constructor(
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
@@ -21,7 +24,8 @@ export class AssociatedProjectsComponent implements OnInit {
         public indicator: SpotlightIndicatorsService,
         private router: Router,
         public fuseAlert: FuseConfirmationService,
-        private msalService: MsalService
+        private msalService: MsalService,
+        private portApiService: PortfolioApiService
     ) {
         this.projecthubservice.submitbutton.subscribe(res => {
             this.dataloader()
@@ -41,6 +45,9 @@ export class AssociatedProjectsComponent implements OnInit {
         var projects = [];
         var ids = [];
         var children = [];
+        this.portApiService.getOnlyLocalCurrency(this.id).then(currency => {
+            this.localCurrency = currency
+        });
         this.apiService.getProjectTree(this.id).then((res: any) => {
             res.values.forEach(project => {
                 ids.push(project.problemUniqueId);
@@ -75,6 +82,9 @@ export class AssociatedProjectsComponent implements OnInit {
     }
     getHeaderClass(): any {
         return ' vertical-header-class';
+    }
+    alignHeaderMiddleClass(): any {
+        return ' align-header-middle-class';
     }
     getTotalCapexHeaderClass(): any {
         return ' total-capex-header-class';

@@ -80,21 +80,21 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column [sortable]="false" name="Units" prop="emwwunit" [width]="30">
+                <ngx-datatable-column [sortable]="false" name="Units" prop="emwwunit" [width]="30" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <div>
                                 {{column.name}}
                                 <mat-icon class="pe" style="font-size: 17px;"
-                                    matTooltip="Input gross change in emissions type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.">help</mat-icon>
+                                    matTooltip="Input gross change in water withdrawal or waste type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.">help</mat-icon>
                             </div>
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
                             (click)="waterWasteTableEditRow(rowIndex)">
-                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
-                            <!-- <p class="unit">{{value | number:'1.0-0'}}</p> -->
+                            <p class="unit" *ngIf="value">{{value | number:'1.0-0'}}</p>
+                            <p class="unit" *ngIf="!value">&nbsp;</p>
                         </a>
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex)">
@@ -117,13 +117,13 @@
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="emwwunitCost" [width]="90">
+                <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="emwwunitCost" [width]="90" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <div>
                                 {{column.name}}
                                 <mat-icon class="pe" style="font-size: 17px;"
-                                    matTooltip="Input the cost of each energy unit using upto 4 decimal places, positive values only.">help</mat-icon>
+                                    matTooltip="Input the cost of each water or waste unit using up to 4 decimal places, positive values only.">help</mat-icon>
                             </div>
                         </ng-container>
                     </ng-template>
@@ -131,8 +131,8 @@
                         <p *ngIf="!editWaterWaste">{{value}}</p>
                         <a *ngIf="!waterWasteTableEditStack.includes(rowIndex) && editWaterWaste"
                             (click)="waterWasteTableEditRow(rowIndex)">
-                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.4-4'}}
-                            <!-- <p class="unit">{{value | number:'1.0-0'}}</p> -->
+                            <p class="cost" *ngIf="value">{{value | number:'1.4-4'}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>
                         </a>
                         <form [formGroup]="waterWasteForm.controls[rowIndex]"
                             *ngIf="waterWasteTableEditStack.includes(rowIndex) && editWaterWaste">
