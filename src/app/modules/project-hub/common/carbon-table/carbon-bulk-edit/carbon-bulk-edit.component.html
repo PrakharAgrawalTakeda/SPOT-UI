@@ -42,8 +42,8 @@
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" (click)="carbonTableEditRow(rowIndex)" ngx-datatable-cell-template>
                         <a *ngIf="!carbonTableEditStack.includes(rowIndex)" (click)="carbonTableEditRow(rowIndex)">
-                            <p *ngIf="!value">&nbsp;</p>{{value | number:'1.0-0'}}
-                            <!-- <p class="unit" >{{value | number:'1.0-0'}}</p> -->
+                            <p class="unit" *ngIf="value">{{value | number:'1.0-0'}}</p>
+                            <p *ngIf="!value">&nbsp;</p>
                         </a>
                         <form [formGroup]="carbonForm.controls[rowIndex]" *ngIf="carbonTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="emunit" name="emunit" [decimalCount]="0" [inputType]="'Number'"
@@ -64,15 +64,15 @@
                             <div>
                                 {{column.name}}
                                 <mat-icon class="pe" style="font-size: 17px;"
-                                    matTooltip="Input the cost of each energy unit using upto 4 decimal places, positive values only.">help</mat-icon>
+                                    matTooltip="Input the cost of each energy unit using up to 4 decimal places, positive values only.">help</mat-icon>
                             </div>
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <p *ngIf="!editCarbonBiogenic">{{ value}}</p>
                         <a *ngIf="!carbonTableEditStack.includes(rowIndex) && editCarbonBiogenic" (click)="carbonTableEditRow(rowIndex)">
-                            <p class="unit" *ngIf="!value">&nbsp;</p>{{value | number:'1.4-4'}}
-                            <!-- <p class="unit">{{value | number:'1.0-0'}}</p> -->
+                            <p class="unit" *ngIf="value">{{value | number:'1.4-4'}}</p>
+                            <p class="unit" *ngIf="!value">&nbsp;</p>
                         </a>
                         <form [formGroup]="carbonForm.controls[rowIndex]" *ngIf="carbonTableEditStack.includes(rowIndex) && editCarbonBiogenic">
                             <spot-input class="w-full" formControlName="unitCost" name="unitCost" [decimalCount]="4" [inputType]="'Number'"
