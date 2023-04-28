@@ -10,6 +10,7 @@ import {MyPreferenceApiService} from "../../my-preference-api.service";
 import {MsalService} from "@azure/msal-angular";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 import moment from "moment";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-milestone-set-view-edit',
@@ -42,6 +43,7 @@ export class MilestoneSetViewEditComponent {
     mainObj: any = {}
     editedSet: any = {}
     portfolioOwnerList =[];
+    orderView = false;
     standardMilestonesTableForm = new FormArray([])
     standardMilestonesDetailsForm = new FormGroup({
         milestoneTemplateId: new FormControl(""),
@@ -66,8 +68,8 @@ export class MilestoneSetViewEditComponent {
         this.portApiService.getfilterlist().then(filterres => {
             this.filterCriteria = filterres
             if (this.myPreferenceService.itemid != "new") {
-                this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((res: any) => {
-                    this.portfolioOwnerList = res;
+                this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((portfolioRes: any) => {
+                    this.portfolioOwnerList = portfolioRes;
                     this.myPreferenceApiService.getDetails(this.myPreferenceService.itemid).then((res: any) => {
                         this.editedSet = res
                         this.standardMilestonesDetailsForm.patchValue({
@@ -227,7 +229,39 @@ export class MilestoneSetViewEditComponent {
             }
         }
     }
-
+    changeOrderView() {
+        if (this.myPreferenceService.isFormChanged) {
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "Are you sure?",
+                "message": "Are you sure you want switch to the order view page? All the changes will be lost ",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warn"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "OK",
+                        "color": "warn"
+                    },
+                    "cancel": {
+                        "show": true,
+                        "label": "Cancel"
+                    }
+                },
+                "dismissible": true
+            }
+            const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
+            riskIssueAlert.afterClosed().subscribe(close => {
+                if (close == 'confirmed') {
+                    this.orderView = !this.orderView;
+                }
+            })
+        }else{
+            this.orderView = !this.orderView;
+        }
+    }
     addSM() {
         var j = [{}]
         j = [{
@@ -356,5 +390,11 @@ export class MilestoneSetViewEditComponent {
             this.lookupdata = resp
             this.dataloader()
         })
+    }
+    drop(event: CdkDragDrop<string[]>) {
+        moveItemInArray(this.standardMilestonesTableData, event.previousIndex, event.currentIndex);
+        let group = (<FormArray>this.standardMilestonesTableForm).at(event.previousIndex);
+        (<FormArray>this.standardMilestonesTableForm).removeAt(event.previousIndex);
+        (<FormArray>this.standardMilestonesTableForm).insert(event.currentIndex,group);
     }
 }

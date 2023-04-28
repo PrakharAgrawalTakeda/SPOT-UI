@@ -30,13 +30,18 @@
                 <div class="pr-3">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                             [color]="'primary-200'"
+                            (click)="changeOrderView()">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Order View
+                    </button>
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                            [color]="'primary-200'"
                             (click)="addSM()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
                 </div>
             </div>
         </div>
-        <div  class="overflow-y-hidden h-[80vh] pl-3"  >
+        <div *ngIf="!orderView"  class="overflow-y-hidden h-[80vh] pl-3"  >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -122,6 +127,11 @@
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
+        </div>
+        <div *ngIf="orderView"  class="overflow-y-hidden h-[80vh] pl-3"  >
+            <div (cdkDropListDropped)="drop($event)" cdkDropList class="example-list">
+                <div class="example-box" *ngFor="let standardMilestone of standardMilestonesTableData" cdkDrag>{{standardMilestone.milestone}}</div>
+            </div>
         </div>
         <div class="flex items-start justify-between  px-3">
             <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
