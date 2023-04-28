@@ -59,7 +59,10 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       if (val != null && val !== '') {
         value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
       }
-  
+      if (this.decimalCount === 0) {
+        // Remove any decimal points if decimalCount is 0
+        value = value.replace(/\..*/, '');
+      }
       const formattedValue = value?.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
   
       this.control.setValue(formattedValue);
@@ -89,7 +92,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
   
       if (this.decimalCount === 0) {
         // Remove any decimal points if decimalCount is 0
-        value = value.replace(/\./g, '');
+        value = value.replace(/\..*/, '');
       } else {
         // Allow only one decimal point
         value = value.replace(/(\..*)\./g, '$1');
@@ -115,7 +118,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       this.onChange(event.target.value);
     }
   }
-  
+
   onBlur(event: any): void {
     this.onTouch();
   
@@ -144,7 +147,6 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
       event.target.value = value;
     }
   }
-  
   customUpdate(value: any) {
     if (this.inputType == 'Text') {
       this.onChange(value)

@@ -247,7 +247,7 @@
                         <p class="amount">{{value | number:'1.0-0'}}</p>
                     </a>
                     <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
-                        <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2">
+                        <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0" [autoAddDecimal]="false">
                         </spot-input>
                     </form>
                 </ng-template>
@@ -261,7 +261,7 @@
                             <p class="amount">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
-                            <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0">
+                            <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0" [autoAddDecimal]="false">
                             </spot-input>
                         </form>
                     </ng-template>
@@ -275,7 +275,7 @@
                             <p class="amount">{{value | number:'1.0-0'}}</p>
                         </a>
                         <form [formGroup]="FundingBCForm.controls[rowIndex]" *ngIf="fundingEditStack.includes(rowIndex)"  class="pt-6">
-                            <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0">
+                            <spot-input [showLabel]="false" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0" [autoAddDecimal]="false">
                             </spot-input>
                         </form>
                     </ng-template>

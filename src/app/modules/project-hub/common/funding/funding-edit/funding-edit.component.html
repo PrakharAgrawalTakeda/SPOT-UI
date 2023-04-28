@@ -72,8 +72,8 @@
                 [label]="'In the Plan'">
             </spot-toggle>
 
-            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="2" [callLocation]="'funding'"
-                [label]="labelText">
+            <spot-input [showLabel]="true" formControlName="fundingAmount" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'funding'"
+                [label]="labelText" [autoAddDecimal]="false">
             </spot-input>
 
             <spot-textarea formControlName="fundingNotes" [showLabel]="true" [placeholder]="'Notes'" [rows]="3"

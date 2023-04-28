@@ -52,8 +52,8 @@ export class MyPreferenceComponent implements OnInit {
         title: 'My Preferences',
         children: [
           {
-            title:'Project Settings',
-            link:'my-preference/project-settings'
+            title:'Settings',
+            link:'my-preference/settings'
           },
           {
             title:'Email Notifications',

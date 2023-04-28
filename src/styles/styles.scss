@@ -44,6 +44,12 @@ $square-size: 10px;
     transform: rotate(-180deg);
     left:10px;
 }
+.total-capex-header-class {
+    text-align: end;
+}
+.align-header-middle-class {
+    text-align: center;
+}
 .current-project{
     background-color: var(--fuse-primary-200);
 }

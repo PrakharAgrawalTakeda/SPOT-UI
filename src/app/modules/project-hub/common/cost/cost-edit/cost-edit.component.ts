@@ -405,19 +405,20 @@ export class CostEditComponent {
       (formValue.totalCapExHighCase != null && formValue.totalCapExBaseCase > formValue.totalCapExHighCase) || 
       (formValue.totalNonFteopExHighCase != null && formValue.totalNonFteopExBaseCase > formValue.totalNonFteopExHighCase)) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "The Base Case cannot be Higher than the High Case",
-        "message": "",
+        "title": "Invalid input",
+        "message": "High Case must be greater than Base Case",
         "icon": {
           "show": true,
           "name": "heroicons_outline:exclamation",
-          "color": "warning"
+          "color": "warn"
         },
         "actions": {
           "confirm": {
             "show": true,
             "label": "OK",
-            "color": "primary"
-          },
+            "color": "warn"
+          }
+          ,
           "cancel": {
             "show": false,
             "label": "Cancel"
