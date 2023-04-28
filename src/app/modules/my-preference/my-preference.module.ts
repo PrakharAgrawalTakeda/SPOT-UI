@@ -35,6 +35,7 @@ import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { ProjectSettingsComponent } from './project-settings/project-settings.component';
 import { MilestoneSetsComponent } from './milestone-sets/milestone-sets.component';
 import { MilestoneSetViewEditComponent } from './milestone-sets/milestone-set-view-edit/milestone-set-view-edit.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -42,7 +43,7 @@ export const projectRoutes: Route[] = [
  children: [
 
   {
-    path: 'project-settings',
+    path: 'settings',
     component: ProjectSettingsComponent,
   },
   {
@@ -95,7 +96,8 @@ export const projectRoutes: Route[] = [
         MatAutocompleteModule,
         MatTooltipModule,
         FuseAlertModule,
-        SpotFormsModule
+        SpotFormsModule,
+        DragDropModule
     ]
 })
 export class MyPreferenceModule { }

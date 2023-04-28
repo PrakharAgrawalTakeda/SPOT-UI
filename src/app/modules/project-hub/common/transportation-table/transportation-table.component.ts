@@ -17,7 +17,11 @@ export class TransportationTableComponent {
   Transportationngx: any = []
   transportationBulkEditData: any = []
   @Input() Editable: boolean = false
+  @Input() ProjectData: any
+  @Input() editCost: any
+  @Input() DateMandatory: boolean
   lookupdata: any
+  sortDir = ""
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -46,5 +50,9 @@ export class TransportationTableComponent {
         this.viewContent = true
       })
     })
+  }
+
+  getLookUpName(id: any): any {
+    return id && id.lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
   }
 }

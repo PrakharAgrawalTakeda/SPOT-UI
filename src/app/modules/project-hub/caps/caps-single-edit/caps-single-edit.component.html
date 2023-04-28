@@ -19,13 +19,13 @@
                     <mat-datepicker #picker1></mat-datepicker>
                 </mat-form-field>
             </div>
-            <spot-input class="w-full" formControlName="EnergyCost" name="EnergyCost" [decimalCount]="0" [inputType]="'Number'"
+            <spot-input *ngIf="this.showDefault" class="w-full" formControlName="EnergyCost" name="EnergyCost" [decimalCount]="0" [inputType]="'Number'"
                 [autoAddDecimal]="false" [placeholder]="'0'" [label]="energyLabel" [allowNegativeValues]="true">
             </spot-input>
-            <spot-input class="w-full" formControlName="WaterCost" name="WaterCost" [decimalCount]="0" [inputType]="'Number'"
+            <spot-input *ngIf="this.showDefault" class="w-full" formControlName="WaterCost" name="WaterCost" [decimalCount]="0" [inputType]="'Number'"
                 [autoAddDecimal]="false" [placeholder]="'0'" [label]="waterLabel" [allowNegativeValues]="true">
             </spot-input>
-            <spot-input class="w-full" formControlName="WasteCost" name="WasteCost" [decimalCount]="0" [inputType]="'Number'"
+            <spot-input *ngIf="this.showDefault" class="w-full" formControlName="WasteCost" name="WasteCost" [decimalCount]="0" [inputType]="'Number'"
                 [autoAddDecimal]="false" [placeholder]="'0'" [label]="wasteLabel" [allowNegativeValues]="true">
             </spot-input>
         </div>

@@ -17,7 +17,7 @@ export class MilestoneSetsComponent {
 
     constructor(private apiService: MyPreferenceApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService,  private msalService: MsalService, public myPreferenceService:MyPreferenceService ) {
-        this.projecthubservice.submitbutton.subscribe(res => {
+        this.myPreferenceService.submitbutton.subscribe(res => {
             if (res == true) {
                 this.dataloader()
             }
@@ -60,11 +60,9 @@ export class MilestoneSetsComponent {
         const milestoneSetDeleteAlert = this.fuseAlert.open(comfirmConfig)
         milestoneSetDeleteAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                // this.apiService.deleteKeyAssumption(id).then(res => {
-                //     this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
-                //         this.projecthubservice.submitbutton.next(true)
-                //     })
-                // })
+                this.apiService.deleteMilestone(id).then(res => {
+                    this.myPreferenceService.submitbutton.next(true)
+                })
             }
         })
     }

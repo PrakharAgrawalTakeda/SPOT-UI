@@ -194,14 +194,18 @@ export class CarbonBulkEditComponent {
         emdataUniqueId: i.emdataUniqueId == null || i.emdataUniqueId == "" ? "" : i.emdataUniqueId,
         projectId: this.projecthubservice.projectid,
         emsourceId: i.emsourceId,
-        emunit: (i.emunit == "" || isNaN(i.emunit)) && i.emunit != 0 ? null : i.emunit,
-        unitCost: (i.unitCost == "" || isNaN(i.unitCost)) && i.unitCost != 0 ? null : i.unitCost,
-        emimpactTonsCo2year: (i.emimpactTonsCo2year == "" || isNaN(i.emimpactTonsCo2year)) && i.emimpactTonsCo2year != 0 ? null : i.emimpactTonsCo2year,
+        emunit: (i.emunit == "" || isNaN(i.emunit)) && i.emunit !== 0 ? null : i.emunit,
+        unitCost: (i.unitCost == "" || isNaN(i.unitCost)) && i.unitCost !== 0 ? null : i.unitCost,
+        emimpactTonsCo2year: (i.emimpactTonsCo2year == "" || isNaN(i.emimpactTonsCo2year)) && i.emimpactTonsCo2year !== 0 ? null : i.emimpactTonsCo2year,
         embasisOfEstimate : i.embasisOfEstimate,
         emportfolioOwnerId: this.envPortfolio
       })
     }
 
+  }
+
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
   }
 
 }

@@ -97,6 +97,9 @@ export class FundingEditComponent implements OnInit {
             this.FundingForm.valueChanges.subscribe(res => {
               this.projecthubservice.isFormChanged = true
             })
+            this.FundingBCForm.valueChanges.subscribe(res => {
+              this.projecthubservice.isFormChanged = true
+            })
           })
         })
       })

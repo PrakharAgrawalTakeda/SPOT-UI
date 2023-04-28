@@ -56,8 +56,6 @@ export class WaterWasteBulkEditComponent {
   }
 
   getData(id){
-    console.log(id)
-    console.log(this.waterWasteForm)
     if (this.waterWasteForm.value[id].wwstream == "Water"){
       this.waterWasteForm.value[id].standardUoM = "m3"
       return '1'
@@ -344,8 +342,8 @@ export class WaterWasteBulkEditComponent {
         emdataWwid: i.emdataWwid,
         projectId: this.projecthubservice.projectid,
         wwsourceMasterUniqueId: id,
-        emwwunit: i.emwwunit == "" && i.emwwunit != 0 ? null : i.emwwunit,
-        emwwunitCost: i.emwwunitCost == "" && i.emwwunitCost != 0 ? null : i.emwwunitCost,
+        emwwunit: i.emwwunit == "" && i.emwwunit !== 0 ? null : i.emwwunit,
+        emwwunitCost: i.emwwunitCost == "" && i.emwwunitCost !== 0 ? null : i.emwwunitCost,
         embasisOfEstimate: i.embasisOfEstimate
       })
       this.waterwasteFormValue.push({
@@ -360,5 +358,9 @@ export class WaterWasteBulkEditComponent {
       })
     }
 
+  }
+
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
   }
 }

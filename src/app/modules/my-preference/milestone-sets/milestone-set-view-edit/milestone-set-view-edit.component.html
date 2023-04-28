@@ -12,10 +12,10 @@
             <div>
                 <form [formGroup]="standardMilestonesDetailsForm" >
                     <div class="flex items-center gap-3 pl-6 mt-4">
-                        <spot-input class="w-64"  formControlName="milestoneSet"  [showLabel]="true" [label]="'Milestone Set'">
+                        <spot-input class="w-96"  formControlName="milestoneSet"  [showLabel]="true" [label]="'Milestone Set'">
                          </spot-input>
                         <spot-singleselect-autocomplete
-                            formControlName="portfolioOwner" class="w-64"
+                            formControlName="portfolioOwner" class="w-96"
                                                          [label]="'Portfolio Owner'"
                                                         [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                                                         [dropDownArray]="portfolioOwnerList" [showHint]="true" [sortByType]="'custom'"
@@ -30,13 +30,18 @@
                 <div class="pr-3">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                             [color]="'primary-200'"
+                            (click)="changeOrderView()">
+                        <mat-icon svgIcon="heroicons_outline:sort-descending"></mat-icon>&nbsp; Order View
+                    </button>
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                            [color]="'primary-200'"
                             (click)="addSM()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
                 </div>
             </div>
         </div>
-        <div  class="overflow-y-hidden h-[80vh] pl-3"  >
+        <div *ngIf="!orderView"  class="overflow-y-hidden h-[80vh] pl-3"  >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -115,13 +120,18 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                                  ngx-datatable-cell-template>
                         <div class="flex justify-start items-center gap-6">
-                            <a href="javascript:void(0)" title="Delete Single" (click)="deleteSM(rowIndex)">
+                            <a href="javascript:void(0)" title="Delete Single" (click)="deleteSM(rowIndex)"  *ngIf="(row.milestoneType?!row.milestoneType >=1:true)">
                                 <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                             </a>
                         </div>
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
+        </div>
+        <div *ngIf="orderView"  class="overflow-y-hidden h-[80vh] pl-3"  >
+            <div (cdkDropListDropped)="drop($event)" cdkDropList class="draggable-list">
+                <div class="draggable-box" *ngFor="let standardMilestone of standardMilestonesTableData" cdkDrag>{{standardMilestone.milestone}}</div>
+            </div>
         </div>
         <div class="flex items-start justify-between  px-3">
             <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
