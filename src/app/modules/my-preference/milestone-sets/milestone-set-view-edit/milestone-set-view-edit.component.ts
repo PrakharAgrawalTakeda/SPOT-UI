@@ -230,7 +230,7 @@ export class MilestoneSetViewEditComponent {
         }
     }
     changeOrderView() {
-        if (this.myPreferenceService.isFormChanged) {
+        if (this.myPreferenceService.isFormChanged && this.orderView == false) {
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "Are you sure?",
                 "message": "Are you sure you want switch to the order view page? All the changes will be lost ",
@@ -255,11 +255,14 @@ export class MilestoneSetViewEditComponent {
             const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
             riskIssueAlert.afterClosed().subscribe(close => {
                 if (close == 'confirmed') {
+                    this.smTableEditStack = [];
                     this.orderView = !this.orderView;
                 }
             })
         }else{
             this.orderView = !this.orderView;
+            this.smTableEditStack = [];
+            this.myPreferenceService.isFormChanged = false;
         }
     }
     addSM() {
