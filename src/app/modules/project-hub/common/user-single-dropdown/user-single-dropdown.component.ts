@@ -44,9 +44,8 @@ export class UserSingleDropdownComponent implements OnInit {
         const params = new HttpParams().set('query', value);
         this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
-
             // Store the result sets
-            this.resultSets = resultSets;
+            this.resultSets = resultSets.filter((obj) => obj.userIsActive);
             console.log(this.resultSets)
             console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
             // Execute the event
@@ -60,13 +59,13 @@ export class UserSingleDropdownComponent implements OnInit {
       usersingle: option.userDisplayName,
       usersingleid: option.userAdid
     })
-    
+
   }
   onUserSelectenter(option: any){
-    console.log(option.option.value)
     this.formgroup.patchValue({
       usersingle: option.option.value.userDisplayName,
-      usersingleid: option.option.value.userAdid
+      usersingleid: option.option.value.userAdid,
+
     })
   }
 }
