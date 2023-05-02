@@ -37,14 +37,12 @@
                 name="ifThisHappens"></textarea>
         </mat-form-field>
 
-        <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto w-full gt-xs:pl-3" [floatLabel]="'always'" *ngIf="viewElementChecker('probability')">
-            <mat-label>Probability</mat-label>
-            <mat-select [placeholder]="'Probability'" formControlName="probability" name="probability">
-                <mat-option value="">None</mat-option>
-                <mat-option *ngFor="let option of getprobability()" value="{{option.lookUpId}}">{{option.lookUpName}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div *ngIf="viewElementChecker('probability')">
+            <spot-select formControlName="probability" name="probability" [label]="'Probability'" [placeholder]="'Probability'"
+                         [dropDownArrayType]="'object'" [dropDownArray]="getprobability()" [idPointer]="'lookUpId'"
+                         [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-select>
+        </div>
 
         <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('thisIsTheResult')">
             <mat-label>This Is The Result</mat-label>
