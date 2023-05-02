@@ -65,7 +65,7 @@
           <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full read-only"
             name="excecutionScope" [label]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
             [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [showHint]="true"
-            [sortByType]="'custom'" [customSortPointer]="'pfid'" [sortSelected]="true" [sortSelectedValuePointer]="'portfolioOwner'"
+            [sortByType]="'custom'" [customSortPointer]="'pfid'"
             [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'"
             *ngIf="viewElementChecker('excecutionScope')">
           </spot-multiselect-autocomplete>

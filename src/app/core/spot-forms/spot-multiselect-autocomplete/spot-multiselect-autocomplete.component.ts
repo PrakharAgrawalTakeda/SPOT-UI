@@ -109,10 +109,7 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
 
   writeValue(val: any) {
     if (val) {
-        if(this.sortSelected){
-            val =  val.sort((a, b) => (a[this.sortSelectedValuePointer] > b[this.sortSelectedValuePointer]) ? 1 : ((b[this.sortSelectedValuePointer] > a[this.sortSelectedValuePointer]) ? -1 : 0))
-        }
-        this.selectedOption = val
+        this.selectedOption = val.sort((a, b) => (a[this.valuePointer] > b[this.valuePointer]) ? 1 : ((b[this.valuePointer] > a[this.valuePointer]) ? -1 : 0))
         this.form.controls.chipList.patchValue(this.selectedOption)
     }
   }

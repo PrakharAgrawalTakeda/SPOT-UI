@@ -68,7 +68,7 @@ export class MilestoneSetViewEditComponent {
         this.portApiService.getfilterlist().then(filterres => {
             this.filterCriteria = filterres
             if (this.myPreferenceService.itemid != "new") {
-                this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((portfolioRes: any) => {
+                this.myPreferenceApiService.GetPortfolioOwnerForPreferences('321be4b0-6338-4ed4-b40d-b9fdf9b4c489').then((portfolioRes: any) => {
                     this.portfolioOwnerList = portfolioRes;
                     this.myPreferenceApiService.getDetails(this.myPreferenceService.itemid).then((res: any) => {
                         this.editedSet = res
@@ -170,7 +170,7 @@ export class MilestoneSetViewEditComponent {
                         }))
                     }
                 }
-                this.myPreferenceApiService.GetPortfolioOwnerForPreferences().then((res: any) => {
+                this.myPreferenceApiService.GetPortfolioOwnerForPreferences('321be4b0-6338-4ed4-b40d-b9fdf9b4c489').then((res: any) => {
                     this.portfolioOwnerList = res;
                 })
 
