@@ -28,6 +28,8 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
   @Input() customSortPointer: string = ''
   @Input() Required: boolean = false
+  @Input() sortSelected: boolean = false
+  @Input() sortSelectedValuePointer: string
 
   @ViewChild('input', { static: false }) input: ElementRef<HTMLInputElement>;
 
@@ -107,8 +109,11 @@ export class SpotMultiselectAutocompleteComponent implements OnInit, ControlValu
 
   writeValue(val: any) {
     if (val) {
-      this.selectedOption = val
-      this.form.controls.chipList.patchValue(this.selectedOption)
+        if(this.sortSelected){
+            val =  val.sort((a, b) => (a[this.sortSelectedValuePointer] > b[this.sortSelectedValuePointer]) ? 1 : ((b[this.sortSelectedValuePointer] > a[this.sortSelectedValuePointer]) ? -1 : 0))
+        }
+        this.selectedOption = val
+        this.form.controls.chipList.patchValue(this.selectedOption)
     }
   }
 
