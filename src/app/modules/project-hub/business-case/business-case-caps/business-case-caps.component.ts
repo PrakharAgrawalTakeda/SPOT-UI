@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./business-case-caps.component.scss']
 })
 export class BusinessCaseCapsComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit(): void {

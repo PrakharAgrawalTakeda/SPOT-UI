@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from 'app/shared/constants';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -12,6 +12,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   styleUrls: ['./caps.component.scss']
 })
 export class CapsComponent implements OnInit {
+  @Input() callLocation: 'Normal' | 'Project-Charter' | 'Business-Case' = 'Normal'
   viewContent = false
   id=""
   editable= false
@@ -45,7 +46,7 @@ export class CapsComponent implements OnInit {
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
   })
-  constructor(public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
+  constructor(private router: Router, public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
         this.viewContent = false
@@ -149,7 +150,12 @@ export class CapsComponent implements OnInit {
     if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
       this.editable = true
     }
-    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    if(this.callLocation == 'Business-Case'){
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
+    }
+    else{
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
     this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
       this.CAPSdata = res
       if (res.localCurrency == null){
@@ -182,84 +188,87 @@ export class CapsComponent implements OnInit {
         WaterCost: res.projectData.waterImpactCost,
         WasteCost: res.projectData.wasteImpactCost
       })
-
-      if (this.showDefault == true){
-        //carbon data
-        var carbonParam = res.carbonParameters
-        var carbonData = res.carbonData
-        var carbonngx = []
-        if (carbonParam != null && carbonData != null) {
-          carbonParam.forEach(function (arrayItem) {
-            var data = []
-            var param = []
-            data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
-            param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
-            var carbonObject = {
-              ...data[0],
-              ...param[0]
-            }
-            carbonngx.push(carbonObject)
-          })
-          this.carbonngx = carbonngx
-        }
-        this.Biogenicsngx = res.biogenicsData
-        
-        //water waste data
-        if (this.editable == false) {
-          this.WaterWastengx = null
-        }
-        else {
-          var wwParam = res.waterWasteParameter
-          var wwData = res.waterWasteData
-          var WaterWastengx = []
-          if (wwParam != null && wwData != null) {
-            for (var i = 0; i < wwData.length; i++) {
+      if (this.callLocation == 'Normal'){
+        if (this.showDefault == true){
+          //carbon data
+          var carbonParam = res.carbonParameters
+          var carbonData = res.carbonData
+          var carbonngx = []
+          if (carbonParam != null && carbonData != null) {
+            carbonParam.forEach(function (arrayItem) {
               var data = []
-              data = wwParam.filter(x => x.wwsourceMasterUniqueId == wwData[i].wwsourceMasterUniqueId)
-              var wwObject = {
+              var param = []
+              data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
+              param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
+              var carbonObject = {
                 ...data[0],
-                ...wwData[i]
+                ...param[0]
               }
-              WaterWastengx.push(wwObject)
-            }
-            this.WaterWastengx = WaterWastengx
+              carbonngx.push(carbonObject)
+            })
+            this.carbonngx = carbonngx
           }
+          this.Biogenicsngx = res.biogenicsData
+          
+          //water waste data
+          if (this.editable == false) {
+            this.WaterWastengx = null
+          }
+          else {
+            var wwParam = res.waterWasteParameter
+            var wwData = res.waterWasteData
+            var WaterWastengx = []
+            if (wwParam != null && wwData != null) {
+              for (var i = 0; i < wwData.length; i++) {
+                var data = []
+                data = wwParam.filter(x => x.wwsourceMasterUniqueId == wwData[i].wwsourceMasterUniqueId)
+                var wwObject = {
+                  ...data[0],
+                  ...wwData[i]
+                }
+                WaterWastengx.push(wwObject)
+              }
+              this.WaterWastengx = WaterWastengx
+            }
+          }
+          this.carbonUnitData = false
+          this.biogenicUnitData = false
+          this.wwUnitData = false
+          this.DateRequired = false
+          if ((this.carbonngx.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0)){
+            this.carbonUnitData = true
+          }
+          if ((this.Biogenicsngx.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0)) {
+            this.biogenicUnitData = true
+          }
+          if ((this.WaterWastengx.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0)) {
+            this.wwUnitData = true
+          }
+          if (this.carbonUnitData || this.biogenicUnitData || this.wwUnitData){
+            this.DateRequired = true
+          }
+          this.costEdit = []
+          this.Biogenicsngx.filter(x => x.biogenicUnitCost != "" && x.biogenicUnitCost != null && x.biogenicUnitCost != 0).length > 0 || this.carbonngx.filter(x => x.unitCost != "" && x.unitCost != null && x.unitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
+          this.WaterWastengx.filter(x => x.wwstream == "Water" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
+          this.WaterWastengx.filter(x => x.wwstream == "Waste" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
+          this.costEdit.push(this.DateRequired)
+          this.costEdit.push(this.currencyLabel)
+          this.WaterWasteParam = res.waterWasteParameter
         }
-        this.carbonUnitData = false
-        this.biogenicUnitData = false
-        this.wwUnitData = false
-        this.DateRequired = false
-        if ((this.carbonngx.filter(x => x.emunit != "" && x.emunit != null && x.emunit != 0).length > 0)){
-          this.carbonUnitData = true
-        }
-        if ((this.Biogenicsngx.filter(x => x.biogenicUnit != "" && x.biogenicUnit != null && x.biogenicUnit != 0).length > 0)) {
-          this.biogenicUnitData = true
-        }
-        if ((this.WaterWastengx.filter(x => x.emwwunit != "" && x.emwwunit != null && x.emwwunit != 0).length > 0)) {
-          this.wwUnitData = true
-        }
-        if (this.carbonUnitData || this.biogenicUnitData || this.wwUnitData){
-          this.DateRequired = true
-        }
-        this.costEdit = []
-        this.Biogenicsngx.filter(x => x.biogenicUnitCost != "" && x.biogenicUnitCost != null && x.biogenicUnitCost != 0).length > 0 || this.carbonngx.filter(x => x.unitCost != "" && x.unitCost != null && x.unitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
-        this.WaterWastengx.filter(x => x.wwstream == "Water" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
-        this.WaterWastengx.filter(x => x.wwstream == "Waste" && x.emwwunitCost != "" && x.emwwunitCost != null && x.emwwunitCost != 0).length > 0 ? this.costEdit.push(false) : this.costEdit.push(true)
-        this.costEdit.push(this.DateRequired)
-        this.costEdit.push(this.currencyLabel)
-        this.WaterWasteParam = res.waterWasteParameter
+        else{
 
-        
-    }
-    else{
-
-      //Transportation, Warehousing, Shipping API call
-    }
+          //Transportation, Warehousing, Shipping API call
+        }
+      }
       this.noCarbonImpact = res.projectData.noCarbonImpact
       this.NoCarbonForm.patchValue({ NoCarbonImpact: res.projectData.noCarbonImpact })
       this.viewContent = true
       this.CAPSform.disable()
     })
+  }
+
+  openCAPS() {
+    this.router.navigate([`./project-hub/` + this.id + `/caps`]);
   }
 
 }
