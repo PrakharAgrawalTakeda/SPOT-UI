@@ -73,17 +73,13 @@
         <div  *ngIf="viewElementChecker('owner')">
             <app-user-single-dropdown [formgroup]="riskIssueForm" [label]="'Owner'"></app-user-single-dropdown>
         </div>
-        <mat-form-field class="w-full" [floatLabel]="'always'"  *ngIf="viewElementChecker('function')">
-            <mat-label>Function</mat-label>
-            <input matInput [placeholder]="'Function'" formControlName="function" name="function"
-                [matAutocomplete]="function">
-            <mat-autocomplete autoActiveFirstOption #function="matAutocomplete"
-                (optionSelected)="onFunctionSelect($event)">
-                <mat-option *ngFor="let function of functionSets | async" [value]="function">
-                    {{function.lookUpName}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
+
+        <div  *ngIf="viewElementChecker('function')">
+            <spot-singleselect-autocomplete formControlName="function" name="function" [label]="'Function Owner'"
+                                            [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'" [dropDownArray]="functionSets"
+                                            [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+        </div>
 
 
         <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('dueDate')">

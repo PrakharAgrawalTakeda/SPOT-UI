@@ -45,7 +45,7 @@ export class UserSingleDropdownComponent implements OnInit {
         this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
             // Store the result sets
-            this.resultSets = resultSets.filter((obj) => obj.userIsActive);
+            this.resultSets = resultSets.filter((obj) => obj.userIsActive!=false);
             console.log(this.resultSets)
             console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
             // Execute the event
