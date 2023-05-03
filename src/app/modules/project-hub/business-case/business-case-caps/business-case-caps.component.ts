@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-business-case-caps',
@@ -7,13 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./business-case-caps.component.scss']
 })
 export class BusinessCaseCapsComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-  
-  openCAPS(){
-    this.router.navigate([`./portfolio-center`]);
   }
 
 }

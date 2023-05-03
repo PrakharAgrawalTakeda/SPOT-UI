@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from 'app/shared/constants';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -46,7 +46,7 @@ export class CapsComponent implements OnInit {
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
   })
-  constructor(public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
+  constructor(private router: Router, public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
         this.viewContent = false
@@ -265,6 +265,10 @@ export class CapsComponent implements OnInit {
       this.viewContent = true
       this.CAPSform.disable()
     })
+  }
+
+  openCAPS() {
+    this.router.navigate([`./project-hub/` + this.id + `/caps`]);
   }
 
 }
