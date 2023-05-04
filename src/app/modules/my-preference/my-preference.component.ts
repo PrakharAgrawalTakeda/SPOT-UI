@@ -80,7 +80,7 @@ export class MyPreferenceComponent implements OnInit {
                 }
             ]
         }
-        if(!this.milestoneAccess){
+        if(this.milestoneAccess){
             this.navItem.children.push({
                 title: 'Milestone Sets',
                 link: 'my-preference/milestone-sets'
