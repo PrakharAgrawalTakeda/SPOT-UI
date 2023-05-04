@@ -74,13 +74,11 @@
             <app-user-single-dropdown [formgroup]="riskIssueForm" [label]="'Owner'"></app-user-single-dropdown>
         </div>
 
-        <div  *ngIf="viewElementChecker('function')">
-            <spot-singleselect-autocomplete formControlName="function" name="function" [label]="'Function Owner'"
-                                            [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'" [dropDownArray]="functionSets"
-                                            [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-            </spot-singleselect-autocomplete>
-        </div>
-
+        <spot-singleselect-autocomplete *ngIf="viewElementChecker('function')" formControlName="functionGroupID" class="w-full"
+                                        [label]="'Function Owner'" [placeholder]="'Function Owner'" [valuePointer]="'lookUpName'"
+                                        [dropDownArray]="getFunctionGroupID()" [sortByType]="'custom'"
+                                        [customSortPointer]="'lookUpOrder'">
+        </spot-singleselect-autocomplete>
 
         <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'" *ngIf="viewElementChecker('dueDate')">
             <mat-label>Due Date</mat-label>

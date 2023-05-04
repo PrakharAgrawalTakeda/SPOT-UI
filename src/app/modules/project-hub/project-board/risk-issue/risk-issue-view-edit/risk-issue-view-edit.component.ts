@@ -61,33 +61,6 @@ export class RiskIssueViewEditComponent implements OnInit {
   id: string = ''
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute,
               public auth: AuthService,private _elementRef: ElementRef, private router: Router) {
-
-    this.functionSets = this.riskIssueForm.controls['function'].valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        var filterValue = value.toString().toLowerCase()
-        if (this.lookupdata.find(x => x.lookUpId == this.riskIssueForm.controls.functionid.value)) {
-          if (this.lookupdata.find(x => x.lookUpName == value)) {
-
-            return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
-              return a.lookUpOrder - b.lookUpOrder;
-            })
-          }
-
-          else {
-            return this.lookupdata.filter(x => x.lookUpName.toLowerCase().includes(filterValue) && x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
-              return a.lookUpOrder - b.lookUpOrder;
-            })
-          }
-        }
-        else if (this.riskIssueForm.controls.functionid.value == "") {
-          return this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77').sort((a, b) => {
-            return a.lookUpOrder - b.lookUpOrder;
-          })
-        }
-      })
-
-    )
   }
 
 
@@ -104,7 +77,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     usersingle: new FormControl(''),
     usersingleid: new FormControl(''),
     function: new FormControl(''),
-    functionid: new FormControl(''),
+    functionGroupID: new FormControl(null),
     includeInReport: new FormControl(false),
     includeInCharter: new FormControl(false),
     postMitigationProbability: new FormControl(''),
@@ -121,7 +94,7 @@ export class RiskIssueViewEditComponent implements OnInit {
     if (this.projecthubservice.itemid != "new") {
       this.apiService.riskIssueSingle(this.projecthubservice.itemid).then((res: any) => {
         this.riskissue = res
-        this.riskIssueForm.patchValue({
+          this.riskIssueForm.patchValue({
           logDate: res.logDate ? res.logDate : this.today,
           type: res.riskIssueTypeId,
           ifThisHappens: res.ifHappens,
@@ -133,7 +106,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           closeDate: res.closeDate,
           usersingle: res.ownerName,
           usersingleid: res.ownerId,
-          functionid: res.functionGroupId,
+          functionGroupID: this.projecthubservice.lookUpMaster.find(x => x.lookUpId == res.functionGroupId?.toLowerCase()),
           includeInReport: res.includeInReport,
           includeInCharter: res.includeInCharter,
           postMitigationProbability: res.postMitigationProbability,
@@ -173,7 +146,7 @@ export class RiskIssueViewEditComponent implements OnInit {
         closeDate: null,
         usersingle: "",
         usersingleid: "",
-        functionid: "",
+        functionGroupID: null,
         includeInReport: false,
         includeInCharter: false,
         postMitigationProbability: "",
@@ -204,6 +177,9 @@ export class RiskIssueViewEditComponent implements OnInit {
 
   viewElementChecker(element: string): boolean {
       return this.viewElements.some(x => x == element)
+  }
+  getFunctionGroupID(): any {
+      return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
   }
   getllookup() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -246,9 +222,9 @@ export class RiskIssueViewEditComponent implements OnInit {
   onFunctionSelect(event: any) {
     this.riskIssueForm.patchValue({
       function: event.option.value.lookUpName,
-      functionid: event.option.value.lookUpId
+      functionGroupID: event.option.value.lookUpId
     })
-    console.log(this.riskIssueForm.controls.functionid.value)
+    console.log(this.riskIssueForm.controls.functionGroupID.value)
 
   }
   submitriskissue() {
@@ -266,7 +242,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           mitigation: this.riskIssueForm.value.mitigation,
           ownerId: this.riskIssueForm.value.usersingleid,
           ownerName: this.riskIssueForm.value.usersingle,
-          functionGroupId: this.riskIssueForm.value.functionid,
+          functionGroupId: this.riskIssueForm.value.functionGroupID.lookUpId,
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
@@ -279,7 +255,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           businessOptionId:""
         }
         //Function when null
-        if (this.riskIssueForm.controls['function'].value == "") {
+        if (this.riskIssueForm.controls['functionGroupID'].value == "") {
           mainObjnew.functionGroupId = null
         }
         if (this.riskIssueForm.controls['includeInReport'].disabled) {
@@ -359,7 +335,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           mitigation: this.riskIssueForm.value.mitigation,
           ownerId: this.riskIssueForm.value.usersingleid,
           ownerName: this.riskIssueForm.value.usersingle,
-          functionGroupId: this.riskIssueForm.value.functionid,
+          functionGroupId: this.riskIssueForm.value.functionGroupID.lookUpId,
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
@@ -371,9 +347,8 @@ export class RiskIssueViewEditComponent implements OnInit {
           postMitigationComments: this.riskIssueForm.value.postMitigationComments
         }
         //Function when null
-        console.log(this.riskIssueForm.controls['function'].value)
-        if (this.riskIssueForm.controls['function'].value == "") {
-          mainObj.functionGroupId = null
+        if (this.riskIssueForm.controls['functionGroupID'].value == "") {
+            mainObj.functionGroupId = null
         }
         if (this.riskIssueForm.controls['usersingle'].value == "") {
           mainObj.ownerName = null
