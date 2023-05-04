@@ -34,9 +34,9 @@ export class CapsComponent implements OnInit {
     WaterCost: new FormControl(''),
     WasteCost: new FormControl('')
   })
-  carbonngx: any
-  Biogenicsngx: any
-  WaterWastengx: any
+  carbonngx: any = []
+  Biogenicsngx: any = []
+  WaterWastengx: any = []
   WaterWasteParam: any
   DateRequired: boolean = false
   carbonUnitData: boolean = false
@@ -167,6 +167,9 @@ export class CapsComponent implements OnInit {
       if (res.envionmentPortfolio == "" || res.envionmentPortfolio == null) {
         this.editableEnv = false
       }
+      else{
+        this.editableEnv = true
+      }
       if (this.editableEnv == true){
       if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
@@ -177,7 +180,7 @@ export class CapsComponent implements OnInit {
     }
       this.CAPSform.patchValue({
         isCapsProject: res.projectData.isCapsProject,
-        enviornmentalPortfolio: res.envionmentPortfolio.portfolioOwner,
+        enviornmentalPortfolio: res.envionmentPortfolio == null || res.envionmentPortfolio == "" ? "" : res.envionmentPortfolio.portfolioOwner,
         impactRealizationDate: res.projectData.emissionsImpactRealizationDate,
         EmissionsImpact: res.projectData.calculatedEmissionsImpact,
         EnergyImpact: res.projectData.energyImpact,
