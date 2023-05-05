@@ -239,11 +239,6 @@ export class ProjectHubService {
                   link: 'business-case/option-2/benefits'
                 },
                 {
-                  title: 'CAPS',
-                  type: 'basic',
-                  link: 'business-case/option-2/caps'
-                },
-                {
                   title: 'Risks / Assumptions',
                   type: 'basic',
                   link: 'business-case/option-2/risks'
@@ -274,11 +269,6 @@ export class ProjectHubService {
                   title: 'Benefits',
                   type: 'basic',
                   link: 'business-case/option-3/benefits'
-                },
-                {
-                  title: 'CAPS',
-                  type: 'basic',
-                  link: 'business-case/option-3/caps'
                 },
                 {
                   title: 'Risks / Assumptions',

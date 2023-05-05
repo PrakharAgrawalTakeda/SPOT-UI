@@ -34,9 +34,9 @@ export class CapsComponent implements OnInit {
     WaterCost: new FormControl(''),
     WasteCost: new FormControl('')
   })
-  carbonngx: any
-  Biogenicsngx: any
-  WaterWastengx: any
+  carbonngx: any = []
+  Biogenicsngx: any = []
+  WaterWastengx: any = []
   WaterWasteParam: any
   DateRequired: boolean = false
   carbonUnitData: boolean = false
@@ -167,6 +167,9 @@ export class CapsComponent implements OnInit {
       if (res.envionmentPortfolio == "" || res.envionmentPortfolio == null) {
         this.editableEnv = false
       }
+      else{
+        this.editableEnv = true
+      }
       if (this.editableEnv == true){
       if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
@@ -177,7 +180,7 @@ export class CapsComponent implements OnInit {
     }
       this.CAPSform.patchValue({
         isCapsProject: res.projectData.isCapsProject,
-        enviornmentalPortfolio: res.envionmentPortfolio.portfolioOwner,
+        enviornmentalPortfolio: res.envionmentPortfolio == null || res.envionmentPortfolio == "" ? "" : res.envionmentPortfolio.portfolioOwner,
         impactRealizationDate: res.projectData.emissionsImpactRealizationDate,
         EmissionsImpact: res.projectData.calculatedEmissionsImpact,
         EnergyImpact: res.projectData.energyImpact,
@@ -268,7 +271,42 @@ export class CapsComponent implements OnInit {
   }
 
   openCAPS() {
-    this.router.navigate([`./project-hub/` + this.id + `/caps`]);
+    var message = "";
+    if(this.callLocation == 'Business-Case'){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Business Case Recommended Options page and switch to the CAPS page?"
+    }
+    else if(this.callLocation == "Project-Charter"){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Project Charter page and switch to the CAPS page?"
+    }
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": message,
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Go to CAPS",
+          // "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.router.navigate([`./project-hub/` + this.id + `/caps`]);
+      }
+    }
+    )
+    
   }
 
 }

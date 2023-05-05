@@ -19,7 +19,7 @@
                                                          [label]="'Portfolio Owner'"
                                                         [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                                                         [dropDownArray]="portfolioOwnerList" [showHint]="true" [sortByType]="'custom'"
-                                                        [customSortPointer]="'pfid'"
+                                                        [customSortPointer]="'portfolioOwner'"
                                                         [hint]="'The group which is responsible for the oversight and process adherence of the record'">
                         </spot-singleselect-autocomplete>
 
@@ -59,7 +59,7 @@
                             <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
                         </a>
                         <form [formGroup]="standardMilestonesTableForm.controls[rowIndex]" *ngIf="smTableEditStack.includes(rowIndex)">
-                            <spot-textarea [rows]="3" formControlName="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
+                            <spot-textarea [rows]="5" formControlName="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
                             </spot-textarea>
                         </form>
                     </ng-template>
@@ -71,7 +71,7 @@
                             <p *ngIf="value == ''">&nbsp;</p>
                             {{getLookUpName(value)}}
                         </a>
-                        <form [formGroup]="standardMilestonesTableForm.controls[rowIndex]" *ngIf="smTableEditStack.includes(rowIndex)">
+                        <form class="pr-1" [formGroup]="standardMilestonesTableForm.controls[rowIndex]" *ngIf="smTableEditStack.includes(rowIndex)">
                             <spot-select formControlName="funtionalOwnerId"  [placeholder]="'Function'"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getFunctionOwner()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'">
@@ -95,7 +95,6 @@
                                                [maxLength]=1000></spot-textarea>
                             </form>
                         </div>
-
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Included In Dashboard" prop="includeInReport" [flexGrow]="0.5"

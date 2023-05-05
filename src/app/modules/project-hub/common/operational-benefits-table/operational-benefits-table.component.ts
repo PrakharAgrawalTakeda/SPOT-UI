@@ -3,6 +3,7 @@ import {ProjectApiService} from "../project-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 
 @Component({
   selector: 'app-operational-benefits-table',
@@ -20,7 +21,11 @@ export class OperationalBenefitsTableComponent {
         ,public fuseAlert: FuseConfirmationService, private router: Router) {
     }
     ngOnInit(): void {
-        this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+        if (this.router.url.includes('business-case')) {
+            this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+        }else{
+            this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+        }
     }
 
     deleteOperationalBenefit(id: string) {
