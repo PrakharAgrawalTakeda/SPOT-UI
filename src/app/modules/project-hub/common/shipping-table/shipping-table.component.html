@@ -7,16 +7,16 @@
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
-                    <!-- <button class="text-primary bg-gray-200" mat-flat-button *ngIf="Editable" [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('BiogenicsBulkEdit', '', biogenicsBulkEditData, id, true)">
+                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="Editable" [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen('ShippingBulkEdit', '', shippingBulkEditData, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
                     <button class="ml-4 text-primary bg-gray-200"
-                        *ngIf="Editable && !NoCarbonForm.controls.NoCarbonImpact.value" mat-flat-button
+                        *ngIf="Editable" mat-flat-button
                         [color]="'primary-200'"
-                        (click)="projecthubservice.toggleDrawerOpen('BiogenicsSingleEdit', 'new', biogenicsBulkEditData , id)">
+                        (click)="projecthubservice.toggleDrawerOpen('ShippingSingleEdit', 'new', shippingBulkEditData , id)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-                    </button> -->
+                    </button>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
 
                     <div class="flex items-center justify-start gap-6">
                         <a href="javascript:void(0)" title="Delete Single" *ngIf="Editable"
-                            (click)="deleteShipping(row.keySuccessUniqueId)">
+                            (click)="deleteShipping(row.shippingDataId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                     </div>

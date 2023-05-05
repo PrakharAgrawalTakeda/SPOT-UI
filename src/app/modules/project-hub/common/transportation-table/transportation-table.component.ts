@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { ActivatedRoute } from '@angular/router';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from '../project-api.service';
 
@@ -19,7 +19,7 @@ export class TransportationTableComponent {
   @Input() Editable: boolean = false
   @Input() ProjectData: any
   @Input() editCost: any
-  @Input() DateMandatory: boolean
+  @Input() data: any
   lookupdata: any
   sortDir = ""
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
@@ -43,7 +43,7 @@ export class TransportationTableComponent {
           this.Transportationngx = null
         }
         else {
-          this.Transportationngx = res.biogenicsData
+          this.Transportationngx = this.data
         }
         this.transportationBulkEditData.push(this.Transportationngx)
         this.transportationBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
@@ -54,5 +54,38 @@ export class TransportationTableComponent {
 
   getLookUpName(id: any): any {
     return id && id.lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
+  }
+
+  deleteTransportation(id: string) {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Remove Transportation?",
+      "message": "Are you sure you want to remove this record permanently? ",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const TransportationAlert = this.fuseAlert.open(comfirmConfig)
+
+    TransportationAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.deleteDistribution(id).then(res => {
+          this.projecthubservice.submitbutton.next(true)
+        })
+      }
+    })
   }
 }

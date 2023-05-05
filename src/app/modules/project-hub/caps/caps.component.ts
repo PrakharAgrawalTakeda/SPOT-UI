@@ -35,6 +35,9 @@ export class CapsComponent implements OnInit {
   })
   carbonngx: any
   Biogenicsngx: any
+  Transportationngx: any
+  Warehousingngx: any
+  Shippingngx: any
   WaterWastengx: any
   WaterWasteParam: any
   DateRequired: boolean = false
@@ -151,6 +154,7 @@ export class CapsComponent implements OnInit {
     }
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+      console.log(res)
       this.CAPSdata = res
       if (res.localCurrency == null){
         this.currencyLabel = ""
@@ -254,6 +258,44 @@ export class CapsComponent implements OnInit {
     else{
 
       //Transportation, Warehousing, Shipping API call
+      console.log("TRANSPORTATION", res.transportationData)
+      var transportationData = res.transportationData
+      var Transportationngx = []
+      if (transportationData != null) {
+        for (var i = 0; i < transportationData.length; i++) {
+          var data = []
+          var transportationObject = {
+            ...transportationData[i]
+          }
+          console.log(transportationObject)
+          Transportationngx.push(transportationObject)
+        }
+        this.Transportationngx = Transportationngx
+      }
+      var warehousingData = res.warehouseData
+      var Warehousingngx = []
+      if (warehousingData != null) {
+        for (var i = 0; i < warehousingData.length; i++) {
+          var data = []
+          var warehouseObject = {
+            ...warehousingData[i]
+          }
+          Warehousingngx.push(warehouseObject)
+        }
+        this.Warehousingngx = Warehousingngx
+      }
+      var shippingData = res.shippingData
+      var Shippingngx = []
+      if (shippingData != null) {
+        for (var i = 0; i < shippingData.length; i++) {
+          var data = []
+          var shippingObject = {
+            ...shippingData[i]
+          }
+          Shippingngx.push(shippingObject)
+        }
+        this.Shippingngx = Shippingngx
+      }
     }
       this.noCarbonImpact = res.projectData.noCarbonImpact
       this.NoCarbonForm.patchValue({ NoCarbonImpact: res.projectData.noCarbonImpact })

@@ -115,19 +115,19 @@
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-transportation-table [Editable]="editableEnv && editable"></app-transportation-table>
+            <app-transportation-table [Editable]="editableEnv && editable" [data]="Transportationngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-transportation-table>
         </div>
     </div>
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-warehousing-table [Editable]="editableEnv && editable"></app-warehousing-table>
+            <app-warehousing-table [Editable]="editableEnv && editable" [data]="Warehousingngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-warehousing-table>
         </div>
     </div>
     <div *ngIf="!showDefault" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-shipping-table [Editable]="editableEnv && editable"></app-shipping-table>
+            <app-shipping-table [Editable]="editableEnv && editable" [data]="Shippingngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-shipping-table>
         </div>
     </div>
 </div>
