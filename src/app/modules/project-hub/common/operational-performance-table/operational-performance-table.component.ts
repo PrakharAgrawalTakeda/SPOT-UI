@@ -65,7 +65,6 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
                   i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
               }
               this.viewContent = true
-              this.initializationComplete = false
               this.initializationComplete = true
           })
       }else{
