@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from 'app/shared/constants';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
@@ -12,6 +12,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   styleUrls: ['./caps.component.scss']
 })
 export class CapsComponent implements OnInit {
+  @Input() callLocation: 'Normal' | 'Project-Charter' | 'Business-Case' = 'Normal'
   viewContent = false
   id=""
   editable= false
@@ -48,7 +49,7 @@ export class CapsComponent implements OnInit {
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
   })
-  constructor(public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
+  constructor(private router: Router, public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
         this.viewContent = false
@@ -152,7 +153,12 @@ export class CapsComponent implements OnInit {
     if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
       this.editable = true
     }
-    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    if(this.callLocation == 'Business-Case'){
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
+    }
+    else{
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
     this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
       console.log(res)
       this.CAPSdata = res
@@ -165,6 +171,9 @@ export class CapsComponent implements OnInit {
       if (res.envionmentPortfolio == "" || res.envionmentPortfolio == null) {
         this.editableEnv = false
       }
+      else{
+        this.editableEnv = true
+      }
       if (this.editableEnv == true){
       if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
         this.showDefault = false;
@@ -175,7 +184,7 @@ export class CapsComponent implements OnInit {
     }
       this.CAPSform.patchValue({
         isCapsProject: res.projectData.isCapsProject,
-        enviornmentalPortfolio: res.envionmentPortfolio.portfolioOwner,
+        enviornmentalPortfolio: res.envionmentPortfolio == null || res.envionmentPortfolio == "" ? "" : res.envionmentPortfolio.portfolioOwner,
         impactRealizationDate: res.projectData.emissionsImpactRealizationDate,
         EmissionsImpact: res.projectData.calculatedEmissionsImpact,
         EnergyImpact: res.projectData.energyImpact,
@@ -302,6 +311,45 @@ export class CapsComponent implements OnInit {
       this.viewContent = true
       this.CAPSform.disable()
     })
+  }
+
+  openCAPS() {
+    var message = "";
+    if(this.callLocation == 'Business-Case'){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Business Case Recommended Options page and switch to the CAPS page?"
+    }
+    else if(this.callLocation == "Project-Charter"){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Project Charter page and switch to the CAPS page?"
+    }
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": message,
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Go to CAPS",
+          // "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.router.navigate([`./project-hub/` + this.id + `/caps`]);
+      }
+    }
+    )
+    
   }
 
 }

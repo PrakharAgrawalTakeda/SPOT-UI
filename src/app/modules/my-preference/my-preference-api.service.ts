@@ -67,8 +67,8 @@ export class MyPreferenceApiService {
         return response
     }
 
-    async GetPortfolioOwnerForPreferences() {
-        var link = GlobalVariables.apiurl + "PortfolioOwner/GetPortfolioOwnersForPreferences"
+    async GetPortfolioOwnerForPreferences(id) {
+        var link = GlobalVariables.apiurl + "PortfolioOwner/GetPortfolioOwnersForPreferences/"+ id
         const abc$ = this.http.get(link)
         const response = await lastValueFrom(abc$)
         return response

@@ -54,7 +54,7 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {
         //this.onChange({})
-        //this.selectedOption = {}  
+        //this.selectedOption = {}
       }
 
     })
@@ -82,7 +82,7 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
         this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
             if (this.selectedOption.length > 0 && resultSets.length > 0) {
-              var select = this.selectedOption.map(x => x.userAdid)
+              var select = this.selectedOption.map(x => x.userAdid).filter((obj) => obj.userIsActive)
               resultSets.filter(x => select.includes(x.userAdid))
             }
 

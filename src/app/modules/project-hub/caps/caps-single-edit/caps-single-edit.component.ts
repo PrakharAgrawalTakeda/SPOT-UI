@@ -127,7 +127,7 @@ viewType = 'SidePanel'
       mainObj.energyCostImpactPerYear = formValue.EnergyCost
       mainObj.waterImpactCost = formValue.WaterCost
       mainObj.wasteImpactCost = formValue.WasteCost
-      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+      this.apiService.editCAPSData(this.projectHubService.projectid, mainObj).then(res => {
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
