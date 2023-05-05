@@ -271,7 +271,42 @@ export class CapsComponent implements OnInit {
   }
 
   openCAPS() {
-    this.router.navigate([`./project-hub/` + this.id + `/caps`]);
+    var message = "";
+    if(this.callLocation == 'Business-Case'){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Business Case Recommended Options page and switch to the CAPS page?"
+    }
+    else if(this.callLocation == "Project-Charter"){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Project Charter page and switch to the CAPS page?"
+    }
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": message,
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Go to CAPS",
+          // "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.router.navigate([`./project-hub/` + this.id + `/caps`]);
+      }
+    }
+    )
+    
   }
 
 }
