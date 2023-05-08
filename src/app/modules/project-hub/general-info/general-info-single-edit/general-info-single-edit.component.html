@@ -152,9 +152,8 @@
                                             *ngIf="viewElementChecker('functionGroupID')" formControlName="functionGroupID" class="w-full"
                                             name="functionGroupID" [label]="'Requesting Function'" [Required]="callLocation == 'CreateNew'"
                                             [placeholder]="'Requesting Function'" [valuePointer]="'lookUpName'"
-                                            [dropDownArray]="getFunctionGroupID()" [showHint]="true" [sortByType]="'custom'"
-                                            [customSortPointer]="'lookUpOrder'"
-                                            [hint]="'The group which is responsible for the oversight and process adherence of the record'">
+                                            [dropDownArray]="getFunctionGroupID()" [sortByType]="'custom'"
+                                            [customSortPointer]="'lookUpOrder'">
             </spot-singleselect-autocomplete>
             <spot-textarea (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
                 [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('projectDescription')"

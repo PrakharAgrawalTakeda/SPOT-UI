@@ -29,19 +29,19 @@
                     </spot-textarea>
                 </div>
                 <div>
-                    <div class="text-primary pt-6 pb-3 text-xl">NPV</div>
+                    <div class="text-primary pt-6 pb-3 text-xl">NPV Net Present Value</div>
                     <div class="flex gap-x-6 gap-y-0 w-full">
                         <spot-input formControlName="npvBaseCase"  [label]="'Base Case (' + this.localCurrency.localCurrencyAbbreviation + ')'"
-                                    [showHint]="true" [hint]="'Provide NPV calculation if applicable (base case)'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
+                                    [showHint]="true" [hint]="'Provide net present value calculation if applicable (base case)'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
                                     class="w-64 read-only" >
                         </spot-input>
                         <spot-input formControlName="npvHighCase"  [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
-                                    [showHint]="true" [hint]="'Provide NPV calculation if applicable (high case)'"
+                                    [showHint]="true" [hint]="'Provide net present value calculation if applicable (high case)'"
                                     class="w-64 read-only" >
                         </spot-input>
                     </div>
-                    <spot-textarea class="w-full read-only" formControlName="npvRationale" [showLabel]="true" [label]="'NPV Basis of Calculation'"
-                                   [placeholder]="'N/A if no NPV calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with NPV as appropriate. NPV needed for capital projects > 5 OKU TPC'">
+                    <spot-textarea class="w-full read-only" formControlName="npvRationale" [showLabel]="true" [label]="'Net Present Value Basis of Calculation'"
+                                   [placeholder]="'N/A if no net present value calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with net present value as appropriate. Net present value needed for capital projects > 5 OKU TPC'">
                     </spot-textarea>
                 </div>
             </div>

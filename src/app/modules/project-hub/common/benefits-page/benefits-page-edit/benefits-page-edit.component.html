@@ -19,15 +19,15 @@
                         [placeholder]="'Justify linkage to the identified strategic element'">
             </spot-textarea>
             <br>
-            <div class="text-primary text-xl pb-3">NPV</div>
+            <div class="text-primary text-xl pb-3">NPV Net Present Value</div>
             <spot-input class="w-full read-only" [showLabel]="true" [label]="'Base Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="npvBaseCase"
                         [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
-                        [showHint]="true" [hint]="'Provide NPV calculation if applicable (base case)'"> </spot-input>
+                        [showHint]="true" [hint]="'Provide net present value calculation if applicable (base case)'"> </spot-input>
             <spot-input class="w-full read-only" [showLabel]="true" [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="npvHighCase"
                         [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
-                        [showHint]="true" [hint]="'Provide NPV calculation if applicable (high case)'"> </spot-input>
-            <spot-textarea formControlName="npvRationale" [showLabel]="true" [label]="'NPV Basis of Calculation'"
-                        [placeholder]="'N/A if no NPV calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with NPV as appropriate. NPV needed for capital projects > 5 OKU TPC'">
+                        [showHint]="true" [hint]="'Provide net present value calculation if applicable (high case)'"> </spot-input>
+            <spot-textarea formControlName="npvRationale" [showLabel]="true" [label]="'Net Present Value Basis of Calculation'"
+                        [placeholder]="'N/A if no net present value calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with net present value as appropriate. Net present value needed for capital projects > 5 OKU TPC'">
             </spot-textarea>
         </div>
         <div class="flex items-start justify-between  form-ask-need">
