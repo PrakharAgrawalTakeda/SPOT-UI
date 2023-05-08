@@ -65,6 +65,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
           if (this.router.url.includes('recommended-option')) {
               this.apiService.getRiskIssuesByOption(this.id,GlobalBusinessCaseOptions.OPTION_1).then((res) => {
                   this.riskIssuesngxdata  = res
+                  console.log("aaaaaaaaaaaaa",res)
               })
           }
           if (this.router.url.includes('option-2')) {
