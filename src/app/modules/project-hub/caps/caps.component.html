@@ -13,7 +13,7 @@
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
                     </div>
-                    <div *ngIf="callLocation != 'Normal'">
+                    <div *ngIf="editableEnv && editable && callLocation != 'Normal'">
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="openCAPS()">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp;Edit Details
                         </button>
@@ -105,7 +105,7 @@
         <br><br>
         <app-biogenics-table [Editable]="editableEnv && editable" [data]="Biogenicsngx" [ProjectData]="CAPSdata" [editCost]="costEdit" [DateMandatory]="carbonUnitData || wwUnitData"></app-biogenics-table>
         <br><br>
-        <form class="p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
+        <form *ngIf="editableEnv && editable" class="p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
             <mat-slide-toggle class="primary slider-adjust" formControlName="NoCarbonImpact">
                 No Carbon Impact</mat-slide-toggle>
         </form>
@@ -120,19 +120,19 @@
     <div *ngIf="!showDefault && callLocation=='Normal'" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-transportation-table [Editable]="editableEnv && editable"></app-transportation-table>
+            <app-transportation-table [Editable]="editableEnv && editable" [data]="Transportationngx" [ProjectData]="CAPSdata" [GDLList]="gdlList" [editCost]="costEdit"></app-transportation-table>
         </div>
     </div>
     <div *ngIf="!showDefault && callLocation=='Normal'" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-warehousing-table [Editable]="editableEnv && editable"></app-warehousing-table>
+            <app-warehousing-table [Editable]="editableEnv && editable" [data]="Warehousingngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-warehousing-table>
         </div>
     </div>
     <div *ngIf="!showDefault && callLocation=='Normal'" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-shipping-table [Editable]="editableEnv && editable"></app-shipping-table>
+            <app-shipping-table [Editable]="editableEnv && editable" [data]="Shippingngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-shipping-table>
         </div>
     </div>
 </div>
