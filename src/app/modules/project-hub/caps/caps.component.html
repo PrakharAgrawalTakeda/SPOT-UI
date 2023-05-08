@@ -13,7 +13,7 @@
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
                     </div>
-                    <div *ngIf="callLocation != 'Normal'">
+                    <div *ngIf="editableEnv && editable && callLocation != 'Normal'">
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="openCAPS()">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp;Edit Details
                         </button>
@@ -105,7 +105,7 @@
         <br><br>
         <app-biogenics-table [Editable]="editableEnv && editable" [data]="Biogenicsngx" [ProjectData]="CAPSdata" [editCost]="costEdit" [DateMandatory]="carbonUnitData || wwUnitData"></app-biogenics-table>
         <br><br>
-        <form class="p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
+        <form *ngIf="editableEnv && editable" class="p-6 pb-3 pt-0" [formGroup]="NoCarbonForm">
             <mat-slide-toggle class="primary slider-adjust" formControlName="NoCarbonImpact">
                 No Carbon Impact</mat-slide-toggle>
         </form>
