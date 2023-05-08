@@ -160,6 +160,7 @@ import { BudgetPerformanceEditComponent } from './close-out/close-out-budget-per
 import { WaterWasteBulkEditComponent } from './common/water-waste-table/water-waste-bulk-edit/water-waste-bulk-edit.component';
 import { WaterWasteSingleEditComponent } from './common/water-waste-table/water-waste-single-edit/water-waste-single-edit.component';
 import {MyPreferenceModule} from "../my-preference/my-preference.module";
+import { TransportationSingleEditComponent } from './common/transportation-table/transportation-single-edit/transportation-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -530,7 +531,8 @@ export const projectRoutes: Route[] = [
     OperationalBenefitsBulkEditComponent,
     BudgetPerformanceEditComponent,
     WaterWasteBulkEditComponent,
-    WaterWasteSingleEditComponent
+    WaterWasteSingleEditComponent,
+    TransportationSingleEditComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),

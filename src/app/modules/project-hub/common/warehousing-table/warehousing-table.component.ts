@@ -43,6 +43,7 @@ export class WarehousingTableComponent {
         }
         else {
           this.Warehousingngx = this.data
+          console.log(this.Warehousingngx)
         }
         this.warehousingBulkEditData.push(this.Warehousingngx)
         this.warehousingBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
@@ -55,7 +56,7 @@ export class WarehousingTableComponent {
     return id && id.lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
   }
 
-  deleteWarehousing(id: string) {
+  deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Remove Warehousing?",
       "message": "Are you sure you want to remove this record permanently? ",

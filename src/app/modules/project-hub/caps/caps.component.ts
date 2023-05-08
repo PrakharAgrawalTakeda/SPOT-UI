@@ -49,6 +49,7 @@ export class CapsComponent implements OnInit {
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
   })
+  gdlList: any;
   constructor(private router: Router, public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
@@ -267,13 +268,16 @@ export class CapsComponent implements OnInit {
     else{
 
       //Transportation, Warehousing, Shipping API call
+      this.gdlList = res.gldDropDownList
       console.log("TRANSPORTATION", res.transportationData)
       var transportationData = res.transportationData
       var Transportationngx = []
-      if (transportationData != null) {
+      if (transportationData != null && this.gdlList != null) {
         for (var i = 0; i < transportationData.length; i++) {
           var data = []
+          data = this.gdlList.filter(x => x.environmentalSourceId == transportationData[i].environmentalSourceId)
           var transportationObject = {
+            ...data[0],
             ...transportationData[i]
           }
           console.log(transportationObject)
@@ -281,24 +285,30 @@ export class CapsComponent implements OnInit {
         }
         this.Transportationngx = Transportationngx
       }
+      console.log("WAREHOUSING", res.warehouseData)
       var warehousingData = res.warehouseData
       var Warehousingngx = []
-      if (warehousingData != null) {
+      if (warehousingData != null && this.gdlList != null) {
         for (var i = 0; i < warehousingData.length; i++) {
           var data = []
+          data = this.gdlList.filter(x => x.environmentalSourceId == warehousingData[i].environmentalSourceId)
           var warehouseObject = {
+            ...data[0],
             ...warehousingData[i]
           }
           Warehousingngx.push(warehouseObject)
         }
         this.Warehousingngx = Warehousingngx
       }
+      console.log("SHIPPING", res.shippingData)
       var shippingData = res.shippingData
       var Shippingngx = []
-      if (shippingData != null) {
+      if (shippingData != null && this.gdlList != null) {
         for (var i = 0; i < shippingData.length; i++) {
           var data = []
+          data = this.gdlList.filter(x => x.environmentalSourceId == shippingData[i].environmentalSourceId)
           var shippingObject = {
+            ...data[0],
             ...shippingData[i]
           }
           Shippingngx.push(shippingObject)

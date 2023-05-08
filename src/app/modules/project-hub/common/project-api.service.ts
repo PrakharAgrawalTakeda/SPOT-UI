@@ -768,6 +768,13 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async addDistribution(body) {
+    var link = GlobalVariables.apiurl + "CAPS/Distribution"
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   async addBiogenics(body) {
     var link = GlobalVariables.apiurl + "CAPS/Biogenics"
     const abc$ = this.http.post(link, body)

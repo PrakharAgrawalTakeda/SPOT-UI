@@ -43,6 +43,7 @@ export class ShippingTableComponent {
         }
         else {
           this.Shippingngx = this.data
+          console.log(this.Shippingngx)
         }
         this.shippingBulkEditData.push(this.Shippingngx)
         this.shippingBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
@@ -51,7 +52,7 @@ export class ShippingTableComponent {
     })
   }
 
-  deleteShipping(id: string) {
+  deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Remove Shipping?",
       "message": "Are you sure you want to remove this record permanently? ",

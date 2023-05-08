@@ -44,8 +44,10 @@ export class TransportationTableComponent {
         }
         else {
           this.Transportationngx = this.data
+          console.log(this.Transportationngx)
         }
         this.transportationBulkEditData.push(this.Transportationngx)
+        this.transportationBulkEditData.push(res.gldDropDownList)
         this.transportationBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
         this.viewContent = true
       })
@@ -56,7 +58,7 @@ export class TransportationTableComponent {
     return id && id.lookUpId != '' ? this.lookupdata.find(x => x.lookUpId == id).lookUpName : ''
   }
 
-  deleteTransportation(id: string) {
+  deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Remove Transportation?",
       "message": "Are you sure you want to remove this record permanently? ",

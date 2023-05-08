@@ -25,47 +25,47 @@
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
             class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
             [rows]="Transportationngx" #transportationTable>
-            <ngx-datatable-column name="Mode" prop="Mode" [flexGrow]="0.8">
+            <ngx-datatable-column name="Mode" prop="transportationMode" [flexGrow]="0.8">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Type" prop="Type" [flexGrow]="1">
+            <ngx-datatable-column name="Type" prop="transportationType" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Fuel" prop="Fuel" [flexGrow]="0.8">
+            <ngx-datatable-column name="Fuel" prop="fuelType" [flexGrow]="0.8">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="CO2 Intensity (Factor Value)" prop="co2Intensity" [flexGrow]="1">
+            <ngx-datatable-column name="CO2 Intensity (Factor Value)" prop="co2intensityFactorValue" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="UoM" prop="standardUoM" [flexGrow]="0.5">
+            <ngx-datatable-column name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Distance (km)" prop="ShipmentDistance" [flexGrow]="1.1">
+            <ngx-datatable-column name="Shipment Distance (km)" prop="shipmentDistance" [flexGrow]="1.1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Weight (kg)" prop="ShipmentWeight" [flexGrow]="1.1">
+            <ngx-datatable-column name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="1.1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Frequency" prop="ShipmentFrequency" [flexGrow]="1">
+            <ngx-datatable-column name="Shipment Frequency" prop="shipmentFrequency" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Basis of Estimate" prop="BasisOfEstimate" [flexGrow]="1">
+            <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
@@ -77,7 +77,7 @@
 
                     <div class="flex items-center justify-start gap-6">
                         <a href="javascript:void(0)" title="Delete Single" *ngIf="Editable"
-                            (click)="deleteTransportation(row.transportationDataId)">
+                            (click)="deleteDistribution(row.emenvironmentId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                     </div>
