@@ -75,7 +75,7 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="ifHappens" [showLabel]="false" [maxLength]=1000></spot-textarea>
+                            <spot-textarea class=" px-1" formControlName="ifHappens" [showLabel]="false" [maxLength]=1000></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
