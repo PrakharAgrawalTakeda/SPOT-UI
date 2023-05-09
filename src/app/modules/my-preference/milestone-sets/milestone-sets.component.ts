@@ -37,8 +37,8 @@ export class MilestoneSetsComponent {
 
     deleteMilestoneSet(id: string) {
         var comfirmConfig: FuseConfirmationConfig = {
-            "title": "Remove Key Assumption?",
-            "message": "Are you sure you want to remove this record permanently? ",
+            "title": "Remove Standard Milestone Set?",
+            "message": "Are you sure you want to delete the Standard Milestone Set permanently?",
             "icon": {
                 "show": true,
                 "name": "heroicons_outline:exclamation",
