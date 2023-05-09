@@ -98,6 +98,7 @@ export class CarbonBulkEditComponent {
           emunit: new FormControl(i.emunit),
           emimpactTonsCo2year: new FormControl(i.emimpactTonsCo2year),
           embasisOfEstimate: new FormControl(i.embasisOfEstimate),
+          localInputUoM: new FormControl(i.localInputUoM),
           unitCost: new FormControl(i.unitCost)
         }))
       }
@@ -118,7 +119,8 @@ export class CarbonBulkEditComponent {
         emunit: x.emunit,
         emimpactTonsCo2year: x.emimpactTonsCo2year,
         embasisOfEstimate: x.embasisOfEstimate,
-        unitCost: x.unitCost
+        unitCost: x.unitCost,
+        localInputUoM: x.localInputUoM
       }
     }) : this.submitObj = []
   }

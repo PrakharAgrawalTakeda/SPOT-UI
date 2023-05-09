@@ -201,16 +201,20 @@ export class CapsComponent implements OnInit {
         //carbon data
         var carbonParam = res.carbonParameters
         var carbonData = res.carbonData
+        var carbonCurrency = res.carbonPortfolioData
         var carbonngx = []
         if (carbonParam != null && carbonData != null) {
           carbonParam.forEach(function (arrayItem) {
             var data = []
             var param = []
+            var currency = []
             data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
             param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
+            currency = carbonCurrency.filter(x => x.emsourceId == arrayItem.emsourceId)
             var carbonObject = {
               ...data[0],
-              ...param[0]
+              ...param[0],
+              ...currency[0]
             }
             carbonngx.push(carbonObject)
           })
