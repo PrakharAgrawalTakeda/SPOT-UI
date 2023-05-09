@@ -52,7 +52,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="UoM" prop="standardUoM" [flexGrow]="0.25">
+                <ngx-datatable-column name="UoM" prop="localInputUoM" [flexGrow]="0.25">
                     <ng-template let-row="row" let-value="value" (click)="carbonTableEditRow(rowIndex)" ngx-datatable-cell-template>
                         {{ value}}
                     </ng-template>

@@ -25,8 +25,8 @@
                             [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
                         </spot-input>
                         <spot-input class="w-full read-only custom" formControlName="EmissionsImpact" name="EmissionsImpact"
-                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="0" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0'">
+                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="1" [inputType]="'Number'"
+                                [autoAddDecimal]="false" [placeholder]="'0.0'">
                         </spot-input>
                         <div *ngIf="callLocation != 'Business-Case'"></div>
                         <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"
@@ -126,13 +126,13 @@
     <div *ngIf="!showDefault && callLocation=='Normal'" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-warehousing-table [Editable]="editableEnv && editable" [data]="Warehousingngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-warehousing-table>
+            <app-warehousing-table [Editable]="editableEnv && editable" [data]="Warehousingngx" [GDLList]="gdlList" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-warehousing-table>
         </div>
     </div>
     <div *ngIf="!showDefault && callLocation=='Normal'" class="flex justify-between items-start gap-6 w-full">
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container
             *ngIf="viewContent">
-            <app-shipping-table [Editable]="editableEnv && editable" [data]="Shippingngx" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-shipping-table>
+            <app-shipping-table [Editable]="editableEnv && editable" [data]="Shippingngx" [GDLList]="gdlList" [ProjectData]="CAPSdata" [editCost]="costEdit"></app-shipping-table>
         </div>
     </div>
 </div>

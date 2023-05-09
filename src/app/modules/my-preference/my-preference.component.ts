@@ -57,12 +57,10 @@ export class MyPreferenceComponent implements OnInit {
     }
 
     checkMilestoneSetsAccess() {
-        this.myPreferenceApiService.checkAccess("321be4b0-6338-4ed4-b40d-b9fdf9b4c489").then((res: any) => {
-            this.milestoneAccess = true;
+        this.myPreferenceApiService.checkAccess(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
+            this.milestoneAccess = res.HasAccess == true;
         }).catch(err => {
-            if (err.status == 200) {
-                this.milestoneAccess = false;
-            }
+            this.milestoneAccess = false;
         })
     }
 

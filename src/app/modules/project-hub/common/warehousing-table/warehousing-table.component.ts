@@ -46,6 +46,7 @@ export class WarehousingTableComponent {
           console.log(this.Warehousingngx)
         }
         this.warehousingBulkEditData.push(this.Warehousingngx)
+        this.warehousingBulkEditData.push(res.gldDropDownList)
         this.warehousingBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
         this.viewContent = true
       })

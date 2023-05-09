@@ -10,22 +10,39 @@
     style="overflow-y: scroll; height: 95vh;">
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
         <spot-select formControlName="transportationMode" name="transportationMode" [label]="'Mode'"
-            [placeholder]="'Transportation Mode'" [dropDownArrayType]="'string'"
-            [dropDownArray]="GetUniqueTransportationModes()" [showNoneOption]="false">
+            [placeholder]="'Transportation Mode'" [dropDownArrayType]="'string'" [dropDownArray]="modeDropDownValues"
+            [showNoneOption]="false">
         </spot-select>
 
         <spot-select formControlName="transportationType" name="transportationType" [label]="'Type'"
-            [placeholder]="'Transportation Type'" [dropDownArrayType]="'string'"
-            [dropDownArray]="GetUniqueTransportationTypes()" [showNoneOption]="false">
+            [placeholder]="'Transportation Type'" [dropDownArrayType]="'string'" [dropDownArray]="TransportationForm.controls.transportationMode.value == '' ? [] :
+  TransportationForm.controls.transportationMode.value == 'Road freight' ? roadTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Air freight' ? airTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Sea freight' ? seaTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Train' ? trainTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Courier' ? courierTypeDropDownValues :
+  parcelTypeDropDownValues" [showNoneOption]="false">
         </spot-select>
 
         <spot-select formControlName="fuelType" name="fuelType" [label]="'Fuel'" [placeholder]="'Fuel'"
-            [dropDownArrayType]="'string'" [dropDownArray]="GetUniqueFuel()" [showNoneOption]="false">
+            [dropDownArrayType]="'string'" [dropDownArray]="TransportationForm.controls.transportationMode.value == '' ? [] :
+            TransportationForm.controls.transportationMode.value == 'Road freight' && (TransportationForm.controls.transportationType.value == 'LTL / RDC - Reefer' || TransportationForm.controls.transportationType.value == 'Partial Load Reefer (Truck load fill rate <60%)'
+            || TransportationForm.controls.transportationType.value == 'Standard - Reefer (if truck load fill rate > 60%)' || TransportationForm.controls.transportationType.value == 'Van - Ambiant' || TransportationForm.controls.transportationType.value == 'Van - Reefer') ? roadFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Road freight' && (TransportationForm.controls.transportationType.value == 'Ambient (truck load fill rate > 60%)' || TransportationForm.controls.transportationType.value == 'LTL / RDC - Ambient'
+            || TransportationForm.controls.transportationType.value == 'Partial Load Ambiant (Truck load fill rate <60%)') ? roadFuelDropDownValues2 :
+            TransportationForm.controls.transportationMode.value == 'Air freight' ? airFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Sea freight' && (TransportationForm.controls.transportationType.value == 'Standard 20 Ft - Reefer' || TransportationForm.controls.transportationType.value == 'Standard 40 Ft - Reefer') ? seaFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Sea freight' && (TransportationForm.controls.transportationType.value == 'Standard 20 Ft - Ambiant' || TransportationForm.controls.transportationType.value == 'Standard 40 Ft - Ambiant') ? seaFuelDropDownValues2 :
+            TransportationForm.controls.transportationMode.value == 'Train' ? trainFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Courier' ? courierFuelDropDownValues :
+            parcelFuelDropDownValues" [showNoneOption]="false">
         </spot-select>
 
-        <spot-input class="w-full" formControlName="co2intensityFactorValue" name="co2intensityFactorValue" [label]="'CO2 Intensity (Factor Value)'">
+        <spot-input class="w-full" formControlName="co2intensityFactorValue" name="co2intensityFactorValue"
+            [label]="'CO2 Intensity (Factor Value)'">
         </spot-input>
-        <spot-input class="w-full" formControlName="co2intensityFactorMeasure" name="co2intensityFactorMeasure" [label]="'UoM'">
+        <spot-input class="w-full" formControlName="co2intensityFactorMeasure" name="co2intensityFactorMeasure"
+            [label]="'UoM'">
         </spot-input>
 
         <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"

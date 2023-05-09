@@ -154,6 +154,12 @@ export class OperationalPerformanceEditComponent implements OnInit {
                 this.projecthubservice.successSave.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
+        }else if(this.mode == 'Project-Charter'){
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            })
         }else{
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.successSave.next(true)
