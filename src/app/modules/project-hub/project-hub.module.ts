@@ -161,6 +161,8 @@ import { WaterWasteBulkEditComponent } from './common/water-waste-table/water-wa
 import { WaterWasteSingleEditComponent } from './common/water-waste-table/water-waste-single-edit/water-waste-single-edit.component';
 import {MyPreferenceModule} from "../my-preference/my-preference.module";
 import { TransportationSingleEditComponent } from './common/transportation-table/transportation-single-edit/transportation-single-edit.component';
+import { WarehousingSingleEditComponent } from './common/warehousing-table/warehousing-single-edit/warehousing-single-edit.component';
+import { ShippingSingleEditComponent } from './common/shipping-table/shipping-single-edit/shipping-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -532,7 +534,9 @@ export const projectRoutes: Route[] = [
     BudgetPerformanceEditComponent,
     WaterWasteBulkEditComponent,
     WaterWasteSingleEditComponent,
-    TransportationSingleEditComponent
+    TransportationSingleEditComponent,
+    WarehousingSingleEditComponent,
+    ShippingSingleEditComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),
