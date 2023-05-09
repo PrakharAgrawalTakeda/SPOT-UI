@@ -28,7 +28,9 @@
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Milestone Set" prop="milestoneSet" [flexGrow]="1">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p>{{value}}</p>
+                            <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
+                            <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p></strong>
+                            <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Template Owner" prop="templateOwnerName" [flexGrow]="1">
