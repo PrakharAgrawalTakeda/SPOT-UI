@@ -46,6 +46,7 @@ export class BiogenicsTableComponent {
         }
         else{
           this.Biogenicsngx = this.data
+          console.log(this.Biogenicsngx)
         }
         if (this.ProjectData.localCurrency == null) {
           this.unitCost = "Unit Cost ()"
