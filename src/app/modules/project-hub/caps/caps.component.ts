@@ -34,12 +34,12 @@ export class CapsComponent implements OnInit {
     WaterCost: new FormControl(''),
     WasteCost: new FormControl('')
   })
-  carbonngx: any
-  Biogenicsngx: any
+  carbonngx: any = []
+  Biogenicsngx: any = []
   Transportationngx: any
   Warehousingngx: any
   Shippingngx: any
-  WaterWastengx: any
+  WaterWastengx: any = []
   WaterWasteParam: any
   DateRequired: boolean = false
   carbonUnitData: boolean = false
