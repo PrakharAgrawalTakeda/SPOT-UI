@@ -242,7 +242,7 @@ export class RiskIssueViewEditComponent implements OnInit {
           mitigation: this.riskIssueForm.value.mitigation,
           ownerId: this.riskIssueForm.value.usersingleid,
           ownerName: this.riskIssueForm.value.usersingle,
-          functionGroupId: this.riskIssueForm.value.type,
+          functionGroupId: this.riskIssueForm.value.functionGroupID.lookUpId,
           dueDate: moment(this.riskIssueForm.value.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           closeDate: moment(this.riskIssueForm.value.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
           logDate: moment(this.riskissue.logDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),

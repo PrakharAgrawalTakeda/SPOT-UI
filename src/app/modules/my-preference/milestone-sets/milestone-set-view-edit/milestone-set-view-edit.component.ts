@@ -349,29 +349,55 @@ export class MilestoneSetViewEditComponent {
     }
 
     submitStandardMilestones() {
-        if (this.myPreferenceService.itemid != 'new') {
-            if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
-                this.myPreferenceService.isFormChanged = false
-                this.formValue()
-                this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.mainObj.milestoneTemplateId).then(res => {
-                    this.myPreferenceService.submitbutton.next(true)
-                    this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-                })
-            } else {
-                this.myPreferenceService.submitbutton.next(true)
-                this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-
+        if (!this.standardMilestonesDetailsForm.value.portfolioOwner) {
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "Please select a Portfolio Owner",
+                "message": "",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warning"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "Okay",
+                        "color": "primary"
+                    },
+                    "cancel": {
+                        "show": false,
+                        "label": "Cancel"
+                    }
+                },
+                "dismissible": true
             }
+            const alert = this.fuseAlert.open(comfirmConfig)
         }else{
-            if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
-                this.myPreferenceService.isFormChanged = false
-                this.formValue()
-                this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj).then(res => {
+            if (this.myPreferenceService.itemid != 'new') {
+                if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
+                    this.myPreferenceService.isFormChanged = false
+                    this.formValue()
+                    this.myPreferenceApiService.editStandardMilestoneSet(this.mainObj, this.mainObj.milestoneTemplateId).then(res => {
+                        this.myPreferenceService.submitbutton.next(true)
+                        this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                    })
+                } else {
                     this.myPreferenceService.submitbutton.next(true)
                     this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-                });
+
+                }
+            }else{
+                if (JSON.stringify(this.standardMilestonesTableDataDb) != JSON.stringify(this.standardMilestonesTableDataSubmit)) {
+                    this.myPreferenceService.isFormChanged = false
+                    this.formValue()
+                    this.myPreferenceApiService.addStandardMilestoneSet(this.mainObj).then(res => {
+                        this.myPreferenceService.submitbutton.next(true)
+                        this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+                    });
+                }
             }
         }
+
     }
 
     getPortfolioOwnerById(portfolioId: string): any {
