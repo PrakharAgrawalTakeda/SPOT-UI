@@ -49,14 +49,14 @@ export class TransportationSingleEditComponent {
     affectedContainers: new FormControl(),
     embasisOfEstimate: new FormControl()
   })
-  roadFuelDropDownValues= []
-  roadFuelDropDownValues2= []
-  airFuelDropDownValues= []
-  courierFuelDropDownValues= []
-  parcelFuelDropDownValues= []
-  seaFuelDropDownValues= []
-  seaFuelDropDownValues2= []
-  trainFuelDropDownValues= []
+  roadFuelDropDownValues = []
+  roadFuelDropDownValues2 = []
+  airFuelDropDownValues = []
+  courierFuelDropDownValues = []
+  parcelFuelDropDownValues = []
+  seaFuelDropDownValues = []
+  seaFuelDropDownValues2 = []
+  trainFuelDropDownValues = []
 
   constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { }
 
@@ -79,13 +79,17 @@ export class TransportationSingleEditComponent {
       this.roadTypeDropDownValues.push(roadFreight[j].transportationType)
     }
     this.roadTypeDropDownValues.sort()
-     var airFreight = this.projecthubservice.all[1].filter(x => x.transportationMode == "Air freight")
-     var uniqueFuelTypes3 = new Set()
+    var airFreight = this.projecthubservice.all[1].filter(x => x.transportationMode == "Air freight")
+    console.log(airFreight)
+    var uniqueAirTypes = new Set()
+    var uniqueFuelTypes3 = new Set()
     for (var j = 0; j < airFreight.length; j++) {
       this.airTypeDropDownValues.push(airFreight[j].transportationType)
+      uniqueAirTypes.add(airFreight[j].transportationType)
       uniqueFuelTypes3.add(airFreight[j].fuelType)
     }
     this.airFuelDropDownValues = Array.from(uniqueFuelTypes3)
+    this.airTypeDropDownValues = Array.from(uniqueAirTypes)
     this.airTypeDropDownValues.sort()
     this.airFuelDropDownValues.sort()
     var seaFreight = this.projecthubservice.all[1].filter(x => x.transportationMode == "Sea freight")
@@ -122,26 +126,26 @@ export class TransportationSingleEditComponent {
     this.courierFuelDropDownValues.sort()
 
     var roadFuel = this.projecthubservice.all[1].filter(x => x.transportationMode == "Road freight" && (x.transportationType == "Ambient (truck load fill rate > 60%)" || x.transportationType == "LTL / RDC - Ambient"
-     || x.transportationType == "Partial Load Ambiant (Truck load fill rate <60%)"))
-     var uniqueFuelTypes5 = new Set()
+      || x.transportationType == "Partial Load Ambiant (Truck load fill rate <60%)"))
+    var uniqueFuelTypes5 = new Set()
     for (var j = 0; j < roadFuel.length; j++) {
       uniqueFuelTypes5.add(roadFuel[j].fuelType)
     }
     this.roadFuelDropDownValues = Array.from(uniqueFuelTypes5)
     this.roadFuelDropDownValues.sort()
     var roadFuel2 = this.projecthubservice.all[1].filter(x => x.transportationMode == "Road freight" && (x.transportationType == "LTL / RDC - Reefer" || x.transportationType == "Partial Load Reefer (Truck load fill rate <60%)"
-    || x.transportationType == "Standard - Reefer (if truck load fill rate > 60%)" || x.transportationType == "Van - Ambiant" || x.transportationType == "Van - Reefer" ))
+      || x.transportationType == "Standard - Reefer (if truck load fill rate > 60%)" || x.transportationType == "Van - Ambiant" || x.transportationType == "Van - Reefer"))
     var uniqueFuelTypes6 = new Set()
-   for (var j = 0; j < roadFuel2.length; j++) {
-    uniqueFuelTypes6.add(roadFuel2[j].fuelType)
-   }
-   this.roadFuelDropDownValues2 = Array.from(uniqueFuelTypes6)
-   this.roadFuelDropDownValues2.sort()
+    for (var j = 0; j < roadFuel2.length; j++) {
+      uniqueFuelTypes6.add(roadFuel2[j].fuelType)
+    }
+    this.roadFuelDropDownValues2 = Array.from(uniqueFuelTypes6)
+    this.roadFuelDropDownValues2.sort()
 
-   var seaFuel = this.projecthubservice.all[1].filter(x => x.transportationMode == "Sea freight" && (x.transportationType == "Standard 20 Ft - Reefer" || x.transportationType == "Standard 40 Ft - Reefer"))
-   var uniqueFuelTypes7 = new Set() 
-   for (var j = 0; j < seaFuel.length; j++) {
-    uniqueFuelTypes7.add(seaFuel[j].fuelType)
+    var seaFuel = this.projecthubservice.all[1].filter(x => x.transportationMode == "Sea freight" && (x.transportationType == "Standard 20 Ft - Reefer" || x.transportationType == "Standard 40 Ft - Reefer"))
+    var uniqueFuelTypes7 = new Set()
+    for (var j = 0; j < seaFuel.length; j++) {
+      uniqueFuelTypes7.add(seaFuel[j].fuelType)
     }
     this.seaFuelDropDownValues = Array.from(uniqueFuelTypes7)
     this.seaFuelDropDownValues.sort()
@@ -158,7 +162,7 @@ export class TransportationSingleEditComponent {
       emenvironmentId: "",
       environmentalSourceTypeId: "1e123779-0e1e-4994-bec3-95924aa0e7e6",
       projectId: this.projecthubservice.projectid,
-      environmentalSourceId: "",
+      environmentalSourceId: null,
       transportationMode: "",
       transportationType: "",
       fuelType: "",
@@ -179,134 +183,139 @@ export class TransportationSingleEditComponent {
     })
   }
 
-  GetUniqueTransportationModes() {
-    const uniqueModes = new Set();
-    if (this.dropdownList) {
-      this.dropdownList
-        .filter(x => x.environmentalSourceTypeId === "1e123779-0e1e-4994-bec3-95924aa0e7e6")
-        .forEach(x => uniqueModes.add(x.transportationMode));
-    }
-    return Array.from(uniqueModes);
-  }
+  // GetUniqueTransportationModes() {
+  //   const uniqueModes = new Set();
+  //   if (this.dropdownList) {
+  //     this.dropdownList
+  //       .filter(x => x.environmentalSourceTypeId === "1e123779-0e1e-4994-bec3-95924aa0e7e6")
+  //       .forEach(x => uniqueModes.add(x.transportationMode));
+  //   }
+  //   return Array.from(uniqueModes);
+  // }
 
-  GetUniqueTransportationTypes() {
-    const uniqueTypes = new Set();
-    if (this.dropdownList) {
-      this.dropdownList
-        .filter(x => x.environmentalSourceTypeId === "1e123779-0e1e-4994-bec3-95924aa0e7e6")
-        .forEach(x => uniqueTypes.add(x.transportationType));
-    }
-    return Array.from(uniqueTypes);
-  }
+  // GetUniqueTransportationTypes() {
+  //   const uniqueTypes = new Set();
+  //   if (this.dropdownList) {
+  //     this.dropdownList
+  //       .filter(x => x.environmentalSourceTypeId === "1e123779-0e1e-4994-bec3-95924aa0e7e6")
+  //       .forEach(x => uniqueTypes.add(x.transportationType));
+  //   }
+  //   return Array.from(uniqueTypes);
+  // }
 
-  GetUniqueFuel() {
-    const uniqueFuel = new Set();
-    if (this.dropdownList) {
-      this.dropdownList
-        .filter(x => x.environmentalSourceTypeId === "1e123779-0e1e-4994-bec3-95924aa0e7e6")
-        .forEach(x => uniqueFuel.add(x.fuelType));
-    }
-    return Array.from(uniqueFuel);
-  }
+  // GetUniqueFuel() {
+  //   const uniqueFuel = new Set();
+  //   if (this.dropdownList) {
+  //     this.dropdownList
+  //       .filter(x => x.environmentalSourceTypeId === "1e123779-0e1e-4994-bec3-95924aa0e7e6")
+  //       .forEach(x => uniqueFuel.add(x.fuelType));
+  //   }
+  //   return Array.from(uniqueFuel);
+  // }
 
 
 
   submitTransportation() {
-       this.projecthubservice.isFormChanged = false
-      var formValue = this.TransportationForm.getRawValue()
-       formValue.shipmentDistance = isNaN(formValue.shipmentDistance) ? null : formValue.shipmentDistance
-       formValue.shipmentFrequency = isNaN(formValue.shipmentFrequency) ? null : formValue.shipmentFrequency
-       formValue.shipmentWeight = isNaN(formValue.shipmentWeight) ? null : formValue.shipmentWeight
-       if (formValue.transportationMode == "") {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
-          "message": "",
-          "icon": {
+    this.projecthubservice.isFormChanged = false
+    var formValue = this.TransportationForm.getRawValue()
+    formValue.shipmentDistance = isNaN(formValue.shipmentDistance) ? null : formValue.shipmentDistance
+    formValue.shipmentFrequency = isNaN(formValue.shipmentFrequency) ? null : formValue.shipmentFrequency
+    formValue.shipmentWeight = isNaN(formValue.shipmentWeight) ? null : formValue.shipmentWeight
+    if (formValue.transportationMode == "") {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
             "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
+            "label": "Okay",
+            "color": "primary"
           },
-          "actions": {
-            "confirm": {
-              "show": true,
-              "label": "Okay",
-              "color": "primary"
-            },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
-        }
-        const alert = this.fuseAlert.open(comfirmConfig)
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
       }
-      else if (formValue.transportationType == "") {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
-          "message": "",
-          "icon": {
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else if (formValue.transportationType == "") {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
             "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
+            "label": "Okay",
+            "color": "primary"
           },
-          "actions": {
-            "confirm": {
-              "show": true,
-              "label": "Okay",
-              "color": "primary"
-            },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
-        }
-        const alert = this.fuseAlert.open(comfirmConfig)
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
       }
-      else if (formValue.fuelType == "") {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
-          "message": "",
-          "icon": {
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else if (formValue.fuelType == "") {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
             "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
+            "label": "Okay",
+            "color": "primary"
           },
-          "actions": {
-            "confirm": {
-              "show": true,
-              "label": "Okay",
-              "color": "primary"
-            },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
-        }
-        const alert = this.fuseAlert.open(comfirmConfig)
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
       }
-      else {
-        var mainObj: any = {
-          emenvironmentId: '',
-  environmentalSourceTypeId: '1e123779-0e1e-4994-bec3-95924aa0e7e6',
-  projectId: this.projecthubservice.projectid,
-  environmentalSourceId: '',
-  shipmentDistance: formValue.shipmentDistance,
-  shipmentWeight: formValue.shipmentWeight,
-  shipmentFrequency: formValue.shipmentFrequency,
-  affectedLocations: null,
-  affectedContainers: null,
-  embasisOfEstimate: formValue.embasisOfEstimate
-        }
-        this.apiService.addDistribution(mainObj).then(res => {
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.successSave.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        })
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    else {
+      var environmentalSourceId = this.projecthubservice.all[1]
+        .filter(x => x.transportationMode == formValue.transportationMode && x.transportationType == formValue.transportationType && x.fuelType == formValue.fuelType)
+        .map(obj => obj.environmentalSourceId)[0].toString()
+
+      var mainObj: any = {
+        emenvironmentId: '',
+        environmentalSourceTypeId: '1e123779-0e1e-4994-bec3-95924aa0e7e6',
+        projectId: this.projecthubservice.projectid,
+        environmentalSourceId: environmentalSourceId,
+        shipmentDistance: formValue.shipmentDistance,
+        shipmentWeight: formValue.shipmentWeight,
+        shipmentFrequency: formValue.shipmentFrequency,
+        affectedLocations: null,
+        affectedContainers: null,
+        embasisOfEstimate: formValue.embasisOfEstimate
       }
+      console.log(mainObj)
+      this.apiService.addDistribution(mainObj).then(res => {
+        this.projecthubservice.submitbutton.next(true)
+        this.projecthubservice.successSave.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      })
+    }
   }
 }
