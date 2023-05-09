@@ -94,9 +94,9 @@
     </div>
 
 
-    <div class="mt-3 pl-3 h-[78vh] overflow-hidden" #target id="scheduleTableDiv">
+    <div class="mt-3 pl-3 h-[78vh] w-screen  overflow-hidden" #target id="scheduleTableDiv">
       <ngx-datatable
-        class="datatable-schedule-74 material font-medium text-sm text-default whitespace-nowrap cursor-pointer"
+        class="datatable-schedule-74 w-full material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
         [scrollbarV]="false" [rowClass]="getRowClass" >
         <ngx-datatable-column name="Status" prop="indicator" [resizeable]="false" [sortable]="false" [flexGrow]="0.3" *ngIf="mode== 'Normal'">
@@ -406,7 +406,7 @@
                       *ngIf="milestoneTableEditStack.includes(rowIndex)"
                       class="h-[45px]">
                     <mat-slide-toggle
-                        [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the pbusiness case' : null"
+                        [matTooltip]="this.milestoneForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 8 can be selected at a time in the business case' : null"
                         (change)="disabler()" class="h-full overflow-hidden"
                         formControlName="includeInBusinessCase">
                     </mat-slide-toggle>
@@ -576,7 +576,7 @@
   </div>
   <!-- <form class="w-full"> -->
     <div class="overflow-x-auto">
-      <div class="mt-3 h-[85vh] overflow-hidden">
+      <div class="mt-3 h-[85vh] w-screen overflow-hidden">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
           class="pl-3 pt-3 datatable-bl-83 material font-medium text-sm text-default whitespace-nowrap cursor-default"
           [rows]="baselineLogData" [sorts]="[{ prop: 'dueDate', dir: 'asc' }]" #baselinelogTable>
@@ -759,7 +759,7 @@
   </div>
   <div class="overflow-y-hidden">
     <!-- <div class="mt-3 h-[85vh] overflow-hidden"> -->
-    <div class="mx-4 mt-8 h-[78.5vh] overflow-y-scroll">
+    <div class="mx-4 mt-8 h-[78.5vh] w-screen overflow-y-scroll">
       <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-2 material font-medium text-sm text-default whitespace-nowrap cursor-pointer" [rows]="logdetailsObj"
         [rowClass]="getRowClass">

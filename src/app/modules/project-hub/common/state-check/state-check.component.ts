@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, SimpleChanges} from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {ActivatedRoute} from "@angular/router";
@@ -6,6 +6,7 @@ import {ProjectApiService} from "../project-api.service";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import * as moment from "moment";
 import {AuthService} from "../../../../core/auth/auth.service";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
     selector: 'app-state-check',
@@ -21,8 +22,15 @@ export class StateCheckComponent implements OnInit {
         public apiService: ProjectApiService,
         public auth: AuthService
     ) {
+        this.checkNumber.subscribe(res => {
+            if (res == 3) {
+                this.apiService.postPhaseState(this.projectHubService.all)
+                this.projectHubService.isNavChanged.next(true)
+                this.projectHubService.toggleDrawerOpen('', '', [], '')
+            }
+        })
     }
-
+    checkNumber = new BehaviorSubject<number>(0)
     id: string = "";
     rows = [];
     scheduleData: any = []
@@ -45,13 +53,15 @@ export class StateCheckComponent implements OnInit {
     showMilestoneTable:boolean = false;
     showRiskIssueTable:boolean = false;
     showAskNeedsTable:boolean = false;
-    stateBody =[];
+
     getRowClass = (row) => {
         return {
             'row-color1': row.completionDate != null,
         };
     };
+    ngOnChanges(changes: SimpleChanges) {
 
+    }
     ngOnInit(): void {
         this.getllookup()
         this.apiService.getGeneralInfoData(this.id).then((res: any) =>{
@@ -425,7 +435,7 @@ export class StateCheckComponent implements OnInit {
         }) : array
     }
 
-    async onSubmit() {
+    onSubmit() {
         var milestonePass =true;
         var riskIssuesPass =true;
         var askNeedsPass =true;
@@ -482,18 +492,20 @@ export class StateCheckComponent implements OnInit {
             this.fuseAlert.open(comfirmConfig)
         }else{
             if(this.showMilestoneTable){
-                await this.saveScheduleBulkEdit()
+                this.saveScheduleBulkEdit()
+            }else{
+                this.checkNumber.next(this.checkNumber.value+1)
             }
             if(this.showRiskIssueTable){
-                await this.submitRI();
+                this.submitRI();
+            }else{
+                this.checkNumber.next(this.checkNumber.value+1)
             }
             if(this.showAskNeedsTable){
-                await this.submitAN();
+                this.submitAN();
+            }else{
+                this.checkNumber.next(this.checkNumber.value+1)
             }
-            await delay(1000);
-            this.apiService.postPhaseState(this.projectHubService.all)
-            this.projectHubService.isNavChanged.next(true)
-            this.projectHubService.toggleDrawerOpen('', '', [], '')
         }
 
     }
@@ -546,11 +558,11 @@ export class StateCheckComponent implements OnInit {
                 }
             }
             this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
+                this.checkNumber.next(this.checkNumber.value+1)
                 this.projectHubService.submitbutton.next(true)
                 this.projectHubService.isNavChanged.next(true)
             })
         }
-        // }
         else {
             var formValue = this.milestoneForm.getRawValue()
             if (!this.projectHubService.includeClosedItems.schedule.value) {
@@ -601,6 +613,7 @@ export class StateCheckComponent implements OnInit {
                 }
             }
             this.apiService.bulkeditSchedule(this.scheduleFormValue, this.id).then(res => {
+                this.checkNumber.next(this.checkNumber.value+1)
                 this.projectHubService.submitbutton.next(true)
                 this.projectHubService.isNavChanged.next(true)
             })
@@ -609,6 +622,7 @@ export class StateCheckComponent implements OnInit {
     submitRI() {
             this.submitPrepRiskIssues()
             this.apiService.bulkeditRiskIssue(this.dbRiskIssues, this.id).then(res => {
+                    this.checkNumber.next(this.checkNumber.value+1)
                     this.projectHubService.submitbutton.next(true)
                     this.projectHubService.successSave.next(true)
                     this.projectHubService.isNavChanged.next(true)
@@ -618,6 +632,7 @@ export class StateCheckComponent implements OnInit {
     submitAN() {
             this.submitPrepAskNeeds()
             this.apiService.bulkeditAskNeeds(this.dbAskNeeds,  this.id).then(res => {
+                this.checkNumber.next(this.checkNumber.value+1)
                     this.projectHubService.submitbutton.next(true)
                     this.projectHubService.successSave.next(true)
                     this.projectHubService.isNavChanged.next(true)

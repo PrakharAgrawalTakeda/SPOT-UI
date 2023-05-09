@@ -48,7 +48,7 @@ export class PortfolioApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-  
+
 
   async BulkEditQualityReference(projectid: string, body: any) {
     var userid = GlobalVariables.apiurl + "/QualityReference/BulkEditQualityRef" + projectid
@@ -63,7 +63,11 @@ export class PortfolioApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
-
-  
+  async getOnlyLocalCurrency(projectId) {
+      var userid = GlobalVariables.apiurl + "Budget/GetOnlyLocalCurrency/" + projectId;
+      const abc$ = this.http.get(userid)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
 
 }

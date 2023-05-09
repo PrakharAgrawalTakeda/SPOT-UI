@@ -52,7 +52,7 @@
             }
 
             input::placeholder {
-                color: black !important;
+                @apply text-hint #{'!important'}
             }
 
             textarea {
@@ -61,7 +61,7 @@
             }
 
             textarea::placeholder {
-                color: black !important;
+                @apply text-hint #{'!important'}
             }
             .mat-mdc-select .mat-mdc-select-trigger .mat-mdc-select-value {
                 color: black !important;

@@ -10,10 +10,12 @@
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueAddSingle'" [mode]="'Project-Charter'"
             [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter']"></app-risk-issue-view-edit>
         <app-risk-issue-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseRiskIssueAddSingle'" [mode]="'Business-Case'"
-            [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact','mitigation','type','owner']"></app-risk-issue-view-edit>
+            [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact','mitigation','type','function']"></app-risk-issue-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'Schedule'"></app-schedule-view-edit>
         <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseScheduleAddNew'"
             [viewElements]="['milestone','plannedFinish','functionOwner','includeInBusinessCase']"></app-schedule-view-edit>
+            <app-schedule-view-edit *ngIf="projecthubservice.itemtype == 'CharterScheduleAddNew'"
+            [viewElements]="['milestone','plannedFinish','responsiblePerson','functionOwner','includeInCharter']"></app-schedule-view-edit>
         <app-schedule-view-bulk-edit
             *ngIf="projecthubservice.itemtype == 'scheduleBulkEdit'"></app-schedule-view-bulk-edit>
         <app-schedule-view-bulk-edit *ngIf="projecthubservice.itemtype == 'scheduleBaselineEdit'"
@@ -45,12 +47,24 @@
 
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEdit'"></app-operational-performance-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'FundingSingleEdit'"
+            [mode]="'Project-Charter'"></app-funding-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'BCFundingSingleEdit'" [optionType]="'recommended-option'"></app-funding-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'BC2FundingSingleEdit'" [optionType]="'option-2'"></app-funding-edit>
+            <app-funding-edit
+            *ngIf="projecthubservice.itemtype == 'BC3FundingSingleEdit'" [optionType]="'option-3'"></app-funding-edit>
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCloseOut'"
             [mode]="'Project-Close-Out'"></app-operational-performance-edit>
         <app-operational-performance-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditCharter'"
             [mode]="'Project-Charter'"></app-operational-performance-edit>
+        <app-operational-performance-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceSingleEditProposal'"
+            [mode]="'Project-Proposal'"></app-operational-performance-edit>
         <app-data-quality-page *ngIf="projecthubservice.itemtype == 'DataQuality'"></app-data-quality-page>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEdit'"></app-operational-performance-bulk-edit>
@@ -59,15 +73,26 @@
             <app-cost-edit
             *ngIf="projecthubservice.itemtype == 'CostEdit'" [mode]="'Project-Charter'"></app-cost-edit>
             <app-funding-bulk-edit
-            *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'" [mode]="'Business-Case'"></app-funding-bulk-edit>
+            *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'" [optionType]="'recommended-option'"></app-funding-bulk-edit>
+            <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO2'"
+            [optionType]="'option-2'"></app-funding-bulk-edit>
+        <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO3'"
+            [optionType]="'option-3'"></app-funding-bulk-edit>
             <app-cost-edit
-            *ngIf="projecthubservice.itemtype == 'CostBCEdit'" [mode]="'Business-Case'"></app-cost-edit>
+            *ngIf="projecthubservice.itemtype == 'CostBCEdit'" [optionType]="'recommended-option'"></app-cost-edit>
+            <app-cost-edit
+            *ngIf="projecthubservice.itemtype == 'CostBCEdit02'" [optionType]="'option-2'"></app-cost-edit>
+            <app-cost-edit
+            *ngIf="projecthubservice.itemtype == 'CostBCEdit03'" [optionType]="'option-3'"></app-cost-edit>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCloseOut'"
             [mode]="'Project-Close-Out'"></app-operational-performance-bulk-edit>
         <app-operational-performance-bulk-edit
             *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditCharter'"
             [mode]="'Project-Charter'"></app-operational-performance-bulk-edit>
+        <app-operational-performance-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'OperationalPerformanceBulkEditProposal'"
+            [mode]="'Project-Proposal'"></app-operational-performance-bulk-edit>
         <app-primary-kpi-single-edit
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
@@ -111,12 +136,8 @@
         <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'ProjectCharterRiskIssueBulkEdit'"
             [viewElements]="['ifThisHappens','thisIsTheResult','mitigation','type','includeInCharter', 'status','isLink']" [mode]="'Project-Charter'"></app-risk-issue-view-bulk-edit>
         <app-risk-issue-view-bulk-edit *ngIf="projecthubservice.itemtype == 'BusinessCaseIssueBulkEdit'" [mode]="'Business-Case'"
-            [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact', 'mitigation','type','owner']"></app-risk-issue-view-bulk-edit>
+            [viewElements]="['ifThisHappens','probability','thisIsTheResult','impact', 'mitigation','type','function']"></app-risk-issue-view-bulk-edit>
         <app-risk-issues-link *ngIf="projecthubservice.itemtype == 'LinkRiskIssues'"></app-risk-issues-link>
-        <app-key-assumption-view-bulk-edit
-            *ngIf="projecthubservice.itemtype == 'KeyAssumptionBulkEdit'"></app-key-assumption-view-bulk-edit>
-        <app-key-assumption-view-edit
-            *ngIf="projecthubservice.itemtype == 'KeyAssumption'"></app-key-assumption-view-edit>
         <app-key-assumptions-add-single
             *ngIf="projecthubservice.itemtype == 'KeyAsssumptionsAddSingle'"></app-key-assumptions-add-single>
         <app-key-assumptions-add-single *ngIf="projecthubservice.itemtype == 'BusinessCaseKeyAssumptionAddSingle'" [mode]="'Business-Case'"
@@ -155,6 +176,20 @@
             *ngIf="projecthubservice.itemtype == 'CarbonBulkEdit'"></app-carbon-bulk-edit>
         <app-caps-single-edit *ngIf="projecthubservice.itemtype == 'CAPS'"></app-caps-single-edit>
         <app-project-requirements-edit *ngIf="projecthubservice.itemtype == 'ProjectRequirementsEditPage'"></app-project-requirements-edit>
+        <app-biogenics-single-edit *ngIf="projecthubservice.itemtype == 'BiogenicsSingleEdit'"></app-biogenics-single-edit>
+        <app-biogenics-bulk-edit *ngIf="projecthubservice.itemtype == 'BiogenicsBulkEdit'"></app-biogenics-bulk-edit>
+        <app-transportation-single-edit *ngIf="projecthubservice.itemtype == 'TransportationSingleEdit'"></app-transportation-single-edit>
+        <app-transportation-bulk-edit *ngIf="projecthubservice.itemtype == 'TransportationBulkEdit'"></app-transportation-bulk-edit>
+        <app-warehousing-single-edit *ngIf="projecthubservice.itemtype == 'WarehousingSingleEdit'"></app-warehousing-single-edit>
+        <app-warehousing-bulk-edit *ngIf="projecthubservice.itemtype == 'WarehousingBulkEdit'"></app-warehousing-bulk-edit>
+        <app-shipping-single-edit *ngIf="projecthubservice.itemtype == 'ShippingSingleEdit'"></app-shipping-single-edit>
+        <app-shipping-bulk-edit *ngIf="projecthubservice.itemtype == 'ShippingBulkEdit'"></app-shipping-bulk-edit>
+        <app-benefits-page-edit *ngIf="projecthubservice.itemtype == 'BenefitsPageEdit'"></app-benefits-page-edit>
+        <app-budget-performance-edit *ngIf="projecthubservice.itemtype == 'BudgetPerformanceEdit'"></app-budget-performance-edit >
+        <app-operational-benefits-add-new *ngIf="projecthubservice.itemtype == 'OperationalBenefitsAddNew'"></app-operational-benefits-add-new>
+        <app-operational-benefits-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalBenefitsBulkEdit'"></app-operational-benefits-bulk-edit>
+        <app-water-waste-bulk-edit *ngIf="projecthubservice.itemtype == 'WaterWasteBulkEdit'"></app-water-waste-bulk-edit>
+        <app-water-waste-single-edit *ngIf="projecthubservice.itemtype == 'WaterWasteSingleEdit'"></app-water-waste-single-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

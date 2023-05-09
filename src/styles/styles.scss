@@ -44,11 +44,22 @@ $square-size: 10px;
     transform: rotate(-180deg);
     left:10px;
 }
+.total-capex-header-class {
+    text-align: end;
+}
+.align-header-middle-class {
+    text-align: center;
+}
 .current-project{
     background-color: var(--fuse-primary-200);
 }
 .first-column-datatable{
     margin-left: 10px;
+}
+.align-right{
+    .datatable-body-cell-label {
+        float: right !important;
+    }
 }
 .graph-cell-datatable{
     overflow-x: visible !important;
@@ -68,5 +79,4 @@ $square-size: 10px;
         width: 100% !important;
     }
 }
-
 

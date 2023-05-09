@@ -1,0 +1,48 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Biogenic</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="w-full overflow-hidden" [formGroup]="BiogenicsForm" (ngSubmit)="submitBiogenics()"
+    style="overflow-y: scroll; height: 95vh;">
+    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+        <spot-select formControlName="biogenicMasterUniqueId" name="biogenicMasterUniqueId" [label]="'Emission Source'" [placeholder]="'Emission Source'"
+            [dropDownArrayType]="'object'" [dropDownArray]="GetSource()" [idPointer]="'lookUpId'"
+            [valuePointer]="'lookUpName'" [showNoneOption]="false">
+        </spot-select>
+
+        <spot-input class="w-full" formControlName="biogenicEmissionFactor" name="biogenicEmissionFactor" [label]="'Emission Factor (kg CO2/kWh)'" [decimalCount]="3"
+            [inputType]="'Number'" [autoAddDecimal]="true" [placeholder]="'Emission Factor (kg CO2/kWh)'" [callLocation]="'View'">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="biogenicUnit" name="biogenicUnit"
+            [label]="'Units'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [allowNegativeValues] = true [callLocation]="'View'">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="standardUoM" name="standardUoM" [placeholder]="'UoM'" [label]="'UoM'">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="biogenicUnitCost" name="biogenicUnitCost" [label]=unitCost [decimalCount]="4"
+            [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true"
+                [hint]="'Input the cost of each energy unit using up to 4 decimal places, positive values only.'" [callLocation]="'View'">
+        </spot-input>
+
+        <spot-textarea formControlName="biogenicBasisOfEstimate" name="biogenicBasisOfEstimate" [label]="'Basis of Estimate'"
+            [placeholder]="'Basis of Estimate'">
+        </spot-textarea>
+
+    </div>
+    <div class="flex items-start justify-between form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
+</form>

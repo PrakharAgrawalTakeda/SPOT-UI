@@ -3,30 +3,32 @@
         <!-- Enter Content here-->
         <form class="w-full" [formGroup]="projectRequirementsForm">
             <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
-                <div class="flex justify-between items-center pb-6">
-                    <div class="font-medium tracking-tight leading-6 truncate ">
-                        <h3 class="text-xl text-primary">Project requirements</h3>
-                    </div>
-                    <div>
-                        <button class="ml-4 text-primary bg-gray-200"
-                                *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
-                                [color]="'primary-200'"
-                                (click)="projectHubService.toggleDrawerOpen('ProjectRequirementsEditPage', '', '' , id)">
-                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-                        </button>
+                <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+                    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Project Requirements</div>
+
+                    <div class="text-primary">
+                        <div class="flex items-start justify-between">
+                            <div style="padding-right: 5px;">
+                                <button class="ml-4 text-primary bg-gray-200"
+                                        *ngIf="projectHubService.roleControllerControl.generalInfo.basicFields" mat-flat-button
+                                        [color]="'primary-200'"
+                                        (click)="projectHubService.toggleDrawerOpen('ProjectRequirementsEditPage', '', '' , id)">
+                                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
                     <spot-input-date class="w-full read-only text-default" formControlName="proposedExecutionStart"
                                  [label]="'Proposed Execution Start'">
                     </spot-input-date>
                     <spot-input-date class="w-full read-only text-default" formControlName="proposedExecutionEnd"
                                 [label]="'Proposed Execution End'">
                     </spot-input-date>
-                    <spot-input formControlName="estimatedFTE" [label]="'# Functions Required'"
+                    <spot-input formControlName="functionsRequiredId" [label]="'# Functions Required'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <spot-input formControlName="estimatedFTE"  [label]="'Estimated FTEs'"
+                    <spot-input formControlName="estimatedFTE"  [label]="'Estimated FTEs'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'"
                                 class="w-full read-only" >
                     </spot-input>
                     <spot-input formControlName="shutdownRequired"  [label]="'Shutdown Required'"
@@ -35,23 +37,21 @@
                     <spot-input formControlName="regulatoryApprovalNeeded"  [label]="'Regulatory Approval Needed'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <spot-input formControlName="totalCapExBaseCase"  [label]="'CAPEX (Total Estimate USD)'"
-                                class="w-full read-only" >
+                    <spot-input formControlName="totalCapExBaseCase"  [label]="'CAPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'"
+                                class="w-full read-only" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'" >
                     </spot-input>
-                    <spot-input formControlName="totalNonFTEOpExBaseCase"  [label]="'OPEX (Total Estimate USD)'"
-                                class="w-full read-only" >
+                    <spot-input formControlName="totalNonFTEOpExBaseCase"  [label]="'OPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'"
+                                class="w-full read-only"  [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'">
                     </spot-input>
                     <spot-input formControlName="planFundingRequired"  [label]="'Plan Funding Required'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <spot-input formControlName="howMuch"  [label]="'How Much (USD)'"
-                                class="w-full read-only" >
+                    <spot-input formControlName="howMuch"  [label]="'How Much (' + this.localCurrency.localCurrencyAbbreviation + ')'"
+                                class="w-full read-only" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'">
                     </spot-input>
                     <spot-input formControlName="budgetInPlan"  [label]="'Budget in Plan'"
                                 class="w-full read-only" >
                     </spot-input>
-                    <div  class="w-full"></div>
-                </div>
             </div>
         </form>
 

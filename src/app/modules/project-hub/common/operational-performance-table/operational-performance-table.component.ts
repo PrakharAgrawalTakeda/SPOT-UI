@@ -14,7 +14,7 @@ import { ProjectApiService } from '../project-api.service';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Business-Case' | 'Project-Proposal' = 'Normal'
   @Input() projectid: any;
   @Input() projectViewDetails: any;
   @Input() lookup: any
@@ -45,6 +45,10 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
       this.bulkEditType = 'OperationalPerformanceBulkEditCharter';
       this.addSingle = 'OperationalPerformanceSingleEditCharter'
     }
+    if (this.mode == 'Project-Proposal') {
+        this.bulkEditType = 'OperationalPerformanceBulkEditProposal';
+        this.addSingle = 'OperationalPerformanceSingleEditProposal'
+    }
     this.dataloader()
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -53,14 +57,35 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
   dataloader() {
     // if(this.mode != 'Normal')
     // {
-    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getprojectviewdata(this.id).then((res: any) => {
-      this.projectViewDetails = res
-    for (var i of this.projectViewDetails.overallPerformace) {
-      i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
-    }
-    this.viewContent = true
-  })
+      if(this.mode != 'Project-Proposal'){
+          this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+          this.apiService.getprojectviewdata(this.id).then((res: any) => {
+              this.projectViewDetails = res
+              for (var i of this.projectViewDetails.overallPerformace) {
+                  i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
+              }
+              this.viewContent = true
+              this.initializationComplete = true
+          })
+      }else{
+          this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id");
+          this.apiService.getprojectviewdata(this.id).then((res: any) => {
+              res.overallPerformace.map( (x, index) => {
+                  if(x.ptrbid){
+                      const array = x.ptrbid.split(',');
+                      res.overallPerformace[index].ptrbid = this.showPtrbNames(array);
+                  }
+              })
+              this.projectViewDetails = res
+              for (var i of this.projectViewDetails.overallPerformace) {
+                  i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
+              }
+              this.viewContent = true
+              this.initializationComplete = false
+              this.initializationComplete = true
+          })
+      }
+
 // }
 // else
 //   {
@@ -78,8 +103,7 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     //         this.projectViewDetails = res
     //   })
     // }
-    this.initializationComplete = false
-    this.initializationComplete = true
+
   }
   getLookUpName(lookUpId: string): string {
     return lookUpId && lookUpId != '' ? this.lookup.find(x => x.lookUpId == lookUpId).lookUpName : ''
@@ -127,10 +151,39 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
     operationalPerformanceAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
         this.apiService.deleteOperationalPerformance(id).then(res => {
-          this.projecthubservice.submitbutton.next(true)
+            if (this.mode == 'Project-Proposal') {
+                this.apiService.updateReportDates(this.id, "ProjectProposalModifiedDate").then(secondRes => {
+                    this.projecthubservice.submitbutton.next(true)
+                })
+            }else if(this.mode == 'Project-Close-Out'){
+                this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                    this.projecthubservice.submitbutton.next(true)
+                })
+            }else if(this.mode == 'Project-Charter'){
+                this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                    this.projecthubservice.submitbutton.next(true)
+                })
+            }else{
+                this.projecthubservice.submitbutton.next(true)
+            }
+
         })
       }
     })
-
+  }
+  showPtrbNames(ptrbArray): any {
+      let ptrbNames =  "";
+      if(ptrbArray != ""){
+          ptrbArray.forEach((x, index, array) =>{
+              if (index + 1 === array.length) {
+                  ptrbNames = ptrbNames + this.getLookUpName(x);
+              }else{
+                  ptrbNames = ptrbNames + this.getLookUpName(x)+ ", ";
+              }
+          })
+          return ptrbNames;
+      }else{
+          return [];
+      }
   }
 }

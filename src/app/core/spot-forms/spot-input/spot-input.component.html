@@ -3,8 +3,8 @@
         <mat-label class="items-center flex" *ngIf="showLabel">{{label}}<mat-icon class="pe" *ngIf="showHint && hintPostion == 'tooltip'" matTooltip="{{hint}}" >help</mat-icon></mat-label>
         
             <input matInput formControlName="control" [placeholder]="placeholder"
-                 (blur)="onBlur($event)" [required]=Required
-                (input)="formatInput($event)" [ngClass]="{'text-right': inputType == 'Number'}" >
+                 (blur)="onBlur($event)" [required]=Required (focus)="formatInput($event)"
+                (input)="formatInput($event)" [ngClass]="{'text-right': inputType == 'Number' && callLocation == 'Edit'}" >
         
             
         <mat-hint *ngIf="showHint && hintPostion == 'mat-hint'">{{hint}}</mat-hint>

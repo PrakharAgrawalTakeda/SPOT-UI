@@ -12,7 +12,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./operational-performance-bulk-edit.component.scss']
 })
 export class OperationalPerformanceBulkEditComponent implements OnInit {
-  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' = 'Normal'
+  @Input() mode: 'Normal' | 'Project-Close-Out' | 'Project-Charter' | 'Project-Proposal' = 'Normal'
   projectViewDetails: any = {}
   opDb = []
   submitObj = []
@@ -44,6 +44,15 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
       this.projectViewDetails = res
       for (var i of this.projectViewDetails.overallPerformace) {
         i.kpiname = this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid) ? this.projecthubservice.kpiMasters.find(x => x.kpiid == i.kpiid).kpiname : ''
+        if(i.ptrbid){
+            i.ptrb = i.ptrbid.split(',');
+            i.ptrbid =i.ptrb.map(x => {
+                return  this.getLookup(x);
+            })
+        }else{
+            i.ptrb = "";
+            i.ptrbid = [];
+        }
       }
       this.projectViewDetails.overallPerformace = this.sortbyKPIName(this.projectViewDetails.overallPerformace)
       for (var i of this.projectViewDetails.overallPerformace) {
@@ -63,7 +72,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           ptrbid: new FormControl(i.ptrbid),
           benefitDescriptionJustification: new FormControl(i.benefitDescriptionJustification),
           includeinProposal: new FormControl(i.includeinProposal),
-          kpiname: new FormControl(i.kpiname)
+          kpiname: new FormControl(i.kpiname),
         }))
       }
 
@@ -152,6 +161,19 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
           }
         }
       }
+
+      if (formValue.filter(x => x.includeinProposal == true).length < 3) {
+          for (var i of this.operationalPerformanceForm.controls) {
+             i['controls']['includeinProposal'].enable()
+          }
+      }
+      else {
+          for (var i of this.operationalPerformanceForm.controls) {
+              if (i['controls']['includeinProposal'].value != true) {
+                  i['controls']['includeinProposal'].disable()
+              }
+          }
+      }
     }
   }
 
@@ -166,7 +188,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         currentState: x.currentState,
         targetPerformance: x.targetPerformance,
         includeInCharter: x.includeInCharter,
-        kpiid: Object.keys(x.kpiid).length > 0 ? x.kpiid.kpiid : '',
+        kpiid: Object.keys(x.kpiid || {}).length > 0 ? x.kpiid.kpiid : '',
         actualPerformance: x.actualPerformance,
         includeInProjectDashboard: x.includeInProjectDashboard,
         status: x.status,
@@ -238,6 +260,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         status: '',
         includeInCloseOut: '',
         ptrbid: '',
+        ptrb: '',
         benefitDescriptionJustification: '',
         includeinProposal: '',
         kpiname: ''
@@ -255,6 +278,7 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
         status: new FormControl(''),
         includeInCloseOut: new FormControl(false),
         ptrbid: new FormControl(''),
+        ptrb: new FormControl(''),
         benefitDescriptionJustification: new FormControl(''),
         includeinProposal: new FormControl(false),
         kpiname: new FormControl('')
@@ -275,18 +299,60 @@ export class OperationalPerformanceBulkEditComponent implements OnInit {
   submitOP() {
     this.changeChecker()
     if (JSON.stringify(this.submitObj) == JSON.stringify(this.opDb)) {
-      //this.projecthubservice.submitbutton.next(true)
-      //this.projecthubservice.successSave.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
+        this.submitObj.forEach((x,index) =>{
+            if(x.ptrbid){
+                this.submitObj[index].ptrbid = x.ptrbid.length > 0 ? x.ptrbid.map(x => x.lookUpId).join() : '';
+            }
+        })
       this.apiService.bulkeditKeySuccess(this.submitObj, this.projecthubservice.projectid).then(resp => {
-        this.projecthubservice.isFormChanged = false
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.successSave.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+        if (this.mode == 'Project-Proposal') {
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "ProjectProposalModifiedDate").then(secondRes => {
+                this.projecthubservice.isFormChanged = false
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+            })
+        }else if(this.mode == 'Project-Close-Out'){
+            this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                this.projecthubservice.isFormChanged = false
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+            })
+        }else{
+            this.projecthubservice.isFormChanged = false
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+        }
+
       })
     }
+  }
+  getPTRB(): any {
+      return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'f48236da-2436-4403-a054-918313159c6e')
+  }
+  showPtrbNames(ptrbArray): any {
+      let ptrbNames =  "";
+      if(ptrbArray != ""){
+          ptrbArray.forEach((x, index, array) =>{
+              if (index + 1 === array.length) {
+                  ptrbNames = ptrbNames + this.getLookUpName(x);
+              }else{
+                  ptrbNames = ptrbNames + this.getLookUpName(x)+ ", ";
+              }
+          })
+          return ptrbNames;
+      }else{
+          return [];
+      }
+
+  }
+  getLookup(lookUpId: string): any {
+      return lookUpId && lookUpId != '' ? this.projecthubservice.lookUpMaster.find(x => x.lookUpId == lookUpId) : null
   }
 
 

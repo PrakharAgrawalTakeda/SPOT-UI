@@ -75,17 +75,17 @@
         </ngx-datatable-column>
         <ngx-datatable-column name="Impact" prop="impactId" [flexGrow]="2" *ngIf="callLocation == 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{getLookUpName(value)}}</p>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Mitigation" prop="mitigation" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter' || callLocation== 'Business-Case'">
+        <ngx-datatable-column name="Details/Mitigation" prop="mitigation" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter' || callLocation== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{value}}</p>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Owner" prop="ownerName" [flexGrow]="2" *ngIf="callLocation== 'Business-Case'">
+        <ngx-datatable-column name="Functional Owner" prop="functionGroupId" [flexGrow]="2" *ngIf="callLocation== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{value}}</p>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" *ngIf="callLocation== 'Normal'">
@@ -93,7 +93,18 @@
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value | date:'dd-MMM-yyyy'}}</p>
             </ng-template>
         </ngx-datatable-column>
-
+        <ngx-datatable-column name="Include in Charter (Max 5)" prop="includeInCharter" [sortable]="false"
+                              [resizeable]="false" [flexGrow]="2" *ngIf="callLocation== 'Project-Charter'">
+            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <div class="flex items-center justify-between pl-2 overflow-hidden">
+                    <mat-icon svgIcon="heroicons_outline:x-circle"
+                              *ngIf="value == false"></mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                              *ngIf="value == true">
+                    </mat-icon>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
         <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" >
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 

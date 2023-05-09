@@ -148,7 +148,13 @@
                 [dropDownArray]="filterCriteria.products" [showHint]="true"
                 [hint]="'Any additional products which are impacted by the project execution'">
             </spot-multiselect-autocomplete>
-
+            <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
+                                            *ngIf="viewElementChecker('functionGroupID')" formControlName="functionGroupID" class="w-full"
+                                            name="functionGroupID" [label]="'Requesting Function'" [Required]="callLocation == 'CreateNew'"
+                                            [placeholder]="'Requesting Function'" [valuePointer]="'lookUpName'"
+                                            [dropDownArray]="getFunctionGroupID()" [sortByType]="'custom'"
+                                            [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
             <spot-textarea (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
                 [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('projectDescription')"
                 formControlName="projectDescription" name="projectDescription"

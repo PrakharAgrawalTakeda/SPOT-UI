@@ -135,7 +135,7 @@ import { KeyTakeawaySingleEditComponent } from './close-out/close-out-lessons-le
 import { ProjectCharterScopeSingleEditComponent } from './project-charter/project-charter-scope/project-charter-scope-single-edit/project-charter-scope-single-edit.component';
 import { CostComponent } from './common/cost/cost.component';
 import { FundingComponent } from './common/funding/funding.component';
-import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component'; 
+import { FundingEditComponent } from './common/funding/funding-edit/funding-edit.component';
 import { FundingBulkEditComponent } from './common/funding/funding-bulk-edit/funding-bulk-edit.component';
 import { LocalAttributeSingleEditComponent } from './local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
 import { CostEditComponent } from './common/cost/cost-edit/cost-edit.component';
@@ -149,6 +149,18 @@ import { ShippingTableComponent } from './common/shipping-table/shipping-table.c
 import { WarehousingTableComponent } from './common/warehousing-table/warehousing-table.component';
 import { ProjectRequirementsComponent } from './common/project-requirements/project-requirements.component';
 import { ProjectRequirementsEditComponent } from './common/project-requirements/project-requirements-edit/project-requirements-edit.component';
+import { BenefitsPageComponent } from './common/benefits-page/benefits-page.component';
+import { OperationalBenefitsTableComponent } from './common/operational-benefits-table/operational-benefits-table.component';
+import { BenefitsPageEditComponent } from './common/benefits-page/benefits-page-edit/benefits-page-edit.component';
+import { BiogenicsBulkEditComponent } from './common/biogenics-table/biogenics-bulk-edit/biogenics-bulk-edit.component';
+import { BiogenicsSingleEditComponent } from './common/biogenics-table/biogenics-single-edit/biogenics-single-edit.component';
+import { OperationalBenefitsAddNewComponent } from './common/operational-benefits-table/operational-benefits-add-new/operational-benefits-add-new.component';
+import { OperationalBenefitsBulkEditComponent } from './common/operational-benefits-table/operational-benefits-bulk-edit/operational-benefits-bulk-edit.component';
+import { BudgetPerformanceEditComponent } from './close-out/close-out-budget-performance/budget-performance-edit/budget-performance-edit.component';
+import { WaterWasteBulkEditComponent } from './common/water-waste-table/water-waste-bulk-edit/water-waste-bulk-edit.component';
+import { WaterWasteSingleEditComponent } from './common/water-waste-table/water-waste-single-edit/water-waste-single-edit.component';
+import {MyPreferenceModule} from "../my-preference/my-preference.module";
+import { TransportationSingleEditComponent } from './common/transportation-table/transportation-single-edit/transportation-single-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -358,10 +370,6 @@ export const projectRoutes: Route[] = [
               component: BusinessCaseBenefitsComponent,
             },
             {
-              path: 'caps',
-              component: BusinessCaseCapsComponent,
-            },
-            {
               path: 'risks',
               component: BusinessCaseRiskIssuesComponent,
             }
@@ -385,10 +393,6 @@ export const projectRoutes: Route[] = [
             {
               path: 'benefits',
               component: BusinessCaseBenefitsComponent,
-            },
-            {
-              path: 'caps',
-              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -517,9 +521,20 @@ export const projectRoutes: Route[] = [
     ShippingTableComponent,
     WarehousingTableComponent,
     ProjectRequirementsComponent,
-    ProjectRequirementsEditComponent
+    ProjectRequirementsEditComponent,
+    BenefitsPageComponent,
+    OperationalBenefitsTableComponent,
+    BenefitsPageEditComponent,
+    BiogenicsBulkEditComponent,
+    BiogenicsSingleEditComponent,
+    OperationalBenefitsAddNewComponent,
+    OperationalBenefitsBulkEditComponent,
+    BudgetPerformanceEditComponent,
+    WaterWasteBulkEditComponent,
+    WaterWasteSingleEditComponent,
+    TransportationSingleEditComponent
   ],
-  imports: [
+    imports: [
     RouterModule.forChild(projectRoutes),
     MatButtonModule,
     MatButtonToggleModule,
@@ -560,7 +575,7 @@ export const projectRoutes: Route[] = [
     MessagesModule,
     NotificationsModule,
     UserModule
-  ],
+    ],
   exports: [
     GeneralInfoSingleEditComponent,
     QualityRefBulkEditComponent,

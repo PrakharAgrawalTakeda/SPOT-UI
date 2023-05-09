@@ -65,6 +65,7 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
           if (this.router.url.includes('recommended-option')) {
               this.apiService.getRiskIssuesByOption(this.id,GlobalBusinessCaseOptions.OPTION_1).then((res) => {
                   this.riskIssuesngxdata  = res
+                  console.log("aaaaaaaaaaaaa",res)
               })
           }
           if (this.router.url.includes('option-2')) {
@@ -208,8 +209,16 @@ export class RiskIssuesTableComponent implements OnInit, OnChanges {
             })
           }else{
               this.apiService.deleteRiskIssue(this.projectid, id).then(res => {
-                  this.projecthubservice.submitbutton.next(true)
-                  this.projecthubservice.isNavChanged.next(true)
+                  if (this.callLocation == 'Project-Charter') {
+                      this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
+                          this.projecthubservice.submitbutton.next(true)
+                          this.projecthubservice.isNavChanged.next(true)
+                      })
+                  }  else{
+                      this.projecthubservice.submitbutton.next(true)
+                      this.projecthubservice.isNavChanged.next(true)
+                  }
+
               })
           }
 

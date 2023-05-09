@@ -82,8 +82,8 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
           .subscribe((resultSets: any) => {
 
             // Store the result sets
-            this.resultSets = resultSets;
-            console.log(this.resultSets)
+            this.resultSets = resultSets.filter((obj) => obj.userIsActive!=false);
+            console.log(this.resultSets.filter((obj) => obj.userIsActive))
             console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
             // Execute the event
             //this.search.next(resultSets);

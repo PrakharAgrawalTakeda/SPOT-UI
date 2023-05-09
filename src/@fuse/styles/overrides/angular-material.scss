@@ -353,7 +353,7 @@
 
     /* Disabled */
     &.mat-form-field-disabled {
-        opacity: 0.7 !important;
+        opacity: 1 !important;
     }
 
     /* Invalid */
@@ -593,8 +593,9 @@
                     width: 100% !important;
                     transform: none !important;
                     pointer-events: auto;
-                    font-weight: 500;
+                    font-weight: 400;
                     @apply text-default #{'!important'};
+                    text-shadow: 0 0 0 #4d556db5;
                 }
 
                 /* Textarea */

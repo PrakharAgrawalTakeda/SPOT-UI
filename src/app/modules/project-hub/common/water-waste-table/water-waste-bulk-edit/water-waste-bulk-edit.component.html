@@ -1,0 +1,186 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Water and Waste</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="w-full bg-card rounded-2xl">
+        <div class="flex items-center justify-end gap-3 pt-3 pr-3 grid-cols-2">
+            <form class="date" [formGroup]="CAPSform" (ngSubmit)="submitCAPS()">
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full" [floatLabel]="'always'">
+                    <mat-label>Impact Realization Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" [max]="today" [placeholder]="'Choose a date'"
+                        formControlName="impactRealizationDate" name="impactRealizationDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </form>
+            <button class="ml-4 text-primary bg-gray-200"
+                *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS" mat-flat-button [color]="'primary-200'"
+                (click)="addWaterWaste()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+
+        </div>
+        <div class="h-[70vh] w-[94vw] overflow-y-hidden pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
+                class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                [rows]="WaterWaste" #waterWasteTable>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Water/Waste"
+                    prop="wwstream" [width]="100">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="wwstream" name="wwstream"
+                                [placeholder]="'Water/Waste'" [dropDownArrayType]="'string'"
+                                [dropDownArray]="waterWasteDropDrownValues" [showNoneOption]="false">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Type"
+                    prop="wwtype" [width]="60">Type
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <div *ngIf="getData(rowIndex) == '1'">
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="wwtype" name="wwtype"
+                                [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                [dropDownArray]="waterTypeDropDrownValues" [showNoneOption]="false">
+                            </spot-select>
+                        </form>
+                        </div>
+                        <div *ngIf="getData(rowIndex) == '2'">
+                            <form [formGroup]="waterWasteForm.controls[rowIndex]" *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'Type'"
+                                    [dropDownArrayType]="'string'" [dropDownArray]="wasteTypeDropDrownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="getData(rowIndex) == '0'">
+                            <form [formGroup]="waterWasteForm.controls[rowIndex]" *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="wwtype" name="wwtype" [placeholder]="'Type'"
+                                    [dropDownArrayType]="'string'" [dropDownArray]="typeDropDrownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [sortable]="false" name="Units" prop="emwwunit" [width]="30" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <div>
+                                {{column.name}}
+                                <mat-icon class="pe" style="font-size: 17px;"
+                                    matTooltip="Input gross change in water withdrawal or waste type here in the unit provided using whole numbers. Positive values for increase, negative values for decrease.">help</mat-icon>
+                            </div>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
+                            <p class="unit" *ngIf="value">{{value | number:'1.0-0'}}</p>
+                            <p class="unit" *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="emwwunit" name="emwwunit" [decimalCount]="0"
+                                [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0" [allowNegativeValues] = true>
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="UoM" prop="standardUoM" [width]="30">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div *ngIf="getData(rowIndex) == '1'">
+                        m3
+                        </div>
+                        <div *ngIf="getData(rowIndex) == '2'">
+                            kg
+                        </div>
+                        <div *ngIf="getData(rowIndex) == '0'">
+                            {{value}}
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name={{unitCost}} prop="emwwunitCost" [width]="90" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <div>
+                                {{column.name}}
+                                <mat-icon class="pe" style="font-size: 17px;"
+                                    matTooltip="Input the cost of each water or waste unit using up to 4 decimal places, positive values only.">help</mat-icon>
+                            </div>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <p *ngIf="!editWaterWaste">{{value}}</p>
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex) && editWaterWaste"
+                            (click)="waterWasteTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value | number:'1.4-4'}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex) && editWaterWaste">
+                            <spot-input class="w-full" formControlName="emwwunitCost" name="emwwunitCost" [decimalCount]="4"
+                                [inputType]="'Number'" [autoAddDecimal]="true" [placeholder]="0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Basis of Estimate"
+                    prop="embasisOfEstimate" [width]="100">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!waterWasteTableEditStack.includes(rowIndex)"
+                            (click)="waterWasteTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="waterWasteForm.controls[rowIndex]"
+                            *ngIf="waterWasteTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="embasisOfEstimate" [showLabel]="false"
+                                [label]="'Basis of Estimate'" [placeholder]="'Basis of Estimate'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="20" [resizeable]="false" [sortable]="false"
+                    [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded" ngx-datatable-cell-template>
+                
+                        <div class="flex items-center justify-start">
+                            <a href="javascript:void(0)" title="Delete Single"
+                                *ngIf="this.projecthubservice.roleControllerControl.projectHub.CAPS" (click)="deleteWaterWaste(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitWaterWaste()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

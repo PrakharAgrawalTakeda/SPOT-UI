@@ -11,6 +11,7 @@ export class ProjectHub{
     public projectBoard: ProjectBoard = new ProjectBoard
     public hubSettings: boolean = true
     public localAttributes: boolean = true
+    public CAPS: boolean = true
 }
 
 export class ProjectBoard{
@@ -22,6 +23,7 @@ export class ProjectBoard{
     public baselineproject: boolean = false
     public phaseState:boolean = true
     public keyAssumptionsEdit: boolean = true
+    public operationalBenefitsEdit: boolean = true
 }
 
 export class GeneralInfo{

@@ -6,56 +6,50 @@
     </a>
     </div>
 </div>
-<form class="w-full form-ask-need" [formGroup]="projectRequirementsForm" (ngSubmit)="submitProjectRequirementsEdit()"
+<form class="w-full overflow-hidden" [formGroup]="projectRequirementsForm" (ngSubmit)="submitProjectRequirementsEdit()"
       style="overflow-y: scroll; height: 95vh;">
-    <spot-input-date formControlName="proposedExecutionStart"  [label]="'Proposed Execution Start'"
-                     [placeholder]="'Choose a date'">
-    </spot-input-date>
-    <spot-input-date formControlName="proposedExecutionEnd"  [label]="'Proposed Execution End'"
-                     [placeholder]="'Choose a date'">
-    </spot-input-date>
-    <spot-select formControlName="shutdownRequired"  [label]="'# Functions Required'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="noFunctionsRequiredOptions">
-    </spot-select>
-    <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>Estimated FTEs</mat-label>
-        <input matInput formControlName="estimatedFTE" type="number" min="0" placeholder="0"
-               pattern="\d*" />
-    </mat-form-field>
-    <spot-select formControlName="shutdownRequired"  [label]="'Shutdown Required'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
-    </spot-select>
-    <spot-select formControlName="regulatoryApprovalNeeded"  [label]="'Regulatory Approval Needed'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
-    </spot-select>
-    <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>CAPEX (Total Estimate USD)</mat-label>
-        <input matInput formControlName="totalCapExBaseCase" type="number" min="0" placeholder="0"
-               pattern="\d*" />
-    </mat-form-field>
-    <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>OPEX (Total Estimate USD)</mat-label>
-        <input matInput formControlName="totalNonFTEOpExBaseCase" type="number" min="0" placeholder="0"
-               pattern="\d*" />
-    </mat-form-field>
-    <spot-select formControlName="planFundingRequired"  [label]="'Plan Funding Required'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
-    </spot-select>
-    <mat-form-field class="w-full" [floatLabel]="'always'">
-        <mat-label>How Much (USD)</mat-label>
-        <input matInput formControlName="howMuch" type="number" min="0" placeholder="0"
-               pattern="\d*" />
-    </mat-form-field>
-    <spot-select formControlName="budgetInPlan"  [label]="'Budget in Plan'"
-                 [placeholder]="'Select and/or Type to Search'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                 [dropDownArray]="yesNoOptions">
-    </spot-select>
-
-    <div class="flex items-start justify-between mt-6">
+    <div class=" form-ask-need h-[87vh] overflow-y-scroll">
+        <spot-input-date formControlName="proposedExecutionStart"  [label]="'Proposed Execution Start'"
+                         [placeholder]="'Choose a date'">
+        </spot-input-date>
+        <spot-input-date formControlName="proposedExecutionEnd"  [label]="'Proposed Execution End'"
+                         [placeholder]="'Choose a date'">
+        </spot-input-date>
+        <spot-select formControlName="functionsRequiredId"  [label]="'# Functions Required'"
+                     [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
+                     [dropDownArray]="getFunctionsRequired()" [idPointer]="'lookUpId'"
+                     [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+        </spot-select>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'Estimated FTEs'" formControlName="estimatedFTE"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'"> </spot-input>
+        <spot-select formControlName="shutdownRequired"  [label]="'Shutdown Required'"
+                     [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
+                     [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                     [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+        </spot-select>
+        <spot-select formControlName="regulatoryApprovalNeeded"  [label]="'Regulatory Approval Needed'"
+                     [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
+                     [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                     [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+        </spot-select>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'CAPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="totalCapExBaseCase"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'"> </spot-input>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'OPEX (Total Estimate ' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="totalNonFTEOpExBaseCase"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'"> </spot-input>
+        <spot-select formControlName="planFundingRequired"  [label]="'Plan Funding Required'"
+                     [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
+                     [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                     [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+        </spot-select>
+        <spot-input class="w-full read-only" [showLabel]="true" [label]="'How Much (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="howMuch"
+                    [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'requirements'"> </spot-input>
+        <spot-select formControlName="budgetInPlan"  [label]="'Budget in Plan'"
+                     [placeholder]="'Select and/or Type to Search'" [showNoneOption]="true" [noneOptionCustomText]="'None'"
+                     [dropDownArray]="getYesNo()" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                     [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+        </spot-select>
+    </div>
+    <div class="flex items-start justify-between  form-ask-need">
         <a class="w-25" mat-flat-button [color]="'primary'"
            (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
             Cancel

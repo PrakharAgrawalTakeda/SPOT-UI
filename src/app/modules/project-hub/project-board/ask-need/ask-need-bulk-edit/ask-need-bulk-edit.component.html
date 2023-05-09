@@ -21,7 +21,7 @@
                 </mat-slide-toggle>
             </form>
         </div>
-        <div class="overflow-y-hidden h-[80vh] pl-3" id="askNeedTableDiv">
+        <div class="overflow-y-hidden h-[80vh] w-screen pl-3" id="askNeedTableDiv">
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                 columnMode="flex"
                 class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer"
@@ -111,7 +111,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Included In Project Dashboard (Max 1)" prop="includeInReport"
+                <ngx-datatable-column name="Include in Dashboard (Max 1)" prop="includeInReport"
                     [flexGrow]="0.6" [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a [ngClass]="{'closed': row.closeDate != null}" *ngIf="!anTableEditStack.includes(rowIndex)"

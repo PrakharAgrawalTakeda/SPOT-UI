@@ -303,17 +303,17 @@ export class LessonLearnedBulkEditComponent implements OnInit {
           "projectUid": this.projecthubservice.projectid,
           "actionOwner": x.actionOwner.userAdid == undefined || x.actionOwner.userAdid == null ? "" : x.actionOwner.userAdid,
           "createDetailedReviewSlide": x.createDetailedReviewSlide,
-          "criticality": x.criticality.lookUpId == undefined ? x.criticality : x.criticality.lookUpId,
+          "criticality": x.criticality == null ? x.criticality : x.criticality.lookUpId == undefined ? x.criticality : x.criticality.lookUpId,
           "dueDate": x.dueDate ? moment(x.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-          "functionActionOwner": x.functionActionOwner.lookUpId == undefined ? x.functionActionOwner : x.functionActionOwner.lookUpId,
+          "functionActionOwner": x.functionActionOwner == null ? x.functionActionOwner : x.functionActionOwner.lookUpId == undefined ? x.functionActionOwner : x.functionActionOwner.lookUpId,
           "includeInCloseOutReport": x.includeInCloseOutReport,
           "leassonTitle": x.leassonTitle,
           "lessonCloseDate": x.lessonCloseDate ? moment(x.lessonCloseDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
           "lessonDetail": x.lessonDetail,
           "lessonLogDate": x.lessonLogDate ? moment(x.lessonLogDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
-          "lessonType": x.lessonType.lookUpId == undefined ? x.lessonType : x.lessonType.lookUpId,
+          "lessonType": x.lessonType == null ? x.lessonType : x.lessonType.lookUpId == undefined ? x.lessonType : x.lessonType.lookUpId,
           "submittedBy": x.submittedBy.userAdid == undefined || x.submittedBy.userAdid == null ? "" : x.submittedBy.userAdid,
-          "submittingGroupRole": x.submittingGroupRole.lookUpId == undefined ? x.submittingGroupRole : x.submittingGroupRole.lookUpId,
+          "submittingGroupRole": x.submittingGroupRole == null ? x.submittingGroupRole : x.submittingGroupRole.lookUpId == undefined ? x.submittingGroupRole : x.submittingGroupRole.lookUpId,
           "suggestedAction": x.suggestedAction
         })
       }

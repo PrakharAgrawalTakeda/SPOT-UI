@@ -18,6 +18,7 @@ export class ProjectHubService {
   lookUpMaster: any = []
   kpiMasters: any = []
   projectid: string = ""
+  localCurrency:any = [];
   hasChildren: boolean = false
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
@@ -238,11 +239,6 @@ export class ProjectHubService {
                   link: 'business-case/option-2/benefits'
                 },
                 {
-                  title: 'CAPS',
-                  type: 'basic',
-                  link: 'business-case/option-2/caps'
-                },
-                {
                   title: 'Risks / Assumptions',
                   type: 'basic',
                   link: 'business-case/option-2/risks'
@@ -273,11 +269,6 @@ export class ProjectHubService {
                   title: 'Benefits',
                   type: 'basic',
                   link: 'business-case/option-3/benefits'
-                },
-                {
-                  title: 'CAPS',
-                  type: 'basic',
-                  link: 'business-case/option-3/caps'
                 },
                 {
                   title: 'Risks / Assumptions',

@@ -1,0 +1,43 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Benefits Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                                         href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        </div>
+    </div>
+    <form class="w-full overflow-hidden" [formGroup]="benefitsInfoForm" (ngSubmit)="submitBenefitsEdit()"
+          style="overflow-y: scroll; height: 95vh;">
+        <div class=" form-ask-need h-[87vh] overflow-y-scroll">
+            <div class="mb-4"><a class="text-primary w-2/6 text-xl">Strategic Alignment</a></div>
+            <spot-textarea formControlName="strategicAlignment" [showLabel]="true" [label]="'Strategic Alignment'"
+                           [showHint]="true"
+                           [hint]="'Provide strategic alignment that is based on X-Matrix or business imperatives/key focus areas'">
+            </spot-textarea>
+            <spot-textarea formControlName="strategicAlignmentJustification" [showLabel]="true" [label]="'Strategic Alignment Rationale'"
+                        [placeholder]="'Justify linkage to the identified strategic element'">
+            </spot-textarea>
+            <br>
+            <div class="text-primary text-xl pb-3">NPV Net Present Value</div>
+            <spot-input class="w-full read-only" [showLabel]="true" [label]="'Base Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="npvBaseCase"
+                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
+                        [showHint]="true" [hint]="'Provide net present value calculation if applicable (base case)'"> </spot-input>
+            <spot-input class="w-full read-only" [showLabel]="true" [label]="'High Case (' + this.localCurrency.localCurrencyAbbreviation + ')'" formControlName="npvHighCase"
+                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'business-case'"
+                        [showHint]="true" [hint]="'Provide net present value calculation if applicable (high case)'"> </spot-input>
+            <spot-textarea formControlName="npvRationale" [showLabel]="true" [label]="'Net Present Value Basis of Calculation'"
+                        [placeholder]="'N/A if no net present value calculation and justify “Why”. If populated explain basis of calculation. Attach financial model associated with net present value as appropriate. Net present value needed for capital projects > 5 OKU TPC'">
+            </spot-textarea>
+        </div>
+        <div class="flex items-start justify-between  form-ask-need">
+            <a class="w-25" mat-flat-button [color]="'primary'"
+               (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-y-hidden h-[80vh] pl-3" id="keyAssumptionsTableDiv" >
+        <div class="overflow-y-hidden h-[80vh] w-screen pl-3" id="keyAssumptionsTableDiv" >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                            columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -92,7 +92,7 @@
                               *ngIf="kaTableEditStack.includes(rowIndex)"
                               class="h-[45px]">
                             <mat-slide-toggle
-                                [matTooltip]="this.keyAssumptionForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 5 can be selected at a time in the business case' : null"
+                                [matTooltip]="this.keyAssumptionForm.controls[rowIndex]['controls']['includeInBusinessCase'].disabled ? 'Only 4 can be selected at a time in the business case' : null"
                                 (change)="disabler()" class="h-full overflow-hidden"
                                 formControlName="includeInBusinessCase">
                             </mat-slide-toggle>

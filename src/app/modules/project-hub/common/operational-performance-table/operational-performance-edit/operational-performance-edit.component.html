@@ -1,5 +1,5 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Operational Performace</div>
+    <div class="text-on-primary" style="padding-top: 6px">Operational Performance</div>
     <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
             href="javascript:void(0)" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -9,7 +9,7 @@
 <form class="w-full overflow-hidden" [formGroup]="OperationalPerformanceForm"
     (ngSubmit)="submitop()" style="overflow-y: scroll; height: 95vh;">
     <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
-    <div class="flex justify-start items-center gap-6">
+    <div class="flex justify-start items-center gap-6" *ngIf="mode != 'Project-Proposal'">
         <mat-icon
             svgIcon="{{(indicator.getIndicators(getIndicator(OperationalPerformanceForm.controls.status.value), 'circle')).icontype}}"
             class="{{(indicator.getIndicators(getIndicator(OperationalPerformanceForm.controls.status.value), 'circle')).iconcolor}}">
@@ -21,7 +21,7 @@
         </spot-select>
     </div>
     <spot-singleselect-autocomplete formControlName="kpiid" class="w-full" name="kpiid" [label]="'KPI'"
-        [placeholder]="'KPI'" [valuePointer]="'kpiname'" [dropDownArray]="projecthubservice.kpiMasters"  *ngIf="mode != 'Project-Charter'">
+        [placeholder]="'KPI'" [valuePointer]="'kpiname'" [dropDownArray]="projecthubservice.kpiMasters"  *ngIf="mode != 'Project-Charter' && mode != 'Project-Proposal'">
     </spot-singleselect-autocomplete>
      <spot-singleselect-autocomplete formControlName="kpiid" class="w-full" name="kpiid" [label]="'Associated KPI'"
         [placeholder]="'Associated KPI'" [valuePointer]="'kpiname'" [dropDownArray]="projecthubservice.kpiMasters"  *ngIf="mode == 'Project-Charter'">
@@ -29,23 +29,31 @@
 
     <spot-textarea formControlName="metric" name="metric" [label]="'Metric'" [placeholder]="'Metric'">
     </spot-textarea>
-    <spot-textarea formControlName="currentState" name="currentState" [label]="'Baseline'" [placeholder]="'Baseline'">
-    </spot-textarea>
-    <spot-textarea formControlName="targetPerformance" name="targetPerformance" [label]="'Target Performance'"
+    <spot-textarea formControlName="targetPerformance" name="targetPerformance" [label]="'Target Performance'" *ngIf="mode != 'Project-Proposal'"
         [placeholder]="'Target Performance'">
     </spot-textarea>
     <spot-textarea formControlName="actualPerformance" name="actualPerformance" [label]="'Actual Performance'"
-        [placeholder]="'Actual Performance'" *ngIf="mode != 'Project-Charter'">
+        [placeholder]="'Actual Performance'" *ngIf="mode != 'Project-Charter' && mode != 'Project-Proposal'">
+    </spot-textarea>
+    <spot-multiselect-autocomplete class="w-full read-only" formControlName="ptrbid" *ngIf="mode == 'Project-Proposal'"
+         name="ptrbid" [label]="'PTRB'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+         [customSortPointer]="'lookUpOrder'" [dropDownArray]="getPTRB()" [sortByType]="'custom'">
+    </spot-multiselect-autocomplete>
+    <spot-textarea formControlName="benefitDescriptionJustification" name="benefitDescriptionJustification" [label]="'Benefit Description/Justification'"
+                       [placeholder]="'Benefit Description/Justification'" *ngIf="mode == 'Project-Proposal'">
     </spot-textarea>
     <mat-slide-toggle *ngIf="mode=='Normal'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInProjectDashboard'].disabled ? 'Only 3 can be selected at a time for dashboard report display' : null"
-        formControlName="includeInProjectDashboard">Include in Project Dashboard</mat-slide-toggle>
+        formControlName="includeInProjectDashboard">Include in Dashboard</mat-slide-toggle>
     <mat-slide-toggle *ngIf="mode=='Project-Close-Out'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInCloseOut'].disabled ? 'Only 3 can be selected at a time for close out report display' : null"
-        formControlName="includeInCloseOut">Include in Project Close Out</mat-slide-toggle>
+        formControlName="includeInCloseOut">Include in Close Out</mat-slide-toggle>
     <mat-slide-toggle *ngIf="mode=='Project-Charter'"
         [matTooltip]="this.OperationalPerformanceForm.controls['includeInCharter'].disabled ? 'Only 3 can be selected at a time for charter report' : null"
         formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
+    <mat-slide-toggle *ngIf="mode=='Project-Proposal'"
+         [matTooltip]="this.OperationalPerformanceForm.controls['includeinProposal'].disabled ? 'Only 3 can be selected at a time for charter report' : null"
+         formControlName="includeinProposal">Include in Proposal</mat-slide-toggle>
     </div>
     <div class="flex items-start justify-between form-ask-need">
         <a class="min-w-26" mat-flat-button [color]="'primary'"

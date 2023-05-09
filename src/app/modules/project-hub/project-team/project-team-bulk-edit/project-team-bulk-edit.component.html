@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-x-auto overflow-hidden h-[80vh] ml-3 mt-3" id="projectTeamTableDiv">
+        <div class="overflow-x-auto overflow-hidden h-[80vh] w-screen ml-3 mt-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="datatable-pt-80 font-medium text-sm text-default whitespace-nowrap" [rows]="teamMembers"
                 #projectTeamsTable>
@@ -116,7 +116,7 @@
                             </form>
                         </ng-template>
                     </ngx-datatable-column>
-                <ngx-datatable-column *ngIf="mode == 'Project-Proposal'" name="Included In Proposal (Max 5)" prop="includeInProposal" [flexGrow]="1"
+                <ngx-datatable-column *ngIf="mode == 'Project-Proposal'" name="Include In Proposal (Max 5)" prop="includeInProposal" [flexGrow]="1"
                                       [draggable]="false" [resizeable]="false" [sortable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a  class="ml-4" *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">

@@ -60,14 +60,15 @@
         <div class="flex flex-col flex-auto gap-6 pt-6 w-full" *ngIf="viewContent">
                 <div class="flex bg-card rounded-2xl p-3 pb-0 justify-between items-start">
                         <div class="w-full">
+                                <div class="text-xl font-medium tracking-tight pl-6 truncate text-primary">Primary KPI</div>
                                 <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
                                         <spot-singleselect-autocomplete formControlName="primaryKpi"
-                                                class="w-full read-only" name="primaryKpi" [label]="'Primary KPI'"
+                                                class="w-full read-only" name="primaryKpi" [showlabel]="false"
                                                 [valuePointer]="'kpiname'" [dropDownArray]="kpiMasters">
                                         </spot-singleselect-autocomplete>
                                 </form>
                         </div>
-                        <div class="w-10 pt-8">
+                        <div class="w-10 pt-14">
                                 <a href="javascript:void(0)"
                                         *ngIf="projecthubservice.roleControllerControl.projectBenefits"
                                         title="Edit Single"

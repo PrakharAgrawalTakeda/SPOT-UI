@@ -54,7 +54,7 @@
             <spot-multiselect-autocomplete class="w-full"
                 *ngIf="strategicDriversForm.controls['isPobos'].value && viewElementChecker('pobosCategory')"
                 formControlName="pobosCategory" name="pobosCategory" [placeholder]="'POBOS Category'"
-                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [customSortPointer]="'lookUpOrder'"
+                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [customSortPointer]="'lookUpName'"
                 [dropDownArray]="getPOBOSCategory()" [sortByType]="'custom'" [showLabel]="false">
             </spot-multiselect-autocomplete>
             </div>
