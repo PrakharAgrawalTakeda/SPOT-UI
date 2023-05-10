@@ -538,7 +538,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             optionId=""
         }
         for (var i of formValue) {
-            console.log("aaaaaaaaaaa", i.functionGroupId)
             this.formValue.push({
                 closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                 dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
