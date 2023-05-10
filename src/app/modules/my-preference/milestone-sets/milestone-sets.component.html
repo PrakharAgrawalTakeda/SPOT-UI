@@ -19,8 +19,8 @@
                 </div>
             </div>
             <div class="overflow-x-auto max-h-[80vh] mx-6">
-                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                               class="pr-6 font-medium text-sm text-default whitespace-nowrap" [rows]="miestoneSetsData">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'"  columnMode="flex"
+                               class="ml-3 datatable-ps material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="miestoneSetsData">
                     <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwner" [flexGrow]="1">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <p>{{value}}</p>

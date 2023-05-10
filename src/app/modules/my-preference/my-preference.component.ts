@@ -13,6 +13,7 @@ import {MsalService} from "@azure/msal-angular";
 })
 export class MyPreferenceComponent implements OnInit {
     milestoneAccess = false;
+    checkAccessError = false;
 
     constructor(private _Activatedroute: ActivatedRoute,
                 private router: Router,
@@ -46,10 +47,12 @@ export class MyPreferenceComponent implements OnInit {
     }
 
     dataloader() {
+        this.titleService.setTitle("Standard Milestones Edit")
         this.checkMilestoneSetsAccess();
         this.viewContent = true
-        this.titleService.setTitle("Standard Milestones Edit")
-        this.reloadName()
+        if(this.checkAccessError==false){
+            this.checkMilestoneSetsAccess();
+        }
     }
 
     isNavActive(link: string): boolean {
@@ -58,10 +61,15 @@ export class MyPreferenceComponent implements OnInit {
 
     checkMilestoneSetsAccess() {
         this.myPreferenceApiService.checkAccess(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
-            this.milestoneAccess = res.HasAccess == true;
+            if(res.HasAccess == true){
+                this.milestoneAccess=true;
+            }else{
+                this.milestoneAccess=false;
+            }
+            this.reloadName()
         }).catch(err => {
-            this.milestoneAccess = false;
-        })
+            this.checkAccessError = true;}
+        )
     }
 
     reloadName() {
@@ -84,5 +92,6 @@ export class MyPreferenceComponent implements OnInit {
                 link: 'my-preference/milestone-sets'
             })
         }
+
     }
 }
