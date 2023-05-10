@@ -110,7 +110,7 @@ export class WarehousingSingleEditComponent {
           emenvironmentId: '',
   environmentalSourceTypeId: 'af83f434-2e3d-42fc-b506-f93ce2f74503',
   projectId: this.projecthubservice.projectid,
-  environmentalSourceId: '',
+  environmentalSourceId: 'C9268310-E160-4624-B242-42F6745A7B13',
   shipmentWeight: formValue.shipmentWeight,
   affectedLocations: formValue.affectedLocations,
   embasisOfEstimate: formValue.embasisOfEstimate

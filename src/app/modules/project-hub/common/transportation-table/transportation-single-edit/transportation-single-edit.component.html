@@ -21,7 +21,7 @@
   TransportationForm.controls.transportationMode.value == 'Sea freight' ? seaTypeDropDownValues :
   TransportationForm.controls.transportationMode.value == 'Train' ? trainTypeDropDownValues :
   TransportationForm.controls.transportationMode.value == 'Courier' ? courierTypeDropDownValues :
-  parcelTypeDropDownValues" [showNoneOption]="false">
+  TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelTypeDropDownValues : []" [showNoneOption]="false">
         </spot-select>
 
         <spot-select formControlName="fuelType" name="fuelType" [label]="'Fuel'" [placeholder]="'Fuel'"
@@ -35,7 +35,7 @@
             TransportationForm.controls.transportationMode.value == 'Sea freight' && (TransportationForm.controls.transportationType.value == 'Standard 20 Ft - Ambiant' || TransportationForm.controls.transportationType.value == 'Standard 40 Ft - Ambiant') ? seaFuelDropDownValues2 :
             TransportationForm.controls.transportationMode.value == 'Train' ? trainFuelDropDownValues :
             TransportationForm.controls.transportationMode.value == 'Courier' ? courierFuelDropDownValues :
-            parcelFuelDropDownValues" [showNoneOption]="false">
+            TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelFuelDropDownValues : []" [showNoneOption]="false">
         </spot-select>
 
         <spot-input class="w-full" formControlName="co2intensityFactorValue" name="co2intensityFactorValue"

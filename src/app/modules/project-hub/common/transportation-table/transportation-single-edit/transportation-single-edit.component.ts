@@ -58,7 +58,100 @@ export class TransportationSingleEditComponent {
   seaFuelDropDownValues2 = []
   trainFuelDropDownValues = []
 
-  constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { }
+  constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
+    this.TransportationForm.controls.fuelType.valueChanges.subscribe(res => {
+      //Air freight
+      if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Short haul (< 1000 km)" && this.TransportationForm.controls.transportationMode.value == "Air freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.920"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Medium haul (1000–3700 km)" && this.TransportationForm.controls.transportationMode.value == "Air freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.690"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Long haul (> 3700 km)" && this.TransportationForm.controls.transportationMode.value == "Air freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.680"})
+      }
+      else if(res == "SAF" && this.TransportationForm.controls.transportationType.value == "Short haul (< 1000 km)" && this.TransportationForm.controls.transportationMode.value == "Air freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.184"})
+      }
+      else if(res == "SAF" && this.TransportationForm.controls.transportationType.value == "Medium haul (1000–3700 km)" && this.TransportationForm.controls.transportationMode.value == "Air freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.138"})
+      }
+      else if(res == "SAF" && this.TransportationForm.controls.transportationType.value == "Long haul (> 3700 km)" && this.TransportationForm.controls.transportationMode.value == "Air freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.136"})
+      }
+      //Courier
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Standard" && this.TransportationForm.controls.transportationMode.value == "Courier"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.708"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Short haul (< 1000 km)" && this.TransportationForm.controls.transportationMode.value == "Courier"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.892"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Medium haul (1000–3700 km)" && this.TransportationForm.controls.transportationMode.value == "Courier"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.708"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Long haul (> 3700 km)" && this.TransportationForm.controls.transportationMode.value == "Courier"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.700"})
+      }
+      //Parcel/Express
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Standard" && this.TransportationForm.controls.transportationMode.value == "Parcel/ Express"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.708"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Short haul (< 1000 km)" && this.TransportationForm.controls.transportationMode.value == "Parcel/ Express"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.892"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Medium haul (1000–3700 km)" && this.TransportationForm.controls.transportationMode.value == "Parcel/ Express"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.708"})
+      }
+      else if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Long haul (> 3700 km)" && this.TransportationForm.controls.transportationMode.value == "Parcel/ Express"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.700"})
+      }
+      //Road freight
+      else if(res == "Non Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "Ambient (truck load fill rate > 60%)" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.078"})
+      }
+      else if(res == "Non Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "LTL / RDC - Ambient" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.063"})
+      }
+      else if(res == "Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "LTL / RDC - Reefer" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.071"})
+      }
+      else if(res == "Non Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "Partial Load Ambiant (Truck load fill rate <60%)" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.137"})
+      }
+      else if(res == "Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "Partial Load Reefer (Truck load fill rate <60%)" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.154"})
+      }
+      else if(res == "Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "Standard - Reefer (if truck load fill rate > 60%)" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.087"})
+      }
+      else if(res == "Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "Van - Ambiant" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.204"})
+      }
+      else if(res == "Temp-controlled / Diesel, 5% biodiesel blend" && this.TransportationForm.controls.transportationType.value == "Van - Reefer" && this.TransportationForm.controls.transportationMode.value == "Road freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.230"})
+      }
+      //Sea freight
+      else if(res == "Deep Sea Cargo - Reefer" && this.TransportationForm.controls.transportationType.value == "Standard 20 Ft - Reefer" && this.TransportationForm.controls.transportationMode.value == "Sea freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.002"})
+      }
+      else if(res == "Deep Sea Cargo - Ambiant" && this.TransportationForm.controls.transportationType.value == "Standard 20 ft - Ambiant" && this.TransportationForm.controls.transportationMode.value == "Sea freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.001"})
+      }
+      else if(res == "Deep Sea Cargo - Reefer" && this.TransportationForm.controls.transportationType.value == "Standard 40 Ft - Reefer" && this.TransportationForm.controls.transportationMode.value == "Sea freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.003"})
+      }
+      else if(res == "Deep Sea Cargo - Ambiant" && this.TransportationForm.controls.transportationType.value == "Standard 40 ft - Ambiant" && this.TransportationForm.controls.transportationMode.value == "Sea freight"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.002"})
+      }
+      //Train
+      else if(res == "Non Temp-controlled / Diesel" && this.TransportationForm.controls.transportationType.value == "Container train - Ambiant" && this.TransportationForm.controls.transportationMode.value == "Train"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.025"})
+      }
+      else if(res == "Non Temp-controlled / Diesel" && this.TransportationForm.controls.transportationType.value == "Container train - Reefer" && this.TransportationForm.controls.transportationMode.value == "Train"){
+        this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.028"})
+      }
+    })
+   }
 
   ngOnInit(): void {
     this.getllookup()

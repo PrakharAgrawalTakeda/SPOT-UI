@@ -1,1 +1,56 @@
-<p>shipping-single-edit works!</p>
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Shipping Solutions</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="w-full overflow-hidden" [formGroup]="ShippingForm" (ngSubmit)="submitShipping()"
+    style="overflow-y: scroll; height: 95vh;">
+    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+        <spot-select formControlName="shippingSolutionSupplier" name="shippingSolutionSupplier" [label]="'Solution Supplier'"
+            [placeholder]="'Solution Supplier'" [dropDownArrayType]="'string'" [dropDownArray]="supplierDropDownValues"
+            [showNoneOption]="false">
+        </spot-select>
+
+        <spot-select formControlName="solutionName" name="solutionName" [label]="'Solution Name'"
+            [placeholder]="'Solution Name'" [dropDownArrayType]="'string'" [dropDownArray]="ShippingForm.controls.shippingSolutionSupplier.value == '' ? [] :
+            ShippingForm.controls.shippingSolutionSupplier.value == 'Csafe' ? csafeDropDownValues :
+            ShippingForm.controls.shippingSolutionSupplier.value == 'Envirotainer' ? envirotainerDropDownValues :
+            ShippingForm.controls.shippingSolutionSupplier.value == 'Standard' ? standardDropDownValues :
+            ShippingForm.controls.shippingSolutionSupplier.value == 'VaQTech' ? vaqtechDropDownValues : []" [showNoneOption]="false">
+        </spot-select>
+
+        <spot-input class="w-full" formControlName="co2intensityFactorValue" name="co2intensityFactorValue"
+            [label]="'CO2 Intensity (Factor Value)'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="co2intensityFactorMeasure" name="co2intensityFactorMeasure"
+            [label]="'UoM'">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
+            [label]="'Shipment Distance (km)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="affectedContainers" name="affectedContainers"
+            [label]="'Affected Containers'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
+        </spot-input>
+
+        <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
+            [placeholder]="'Basis of Estimate'">
+        </spot-textarea>
+
+    </div>
+    <div class="flex items-start justify-between form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
+</form>

@@ -46,6 +46,7 @@ export class ShippingTableComponent {
           console.log(this.Shippingngx)
         }
         this.shippingBulkEditData.push(this.Shippingngx)
+        this.shippingBulkEditData.push(res.gldDropDownList)
         this.shippingBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
         this.viewContent = true
       })
