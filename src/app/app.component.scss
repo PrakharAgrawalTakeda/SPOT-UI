@@ -195,6 +195,12 @@
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
+::ng-deep .ngx-datatable.datatable-sms .datatable-body .datatable-scroll {
+    width: 100% !important;
+    max-height: 50vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+}
 
 ::ng-deep .ngx-datatable.datatable-state-check .datatable-body .datatable-scroll {
     max-height: 20vh !important;
