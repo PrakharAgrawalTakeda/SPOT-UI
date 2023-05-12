@@ -223,10 +223,10 @@ export class CapsComponent implements OnInit {
         this.Biogenicsngx = res.biogenicsData
         
         //water waste data
-        if (this.editable == false) {
-          this.WaterWastengx = null
-        }
-        else {
+        // if (this.editable == false) {
+        //   this.WaterWastengx = null
+        // }
+        // else {
           var wwParam = res.waterWasteParameter
           var wwData = res.waterWasteData
           var WaterWastengx = []
@@ -242,7 +242,7 @@ export class CapsComponent implements OnInit {
             }
             this.WaterWastengx = WaterWastengx
           }
-        }
+        // }
         this.carbonUnitData = false
         this.biogenicUnitData = false
         this.wwUnitData = false
