@@ -51,7 +51,7 @@ export class BiogenicsBulkEditComponent {
       }
     })
   }
-  
+
   ngOnInit(): void {
     this.dataloader()
   }
@@ -167,7 +167,7 @@ export class BiogenicsBulkEditComponent {
   deleteBio(rowIndex: number){
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
-      "message": "Are you sure you want Delete this Record?",
+      "message": "Are you sure you want to delete this Record?",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",

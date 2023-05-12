@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ProjectHubService} from "../project-hub.service";
 
 @Component({
   selector: 'app-budget',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./budget.component.scss']
 })
 export class BudgetComponent implements OnInit {
-
-  constructor() { }
+    viewContent = false;
+  constructor(public projectHubService: ProjectHubService) { }
 
   ngOnInit(): void {
+      this.viewContent = true;
   }
 
 }
