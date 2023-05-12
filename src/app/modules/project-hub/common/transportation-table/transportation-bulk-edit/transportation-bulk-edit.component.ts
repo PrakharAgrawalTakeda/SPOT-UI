@@ -315,7 +315,6 @@ export class TransportationBulkEditComponent {
     this.seaFuelDropDownValues2 = Array.from(uniqueFuelTypes8)
     this.seaFuelDropDownValues2.sort()
     for (var i of this.Transportation) {
-      //this.transportationDb.push(i)
       this.transportationDb.push({
         emenvironmentId: i.emenvironmentId,
         environmentalSourceTypeId: i.environmentalSourceTypeId,
@@ -328,6 +327,7 @@ export class TransportationBulkEditComponent {
         affectedContainers: i.affectedContainers,
         embasisOfEstimate: i.embasisOfEstimate
       })
+
       this.transportationForm.push(new FormGroup({
 
         emenvironmentId: new FormControl(i.emenvironmentId),
