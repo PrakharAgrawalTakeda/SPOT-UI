@@ -30,42 +30,42 @@
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Type" prop="transportationType" [flexGrow]="1">
+            <ngx-datatable-column name="Type" prop="transportationType" [flexGrow]="1.2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Fuel" prop="fuelType" [flexGrow]="0.8">
+            <ngx-datatable-column name="Fuel" prop="fuelType" [flexGrow]="1.2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="CO2 Intensity (Factor Value)" prop="co2intensityFactorValue" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                   <p class="right">{{value}}</p> 
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.5">
+            <ngx-datatable-column name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.6">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Distance (km)" prop="shipmentDistance" [flexGrow]="1.1">
+            <ngx-datatable-column name="Shipment Distance (km)" prop="shipmentDistance" [flexGrow]="0.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="right">{{value}}</p> 
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="1.1">
+            <ngx-datatable-column name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="0.4">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="right">{{value}}</p> 
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Frequency" prop="shipmentFrequency" [flexGrow]="1">
+            <ngx-datatable-column name="Shipment Frequency" prop="shipmentFrequency" [flexGrow]="0.3">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="right">{{value}}</p> 
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1">
+            <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>

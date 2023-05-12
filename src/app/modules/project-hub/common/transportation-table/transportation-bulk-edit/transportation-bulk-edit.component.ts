@@ -501,7 +501,7 @@ environmentalSourceId: new FormControl(''),
     this.submitPrep()
     if (this.transportationFormValue.filter(x => x.transportationMode == "").length > 0) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a value in Mode.",
+        "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
         "message": "",
         "icon": {
           "show": true,
@@ -525,7 +525,7 @@ environmentalSourceId: new FormControl(''),
     }
     else if (this.transportationFormValue.filter(x => x.transportationType == "").length > 0) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a Type.",
+        "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
         "message": "",
         "icon": {
           "show": true,
@@ -549,7 +549,7 @@ environmentalSourceId: new FormControl(''),
     }
     else if (this.transportationFormValue.filter(x => x.fuelType == "").length > 0) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a Fuel Type.",
+        "title": "In order to save the Transportation information it is required to select Mode, Type and Fuel categories!",
         "message": "",
         "icon": {
           "show": true,

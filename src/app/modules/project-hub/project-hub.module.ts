@@ -166,7 +166,7 @@ import { ShippingSingleEditComponent } from './common/shipping-table/shipping-si
 import { TransportationBulkEditComponent } from './common/transportation-table/transportation-bulk-edit/transportation-bulk-edit.component';
 import { ShippingBulkEditComponent } from './common/shipping-table/shipping-bulk-edit/shipping-bulk-edit.component';
 import { WarehousingBulkEditComponent } from './common/warehousing-table/warehousing-bulk-edit/warehousing-bulk-edit.component';
-import { BudgetGeneralEditComponent } from './budget/budget-general-edit/budget-general-edit.component';
+//import { BudgetGeneralEditComponent } from './budget/budget-general-edit/budget-general-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -543,8 +543,9 @@ export const projectRoutes: Route[] = [
     ShippingSingleEditComponent,
     TransportationBulkEditComponent,
     ShippingBulkEditComponent,
-    WarehousingBulkEditComponent,
-    BudgetGeneralEditComponent
+    WarehousingBulkEditComponent
+    //,
+    //BudgetGeneralEditComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),
