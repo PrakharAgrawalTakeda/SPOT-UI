@@ -321,16 +321,16 @@ export class TransportationBulkEditComponent {
         emenvironmentId: new FormControl(i.emenvironmentId),
         environmentalSourceTypeId: new FormControl(i.environmentalSourceTypeId),
         projectId: new FormControl(this.projecthubservice.projectid),
-        //transportationMode: new FormControl(i.transportationMode),
-        //transportationType: new FormControl(i.transportationType),
-        //fuelType: new FormControl(i.fuelType),
-        //co2intensityFactorValue: new FormControl(i.co2intensityFactorValue),
-        //co2intensityFactorMeasure: new FormControl(i.co2intensityFactorMeasure),
+        transportationMode: new FormControl(i.transportationMode),
+        transportationType: new FormControl(i.transportationType),
+        fuelType: new FormControl(i.fuelType),
+        co2intensityFactorValue: new FormControl(i.co2intensityFactorValue),
+        co2intensityFactorMeasure: new FormControl(i.co2intensityFactorMeasure),
         shipmentDistance: new FormControl(i.shipmentDistance),
         shipmentWeight: new FormControl(i.shipmentWeight),
         shipmentFrequency: new FormControl(i.shipmentFrequency),
-        //shippingSolutionSupplier: new FormControl(i.shippingSolutionSupplier),
-        //solutionName: new FormControl(i.solutionName),
+        shippingSolutionSupplier: new FormControl(i.shippingSolutionSupplier),
+        solutionName: new FormControl(i.solutionName),
         environmentalSourceId: new FormControl(i.environmentalSourceId),
         affectedLocations: new FormControl(i.affectedLocations),
         affectedContainers: new FormControl(i.affectedContainers),
@@ -579,59 +579,59 @@ environmentalSourceId: new FormControl(''),
     }
   }
 
-  getEnvironmentalSourceIds(i, allObjects) {
-    const filteredObjects = allObjects.filter(obj => 
-      obj.transportationMode === i.transportationMode &&
-      obj.transportationType === i.transportationType &&
-      obj.fuelType === i.fuelType
-    );
-    return filteredObjects.length > 0 ? filteredObjects[0].environmentalSourceId : null;
+getEnvironmentalSourceIds(i, allObjects) {
+  const filteredObjects = allObjects.filter(obj => 
+    obj.transportationMode === i.transportationMode &&
+    obj.transportationType === i.transportationType &&
+    obj.fuelType === i.fuelType
+  );
+  return filteredObjects.length > 0 ? filteredObjects[0].environmentalSourceId : null;
+}
+
+submitPrep() {
+  this.transportationDb = [];
+  this.transportationFormValue = [];
+  const formValue = this.transportationForm.getRawValue();
+  console.log("FORM VALUE",formValue);
+  const allObjects = this.projecthubservice.all[1];
+  for (const i of formValue) {
+    const environmentalSourceId = this.getEnvironmentalSourceIds(i, allObjects);
+    
+    this.transportationDb.push({
+      emenvironmentId: i.emenvironmentId,
+      environmentalSourceTypeId: i.environmentalSourceTypeId,
+      projectId: this.projecthubservice.projectid,
+      shipmentDistance: i.shipmentDistance,
+      shipmentWeight: i.shipmentWeight,
+      shipmentFrequency: i.shipmentFrequency,
+      environmentalSourceId: environmentalSourceId,
+      affectedLocations: i.affectedLocations,
+      affectedContainers: i.affectedContainers,
+      embasisOfEstimate: i.embasisOfEstimate
+    });
+
+    this.transportationFormValue.push({
+      emenvironmentId: i.emenvironmentId,
+      environmentalSourceTypeId: i.environmentalSourceTypeId,
+      projectId: this.projecthubservice.projectid,
+      transportationMode: i.transportationMode,
+      transportationType: i.transportationType,
+      fuelType: i.fuelType,
+      co2intensityFactorValue: i.co2intensityFactorValue,
+      co2intensityFactorMeasure: i.co2intensityFactorMeasure,
+      shipmentDistance: i.shipmentDistance,
+      shipmentWeight: i.shipmentWeight,
+      shipmentFrequency: i.shipmentFrequency,
+      shippingSolutionSupplier: i.shippingSolutionSupplier,
+      solutionName: i.solutionName,
+      environmentalSourceId: environmentalSourceId,
+      affectedLocations: i.affectedLocations,
+      affectedContainers: i.affectedContainers,
+      embasisOfEstimate: i.embasisOfEstimate
+    });
   }
-  
-  submitPrep() {
-    this.transportationDb = [];
-    this.transportationFormValue = [];
-    const formValue = this.transportationForm.getRawValue();
-    console.log("FORM VALUE",formValue);
-    const allObjects = this.projecthubservice.all[1];
-    for (const i of formValue) {
-      const environmentalSourceId = this.getEnvironmentalSourceIds(i, allObjects);
-      
-      this.transportationDb.push({
-        emenvironmentId: i.emenvironmentId,
-        environmentalSourceTypeId: i.environmentalSourceTypeId,
-        projectId: this.projecthubservice.projectid,
-        shipmentDistance: i.shipmentDistance,
-        shipmentWeight: i.shipmentWeight,
-        shipmentFrequency: i.shipmentFrequency,
-        environmentalSourceId: environmentalSourceId,
-        affectedLocations: i.affectedLocations,
-        affectedContainers: i.affectedContainers,
-        embasisOfEstimate: i.embasisOfEstimate
-      });
-  
-      this.transportationFormValue.push({
-        emenvironmentId: i.emenvironmentId,
-        environmentalSourceTypeId: i.environmentalSourceTypeId,
-        projectId: this.projecthubservice.projectid,
-        transportationMode: i.transportationMode,
-        transportationType: i.transportationType,
-        fuelType: i.fuelType,
-        co2intensityFactorValue: i.co2intensityFactorValue,
-        co2intensityFactorMeasure: i.co2intensityFactorMeasure,
-        shipmentDistance: i.shipmentDistance,
-        shipmentWeight: i.shipmentWeight,
-        shipmentFrequency: i.shipmentFrequency,
-        shippingSolutionSupplier: i.shippingSolutionSupplier,
-        solutionName: i.solutionName,
-        environmentalSourceId: environmentalSourceId,
-        affectedLocations: i.affectedLocations,
-        affectedContainers: i.affectedContainers,
-        embasisOfEstimate: i.embasisOfEstimate
-      });
-    }
-  }
-  
+}
+
   
   getNgxDatatableNumberHeader(): any {
     return ' ngx-number-header';
