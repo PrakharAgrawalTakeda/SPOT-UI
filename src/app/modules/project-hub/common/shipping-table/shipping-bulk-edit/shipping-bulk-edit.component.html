@@ -1,1 +1,162 @@
-<p>shipping-bulk-edit works!</p>
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Shipping Solutions</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="w-full bg-card rounded-2xl">
+        <div class="flex items-center justify-end gap-3 pt-3 pr-3 grid-cols-2">
+            <button class="ml-4 text-primary bg-gray-200"
+                *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS" mat-flat-button [color]="'primary-200'"
+                (click)="addShipping()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+
+        </div>
+        <div class="h-[70vh] w-[94vw] overflow-y-hidden pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
+                class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                [rows]="Shipping" #shippingTable>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Solution Supplier" prop="shippingSolutionSupplier"
+                    [width]="100">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!shippingTableEditStack.includes(rowIndex)"
+                            (click)="shippingTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="shippingForm.controls[rowIndex]"
+                            *ngIf="shippingTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="shippingSolutionSupplier" name="shippingSolutionSupplier"
+                                [placeholder]="'Solution Supplier'" [dropDownArrayType]="'string'"
+                                [dropDownArray]="supplierDropDownValues" [showNoneOption]="false">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Solution Name" prop="solutionName"
+                    [width]="60">Type
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!shippingTableEditStack.includes(rowIndex)"
+                            (click)="shippingTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <div>
+                            <form [formGroup]="shippingForm.controls[rowIndex]"
+                                *ngIf="shippingTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="solutionName" name="solutionName"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="shippingForm.controls[rowIndex].get('shippingSolutionSupplier').value == 'solutionDropDownValues' ? [] :
+                                    shippingForm.controls[rowIndex].get('shippingSolutionSupplier').value == 'Csafe' ? csafeDropDownValues :
+                                    shippingForm.controls[rowIndex].get('shippingSolutionSupplier').value == 'Envirotainer' ? envirotainerDropDownValues :
+                                    shippingForm.controls[rowIndex].get('shippingSolutionSupplier').value == 'Standard' ? standardDropDownValues :
+                                    shippingForm.controls[rowIndex].get('shippingSolutionSupplier').value == 'VaQTech' ? vaqtechDropDownValues : []" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            <ngx-datatable-column [sortable]="false" name="CO2 Intensity (Factor Value)" prop="co2intensityFactorValue" [width]="30">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <div *ngIf="getData(rowIndex) == '1'">
+                        3.240
+                    </div>
+                    <div *ngIf="getData(rowIndex) == '2'">
+                        3.130
+                    </div>
+                    <div *ngIf="getData(rowIndex) == '3'">
+                        3.275
+                    </div>
+                    <div *ngIf="getData(rowIndex) == '4'">
+                        3.600
+                    </div>
+                    <div *ngIf="getData(rowIndex) == '0'">
+                        {{value}}
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="UoM" prop="co2intensityFactorMeasure" [width]="30">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div>
+                            kg CO2e per container-km 
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Shipment Distance (km)" prop="shipmentDistance" [width]="90">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!shippingTableEditStack.includes(rowIndex)"
+                            (click)="shippingTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="shippingForm.controls[rowIndex]"
+                            *ngIf="shippingTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Affected Containers" prop="affectedContainers" [width]="90">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!shippingTableEditStack.includes(rowIndex)"
+                            (click)="shippingTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="shippingForm.controls[rowIndex]"
+                            *ngIf="shippingTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="affectedContainers" name="affectedContainers"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Basis of Estimate"
+                    prop="embasisOfEstimate" [width]="100">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!shippingTableEditStack.includes(rowIndex)"
+                            (click)="shippingTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="shippingForm.controls[rowIndex]"
+                            *ngIf="shippingTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="embasisOfEstimate" [showLabel]="false"
+                                [label]="'Basis of Estimate'" [placeholder]="'Basis of Estimate'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="20" [resizeable]="false"
+                    [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+
+                        <div class="flex items-center justify-start">
+                            <a href="javascript:void(0)" title="Delete Single"
+                                *ngIf="this.projecthubservice.roleControllerControl.projectHub.CAPS"
+                                (click)="deleteShipping(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitShipping()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

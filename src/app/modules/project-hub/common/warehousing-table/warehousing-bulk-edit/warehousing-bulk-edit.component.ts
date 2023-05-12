@@ -116,7 +116,7 @@ export class WarehousingBulkEditComponent {
         shipmentDistance: 0,
         shipmentWeight: 0,
         shipmentFrequency: 0,
-        affectedLocations: null,
+        affectedLocations: 0,
         affectedContainers: null,
         embasisOfEstimate: ''
     }]
@@ -135,7 +135,7 @@ export class WarehousingBulkEditComponent {
         shippingSolutionSupplier: new FormControl(''),
         solutionName: new FormControl(''),
 environmentalSourceId: new FormControl(''),
-      affectedLocations: new FormControl(null),
+      affectedLocations: new FormControl(0),
       affectedContainers: new FormControl(null),
       embasisOfEstimate: new FormControl('')
     }))
