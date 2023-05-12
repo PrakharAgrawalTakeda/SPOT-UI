@@ -167,7 +167,7 @@ export class BiogenicsBulkEditComponent {
   deleteBio(rowIndex: number){
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
-      "message": "Are you sure you to want delete this Record?",
+      "message": "Are you sure you want to delete this Record?",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",

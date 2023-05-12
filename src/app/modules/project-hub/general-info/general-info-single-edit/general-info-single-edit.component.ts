@@ -441,7 +441,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio && (this.generalInfo.enviornmentalPortfolio != null || Object.keys(formValue.enviornmentalPortfolio).length == 0)) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you sure?",
-          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "message": "If you change the currently selected Environmental Portfolio, all CAPS data will be removed! Do you want to proceed ?",
           "icon": {
             "show": true,
             "name": "heroicons_outline:exclamation",
@@ -557,7 +557,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio && (this.generalInfo.enviornmentalPortfolio != null || Object.keys(formValue.enviornmentalPortfolio).length == 0)) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you sure?",
-          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "message": "If you change the currently selected Environmental Portfolio, all CAPS data will be removed! Do you want to proceed ?",
           "icon": {
             "show": true,
             "name": "heroicons_outline:exclamation",
