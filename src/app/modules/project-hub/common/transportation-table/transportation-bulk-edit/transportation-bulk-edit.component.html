@@ -1,0 +1,464 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Transportation</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="w-full bg-card rounded-2xl">
+        <div class="flex items-center justify-end gap-3 pt-3 pr-3 grid-cols-2">
+            <button class="ml-4 text-primary bg-gray-200"
+                *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS" mat-flat-button [color]="'primary-200'"
+                (click)="addTransportation()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+
+        </div>
+        <div class="h-[70vh] w-[94vw] overflow-y-hidden pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
+                class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                [rows]="Transportation" #transportationTable>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Mode" prop="transportationMode"
+                    [width]="100">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
+                            (click)="transportationTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="transportationForm.controls[rowIndex]"
+                            *ngIf="transportationTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="transportationMode" name="transportationMode"
+                                [placeholder]="'Transportation Mode'" [dropDownArrayType]="'string'"
+                                [dropDownArray]="modeDropDownValues" [showNoneOption]="false">
+                            </spot-select>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Type" prop="transportationType"
+                    [width]="60">Type
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
+                            (click)="transportationTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="transportationType" name="transportationType"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="transportationForm.controls[rowIndex].get('transportationMode').value == '' ? typeDropDrownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? roadTypeDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? airTypeDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Sea freight' ? seaTypeDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Train' ? trainTypeDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Courier' ? courierTypeDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Parcel/ Express' ? parcelTypeDropDownValues : []" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <!-- <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="transportationType" name="transportationType"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="airTypeDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="transportationType" name="transportationType"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="seaTypeDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="transportationType" name="transportationType"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="trainTypeDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="transportationType" name="transportationType"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="courierTypeDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="transportationType" name="transportationType"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="parcelTypeDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="transportationType" name="transportationType"
+                                    [placeholder]="'Type'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="typeDropDrownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div> -->
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Fuel" prop="fuelType"
+                    [width]="60">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
+                            (click)="transportationTableEditRow(rowIndex)">
+                            <p *ngIf="value==''">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <div>
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="transportationForm.controls[rowIndex].get('transportationMode').value == '' ? fuelDropDrownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' && (transportationForm.controls[rowIndex].get('transportationType').value == 'LTL / RDC - Reefer' || transportationForm.controls[rowIndex].get('transportationType').value == 'Partial Load Reefer (Truck load fill rate <60%)'
+                                    || transportationForm.controls[rowIndex].get('transportationType').value == 'Standard - Reefer (if truck load fill rate > 60%)' || transportationForm.controls[rowIndex].get('transportationType').value == 'Van - Ambiant' || transportationForm.controls[rowIndex].get('transportationType').value == 'Van - Reefer') ? roadFuelDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' && (transportationForm.controls[rowIndex].get('transportationType').value == 'Ambient (truck load fill rate > 60%)' || transportationForm.controls[rowIndex].get('transportationType').value == 'LTL / RDC - Ambient'
+                                    || transportationForm.controls[rowIndex].get('transportationType').value == 'Partial Load Ambiant (Truck load fill rate <60%)') ? roadFuelDropDownValues2 :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? airFuelDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Sea freight' && (transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 20 Ft - Reefer' || transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 40 Ft - Reefer') ? seaFuelDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Sea freight' && (transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 20 Ft - Ambiant' || transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 40 Ft - Ambiant') ? seaFuelDropDownValues2 :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Train' ? trainFuelDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Courier' ? courierFuelDropDownValues :
+                                    transportationForm.controls[rowIndex].get('transportationMode').value == 'Parcel/ Express' ? parcelFuelDropDownValues : []" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <!-- <div *ngIf="transportationForm.controls[rowIndex].transportationMode == 'Road freight' && 
+                        (transportationForm.controls[rowIndex].transportationType == 'Ambient (truck load fill rate > 60%)' 
+                        || transportationForm.controls[rowIndex].transportationType == 'LTL / RDC - Ambient'
+                            || transportationForm.controls[rowIndex].transportationType == 'Partial Load Ambiant (Truck load fill rate <60%)')">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="roadFuelDropDownValues2" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="transportationForm.controls[rowIndex].transportationMode == 'Air freight'">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="airFuelDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="transportationForm.controls[rowIndex].transportationMode == 'Sea freight' && 
+                        (transportationForm.controls[rowIndex].transportationType == 'Standard 20 Ft - Reefer' || 
+                        transportationForm.controls[rowIndex].transportationType == 'Standard 40 Ft - Reefer')">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="seaFuelDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="transportationForm.controls[rowIndex].transportationMode == 'Sea freight' && 
+                        (transportationForm.controls[rowIndex].transportationType == 'Standard 20 Ft - Ambiant' || 
+                        transportationForm.controls[rowIndex].transportationType == 'Standard 40 Ft - Ambiant')">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="seaFuelDropDownValues2" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="transportationForm.controls[rowIndex].transportationMode == 'Train'">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="trainFuelDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="transportationForm.controls[rowIndex].transportationMode == 'Courier'">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="courierFuelDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="transportationForm.controls[rowIndex].transportationMode == 'Parcel/ Express'">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="parcelFuelDropDownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div>
+                        <div *ngIf="transportationForm.controls[rowIndex].transportationMode == ''">
+                            <form [formGroup]="transportationForm.controls[rowIndex]"
+                                *ngIf="transportationTableEditStack.includes(rowIndex)">
+                                <spot-select formControlName="fuelType" name="fuelType"
+                                    [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                    [dropDownArray]="fuelDropDrownValues" [showNoneOption]="false">
+                                </spot-select>
+                            </form>
+                        </div> -->
+                    </ng-template>
+                </ngx-datatable-column>
+                <!-- <ngx-datatable-column [resizeable]="false" [sortable]="false" name="CO2 Intensity (Factor Value)" prop="co2intensityFactorValue"
+                [width]="60">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
+                        (click)="transportationTableEditRow(rowIndex)">
+                        <p *ngIf="value==''">&nbsp;</p>
+                        <p>{{value}}</p>
+                    </a>
+                    <div>
+                        <form [formGroup]="transportationForm.controls[rowIndex]"
+                            *ngIf="transportationTableEditStack.includes(rowIndex)">
+                            <spot-select formControlName="fuelType" name="fuelType"
+                                [placeholder]="'Fuel'" [dropDownArrayType]="'string'"
+                                [dropDownArray]="transportationForm.controls[rowIndex].get('fuelType').value == '' && transportationForm.controls[rowIndex].get('transportationType').value == '' ? uomDropDrownValues :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Short haul (< 1000 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? air1 : 
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Medium haul (1000–3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? air2 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Long haul (> 3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? air3 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'SAF' && transportationForm.controls[rowIndex].get('transportationType').value == 'Short haul (< 1000 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? air4 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'SAF' && transportationForm.controls[rowIndex].get('transportationType').value == 'Medium haul (1000–3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? air5 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'SAF' && transportationForm.controls[rowIndex].get('transportationType').value == 'Long haul (> 3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Air freight' ? air6 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Courier' ? courier1 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Short haul (< 1000 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Courier' ? courier2 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Medium haul (1000–3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Courier' ? courier3 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Long haul (> 3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Courier' ? courier4 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Parcel/ Express' ? parcel1 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Short haul (< 1000 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Parcel/ Express' ? parcel2 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Medium haul (1000–3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Parcel/ Express' ? parcel3 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Standard' && transportationForm.controls[rowIndex].get('transportationType').value == 'Long haul (> 3700 km)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Parcel/ Express' ? parcel4 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Non Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'Ambient (truck load fill rate > 60%)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road1 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Non Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'LTL / RDC - Ambient' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road2 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'LTL / RDC - Reefer' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road3 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Non Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'Partial Load Ambiant (Truck load fill rate <60%)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road4 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'Partial Load Reefer (Truck load fill rate <60%)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road5 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'Standard - Reefer (if truck load fill rate > 60%)' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road6 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'Van - Ambiant' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road7 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Temp-controlled / Diesel, 5% biodiesel blend' && transportationForm.controls[rowIndex].get('transportationType').value == 'Van - Reefer' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Road freight' ? road8 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Deep Sea Cargo - Reefer' && transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 20 Ft - Reefer' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Sea freight' ? sea1 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Deep Sea Cargo - Ambiant' && transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 20 ft - Ambiant' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Sea freight' ? sea2 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Deep Sea Cargo - Reefer' && transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 40 Ft - Reefer' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Sea freight' ? sea3 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Deep Sea Cargo - Ambiant' && transportationForm.controls[rowIndex].get('transportationType').value == 'Standard 40 ft - Ambiant' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Sea freight' ? sea4 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Non Temp-controlled / Diesel' && transportationForm.controls[rowIndex].get('transportationType').value == 'Container train - Ambiant' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Train' ? train1 :
+transportationForm.controls[rowIndex].get('fuelType').value == 'Non Temp-controlled / Diesel' && transportationForm.controls[rowIndex].get('transportationType').value == 'Container train - Reefer' && transportationForm.controls[rowIndex].get('transportationMode').value == 'Train' ? train2 : []" [showNoneOption]="false">
+                            </spot-select>
+                        </form>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column> -->
+            <ngx-datatable-column [sortable]="false" name="CO2 Intensity (Factor Value)" prop="co2intensityFactorValue" [width]="30">
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                    <div *ngIf="getData(rowIndex) == 'air1'">
+                        0.920
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'air2'">
+                        0.690
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'air3'">
+                        0.680
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'air4'">
+                        0.184
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'air5'">
+                        0.138
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'air6'">
+                        0.136
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'courier1'">
+                        0.708
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'courier2'">
+                        0.892
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'courier3'">
+                        0.708
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'courier4'">
+                        0.700
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'parcel1'">
+                        0.708
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'parcel2'">
+                        0.892
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'parcel3'">
+                        0.708
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'parcel4'">
+                        0.700
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road1'">
+                        0.078
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road2'">
+                        0.063
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road3'">
+                        0.071
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road4'">
+                        0.137
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road5'">
+                        0.154
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road6'">
+                        0.087
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road7'">
+                        0.204
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'road8'">
+                        0.230
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'sea1'">
+                        0.002
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'sea2'">
+                        0.001
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'sea3'">
+                        0.003
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'sea4'">
+                        0.002
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'train1'">
+                        0.025
+                    </div>
+                    <div *ngIf="getData(rowIndex) == 'train2'">
+                        0.028
+                    </div>
+
+                    <div *ngIf="getData(rowIndex) == '0'">
+                        {{value}}
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="UoM" prop="co2intensityFactorMeasure" [width]="30">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div>
+                            kg CO2e/t-km 
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Shipment Distance (km)" prop="shipmentDistance" [width]="90">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <p *ngIf="!editTransportation">{{value}}</p>
+                        <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
+                            (click)="transportationTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="transportationForm.controls[rowIndex]"
+                            *ngIf="transportationTableEditStack.includes(rowIndex)">
+                            <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Shipment Weight (kg)" prop="shipmentWeight" [width]="90">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <p *ngIf="!editTransportation">{{value}}</p>
+                        <a *ngIf="!transportationTableEditStack.includes(rowIndex) && editTransportation"
+                            (click)="transportationTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="transportationForm.controls[rowIndex]"
+                            *ngIf="transportationTableEditStack.includes(rowIndex) && editTransportation">
+                            <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Shipment Frequency" prop="shipmentFrequency" [width]="90">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <p *ngIf="!editTransportation">{{value}}</p>
+                        <a *ngIf="!transportationTableEditStack.includes(rowIndex) && editTransportation"
+                            (click)="transportationTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                        </a>
+                        <form [formGroup]="transportationForm.controls[rowIndex]"
+                            *ngIf="transportationTableEditStack.includes(rowIndex) && editTransportation">
+                            <spot-input class="w-full" formControlName="shipmentFrequency" name="shipmentFrequency"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Basis of Estimate"
+                    prop="embasisOfEstimate" [width]="100">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
+                            (click)="transportationTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="transportationForm.controls[rowIndex]"
+                            *ngIf="transportationTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="embasisOfEstimate" [showLabel]="false"
+                                [label]="'Basis of Estimate'" [placeholder]="'Basis of Estimate'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="20" [resizeable]="false"
+                    [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+
+                        <div class="flex items-center justify-start">
+                            <a href="javascript:void(0)" title="Delete Single"
+                                *ngIf="this.projecthubservice.roleControllerControl.projectHub.CAPS"
+                                (click)="deleteTransportation(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitTransportation()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

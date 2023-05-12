@@ -87,6 +87,9 @@ export class WaterWasteBulkEditComponent {
     this.WaterWaste = this.projecthubservice.all[0]
     this.WaterWaste = this.sortbyNameandType(this.WaterWaste)
     this.waterwasteValues = this.projecthubservice.all[3]
+    console.log(this.WaterWaste)
+    console.log(this.waterwasteValues)
+    console.log(this.ProjectData)
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
     for(var j=0;j<waterValues.length;j++){
       this.waterTypeDropDrownValues.push(waterValues[j].wwtype)

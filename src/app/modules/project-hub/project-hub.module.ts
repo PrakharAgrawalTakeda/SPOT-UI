@@ -163,6 +163,9 @@ import {MyPreferenceModule} from "../my-preference/my-preference.module";
 import { TransportationSingleEditComponent } from './common/transportation-table/transportation-single-edit/transportation-single-edit.component';
 import { WarehousingSingleEditComponent } from './common/warehousing-table/warehousing-single-edit/warehousing-single-edit.component';
 import { ShippingSingleEditComponent } from './common/shipping-table/shipping-single-edit/shipping-single-edit.component';
+import { TransportationBulkEditComponent } from './common/transportation-table/transportation-bulk-edit/transportation-bulk-edit.component';
+import { ShippingBulkEditComponent } from './common/shipping-table/shipping-bulk-edit/shipping-bulk-edit.component';
+import { WarehousingBulkEditComponent } from './common/warehousing-table/warehousing-bulk-edit/warehousing-bulk-edit.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -536,7 +539,10 @@ export const projectRoutes: Route[] = [
     WaterWasteSingleEditComponent,
     TransportationSingleEditComponent,
     WarehousingSingleEditComponent,
-    ShippingSingleEditComponent
+    ShippingSingleEditComponent,
+    TransportationBulkEditComponent,
+    ShippingBulkEditComponent,
+    WarehousingBulkEditComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),
