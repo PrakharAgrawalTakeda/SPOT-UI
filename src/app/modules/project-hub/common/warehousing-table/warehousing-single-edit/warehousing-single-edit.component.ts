@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MsalService } from '@azure/msal-angular';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectApiService } from '../../project-api.service';
@@ -36,7 +36,32 @@ export class WarehousingSingleEditComponent {
     embasisOfEstimate: new FormControl()
   })
 
-  constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { }
+
+  allowNegativeShipment = true;
+  allowNegativeLocations = true;
+  
+
+  constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
+
+this.WarehousingForm.controls.shipmentWeight.valueChanges.subscribe(res => {
+    if (res < 0) {
+        this.allowNegativeLocations = false;
+    } else {
+        this.allowNegativeLocations = true;
+    }
+});
+
+this.WarehousingForm.controls.affectedLocations.valueChanges.subscribe(res => {
+    if (res < 0) {
+        this.allowNegativeShipment = false;
+    } else {
+        this.allowNegativeShipment = true;
+    }
+});
+
+    
+    
+   }
 
   ngOnInit(): void {
     this.getllookup()

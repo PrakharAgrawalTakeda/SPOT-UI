@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
@@ -27,21 +27,22 @@ export class WarehousingBulkEditComponent {
   editWarehousing: boolean = true
   dropdownList: any;
 
-
-
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
-    this.warehousingForm.valueChanges.subscribe(res => {
-      if (this.viewContent) {
-        this.changeChecker()
-        if (JSON.stringify(this.submitObj) == JSON.stringify(this.warehousingDb)) {
-          this.projecthubservice.isFormChanged = false
+      this.warehousingForm.valueChanges.subscribe((res) => {
+        if (this.viewContent) {
+          this.changeChecker();
+          if (JSON.stringify(this.submitObj) == JSON.stringify(this.warehousingDb)) {
+            this.projecthubservice.isFormChanged = false;
+          } else {
+            this.projecthubservice.isFormChanged = true;
+          }
         }
-        else {
-          this.projecthubservice.isFormChanged = true
-        }
-      }
-    })
+      });
+
+      
+      
+
 
   }
 

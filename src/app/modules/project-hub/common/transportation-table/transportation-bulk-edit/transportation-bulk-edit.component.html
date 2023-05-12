@@ -258,7 +258,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                         ngx-datatable-cell-template>
 
-                        <div class="flex items-center justify-start">
+                        <div class="flex items-center justify-end pr-5">
                             <a href="javascript:void(0)" title="Delete Single"
                                 *ngIf="this.projecthubservice.roleControllerControl.projectHub.CAPS"
                                 (click)="deleteTransportation(rowIndex)">
