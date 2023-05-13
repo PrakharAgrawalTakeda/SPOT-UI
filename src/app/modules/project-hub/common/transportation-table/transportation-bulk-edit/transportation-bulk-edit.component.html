@@ -201,7 +201,8 @@
                         <form [formGroup]="transportationForm.controls[rowIndex]"
                             *ngIf="transportationTableEditStack.includes(rowIndex)">
                             <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
-                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0"
+                                [allowNegativeValues]="transportationForm.controls[rowIndex].get('shipmentWeight').value >= 0 && transportationForm.controls[rowIndex].get('shipmentFrequency').value >= 0">
                             </spot-input>
                         </form>
                     </ng-template>
@@ -217,7 +218,8 @@
                         <form [formGroup]="transportationForm.controls[rowIndex]"
                             *ngIf="transportationTableEditStack.includes(rowIndex) && editTransportation">
                             <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
-                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0"
+                                [allowNegativeValues]="transportationForm.controls[rowIndex].get('shipmentDistance').value >= 0 && transportationForm.controls[rowIndex].get('shipmentFrequency').value >= 0">
                             </spot-input>
                         </form>
                     </ng-template>
@@ -233,7 +235,8 @@
                         <form [formGroup]="transportationForm.controls[rowIndex]"
                             *ngIf="transportationTableEditStack.includes(rowIndex) && editTransportation">
                             <spot-input class="w-full" formControlName="shipmentFrequency" name="shipmentFrequency"
-                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0">
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0"
+                                [allowNegativeValues]="transportationForm.controls[rowIndex].get('shipmentDistance').value >= 0 && transportationForm.controls[rowIndex].get('shipmentWeight').value >= 0">
                             </spot-input>
                         </form>
                     </ng-template>
