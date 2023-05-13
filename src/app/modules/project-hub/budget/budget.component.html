@@ -1,1 +1,66 @@
-<p>budget works!</p>
+<div class="w-full min-w-0 p-8 pt-0">
+    <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+        <div class="p-6 pb-3 pt-0 flex items-center justify-between">
+            <div class="p-4 pb-3 pt-0 flex items-center justify-between">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget</div>
+            </div>
+            <div class="flex items-start justify-between">
+                <div style="padding-right: 5px;">
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projectHubService.toggleDrawerOpen('BudgetGeneralEdit', '', '' , '')">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+            <spot-input class="w-full read-only"
+                        formControlName="parentProgram"
+                        [label]="'CAPEX Required'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'OPEX Required?'">
+            </spot-input>
+            <div>
+            </div>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Parent Program'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Local Currency'" [showHint]="true" [hint]="'Currency Info'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Asset Placed In Service (Estimate)'">
+            </spot-input>
+        </div>
+        <div class="text-primary text-xl">Required for CAPEX Projects</div>
+        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Budget ID'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'GMS Budget Owner'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Global/Regional Predefined Investment'">
+            </spot-input>
+
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Where'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Why'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Funding Approval Need Date'">
+            </spot-input>
+        </div>
+        <div class="text-primary text-xl">Funding Information</div>
+        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Project Funding Status'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram"
+                        [label]="'Total Approved CAPEX (USD)'" [showHint]="true"
+                        [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Total Approved OPEX (USD)'">
+            </spot-input>
+        </div>
+        <div>
+
+        </div>
+        <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
+                       [label]="'Budget Commentary'">
+        </spot-textarea>
+    </div>
+</div>

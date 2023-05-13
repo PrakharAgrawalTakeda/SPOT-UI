@@ -52,7 +52,7 @@ export class WaterWasteBulkEditComponent {
         this.projecthubservice.isFormChanged = true
       }
     })
-    
+
   }
 
   getData(id){
@@ -87,6 +87,9 @@ export class WaterWasteBulkEditComponent {
     this.WaterWaste = this.projecthubservice.all[0]
     this.WaterWaste = this.sortbyNameandType(this.WaterWaste)
     this.waterwasteValues = this.projecthubservice.all[3]
+    console.log(this.WaterWaste)
+    console.log(this.waterwasteValues)
+    console.log(this.ProjectData)
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
     for(var j=0;j<waterValues.length;j++){
       this.waterTypeDropDrownValues.push(waterValues[j].wwtype)
@@ -129,7 +132,7 @@ export class WaterWasteBulkEditComponent {
       }
     }) : array
   }
-  
+
 
   addWaterWaste() {
     var j = [{}]
@@ -192,7 +195,7 @@ export class WaterWasteBulkEditComponent {
   deleteWaterWaste(rowIndex: number) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
-      "message": "Are you sure you want Delete this Record?",
+      "message": "Are you sure you want to delete this record?",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
@@ -310,7 +313,7 @@ export class WaterWasteBulkEditComponent {
           if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
             var formValue = this.CAPSform.getRawValue()
             var mainObj = this.ProjectData.projectData
-            
+
             mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
 
             this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {

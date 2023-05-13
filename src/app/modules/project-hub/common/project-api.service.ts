@@ -789,6 +789,13 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async bulkeditD(body, projectId, environmentalSourceTypeId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditDistribution/" + projectId+ "/"+environmentalSourceTypeId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   async bulkeditBiogenics(body, projectId) {
     var link = GlobalVariables.apiurl + "CAPS/BulkEditBiogenics/" + projectId
     const abc$ = this.http.put(link, body)

@@ -20,11 +20,11 @@
                     </div>
                 </div>
                     <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full" [ngClass]="{'grid-cols-3' : callLocation != 'Business-Case', 'grid-cols-2' : callLocation == 'Business-Case'}">
-                        <spot-input class="w-full read-only" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
+                        <spot-input class="w-full" formControlName="enviornmentalPortfolio" name="enviornmentalPortfolio"
                             [label]="'Environmental Portfolio'" [showHint]="true"
                             [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
                         </spot-input>
-                        <spot-input class="w-full read-only custom" formControlName="EmissionsImpact" name="EmissionsImpact"
+                        <spot-input class="w-full custom" formControlName="EmissionsImpact" name="EmissionsImpact"
                             [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="1" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0.0'">
                         </spot-input>
@@ -35,11 +35,11 @@
                         </spot-input-date>
                         <div *ngIf="!this.showDefault"></div><div *ngIf="!this.showDefault && callLocation != 'Business-Case'"></div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only custom" formControlName="EnergyImpact" name="EnergyImpact"
+                        <spot-input class="w-full custom" formControlName="EnergyImpact" name="EnergyImpact"
                             [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
-                        <label class="Unit">GJ</label>
+                        <label class="Unit">kWh</label>
                         </div>
                         <div *ngIf="this.showDefault && callLocation != 'Business-Case'" class="label">
                         <spot-input class="w-full read-only customCost" formControlName="EnergyCost" name="EnergyCost"
@@ -62,7 +62,7 @@
                             </mat-icon>
                         </div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only custom" formControlName="WaterImpact" name="WaterImpact"
+                        <spot-input class="w-full custom" formControlName="WaterImpact" name="WaterImpact"
                             [label]="'Water Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
@@ -76,7 +76,7 @@
                         </div>
                         <div></div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only custom" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
+                        <spot-input class="w-full custom" formControlName="TotalWasteImpact" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" name="TotalWasteImpact" [label]="'Total Waste Impact (per Year)'" [placeholder]="'0'">
                         </spot-input>
                         <label class="Unit">Kg</label>
@@ -89,7 +89,7 @@
                         </div>
                         <div></div>
                         <div *ngIf="this.showDefault" class="label">
-                        <spot-input class="w-full read-only custom" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
+                        <spot-input class="w-full custom" formControlName="LandfilledWasteImpact" name="LandfilledWasteImpact"
                             [label]="'Landfilled Waste Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>

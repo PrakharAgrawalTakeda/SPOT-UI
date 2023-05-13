@@ -45,6 +45,7 @@ export class MilestoneSetViewEditComponent {
     portfolioOwnerList =[];
     orderView = false;
     standardMilestonesTableForm = new FormArray([])
+    milestoneName: any;
     standardMilestonesDetailsForm = new FormGroup({
         milestoneTemplateId: new FormControl(""),
         milestonesetId: new FormControl(""),
@@ -100,11 +101,12 @@ export class MilestoneSetViewEditComponent {
                             }
                         })
                         for (var i of res.templateDetails) {
+                            this.milestoneName = i.milestone
                             this.standardMilestonesTableForm.push(new FormGroup({
                                 milestoneTemplateId: new FormControl(i.milestoneTemplateId),
                                 milestoneId: new FormControl(i.milestoneId),
                                 milestoneInternalId: new FormControl(i.milestoneInternalId),
-                                milestone: new FormControl(i.milestone),
+                                milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
                                 funtionalOwnerId: new FormControl(i.funtionalOwnerId),
                                 comment: new FormControl(i.comment),
                                 includeInReport: new FormControl(i.includeInReport),
@@ -157,11 +159,12 @@ export class MilestoneSetViewEditComponent {
                         }
                     })
                     for (var i of this.standardMilestonesTableData) {
+                        this.milestoneName = i.milestone
                         this.standardMilestonesTableForm.push(new FormGroup({
                             milestoneTemplateId: new FormControl(i.milestoneTemplateId),
                             milestoneId: new FormControl(i.milestoneId),
                             milestoneInternalId: new FormControl(i.milestoneInternalId),
-                            milestone: new FormControl(i.milestone),
+                            milestone: new FormControl(i.milestoneType > 0 ? i.milestoneType == 1 ? this.milestoneName.replace('Execution Start - ', '') : i.milestoneType == 2 ? this.milestoneName.replace('Execution End - ', '') : i.milestone : i.milestone),
                             funtionalOwnerId: new FormControl(i.funtionalOwnerId),
                             comment: new FormControl(i.comment),
                             includeInReport: new FormControl(i.includeInReport),
@@ -185,16 +188,40 @@ export class MilestoneSetViewEditComponent {
             this.standardMilestonesTableDataSubmit = []
             let sortOrder = 100;
             for (var i of form) {
-                this.standardMilestonesTableDataSubmit.push({
-                    "milestoneTemplateId": i.milestoneTemplateId,
-                    "milestoneId": i.milestoneId,
-                    "milestone": i.milestone,
-                    "funtionalOwnerId": i.funtionalOwnerId,
-                    "comment": i.comment ? i.comment : "",
-                    "includeInReport": i.includeInReport,
-                    "sortOrder": sortOrder,
-                    "milestoneType": i.milestoneType ? i.milestoneType : "0",
-                })
+                var milestoneName = i.milestone;
+                if (i.milestoneType == 1) {
+                    if (!i.milestone.includes('Execution Start')) {
+                        milestoneName = 'Execution Start - '.concat(i.milestone)
+                    }
+                }
+                if (i.milestoneType == 2) {
+                    if (!i.milestone.includes('Execution End ')) {
+                        milestoneName = 'Execution End - '.concat(i.milestone)
+                    }
+                }
+                if ((i.milestoneType > 0 && i.milestone != '') || (i.milestoneType > 0 && i.milestone != null)) {
+                    this.standardMilestonesTableDataSubmit.push({
+                        "milestoneTemplateId": i.milestoneTemplateId,
+                        "milestoneId": i.milestoneId,
+                        "milestone": milestoneName,
+                        "funtionalOwnerId": i.funtionalOwnerId,
+                        "comment": i.comment ? i.comment : "",
+                        "includeInReport": i.includeInReport,
+                        "sortOrder": sortOrder,
+                        "milestoneType": i.milestoneType ? i.milestoneType : "0",
+                    })
+                } else {
+                    this.standardMilestonesTableDataSubmit.push({
+                        "milestoneTemplateId": i.milestoneTemplateId,
+                        "milestoneId": i.milestoneId,
+                        "milestone": (i.milestone),
+                        "funtionalOwnerId": i.funtionalOwnerId,
+                        "comment": i.comment ? i.comment : "",
+                        "includeInReport": i.includeInReport,
+                        "sortOrder": sortOrder,
+                        "milestoneType": i.milestoneType ? i.milestoneType : "0",
+                    })
+                }
                 sortOrder = sortOrder + 100;
             }
         } else {
@@ -312,7 +339,7 @@ export class MilestoneSetViewEditComponent {
     deleteSM(rowIndex: number) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
-            "message": "Are you sure you want Delete this Record?",
+            "message": "Are you sure you want to delete this record?",
             "icon": {
                 "show": true,
                 "name": "heroicons_outline:exclamation",
@@ -351,7 +378,7 @@ export class MilestoneSetViewEditComponent {
     submitStandardMilestones() {
         if (!this.standardMilestonesDetailsForm.value.milestoneSet) {
             var comfirmConfig: FuseConfirmationConfig = {
-                "title": "Please type a Milestone Set name",
+                "title": "Please enter a Milestone Set name!",
                 "message": "",
                 "icon": {
                     "show": true,
@@ -371,9 +398,9 @@ export class MilestoneSetViewEditComponent {
                 },
                 "dismissible": true
             }
-            const alert = this.fuseAlert.open(comfirmConfig)
+            this.fuseAlert.open(comfirmConfig)
         }else{
-            if (!this.standardMilestonesDetailsForm.value.portfolioOwner) {
+            if (!this.standardMilestonesDetailsForm.value.portfolioOwner || Object.keys(this.standardMilestonesDetailsForm.value.portfolioOwner).length===0) {
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "Please select a Portfolio Owner",
                     "message": "",

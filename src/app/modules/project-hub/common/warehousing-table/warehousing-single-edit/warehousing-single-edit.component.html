@@ -15,14 +15,16 @@
         </spot-input>
 
         <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
-            [label]="'Shipment Weight (kg)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
-        </spot-input>
+    [label]="'Shipment Weight (kg)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+    [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeShipment">
+</spot-input>
 
-        <spot-input class="w-full" formControlName="affectedLocations" name="affectedLocations"
-            [label]="'Affected Locations'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
-        </spot-input>
+<spot-input class="w-full" formControlName="affectedLocations" name="affectedLocations"
+    [label]="'Affected Locations'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+    [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeLocations">
+</spot-input>
+
+
 
         <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
             [placeholder]="'Basis of Estimate'">

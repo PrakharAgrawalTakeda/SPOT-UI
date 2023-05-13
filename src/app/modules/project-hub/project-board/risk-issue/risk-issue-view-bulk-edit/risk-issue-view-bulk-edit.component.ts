@@ -538,7 +538,6 @@ export class RisIssueViewBulkEditComponent implements OnInit {
             optionId=""
         }
         for (var i of formValue) {
-            console.log("aaaaaaaaaaa", i.functionGroupId)
             this.formValue.push({
                 closeDate: i.closeDate ? moment(i.closeDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
                 dueDate: i.dueDate ? moment(i.dueDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
@@ -601,7 +600,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     deleteRI(rowIndex: number) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
-            "message": "Are you sure you want Delete this Record?",
+            "message": "Are you sure you want to delete this record?",
             "icon": {
                 "show": true,
                 "name": "heroicons_outline:exclamation",
