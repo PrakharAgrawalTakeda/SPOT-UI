@@ -59,11 +59,80 @@ export class TransportationSingleEditComponent {
   trainFuelDropDownValues = []
 
 
-  allowNegativeDistance = true;
-  allowNegativeWeight = false;
+  allowNegativeWeight = true;
   allowNegativeFrequency = true;
+  allowNegativeDistance = true;
+  
 
   constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
+
+    
+    this.TransportationForm.controls.shipmentDistance.valueChanges.subscribe(res => {
+      if (res < 0) {
+        this.allowNegativeWeight = false;
+        this.allowNegativeFrequency = false;
+      } else {
+        if (this.TransportationForm.controls.shipmentWeight.value < 0) {
+          this.allowNegativeWeight = true;
+          this.allowNegativeFrequency = false;
+        } else if (this.TransportationForm.controls.shipmentFrequency.value < 0) {
+          this.allowNegativeWeight = false;
+          this.allowNegativeFrequency = true;
+        } else if (this.TransportationForm.controls.shipmentWeight.value > 0){
+          this.allowNegativeWeight = false;
+          this.allowNegativeFrequency = true;
+        }
+        else if (this.TransportationForm.controls.shipmentFrequency.value > 0){
+          this.allowNegativeWeight = true;
+          this.allowNegativeFrequency = false;
+        }
+      }
+    });
+    
+    this.TransportationForm.controls.shipmentWeight.valueChanges.subscribe(res => {
+      if (res < 0) {
+        this.allowNegativeDistance = false;
+        this.allowNegativeFrequency = false;
+      }
+      else{
+        if (this.TransportationForm.controls.shipmentFrequency.value < 0) {
+          this.allowNegativeDistance = false;
+      }
+      else if (this.TransportationForm.controls.shipmentFrequency.value > 0) {
+        this.allowNegativeDistance = true;
+      }
+      else if (this.TransportationForm.controls.shipmentDistance.value < 0) {
+        this.allowNegativeFrequency = false;
+    }
+    else if (this.TransportationForm.controls.shipmentDistance.value > 0) {
+      this.allowNegativeFrequency = true;
+    }
+      }
+    });
+    
+    this.TransportationForm.controls.shipmentFrequency.valueChanges.subscribe(res => {
+      if (res < 0) {
+        this.allowNegativeDistance = false;
+        this.allowNegativeWeight = false;
+      }
+      else{
+        if (this.TransportationForm.controls.shipmentWeight.value < 0) {
+          this.allowNegativeDistance = false;
+        } else if (this.TransportationForm.controls.shipmentWeight.value > 0){
+          this.allowNegativeDistance = true;
+        }
+        else if (this.TransportationForm.controls.shipmentDistance.value < 0) {
+          this.allowNegativeWeight = false;
+        } else if (this.TransportationForm.controls.shipmentDistance.value > 0){
+          this.allowNegativeWeight = true;
+        }
+      }
+    });
+    
+
+    
+
+    
     this.TransportationForm.controls.fuelType.valueChanges.subscribe(res => {
       //Air freight
       if(res == "Standard" && this.TransportationForm.controls.transportationType.value == "Short haul (< 1000 km)" && this.TransportationForm.controls.transportationMode.value == "Air freight"){
@@ -156,54 +225,7 @@ export class TransportationSingleEditComponent {
         this.TransportationForm.patchValue({ co2intensityFactorMeasure : "kg CO2e/t-km", co2intensityFactorValue : "0.028"})
       }
     })
-
-
     
-    this.TransportationForm.controls.shipmentDistance.valueChanges.subscribe(res => {
-      if (res >= 0) {
-        this.allowNegativeWeight = true;
-        this.allowNegativeFrequency = true;
-      } else {
-        this.allowNegativeWeight = false;
-        this.allowNegativeFrequency = false;
-      }
-    })
-    
-    this.TransportationForm.controls.shipmentWeight.valueChanges.subscribe(res => {
-      if (this.TransportationForm.controls.shipmentDistance.value >= 0) {
-        if (res >= 0) {
-          this.allowNegativeFrequency = true;
-        } else {
-          this.allowNegativeFrequency = false;
-        }
-      } else {
-        if (res <= 0) {
-          this.allowNegativeDistance = false;
-          this.allowNegativeWeight = false;
-        } else {
-          this.allowNegativeDistance = true;
-          this.allowNegativeWeight = true;
-        }
-      }
-    })
-    
-    this.TransportationForm.controls.shipmentFrequency.valueChanges.subscribe(res => {
-      if (this.TransportationForm.controls.shipmentDistance.value >= 0) {
-        if (res >= 0) {
-          this.allowNegativeWeight = true;
-        } else {
-          this.allowNegativeWeight = false;
-        }
-      } else {
-        if (res <= 0) {
-          this.allowNegativeDistance = false;
-          this.allowNegativeWeight = false;
-        } else {
-          this.allowNegativeDistance = true;
-          this.allowNegativeWeight = true;
-        }
-      }
-    })
     
    }
 
