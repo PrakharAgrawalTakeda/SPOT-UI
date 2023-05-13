@@ -48,7 +48,8 @@ export class ShippingSingleEditComponent {
     solutionName: new FormControl(),
     shippingSolutionSupplier: new FormControl()
   })
-
+  allowNegativeShipment = true;
+  allowNegativeLocations = true;
   constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) { 
     this.ShippingForm.controls.solutionName.valueChanges.subscribe(res => {
       if(res == "Csafe RKN"){
@@ -64,6 +65,21 @@ export class ShippingSingleEditComponent {
         this.ShippingForm.patchValue({ co2intensityFactorMeasure : "kg CO2e per container-km", co2intensityFactorValue : "3.600"})
       }
     })
+    this.ShippingForm.controls.shipmentDistance.valueChanges.subscribe(res => {
+      if (res < 0) {
+          this.allowNegativeLocations = false;
+      } else {
+          this.allowNegativeLocations = true;
+      }
+  });
+  
+  this.ShippingForm.controls.affectedContainers.valueChanges.subscribe(res => {
+      if (res < 0) {
+          this.allowNegativeShipment = false;
+      } else {
+          this.allowNegativeShipment = true;
+      }
+  });
   }
 
   ngOnInit(): void {

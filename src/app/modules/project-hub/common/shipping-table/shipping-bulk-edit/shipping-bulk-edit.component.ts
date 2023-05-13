@@ -277,7 +277,7 @@ environmentalSourceId: new FormControl(''),
     this.submitPrep()
     if (this.shippingFormValue.filter(x => x.shippingSolutionSupplier == "").length > 0) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a value in Solution Supplier.",
+        "title": "In order to save the Shipping Solution information it is required to select Solution Supplier and Solution Name!",
         "message": "",
         "icon": {
           "show": true,
@@ -301,7 +301,7 @@ environmentalSourceId: new FormControl(''),
     }
     else if (this.shippingFormValue.filter(x => x.solutionName == "").length > 0) {
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a Solution Name.",
+        "title": "In order to save the Shipping Solution information it is required to select Solution Supplier and Solution Name!",
         "message": "",
         "icon": {
           "show": true,

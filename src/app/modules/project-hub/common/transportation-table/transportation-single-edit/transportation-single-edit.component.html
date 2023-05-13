@@ -46,19 +46,20 @@
         </spot-input>
 
         <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
-            [label]="'Shipment Distance (km)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
-        </spot-input>
-
-        <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
-            [label]="'Shipment Weight (kg)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
-        </spot-input>
-
-        <spot-input class="w-full" formControlName="shipmentFrequency" name="shipmentFrequency"
-            [label]="'Shipment Frequency'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
-        </spot-input>
+        [label]="'Shipment Distance (km)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+        [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeDistance">
+    </spot-input>
+    
+    <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
+        [label]="'Shipment Weight (kg)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+        [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeWeight">
+    </spot-input>
+    
+    <spot-input class="w-full" formControlName="shipmentFrequency" name="shipmentFrequency"
+        [label]="'Shipment Frequency'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+        [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeFrequency">
+    </spot-input>
+    
 
         <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
             [placeholder]="'Basis of Estimate'">

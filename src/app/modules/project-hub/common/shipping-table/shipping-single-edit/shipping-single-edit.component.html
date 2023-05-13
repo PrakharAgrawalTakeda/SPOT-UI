@@ -31,12 +31,12 @@
 
         <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
             [label]="'Shipment Distance (km)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeShipment">
         </spot-input>
 
         <spot-input class="w-full" formControlName="affectedContainers" name="affectedContainers"
             [label]="'Affected Containers'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]=true>
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeLocations">
         </spot-input>
 
         <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
