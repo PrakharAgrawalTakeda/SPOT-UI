@@ -595,12 +595,20 @@ async addBCFunding(body,optionId,projectId){
       const response = await lastValueFrom(abc$)
       return response
     }
+    async getProjectDashboard(projectid) {
+      var url = GlobalVariables.apiurl + "ProjectDashboard/GetProjectDashboard/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+
     async getReportInfoData(projectid) {
       var url = GlobalVariables.apiurl + "ProjectHubData/ReportPageInfo/" + projectid
       const abc$ = this.http.get(url)
       const response = await lastValueFrom(abc$)
       return response
     }
+
     async updateReportDates(projectid:string ,itemid: string){
       var userid = GlobalVariables.apiurl+"ProjectCharter/UpdateDate/"+projectid+"/"+itemid
       const abc$ = this.http.patch(userid,itemid)
