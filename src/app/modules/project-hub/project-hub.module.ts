@@ -166,6 +166,10 @@ import { ShippingSingleEditComponent } from './common/shipping-table/shipping-si
 import { TransportationBulkEditComponent } from './common/transportation-table/transportation-bulk-edit/transportation-bulk-edit.component';
 import { ShippingBulkEditComponent } from './common/shipping-table/shipping-bulk-edit/shipping-bulk-edit.component';
 import { WarehousingBulkEditComponent } from './common/warehousing-table/warehousing-bulk-edit/warehousing-bulk-edit.component';
+import { ProjectDashboardComponent } from './project-dashboard/project-dashboard.component';
+import { ProjectDashboardPerformanceComponent } from './project-dashboard/project-dashboard-performance/project-dashboard-performance.component';
+import { ProjectDashboardBudgetComponent } from './project-dashboard/project-dashboard-budget/project-dashboard-budget.component';
+import { ProjectDashboardProductTeamComponent } from './project-dashboard/project-dashboard-product-team/project-dashboard-product-team.component';
 import {BudgetGeneralEditComponent} from "./budget/budget-general-edit/budget-general-edit.component";
 //import { BudgetGeneralEditComponent } from './budget/budget-general-edit/budget-general-edit.component';
 
@@ -237,6 +241,24 @@ export const projectRoutes: Route[] = [
       path: 'hub-settings',
       component: HubSettingsComponent,
       pathMatch: 'full'
+    },
+    {
+      path: 'project-dashboard',
+      component: ProjectDashboardComponent,
+      children: [
+        {
+          path: 'performance',
+          component: ProjectDashboardPerformanceComponent,
+        },
+        {
+          path: 'budget',
+          component: ProjectDashboardBudgetComponent,
+        },
+        {
+          path: 'product-team',
+          component: ProjectDashboardProductTeamComponent,
+        }
+      ]
     },
     {
       path: 'project-proposal',
@@ -545,7 +567,11 @@ export const projectRoutes: Route[] = [
     ShippingSingleEditComponent,
     TransportationBulkEditComponent,
     ShippingBulkEditComponent,
-    WarehousingBulkEditComponent
+    WarehousingBulkEditComponent,
+    ProjectDashboardComponent,
+    ProjectDashboardPerformanceComponent,
+    ProjectDashboardBudgetComponent,
+    ProjectDashboardProductTeamComponent
     //,
     //BudgetGeneralEditComponent
   ],
