@@ -21,7 +21,7 @@
                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                          [dropDownArray]="getYesNo()">
             </spot-select>
-            <app-project-single-dropdown class="w-full" [formgroup]="budgetInfoForm" [label]="'Parent Program'" [showHint]="true"
+            <app-project-single-dropdown class="w-full" [formgroup]="budgetInfoForm"  [label]="'Parent Program'" [showHint]="true"
                                          [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
             </app-project-single-dropdown>
             <spot-select  class="w-full" formControlName="testform" [label]="'Local Currency'"

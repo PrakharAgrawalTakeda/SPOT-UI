@@ -44,4 +44,7 @@ export class BudgetGeneralEditComponent {
         return this.lookupdata.filter(x => x.lookUpParentId == '927293cb-d4ca-4f31-8af6-c33c9e4792d1')
     }
     submitBudgetInfo() {}
+
+    disabler() {
+    }
 }
