@@ -1,3 +1,4 @@
+@import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
 .example-chip-list {
     width: 100%;
 }
@@ -17,6 +18,9 @@
 .w-1qua {
     width: 25vw;
 }
+.w-2qua {
+    width: 55vw;
+}
 .dashboard-chip-list {
     padding-top: 20px !important;
     padding-bottom: 20px !important;
@@ -32,4 +36,19 @@
 
 .tile-title{
     font-size: 20px;
+}
+
+::ng-deep .ngx-datatable .datatable-PO-80 .datatable-body .datatable-scroll {
+    height: 68vh !important;
+    width: 100vw !important;
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+}
+
+.frozen-header-class {
+    top: 73px !important;
+}
+
+.frozen-header-classID {
+    top: 52px !important;
 }
