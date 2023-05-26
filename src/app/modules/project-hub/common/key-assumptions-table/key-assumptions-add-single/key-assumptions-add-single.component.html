@@ -6,26 +6,26 @@
     </a>
     </div>
 </div>
-<form class="w-full form-ask-need" [formGroup]="keyAssumptionForm" (ngSubmit)="submitKeyAssumption()"
-      style="overflow-y: scroll; height: 95vh;">
-
-    <spot-textarea class="w-full read-only" formControlName="keyAssumptionName" name="keyAssumptionName" *ngIf="viewElementChecker('keyAssumption')"
-                   [label]="'Key Assumption'">
-    </spot-textarea>
-    <spot-textarea class="w-full read-only" formControlName="assumptionRationale" name="assumptionRationale" *ngIf="viewElementChecker('whyIsThisAssumptionValid')"
-                   [label]="'Why Is This Assumption Valid'">
-    </spot-textarea>
-    <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInCharter')">
-        <mat-slide-toggle
-            [matTooltip]="this.keyAssumptionForm.controls['includeInCharter'].disabled ? 'Only 5 can be selected at a time for the proposal' : null"
-            formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
+<form class="w-full overflow-hidden" [formGroup]="keyAssumptionForm" (ngSubmit)="submitKeyAssumption()">
+    <div class=" form-ask-need h-[87vh] overflow-y-scroll">
+        <spot-textarea class="w-full read-only" formControlName="keyAssumptionName" name="keyAssumptionName" *ngIf="viewElementChecker('keyAssumption')"
+                       [label]="'Key Assumption'">
+        </spot-textarea>
+        <spot-textarea class="w-full read-only" formControlName="assumptionRationale" name="assumptionRationale" *ngIf="viewElementChecker('whyIsThisAssumptionValid')"
+                       [label]="'Why Is This Assumption Valid'">
+        </spot-textarea>
+        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInCharter')">
+            <mat-slide-toggle
+                [matTooltip]="this.keyAssumptionForm.controls['includeInCharter'].disabled ? 'Only 5 can be selected at a time for the proposal' : null"
+                formControlName="includeInCharter">Include in Charter</mat-slide-toggle>
+        </div>
+        <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInBusinessCase')">
+            <mat-slide-toggle
+                [matTooltip]="this.keyAssumptionForm.controls['includeInBusinessCase'].disabled ? 'Only 4 can be selected at a time in the business case' : null"
+                formControlName="includeInBusinessCase">Include in Business Case</mat-slide-toggle>
+        </div>
     </div>
-    <div class="flex items-start justify-between incuded-in-dash" *ngIf="viewElementChecker('includeInBusinessCase')">
-        <mat-slide-toggle
-            [matTooltip]="this.keyAssumptionForm.controls['includeInBusinessCase'].disabled ? 'Only 4 can be selected at a time in the business case' : null"
-            formControlName="includeInBusinessCase">Include in Business Case</mat-slide-toggle>
-    </div>
-    <div class="flex items-start justify-between mt-6">
+    <div class="flex items-start justify-between  form-ask-need">
         <a class="w-25" mat-flat-button [color]="'primary'"
            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
             Cancel
