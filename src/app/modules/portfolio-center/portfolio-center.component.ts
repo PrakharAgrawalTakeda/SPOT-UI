@@ -399,6 +399,14 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
+          // var div = document.getElementsByClassName('datatable-scroll')[0]
+          // setTimeout(() => {
+          //   div.scroll({
+          //     top: div.scrollHeight,
+          //     left: 0,
+          //     behavior: 'smooth'
+          //   });
+          // }, 100);
           console.log("is this working too?")
         });
         //End Loading

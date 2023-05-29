@@ -468,7 +468,7 @@
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Milestone / Progression" prop="progression" [resizeable]="false"
-                            [headerClass]="alignHeaderMiddleClass" [cellClass]="getGraphCellClass" [width]="150" [sortable]="false">
+                            [headerClass]="alignHeaderMiddleClass" [cellClass]="getGraphCellClass" [width]="200" [sortable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <apx-chart [chart]="{
                                                             type: 'bar',
@@ -521,27 +521,27 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [width]="150" [sortable]="false" [resizeable]="false">
+                        <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [width]="250" [sortable]="false" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate" [resizeable]="false"
-                            [width]="100" [sortable]="false">
+                            [width]="170" [sortable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate" [resizeable]="false"
-                            [width]="100" [sortable]="false">
+                            [width]="150" [sortable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration" [resizeable]="false" [width]="100"
+                        <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration" [resizeable]="false" [width]="150"
                             [sortable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}

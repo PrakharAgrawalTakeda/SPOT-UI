@@ -39,7 +39,7 @@
 }
 
 ::ng-deep .ngx-datatable .datatable-PO-80 .datatable-body .datatable-scroll {
-    height: 68vh !important;
+    height: 80vh !important;
     width: 100vw !important;
     overflow-x: scroll !important;
     overflow-y: scroll !important;
@@ -51,4 +51,11 @@
 
 .frozen-header-classID {
     top: 52px !important;
+}
+.datatable-body{
+    height: 72vh !important;
+}
+
+.datatable-row-left{
+    background: white !important;
 }
