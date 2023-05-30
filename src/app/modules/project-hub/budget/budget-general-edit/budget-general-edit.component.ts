@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {AuthService} from "../../../../core/auth/auth.service";
+import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-budget-general-edit',
@@ -13,15 +15,23 @@ export class BudgetGeneralEditComponent {
     showMessage: boolean = false;
     local: any = [];
     lookupdata: any = [];
+    id: string = "";
+    localCurrency:any = [];
     budgetInfoForm = new FormGroup({
         testform: new FormControl('')
     })
     constructor (public projectHubService: ProjectHubService,
-                 public auth: AuthService){
+                 private portApiService: PortfolioApiService,
+                 public auth: AuthService,
+                 private _Activatedroute: ActivatedRoute){
 
     }
     ngOnInit(): void {
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.getllookup()
+        this.portApiService.getOnlyLocalCurrency(this.id).then(currency => {
+            this.localCurrency = currency
+        });
 
     }
 
@@ -46,5 +56,6 @@ export class BudgetGeneralEditComponent {
     submitBudgetInfo() {}
 
     disabler() {
+
     }
 }

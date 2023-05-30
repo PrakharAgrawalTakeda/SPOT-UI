@@ -88,6 +88,12 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+    async getBudgetPageInfo(projectId) {
+        var url = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
   async getfilterlist(){
     var userid = GlobalVariables.apiurl+"FilterProjects/FilterCriteria"
     const abc$ = this.http.get(userid)
