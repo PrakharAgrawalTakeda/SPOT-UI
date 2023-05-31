@@ -59,3 +59,24 @@
 .datatable-row-left{
     background: white !important;
 }
+
+// .columnFilter {
+//     // width: 38% !important;
+//     display: flex;
+//     justify-content: center;
+//     position: relative;
+//     bottom: 62px;
+//     width: 69%;
+// }
+
+// .mat-mdc-form-field{
+//     width: 500% !important;
+// }
+
+.columnFilter{
+    top: 12px !important;
+    position: relative !important;
+    display: flex;
+    width: 50%;
+    left: 21px;
+}
