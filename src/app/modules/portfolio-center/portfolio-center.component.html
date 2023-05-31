@@ -8,7 +8,7 @@
             <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm"
                 style="overflow-y: scroll; height: 95vh;">
                 <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
-                    <spot-multiselect-autocomplete formControlName="portfolioOwner" class="w-full" name="portfolioOwner"
+                    <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
                         [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                         [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
                         [customSortPointer]="'pfid'">
@@ -17,8 +17,8 @@
                         [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
                         [showLabel]="true">
                     </spot-multiselect-user-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full"
-                        name="excecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
+                    <spot-multiselect-autocomplete formControlName="ExcecutionScope" class="w-full"
+                        name="ExcecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                         [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
                     </spot-multiselect-autocomplete>
@@ -26,21 +26,21 @@
                         name="owningOrganization" [label]="'Owning Organization'" [placeholder]="'Owning Organization'"
                         [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="projectState" class="w-full" name="projectState"
+                    <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
                         [label]="'Project State'" [placeholder]="'Project State'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.state" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="projectPhase" class="w-full" name="projectPhase"
+                    <spot-multiselect-autocomplete formControlName="ProjectPhase" class="w-full" name="ProjectPhase"
                         [label]="'Project Phase'" [placeholder]="'Project Phase'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.phase" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete fophaseControlName="projectType" class="w-full" name="projectType"
+                    <spot-multiselect-autocomplete formControlName="projectType" class="w-full" name="projectType"
                         [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
                         [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="product" class="w-full" name="product"
+                    <spot-multiselect-autocomplete formControlName="products" class="w-full" name="products"
                         [label]="'Product'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
                         [idPointer]="'productId'" [dropDownArray]="filterlist.products">
                     </spot-multiselect-autocomplete>
@@ -327,8 +327,8 @@
                 <div class="p-6">
                     <div class="mr-4 tile-title font-medium tracking-tight text-primary leading-6 truncate">Project Overview</div>
                 </div>
-                <div>
-                    <div>
+                <div style="height: auto;">
+                    <form>
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
                             Portfolio Report
                         </button>
@@ -338,22 +338,13 @@
                         <button class="ml-4" mat-flat-button [color]="'primary'">
                             Generate Reports
                         </button>
-                    </div>
-                    <!-- <div>
-                        <div (mouseleave)="showDropDown = false">
-                            <button class="drop-toggle btn flat" (click)="showDropDown=!showDropDown">
-                                <span *ngIf="checkedList.length<=0">Select</span>
-                                <span *ngIf="checkedList.length>0">{{checkedList.join(', ')}}</span>
-                                <i class="fa fa-angle-down"></i>
-                            </button>
-                            <div class="drop-show" *ngIf="showDropDown">
-                                <label *ngFor="let a of fieldsvalues">
-                                    <input type="checkbox" [(ngModel)]="a.checked" (change)="getSelectedValue(a.checked,a.name)" />
-                                    <span>{{a.name}}</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div> -->
+                        <!-- <form class="columnFilter"> -->
+                            <spot-multiselect-autocomplete class="columnFilter" formControlName="SelectColumns" name="SelectColumns"
+                                [label]="'Select Columns'" [placeholder]="'Select Columns'" [valuePointer]="'ColumnName'"
+                                [idPointer]="'ColumnName'" [dropDownArray]="columnList">
+                            </spot-multiselect-autocomplete>
+                        <!-- </form> -->
+                        </form>
                 </div>
                 <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden">
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"

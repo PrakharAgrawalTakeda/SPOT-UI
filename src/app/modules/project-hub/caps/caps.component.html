@@ -25,8 +25,8 @@
                             [hint]="'An environmental portfolio is the site or functional group to which the environmental impact of the project will be attributed (i.e. where the project will have an affect)'">
                         </spot-input>
                         <spot-input class="w-full custom" formControlName="EmissionsImpact" name="EmissionsImpact"
-                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="1" [inputType]="'Number'"
-                                [autoAddDecimal]="false" [placeholder]="'0.0'">
+                            [label]="'Emissions Impact (tCO2e/Year)'" [decimalCount]="2" [inputType]="'Number'"
+                                [autoAddDecimal]="true" [placeholder]="'0.0'">
                         </spot-input>
                         <div *ngIf="callLocation != 'Business-Case'"></div>
                         <spot-input-date class="w-full read-only" formControlName="impactRealizationDate" name="impactRealizationDate"

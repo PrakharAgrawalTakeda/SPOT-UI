@@ -45,25 +45,32 @@ export class PortfolioCenterComponent implements OnInit {
   overallStatus = []
   viewBaseline = false
   projectOverview:any = []
-  fieldsvalues = 
-  [
-    { name: 'Overall Status', checked: false },
-    { name: 'Project ID / Budget ID', checked: false },
-    { name: 'Program / Project Name', checked: false },
-    { name: 'Phase (Project/Capital/OE)', checked: false }
-  ]
-  checkedList: any = [];
-  currentSelected = {};
-  showDropDown = true
   filtersnew: any = {
-    "portfolioOwner": [],
+    "PortfolioOwner": [],
     "ProjectTeamMember": [],
-    "excecutionScope": [],
+    "ExcecutionScope": [],
     "owningOrganization": [],
-    "projectState": [],
-    "projectPhase": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
     "projectType": [],
-    "product": [],
+    "products": [],
+    "totalCapex": [],
+    "GMSBudgetOwner": [],
+    "AgileWorkstream": [],
+    "AgileWave": [],
+    "isCapsProject": [],
+    "projectName": [],
+    "overallStatus": [],
+  }
+  filtersnew1: any = {
+    "PortfolioOwner": [],
+    "ProjectTeamMember": [],
+    "ExcecutionScope": [],
+    "owningOrganization": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
+    "projectType": [],
+    "products": [],
     "totalCapex": [],
     "GMSBudgetOwner": [],
     "AgileWorkstream": [],
@@ -73,14 +80,14 @@ export class PortfolioCenterComponent implements OnInit {
     "overallStatus": [],
   }
   defaultfilter: any = {
-    "portfolioOwner": [],
+    "PortfolioOwner": [],
     "ProjectTeamMember": [],
-    "excecutionScope": [],
+    "ExcecutionScope": [],
     "owningOrganization": [],
-    "projectState": [],
-    "projectPhase": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
     "projectType": [],
-    "product": [],
+    "products": [],
     "totalCapex": [],
     "GMSBudgetOwner": [],
     "AgileWorkstream": [],
@@ -90,14 +97,14 @@ export class PortfolioCenterComponent implements OnInit {
     "overallStatus": [],
   }
   PortfolioFilterForm = new FormGroup({
-    portfolioOwner: new FormControl(),
+    PortfolioOwner: new FormControl(),
     ProjectTeamMember: new FormControl(),
-    excecutionScope: new FormControl(),
+    ExcecutionScope: new FormControl(),
     owningOrganization: new FormControl(),
-    projectState: new FormControl(),
-    projectPhase: new FormControl(),
+    ProjectState: new FormControl(),
+    ProjectPhase: new FormControl(),
     projectType: new FormControl(),
-    product: new FormControl(),
+    products: new FormControl(),
     totalCapex: new FormControl(),
     GMSBudgetOwner: new FormControl(),
     AgileWorkstream: new FormControl(),
@@ -162,13 +169,42 @@ export class PortfolioCenterComponent implements OnInit {
   dataLA: any = [];
   originalData: any
   rawData: any
+  columnList=[{"ColumnName": 'Overall Status'},
+    {"ColumnName": 'Project ID / Budgets ID' },
+    {"ColumnName": 'Program / Project Name'},
+    { "ColumnName": 'Phase (Project/Capital/OE)'},
+    { "ColumnName": 'Project Manager'},
+    { "ColumnName": 'Sponsor'},
+    { "ColumnName": 'Schedule'},
+    { "ColumnName": 'Risk/Issues'},
+    { "ColumnName": 'Ask/Needs' },
+    { "ColumnName": 'Budget' },
+    { "ColumnName": 'Spend' },
+    { "ColumnName": 'DQ%' },
+    { "ColumnName": 'Total CAPEX Approved/Forecast' },
+    { "ColumnName": 'Carbon Impact (Tons CO2)' },
+    { "ColumnName": 'Water Impact (m3)' },
+    { "ColumnName": 'Milestone / Progression' },
+    { "ColumnName": 'Next Milestone' },
+    { "ColumnName": 'Next Milestone Planned Finish Date' },
+    { "ColumnName": 'Execution Complete Date' },
+    { "ColumnName": 'Execution Duration (Days)' },
+    
+  ]
 
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {
+    this.PortfolioFilterForm.controls.projectType.valueChanges.subscribe(res => {
+      console.log(res)
+    })
+    this.PortfolioFilterForm.controls.ProjectPhase.valueChanges.subscribe(res => {
+      console.log(res)
+    })
   }
 
   ngOnInit(): void {
+    // localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
     this.showContent = false;
     this.titleService.setTitle("Portfolio Center")
     if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
@@ -208,7 +244,100 @@ export class PortfolioCenterComponent implements OnInit {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filters'))
 
     }
-    console.log(this.filtersnew)
+    
+    if (localStorage.getItem('spot-filtersNew') == null) {
+      this.filtersnew1 = this.defaultfilter
+
+    }
+    else {
+      this.filtersnew1 = JSON.parse(localStorage.getItem('spot-filtersNew'))
+
+    }
+    var filterKeys = Object.keys(this.filtersnew1);
+    var filterGroups = []
+    for (var i = 0; i < Object.keys(this.filtersnew1).length; i++){
+      var attribute = filterKeys[i]
+      var filterItems = []
+      if (this.filtersnew1[attribute] != null){
+      for (var j = 0; j < this.filtersnew1[attribute].length; j++){
+        if (attribute == "PortfolioOwner" || attribute == "ExcecutionScope" || attribute == "GMSBudgetOwner"){
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].portfolioOwner,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "owningOrganization" || attribute == "projectType"){
+          var filterItems1 = 
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].name,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "ProjectTeamMember") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].userDisplayName,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "isCapsProject") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute],
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "projectName") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].problemTitle,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "products") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].fullProductName,
+            "unionOperator": 2
+          }
+        }
+        else {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].lookUpName,
+            "unionOperator": 2
+          }
+        }
+        filterItems.push(filterItems1)
+      }
+    // }
+      filterGroups.push({
+          filterItems,
+          "groupCondition": 1
+    })
+  }
+    }
+    filterGroups[filterGroups.length - 1].groupCondition = 0
+    var groupData = {
+      "filterGroups": filterGroups
+    }
+
+    console.log("Filter Data : " +groupData)
     //Filtering Projects
     this.apiService.MainFilters(this.filtersnew).then((resp:any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
@@ -574,6 +703,8 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   applyfilters() {
+    console.log(this.PortfolioFilterForm.getRawValue())
+    localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
     localStorage.setItem('spot-filters', JSON.stringify(this.filtersnew))
     this.filterDrawer.close()
     this.resetpage()
@@ -659,27 +790,4 @@ export class PortfolioCenterComponent implements OnInit {
     })
   }
 
-  getSelectedValue(status: Boolean, value: String) {
-    if (status) {
-      this.checkedList.push(value);
-    } else {
-      var index = this.checkedList.indexOf(value);
-      this.checkedList.splice(index, 1);
-    }
-
-    this.currentSelected = { checked: status, name: value };
-
-    //share checked list
-    // this.shareCheckedlist();
-
-    //share individual selected item
-    // this.shareIndividualStatus();
-  }
-
-  // shareCheckedlist() {
-  //   this.shareCheckedList.emit(this.checkedList);
-  // }
-  // shareIndividualStatus() {
-  //   this.shareIndividualCheckedList.emit(this.currentSelected);
-  // }
 }

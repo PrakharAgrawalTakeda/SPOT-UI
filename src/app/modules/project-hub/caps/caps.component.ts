@@ -5,6 +5,7 @@ import { Constants } from 'app/shared/constants';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { toLower } from 'lodash';
 
 @Component({
   selector: 'app-caps',
@@ -208,9 +209,9 @@ export class CapsComponent implements OnInit {
             var data = []
             var param = []
             var currency = []
-            data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
-            param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
-            currency = carbonCurrency.filter(x => x.emsourceId == arrayItem.emsourceId)
+            data = carbonData.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
+            param = carbonParam.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
+            currency = carbonCurrency.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
             var carbonObject = {
               ...data[0],
               ...param[0],
