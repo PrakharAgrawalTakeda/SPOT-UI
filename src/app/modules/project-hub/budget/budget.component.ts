@@ -15,7 +15,6 @@ export class BudgetComponent implements OnInit {
     id: string = "";
     lookUpData: any = []
     localCurrency:any = [];
-    portfolioOwnerList =[];
     filterCriteria: any = {}
 
     constructor(public projectHubService: ProjectHubService,
@@ -72,9 +71,9 @@ export class BudgetComponent implements OnInit {
 
     generalInfoPatchValue(response){
         this.budgetForm.patchValue({
-            capexRequired: response.budget.capExRequired,
-            opexRequired:  response.budget.opExRequired,
-            parentProgram:  response.budget.capexRequired,//needed
+            capexRequired: response.budget.capExRequired ? "Yes" : "No" ,
+            opexRequired:  response.budget.opExRequired  ? "Yes" : "No" ,
+            parentProgram:  response.parentProgram,
             localCurrency:  this.localCurrency.localCurrencyAbbreviation,
             assetPlaced:  response.budget.definitiveCrapprovalDate,
             budgetId:  response.budget.capitalBudgetId,
@@ -83,7 +82,7 @@ export class BudgetComponent implements OnInit {
             where:  response.budget.whereId,
             why:  response.budget.whyId,
             fundingApprovalNeedDate:  response.budget.fundingApprovalNeedDate,
-            projectFundingStatus:  response.budget.fundingStatusId,
+            projectFundingStatus:  this.getLookUpName(response.budget.fundingStatusId),
             totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
             budgetCommentary:  response.budget.budgetComment,
