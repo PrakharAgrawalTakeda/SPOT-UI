@@ -48,70 +48,70 @@ export class PortfolioCenterComponent implements OnInit {
   filtersnew: any = {
     "PortfolioOwner": [],
     "ProjectTeamMember": [],
-    "ExcecutionScope": [],
-    "owningOrganization": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
     "ProjectState": [],
     "ProjectPhase": [],
-    "projectType": [],
-    "products": [],
-    "totalCapex": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
     "GMSBudgetOwner": [],
-    "AgileWorkstream": [],
-    "AgileWave": [],
-    "isCapsProject": [],
-    "projectName": [],
-    "overallStatus": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
   filtersnew1: any = {
     "PortfolioOwner": [],
     "ProjectTeamMember": [],
-    "ExcecutionScope": [],
-    "owningOrganization": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
     "ProjectState": [],
     "ProjectPhase": [],
-    "projectType": [],
-    "products": [],
-    "totalCapex": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
     "GMSBudgetOwner": [],
-    "AgileWorkstream": [],
-    "AgileWave": [],
-    "isCapsProject": [],
-    "projectName": [],
-    "overallStatus": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
     "ProjectTeamMember": [],
-    "ExcecutionScope": [],
-    "owningOrganization": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
     "ProjectState": [],
     "ProjectPhase": [],
-    "projectType": [],
-    "products": [],
-    "totalCapex": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
     "GMSBudgetOwner": [],
-    "AgileWorkstream": [],
-    "AgileWave": [],
-    "isCapsProject": [],
-    "projectName": [],
-    "overallStatus": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
     ProjectTeamMember: new FormControl(),
-    ExcecutionScope: new FormControl(),
-    owningOrganization: new FormControl(),
+    ExecutionScope: new FormControl(),
+    OwningOrganization: new FormControl(),
     ProjectState: new FormControl(),
     ProjectPhase: new FormControl(),
-    projectType: new FormControl(),
-    products: new FormControl(),
-    totalCapex: new FormControl(),
+    ProjectType: new FormControl(),
+    Product: new FormControl(),
+    TotalCAPEX: new FormControl(),
     GMSBudgetOwner: new FormControl(),
-    AgileWorkstream: new FormControl(),
-    AgileWave: new FormControl(),
-    isCapsProject: new FormControl(),
+    AGILEWorkstream: new FormControl(),
+    AGILEWave: new FormControl(),
+    CAPSProject: new FormControl(),
     projectName: new FormControl(),
-    overallStatus: new FormControl(),
+    OverallStatus: new FormControl(),
   })
 
   filterlist: any = {}
@@ -195,16 +195,11 @@ export class PortfolioCenterComponent implements OnInit {
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {
-    this.PortfolioFilterForm.controls.projectType.valueChanges.subscribe(res => {
-      console.log(res)
-    })
-    this.PortfolioFilterForm.controls.ProjectPhase.valueChanges.subscribe(res => {
-      console.log(res)
-    })
   }
 
   ngOnInit(): void {
     // localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
+    this.activeaccount = this.msal.instance.getActiveAccount();
     this.showContent = false;
     this.titleService.setTitle("Portfolio Center")
     if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
@@ -244,13 +239,43 @@ export class PortfolioCenterComponent implements OnInit {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filters'))
 
     }
-    
+    var user = [{
+      "userAdid": this.activeaccount.localAccountId,
+      "userDisplayName": this.activeaccount.name,
+      "userIsActive": true
+    }]
+    var state = [{
+      "isActive":true,
+      "kpiImpact":null,
+      "lookUpId":"0a3fb510-b3c6-4527-afc2-ac2ba3088d5e",
+      "lookUpName":"Active",
+      "lookUpOrder":100,
+      "lookUpParentId":"b2ab502a-f702-420f-98d9-c126d8664f6b"
+    }]
     if (localStorage.getItem('spot-filtersNew') == null) {
       this.filtersnew1 = this.defaultfilter
+      this.filtersnew1.ProjectState = state
+      this.filtersnew1.ProjectTeamMember = user
+      this.PortfolioFilterForm.patchValue({
+        ProjectTeamMember: user,
+        ProjectState: state
+      })
 
     }
     else {
       this.filtersnew1 = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      if (this.filtersnew1.ProjectTeamMember == null){
+        this.filtersnew1.ProjectTeamMember = user
+        this.PortfolioFilterForm.patchValue({
+          ProjectTeamMember: user
+        })
+      }
+      if (this.filtersnew1.ProjectState == null) {
+        this.filtersnew1.ProjectState = state
+        this.PortfolioFilterForm.patchValue({
+          ProjectState: state
+        })
+      }
 
     }
     var filterKeys = Object.keys(this.filtersnew1);
@@ -258,14 +283,23 @@ export class PortfolioCenterComponent implements OnInit {
     for (var i = 0; i < Object.keys(this.filtersnew1).length; i++){
       var attribute = filterKeys[i]
       var filterItems = []
-      if (this.filtersnew1[attribute] != null){
+      if (this.filtersnew1[attribute] != null && this.filtersnew1[attribute].length != 0){
       for (var j = 0; j < this.filtersnew1[attribute].length; j++){
-        if (attribute == "PortfolioOwner" || attribute == "ExcecutionScope" || attribute == "GMSBudgetOwner"){
+        if (attribute == "PortfolioOwner" || attribute == "ExcecutionScope"){
           var filterItems1 =
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
             "filterValue": this.filtersnew1[attribute][j].portfolioOwner,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "GMSBudgetOwner") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].gmsbudgetOwnerDefault,
             "unionOperator": 2
           }
         }
@@ -283,11 +317,17 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].userDisplayName,
+            "filterValue": this.filtersnew1[attribute][j].userAdid,
             "unionOperator": 2
           }
         }
         else if (attribute == "isCapsProject") {
+          if(this.filtersnew1[attribute] == true){
+            this.filtersnew1[attribute] = "Yes";
+          }
+          else{
+            this.filtersnew1[attribute] ="No"
+          }
           var filterItems1 =
           {
             "filterAttribute": attribute,
@@ -299,9 +339,9 @@ export class PortfolioCenterComponent implements OnInit {
         else if (attribute == "projectName") {
           var filterItems1 =
           {
-            "filterAttribute": attribute,
+            "filterAttribute": "Project/Program",
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].problemTitle,
+            "filterValue": this.filtersnew1[attribute][j].ProblemUniqueId,
             "unionOperator": 2
           }
         }
@@ -310,7 +350,7 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].fullProductName,
+            "filterValue": this.filtersnew1[attribute][j].productId,
             "unionOperator": 2
           }
         }
@@ -319,7 +359,7 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].lookUpName,
+            "filterValue": this.filtersnew1[attribute][j].lookUpId,
             "unionOperator": 2
           }
         }
@@ -339,11 +379,12 @@ export class PortfolioCenterComponent implements OnInit {
 
     console.log("Filter Data : " +groupData)
     //Filtering Projects
-    this.apiService.MainFilters(this.filtersnew).then((resp:any) => {
+    // this.apiService.MainFilters(this.filtersnew).then((resp:any) => {
+      this.apiService.Filters(groupData).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
       mainNavComponent.refresh()
-      if (resp != null) {
+      // if (resp != null) {
 
         //Loading Lookup Values in Filters
         this.apiService.getfilterlist().then(data => {
@@ -364,7 +405,7 @@ export class PortfolioCenterComponent implements OnInit {
 
         //end Loading
         //Loading Portfiolio Data
-        this.apiService.getportfoliodata(resp).then((res: any) => {
+        // this.apiService.getportfoliodata(resp).then((res: any) => {
           console.log(res)
           this.totalproject = res.totalProjects
           this.data = {
@@ -528,19 +569,10 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
-          // var div = document.getElementsByClassName('datatable-scroll')[0]
-          // setTimeout(() => {
-          //   div.scroll({
-          //     top: div.scrollHeight,
-          //     left: 0,
-          //     behavior: 'smooth'
-          //   });
-          // }, 100);
           console.log("is this working too?")
-        });
-        //End Loading
-      }
-    })
+        // });
+      // }
+  })
 
     //For Local Attributes
     // this.apiService.getLocalAttributes(this.projectHubService.projectid).then((res: any) => {

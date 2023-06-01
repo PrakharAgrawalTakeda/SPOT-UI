@@ -17,13 +17,13 @@
                         [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
                         [showLabel]="true">
                     </spot-multiselect-user-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="ExcecutionScope" class="w-full"
-                        name="ExcecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
+                    <spot-multiselect-autocomplete formControlName="ExecutionScope" class="w-full"
+                        name="ExecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                         [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="owningOrganization" class="w-full"
-                        name="owningOrganization" [label]="'Owning Organization'" [placeholder]="'Owning Organization'"
+                    <spot-multiselect-autocomplete formControlName="OwningOrganization" class="w-full"
+                        name="OwningOrganization" [label]="'Owning Organization'" [placeholder]="'Owning Organization'"
                         [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
@@ -36,15 +36,15 @@
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.phase" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="projectType" class="w-full" name="projectType"
+                    <spot-multiselect-autocomplete formControlName="ProjectType" class="w-full" name="ProjectType"
                         [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
                         [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="products" class="w-full" name="products"
+                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
                         [label]="'Product'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
                         [idPointer]="'productId'" [dropDownArray]="filterlist.products">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="totalCapex" class="w-full" name="totalCapex"
+                    <spot-multiselect-autocomplete formControlName="TotalCAPEX" class="w-full" name="TotalCAPEX"
                         [label]="'Total CAPEX'" [placeholder]="'Total CAPEX'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="totalCAPEX" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
@@ -55,21 +55,21 @@
                         [dropDownArray]="getGMSBudgetOwner()" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="AgileWorkstream" class="w-full"
-                        name="AgileWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
+                    <spot-multiselect-autocomplete formControlName="AGILEWorkstream" class="w-full"
+                        name="AGILEWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
                         [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [dropDownArray]="AgileWorkstream">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="AgileWave" class="w-full" name="AgileWave"
+                    <spot-multiselect-autocomplete formControlName="AGILEWave" class="w-full" name="AGILEWave"
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
-                    <spot-toggle class="w-full" formControlName="isCapsProject" [mode]="'dropDown'"
+                    <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
                         [label]="'CAPS Project '">
                     </spot-toggle>
                     <app-spot-multiselect-project-autocomplete formControlName="projectName" [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
                         [label]="'Project Name'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="overallStatus" class="w-full" name="overallStatus"
+                    <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
@@ -383,7 +383,7 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Sponsor" prop="sponsor" [width]="90">
+                        <ngx-datatable-column name="Sponsor" prop="sponsor" [width]="100">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value}}</p>
                             </ng-template>
@@ -512,28 +512,28 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [width]="250" [sortable]="false" [resizeable]="false">
+                        <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [width]="250" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate" [resizeable]="false"
-                            [width]="170" [sortable]="false">
+                            [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate" [resizeable]="false"
-                            [width]="150" [sortable]="false">
+                            [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration" [resizeable]="false" [width]="150"
-                            [sortable]="false">
+                            >
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
