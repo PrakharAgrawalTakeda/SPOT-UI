@@ -1,0 +1,140 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Funding Requests</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="py-3 px-0">
+        <div class="flex justify-between items-center">
+            <div></div>
+            <div class="flex justify-between items-center gap-3">
+                <div class="pr-3">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                            [color]="'primary-200'"
+                            (click)="addFR()">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-y-hidden h-[80vh] w-screen pl-3" id="keyAssumptionsTableDiv">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                           class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
+                           [rows]="fundingRequests">
+                <ngx-datatable-column name="Funding Request ID" prop="fundingRequestId" [flexGrow]="1"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!frTableEditStack.includes(rowIndex)"
+                           (click)="frTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                              *ngIf="frTableEditStack.includes(rowIndex)">
+                            <spot-input formControlName="fundingRequestId" [showLabel]="false"></spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Approval Currency" prop="approvalCurrency" [flexGrow]="1"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!frTableEditStack.includes(rowIndex)"
+                           (click)="frTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                              *ngIf="frTableEditStack.includes(rowIndex)">
+                            <spot-input formControlName="approvalCurrency" [showLabel]="false"></spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="CAPEX Amount" prop="CAPEXAmount" [flexGrow]="1"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!frTableEditStack.includes(rowIndex)"
+                           (click)="frTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                              *ngIf="frTableEditStack.includes(rowIndex)">
+                            <spot-input formControlName="CAPEXAmount" [showLabel]="false"></spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="OPEX Amount" prop="OPEXAmount" [flexGrow]="1"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!frTableEditStack.includes(rowIndex)"
+                           (click)="frTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                              *ngIf="frTableEditStack.includes(rowIndex)">
+                            <spot-input formControlName="OPEXAmount" [showLabel]="false"></spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Amended CAR" prop="amendedCAR" [flexGrow]="1"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!frTableEditStack.includes(rowIndex)"
+                           (click)="frTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                              *ngIf="frTableEditStack.includes(rowIndex)">
+                            <spot-input formControlName="amendedCAR" [showLabel]="false"></spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Funding Status" prop="fundingStatus" [flexGrow]="1"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!frTableEditStack.includes(rowIndex)"
+                           (click)="frTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                              *ngIf="frTableEditStack.includes(rowIndex)">
+                            <spot-input formControlName="fundingStatus" [showLabel]="false"></spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [draggable]="false" [flexGrow]="1">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                                 ngx-datatable-cell-template>
+                        <div class="flex justify-start items-center gap-6">
+                            <a href="javascript:void(0)" title="Delete Single" (click)="deleteFR(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="flex items-start justify-between mt-6 px-3">
+            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+               (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitFundingRequests()"
+                    type="button">
+                Submit
+            </button>
+        </div>
+    </div>
+</div>

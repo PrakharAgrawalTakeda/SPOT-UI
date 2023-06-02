@@ -191,6 +191,7 @@
         <app-water-waste-bulk-edit *ngIf="projecthubservice.itemtype == 'WaterWasteBulkEdit'"></app-water-waste-bulk-edit>
         <app-water-waste-single-edit *ngIf="projecthubservice.itemtype == 'WaterWasteSingleEdit'"></app-water-waste-single-edit>
         <app-budget-general-edit *ngIf="projecthubservice.itemtype == 'BudgetGeneralEdit'"></app-budget-general-edit>
+        <app-budget-funding-information-bulk-edit *ngIf="projecthubservice.itemtype == 'BudgetFundingBulkEdit'"></app-budget-funding-information-bulk-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

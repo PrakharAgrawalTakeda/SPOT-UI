@@ -58,9 +58,7 @@
             <spot-input class="w-full read-only" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
             </spot-input>
         </div>
-        <div>
-
-        </div>
+        <app-budget-funding-information-table></app-budget-funding-information-table>
         <spot-textarea class="w-full read-only" formControlName="budgetCommentary" name="projectDescription"
                        [label]="'Budget Commentary'">
         </spot-textarea>

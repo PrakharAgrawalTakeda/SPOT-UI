@@ -171,6 +171,8 @@ import { ProjectDashboardPerformanceComponent } from './project-dashboard/projec
 import { ProjectDashboardBudgetComponent } from './project-dashboard/project-dashboard-budget/project-dashboard-budget.component';
 import { ProjectDashboardProductTeamComponent } from './project-dashboard/project-dashboard-product-team/project-dashboard-product-team.component';
 import {BudgetGeneralEditComponent} from "./budget/budget-general-edit/budget-general-edit.component";
+import { BudgetFundingInformationTableComponent } from './budget/budget-funding-information-table/budget-funding-information-table.component';
+import { BudgetFundingInformationBulkEditComponent } from './budget/budget-funding-information-bulk-edit/budget-funding-information-bulk-edit.component';
 //import { BudgetGeneralEditComponent } from './budget/budget-general-edit/budget-general-edit.component';
 
 export const projectRoutes: Route[] = [
@@ -571,7 +573,9 @@ export const projectRoutes: Route[] = [
     ProjectDashboardComponent,
     ProjectDashboardPerformanceComponent,
     ProjectDashboardBudgetComponent,
-    ProjectDashboardProductTeamComponent
+    ProjectDashboardProductTeamComponent,
+    BudgetFundingInformationTableComponent,
+    BudgetFundingInformationBulkEditComponent
     //,
     //BudgetGeneralEditComponent
   ],

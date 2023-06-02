@@ -62,17 +62,17 @@
                           [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                           [dropDownArray]="getWhyLookup()">
             </spot-select>
-            <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate"
-                             [label]="'Funding Approval Need Date'" [placeholder]="'Funding Approval Need Date'">
-            </spot-input-date>
-            <spot-input class="w-full read-only customCost" formControlName="totalApprovedCapex"
-                        [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [decimalCount]="0" [inputType]="'Number'"
-                        [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true" [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
-            </spot-input>
-            <spot-input class="w-full read-only customCost" formControlName="totalApprovedOpex"
-                        [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [decimalCount]="0" [inputType]="'Number'"
-                        [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true">
-            </spot-input>
+<!--            <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate"-->
+<!--                             [label]="'Funding Approval Need Date'" [placeholder]="'Funding Approval Need Date'">-->
+<!--            </spot-input-date>-->
+<!--            <spot-input class="w-full read-only customCost" formControlName="totalApprovedCapex"-->
+<!--                        [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [decimalCount]="0" [inputType]="'Number'"-->
+<!--                        [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true" [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">-->
+<!--            </spot-input>-->
+<!--            <spot-input class="w-full read-only customCost" formControlName="totalApprovedOpex"-->
+<!--                        [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [decimalCount]="0" [inputType]="'Number'"-->
+<!--                        [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true">-->
+<!--            </spot-input>-->
             <spot-textarea formControlName="budgetCommentary"
                            [label]="'Budget Commentary'"
                            [placeholder]="'Budget Commentary'">
