@@ -48,7 +48,7 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                        <form  class="w-full px-1" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="frTableEditStack.includes(rowIndex)">
                             <spot-input formControlName="approvalCurrency" [showLabel]="false"></spot-input>
                         </form>
@@ -108,7 +108,7 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                        <form  class="w-full px-1" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="frTableEditStack.includes(rowIndex)">
                             <spot-input formControlName="fundingStatus" [showLabel]="false"></spot-input>
                         </form>

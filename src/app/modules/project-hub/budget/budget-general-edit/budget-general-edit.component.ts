@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../../core/auth/auth.service";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 import {ActivatedRoute} from "@angular/router";
@@ -55,22 +55,41 @@ export class BudgetGeneralEditComponent {
             this.budgetInfoForm.controls.gmsBudgetowner.disable()
         }
         this.budgetInfoForm.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.budgetId.updateValueAndValidity({emitEvent : false})
+        })
+        this.budgetInfoForm.controls.capexRequired.valueChanges.subscribe(res => {
+            // Choosing Yes
             if(this.budgetInfoForm.controls.capexRequired.value =="0b52f476-5a54-4bbc-a2e6-da56016a36e0"){
-                //Before clicking submit
-                if(this.budgetInfoForm.controls.gmsBudgetowner.value.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC" && !this.isBudgetAdmin){
+                this.budgetInfoForm.controls.budgetId.setValidators(Validators.required)
+                this.budgetInfoForm.controls.predefinedInvestmentId.setValidators(Validators.required)
+                this.budgetInfoForm.controls.gmsBudgetowner.setValidators(Validators.required)
+                this.budgetInfoForm.controls.where.setValidators(Validators.required)
+                this.budgetInfoForm.controls.why.setValidators(Validators.required)
+                this.budgetInfoForm.controls.projectFundingStatus.setValidators(Validators.required)
+                if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
                     this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                    this.showBudgetIdButton = false;
-                }else{
-                    this.showBudgetIdButton = true;
-                }
-                if(this.isBudgetAdmin && this.budgetInfoForm.controls.gmsBudgetowner.value.portfolioOwnerId!="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
-                    this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                    this.showBudgetIdButton = true;
+                    this.budgetInfoForm.controls.predefinedInvestmentId.enable({emitEvent : false})
+                    this.budgetInfoForm.controls.where.enable({emitEvent : false})
+                    this.budgetInfoForm.controls.why.enable({emitEvent : false})
+                    this.budgetInfoForm.controls.projectFundingStatus.enable({emitEvent : false})
+                    if(!this.isBudgetAdmin){
+                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
+                        this.showBudgetIdButton = false;
+                    }else{
+                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
+                        this.showBudgetIdButton = true;
+                    }
                 }
             }else{
+                this.budgetInfoForm.controls.budgetId.clearValidators()
+                this.budgetInfoForm.controls.predefinedInvestmentId.clearValidators()
+                this.budgetInfoForm.controls.gmsBudgetowner.clearValidators()
+                this.budgetInfoForm.controls.where.clearValidators()
+                this.budgetInfoForm.controls.why.clearValidators()
+                this.budgetInfoForm.controls.projectFundingStatus.clearValidators()
                 this.showBudgetIdButton = false;
+                this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
                 if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
-                    this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
                     this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                 }
             }
@@ -106,7 +125,9 @@ export class BudgetGeneralEditComponent {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '927293cb-d4ca-4f31-8af6-c33c9e4792d1')
     }
 
-    submitBudgetInfo() {}
+    submitBudgetInfo() {
+        this.budgetInfoForm.updateValueAndValidity()
+    }
 
     disabler() {
 
@@ -137,4 +158,7 @@ export class BudgetGeneralEditComponent {
     getPortfolioOwner(): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
     }
+    get budgetId() {
+        console.log("aaaaaaaa")
+        return this.budgetInfoForm.get('budgetId'); }
 }

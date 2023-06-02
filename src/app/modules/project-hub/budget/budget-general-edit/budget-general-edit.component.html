@@ -30,7 +30,7 @@
             </spot-input-date>
 
             <div class="flex justify-between items-center mt-3">
-                <spot-input class="w-full read-only" formControlName="budgetId" [label]="'Budget ID'" [Required]="true">
+                <spot-input class="w-full read-only" id="budgetId"  formControlName="budgetId" [label]="'Budget ID'" [Required]="true">
                 </spot-input>
                 <div>
                     <button *ngIf="showBudgetIdButton" class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
@@ -83,7 +83,7 @@
                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
                 Cancel
             </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" [disabled]="budgetInfoForm.invalid">
                 Submit
             </button>
         </div>
