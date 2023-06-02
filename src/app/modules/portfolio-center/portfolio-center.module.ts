@@ -20,6 +20,9 @@ import { FuseDrawerModule } from '@fuse/components/drawer';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 export const projectRoutes: Route[] = [
   {
@@ -52,6 +55,9 @@ export const projectRoutes: Route[] = [
     MatChipsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
+    SpotFormsModule,
+    NgScrollbarModule,
+    NgxDatatableModule,
   ]
 })
 export class PortfolioCenterModule { }

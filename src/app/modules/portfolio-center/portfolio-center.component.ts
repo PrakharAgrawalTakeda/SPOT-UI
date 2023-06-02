@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { MsalService } from '@azure/msal-angular';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
@@ -37,96 +37,87 @@ export class PortfolioCenterComponent implements OnInit {
   showContent = false
   data: any
   totalproject = 0;
+  owningOrg = []
+  projectType = [{ name: 'Standard Project / Program' }, { name: 'Simple Project' }]
+  totalCAPEX = []
+  AgileWorkstream = []
+  AgileWave = []
+  overallStatus = []
+  viewBaseline = false
+  projectOverview:any = []
   filtersnew: any = {
-    "portfolioOwner": [],
-    "executionScope": [],
-    "people": [],
-    "phase": [],
-    "state": [],
-    "products": [],
-    "totalCAPEX": []
+    "PortfolioOwner": [],
+    "ProjectTeamMember": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
+    "GMSBudgetOwner": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
-  filters: any = {
-    "portfolioOwner": [],
-    "phase": [],
-    "executionScope": [],
-    "people": [],
-    "products": [],
-    "state": [],
-    "totalCAPEX": [],
-    "gmsBudgetOwner": [],
-    "oeProjectType": [],
-    "projectType": [],
-    "fundingStatus": [],
-    "agileWorkstream": [],
-    "agileWave": [],
-    "primaryKPI": [],
-    "startegicYear": [],
-    "annualInitiatives": [],
-    "topsGroup": [],
-    "capsProject": [],
-    "projectName": []
+  filtersnew1: any = {
+    "PortfolioOwner": [],
+    "ProjectTeamMember": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
+    "GMSBudgetOwner": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
   defaultfilter: any = {
-    "portfolioOwner": [],
-    "executionScope": [],
-    "people": [],
-    "phase": [],
-    "state": [],
-    "products": [],
-    "totalCAPEX": []
+    "PortfolioOwner": [],
+    "ProjectTeamMember": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
+    "GMSBudgetOwner": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
-  filterchiplist: any = {
-    "portfolioOwner": [],
-    "phase": [],
-    "executionScope": [],
-    "people": [],
-    "products": [],
-    "state": [],
-    "totalCAPEX": [],
-    "gmsBudgetOwner": [],
-    "oeProjectType": [],
-    "projectType": [],
-    "fundingStatus": [],
-    "agileWorkstream": [],
-    "agileWave": [],
-    "primaryKPI": [],
-    "startegicYear": [],
-    "annualInitiatives": [],
-    "topsGroup": [],
-    "capsProject": [],
-    "projectName": []
-  }
-  filterInputs: any = {
-    "portfolioOwner": [],
-    "phase": [],
-    "executionScope": [],
-    "products": [],
-    "state": [],
-    "totalCAPEX": [],
-    "gmsBudgetOwner": [],
-    "oeProjectType": [],
-    "projectType": [],
-    "fundingStatus": [],
-    "agileWorkstream": [],
-    "agileWave": [],
-    "primaryKPI": [],
-    "startegicYear": [],
-    "annualInitiatives": [],
-    "topsGroup": [],
-    "capsProject": [],
-    "projectName": []
-  }
+  PortfolioFilterForm = new FormGroup({
+    PortfolioOwner: new FormControl(),
+    ProjectTeamMember: new FormControl(),
+    ExecutionScope: new FormControl(),
+    OwningOrganization: new FormControl(),
+    ProjectState: new FormControl(),
+    ProjectPhase: new FormControl(),
+    ProjectType: new FormControl(),
+    Product: new FormControl(),
+    TotalCAPEX: new FormControl(),
+    GMSBudgetOwner: new FormControl(),
+    AGILEWorkstream: new FormControl(),
+    AGILEWave: new FormControl(),
+    CAPSProject: new FormControl(),
+    projectName: new FormControl(),
+    OverallStatus: new FormControl(),
+  })
+
   filterlist: any = {}
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl();
-  phaseCtrl = new FormControl();
-  stateCtrl = new FormControl();
-  filteredFruits: Observable<string[]>;
-  fruits: string[] = [];
   lookup: any = [];
   activeaccount: any
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
   newmainnav: any = [
     {
       id: 'portfolio-center',
@@ -170,45 +161,75 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
   ]
-  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
-  @ViewChild('phaseInput') phaseInput: ElementRef<HTMLInputElement>;
-  @ViewChild('stateInput') stateInput: ElementRef<HTMLInputElement>;
+
+  //For Local Attributes
+  localAttributeForm: any = new FormGroup({})
+  localAttributeFormRaw: any = new FormGroup({})
+  viewType = 'SidePanel'
+  dataLA: any = [];
+  originalData: any
+  rawData: any
+  columnList=[{"ColumnName": 'Overall Status'},
+    {"ColumnName": 'Project ID / Budgets ID' },
+    {"ColumnName": 'Program / Project Name'},
+    { "ColumnName": 'Phase (Project/Capital/OE)'},
+    { "ColumnName": 'Project Manager'},
+    { "ColumnName": 'Sponsor'},
+    { "ColumnName": 'Schedule'},
+    { "ColumnName": 'Risk/Issues'},
+    { "ColumnName": 'Ask/Needs' },
+    { "ColumnName": 'Budget' },
+    { "ColumnName": 'Spend' },
+    { "ColumnName": 'DQ%' },
+    { "ColumnName": 'Total CAPEX Approved/Forecast' },
+    { "ColumnName": 'Carbon Impact (Tons CO2)' },
+    { "ColumnName": 'Water Impact (m3)' },
+    { "ColumnName": 'Milestone / Progression' },
+    { "ColumnName": 'Next Milestone' },
+    { "ColumnName": 'Next Milestone Planned Finish Date' },
+    { "ColumnName": 'Execution Complete Date' },
+    { "ColumnName": 'Execution Duration (Days)' },
+    
+  ]
+
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {
   }
 
   ngOnInit(): void {
+    // localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
+    this.activeaccount = this.msal.instance.getActiveAccount();
     this.showContent = false;
     this.titleService.setTitle("Portfolio Center")
-      if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F"){
-        this.newmainnav = [
-          {
-            id: 'portfolio-center',
-            title: 'Portfolio Center',
-            type: 'basic',
-            link: '/portfolio-center'
-          },
-          {
-            id: 'spot-documents',
-            title: 'SPOT Resources',
-            type: 'basic',
-            externalLink: true,
-            link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-            target: '_blank'
-          },
-          {
-            id: 'report-navigator',
-            title: 'Report Navigator',
-            type: 'basic',
-            link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-            externalLink: true,
-            target: "_blank"
+    if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
+      this.newmainnav = [
+        {
+          id: 'portfolio-center',
+          title: 'Portfolio Center',
+          type: 'basic',
+          link: '/portfolio-center'
+        },
+        {
+          id: 'spot-documents',
+          title: 'SPOT Resources',
+          type: 'basic',
+          externalLink: true,
+          link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+          target: '_blank'
+        },
+        {
+          id: 'report-navigator',
+          title: 'Report Navigator',
+          type: 'basic',
+          link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+          externalLink: true,
+          target: "_blank"
 
-          }
-        ]
-      }
-    
+        }
+      ]
+    }
+
     //checking if there are any preset filter
     if (localStorage.getItem('spot-filters') == null) {
       this.filtersnew = this.defaultfilter
@@ -218,47 +239,173 @@ export class PortfolioCenterComponent implements OnInit {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filters'))
 
     }
-    console.log(this.filtersnew)
+    var user = [{
+      "userAdid": this.activeaccount.localAccountId,
+      "userDisplayName": this.activeaccount.name,
+      "userIsActive": true
+    }]
+    var state = [{
+      "isActive":true,
+      "kpiImpact":null,
+      "lookUpId":"0a3fb510-b3c6-4527-afc2-ac2ba3088d5e",
+      "lookUpName":"Active",
+      "lookUpOrder":100,
+      "lookUpParentId":"b2ab502a-f702-420f-98d9-c126d8664f6b"
+    }]
+    if (localStorage.getItem('spot-filtersNew') == null) {
+      this.filtersnew1 = this.defaultfilter
+      this.filtersnew1.ProjectState = state
+      this.filtersnew1.ProjectTeamMember = user
+      this.PortfolioFilterForm.patchValue({
+        ProjectTeamMember: user,
+        ProjectState: state
+      })
+
+    }
+    else {
+      this.filtersnew1 = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      if (this.filtersnew1.ProjectTeamMember == null){
+        this.filtersnew1.ProjectTeamMember = user
+        this.PortfolioFilterForm.patchValue({
+          ProjectTeamMember: user
+        })
+      }
+      if (this.filtersnew1.ProjectState == null) {
+        this.filtersnew1.ProjectState = state
+        this.PortfolioFilterForm.patchValue({
+          ProjectState: state
+        })
+      }
+
+    }
+    var filterKeys = Object.keys(this.filtersnew1);
+    var filterGroups = []
+    for (var i = 0; i < Object.keys(this.filtersnew1).length; i++){
+      var attribute = filterKeys[i]
+      var filterItems = []
+      if (this.filtersnew1[attribute] != null && this.filtersnew1[attribute].length != 0){
+      for (var j = 0; j < this.filtersnew1[attribute].length; j++){
+        if (attribute == "PortfolioOwner" || attribute == "ExcecutionScope"){
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].portfolioOwner,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "GMSBudgetOwner") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].gmsbudgetOwnerDefault,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "owningOrganization" || attribute == "projectType"){
+          var filterItems1 = 
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].name,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "ProjectTeamMember") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].userAdid,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "isCapsProject") {
+          if(this.filtersnew1[attribute] == true){
+            this.filtersnew1[attribute] = "Yes";
+          }
+          else{
+            this.filtersnew1[attribute] ="No"
+          }
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute],
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "projectName") {
+          var filterItems1 =
+          {
+            "filterAttribute": "Project/Program",
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].ProblemUniqueId,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "products") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].productId,
+            "unionOperator": 2
+          }
+        }
+        else {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew1[attribute][j].lookUpId,
+            "unionOperator": 2
+          }
+        }
+        filterItems.push(filterItems1)
+      }
+    // }
+      filterGroups.push({
+          filterItems,
+          "groupCondition": 1
+    })
+  }
+    }
+    filterGroups[filterGroups.length - 1].groupCondition = 0
+    var groupData = {
+      "filterGroups": filterGroups
+    }
+
+    console.log("Filter Data : " +groupData)
     //Filtering Projects
-    this.apiService.MainFilters(this.filtersnew).then((resp) => {
+    // this.apiService.MainFilters(this.filtersnew).then((resp:any) => {
+      this.apiService.Filters(groupData).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
       mainNavComponent.refresh()
-      if (resp != null) {
+      // if (resp != null) {
 
         //Loading Lookup Values in Filters
         this.apiService.getfilterlist().then(data => {
           this.filterlist = data
+          this.filterlist.defaultOwningOrganizations.forEach(res => {
+            this.owningOrg.push({ name: res })
+          })
         })
 
         this.auth.lookupMaster().then(data => {
-          this.filterchiplist.phase = []
-          this.filterchiplist.state = []
-          // Filters Inputs 
           this.lookup = data
-          this.filterInputs.phase = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["phase"])
-          this.filterInputs.state = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["state"])
-          this.filterInputs.startegicYear = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["stratyear"])
-          //Phase
-          for (var i of this.filters.phase) {
-            const name = this.lookup.find(x => x.lookUpId == i).lookUpName
-            if (!this.filterchiplist.phase.includes(name)) {
-              this.filterchiplist.phase.push(name)
-              this.filterInputs.phase = this.filterInputs.phase.filter(x => x.lookUpId != i)
-            }
-          }
-          //State
-          for (var i of this.filters.state) {
-            if (!this.filterchiplist.state.includes(i)) {
-              this.filterchiplist.state.push(i)
-              this.filterInputs.state = this.filterInputs.state.filter(x => x.lookUpName != i)
-            }
-          }
+          this.totalCAPEX = this.lookup.filter(result => result.lookUpParentId == "10F36AC1-23CB-4326-8701-2416F8AE679E")
+          this.AgileWorkstream = this.lookup.filter(result => result.lookUpParentId == "f4486388-4c52-48fc-8c05-836878da2247")
+          this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
+          this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
+          
         })
 
         //end Loading
         //Loading Portfiolio Data
-        this.apiService.getportfoliodata(resp).then((res: any) => {
+        // this.apiService.getportfoliodata(resp).then((res: any) => {
           console.log(res)
           this.totalproject = res.totalProjects
           this.data = {
@@ -385,6 +532,25 @@ export class PortfolioCenterComponent implements OnInit {
           };
           this.projectNames = res.projectDetails;
           this.projects.data = res.portfolioDetails;
+          this.projectOverview = res.portfolioDetails
+          for(var i=0;i<this.projectOverview.length;i++){
+            this.projectOverview[i].projectCapitalOe= this.projects.data[i].phase +
+                ' - ' +
+                (this.projects.data[i].capitalPhaseAbbreviation
+                ? this.projects.data[i].capitalPhaseAbbreviation
+                  : 'NA') +
+                ' - ' +
+                (this.projects.data[i].oePhaseAbbreviation
+                ? this.projects.data[i].oePhaseAbbreviation
+                  : 'NA');
+            this.projectOverview[i].calculatedEmissionsImpact= this.projectNames[i].calculatedEmissionsImpact;
+            this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
+            this.projectOverview[i].problemId = this.projectNames[i].problemId;
+            this.projectOverview[i].nextMilestoneFinishDate= this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
+            this.projectOverview[i].executionCompleteDate= this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
+            this.projectOverview[i].totalApprovedCapex= this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
+          }
+          
           this.projects.sort = this.recentTransactionsTableMatSort;
           this.showContent = true
           for (var name of this.projectNames) {
@@ -404,130 +570,27 @@ export class PortfolioCenterComponent implements OnInit {
             }
           };
           console.log("is this working too?")
-        });
-        //End Loading
-      }
-    })
+        // });
+      // }
+  })
+
+    //For Local Attributes
+    // this.apiService.getLocalAttributes(this.projectHubService.projectid).then((res: any) => {
+    //   this.auth.lookupMaster().then(res1 => {
+    //     this.lookupData = res1
+    //     const originalData = Object.assign([{}], res)
+    //     res.forEach(i => {
+    //       this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+    //     })
+    //     this.dataLoader(res);
+    //     this.originalData = originalData;
+    //     this.viewContent = true
+    //   })
+    // })
   }
   routeProject(projectid): void {
-    //this.close()
-    /*if (this.routes.url.includes('project-hub')){
-    this.routes.navigate(['project-hub/'+ projectid]).then(() => {
-        window.location.reload();
-      });
-    }
-    else{}*/
     window.open('project-hub/' + projectid, "_blank")
 
-  }
-  selectoption(event: MatAutocompleteSelectedEvent, field: string): void {
-    if (field == "PortfolioOwner") {
-      console.log(event)
-      this.filtersnew.portfolioOwner.push(event.option.value)
-      this.filterlist.portfolioOwner = this.filterlist.portfolioOwner.filter(x => x.portfolioOwnerId != event.option.value.portfolioOwnerId)
-    }
-    if (field == "Excecution") {
-      this.filtersnew.executionScope.push(event.option.value)
-      this.filterlist.executionScope = this.filterlist.executionScope.filter(x => x.portfolioOwnerId != event.option.value.portfolioOwnerId)
-      console.log(this.filtersnew)
-    }
-    if (field == "Phase") {
-      this.filtersnew.phase.push(event.option.value)
-      this.filterlist.phase = this.filterlist.phase.filter(x => x.lookUpId != event.option.value.lookUpId)
-      console.log(this.filtersnew)
-    }
-    if (field == "State") {
-      this.filtersnew.state.push(event.option.value)
-      this.filterlist.state = this.filterlist.state.filter(x => x.lookUpId != event.option.value.lookUpId)
-      console.log(this.filtersnew)
-    }
-    if (field == "Product") {
-      this.filtersnew.products.push(event.option.value)
-      this.filterlist.products = this.filterlist.products.filter(x => x.id != event.option.value.id)
-      console.log(this.filtersnew)
-    }
-  }
-  removeoption(value: any, field: string) {
-    if (field == "PortfolioOwner") {
-      this.filterlist.portfolioOwner.push(value)
-      this.filtersnew.portfolioOwner = this.filtersnew.portfolioOwner.filter(x => x.portfolioOwnerId != value.portfolioOwnerId)
-      console.log(value)
-    }
-    if (field == "Excecution") {
-      this.filterlist.executionScope.push(value)
-      this.filtersnew.executionScope = this.filtersnew.executionScope.filter(x => x.portfolioOwnerId != value.portfolioOwnerId)
-      console.log(value)
-    }
-    if (field == "Phase") {
-      this.filterlist.phase.push(value)
-      this.filtersnew.phase = this.filtersnew.phase.filter(x => x.lookUpId != value.lookUpId)
-      console.log(value)
-    }
-    if (field == "State") {
-      this.filterlist.state.push(value)
-      this.filtersnew.state = this.filtersnew.state.filter(x => x.lookUpId != value.lookUpId)
-      console.log(value)
-    }
-    if (field == "Product") {
-      this.filterlist.products.push(value)
-      this.filtersnew.products = this.filtersnew.products.filter(x => x.id != value.id)
-      console.log(value)
-    }
-  }
-  remove(value: string, field: string): void {
-    if (field == "Phase") {
-      var look = this.lookup.find(x => x.lookUpName == value)
-      this.filterInputs.phase.push(look)
-      const index = this.filterchiplist.phase.indexOf(value)
-      this.filterchiplist.phase.splice(index, 1)
-      const indexfil = this.filters.phase.indexOf(look.lookUpId)
-      this.filters.phase.splice(indexfil, 1)
-    }
-    else if (field == "State") {
-      var look = this.lookup.find(x => x.lookUpName == value)
-      this.filterInputs.state.push(look)
-      const index = this.filterchiplist.state.indexOf(value)
-      this.filterchiplist.state.splice(index, 1)
-      const indexfil = this.filters.state.indexOf(look.lookUpName)
-      this.filters.state.splice(indexfil, 1)
-    }
-  }
-  selected(event: MatAutocompleteSelectedEvent, field: string): void {
-
-    //entering values to start filtering
-    //Phase Selection
-    if (field == "Phase") {
-      if (!this.filters.phase.includes(event.option.value)) {
-        this.filters.phase.push(event.option.value);
-        this.filterchiplist.phase.push(event.option.viewValue);
-        this.filterInputs.phase = this.filterInputs.phase.filter(x => x.lookUpId != event.option.value)
-      }
-      this.phaseInput.nativeElement.blur();
-      this.phaseCtrl.setValue(null);
-    }
-    if (field == "State") {
-      if (!this.filters.state.includes(event.option.value)) {
-        this.filters.state.push(event.option.viewValue);
-        this.filterchiplist.state.push(event.option.viewValue);
-        this.filterInputs.state = this.filterInputs.state.filter(x => x.lookUpId != event.option.value)
-      }
-      this.stateInput.nativeElement.blur();
-      this.stateCtrl.setValue(null);
-    }
-    if (field == "Priority") {
-      if (!this.fruits.includes(event.option.viewValue)) {
-        this.fruits.push(event.option.viewValue);
-        this.allFruits.splice(this.allFruits.indexOf(event.option.viewValue), 1)
-      }
-      this.fruitInput.nativeElement.blur();
-      this.fruitCtrl.setValue(null);
-    }
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
   }
 
   trackByFn(index: number, item: any): any {
@@ -538,10 +601,6 @@ export class PortfolioCenterComponent implements OnInit {
   private _fixSvgFill(element: Element): void {
     // Current URL
     const currentURL = this.router.url;
-
-    // 1. Find all elements with 'fill' attribute within the element
-    // 2. Filter out the ones that doesn't have cross reference so we only left with the ones that use the 'url(#id)' syntax
-    // 3. Insert the 'currentURL' at the front of the 'fill' attribute value
     Array.from(element.querySelectorAll('*[fill]'))
       .filter(el => el.getAttribute('fill').indexOf('url(') !== -1)
       .forEach((el) => {
@@ -676,8 +735,9 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   applyfilters() {
+    console.log(this.PortfolioFilterForm.getRawValue())
+    localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
     localStorage.setItem('spot-filters', JSON.stringify(this.filtersnew))
-    console.log(this.filters)
     this.filterDrawer.close()
     this.resetpage()
 
@@ -691,4 +751,75 @@ export class PortfolioCenterComponent implements OnInit {
     localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
     this.resetpage()
   }
+
+  getPortfolioOwner(): any {
+    if (Object.keys(this.filterlist).length != 0){
+      return this.filterlist.portfolioOwner.filter(x => x.isPortfolioOwner == true)
+    }
+  }
+
+  getExcecutionScope(): any {
+    if (Object.keys(this.filterlist).length != 0) {
+      return this.filterlist.portfolioOwner.filter(x => x.isExecutionScope == true)
+    }
+  }
+
+  getGMSBudgetOwner(): any {
+    if (Object.keys(this.filterlist).length != 0) {
+      return this.filterlist.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+    }
+  }
+
+  OpenLA(){
+    this.viewBaseline = true
+    this.filterDrawer.toggle();
+  }
+
+  getHeaderClass(): any {
+    return ' vertical-header-class';
+  }
+  alignHeaderMiddleClass(): any {
+    return ' align-header-middle-class';
+  }
+  getTotalCapexHeaderClass(): any {
+    return ' total-capex-header-class';
+  }
+  getGraphCellClass(): any {
+    return 'graph-cell-datatable';
+  } 
+  getFrozenHeaderClass(): any {
+    return ' frozen-header-class';
+  }
+  getFrozenHeaderClassID(): any {
+    return ' frozen-header-classID';
+  }
+
+  formatDate(date) {
+  return [
+    this.padTo2Digits(date.getDate()),
+    this.padTo2Digits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join('/');
+  }
+
+  padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+
+  OpenBiReport(){
+    window.open('https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/f20aacee-f8de-4db9-a17d-341b12c4fa00/ReportSection97454b27006b80c04035?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae')
+  }
+
+  OpenSPOTReport(){
+    window.open('https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/3b64d881-0127-47a0-a4e1-8ae202214a6a/ReportSection76c7ec63df87082c77bb?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae')
+  }
+  
+  OpenProject(projectName){
+    this.projectOverview.forEach((item)=>{
+      if (item.problemTitle == projectName){
+        window.open('/project-hub/' + item.projectUid + '/project-board', "_blank")
+      }
+    })
+  }
+
 }
