@@ -54,7 +54,30 @@ export class BudgetGeneralEditComponent {
         if(!this.isBudgetOwnerEditable){
             this.budgetInfoForm.controls.gmsBudgetowner.disable()
         }
+        this.budgetInfoForm.controls.budgetId.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.budgetId.updateValueAndValidity({emitEvent : false})
+        })
+        this.budgetInfoForm.controls.predefinedInvestmentId.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
+        })
+        this.budgetInfoForm.controls.gmsBudgetowner.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
+        })
+        this.budgetInfoForm.controls.where.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.where.updateValueAndValidity({emitEvent : false})
+        })
+        this.budgetInfoForm.controls.why.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.why.updateValueAndValidity({emitEvent : false})
+        })
+        this.budgetInfoForm.controls.projectFundingStatus.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.projectFundingStatus.updateValueAndValidity({emitEvent : false})
+        })
         this.budgetInfoForm.valueChanges.subscribe(res => {
+            this.budgetInfoForm.controls.projectFundingStatus.updateValueAndValidity({emitEvent : false})
+            this.budgetInfoForm.controls.why.updateValueAndValidity({emitEvent : false})
+            this.budgetInfoForm.controls.where.updateValueAndValidity({emitEvent : false})
+            this.budgetInfoForm.controls.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
+            this.budgetInfoForm.controls.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
             this.budgetInfoForm.controls.budgetId.updateValueAndValidity({emitEvent : false})
         })
         this.budgetInfoForm.controls.capexRequired.valueChanges.subscribe(res => {
@@ -73,13 +96,22 @@ export class BudgetGeneralEditComponent {
                     this.budgetInfoForm.controls.why.enable({emitEvent : false})
                     this.budgetInfoForm.controls.projectFundingStatus.enable({emitEvent : false})
                     if(!this.isBudgetAdmin){
-                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
+                        this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                         this.showBudgetIdButton = false;
                     }else{
                         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
                         this.showBudgetIdButton = true;
                     }
+                }else{
+                    if(!this.isBudgetAdmin){
+                        this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
+                        this.showBudgetIdButton = true;
+                    }else{
+                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
+                        this.showBudgetIdButton = true;
+                    }
                 }
+
             }else{
                 this.budgetInfoForm.controls.budgetId.clearValidators()
                 this.budgetInfoForm.controls.predefinedInvestmentId.clearValidators()
