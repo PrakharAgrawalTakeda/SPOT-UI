@@ -5,6 +5,7 @@ import {AuthService} from "../../../../core/auth/auth.service";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 import {ActivatedRoute} from "@angular/router";
 import {ProjectApiService} from "../../common/project-api.service";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 
 @Component({
   selector: 'app-budget-general-edit',
@@ -23,11 +24,10 @@ export class BudgetGeneralEditComponent {
     isBudgetAdmin: boolean = true;
     isBudgetOwnerEditable: boolean = false;
     showBudgetIdButton: boolean = false;
+    required:boolean = false;
     budgetInfoForm = new FormGroup({
         capexRequired: new FormControl(''),
         opexRequired: new FormControl(''),
-        parentProgram: new FormControl(''),
-        localCurrency: new FormControl(''),
         assetPlaced: new FormControl(''),
         budgetId: new FormControl(''),
         gmsBudgetowner: new FormControl(null),
@@ -44,57 +44,51 @@ export class BudgetGeneralEditComponent {
                  private portApiService: PortfolioApiService,
                  public auth: AuthService,
                  private _Activatedroute: ActivatedRoute,
+                 public fuseAlert: FuseConfirmationService,
                  private apiService: ProjectApiService){
-        this.budgetInfoForm.controls.localCurrency.disable();
-        this.budgetInfoForm.controls.parentProgram.disable()
-        if(this.budgetInfoForm.controls.capexRequired.value =="0b52f476-5a54-4bbc-a2e6-da56016a36e0"){
-            this.budgetInfoForm.controls.capexRequired.disable()
+        if(this.capexRequired.value =="0b52f476-5a54-4bbc-a2e6-da56016a36e0"){
+            this.capexRequired.disable()
         }
         this.budgetInfoForm.controls.budgetId.disable()
         if(!this.isBudgetOwnerEditable){
-            this.budgetInfoForm.controls.gmsBudgetowner.disable()
+            this.gmsBudgetowner.disable()
         }
         this.budgetInfoForm.controls.budgetId.valueChanges.subscribe(res => {
-            this.budgetInfoForm.controls.budgetId.updateValueAndValidity({emitEvent : false})
+            this.budgetId.updateValueAndValidity({emitEvent : false})
         })
         this.budgetInfoForm.controls.predefinedInvestmentId.valueChanges.subscribe(res => {
-            this.budgetInfoForm.controls.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
+            this.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
         })
         this.budgetInfoForm.controls.gmsBudgetowner.valueChanges.subscribe(res => {
-            this.budgetInfoForm.controls.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
+            this.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
         })
         this.budgetInfoForm.controls.where.valueChanges.subscribe(res => {
-            this.budgetInfoForm.controls.where.updateValueAndValidity({emitEvent : false})
+            this.where.updateValueAndValidity({emitEvent : false})
         })
         this.budgetInfoForm.controls.why.valueChanges.subscribe(res => {
-            this.budgetInfoForm.controls.why.updateValueAndValidity({emitEvent : false})
-        })
-        this.budgetInfoForm.controls.projectFundingStatus.valueChanges.subscribe(res => {
-            this.budgetInfoForm.controls.projectFundingStatus.updateValueAndValidity({emitEvent : false})
+            this.why.updateValueAndValidity({emitEvent : false})
         })
         this.budgetInfoForm.valueChanges.subscribe(res => {
-            this.budgetInfoForm.controls.projectFundingStatus.updateValueAndValidity({emitEvent : false})
-            this.budgetInfoForm.controls.why.updateValueAndValidity({emitEvent : false})
-            this.budgetInfoForm.controls.where.updateValueAndValidity({emitEvent : false})
-            this.budgetInfoForm.controls.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
-            this.budgetInfoForm.controls.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
-            this.budgetInfoForm.controls.budgetId.updateValueAndValidity({emitEvent : false})
+            this.predefinedInvestmentId.updateValueAndValidity({emitEvent : false})
+            this.why.updateValueAndValidity({emitEvent : false})
+            this.where.updateValueAndValidity({emitEvent : false})
+            this.gmsBudgetowner.updateValueAndValidity({emitEvent : false})
+            this.budgetId.updateValueAndValidity({emitEvent : false})
         })
-        this.budgetInfoForm.controls.capexRequired.valueChanges.subscribe(res => {
+        this.capexRequired.valueChanges.subscribe(res => {
             // Choosing Yes
             if(this.budgetInfoForm.controls.capexRequired.value =="0b52f476-5a54-4bbc-a2e6-da56016a36e0"){
-                this.budgetInfoForm.controls.budgetId.setValidators(Validators.required)
-                this.budgetInfoForm.controls.predefinedInvestmentId.setValidators(Validators.required)
-                this.budgetInfoForm.controls.gmsBudgetowner.setValidators(Validators.required)
-                this.budgetInfoForm.controls.where.setValidators(Validators.required)
-                this.budgetInfoForm.controls.why.setValidators(Validators.required)
-                this.budgetInfoForm.controls.projectFundingStatus.setValidators(Validators.required)
+                this.required = true;
+                this.budgetId.setValidators(Validators.required)
+                this.predefinedInvestmentId.setValidators(Validators.required)
+                this.gmsBudgetowner.setValidators(Validators.required)
+                this.where.setValidators(Validators.required)
+                this.why.setValidators(Validators.required)
                 if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
                     this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
                     this.budgetInfoForm.controls.predefinedInvestmentId.enable({emitEvent : false})
                     this.budgetInfoForm.controls.where.enable({emitEvent : false})
                     this.budgetInfoForm.controls.why.enable({emitEvent : false})
-                    this.budgetInfoForm.controls.projectFundingStatus.enable({emitEvent : false})
                     if(!this.isBudgetAdmin){
                         this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                         this.showBudgetIdButton = false;
@@ -112,12 +106,12 @@ export class BudgetGeneralEditComponent {
                     }
                 }
             }else{
-                this.budgetInfoForm.controls.budgetId.clearValidators()
-                this.budgetInfoForm.controls.predefinedInvestmentId.clearValidators()
-                this.budgetInfoForm.controls.gmsBudgetowner.clearValidators()
-                this.budgetInfoForm.controls.where.clearValidators()
-                this.budgetInfoForm.controls.why.clearValidators()
-                this.budgetInfoForm.controls.projectFundingStatus.clearValidators()
+                this.required = false;
+                this.budgetId.clearValidators()
+                this.predefinedInvestmentId.clearValidators()
+                this.gmsBudgetowner.clearValidators()
+                this.where.clearValidators()
+                this.why.clearValidators()
                 this.showBudgetIdButton = false;
                 this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
                 if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
@@ -134,13 +128,6 @@ export class BudgetGeneralEditComponent {
             this.generalInfoPatchValue(res)
             this.viewContent = true
         })
-        this.portApiService.getOnlyLocalCurrency(this.id).then(currency => {
-            this.localCurrency = currency
-            this.budgetInfoForm.patchValue({
-                localCurrency:  this.localCurrency.localCurrencyAbbreviation,
-            })
-        });
-
     }
 
     getYesNo(): any {
@@ -157,9 +144,64 @@ export class BudgetGeneralEditComponent {
     }
 
     submitBudgetInfo() {
-        this.budgetInfoForm.updateValueAndValidity()
-    }
+        if (this.required) {
+            var fieldsMissing = 0;
+            var missingFields = [];
+            if(this.budgetId.invalid){
+                fieldsMissing ++;
+                missingFields.push("Budget ID")
+            }
+            if(Object.keys(this.predefinedInvestmentId.value).length === 0){
+                fieldsMissing ++;
+                missingFields.push("Global/Regional Predefined Investment")
+            }
+            // if(this.gmsBudgetowner.value.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+            //     fieldsMissing ++;
+            //     missingFields.push("GMS Budget Owner")
+            // }
+            if(this.where.invalid){
+                fieldsMissing ++;
+                missingFields.push("Where")
+            }
+            if(this.why.invalid){
+                fieldsMissing ++;
+                missingFields.push("Why")
+            }
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "The following fields are required",
+                "message": this.getMissingFieldsString(missingFields),
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warn"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "OK",
+                        "color": "warn"
+                    },
+                    "cancel": {
+                        "show": true,
+                        "label": "Cancel"
+                    }
+                },
+                "dismissible": true
+            }
+            if(fieldsMissing!=0){
+                const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
+                riskIssueAlert.afterClosed().subscribe(close => {
+                    if (close == 'confirmed') {
+                    }
+                })
+            }else{
 
+            }
+        }
+    }
+    getMissingFieldsString(fields) : string {
+        return fields.join(', ')
+    }
     disabler() {
 
     }
@@ -168,8 +210,6 @@ export class BudgetGeneralEditComponent {
         this.budgetInfoForm.patchValue({
             capexRequired: response.budget.capExRequired ? response.budget.capExRequired : "17ac13d1-a591-4e4f-ba7b-00d72124b1c4" ,
             opexRequired:  response.budget.opExRequired ? response.budget.opExRequired : "17ac13d1-a591-4e4f-ba7b-00d72124b1c4" ,
-            parentProgram:  response.parentProgram,
-            localCurrency:  this.localCurrency.localCurrencyAbbreviation,
             assetPlaced:  response.budget.definitiveCrapprovalDate,
             budgetId:  response.budget.capitalBudgetId,
             gmsBudgetowner:  this.getPortfolioOwnerNameById(response.budget.budgetOwner),
@@ -190,6 +230,23 @@ export class BudgetGeneralEditComponent {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
     }
     get budgetId() {
-        console.log("aaaaaaaa")
-        return this.budgetInfoForm.get('budgetId'); }
+        return this.budgetInfoForm.get('budgetId');
+    }
+    get predefinedInvestmentId() {
+        return this.budgetInfoForm.get('predefinedInvestmentId');
+    }
+    get gmsBudgetowner() {
+        return this.budgetInfoForm.get('gmsBudgetowner');
+    }
+    get where() {
+        return this.budgetInfoForm.get('where');
+    }
+    get why() {
+        return this.budgetInfoForm.get('why');
+    }
+    get capexRequired() {
+        return this.budgetInfoForm.get('capexRequired');
+    }
+
+
 }
