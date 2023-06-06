@@ -1,66 +1,92 @@
 <div class="w-full min-w-0 p-8 pt-0">
-    <form [formGroup]="budgetForm" class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-        <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget</div>
-            <div class="flex items-start justify-between">
-                <div style="padding-right: 5px;">
-                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                            (click)="projectHubService.toggleDrawerOpen('BudgetGeneralEdit', '', filterCriteria , id)">
-                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-                    </button>
+    <form [formGroup]="budgetForm"  class="space-y-6">
+        <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+            <div class=" pb-3 pt-0 flex items-center justify-between">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget</div>
+                <div class="flex items-start justify-between">
+                    <div style="padding-right: 5px;">
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                (click)="projectHubService.toggleDrawerOpen('BudgetGeneralEdit', '', filterCriteria , id)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-            <spot-input class="w-full read-only"
-                        formControlName="capexRequired"
-                        [label]="'CAPEX Required'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="opexRequired" [label]="'OPEX Required?'">
-            </spot-input>
-            <div>
+            <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+                <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Parent Program'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="localCurrency" [label]="'Local Currency'" [showHint]="true" [hint]="'Currency Info'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="assetPlaced" [label]="'Asset Placed In Service (Estimate)'">
+                </spot-input>
             </div>
         </div>
-        <mat-divider class="my-4" ></mat-divider>
-        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-            <spot-input class="w-full read-only" formControlName="parentProgram" [label]="'Parent Program'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="localCurrency" [label]="'Local Currency'" [showHint]="true" [hint]="'Currency Info'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="assetPlaced" [label]="'Asset Placed In Service (Estimate)'">
-            </spot-input>
-        </div>
-        <mat-divider class="my-4" ></mat-divider>
-        <div class="text-primary text-xl">Required for CAPEX Projects</div>
-        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-            <spot-input class="w-full read-only" formControlName="budgetId" [label]="'Budget ID'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="gmsBudgetowner" [label]="'GMS Budget Owner'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="predefinedInvestmentId" [label]="'Global/Regional Predefined Investment'">
-            </spot-input>
+        <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+            <div class="pb-3 pt-0 flex items-center justify-between">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Required for Capex Project</div>
+                <div class="flex items-start justify-between">
+                    <div style="padding-right: 5px;">
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                (click)="projectHubService.toggleDrawerOpen('BudgetGeneralEdit', '', filterCriteria , id)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full mb-4">
+                <div
+                    class="flex justify-start w-full gap-3 items-center font-medium">
+                    CAPEX Required
+                    <mat-icon svgIcon="heroicons_outline:x-circle"
+                              *ngIf="!budgetForm.controls.capexRequired.value"></mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                              *ngIf="budgetForm.controls.capexRequired.value">
+                    </mat-icon>
+                </div>
+                <div
+                    class="flex justify-start w-full gap-3 items-center font-medium">
+                    OPEX Required
+                    <mat-icon svgIcon="heroicons_outline:x-circle"
+                              *ngIf="!budgetForm.controls.opexRequired.value"></mat-icon>
+                    <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                              *ngIf="budgetForm.controls.opexRequired.value">
+                    </mat-icon>
+                </div>
+                <div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+                <spot-input class="w-full read-only" formControlName="budgetId" [label]="'Budget ID'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="gmsBudgetowner" [label]="'GMS Budget Owner'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="predefinedInvestmentId" [label]="'Global/Regional Predefined Investment'">
+                </spot-input>
 
-            <spot-input class="w-full read-only" formControlName="where" [label]="'Where'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="why" [label]="'Why'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="fundingApprovalNeedDate" [label]="'Funding Approval Need Date'">
-            </spot-input>
+                <spot-input class="w-full read-only" formControlName="where" [label]="'Where'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="why" [label]="'Why'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="fundingApprovalNeedDate" [label]="'Funding Approval Need Date'">
+                </spot-input>
+            </div>
+            <spot-textarea class="w-full read-only" formControlName="budgetCommentary" name="projectDescription"
+                           [label]="'Budget Commentary'">
+            </spot-textarea>
         </div>
-        <div class="text-primary text-xl">Funding Information</div>
-        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-            <spot-input class="w-full read-only" formControlName="projectFundingStatus" [label]="'Project Funding Status'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="totalApprovedCapex"
-                        [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [showHint]="true"
-                        [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
-            </spot-input>
+        <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+            <div class="text-primary text-xl mb-4">Funding Information</div>
+            <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+                <spot-input class="w-full read-only" formControlName="projectFundingStatus" [label]="'Project Funding Status'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="totalApprovedCapex"
+                            [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [showHint]="true"
+                            [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
+                </spot-input>
+            </div>
+            <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"></app-budget-funding-information-table>
         </div>
-        <app-budget-funding-information-table></app-budget-funding-information-table>
-        <spot-textarea class="w-full read-only" formControlName="budgetCommentary" name="projectDescription"
-                       [label]="'Budget Commentary'">
-        </spot-textarea>
     </form>
 </div>

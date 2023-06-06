@@ -111,7 +111,6 @@ export class BudgetGeneralEditComponent {
                         this.showBudgetIdButton = true;
                     }
                 }
-
             }else{
                 this.budgetInfoForm.controls.budgetId.clearValidators()
                 this.budgetInfoForm.controls.predefinedInvestmentId.clearValidators()

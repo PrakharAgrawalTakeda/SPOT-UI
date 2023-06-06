@@ -9,6 +9,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
     styleUrls: ['./budget-funding-information-table.component.scss']
 })
 export class BudgetFundingInformationTableComponent {
+    @Input() editable: boolean
     fundingRequests: any = []
     id: string = ''
 

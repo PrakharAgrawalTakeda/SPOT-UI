@@ -25,8 +25,8 @@ export class BudgetComponent implements OnInit {
     }
 
     budgetForm = new FormGroup({
-        capexRequired: new FormControl(''),
-        opexRequired: new FormControl(''),
+        capexRequired: new FormControl(false),
+        opexRequired: new FormControl(false),
         parentProgram: new FormControl(''),
         localCurrency: new FormControl(''),
         assetPlaced: new FormControl(''),
@@ -71,8 +71,8 @@ export class BudgetComponent implements OnInit {
 
     generalInfoPatchValue(response){
         this.budgetForm.patchValue({
-            capexRequired: response.budget.capExRequired ? "Yes" : "No" ,
-            opexRequired:  response.budget.opExRequired  ? "Yes" : "No" ,
+            capexRequired: response.budget.capExRequired ? true : false ,
+            opexRequired:  response.budget.opExRequired  ? true : false ,
             parentProgram:  response.parentProgram,
             localCurrency:  this.localCurrency.localCurrencyAbbreviation,
             assetPlaced:  response.budget.definitiveCrapprovalDate,
