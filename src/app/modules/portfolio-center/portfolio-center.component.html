@@ -73,7 +73,7 @@
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
-                    <mat-label style="color: #a0cbf1;" (click)="filterDrawerOver.toggle()">+ Add Local Attribute</mat-label>
+                    <mat-label id="localAttribute" style="color: #a0cbf1;" (click)="OpenLA()">+ Add Local Attribute</mat-label>
                     <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyfilters()">
                         Apply Filters
                     </button>
@@ -91,9 +91,9 @@
                         </a>
                     </div>
                 </div>
-            <!-- <form class="pl-3 w-full overflow-hidden" [formGroup]="localAttributeForm">
+            <form class="pl-3 w-full overflow-hidden" [formGroup]="localAttributeForm">
                 <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
-                    <div *ngFor="let item of data">
+                    <div *ngFor="let item of dataLA">
                         <div [ngSwitch]="item.dataType">
                             <div *ngSwitchCase="'1'" class="w-full mt-4 mb-6" #checkbox>
                                 <spot-toggle (focusout)="clickEvent(item.name, $event.target.value)" class="w-full"
@@ -124,13 +124,24 @@
                                     [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                                 </spot-multiselect-autocomplete>
                             </div>
-                            <spot-input *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                [label]=item.name [decimalCount]=item.linesCount [inputType]="'Number'"
-                                [callLocation]="'LocalAttribute'" [placeholder]=item.name>
-                            </spot-input>
-                            <spot-input-date *ngSwitchCase="'2'" class="w-full read-only" formControlName={{item.uniqueId}}
-                                name={{item.uniqueId}} [label]=item.name [placeholder]=item.name>
-                            </spot-input-date>
+                            <div style="display: flex;">
+                                <spot-input style="display: flex;" *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                                    [label]=item.name [decimalCount]=item.linesCount [inputType]="'Number'"
+                                    [callLocation]="'LocalAttribute'" [placeholder]=item.name>
+                                </spot-input>
+                                <spot-input style="display: flex; left: 10px; position: relative;" *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                                    [decimalCount]=item.linesCount [inputType]="'Number'" [callLocation]="'LocalAttribute'"
+                                    [placeholder]=item.name>
+                                </spot-input>
+                            </div>
+                            <div style="display: flex;">
+                                <spot-input-date style="display: flex;" *ngSwitchCase="'2'" class="w-full read-only" formControlName={{item.uniqueId}}
+                                    name={{item.uniqueId}} [label]=item.name [placeholder]=item.name>
+                                </spot-input-date>
+                                <spot-input-date style="display: flex; left: 10px; position: relative;" *ngSwitchCase="'2'" class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                                    [placeholder]=item.name>
+                                </spot-input-date>
+                            </div>
                             <div *ngIf="!item.isMulti" #people>
                                 <spot-singleselect-user-autocomplete *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
                                     [label]=item.name name={{item.uniqueId}} [showLabel]="true"
@@ -145,7 +156,7 @@
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div> 
                 <!-- <div *ngIf="viewType == 'SidePanel'" class="pr-3 flex items-start justify-between mt-6">
                     <a class="min-w-26" mat-flat-button [color]="'primary'"
                         (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
@@ -155,7 +166,7 @@
                         Submit
                     </button>
                 </div> -->
-            <!-- </form> -->
+            </form> 
             </div>
         </mat-drawer>
 
@@ -328,7 +339,7 @@
                     <div class="mr-4 tile-title font-medium tracking-tight text-primary leading-6 truncate">Project Overview</div>
                 </div>
                 <div style="height: auto;">
-                    <form>
+                    <form [formGroup]="ColumnFilterForm">
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
                             Portfolio Report
                         </button>
@@ -338,15 +349,35 @@
                         <button class="ml-4" mat-flat-button [color]="'primary'">
                             Generate Reports
                         </button>
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="open()">
+                            Available Columns
+                        </button>
+                        <div class="checkbox">
+                        <ul *ngIf="opened">
+                            <li *ngFor="let col of columnList " (click)="SelectColumns(col.name)">
+                                <input type="checkbox" [id]="col.name" />
+                                <label [attr.for]="col.name">{{ col.name }}</label>
+                            </li>
+                        </ul>
+                        </div>
                         <!-- <form class="columnFilter"> -->
-                            <spot-multiselect-autocomplete class="columnFilter" formControlName="SelectColumns" name="SelectColumns"
-                                [label]="'Select Columns'" [placeholder]="'Select Columns'" [valuePointer]="'ColumnName'"
-                                [idPointer]="'ColumnName'" [dropDownArray]="columnList">
-                            </spot-multiselect-autocomplete>
+                            <!-- <spot-multiselect-autocomplete class="columnFilter" formControlName="SelectColumns" name="SelectColumns"
+                                [label]="'Select Columns'" [placeholder]="'Select Columns'" [valuePointer]="'name'"
+                                [idPointer]="'name'" [dropDownArray]="columnList">
+                            </spot-multiselect-autocomplete> -->
                         <!-- </form> -->
+                        <!-- <div class="selected-column">
+                            <label (click)="open()">Available Columns</label>
+                            <ul *ngIf="opened">
+                                <li *ngFor="let col of columns ">
+                                    <input type="checkbox" [id]="col.name" (click)="toggle(col)" [checked]="isChecked(col)" />
+                                    <label [attr.for]="col.name">{{ col.name }}</label>
+                                </li>
+                            </ul>
+                        </div> -->
                         </form>
                 </div>
-                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden">
+                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showcontent">
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
                         class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
                 
@@ -359,7 +390,7 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Project ID / Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
+                        <ngx-datatable-column *ngIf="hide" name="Project ID / Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                 <p style="margin-bottom: 30px;">{{ value }} <br> {{ row.budgetId }}</p>
                             </ng-template>

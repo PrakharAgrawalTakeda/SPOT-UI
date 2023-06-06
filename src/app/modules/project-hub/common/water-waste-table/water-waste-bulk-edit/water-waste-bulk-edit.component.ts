@@ -309,29 +309,32 @@ export class WaterWasteBulkEditComponent {
         console.log(this.waterWasteDb)
         this.projecthubservice.isFormChanged = false
         this.submitPrep()
+      if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
+        var formValue = this.CAPSform.getRawValue()
+        var mainObj = this.ProjectData.projectData
+
+        mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+
+        this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+          this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        })
+      })
+      }
+      else{
         this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
-          if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
-            var formValue = this.CAPSform.getRawValue()
-            var mainObj = this.ProjectData.projectData
-
-            mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-
-            this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
-              this.projecthubservice.isFormChanged = false
-              this.projecthubservice.isNavChanged.next(true)
-              this.projecthubservice.submitbutton.next(true)
-              this.projecthubservice.successSave.next(true)
-              this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
-          }
-          else {
             this.projecthubservice.isFormChanged = false
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.isNavChanged.next(true)
             this.projecthubservice.successSave.next(true)
-          }
         })
+            
+          }
     }
   }
 
