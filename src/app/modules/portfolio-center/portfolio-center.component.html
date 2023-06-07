@@ -339,7 +339,7 @@
                     <div class="mr-4 tile-title font-medium tracking-tight text-primary leading-6 truncate">Project Overview</div>
                 </div>
                 <div style="height: auto;">
-                    <form [formGroup]="ColumnFilterForm">
+                    <!-- <form [formGroup]="ColumnFilterForm"> -->
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
                             Portfolio Report
                         </button>
@@ -349,7 +349,7 @@
                         <button class="ml-4" mat-flat-button [color]="'primary'">
                             Generate Reports
                         </button>
-                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="open()">
+                        <!-- <button class="ml-4" mat-flat-button [color]="'primary'" (click)="open()">
                             Available Columns
                         </button>
                         <div class="checkbox">
@@ -359,7 +359,7 @@
                                 <label [attr.for]="col.name">{{ col.name }}</label>
                             </li>
                         </ul>
-                        </div>
+                        </div> -->
                         <!-- <form class="columnFilter"> -->
                             <!-- <spot-multiselect-autocomplete class="columnFilter" formControlName="SelectColumns" name="SelectColumns"
                                 [label]="'Select Columns'" [placeholder]="'Select Columns'" [valuePointer]="'name'"
@@ -375,7 +375,7 @@
                                 </li>
                             </ul>
                         </div> -->
-                        </form>
+                        <!-- </form> -->
                 </div>
                 <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showcontent">
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
@@ -390,7 +390,7 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column *ngIf="hide" name="Project ID / Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
+                        <ngx-datatable-column name="Project ID / Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                 <p style="margin-bottom: 30px;">{{ value }} <br> {{ row.budgetId }}</p>
                             </ng-template>
@@ -408,13 +408,13 @@
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Project Manager" prop="pm" [width]="100">
+                        <ngx-datatable-column name="Project Manager" prop="pm" [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Sponsor" prop="sponsor" [width]="100">
+                        <ngx-datatable-column name="Sponsor" prop="sponsor" [width]="140">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value}}</p>
                             </ng-template>

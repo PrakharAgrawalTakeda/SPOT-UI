@@ -97,9 +97,9 @@ export class PortfolioCenterComponent implements OnInit {
     OverallStatus: new FormControl(),
   })
 
-  ColumnFilterForm = new FormGroup({
-    SelectColumns: new FormControl()
-  })
+  // ColumnFilterForm = new FormGroup({
+  //   SelectColumns: new FormControl()
+  // })
 
   filterlist: any = {}
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -160,41 +160,32 @@ export class PortfolioCenterComponent implements OnInit {
   hide:boolean = true
   showcontent: boolean = false
   
-  columnList = [{"name": 'Overall Status'},
-    { "name": 'Project ID / Budgets ID'},
-    { "name": 'Program / Project Name' },
-    { "name": 'Phase (Project/Capital/OE)'},
-    { "name": 'Project Manager'},
-    { "name": 'Sponsor'},
-    { "name": 'Schedule'},
-    { "name": 'Risk/Issues'},
-    { "name": 'Ask/Needs' },
-    { "name": 'Budget' },
-    { "name": 'Spend' },
-    { "name": 'DQ%' },
-    { "name": 'Total CAPEX Approved/Forecast' },
-    { "name": 'Carbon Impact (Tons CO2)' },
-    { "name": 'Water Impact (m3)' },
-    { "name": 'Milestone / Progression' },
-    { "name": 'Next Milestone' },
-    { "name": 'Next Milestone Planned Finish Date' },
-    { "name": 'Execution Complete Date' },
-    { "name": 'Execution Duration (Days)' },
-    
-  ]
+  // columnList = [{"name": 'Overall Status'},
+  //   { "name": 'Project ID / Budgets ID'},
+  //   { "name": 'Program / Project Name' },
+  //   { "name": 'Phase (Project/Capital/OE)'},
+  //   { "name": 'Project Manager'},
+  //   { "name": 'Sponsor'},
+  //   { "name": 'Schedule'},
+  //   { "name": 'Risk/Issues'},
+  //   { "name": 'Ask/Needs' },
+  //   { "name": 'Budget' },
+  //   { "name": 'Spend' },
+  //   { "name": 'DQ%' },
+  //   { "name": 'Total CAPEX Approved/Forecast' },
+  //   { "name": 'Carbon Impact (Tons CO2)' },
+  //   { "name": 'Water Impact (m3)' },
+  //   { "name": 'Milestone / Progression' },
+  //   { "name": 'Next Milestone' },
+  //   { "name": 'Next Milestone Planned Finish Date' },
+  //   { "name": 'Execution Complete Date' },
+  //   { "name": 'Execution Duration (Days)' }, 
+  // ]
   columns = [{ name: 'Name' }, { name: 'Gender' }, { name: 'Company' }];
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   @ViewChild('filterDrawerOver') filterDrawerOver: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {
-    // this.ColumnFilterForm.controls.SelectColumns.valueChanges.subscribe(res => {
-    //   console.log(res)
-    //   for(var i=0;i<res.length;i++){
-    //     var index = this.columnList.findIndex(x => x.ColumnName === res[i].ColumnName);
-    //     this.columnList[index].checked = true
-    //   }
-    // })
-  }
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {}
 
   ngOnInit(): void {
     var executionScope = ""
@@ -303,15 +294,6 @@ export class PortfolioCenterComponent implements OnInit {
         executionScope += this.filtersnew.ExecutionScope[z].portfolioOwnerId + ','
       }
     }
-      //For Local Attributes
-      // this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
-      //   console.log(res);
-      //   const originalData = Object.assign([{}], res)
-      //   res.forEach(i => {
-      //     this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
-      //   })
-      //   this.dataLoader(res);
-      //   this.originalData = originalData;
         
     for (var i = 0; i < Object.keys(this.filtersnew).length; i++){
       var attribute = filterKeys[i]
@@ -336,7 +318,7 @@ export class PortfolioCenterComponent implements OnInit {
             "unionOperator": 2
           }
         }
-        else if (attribute == "owningOrganization" || attribute == "projectType"){
+        else if (attribute == "OwningOrganization" || attribute == "ProjectType"){
           var filterItems1 = 
           {
             "filterAttribute": attribute,
@@ -354,7 +336,7 @@ export class PortfolioCenterComponent implements OnInit {
             "unionOperator": 2
           }
         }
-        else if (attribute == "isCapsProject") {
+        else if (attribute == "CAPSProject") {
           if(this.filtersnew[attribute] == true){
             this.filtersnew[attribute] = "Yes";
           }
@@ -378,7 +360,7 @@ export class PortfolioCenterComponent implements OnInit {
             "unionOperator": 2
           }
         }
-        else if (attribute == "products") {
+        else if (attribute == "Product") {
           var filterItems1 =
           {
             "filterAttribute": attribute,
@@ -579,10 +561,21 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
-  })
+        if(portfolioOwners != "" || executionScope != ""){
+        //For Local Attributes
+        this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+          console.log(res);
+          const originalData = Object.assign([{}], res)
+          res.forEach(i => {
+            this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+          })
+          this.dataLoader(res);
+          this.originalData = originalData;
+        })
+      }
 })
 })
-// })
+})
   this.showcontent = true;
   }
   routeProject(projectid): void {
@@ -768,33 +761,33 @@ export class PortfolioCenterComponent implements OnInit {
 
   OpenLA(){
     console.log("Inside drawer function")
-    // if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
+    if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
       this.filterDrawerOver.toggle();
-  //   }
-  //   else{
-  //   var portfolioOwners = ""
-  //   var executionScope = ""
-  //     if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
-  //       for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
-  //         portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
-  //     }
-  //   }
-  //     if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
-  //       for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
-  //         executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
-  //     }
-  //   }
-  //   this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
-  //     console.log(res);
-  //     const originalData = Object.assign([{}], res)
-  //     res.forEach(i => {
-  //       this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
-  //     })
-  //     this.dataLoader(res);
-  //     this.originalData = originalData;
-  //   this.filterDrawerOver.toggle();
-  //   })
-  // }
+    }
+    else{
+    var portfolioOwners = ""
+    var executionScope = ""
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+          portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+      }
+    }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+          executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+      }
+    }
+    this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+      console.log(res);
+      const originalData = Object.assign([{}], res)
+      res.forEach(i => {
+        this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+      })
+      this.dataLoader(res);
+      this.originalData = originalData;
+    this.filterDrawerOver.toggle();
+    })
+  }
   }
 
   getHeaderClass(): any {
@@ -844,25 +837,25 @@ export class PortfolioCenterComponent implements OnInit {
     })
   }
 
-  open(): void {
+  // open(): void {
 
-    // Return if it's already opened
-    if (this.opened) {
-      this.opened = false;
-    }
-    else{
-    // window.scroll(0, 0);
-    // Open the search
-    this.opened = true;
-    }
-  }
+  //   // Return if it's already opened
+  //   if (this.opened) {
+  //     this.opened = false;
+  //   }
+  //   else{
+  //   // window.scroll(0, 0);
+  //   // Open the search
+  //   this.opened = true;
+  //   }
+  // }
 
-  SelectColumns(name) {
-    this.showContent = false;
-    console.log(name)
-    this.hide = false;
-    this.showContent = true
-  }
+  // SelectColumns(name) {
+  //   this.showContent = false;
+  //   console.log(name)
+  //   this.hide = false;
+  //   this.showContent = true
+  // }
 
   dataLoader(res) {
 
@@ -983,9 +976,5 @@ export class PortfolioCenterComponent implements OnInit {
   getLookup(key) {
     return this.lookup.filter(x => x.lookUpParentId == key)
   }
-
-  // OpenLA(){
-  //   console.log("Inside this function")
-  // }
 
 }
