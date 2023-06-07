@@ -38,7 +38,7 @@
             <ng-template #ifBlock>
                 <spot-singleselect-autocomplete class="w-full read-only" formControlName="gmsBudgetowner" [label]="'GMS Budget Owner'"  [Required]="true"
                                                 [valuePointer]="'portfolioOwner'"
-                                                [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
+                                                [dropDownArray]="getGmsBudgetOwner()" [sortByType]="'custom'"
                                                 [customSortPointer]="'pfid'">
                 </spot-singleselect-autocomplete>
                 <spot-singleselect-autocomplete class="w-full" formControlName="predefinedInvestmentId"
@@ -49,7 +49,7 @@
             <ng-template #elseBlock>
                 <spot-singleselect-autocomplete class="w-full" formControlName="gmsBudgetowner" [label]="'GMS Budget Owner'"  [Required]="false"
                                                 [valuePointer]="'portfolioOwner'"
-                                                [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
+                                                [dropDownArray]="getGmsBudgetOwner()" [sortByType]="'custom'"
                                                 [customSortPointer]="'pfid'">
                 </spot-singleselect-autocomplete>
                 <spot-singleselect-autocomplete class="w-full" formControlName="predefinedInvestmentId"

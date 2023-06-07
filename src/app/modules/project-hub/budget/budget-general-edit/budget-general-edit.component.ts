@@ -50,9 +50,6 @@ export class BudgetGeneralEditComponent {
             this.capexRequired.disable()
         }
         this.budgetInfoForm.controls.budgetId.disable()
-        if(!this.isBudgetOwnerEditable){
-            this.gmsBudgetowner.disable()
-        }
         this.budgetInfoForm.controls.budgetId.valueChanges.subscribe(res => {
             this.budgetId.updateValueAndValidity({emitEvent : false})
         })
@@ -222,12 +219,27 @@ export class BudgetGeneralEditComponent {
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
             budgetCommentary:  response.budget.budgetComment,
         })
+        if(!this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
+            this.gmsBudgetowner.disable()
+        }
     }
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0];
     }
     getPortfolioOwner(): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+    }
+    getGmsBudgetOwner(): any {
+        if(this.isBudgetAdmin){
+            return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+        }else{
+            if(!this.gmsBudgetowner.invalid){
+                return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.gmsbudgetOwnerEditable)
+            }else{
+                return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+            }
+        }
+
     }
     get budgetId() {
         return this.budgetInfoForm.get('budgetId');
