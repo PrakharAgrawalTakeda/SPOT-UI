@@ -191,7 +191,8 @@
         <app-water-waste-bulk-edit *ngIf="projecthubservice.itemtype == 'WaterWasteBulkEdit'"></app-water-waste-bulk-edit>
         <app-water-waste-single-edit *ngIf="projecthubservice.itemtype == 'WaterWasteSingleEdit'"></app-water-waste-single-edit>
         <app-budget-general-edit *ngIf="projecthubservice.itemtype == 'BudgetRequiredForCapexEdit'"></app-budget-general-edit>
-        <app-budget-asset-placed-service-edit *ngIf="projecthubservice.itemtype == 'BudgetAssetPlacedServiceEdit'"></app-budget-asset-placed-service-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetAssetPlacedServiceEdit'" [mode]="'Asset-In-Service'"></app-budget-additional-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetOPEXEdit'" [mode]="'OPEX'"></app-budget-additional-edit>
         <app-budget-funding-information-bulk-edit *ngIf="projecthubservice.itemtype == 'BudgetFundingBulkEdit'"></app-budget-funding-information-bulk-edit>
     </div>
 </fuse-drawer>
