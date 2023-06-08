@@ -1,0 +1,80 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Budget Details Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                                         href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        </div>
+    </div>
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="budgetInfoForm" (ngSubmit)="submitBudgetInfo()">
+        <div [ngClass]="'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3'">
+            <p style="color:red;" *ngIf="showMessage">Error: Some of the
+                required fields are missing. Please review and correct your data below</p>
+            <spot-select class="w-full" formControlName="testform" [label]="'CAPEX Required?'"
+                         [placeholder]="'CAPEX Required?'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                         [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                         [dropDownArray]="getYesNo()">
+            </spot-select>
+            <spot-select class="w-full" formControlName="testform" [label]="'OPEX Required?'"
+                         [placeholder]="'OPEX Required?'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                         [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                         [dropDownArray]="getYesNo()">
+            </spot-select>
+            <app-project-single-dropdown class="w-full" [formgroup]="budgetInfoForm"  [label]="'Parent Program'" [showHint]="true"
+                                         [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
+            </app-project-single-dropdown>
+            <spot-select  class="w-full" formControlName="testform" [label]="'Local Currency'"
+                         [placeholder]="'Local Currency'" [showNoneOption]="false" [dropDownArrayType]="'string'"
+                         [dropDownArray]="local">
+            </spot-select>
+            <spot-input-date class="w-full read-only" formControlName="testform"
+                             [label]="'Asset Placed In Service (Estimate)'" [placeholder]="'Asset Placed In Service (Estimate)'">
+            </spot-input-date>
+            <spot-input class="w-full read-only" formControlName="testform" [label]="'Budget ID'">
+            </spot-input>
+            <spot-singleselect-autocomplete class="w-full" formControlName="testform"
+                                            [label]="'GMS Budget Owner'" [placeholder]="'GMS Budget Owner'" [valuePointer]="'lookUpName'"
+                                            [dropDownArray]="" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+            <spot-singleselect-autocomplete class="w-full" formControlName="testform"
+                                            [label]="'Global/Regional Predefined Investment '" [placeholder]="'Global/Regional Predefined Investment '" [valuePointer]="'lookUpName'"
+                                            [dropDownArray]="getPredifinedInvestment()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+            <spot-select  class="w-full" formControlName="testform" [label]="'Where'"
+                          [placeholder]="'Where'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                          [dropDownArray]="getWhereLookup()">
+            </spot-select>
+            <spot-select  class="w-full" formControlName="testform" [label]="'Why'"
+                          [placeholder]="'Why'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                          [dropDownArray]="getWhyLookup()">
+            </spot-select>
+            <spot-input-date class="w-full read-only" formControlName="testform"
+                             [label]="'Funding Approval Need Date'" [placeholder]="'Funding Approval Need Date'">
+            </spot-input-date>
+            <spot-input class="w-full read-only customCost" formControlName="testform"
+                        [label]="'Total Approved CAPEX (USD)'" [decimalCount]="0" [inputType]="'Number'"
+                        [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true" [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
+            </spot-input>
+            <spot-input class="w-full read-only customCost" formControlName="testform"
+                        [label]="'Total Approved OPEX (USD)'" [decimalCount]="0" [inputType]="'Number'"
+                        [autoAddDecimal]="false" [placeholder]="'0'" [showHint]="true">
+            </spot-input>
+            <spot-textarea formControlName="testform"
+                           [label]="'Budget Commentary'"
+                           [placeholder]="'Budget Commentary'">
+            </spot-textarea>
+        </div>
+        <div class="pr-3 flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+               (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

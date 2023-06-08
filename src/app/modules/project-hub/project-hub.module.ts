@@ -170,6 +170,7 @@ import { ProjectDashboardComponent } from './project-dashboard/project-dashboard
 import { ProjectDashboardPerformanceComponent } from './project-dashboard/project-dashboard-performance/project-dashboard-performance.component';
 import { ProjectDashboardBudgetComponent } from './project-dashboard/project-dashboard-budget/project-dashboard-budget.component';
 import { ProjectDashboardProductTeamComponent } from './project-dashboard/project-dashboard-product-team/project-dashboard-product-team.component';
+import {BudgetGeneralEditComponent} from "./budget/budget-general-edit/budget-general-edit.component";
 //import { BudgetGeneralEditComponent } from './budget/budget-general-edit/budget-general-edit.component';
 
 export const projectRoutes: Route[] = [
@@ -471,6 +472,7 @@ export const projectRoutes: Route[] = [
     OperationalPerformanceBulkEditComponent,
     PrimaryKpiSingleEditComponent,
     GeneralInfoSingleEditComponent,
+    BudgetGeneralEditComponent,
     OeProjectSingleEditComponent,
     TechTransferSingleEditComponent,
     QualityRefBulkEditComponent,

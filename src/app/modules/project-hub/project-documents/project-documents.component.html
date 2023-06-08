@@ -1,1 +1,15 @@
-<p>project-documents works!</p>
+<div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
+    <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center pb-6">
+            <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">Project Documents</h3>
+            <div>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'">
+                    <mat-icon svgIcon="feather:external-link"></mat-icon>&nbsp; Open In New Tab
+                </button>
+            </div>
+        </div>
+        <div class="flex justify-between items-center pb-6">
+            <iframe [src]="sharepointLink" class="w-[100vw] h-[100vh]"></iframe>
+        </div>
+    </div>
+</div>

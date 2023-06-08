@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { MsalService } from '@azure/msal-angular';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
@@ -37,96 +37,74 @@ export class PortfolioCenterComponent implements OnInit {
   showContent = false
   data: any
   totalproject = 0;
+  owningOrg = []
+  projectType = [{ name: 'Standard Project / Program' }, { name: 'Simple Project' }]
+  totalCAPEX = []
+  AgileWorkstream = []
+  AgileWave = []
+  overallStatus = []
+  viewBaseline = false
+  projectOverview:any = []
   filtersnew: any = {
-    "portfolioOwner": [],
-    "executionScope": [],
-    "people": [],
-    "phase": [],
-    "state": [],
-    "products": [],
-    "totalCAPEX": []
-  }
-  filters: any = {
-    "portfolioOwner": [],
-    "phase": [],
-    "executionScope": [],
-    "people": [],
-    "products": [],
-    "state": [],
-    "totalCAPEX": [],
-    "gmsBudgetOwner": [],
-    "oeProjectType": [],
-    "projectType": [],
-    "fundingStatus": [],
-    "agileWorkstream": [],
-    "agileWave": [],
-    "primaryKPI": [],
-    "startegicYear": [],
-    "annualInitiatives": [],
-    "topsGroup": [],
-    "capsProject": [],
-    "projectName": []
+    "PortfolioOwner": [],
+    "ProjectTeamMember": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
+    "GMSBudgetOwner": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
   defaultfilter: any = {
-    "portfolioOwner": [],
-    "executionScope": [],
-    "people": [],
-    "phase": [],
-    "state": [],
-    "products": [],
-    "totalCAPEX": []
+    "PortfolioOwner": [],
+    "ProjectTeamMember": [],
+    "ExecutionScope": [],
+    "OwningOrganization": [],
+    "ProjectState": [],
+    "ProjectPhase": [],
+    "ProjectType": [],
+    "Product": [],
+    "TotalCAPEX": [],
+    "GMSBudgetOwner": [],
+    "AGILEWorkstream": [],
+    "AGILEWave": [],
+    "CAPSProject": [],
+    "Project/Program": [],
+    "OverallStatus": [],
   }
-  filterchiplist: any = {
-    "portfolioOwner": [],
-    "phase": [],
-    "executionScope": [],
-    "people": [],
-    "products": [],
-    "state": [],
-    "totalCAPEX": [],
-    "gmsBudgetOwner": [],
-    "oeProjectType": [],
-    "projectType": [],
-    "fundingStatus": [],
-    "agileWorkstream": [],
-    "agileWave": [],
-    "primaryKPI": [],
-    "startegicYear": [],
-    "annualInitiatives": [],
-    "topsGroup": [],
-    "capsProject": [],
-    "projectName": []
-  }
-  filterInputs: any = {
-    "portfolioOwner": [],
-    "phase": [],
-    "executionScope": [],
-    "products": [],
-    "state": [],
-    "totalCAPEX": [],
-    "gmsBudgetOwner": [],
-    "oeProjectType": [],
-    "projectType": [],
-    "fundingStatus": [],
-    "agileWorkstream": [],
-    "agileWave": [],
-    "primaryKPI": [],
-    "startegicYear": [],
-    "annualInitiatives": [],
-    "topsGroup": [],
-    "capsProject": [],
-    "projectName": []
-  }
+  PortfolioFilterForm = new FormGroup({
+    PortfolioOwner: new FormControl(),
+    ProjectTeamMember: new FormControl(),
+    ExecutionScope: new FormControl(),
+    OwningOrganization: new FormControl(),
+    ProjectState: new FormControl(),
+    ProjectPhase: new FormControl(),
+    ProjectType: new FormControl(),
+    Product: new FormControl(),
+    TotalCAPEX: new FormControl(),
+    GMSBudgetOwner: new FormControl(),
+    AGILEWorkstream: new FormControl(),
+    AGILEWave: new FormControl(),
+    CAPSProject: new FormControl(),
+    projectName: new FormControl(),
+    OverallStatus: new FormControl(),
+  })
+
+  // ColumnFilterForm = new FormGroup({
+  //   SelectColumns: new FormControl()
+  // })
+
   filterlist: any = {}
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl();
-  phaseCtrl = new FormControl();
-  stateCtrl = new FormControl();
-  filteredFruits: Observable<string[]>;
-  fruits: string[] = [];
   lookup: any = [];
   activeaccount: any
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
   newmainnav: any = [
     {
       id: 'portfolio-center',
@@ -170,95 +148,256 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
   ]
-  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
-  @ViewChild('phaseInput') phaseInput: ElementRef<HTMLInputElement>;
-  @ViewChild('stateInput') stateInput: ElementRef<HTMLInputElement>;
+
+  //For Local Attributes
+  localAttributeForm: any = new FormGroup({})
+  localAttributeFormRaw: any = new FormGroup({})
+  viewType = 'SidePanel'
+  dataLA: any = [];
+  originalData: any
+  rawData: any
+  opened:boolean =  false
+  hide:boolean = true
+  showcontent: boolean = false
+  
+  // columnList = [{"name": 'Overall Status'},
+  //   { "name": 'Project ID / Budgets ID'},
+  //   { "name": 'Program / Project Name' },
+  //   { "name": 'Phase (Project/Capital/OE)'},
+  //   { "name": 'Project Manager'},
+  //   { "name": 'Sponsor'},
+  //   { "name": 'Schedule'},
+  //   { "name": 'Risk/Issues'},
+  //   { "name": 'Ask/Needs' },
+  //   { "name": 'Budget' },
+  //   { "name": 'Spend' },
+  //   { "name": 'DQ%' },
+  //   { "name": 'Total CAPEX Approved/Forecast' },
+  //   { "name": 'Carbon Impact (Tons CO2)' },
+  //   { "name": 'Water Impact (m3)' },
+  //   { "name": 'Milestone / Progression' },
+  //   { "name": 'Next Milestone' },
+  //   { "name": 'Next Milestone Planned Finish Date' },
+  //   { "name": 'Execution Complete Date' },
+  //   { "name": 'Execution Duration (Days)' }, 
+  // ]
+  columns = [{ name: 'Name' }, { name: 'Gender' }, { name: 'Company' }];
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
+  @ViewChild('filterDrawerOver') filterDrawerOver: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {
-  }
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {}
 
   ngOnInit(): void {
+    var executionScope = ""
+    var portfolioOwners = ""
+    this.activeaccount = this.msal.instance.getActiveAccount();
     this.showContent = false;
     this.titleService.setTitle("Portfolio Center")
-      if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F"){
-        this.newmainnav = [
-          {
-            id: 'portfolio-center',
-            title: 'Portfolio Center',
-            type: 'basic',
-            link: '/portfolio-center'
-          },
-          {
-            id: 'spot-documents',
-            title: 'SPOT Resources',
-            type: 'basic',
-            externalLink: true,
-            link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-            target: '_blank'
-          },
-          {
-            id: 'report-navigator',
-            title: 'Report Navigator',
-            type: 'basic',
-            link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-            externalLink: true,
-            target: "_blank"
+    if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
+      this.newmainnav = [
+        {
+          id: 'portfolio-center',
+          title: 'Portfolio Center',
+          type: 'basic',
+          link: '/portfolio-center'
+        },
+        {
+          id: 'spot-documents',
+          title: 'SPOT Resources',
+          type: 'basic',
+          externalLink: true,
+          link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+          target: '_blank'
+        },
+        {
+          id: 'report-navigator',
+          title: 'Report Navigator',
+          type: 'basic',
+          link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+          externalLink: true,
+          target: "_blank"
 
-          }
-        ]
-      }
-    
-    //checking if there are any preset filter
-    if (localStorage.getItem('spot-filters') == null) {
+        }
+      ]
+    }
+    this.apiService.getfilterlist().then(data => {
+      this.filterlist = data
+      this.filterlist.defaultOwningOrganizations.forEach(res => {
+        this.owningOrg.push({ name: res })
+      })
+
+    this.auth.lookupMaster().then(data => {
+      this.lookup = data
+      this.totalCAPEX = this.lookup.filter(result => result.lookUpParentId == "10F36AC1-23CB-4326-8701-2416F8AE679E")
+      this.AgileWorkstream = this.lookup.filter(result => result.lookUpParentId == "f4486388-4c52-48fc-8c05-836878da2247")
+      this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
+      this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
+
+    var user = [{
+      "userAdid": this.activeaccount.localAccountId,
+      "userDisplayName": this.activeaccount.name,
+      "userIsActive": true
+    }]
+      var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
+    if (localStorage.getItem('spot-filtersNew') == null) {
       this.filtersnew = this.defaultfilter
+      this.filtersnew.ProjectState = state
+      this.filtersnew.ProjectTeamMember = user
+      this.PortfolioFilterForm.patchValue({
+        ProjectTeamMember: user,
+        ProjectState: state
+      })
 
     }
     else {
-      this.filtersnew = JSON.parse(localStorage.getItem('spot-filters'))
+      this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      this.PortfolioFilterForm.patchValue({
+        PortfolioOwner: this.filtersnew.PortfolioOwner,
+        ProjectTeamMember: this.filtersnew.ProjectTeamMember,
+        ExecutionScope: this.filtersnew.ExecutionScope,
+        OwningOrganization: this.filtersnew.OwningOrganization,
+        ProjectState: this.filtersnew.ProjectState,
+        ProjectPhase: this.filtersnew.ProjectPhase,
+        ProjectType: this.filtersnew.ProjectType,
+        Product: this.filtersnew.Product,
+        TotalCAPEX: this.filtersnew.TotalCAPEX,
+        GMSBudgetOwner: this.filtersnew.GMSBudgetOwner,
+        AGILEWorkstream: this.filtersnew.AGILEWorkstream,
+        AGILEWave: this.filtersnew.AGILEWave,
+        CAPSProject: this.filtersnew.CAPSProject,
+        projectName: this.filtersnew.projectName,
+        OverallStatus: this.filtersnew.OverallStatus,
+      })
+      if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0){
+        this.filtersnew.ProjectTeamMember = user
+        this.PortfolioFilterForm.patchValue({
+          ProjectTeamMember: user
+        })
+      }
+      if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
+        this.filtersnew.ProjectState = state
+        this.PortfolioFilterForm.patchValue({
+          ProjectState: state
+        })
+      }
 
     }
-    console.log(this.filtersnew)
+    var filterKeys = Object.keys(this.filtersnew);
+    var filterGroups = []
+    if (this.filtersnew.PortfolioOwner != null && this.filtersnew.PortfolioOwner.length != 0){
+      for (var z = 0; z < this.filtersnew.PortfolioOwner.length; z++){
+        portfolioOwners += this.filtersnew.PortfolioOwner[z].portfolioOwnerId + ','
+      }
+    }
+    if (this.filtersnew.ExecutionScope != null && this.filtersnew.ExecutionScope.length != 0) {
+      for (var z = 0; z < this.filtersnew.ExecutionScope.length; z++) {
+        executionScope += this.filtersnew.ExecutionScope[z].portfolioOwnerId + ','
+      }
+    }
+        
+    for (var i = 0; i < Object.keys(this.filtersnew).length; i++){
+      var attribute = filterKeys[i]
+      var filterItems = []
+      if (this.filtersnew[attribute] != null && this.filtersnew[attribute].length != 0){
+      for (var j = 0; j < this.filtersnew[attribute].length; j++){
+        if (attribute == "PortfolioOwner" || attribute == "ExecutionScope"){
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].portfolioOwner,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "GMSBudgetOwner") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].gmsbudgetOwnerDefault,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "OwningOrganization" || attribute == "ProjectType"){
+          var filterItems1 = 
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].name,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "ProjectTeamMember") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].userAdid,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "CAPSProject") {
+          if(this.filtersnew[attribute] == true){
+            this.filtersnew[attribute] = "Yes";
+          }
+          else{
+            this.filtersnew[attribute] ="No"
+          }
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute],
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "projectName") {
+          var filterItems1 =
+          {
+            "filterAttribute": "Project/Program",
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].ProblemUniqueId,
+            "unionOperator": 2
+          }
+        }
+        else if (attribute == "Product") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].productId,
+            "unionOperator": 2
+          }
+        }
+        else {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].lookUpId,
+            "unionOperator": 2
+          }
+        }
+        filterItems.push(filterItems1)
+      }
+    // }
+      filterGroups.push({
+          filterItems,
+          "groupCondition": 1
+    })
+  }
+    }
+    filterGroups[filterGroups.length - 1].groupCondition = 0
+    var groupData = {
+      "filterGroups": filterGroups
+    }
+
+    console.log("Filter Data : " +groupData)
     //Filtering Projects
-    this.apiService.MainFilters(this.filtersnew).then((resp) => {
+      this.apiService.Filters(groupData).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
       mainNavComponent.refresh()
-      if (resp != null) {
-
-        //Loading Lookup Values in Filters
-        this.apiService.getfilterlist().then(data => {
-          this.filterlist = data
-        })
-
-        this.auth.lookupMaster().then(data => {
-          this.filterchiplist.phase = []
-          this.filterchiplist.state = []
-          // Filters Inputs 
-          this.lookup = data
-          this.filterInputs.phase = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["phase"])
-          this.filterInputs.state = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["state"])
-          this.filterInputs.startegicYear = this.lookup.filter(p => p.lookUpParentId === GlobalFiltersDropDown.dropdownparent["stratyear"])
-          //Phase
-          for (var i of this.filters.phase) {
-            const name = this.lookup.find(x => x.lookUpId == i).lookUpName
-            if (!this.filterchiplist.phase.includes(name)) {
-              this.filterchiplist.phase.push(name)
-              this.filterInputs.phase = this.filterInputs.phase.filter(x => x.lookUpId != i)
-            }
-          }
-          //State
-          for (var i of this.filters.state) {
-            if (!this.filterchiplist.state.includes(i)) {
-              this.filterchiplist.state.push(i)
-              this.filterInputs.state = this.filterInputs.state.filter(x => x.lookUpName != i)
-            }
-          }
-        })
-
-        //end Loading
-        //Loading Portfiolio Data
-        this.apiService.getportfoliodata(resp).then((res: any) => {
           console.log(res)
           this.totalproject = res.totalProjects
           this.data = {
@@ -385,6 +524,25 @@ export class PortfolioCenterComponent implements OnInit {
           };
           this.projectNames = res.projectDetails;
           this.projects.data = res.portfolioDetails;
+          this.projectOverview = res.portfolioDetails
+          for(var i=0;i<this.projectOverview.length;i++){
+            this.projectOverview[i].projectCapitalOe= this.projects.data[i].phase +
+                ' - ' +
+                (this.projects.data[i].capitalPhaseAbbreviation
+                ? this.projects.data[i].capitalPhaseAbbreviation
+                  : 'NA') +
+                ' - ' +
+                (this.projects.data[i].oePhaseAbbreviation
+                ? this.projects.data[i].oePhaseAbbreviation
+                  : 'NA');
+            this.projectOverview[i].calculatedEmissionsImpact= this.projectNames[i].calculatedEmissionsImpact;
+            this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
+            this.projectOverview[i].problemId = this.projectNames[i].problemId;
+            this.projectOverview[i].nextMilestoneFinishDate= this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
+            this.projectOverview[i].executionCompleteDate= this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
+            this.projectOverview[i].totalApprovedCapex= this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
+          }
+          
           this.projects.sort = this.recentTransactionsTableMatSort;
           this.showContent = true
           for (var name of this.projectNames) {
@@ -403,131 +561,26 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
-          console.log("is this working too?")
-        });
-        //End Loading
+        if(portfolioOwners != "" || executionScope != ""){
+        //For Local Attributes
+        this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+          console.log(res);
+          const originalData = Object.assign([{}], res)
+          res.forEach(i => {
+            this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+          })
+          this.dataLoader(res);
+          this.originalData = originalData;
+        })
       }
-    })
+})
+})
+})
+  this.showcontent = true;
   }
   routeProject(projectid): void {
-    //this.close()
-    /*if (this.routes.url.includes('project-hub')){
-    this.routes.navigate(['project-hub/'+ projectid]).then(() => {
-        window.location.reload();
-      });
-    }
-    else{}*/
     window.open('project-hub/' + projectid, "_blank")
 
-  }
-  selectoption(event: MatAutocompleteSelectedEvent, field: string): void {
-    if (field == "PortfolioOwner") {
-      console.log(event)
-      this.filtersnew.portfolioOwner.push(event.option.value)
-      this.filterlist.portfolioOwner = this.filterlist.portfolioOwner.filter(x => x.portfolioOwnerId != event.option.value.portfolioOwnerId)
-    }
-    if (field == "Excecution") {
-      this.filtersnew.executionScope.push(event.option.value)
-      this.filterlist.executionScope = this.filterlist.executionScope.filter(x => x.portfolioOwnerId != event.option.value.portfolioOwnerId)
-      console.log(this.filtersnew)
-    }
-    if (field == "Phase") {
-      this.filtersnew.phase.push(event.option.value)
-      this.filterlist.phase = this.filterlist.phase.filter(x => x.lookUpId != event.option.value.lookUpId)
-      console.log(this.filtersnew)
-    }
-    if (field == "State") {
-      this.filtersnew.state.push(event.option.value)
-      this.filterlist.state = this.filterlist.state.filter(x => x.lookUpId != event.option.value.lookUpId)
-      console.log(this.filtersnew)
-    }
-    if (field == "Product") {
-      this.filtersnew.products.push(event.option.value)
-      this.filterlist.products = this.filterlist.products.filter(x => x.id != event.option.value.id)
-      console.log(this.filtersnew)
-    }
-  }
-  removeoption(value: any, field: string) {
-    if (field == "PortfolioOwner") {
-      this.filterlist.portfolioOwner.push(value)
-      this.filtersnew.portfolioOwner = this.filtersnew.portfolioOwner.filter(x => x.portfolioOwnerId != value.portfolioOwnerId)
-      console.log(value)
-    }
-    if (field == "Excecution") {
-      this.filterlist.executionScope.push(value)
-      this.filtersnew.executionScope = this.filtersnew.executionScope.filter(x => x.portfolioOwnerId != value.portfolioOwnerId)
-      console.log(value)
-    }
-    if (field == "Phase") {
-      this.filterlist.phase.push(value)
-      this.filtersnew.phase = this.filtersnew.phase.filter(x => x.lookUpId != value.lookUpId)
-      console.log(value)
-    }
-    if (field == "State") {
-      this.filterlist.state.push(value)
-      this.filtersnew.state = this.filtersnew.state.filter(x => x.lookUpId != value.lookUpId)
-      console.log(value)
-    }
-    if (field == "Product") {
-      this.filterlist.products.push(value)
-      this.filtersnew.products = this.filtersnew.products.filter(x => x.id != value.id)
-      console.log(value)
-    }
-  }
-  remove(value: string, field: string): void {
-    if (field == "Phase") {
-      var look = this.lookup.find(x => x.lookUpName == value)
-      this.filterInputs.phase.push(look)
-      const index = this.filterchiplist.phase.indexOf(value)
-      this.filterchiplist.phase.splice(index, 1)
-      const indexfil = this.filters.phase.indexOf(look.lookUpId)
-      this.filters.phase.splice(indexfil, 1)
-    }
-    else if (field == "State") {
-      var look = this.lookup.find(x => x.lookUpName == value)
-      this.filterInputs.state.push(look)
-      const index = this.filterchiplist.state.indexOf(value)
-      this.filterchiplist.state.splice(index, 1)
-      const indexfil = this.filters.state.indexOf(look.lookUpName)
-      this.filters.state.splice(indexfil, 1)
-    }
-  }
-  selected(event: MatAutocompleteSelectedEvent, field: string): void {
-
-    //entering values to start filtering
-    //Phase Selection
-    if (field == "Phase") {
-      if (!this.filters.phase.includes(event.option.value)) {
-        this.filters.phase.push(event.option.value);
-        this.filterchiplist.phase.push(event.option.viewValue);
-        this.filterInputs.phase = this.filterInputs.phase.filter(x => x.lookUpId != event.option.value)
-      }
-      this.phaseInput.nativeElement.blur();
-      this.phaseCtrl.setValue(null);
-    }
-    if (field == "State") {
-      if (!this.filters.state.includes(event.option.value)) {
-        this.filters.state.push(event.option.viewValue);
-        this.filterchiplist.state.push(event.option.viewValue);
-        this.filterInputs.state = this.filterInputs.state.filter(x => x.lookUpId != event.option.value)
-      }
-      this.stateInput.nativeElement.blur();
-      this.stateCtrl.setValue(null);
-    }
-    if (field == "Priority") {
-      if (!this.fruits.includes(event.option.viewValue)) {
-        this.fruits.push(event.option.viewValue);
-        this.allFruits.splice(this.allFruits.indexOf(event.option.viewValue), 1)
-      }
-      this.fruitInput.nativeElement.blur();
-      this.fruitCtrl.setValue(null);
-    }
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
   }
 
   trackByFn(index: number, item: any): any {
@@ -538,10 +591,6 @@ export class PortfolioCenterComponent implements OnInit {
   private _fixSvgFill(element: Element): void {
     // Current URL
     const currentURL = this.router.url;
-
-    // 1. Find all elements with 'fill' attribute within the element
-    // 2. Filter out the ones that doesn't have cross reference so we only left with the ones that use the 'url(#id)' syntax
-    // 3. Insert the 'currentURL' at the front of the 'fill' attribute value
     Array.from(element.querySelectorAll('*[fill]'))
       .filter(el => el.getAttribute('fill').indexOf('url(') !== -1)
       .forEach((el) => {
@@ -676,8 +725,8 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   applyfilters() {
-    localStorage.setItem('spot-filters', JSON.stringify(this.filtersnew))
-    console.log(this.filters)
+    console.log(this.PortfolioFilterForm.getRawValue())
+    localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
     this.filterDrawer.close()
     this.resetpage()
 
@@ -688,7 +737,244 @@ export class PortfolioCenterComponent implements OnInit {
     this.ngOnInit()
   }
   resetfilters() {
-    localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
+    localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
     this.resetpage()
   }
+
+  getPortfolioOwner(): any {
+    if (Object.keys(this.filterlist).length != 0){
+      return this.filterlist.portfolioOwner.filter(x => x.isPortfolioOwner == true)
+    }
+  }
+
+  getExcecutionScope(): any {
+    if (Object.keys(this.filterlist).length != 0) {
+      return this.filterlist.portfolioOwner.filter(x => x.isExecutionScope == true)
+    }
+  }
+
+  getGMSBudgetOwner(): any {
+    if (Object.keys(this.filterlist).length != 0) {
+      return this.filterlist.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+    }
+  }
+
+  OpenLA(){
+    console.log("Inside drawer function")
+    if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
+      this.filterDrawerOver.toggle();
+    }
+    else{
+    var portfolioOwners = ""
+    var executionScope = ""
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+          portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+      }
+    }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+          executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+      }
+    }
+    this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+      console.log(res);
+      const originalData = Object.assign([{}], res)
+      res.forEach(i => {
+        this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+      })
+      this.dataLoader(res);
+      this.originalData = originalData;
+    this.filterDrawerOver.toggle();
+    })
+  }
+  }
+
+  getHeaderClass(): any {
+    return ' vertical-header-class';
+  }
+  alignHeaderMiddleClass(): any {
+    return ' align-header-middle-class';
+  }
+  getTotalCapexHeaderClass(): any {
+    return ' total-capex-header-class';
+  }
+  getGraphCellClass(): any {
+    return 'graph-cell-datatable';
+  } 
+  getFrozenHeaderClass(): any {
+    return ' frozen-header-class';
+  }
+  getFrozenHeaderClassID(): any {
+    return ' frozen-header-classID';
+  }
+
+  formatDate(date) {
+  return [
+    this.padTo2Digits(date.getDate()),
+    this.padTo2Digits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join('/');
+  }
+
+  padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+  }
+
+  OpenBiReport(){
+    window.open('https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/f20aacee-f8de-4db9-a17d-341b12c4fa00/ReportSection97454b27006b80c04035?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae')
+  }
+
+  OpenSPOTReport(){
+    window.open('https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/3b64d881-0127-47a0-a4e1-8ae202214a6a/ReportSection76c7ec63df87082c77bb?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae')
+  }
+  
+  OpenProject(projectName){
+    this.projectOverview.forEach((item)=>{
+      if (item.problemTitle == projectName){
+        window.open('/project-hub/' + item.projectUid + '/project-board', "_blank")
+      }
+    })
+  }
+
+  // open(): void {
+
+  //   // Return if it's already opened
+  //   if (this.opened) {
+  //     this.opened = false;
+  //   }
+  //   else{
+  //   // window.scroll(0, 0);
+  //   // Open the search
+  //   this.opened = true;
+  //   }
+  // }
+
+  // SelectColumns(name) {
+  //   this.showContent = false;
+  //   console.log(name)
+  //   this.hide = false;
+  //   this.showContent = true
+  // }
+
+  dataLoader(res) {
+
+    res.forEach(data => {
+      var i = Object.assign({}, data)
+      if (i.dataType == 1 && i.data.length == 0) {
+        i.data = false
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 1 && i.data.length > 0) {
+        i.data = i.data[0].value
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 2 && i.data.length == 0) {
+        i.data = ""
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 2 && i.data.length > 0) {
+        i.data = i.data[0].value
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 3 && i.isMulti == true) {
+        if (i.data.length == 0) {
+          i.data = []
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          var newData = i.data
+          var dataMulti = []
+          for (var j = 0; j < newData.length; j++) {
+            if (this.lookup.filter(x => x.lookUpId == newData[j].value).length == 0) {
+              i.data[j] = []
+            }
+            else {
+              i.data[j] = this.lookup.filter(x => x.lookUpId == newData[j].value)[0]
+            }
+          }
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+      }
+      else if (i.dataType == 3 && i.isMulti == false) {
+        if (i.data.length == 0) {
+          i.data = ""
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          if (this.lookup.filter(x => x.lookUpId == i.data[0].value).length == 0) {
+            i.data = ""
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else {
+            i.data = this.lookup.filter(x => x.lookUpId == i.data[0].value)[0]
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+        }
+      }
+      else if (i.dataType == 4 && i.data.length == 0) {
+        if (i.linesCount == null) {
+          i.linesCount = 13
+        }
+        i.data = ""
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 4 && i.data.length > 0) {
+        if (i.linesCount == null) {
+          i.linesCount = 13
+        }
+        if (i.data[0].value == null) {
+          i.data = ""
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          i.data = i.data[0].value
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+      }
+      else if (i.dataType == 5 && i.isMulti == false) {
+        if (i.data.length == 0) {
+          i.data = ""
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          if (i.data[0].value == null) {
+            i.data = ""
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else {
+            i.data = i.data[0].value
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+        }
+      }
+      else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {
+        if (i.data.length == 0) {
+          i.data = []
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          var newData = i.data
+          for (var j = 0; j < newData.length; j++) {
+            i.data = newData[j].value
+          }
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+      }
+      else if (i.dataType == 6 && i.data.length == 0) {
+        i.data = ""
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 6 && i.data.length > 0) {
+        i.data = i.data[0].value
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      this.dataLA.push(i);
+    })
+  }
+
+  getLookup(key) {
+    return this.lookup.filter(x => x.lookUpParentId == key)
+  }
+
 }
