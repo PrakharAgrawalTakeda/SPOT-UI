@@ -14,7 +14,6 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
 })
 export class BudgetGeneralEditComponent {
     viewContent: boolean = false;
-    showMessage: boolean = false;
     local: any = [];
     lookupdata: any = [];
     id: string = "";
@@ -26,8 +25,7 @@ export class BudgetGeneralEditComponent {
     showBudgetIdButton: boolean = false;
     required:boolean = false;
     budgetInfoForm = new FormGroup({
-        capexRequired: new FormControl(''),
-        opexRequired: new FormControl(''),
+        capexRequired: new FormControl(false),
         assetPlaced: new FormControl(''),
         budgetId: new FormControl(''),
         gmsBudgetowner: new FormControl(null),
@@ -46,7 +44,7 @@ export class BudgetGeneralEditComponent {
                  private _Activatedroute: ActivatedRoute,
                  public fuseAlert: FuseConfirmationService,
                  private apiService: ProjectApiService){
-        if(this.capexRequired.value =="0b52f476-5a54-4bbc-a2e6-da56016a36e0"){
+        if(this.capexRequired.value ==true){
             this.capexRequired.disable()
         }
         this.budgetInfoForm.controls.budgetId.disable()
@@ -74,7 +72,7 @@ export class BudgetGeneralEditComponent {
         })
         this.capexRequired.valueChanges.subscribe(res => {
             // Choosing Yes
-            if(this.budgetInfoForm.controls.capexRequired.value =="0b52f476-5a54-4bbc-a2e6-da56016a36e0"){
+            if(this.budgetInfoForm.controls.capexRequired.value ==true){
                 this.required = true;
                 this.budgetId.setValidators(Validators.required)
                 this.predefinedInvestmentId.setValidators(Validators.required)
@@ -205,8 +203,7 @@ export class BudgetGeneralEditComponent {
     generalInfoPatchValue(response){
         this.getPortfolioOwnerNameById(response.budget.budgetOwner)
         this.budgetInfoForm.patchValue({
-            capexRequired: response.budget.capExRequired ? response.budget.capExRequired : "17ac13d1-a591-4e4f-ba7b-00d72124b1c4" ,
-            opexRequired:  response.budget.opExRequired ? response.budget.opExRequired : "17ac13d1-a591-4e4f-ba7b-00d72124b1c4" ,
+            capexRequired: response.budget.capExRequired,
             assetPlaced:  response.budget.definitiveCrapprovalDate,
             budgetId:  response.budget.capitalBudgetId,
             gmsBudgetowner:  this.getPortfolioOwnerNameById(response.budget.budgetOwner),
