@@ -21,6 +21,7 @@ export class TransportationTableComponent {
   @Input() editCost: any
   @Input() data: any
   lookupdata: any
+  editable= false
   sortDir = ""
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
@@ -35,6 +36,9 @@ export class TransportationTableComponent {
     this.dataloader()
   }
   dataloader() {
+    if (this.projecthubservice.roleControllerControl.projectHub.CAPS) {
+      this.editable = true
+    }
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
