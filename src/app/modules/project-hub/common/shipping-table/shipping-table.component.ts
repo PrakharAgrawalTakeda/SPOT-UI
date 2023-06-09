@@ -55,7 +55,7 @@ export class ShippingTableComponent {
 
   deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Shipping?",
+      "title": "Remove Shipping Record?",
       "message": "Are you sure you want to remove this record permanently? ",
       "icon": {
         "show": true,

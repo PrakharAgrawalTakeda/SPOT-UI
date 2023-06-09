@@ -60,7 +60,7 @@ export class TransportationTableComponent {
 
   deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Transportation?",
+      "title": "Remove Transportation Record?",
       "message": "Are you sure you want to remove this record permanently? ",
       "icon": {
         "show": true,

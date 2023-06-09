@@ -111,12 +111,12 @@ export class ShippingBulkEditComponent {
         emenvironmentId: i.emenvironmentId,
         environmentalSourceTypeId: i.environmentalSourceTypeId,
         projectId: this.projecthubservice.projectid,
-        shipmentDistance: i.shipmentDistance,
+        shipmentDistance: i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance,
         shipmentWeight: i.shipmentWeight,
         shipmentFrequency: i.shipmentFrequency,
         environmentalSourceId: i.environmentalSourceId,
         affectedLocations: i.affectedLocations,
-        affectedContainers: i.affectedContainers,
+        affectedContainers: i.affectedContainers == null || i.affectedContainers == 0 ? 0 : i.affectedContainers,
         embasisOfEstimate: i.embasisOfEstimate
       })
 
@@ -130,14 +130,14 @@ export class ShippingBulkEditComponent {
         fuelType: new FormControl(i.fuelType),
         co2intensityFactorValue: new FormControl(i.co2intensityFactorValue),
         co2intensityFactorMeasure: new FormControl(i.co2intensityFactorMeasure),
-        shipmentDistance: new FormControl(i.shipmentDistance),
+        shipmentDistance: new FormControl(i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance),
         shipmentWeight: new FormControl(i.shipmentWeight),
         shipmentFrequency: new FormControl(i.shipmentFrequency),
         shippingSolutionSupplier: new FormControl(i.shippingSolutionSupplier),
         solutionName: new FormControl(i.solutionName),
         environmentalSourceId: new FormControl(i.environmentalSourceId),
         affectedLocations: new FormControl(i.affectedLocations),
-        affectedContainers: new FormControl(i.affectedContainers),
+        affectedContainers: new FormControl(i.affectedContainers == null || i.affectedContainers == 0 ? 0 : i.affectedContainers),
         embasisOfEstimate: new FormControl(i.embasisOfEstimate)
       }))
     }
@@ -214,11 +214,11 @@ environmentalSourceId: new FormControl(''),
         solutionName: x.solutionName,
         emenvironmentId: x.emenvironmentId,
         projectId: x.projectId,
-        shipmentDistance: x.shipmentDistance,
+        shipmentDistance: x.shipmentDistance == null || x.shipmentDistance == 0 ? 0 : x.shipmentDistance,
         shipmentWeight: x.shipmentWeight,
         shipmentFrequency: x.shipmentFrequency,
         affectedLocations: x.affectedLocations,
-        affectedContainers: x.affectedContainers,
+        affectedContainers: x.affectedContainers == null || x.affectedContainers == 0? 0 : x.affectedContainers,
         embasisOfEstimate: x.embasisOfEstimate
       }
     }) : this.submitObj = []
@@ -363,12 +363,12 @@ submitPrep() {
       emenvironmentId: i.emenvironmentId,
       environmentalSourceTypeId: i.environmentalSourceTypeId,
       projectId: this.projecthubservice.projectid,
-      shipmentDistance: i.shipmentDistance,
+      shipmentDistance: i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance,
       shipmentWeight: i.shipmentWeight,
       shipmentFrequency: i.shipmentFrequency,
       environmentalSourceId: environmentalSourceId,
       affectedLocations: i.affectedLocations,
-      affectedContainers: i.affectedContainers,
+      affectedContainers: i.affectedContainers == null || i.affectedContainers == 0 ? 0 : i.affectedContainers,
       embasisOfEstimate: i.embasisOfEstimate
     });
 
@@ -381,14 +381,14 @@ submitPrep() {
       fuelType: i.fuelType,
       co2intensityFactorValue: i.co2intensityFactorValue,
       co2intensityFactorMeasure: i.co2intensityFactorMeasure,
-      shipmentDistance: i.shipmentDistance,
+      shipmentDistance: i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance,
       shipmentWeight: i.shipmentWeight,
       shipmentFrequency: i.shipmentFrequency,
       shippingSolutionSupplier: i.shippingSolutionSupplier,
       solutionName: i.solutionName,
       environmentalSourceId: environmentalSourceId,
       affectedLocations: i.affectedLocations,
-      affectedContainers: i.affectedContainers,
+      affectedContainers: i.affectedContainers == null || i.affectedContainers == 0 ? 0 : i.affectedContainers,
       embasisOfEstimate: i.embasisOfEstimate
     });
   }

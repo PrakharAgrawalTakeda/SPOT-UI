@@ -25,27 +25,27 @@
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
             class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
             [rows]="Warehousingngx" #warehousingTable>
-            <ngx-datatable-column name="CO2 Intensity" prop="co2intensityFactorValue" [flexGrow]="0.5">
+            <ngx-datatable-column name="CO2 Intensity" prop="co2intensityFactorValue" [flexGrow]="0.3">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p class="right2">{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.5">
+            <ngx-datatable-column name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.3">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
             </ngx-datatable-column> 
-            <ngx-datatable-column name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="0.5">
+            <ngx-datatable-column name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="0.48">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p class="right">{{value}}</p>
+                    <p class="right">{{value  | number:'1.0-0'}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Affected Locations" prop="affectedLocations" [flexGrow]="0.5">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p class="right">{{value}}</p>
+                    <p class="right">{{value  | number:'1.0-0'}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1.6">
+            <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1.15">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>

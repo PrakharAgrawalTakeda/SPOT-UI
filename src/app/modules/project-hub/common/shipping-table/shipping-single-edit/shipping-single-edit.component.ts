@@ -133,7 +133,7 @@ export class ShippingSingleEditComponent {
       shipmentWeight: 0,
       shipmentFrequency: 0,
       affectedLocations: null,
-      affectedContainers: null,
+      affectedContainers: 0,
       embasisOfEstimate: "",
       solutionName: "",
     shippingSolutionSupplier: ""
@@ -213,11 +213,11 @@ export class ShippingSingleEditComponent {
         environmentalSourceTypeId: '0d69c0c1-ce34-4419-8555-32183d301d15',
         projectId: this.projecthubservice.projectid,
         environmentalSourceId: environmentalSourceId,
-        shipmentDistance: formValue.shipmentDistance,
+        shipmentDistance: formValue.shipmentDistance == null || formValue.shipmentDistance == 0 ? 0 : formValue.shipmentDistance,
         shipmentWeight: null,
         shipmentFrequency: null,
         affectedLocations: null,
-        affectedContainers: formValue.affectedContainers,
+        affectedContainers: formValue.affectedContainers == null || formValue.affectedContainers == 0 ? 0 : formValue.affectedContainers,
         embasisOfEstimate: formValue.embasisOfEstimate
       }
       console.log(mainObj)

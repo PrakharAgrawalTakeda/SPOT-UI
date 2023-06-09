@@ -59,7 +59,7 @@ export class WarehousingTableComponent {
 
   deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Warehousing?",
+      "title": "Remove Warehousing Record?",
       "message": "Are you sure you want to remove this record permanently? ",
       "icon": {
         "show": true,

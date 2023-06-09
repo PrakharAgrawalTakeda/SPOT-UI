@@ -196,7 +196,7 @@
                         <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
                             (click)="transportationTableEditRow(rowIndex)">
                             <p class="cost" *ngIf="value">{{value}}</p>
-                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                            <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="transportationForm.controls[rowIndex]"
                             *ngIf="transportationTableEditStack.includes(rowIndex)">
@@ -213,7 +213,7 @@
                         <a *ngIf="!transportationTableEditStack.includes(rowIndex) && editTransportation"
                             (click)="transportationTableEditRow(rowIndex)">
                             <p class="cost" *ngIf="value">{{value}}</p>
-                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                            <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="transportationForm.controls[rowIndex]"
                             *ngIf="transportationTableEditStack.includes(rowIndex) && editTransportation">
@@ -230,7 +230,7 @@
                         <a *ngIf="!transportationTableEditStack.includes(rowIndex) && editTransportation"
                             (click)="transportationTableEditRow(rowIndex)">
                             <p class="cost" *ngIf="value">{{value}}</p>
-                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                            <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="transportationForm.controls[rowIndex]"
                             *ngIf="transportationTableEditStack.includes(rowIndex) && editTransportation">
