@@ -19,7 +19,7 @@ export class ProjectDashboardComponent {
     this.router.events.subscribe(res => {
       if (this.viewContent) {
         this.navItem = null
-        this.reloadName()
+        //this.reloadName()
       }
     })
   }
@@ -31,19 +31,15 @@ export class ProjectDashboardComponent {
     this.dataloader()
   }
   dataloader() {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getProjectDashboard(this.id).then(res => {
       console.log("Report Info", res)
       this.reportInfoData = res
-      this.reloadName()
+      //this.reloadName()
       this.viewContent = true
     })
   }
   isNavActive(link: string): boolean {
     return this.router.url.includes(link)
-  }
-  reloadName() {
-    const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
-    this.navItem = this._fuseNavigationService.getItem('project-dashboard', navComponent.navigation)
   }
 }

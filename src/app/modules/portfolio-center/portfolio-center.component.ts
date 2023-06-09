@@ -21,6 +21,19 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 import { Title } from '@angular/platform-browser';
 import { ProjectHubService } from '../project-hub/project-hub.service';
 import { RoleService } from 'app/core/auth/role.service';
+import moment from 'moment';
+import { forEach } from 'lodash';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MMM-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 @Component({
   selector: 'app-portfolio-center',
   templateUrl: './portfolio-center.component.html',
@@ -46,23 +59,6 @@ export class PortfolioCenterComponent implements OnInit {
   viewBaseline = false
   projectOverview:any = []
   filtersnew: any = {
-    "PortfolioOwner": [],
-    "ProjectTeamMember": [],
-    "ExecutionScope": [],
-    "OwningOrganization": [],
-    "ProjectState": [],
-    "ProjectPhase": [],
-    "ProjectType": [],
-    "Product": [],
-    "TotalCAPEX": [],
-    "GMSBudgetOwner": [],
-    "AGILEWorkstream": [],
-    "AGILEWave": [],
-    "CAPSProject": [],
-    "Project/Program": [],
-    "OverallStatus": [],
-  }
-  filtersnew1: any = {
     "PortfolioOwner": [],
     "ProjectTeamMember": [],
     "ExecutionScope": [],
@@ -118,6 +114,7 @@ export class PortfolioCenterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   lookup: any = [];
   activeaccount: any
+  showLA = false
   newmainnav: any = [
     {
       id: 'portfolio-center',
@@ -169,36 +166,19 @@ export class PortfolioCenterComponent implements OnInit {
   dataLA: any = [];
   originalData: any
   rawData: any
-  columnList=[{"ColumnName": 'Overall Status'},
-    {"ColumnName": 'Project ID / Budgets ID' },
-    {"ColumnName": 'Program / Project Name'},
-    { "ColumnName": 'Phase (Project/Capital/OE)'},
-    { "ColumnName": 'Project Manager'},
-    { "ColumnName": 'Sponsor'},
-    { "ColumnName": 'Schedule'},
-    { "ColumnName": 'Risk/Issues'},
-    { "ColumnName": 'Ask/Needs' },
-    { "ColumnName": 'Budget' },
-    { "ColumnName": 'Spend' },
-    { "ColumnName": 'DQ%' },
-    { "ColumnName": 'Total CAPEX Approved/Forecast' },
-    { "ColumnName": 'Carbon Impact (Tons CO2)' },
-    { "ColumnName": 'Water Impact (m3)' },
-    { "ColumnName": 'Milestone / Progression' },
-    { "ColumnName": 'Next Milestone' },
-    { "ColumnName": 'Next Milestone Planned Finish Date' },
-    { "ColumnName": 'Execution Complete Date' },
-    { "ColumnName": 'Execution Duration (Days)' },
-    
-  ]
-
+  opened:boolean =  false
+  hide:boolean = true
+  showcontent: boolean = false
+  
+  columns = [{ name: 'Name' }, { name: 'Gender' }, { name: 'Company' }];
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
+  @ViewChild('filterDrawerOver') filterDrawerOver: MatSidenav
   recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {
-  }
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {}
 
   ngOnInit(): void {
-    // localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
+    var executionScope = ""
+    var portfolioOwners = ""
     this.activeaccount = this.msal.instance.getActiveAccount();
     this.showContent = false;
     this.titleService.setTitle("Portfolio Center")
@@ -229,33 +209,35 @@ export class PortfolioCenterComponent implements OnInit {
         }
       ]
     }
+    this.apiService.getfilterlist().then(data => {
+      this.filterlist = data
+      this.filterlist.defaultOwningOrganizations.forEach(res => {
+        this.owningOrg.push({ name: res })
+      })
 
-    //checking if there are any preset filter
-    if (localStorage.getItem('spot-filters') == null) {
-      this.filtersnew = this.defaultfilter
+    this.auth.lookupMaster().then(data => {
+      this.lookup = data
+      this.totalCAPEX = this.lookup.filter(result => result.lookUpParentId == "10F36AC1-23CB-4326-8701-2416F8AE679E")
+      this.AgileWorkstream = this.lookup.filter(result => result.lookUpParentId == "f4486388-4c52-48fc-8c05-836878da2247")
+      this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
+      this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
 
-    }
-    else {
-      this.filtersnew = JSON.parse(localStorage.getItem('spot-filters'))
+    // var user = [{
+    //   "userAdid": this.activeaccount.localAccountId,
+    //   "userDisplayName": this.activeaccount.name,
+    //   "userIsActive": true
+    // }]
 
-    }
-    var user = [{
-      "userAdid": this.activeaccount.localAccountId,
-      "userDisplayName": this.activeaccount.name,
-      "userIsActive": true
-    }]
-    var state = [{
-      "isActive":true,
-      "kpiImpact":null,
-      "lookUpId":"0a3fb510-b3c6-4527-afc2-ac2ba3088d5e",
-      "lookUpName":"Active",
-      "lookUpOrder":100,
-      "lookUpParentId":"b2ab502a-f702-420f-98d9-c126d8664f6b"
-    }]
+      var user = [{
+        "userAdid": "8195b08b-caf6-4119-85b4-42ae8d7f9e97",
+        "userDisplayName": "Waglawala, Zenab (ext)",
+        "userIsActive": true
+      }]
+      var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
     if (localStorage.getItem('spot-filtersNew') == null) {
-      this.filtersnew1 = this.defaultfilter
-      this.filtersnew1.ProjectState = state
-      this.filtersnew1.ProjectTeamMember = user
+      this.filtersnew = this.defaultfilter
+      this.filtersnew.ProjectState = state
+      this.filtersnew.ProjectTeamMember = user
       this.PortfolioFilterForm.patchValue({
         ProjectTeamMember: user,
         ProjectState: state
@@ -263,34 +245,67 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
     else {
-      this.filtersnew1 = JSON.parse(localStorage.getItem('spot-filtersNew'))
-      if (this.filtersnew1.ProjectTeamMember == null){
-        this.filtersnew1.ProjectTeamMember = user
+      this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      this.PortfolioFilterForm.patchValue({
+        PortfolioOwner: this.filtersnew.PortfolioOwner,
+        // ProjectTeamMember: this.filtersnew.ProjectTeamMember,
+        ProjectTeamMember: user,
+        ExecutionScope: this.filtersnew.ExecutionScope,
+        OwningOrganization: this.filtersnew.OwningOrganization,
+        ProjectState: this.filtersnew.ProjectState,
+        ProjectPhase: this.filtersnew.ProjectPhase,
+        ProjectType: this.filtersnew.ProjectType,
+        Product: this.filtersnew.Product,
+        TotalCAPEX: this.filtersnew.TotalCAPEX,
+        GMSBudgetOwner: this.filtersnew.GMSBudgetOwner,
+        AGILEWorkstream: this.filtersnew.AGILEWorkstream,
+        AGILEWave: this.filtersnew.AGILEWave,
+        CAPSProject: this.filtersnew.CAPSProject,
+        projectName: this.filtersnew.projectName,
+        OverallStatus: this.filtersnew.OverallStatus,
+      })
+      if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0){
+        this.filtersnew.ProjectTeamMember = user
         this.PortfolioFilterForm.patchValue({
           ProjectTeamMember: user
         })
       }
-      if (this.filtersnew1.ProjectState == null) {
-        this.filtersnew1.ProjectState = state
+      if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
+        this.filtersnew.ProjectState = state
         this.PortfolioFilterForm.patchValue({
           ProjectState: state
         })
       }
 
     }
-    var filterKeys = Object.keys(this.filtersnew1);
+    var localattribute;
+    if (localStorage.getItem('spot-localattribute') != null) {
+      localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
+    }
+    var filterKeys = Object.keys(this.filtersnew);
     var filterGroups = []
-    for (var i = 0; i < Object.keys(this.filtersnew1).length; i++){
+    if (this.filtersnew.PortfolioOwner != null && this.filtersnew.PortfolioOwner.length != 0){
+      for (var z = 0; z < this.filtersnew.PortfolioOwner.length; z++){
+        portfolioOwners += this.filtersnew.PortfolioOwner[z].portfolioOwnerId + ','
+      }
+    }
+    if (this.filtersnew.ExecutionScope != null && this.filtersnew.ExecutionScope.length != 0) {
+      for (var z = 0; z < this.filtersnew.ExecutionScope.length; z++) {
+        executionScope += this.filtersnew.ExecutionScope[z].portfolioOwnerId + ','
+      }
+    }
+        
+    for (var i = 0; i < Object.keys(this.filtersnew).length; i++){
       var attribute = filterKeys[i]
       var filterItems = []
-      if (this.filtersnew1[attribute] != null && this.filtersnew1[attribute].length != 0){
-      for (var j = 0; j < this.filtersnew1[attribute].length; j++){
-        if (attribute == "PortfolioOwner" || attribute == "ExcecutionScope"){
+      if (this.filtersnew[attribute] != null && this.filtersnew[attribute].length != 0){
+      for (var j = 0; j < this.filtersnew[attribute].length; j++){
+        if (attribute == "PortfolioOwner" || attribute == "ExecutionScope"){
           var filterItems1 =
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].portfolioOwner,
+            "filterValue": this.filtersnew[attribute][j].portfolioOwner,
             "unionOperator": 2
           }
         }
@@ -299,40 +314,42 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].gmsbudgetOwnerDefault,
+            "filterValue": this.filtersnew[attribute][j].gmsbudgetOwnerDefault,
             "unionOperator": 2
           }
         }
-        else if (attribute == "owningOrganization" || attribute == "projectType"){
+        else if (attribute == "OwningOrganization" || attribute == "ProjectType"){
           var filterItems1 = 
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].name,
+            "filterValue": this.filtersnew[attribute][j].name,
             "unionOperator": 2
           }
         }
         else if (attribute == "ProjectTeamMember") {
+          this.filtersnew[attribute][j] = "8195b08b-caf6-4119-85b4-42ae8d7f9e97"
           var filterItems1 =
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].userAdid,
+            // "filterValue": this.filtersnew[attribute][j].userAdid,
+            "filterValue": this.filtersnew[attribute][j],
             "unionOperator": 2
           }
         }
-        else if (attribute == "isCapsProject") {
-          if(this.filtersnew1[attribute] == true){
-            this.filtersnew1[attribute] = "Yes";
+        else if (attribute == "CAPSProject") {
+          if(this.filtersnew[attribute] == true){
+            this.filtersnew[attribute] = "Yes";
           }
           else{
-            this.filtersnew1[attribute] ="No"
+            this.filtersnew[attribute] ="No"
           }
           var filterItems1 =
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute],
+            "filterValue": this.filtersnew[attribute],
             "unionOperator": 2
           }
         }
@@ -341,16 +358,16 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": "Project/Program",
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].ProblemUniqueId,
+            "filterValue": this.filtersnew[attribute][j].ProblemUniqueId,
             "unionOperator": 2
           }
         }
-        else if (attribute == "products") {
+        else if (attribute == "Product") {
           var filterItems1 =
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].productId,
+            "filterValue": this.filtersnew[attribute][j].productId,
             "unionOperator": 2
           }
         }
@@ -359,7 +376,7 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            "filterValue": this.filtersnew1[attribute][j].lookUpId,
+            "filterValue": this.filtersnew[attribute][j].lookUpId,
             "unionOperator": 2
           }
         }
@@ -374,38 +391,16 @@ export class PortfolioCenterComponent implements OnInit {
     }
     filterGroups[filterGroups.length - 1].groupCondition = 0
     var groupData = {
-      "filterGroups": filterGroups
+      "filterGroups": filterGroups,
+      // "localAttributes": localattribute
     }
 
     console.log("Filter Data : " +groupData)
     //Filtering Projects
-    // this.apiService.MainFilters(this.filtersnew).then((resp:any) => {
       this.apiService.Filters(groupData).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
       mainNavComponent.refresh()
-      // if (resp != null) {
-
-        //Loading Lookup Values in Filters
-        this.apiService.getfilterlist().then(data => {
-          this.filterlist = data
-          this.filterlist.defaultOwningOrganizations.forEach(res => {
-            this.owningOrg.push({ name: res })
-          })
-        })
-
-        this.auth.lookupMaster().then(data => {
-          this.lookup = data
-          this.totalCAPEX = this.lookup.filter(result => result.lookUpParentId == "10F36AC1-23CB-4326-8701-2416F8AE679E")
-          this.AgileWorkstream = this.lookup.filter(result => result.lookUpParentId == "f4486388-4c52-48fc-8c05-836878da2247")
-          this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
-          this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
-          
-        })
-
-        //end Loading
-        //Loading Portfiolio Data
-        // this.apiService.getportfoliodata(resp).then((res: any) => {
           console.log(res)
           this.totalproject = res.totalProjects
           this.data = {
@@ -569,24 +564,30 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
-          console.log("is this working too?")
-        // });
-      // }
-  })
-
-    //For Local Attributes
-    // this.apiService.getLocalAttributes(this.projectHubService.projectid).then((res: any) => {
-    //   this.auth.lookupMaster().then(res1 => {
-    //     this.lookupData = res1
-    //     const originalData = Object.assign([{}], res)
-    //     res.forEach(i => {
-    //       this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
-    //     })
-    //     this.dataLoader(res);
-    //     this.originalData = originalData;
-    //     this.viewContent = true
-    //   })
-    // })
+        if(portfolioOwners != "" || executionScope != ""){
+        //For Local Attributes
+        this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+          console.log(res);
+          res.forEach(response => {
+            localattribute.forEach(LA => {
+              if (LA.uniqueId == response.uniqueId){
+                response.data = LA.data
+              }
+            })
+          })
+          const originalData = Object.assign([{}], res)
+          res.forEach(i => {
+            this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+          })
+          this.dataLoader(res);
+          this.originalData = originalData;
+          this.showLA = true
+        })
+      }
+})
+})
+})
+  this.showcontent = true;
   }
   routeProject(projectid): void {
     window.open('project-hub/' + projectid, "_blank")
@@ -735,9 +736,141 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   applyfilters() {
-    console.log(this.PortfolioFilterForm.getRawValue())
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
-    localStorage.setItem('spot-filters', JSON.stringify(this.filtersnew))
+    var mainObj = this.originalData
+    var i = -1;
+    var dataToSend = []
+    var emptyObject = {
+      "uniqueId": "",
+      "value": ""
+    }
+    Object.keys(this.localAttributeForm.controls).forEach((name) => {
+      const currentControl = this.localAttributeForm.controls[name];
+      i++;
+      if (currentControl.dirty) {
+        if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].dataType == 2) {
+          if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)) {
+            mainObj[i].data[0].value = null
+            dataToSend.push(mainObj[i])
+          }
+          else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+            emptyObject = {
+              "uniqueId": "",
+              "value": ""
+            }
+            mainObj[i].data.push(emptyObject)
+            mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            dataToSend.push(mainObj[i])
+          }
+          else {
+            mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            dataToSend.push(mainObj[i])
+          }
+        }
+        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
+          if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+            mainObj[i].data[0].value = null
+            dataToSend.push(mainObj[i])
+          }
+          else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
+            emptyObject = {
+              "uniqueId": "",
+              "value": ""
+            }
+            mainObj[i].data.push(emptyObject)
+            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            dataToSend.push(mainObj[i])
+          }
+          else {
+            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            dataToSend.push(mainObj[i])
+          }
+        }
+        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
+          var data = []
+          if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
+            for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
+              if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
+                mainObj[i].data = []
+                mainObj[i].data[j] = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                }
+              }
+              else {
+                if (mainObj[i].data[j] == undefined) {
+                  mainObj[i].data[j] = {
+                    "uniqueId": "",
+                    "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                  }
+                }
+                else {
+                  mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+
+                }
+              }
+            }
+          }
+          else {
+            mainObj[i].data = []
+          }
+          dataToSend.push(mainObj[i])
+        }
+        else {
+          if (mainObj[i].data.length == 0) {
+            emptyObject = {
+              "uniqueId": "",
+              "value": ""
+            }
+            mainObj[i].data.push(emptyObject)
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data[0].value = null
+              dataToSend.push(mainObj[i])
+            }
+            else {
+              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+              dataToSend.push(mainObj[i])
+            }
+          }
+          else {
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data[0].value = null
+              dataToSend.push(mainObj[i])
+            }
+            else {
+              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+              dataToSend.push(mainObj[i])
+            }
+          }
+        }
+      }
+    })
+    console.log(dataToSend)
+    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     this.filterDrawer.close()
     this.resetpage()
 
@@ -748,7 +881,7 @@ export class PortfolioCenterComponent implements OnInit {
     this.ngOnInit()
   }
   resetfilters() {
-    localStorage.setItem('spot-filters', JSON.stringify(this.defaultfilter))
+    localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
     this.resetpage()
   }
 
@@ -771,8 +904,42 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   OpenLA(){
-    this.viewBaseline = true
-    this.filterDrawer.toggle();
+    console.log("Inside drawer function")
+    if (this.PortfolioFilterForm.controls.PortfolioOwner == null && this.PortfolioFilterForm.controls.ExecutionScope == null){
+      this.filterDrawerOver.toggle();
+    }
+    else{
+    var portfolioOwners = ""
+    var executionScope = ""
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+          portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+      }
+    }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+        for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+          executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+      }
+    }
+  }
+    if (portfolioOwners == "" && executionScope == ""){
+      this.filterDrawerOver.toggle();
+    }
+    else{
+      localStorage.setItem('spot-localattribute', null)
+    this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+      console.log(res);
+      this.showLA = false
+      const originalData = Object.assign([{}], res)
+      res.forEach(i => {
+        this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
+      })
+      this.dataLoader(res);
+      this.originalData = originalData;
+      this.showLA = true
+    this.filterDrawerOver.toggle();
+    })
+  }
   }
 
   getHeaderClass(): any {
@@ -820,6 +987,146 @@ export class PortfolioCenterComponent implements OnInit {
         window.open('/project-hub/' + item.projectUid + '/project-board', "_blank")
       }
     })
+  }
+
+  // open(): void {
+
+  //   // Return if it's already opened
+  //   if (this.opened) {
+  //     this.opened = false;
+  //   }
+  //   else{
+  //   // window.scroll(0, 0);
+  //   // Open the search
+  //   this.opened = true;
+  //   }
+  // }
+
+  // SelectColumns(name) {
+  //   this.showContent = false;
+  //   console.log(name)
+  //   this.hide = false;
+  //   this.showContent = true
+  // }
+
+  dataLoader(res) {
+
+    res.forEach(data => {
+      var i = Object.assign({}, data)
+      if (i.dataType == 1 && i.data.length == 0) {
+        i.data = false
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 1 && i.data.length > 0) {
+        i.data = i.data[0].value
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 2 && i.data.length == 0) {
+        i.data = ""
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 2 && i.data.length > 0) {
+        i.data = i.data[0].value
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 3 && i.isMulti == true) {
+        if (i.data.length == 0) {
+          i.data = []
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          var newData = i.data
+          var dataMulti = []
+          for (var j = 0; j < newData.length; j++) {
+            if (this.lookup.filter(x => x.lookUpId == newData[j].value).length == 0) {
+              i.data[j] = []
+            }
+            else {
+              i.data[j] = this.lookup.filter(x => x.lookUpId == newData[j].value)[0]
+            }
+          }
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+      }
+      else if (i.dataType == 3 && i.isMulti == false) {
+        if (i.data.length == 0) {
+          i.data = ""
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          if (this.lookup.filter(x => x.lookUpId == i.data[0].value).length == 0) {
+            i.data = ""
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else {
+            i.data = this.lookup.filter(x => x.lookUpId == i.data[0].value)[0]
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+        }
+      }
+      else if (i.dataType == 4 && i.data.length == 0) {
+        if (i.linesCount == null) {
+          i.linesCount = 13
+        }
+        i.data = ""
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 4 && i.data.length > 0) {
+        if (i.linesCount == null) {
+          i.linesCount = 13
+        }
+        if (i.data[0].value == null) {
+          i.data = ""
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          i.data = i.data[0].value
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+      }
+      else if (i.dataType == 5 && i.isMulti == false) {
+        if (i.data.length == 0) {
+          i.data = ""
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          if (i.data[0].value == null) {
+            i.data = ""
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+          else {
+            i.data = i.data[0].value
+            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+          }
+        }
+      }
+      else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {
+        if (i.data.length == 0) {
+          i.data = []
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          var newData = i.data
+          for (var j = 0; j < newData.length; j++) {
+            i.data = newData[j].value
+          }
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+      }
+      else if (i.dataType == 6 && i.data.length == 0) {
+        i.data = ""
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      else if (i.dataType == 6 && i.data.length > 0) {
+        i.data = i.data[0].value
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      }
+      this.dataLA.push(i);
+    })
+  }
+
+  getLookup(key) {
+    return this.lookup.filter(x => x.lookUpParentId == key)
   }
 
 }

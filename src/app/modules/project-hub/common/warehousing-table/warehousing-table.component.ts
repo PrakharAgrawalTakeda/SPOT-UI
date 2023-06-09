@@ -21,6 +21,7 @@ export class WarehousingTableComponent {
   @Input() data: any
   lookupdata: any
   sortDir = ""
+  editable= false
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -34,6 +35,9 @@ export class WarehousingTableComponent {
     this.dataloader()
   }
   dataloader() {
+    if (this.projecthubservice.roleControllerControl.projectHub.CAPS) {
+      this.editable = true
+    }
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
@@ -59,7 +63,7 @@ export class WarehousingTableComponent {
 
   deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Warehousing?",
+      "title": "Remove Warehousing Record?",
       "message": "Are you sure you want to remove this record permanently? ",
       "icon": {
         "show": true,

@@ -91,7 +91,7 @@
                         <a *ngIf="!shippingTableEditStack.includes(rowIndex)"
                             (click)="shippingTableEditRow(rowIndex)">
                             <p class="cost" *ngIf="value">{{value}}</p>
-                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                            <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="shippingForm.controls[rowIndex]"
                             *ngIf="shippingTableEditStack.includes(rowIndex)">
@@ -107,7 +107,7 @@
                         <a *ngIf="!shippingTableEditStack.includes(rowIndex)"
                             (click)="shippingTableEditRow(rowIndex)">
                             <p class="cost" *ngIf="value">{{value}}</p>
-                            <p class="cost" *ngIf="!value">&nbsp;</p>
+                            <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="shippingForm.controls[rowIndex]"
                             *ngIf="shippingTableEditStack.includes(rowIndex)">

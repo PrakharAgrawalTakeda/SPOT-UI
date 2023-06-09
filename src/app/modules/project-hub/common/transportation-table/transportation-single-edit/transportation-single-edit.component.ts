@@ -472,9 +472,9 @@ export class TransportationSingleEditComponent {
         environmentalSourceTypeId: '1e123779-0e1e-4994-bec3-95924aa0e7e6',
         projectId: this.projecthubservice.projectid,
         environmentalSourceId: environmentalSourceId,
-        shipmentDistance: formValue.shipmentDistance,
-        shipmentWeight: formValue.shipmentWeight,
-        shipmentFrequency: formValue.shipmentFrequency,
+        shipmentDistance: formValue.shipmentDistance == null || formValue.shipmentDistance == 0 ? 0 : formValue.shipmentDistance,
+        shipmentWeight: formValue.shipmentWeight == null || formValue.shipmentWeight == 0 ? 0 : formValue.shipmentWeight,
+        shipmentFrequency: formValue.shipmentFrequency == null || formValue.shipmentFrequency == 0 ? 0 : formValue.shipmentFrequency,
         affectedLocations: null,
         affectedContainers: null,
         embasisOfEstimate: formValue.embasisOfEstimate
