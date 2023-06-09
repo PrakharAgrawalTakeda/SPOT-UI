@@ -29,6 +29,64 @@
                     </div>
                 </div>
             </div>
+
+            <div class="flex flex-auto w-full">
+                <div class="flex justify-between items-center w-full gap-3">
+                    <p class="font-bold text-xl">
+                        Budget Dashboard
+                    </p>
+                </div>
+                <div class="flex justify-between items-center w-full gap-3">
+                    <div class="w-1/2">
+                        <button class="min-w-26 mt-3 w-full" mat-flat-button [color]="'primary'" type="button">
+                            Generate Document
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-auto w-full flex-col mt-3">
+                    <div class="flex justify-between items-center w-full">
+                        <p class="text-l font-bold">Last Generated</p>
+                    </div>
+                    <div class="ml-2">
+                        <span *ngIf="reportInfoData.budgetReportLastGenerated" class="font-bold text-primary">
+                            {{reportInfoData.budgetReportLastGenerated | date:'dd-MMM-yyyy'}}
+                        </span>
+                        <span *ngIf="!reportInfoData.budgetReportLastGenerated" class="font-bold text-primary">
+                            -
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-auto w-full">
+                <div class="flex justify-between items-center w-full gap-3">
+                    <p class="font-bold text-xl">
+                        GMSGQ Product Team Dashboard
+                    </p>
+                </div>
+                <div class="flex justify-between items-center w-full gap-3">
+                    <div class="w-1/2">
+                        <button class="min-w-26 mt-3 w-full" mat-flat-button [color]="'primary'" type="button">
+                            Generate Document
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-auto w-full flex-col mt-3">
+                    <div class="flex justify-between items-center w-full">
+                        <p class="text-l font-bold">Last Generated</p>
+                    </div>
+                    <div class="ml-2">
+                        <span *ngIf="reportInfoData.productTeamReportLastGenerated" class="font-bold text-primary">
+                            {{reportInfoData.productTeamReportLastGenerated | date:'dd-MMM-yyyy'}}
+                        </span>
+                        <span *ngIf="!reportInfoData.productTeamReportLastGenerated" class="font-bold text-primary">
+                            -
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
