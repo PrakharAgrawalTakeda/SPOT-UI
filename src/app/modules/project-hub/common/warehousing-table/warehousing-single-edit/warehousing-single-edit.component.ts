@@ -88,7 +88,7 @@ this.WarehousingForm.controls.affectedLocations.valueChanges.subscribe(res => {
       co2intensityFactorValue: "11.7",
       co2intensityFactorMeasure: "kg CO2e/t",
       shipmentWeight: 0,
-      affectedLocations: null,
+      affectedLocations: 0,
       embasisOfEstimate: ""
     })
     this.WarehousingForm.controls['co2intensityFactorMeasure'].disable()
