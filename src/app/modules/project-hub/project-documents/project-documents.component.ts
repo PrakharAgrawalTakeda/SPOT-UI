@@ -38,4 +38,7 @@ export class ProjectDocumentsComponent implements OnInit {
       this.viewContent = true
     })
   }
+  newtab(){
+    window.open(this.projectData.projectSiteUrl + '/Shared%20Documents/Forms/AllItems.aspx', '_blank');
+  }
 }
