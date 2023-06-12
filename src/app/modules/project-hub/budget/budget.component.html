@@ -106,5 +106,45 @@
             </div>
             <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"></app-budget-funding-information-table>
         </div>
+
+        <div>
+            <h1 *ngIf="capexField; then capexTrueBlock else capexFalseBlock"></h1>
+            <ng-template #capexTrueBlock>
+                <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+                    <app-budget-capex-opex-table ></app-budget-capex-opex-table>
+                </div>
+            </ng-template>
+            <ng-template #capexFalseBlock>
+                <div  class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+                    <div class="pt-0 flex items-center justify-between">
+                        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">CAPEX</div>
+                        <div>
+                            Capex Forecast Tables are displayed only when CAPEX Required is "Saved" to Yes
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+
+        <div>
+            <h1 *ngIf="opexField; then opexTrueBlock else opexFalseBlock"></h1>
+            <ng-template #opexTrueBlock>
+                <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+                    <app-budget-capex-opex-table ></app-budget-capex-opex-table>
+                </div>
+            </ng-template>
+            <ng-template #opexFalseBlock>
+                <div  class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
+                    <div class="pt-0 flex items-center justify-between">
+                        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Non-FTE OPEX</div>
+                        <div>
+                            Opex Forecast Tables are displayed only when OPEX Required is "Saved" to Yes
+                        </div>
+                        <div></div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
     </form>
 </div>

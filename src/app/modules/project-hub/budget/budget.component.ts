@@ -16,6 +16,8 @@ export class BudgetComponent implements OnInit {
     lookUpData: any = []
     localCurrency:any = [];
     filterCriteria: any = {}
+    opexField:boolean = false;
+    capexField:boolean = false;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -58,6 +60,8 @@ export class BudgetComponent implements OnInit {
             this.lookUpData = lookup
             this.projectHubService.lookUpMaster = lookup
             this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
+                this.opexField = !!res.budget.opExRequired;
+                this.capexField = !!res.budget.capexRequired;
                 this.generalInfoPatchValue(res)
                 this.viewContent = true
             })
@@ -71,8 +75,8 @@ export class BudgetComponent implements OnInit {
 
     generalInfoPatchValue(response){
         this.budgetForm.patchValue({
-            capexRequired: response.budget.capExRequired ? true : false ,
-            opexRequired:  response.budget.opExRequired  ? true : false ,
+            capexRequired: !!response.budget.capExRequired,
+            opexRequired:  !!response.budget.opExRequired,
             parentProgram:  response.parentProgram,
             localCurrency:  this.localCurrency.localCurrencyAbbreviation,
             assetPlaced:  response.budget.definitiveCrapprovalDate,
@@ -87,6 +91,7 @@ export class BudgetComponent implements OnInit {
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
             budgetCommentary:  response.budget.budgetComment,
         })
+
     }
 
     getLookUpName(id: string): string {
