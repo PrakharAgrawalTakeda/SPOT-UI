@@ -15,6 +15,7 @@ export class ProjectDocumentsComponent implements OnInit {
   projectData: any = {}
   sharepointLink: any = null
   viewContent: boolean = false
+  isCreate: boolean = true
   constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private sanitizer: DomSanitizer) {
 
   }
@@ -31,7 +32,7 @@ export class ProjectDocumentsComponent implements OnInit {
       if (this.projectData.projectSiteUrl) {
         if (this.projectData.projectSiteUrl != '') {
           this.sharepointLink = this.sanitizer.bypassSecurityTrustResourceUrl(this.projectData.projectSiteUrl);
-          console.log("Sharepoint URL: ", this.sharepointLink)
+          this.isCreate = false
         }
       }
       this.viewContent = true
