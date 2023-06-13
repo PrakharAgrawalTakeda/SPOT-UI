@@ -60,10 +60,10 @@ export class RoleService {
         localroleController.generalInfo.porfolioOwner = false
         localroleController.projectHub.localAttributes = false
         localroleController.projectHub.CAPS = false
-        if (!this.roleMaster?.secondarySecurityGroupId?.some('0E83F6BE-79BE-426A-A316-F523FFAECC4F')) {
+        if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='0E83F6BE-79BE-426A-A316-F523FFAECC4F')) {
           localroleController.budgetEdit = false
         }
-        if (!this.roleMaster?.secondarySecurityGroupId?.some('C005FB71-C1FF-44D3-8779-5CA37643D794')) {
+        if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
           localroleController.generalInfo.confidentialEdit = false
         }
       }
@@ -73,18 +73,18 @@ export class RoleService {
     }
     else if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
       localroleController.generalInfo.porfolioOwner = false
-      if (!this.roleMaster?.secondarySecurityGroupId?.some('0E83F6BE-79BE-426A-A316-F523FFAECC4F')) {
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='0E83F6BE-79BE-426A-A316-F523FFAECC4F')) {
         localroleController.budgetEdit = false
       }
-      if (!this.roleMaster?.secondarySecurityGroupId?.some('C005FB71-C1FF-44D3-8779-5CA37643D794')) {
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
         localroleController.generalInfo.confidentialEdit = false
       }
     }
     else if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0') {
-      if (!this.roleMaster?.secondarySecurityGroupId?.some('0E83F6BE-79BE-426A-A316-F523FFAECC4F')) {
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='0E83F6BE-79BE-426A-A316-F523FFAECC4F')) {
         localroleController.budgetEdit = false
       }
-      if (!this.roleMaster?.secondarySecurityGroupId?.some('C005FB71-C1FF-44D3-8779-5CA37643D794')) {
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
         localroleController.generalInfo.confidentialEdit = false
       }
     }
