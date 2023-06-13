@@ -6,6 +6,9 @@ import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.servi
 import {ActivatedRoute} from "@angular/router";
 import {ProjectApiService} from "../../common/project-api.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {RoleService} from "../../../../core/auth/role.service";
+import {MsalService} from "@azure/msal-angular";
+import {map} from "rxjs";
 
 @Component({
   selector: 'app-budget-general-edit',
@@ -20,7 +23,7 @@ export class BudgetGeneralEditComponent {
     localCurrency:any = [];
     budgetInfo: any = {}
     filterCriteria: any = {}
-    isBudgetAdmin: boolean = true;
+    isBudgetAdmin: boolean = false;
     isBudgetOwnerEditable: boolean = false;
     showBudgetIdButton: boolean = false;
     required:boolean = false;
@@ -41,9 +44,11 @@ export class BudgetGeneralEditComponent {
     constructor (public projectHubService: ProjectHubService,
                  private portApiService: PortfolioApiService,
                  public auth: AuthService,
+                 private msalService: MsalService,
                  private _Activatedroute: ActivatedRoute,
                  public fuseAlert: FuseConfirmationService,
-                 private apiService: ProjectApiService){
+                 private apiService: ProjectApiService,
+                 private roleService: RoleService){
         if(this.capexRequired.value ==true){
             this.capexRequired.disable()
         }
@@ -123,6 +128,10 @@ export class BudgetGeneralEditComponent {
             this.generalInfoPatchValue(res)
             this.viewContent = true
         })
+        this.roleService.getCurrentRole(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
+            this.isBudgetAdmin = !!res.secondarySecurityGroupId.includes("500ee862-3878-43d9-9378-53feb1832cef");
+        })
+
     }
 
     getYesNo(): any {
@@ -225,6 +234,15 @@ export class BudgetGeneralEditComponent {
     }
     getPortfolioOwner(): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+    }
+    requestBudgetId(): any {
+        this.apiService.getNewBudgetId(this.projectHubService.projectid).then((res: any) => {
+            this.budgetInfoForm.patchValue({
+                budgetId:  res.BudgetId,
+            })
+            this.showBudgetIdButton = false;
+            this.budgetId.disable();
+        })
     }
     getGmsBudgetOwner(): any {
         if(this.isBudgetAdmin){
