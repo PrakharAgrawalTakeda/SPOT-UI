@@ -58,7 +58,7 @@
                 <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                     <div class="flex items-center justify-start gap-6 pl-3">
-                        <a href="javascript:void(0)" title="Delete Single" *ngIf="Editable"
+                        <a href="javascript:void(0)" title="Delete Single" *ngIf="Editable && editable"
                             (click)="deleteDistribution(row.emenvironmentId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
