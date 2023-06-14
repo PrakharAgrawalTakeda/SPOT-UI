@@ -70,4 +70,11 @@ export class PortfolioApiService {
       return response
   }
 
+  async getLocalAttributes(portfolioOwners: string, executionScope: string) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/ByOwners" + "?portfolioOwners=" + portfolioOwners + "&executionScopes=" + executionScope
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
 }

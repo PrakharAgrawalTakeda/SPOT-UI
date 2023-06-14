@@ -162,29 +162,32 @@ export class CarbonBulkEditComponent {
     else {
       console.log(this.carbonDb)
       this.projecthubservice.isFormChanged = false
-      this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
-        if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
-          var formValue = this.CAPSform.getRawValue()
-          var mainObj = this.ProjectData
+      if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
+        var formValue = this.CAPSform.getRawValue()
+        var mainObj = this.ProjectData
 
-          mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+        mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
 
-          this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
-            this.projecthubservice.isFormChanged = false
-            this.projecthubservice.isNavChanged.next(true)
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.successSave.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          })
-        }
-        else {
+        this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+        this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
           this.projecthubservice.isFormChanged = false
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.successSave.next(true)
-        }
+        
       })
+        })
+      }
+      else{
+        this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.successSave.next(true)
+        })
+      }
     }
   }
 

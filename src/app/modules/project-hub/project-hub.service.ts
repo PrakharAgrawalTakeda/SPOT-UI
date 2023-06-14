@@ -322,37 +322,37 @@ export class ProjectHubService {
             },
           ]
         },
-        {
-          id: 'project-dashboard',
-          title: 'Project Dashboards',
-          type: 'collapsable',
-          icon: 'heroicons_outline:presentation-chart-line'
-          ,
-          children: [
-            {
-              title: 'Performance',
-              type: 'basic',
-              link: 'project-dashboard/performance'
-
-            },
-            {
-              title: 'Budget',
-              type: 'basic',
-              link: 'project-dashboard/budget'
-            },
-            {
-              title: 'GMSGQ Product Team',
-              type: 'basic',
-              link: 'project-dashboard/product-team'
-            }
-          ]
-        },
         // {
+        //   id: 'project-dashboard',
         //   title: 'Project Dashboards',
-        //   type: 'basic',
-        //   icon: 'heroicons_outline:presentation-chart-line',
-        //   link: 'project-dashboards'
+        //   type: 'collapsable',
+        //   icon: 'heroicons_outline:presentation-chart-line'
+        //   ,
+        //   children: [
+        //     {
+        //       title: 'Performance',
+        //       type: 'basic',
+        //       link: 'project-dashboard/performance'
+
+        //     },
+        //     {
+        //       title: 'Budget',
+        //       type: 'basic',
+        //       link: 'project-dashboard/budget'
+        //     },
+        //     {
+        //       title: 'GMSGQ Product Team',
+        //       type: 'basic',
+        //       link: 'project-dashboard/product-team'
+        //     }
+        //   ]
         // },
+        {
+          title: 'Project Dashboards',
+          type: 'basic',
+          icon: 'heroicons_outline:presentation-chart-line',
+          link: 'project-dashboards'
+        },
         {
           id: 'project-closeout',
           title: 'Project Close Out',

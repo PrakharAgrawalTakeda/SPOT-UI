@@ -4,6 +4,7 @@ export class RoleController{
      public closeOut: CloseOut = new CloseOut
      public projectTeam: boolean = true
      public projectBenefits: boolean = true
+     public budgetEdit: boolean = true
      public roleId: string = ''
 }
 
@@ -29,6 +30,7 @@ export class ProjectBoard{
 export class GeneralInfo{
    public basicFields: boolean = true
    public porfolioOwner: boolean = true
+   public confidentialEdit: boolean = true
 }
 export class CloseOut{
     public lessonsLearnt: boolean = true

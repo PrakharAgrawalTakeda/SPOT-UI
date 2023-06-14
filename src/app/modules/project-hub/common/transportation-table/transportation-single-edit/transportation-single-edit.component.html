@@ -21,7 +21,8 @@
   TransportationForm.controls.transportationMode.value == 'Sea freight' ? seaTypeDropDownValues :
   TransportationForm.controls.transportationMode.value == 'Train' ? trainTypeDropDownValues :
   TransportationForm.controls.transportationMode.value == 'Courier' ? courierTypeDropDownValues :
-  TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelTypeDropDownValues : []" [showNoneOption]="false">
+  TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelTypeDropDownValues : []"
+            [showNoneOption]="false">
         </spot-select>
 
         <spot-select formControlName="fuelType" name="fuelType" [label]="'Fuel'" [placeholder]="'Fuel'"
@@ -35,7 +36,8 @@
             TransportationForm.controls.transportationMode.value == 'Sea freight' && (TransportationForm.controls.transportationType.value == 'Standard 20 Ft - Ambiant' || TransportationForm.controls.transportationType.value == 'Standard 40 Ft - Ambiant') ? seaFuelDropDownValues2 :
             TransportationForm.controls.transportationMode.value == 'Train' ? trainFuelDropDownValues :
             TransportationForm.controls.transportationMode.value == 'Courier' ? courierFuelDropDownValues :
-            TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelFuelDropDownValues : []" [showNoneOption]="false">
+            TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelFuelDropDownValues : []"
+            [showNoneOption]="false">
         </spot-select>
 
         <spot-input class="w-full" formControlName="co2intensityFactorValue" name="co2intensityFactorValue"
@@ -46,20 +48,20 @@
         </spot-input>
 
         <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
-        [label]="'Shipment Distance (km)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-        [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeDistance">
-    </spot-input>
-    
-    <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
-        [label]="'Shipment Weight (kg)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-        [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeWeight">
-    </spot-input>
-    
-    <spot-input class="w-full" formControlName="shipmentFrequency" name="shipmentFrequency"
-        [label]="'Shipment Frequency'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
-        [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeFrequency">
-    </spot-input>
-    
+            [label]="'Shipment Distance (km)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeDistance">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
+            [label]="'Shipment Weight (kg)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeWeight">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="shipmentFrequency" name="shipmentFrequency"
+            [label]="'Shipment Frequency'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeFrequency">
+        </spot-input>
+
 
         <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
             [placeholder]="'Basis of Estimate'">
