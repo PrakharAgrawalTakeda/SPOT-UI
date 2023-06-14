@@ -105,7 +105,8 @@ export class ShippingBulkEditComponent {
       this.vaqtechDropDownValues.push(vaQTech[j].solutionName)
     }
     this.vaqtechDropDownValues.sort()
-
+    if(this.Shipping)
+    {
     for (var i of this.Shipping) {
       this.shippingDb.push({
         emenvironmentId: i.emenvironmentId,
@@ -141,33 +142,33 @@ export class ShippingBulkEditComponent {
         embasisOfEstimate: new FormControl(i.embasisOfEstimate)
       }))
     }
+  }
     console.log(this.shippingForm)
     this.viewContent = true
   }
 
 
   addShipping() {
-    var j = [{}]
-
-    j = [{
-        environmentalSourceId: '',
-        environmentalSourceTypeId: '0d69c0c1-ce34-4419-8555-32183d301d15',
-        transportationMode:'',
-        transportationType: '',
-        fuelType: '',
-        co2intensityFactorValue: '',
-        co2intensityFactorMeasure: '',
-        shippingSolutionSupplier: '',
-        solutionName: '',
-        emenvironmentId: '',
-        projectId: '',
-        shipmentDistance: 0,
-        shipmentWeight: 0,
-        shipmentFrequency: 0,
-        affectedLocations: null,
-        affectedContainers: 0,
-        embasisOfEstimate: ''
-    }]
+    var j = [{
+      environmentalSourceId: '',
+      environmentalSourceTypeId: '0d69c0c1-ce34-4419-8555-32183d301d15',
+      transportationMode: '',
+      transportationType: '',
+      fuelType: '',
+      co2intensityFactorValue: '',
+      co2intensityFactorMeasure: '',
+      shippingSolutionSupplier: '',
+      solutionName: '',
+      emenvironmentId: '',
+      projectId: '',
+      shipmentDistance: 0,
+      shipmentWeight: 0,
+      shipmentFrequency: 0,
+      affectedLocations: null,
+      affectedContainers: 0,
+      embasisOfEstimate: ''
+    }];
+  
     this.shippingForm.push(new FormGroup({
       emenvironmentId: new FormControl(''),
       environmentalSourceTypeId: new FormControl('0d69c0c1-ce34-4419-8555-32183d301d15'),
@@ -180,24 +181,33 @@ export class ShippingBulkEditComponent {
       shipmentDistance: new FormControl(0),
       shipmentWeight: new FormControl(0),
       shipmentFrequency: new FormControl(0),
-        shippingSolutionSupplier: new FormControl(''),
-        solutionName: new FormControl(''),
-environmentalSourceId: new FormControl(''),
+      shippingSolutionSupplier: new FormControl(''),
+      solutionName: new FormControl(''),
+      environmentalSourceId: new FormControl(''),
       affectedLocations: new FormControl(null),
       affectedContainers: new FormControl(0),
       embasisOfEstimate: new FormControl('')
-    }))
-    this.Shipping = [...this.Shipping, ...j]
-    this.shippingTableEditStack.push(this.Shipping.length - 1)
-    var div = document.getElementsByClassName('datatable-scroll')[0]
+    }));
+  
+    if (!this.Shipping) {
+      this.Shipping = [];
+    }
+  
+    this.Shipping = [...this.Shipping, ...j];
+    this.shippingTableEditStack.push(this.Shipping.length - 1);
+  
+    var div = document.getElementsByClassName('datatable-scroll')[0];
     setTimeout(() => {
+      if (div) {
       div.scroll({
         top: div.scrollHeight,
         left: 0,
         behavior: 'smooth'
       });
+    }
     }, 100);
   }
+  
 
   changeChecker() {
     var formValue = this.shippingForm.getRawValue()

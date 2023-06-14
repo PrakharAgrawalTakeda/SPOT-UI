@@ -55,10 +55,12 @@ export class WarehousingBulkEditComponent {
   dataloader() {
     this.environmentalSourceTypeId == 'af83f434-2e3d-42fc-b506-f93ce2f74503'
     this.Warehousing = this.projecthubservice.all[0]
+    console.log(typeof this.projecthubservice.all[0])
     console.log(this.projecthubservice.all[0])
     console.log(this.projecthubservice.all[1])
     this.dropdownList = this.projecthubservice.all[1]
-   
+   if(this.Warehousing)
+   {
     for (var i of this.Warehousing) {
       this.warehousingDb.push({
         emenvironmentId: i.emenvironmentId,
@@ -94,6 +96,8 @@ export class WarehousingBulkEditComponent {
         embasisOfEstimate: new FormControl(i.embasisOfEstimate)
       }))
     }
+   }
+
     console.log(this.warehousingForm)
     this.viewContent = true
   }
@@ -140,15 +144,22 @@ environmentalSourceId: new FormControl(''),
       affectedContainers: new FormControl(null),
       embasisOfEstimate: new FormControl('')
     }))
+    if (!this.Warehousing) {
+      this.Warehousing = [];
+    }
     this.Warehousing = [...this.Warehousing, ...j]
     this.warehousingTableEditStack.push(this.Warehousing.length - 1)
     var div = document.getElementsByClassName('datatable-scroll')[0]
     setTimeout(() => {
+      if(div)
+    {
       div.scroll({
         top: div.scrollHeight,
         left: 0,
         behavior: 'smooth'
       });
+    }
+      
     }, 100);
   }
 
