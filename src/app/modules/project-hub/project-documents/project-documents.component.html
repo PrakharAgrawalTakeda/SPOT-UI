@@ -1,14 +1,17 @@
 <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
     <div class="flex flex-col flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden">
-        <div class="flex justify-between items-center pb-6">
+        <div class="flex justify-between items-center" [ngClass]="{'pb-6': !isCreate}">
             <h3 class="font-medium tracking-tight leading-6 truncate text-xl text-primary">Project Documents</h3>
             <div>
-                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'">
+                <button class="ml-4 text-primary bg-gray-200" *ngIf="!isCreate" mat-flat-button [color]="'primary-200'" (click)="newtab()">
                     <mat-icon svgIcon="feather:external-link"></mat-icon>&nbsp; Open In New Tab
+                </button>
+                <button class="ml-4 text-primary bg-gray-200" *ngIf="isCreate" mat-flat-button [color]="'primary-200'">
+                    <mat-icon svgIcon="feather:external-link"></mat-icon>&nbsp; Create Library
                 </button>
             </div>
         </div>
-        <div class="flex justify-between items-center pb-6">
+        <div class="flex justify-between items-center pb-6" *ngIf="!isCreate">
             <iframe [src]="sharepointLink" class="w-[100vw] h-[100vh]"></iframe>
         </div>
     </div>

@@ -243,22 +243,9 @@ export const projectRoutes: Route[] = [
       pathMatch: 'full'
     },
     {
-      path: 'project-dashboard',
+      path: 'project-dashboards',
       component: ProjectDashboardComponent,
-      children: [
-        {
-          path: 'performance',
-          component: ProjectDashboardPerformanceComponent,
-        },
-        {
-          path: 'budget',
-          component: ProjectDashboardBudgetComponent,
-        },
-        {
-          path: 'product-team',
-          component: ProjectDashboardProductTeamComponent,
-        }
-      ]
+      pathMatch: 'full'
     },
     {
       path: 'project-proposal',

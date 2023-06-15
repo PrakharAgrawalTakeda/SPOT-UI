@@ -75,7 +75,8 @@ export class CreateProjectComponent implements OnInit {
     strategicYear: new FormControl(),
     annualMustWinID: new FormControl(),
     localCurrency: new FormControl(),
-    isArchived: new FormControl()
+    isArchived: new FormControl(),
+    isConfidential: new FormControl(),
   })
   newmainnav: any = [
     {
@@ -203,7 +204,8 @@ export class CreateProjectComponent implements OnInit {
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
-        isCapsProject: event.isCapsProject
+        isCapsProject: event.isCapsProject,
+        isConfidential: event.isConfidential
       })
     }
     else if (index == 2) {
@@ -373,6 +375,7 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].ProjectDescription = formValue.projectDescription
       mainObjCreate[0].TargetEndState = formValue.targetGoalSituation
       mainObjCreate[0].ProblemType = formValue.problemType
+      mainObjCreate[0].IsConfidential =  formValue.isConfidential == "" || formValue.isConfidential == "No" ? false : true
       mainObjCreate[0].DefaultOwningOrganizationID = formValue.owningOrganization
     mainObjCreate[0].IsOEProject = formValue.isOeproject == "" ? false : formValue.isOeproject
       if (mainObjCreate[0].IsOEProject) {

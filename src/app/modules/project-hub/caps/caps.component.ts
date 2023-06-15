@@ -155,6 +155,7 @@ export class CapsComponent implements OnInit {
     if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
       this.editable = true
     }
+    console.log(this.editable)
     if(this.callLocation == 'Business-Case'){
       this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
     }

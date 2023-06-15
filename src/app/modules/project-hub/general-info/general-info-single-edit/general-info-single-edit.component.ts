@@ -22,7 +22,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  @Input() viewElements: any = ["isConfidential","isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   @Input() createform: any
   @Input() portfolio
   activeaccount: any;
@@ -50,6 +50,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     excecutionScope: new FormControl([]),
     enviornmentalPortfolio: new FormControl(null),
     isArchived: new FormControl(false),
+    isConfidential: new FormControl(false),
     isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
@@ -193,6 +194,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           excecutionScope: res.excecutionScope ? res.excecutionScope : [],
           enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
           isArchived: res.projectData.isArchived,
+          isConfidential: res.projectData.isConfidential,
           isCapsProject: res.projectData.isCapsProject,
           owningOrganization: res.projectData.defaultOwningOrganizationId,
           closeOutApprovedDate: res.projectData.closeOutApprovedDate,
@@ -594,6 +596,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
     mainObj.isArchived = formValue.isArchived
+    mainObj.isConfidential = formValue.isConfidential
     mainObj.problemTitle = formValue.problemTitle
     mainObj.problemType = formValue.problemType
     mainObj.projectDescription = formValue.projectDescription
