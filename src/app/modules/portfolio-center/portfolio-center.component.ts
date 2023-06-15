@@ -968,7 +968,7 @@ export class PortfolioCenterComponent implements OnInit {
 
   OpenLA(){
     console.log("Inside drawer function")
-    if (this.PortfolioFilterForm.controls.PortfolioOwner == null && this.PortfolioFilterForm.controls.ExecutionScope == null){
+    if ((this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 || this.PortfolioFilterForm.controls.PortfolioOwner.value == null) && (this.PortfolioFilterForm.controls.ExecutionScope.value == null || this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0)){
       // this.filterDrawerOver.toggle();
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please select a portfolio owner and Execution Scope",
