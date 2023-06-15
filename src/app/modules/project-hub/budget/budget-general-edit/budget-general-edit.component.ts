@@ -128,10 +128,7 @@ export class BudgetGeneralEditComponent {
             this.generalInfoPatchValue(res)
             this.viewContent = true
         })
-        this.roleService.getCurrentRole(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
-            this.isBudgetAdmin = !!res.secondarySecurityGroupId.includes("500ee862-3878-43d9-9378-53feb1832cef");
-        })
-
+        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
     }
 
     getYesNo(): any {
