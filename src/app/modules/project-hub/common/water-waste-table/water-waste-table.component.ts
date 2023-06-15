@@ -38,12 +38,14 @@ export class WaterWasteTableComponent {
   }
   dataloader() {
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      if(this.ProjectData){
       if (this.ProjectData.localCurrency == null){
           this.unitCost = "Unit Cost ()"
         }
         else{
         this.unitCost = "Unit Cost (" + this.ProjectData.localCurrency.localCurrencyAbbreviation + ")"
         }
+      }
         if(this.Editable == false){
           this.WaterWastengx = null
         }
@@ -53,12 +55,17 @@ export class WaterWasteTableComponent {
         this.waterWasteBulkEditData=[]
         this.waterWasteBulkEditData.push(this.WaterWastengx)
       this.waterWasteBulkEditData.push(this.ProjectData)
+    if (this.ProjectData) {
       if (this.ProjectData.localCurrency == null) {
           this.waterWasteBulkEditData.push("")
         }
         else {
         this.waterWasteBulkEditData.push(this.ProjectData.localCurrency.localCurrencyAbbreviation)
         }
+      }
+      else{
+      this.waterWasteBulkEditData.push("")
+      }
       this.waterWasteBulkEditData.push(this.WaterWasteParam)
     this.waterWasteBulkEditData.push(this.editCost)
     this.waterWasteBulkEditData.push(this.DateMandatory)
