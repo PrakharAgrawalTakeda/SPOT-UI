@@ -236,11 +236,17 @@ export class PortfolioCenterComponent implements OnInit {
       this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
       this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
 
-    var user = [{
-      "userAdid": this.activeaccount.localAccountId,
-      "userDisplayName": this.activeaccount.name,
-      "userIsActive": true
-    }]
+    // var user = [{
+    //   "userAdid": this.activeaccount.localAccountId,
+    //   "userDisplayName": this.activeaccount.name,
+    //   "userIsActive": true
+    // }]
+
+      var user = [{
+        "userAdid": "8195b08b-caf6-4119-85b4-42ae8d7f9e97",
+        "userDisplayName": "Waglawala, Zenab (ext)",
+        "userIsActive": true
+      }]
 
     var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
     if (localStorage.getItem('spot-filtersNew') == null) {
@@ -257,7 +263,8 @@ export class PortfolioCenterComponent implements OnInit {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
       this.PortfolioFilterForm.patchValue({
         PortfolioOwner: this.filtersnew.PortfolioOwner,
-        ProjectTeamMember: this.filtersnew.ProjectTeamMember,
+        // ProjectTeamMember: this.filtersnew.ProjectTeamMember,
+        ProjectTeamMember: user,
         ExecutionScope: this.filtersnew.ExecutionScope,
         OwningOrganization: this.filtersnew.OwningOrganization,
         ProjectState: this.filtersnew.ProjectState,
@@ -336,6 +343,7 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
         else if (attribute == "ProjectTeamMember") {
+          this.filtersnew[attribute][j].userAdid = '8195b08b-caf6-4119-85b4-42ae8d7f9e97'
           var filterItems1 =
           {
             "filterAttribute": attribute,
