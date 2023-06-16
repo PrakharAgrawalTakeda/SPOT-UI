@@ -343,10 +343,10 @@ export class ShippingBulkEditComponent {
       this.apiService.bulkeditD(this.shippingDb, this.projecthubservice.projectid, '0d69c0c1-ce34-4419-8555-32183d301d15').then(res => {
 
         this.projecthubservice.isFormChanged = false
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        this.projecthubservice.isNavChanged.next(true)
-        this.projecthubservice.successSave.next(true)
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
 
       })
     }

@@ -273,10 +273,10 @@ environmentalSourceId: new FormControl(''),
       this.apiService.bulkeditD(this.warehousingDb, this.projecthubservice.projectid, 'af83f434-2e3d-42fc-b506-f93ce2f74503').then(res => {
 
         this.projecthubservice.isFormChanged = false
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        this.projecthubservice.isNavChanged.next(true)
-        this.projecthubservice.successSave.next(true)
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
 
       })
     }
