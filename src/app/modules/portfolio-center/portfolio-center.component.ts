@@ -247,7 +247,6 @@ export class PortfolioCenterComponent implements OnInit {
         ProjectTeamMember: user,
         ProjectState: state
       })
-
     }
     else {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
@@ -268,17 +267,19 @@ export class PortfolioCenterComponent implements OnInit {
         projectName: this.filtersnew.projectName,
         OverallStatus: this.filtersnew.OverallStatus,
       })
-      if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0){
-        this.filtersnew.ProjectTeamMember = user
-        this.PortfolioFilterForm.patchValue({
-          ProjectTeamMember: user
-        })
-      }
-      if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
-        this.filtersnew.ProjectState = state
-        this.PortfolioFilterForm.patchValue({
-          ProjectState: state
-        })
+      if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)){
+        if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0){
+          this.filtersnew.ProjectTeamMember = user
+          this.PortfolioFilterForm.patchValue({
+            ProjectTeamMember: user
+          })
+        }
+        if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
+          this.filtersnew.ProjectState = state
+          this.PortfolioFilterForm.patchValue({
+            ProjectState: state
+          })
+        }
       }
 
     }
@@ -494,23 +495,23 @@ export class PortfolioCenterComponent implements OnInit {
             "budgetTile": [
               {
                 "title": "Plan",
-                "value": res.budgetTile.capex ? res.budgetTile.capex.plan : 0,
-                "value2": res.budgetTile.opex ? res.budgetTile.opex.plan : 0
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.plan).toFixed(4)  : 0
               },
               {
                 "title": "Previous",
-                "value": res.budgetTile.capex ? res.budgetTile.capex.previous : 0,
-                "value2": res.budgetTile.opex ? res.budgetTile.opex.previous : 0
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.previous).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.previous).toFixed(4)  : 0
               },
               {
                 "title": "Current",
-                "value": res.budgetTile.capex ? res.budgetTile.capex.current : 0,
-                "value2": res.budgetTile.opex ? res.budgetTile.opex.current : 0
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.current).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.current).toFixed(4)  : 0
               },
               {
                 "title": "YTD",
-                "value": res.budgetTile.capex ? res.budgetTile.capex.ytd : 0,
-                "value2": res.budgetTile.opex ? res.budgetTile.opex.ytd : 0
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.ytd).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.ytd).toFixed(4)  : 0
               }
             ],
             "lastThreeTile": [
