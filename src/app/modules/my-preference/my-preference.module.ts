@@ -37,6 +37,7 @@ import { MilestoneSetsComponent } from './milestone-sets/milestone-sets.componen
 import { MilestoneSetViewEditComponent } from './milestone-sets/milestone-set-view-edit/milestone-set-view-edit.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { EmailNotificationsComponent } from './email-notifications/email-notifications.component';
+import { EmailNotificationsEditComponent } from './email-notifications/email-notifications-edit/email-notifications-edit.component';
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -65,7 +66,8 @@ export const projectRoutes: Route[] = [
         ProjectSettingsComponent,
         MilestoneSetsComponent,
         MilestoneSetViewEditComponent,
-        EmailNotificationsComponent
+        EmailNotificationsComponent,
+        EmailNotificationsEditComponent
     ],
     exports: [
         MilestoneSetViewEditComponent

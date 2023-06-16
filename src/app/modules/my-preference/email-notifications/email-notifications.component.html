@@ -2,19 +2,93 @@
     <div class="p-6 bg-card rounded-2xl shadow w-full mb-6">
         <div>
             <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">E-mail Notifications</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">E-mail
+                    Notifications</div>
+            </div>
+            <div class="flex justify-end items-end">
+                <div></div>
+                <div>
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen(emailNotiEditType, '' , emailNoti , id)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    </button>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <form class="w-full p-[20px]" [formGroup]="emailNotiForm" (ngSubmit)="submitnotifications()">
-        <div class="h-[84vh]">
-            <div class="w-full mt-4 mb-6">
-                <spot-toggle class="w-full" formControlName="" [mode]="'toggle'"
-                    [label]="'Receive Email Notifications?'">
-                </spot-toggle>
-            </div>
-            <div *ngIf="emailNotiForm.controls['flag'].value">
-                </div>
-                </div>
+                    <div class="h-[80vh]">
+                        <div class="flex justify-start items-center gap-3 pb-6">
+                            Receive Email Notifications?
+                            <mat-icon svgIcon="heroicons_outline:x-circle"
+                                *ngIf="!emailNotiForm.controls.recieveEmailNotification.value">
+                            </mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                *ngIf="emailNotiForm.controls.recieveEmailNotification.value">
+                            </mat-icon>
+                        </div>
+                        <div>
+                            <!-- *ngIf="emailNotiForm.controls['recieveEmailNotification'].value" -->
+                            <!-- <spot-singleselect-autocomplete
+                formControlName="reportFrequencyId" class="w-full" name="reportFrequencyId"
+                [label]="'Report Frequency'" [placeholder]="'Report Frequency'"
+                [valuePointer]="'lookUpName'" [dropDownArray]="getReportFrequency()" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete> -->
+
+            <spot-singleselect-autocomplete formControlName="reportFrequencyId"
+                class="w-full" name="reportFrequencyId" [label]="'Report Frequency'" [placeholder]="'Report Frequency'"
+                [valuePointer]="'lookUpName'" [dropDownArray]="lookUpData" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+
+            <spot-singleselect-autocomplete formControlName="emailNotifcationNotifcationReportScopeIds"
+                class="w-full" name="emailNotifcationNotifcationReportScopeIds" [label]="'Notification Report Scope'" [placeholder]="'Notification Report Scope'"
+                [valuePointer]="'lookUpName'" [dropDownArray]="lookUpData2" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+
+                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
+                                columnMode="flex"
+                                class="pr-6 material font-medium text-sm text-default whitespace-nowrap"
+                                [rows]="eventsData" #emailNotiTable>
+
+                                <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="0.4">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        {{value}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+
+                                <ngx-datatable-column name="Event" prop="event" [flexGrow]="0.4">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        {{value}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+
+                                <ngx-datatable-column name="Description" prop="description" [flexGrow]="0.8">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        {{value}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+
+                                <ngx-datatable-column name="On/Off" prop="onoff" [resizeable]="false" [sortable]="false"
+                                    [flexGrow]="0.4">
+                                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                                        ngx-datatable-cell-template>
+                                        <mat-icon svgIcon="heroicons_outline:x-circle"
+                                            *ngIf="!emailNotiForm.controls.onoff.value">
+                                        </mat-icon>
+                                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                            *ngIf="emailNotiForm.controls.onoff.value">
+                                        </mat-icon>
+                                    </ng-template>
+                                </ngx-datatable-column>
+
+                            </ngx-datatable>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

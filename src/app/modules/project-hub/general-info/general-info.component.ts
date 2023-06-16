@@ -23,7 +23,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
+  @Input() viewElements: any = ["isConfidential","isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject","projectManager","sponsor","topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription","isTechTransfer","isOeproject", "isQualityRef", "StrategicDrivers","primaryKPI","isAgile","isPobos","isGmsgqltannualMustWin","isSiteAssessment","isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' | 'GeneralInfoSingleEditBusinessCase' = 'GeneralInfoSingleEdit'
   strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
@@ -58,6 +58,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     campaignTypeId: new FormControl(''),
     isQualityRef: new FormControl(false),
     isArchived: new FormControl(false),
+    isConfidential: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
     approvedDate: new FormControl(''),
@@ -223,7 +224,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   }
   generalInfoPatchValue(response){
       var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
-      
+      console.log(response)
       this.generalInfoForm.patchValue({
           problemTitle: response.projectData.problemTitle,
           problemType: response.projectData.problemType,
@@ -248,6 +249,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           campaignTypeId: response.projectData.campaignTypeId,
           isQualityRef: response.qualityReferences.length != 0,
           isArchived: response.projectData.isArchived,
+          isConfidential: response.projectData.isConfidential,
           owningOrganization: response.projectData.defaultOwningOrganizationId ? response.projectData.defaultOwningOrganizationId : [],
           projectId: response.projectData.problemId,
           opU:  this.filterCriteria.opuMasters.find(

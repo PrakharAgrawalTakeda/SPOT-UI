@@ -314,41 +314,46 @@ export class TransportationBulkEditComponent {
     }
     this.seaFuelDropDownValues2 = Array.from(uniqueFuelTypes8)
     this.seaFuelDropDownValues2.sort()
-    for (var i of this.Transportation) {
-      this.transportationDb.push({
-        emenvironmentId: i.emenvironmentId,
-        environmentalSourceTypeId: i.environmentalSourceTypeId,
-        projectId: this.projecthubservice.projectid,
-        shipmentDistance: i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance,
-        shipmentWeight: i.shipmentWeight == null || i.shipmentWeight == 0 ? 0 : i.shipmentWeight,
-        shipmentFrequency: i.shipmentFrequency == null || i.shipmentFrequency == 0 ? 0 : i.shipmentFrequency,
-        environmentalSourceId: i.environmentalSourceId,
-        affectedLocations: i.affectedLocations,
-        affectedContainers: i.affectedContainers,
-        embasisOfEstimate: i.embasisOfEstimate
-      })
 
-      this.transportationForm.push(new FormGroup({
-
-        emenvironmentId: new FormControl(i.emenvironmentId),
-        environmentalSourceTypeId: new FormControl(i.environmentalSourceTypeId),
-        projectId: new FormControl(this.projecthubservice.projectid),
-        transportationMode: new FormControl(i.transportationMode),
-        transportationType: new FormControl(i.transportationType),
-        fuelType: new FormControl(i.fuelType),
-        co2intensityFactorValue: new FormControl(i.co2intensityFactorValue),
-        co2intensityFactorMeasure: new FormControl(i.co2intensityFactorMeasure),
-        shipmentDistance: new FormControl(i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance),
-        shipmentWeight: new FormControl(i.shipmentWeight == null || i.shipmentWeight == 0 ? 0 : i.shipmentWeight),
-        shipmentFrequency: new FormControl(i.shipmentFrequency == null || i.shipmentFrequency == 0 ? 0 : i.shipmentFrequency),
-        shippingSolutionSupplier: new FormControl(i.shippingSolutionSupplier),
-        solutionName: new FormControl(i.solutionName),
-        environmentalSourceId: new FormControl(i.environmentalSourceId),
-        affectedLocations: new FormControl(i.affectedLocations),
-        affectedContainers: new FormControl(i.affectedContainers),
-        embasisOfEstimate: new FormControl(i.embasisOfEstimate)
-      }))
+    if(this.Transportation)
+    {
+      for (var i of this.Transportation) {
+        this.transportationDb.push({
+          emenvironmentId: i.emenvironmentId,
+          environmentalSourceTypeId: i.environmentalSourceTypeId,
+          projectId: this.projecthubservice.projectid,
+          shipmentDistance: i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance,
+          shipmentWeight: i.shipmentWeight == null || i.shipmentWeight == 0 ? 0 : i.shipmentWeight,
+          shipmentFrequency: i.shipmentFrequency == null || i.shipmentFrequency == 0 ? 0 : i.shipmentFrequency,
+          environmentalSourceId: i.environmentalSourceId,
+          affectedLocations: i.affectedLocations,
+          affectedContainers: i.affectedContainers,
+          embasisOfEstimate: i.embasisOfEstimate
+        })
+  
+        this.transportationForm.push(new FormGroup({
+  
+          emenvironmentId: new FormControl(i.emenvironmentId),
+          environmentalSourceTypeId: new FormControl(i.environmentalSourceTypeId),
+          projectId: new FormControl(this.projecthubservice.projectid),
+          transportationMode: new FormControl(i.transportationMode),
+          transportationType: new FormControl(i.transportationType),
+          fuelType: new FormControl(i.fuelType),
+          co2intensityFactorValue: new FormControl(i.co2intensityFactorValue),
+          co2intensityFactorMeasure: new FormControl(i.co2intensityFactorMeasure),
+          shipmentDistance: new FormControl(i.shipmentDistance == null || i.shipmentDistance == 0 ? 0 : i.shipmentDistance),
+          shipmentWeight: new FormControl(i.shipmentWeight == null || i.shipmentWeight == 0 ? 0 : i.shipmentWeight),
+          shipmentFrequency: new FormControl(i.shipmentFrequency == null || i.shipmentFrequency == 0 ? 0 : i.shipmentFrequency),
+          shippingSolutionSupplier: new FormControl(i.shippingSolutionSupplier),
+          solutionName: new FormControl(i.solutionName),
+          environmentalSourceId: new FormControl(i.environmentalSourceId),
+          affectedLocations: new FormControl(i.affectedLocations),
+          affectedContainers: new FormControl(i.affectedContainers),
+          embasisOfEstimate: new FormControl(i.embasisOfEstimate)
+        }))
+      }
     }
+    
     console.log(this.transportationForm)
     this.viewContent = true
   }
@@ -411,15 +416,21 @@ environmentalSourceId: new FormControl(''),
       affectedContainers: new FormControl(null),
       embasisOfEstimate: new FormControl('')
     }))
+    if (!this.Transportation) {
+      this.Transportation = [];
+    }
     this.Transportation = [...this.Transportation, ...j]
     this.transportationTableEditStack.push(this.Transportation.length - 1)
     var div = document.getElementsByClassName('datatable-scroll')[0]
     setTimeout(() => {
-      div.scroll({
-        top: div.scrollHeight,
-        left: 0,
-        behavior: 'smooth'
-      });
+      if(div)
+      {
+        div.scroll({
+          top: div.scrollHeight,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }
     }, 100);
   }
 
@@ -582,10 +593,10 @@ environmentalSourceId: new FormControl(''),
       this.apiService.bulkeditD(this.transportationDb, this.projecthubservice.projectid, '1e123779-0e1e-4994-bec3-95924aa0e7e6').then(res => {
 
         this.projecthubservice.isFormChanged = false
-        this.projecthubservice.submitbutton.next(true)
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
         this.projecthubservice.isNavChanged.next(true)
+        this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.successSave.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '')
 
       })
     }

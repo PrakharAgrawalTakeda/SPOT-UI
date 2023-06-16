@@ -23,6 +23,7 @@ import { ProjectHubService } from '../project-hub/project-hub.service';
 import { RoleService } from 'app/core/auth/role.service';
 import moment from 'moment';
 import { forEach } from 'lodash';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -111,10 +112,8 @@ export class PortfolioCenterComponent implements OnInit {
   })
 
   filterlist: any = {}
-  separatorKeysCodes: number[] = [ENTER, COMMA];
   lookup: any = [];
   activeaccount: any
-  showLA = false
   newmainnav: any = [
     {
       id: 'portfolio-center',
@@ -123,7 +122,6 @@ export class PortfolioCenterComponent implements OnInit {
       link: '/portfolio-center'
     },
     {
-      // id: 'create-project',
       title: 'Create Project',
       type: 'collapsable',
       link: '/create-project',
@@ -169,12 +167,24 @@ export class PortfolioCenterComponent implements OnInit {
   opened:boolean =  false
   hide:boolean = true
   showcontent: boolean = false
+  showLA:boolean=false
+  changePO = false
+  changeES = false
   
-  columns = [{ name: 'Name' }, { name: 'Gender' }, { name: 'Company' }];
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
-  @ViewChild('filterDrawerOver') filterDrawerOver: MatSidenav
-  recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService) {}
+  // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
+  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
+    this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
+      if(this.showContent){
+        this.changePO = true
+      }
+    })
+    this.PortfolioFilterForm.controls.ExecutionScope.valueChanges.subscribe(res => {
+      if (this.showContent) {
+        this.changeES = true
+      }
+    })
+  }
 
   ngOnInit(): void {
     var executionScope = ""
@@ -222,18 +232,13 @@ export class PortfolioCenterComponent implements OnInit {
       this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
       this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
 
-    // var user = [{
-    //   "userAdid": this.activeaccount.localAccountId,
-    //   "userDisplayName": this.activeaccount.name,
-    //   "userIsActive": true
-    // }]
+    var user = [{
+      "userAdid": this.activeaccount.localAccountId,
+      "userDisplayName": this.activeaccount.name,
+      "userIsActive": true
+    }]
 
-      var user = [{
-        "userAdid": "8195b08b-caf6-4119-85b4-42ae8d7f9e97",
-        "userDisplayName": "Waglawala, Zenab (ext)",
-        "userIsActive": true
-      }]
-      var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
+    var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
     if (localStorage.getItem('spot-filtersNew') == null) {
       this.filtersnew = this.defaultfilter
       this.filtersnew.ProjectState = state
@@ -242,14 +247,12 @@ export class PortfolioCenterComponent implements OnInit {
         ProjectTeamMember: user,
         ProjectState: state
       })
-
     }
     else {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
       this.PortfolioFilterForm.patchValue({
         PortfolioOwner: this.filtersnew.PortfolioOwner,
-        // ProjectTeamMember: this.filtersnew.ProjectTeamMember,
-        ProjectTeamMember: user,
+        ProjectTeamMember: this.filtersnew.ProjectTeamMember,
         ExecutionScope: this.filtersnew.ExecutionScope,
         OwningOrganization: this.filtersnew.OwningOrganization,
         ProjectState: this.filtersnew.ProjectState,
@@ -264,21 +267,23 @@ export class PortfolioCenterComponent implements OnInit {
         projectName: this.filtersnew.projectName,
         OverallStatus: this.filtersnew.OverallStatus,
       })
-      if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0){
-        this.filtersnew.ProjectTeamMember = user
-        this.PortfolioFilterForm.patchValue({
-          ProjectTeamMember: user
-        })
-      }
-      if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
-        this.filtersnew.ProjectState = state
-        this.PortfolioFilterForm.patchValue({
-          ProjectState: state
-        })
+      if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)){
+        if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0){
+          this.filtersnew.ProjectTeamMember = user
+          this.PortfolioFilterForm.patchValue({
+            ProjectTeamMember: user
+          })
+        }
+        if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
+          this.filtersnew.ProjectState = state
+          this.PortfolioFilterForm.patchValue({
+            ProjectState: state
+          })
+        }
       }
 
     }
-    var localattribute;
+    var localattribute
     if (localStorage.getItem('spot-localattribute') != null) {
       localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
     }
@@ -328,13 +333,11 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
         else if (attribute == "ProjectTeamMember") {
-          this.filtersnew[attribute][j] = "8195b08b-caf6-4119-85b4-42ae8d7f9e97"
           var filterItems1 =
           {
             "filterAttribute": attribute,
             "filterOperator": "=",
-            // "filterValue": this.filtersnew[attribute][j].userAdid,
-            "filterValue": this.filtersnew[attribute][j],
+            "filterValue": this.filtersnew[attribute][j].userAdid,
             "unionOperator": 2
           }
         }
@@ -358,7 +361,7 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": "Project/Program",
             "filterOperator": "=",
-            "filterValue": this.filtersnew[attribute][j].ProblemUniqueId,
+            "filterValue": this.filtersnew[attribute][j].problemUniqueId,
             "unionOperator": 2
           }
         }
@@ -390,9 +393,18 @@ export class PortfolioCenterComponent implements OnInit {
   }
     }
     filterGroups[filterGroups.length - 1].groupCondition = 0
-    var groupData = {
-      "filterGroups": filterGroups,
-      // "localAttributes": localattribute
+      var groupData
+    if (localattribute == null){
+      groupData = {
+        "filterGroups": filterGroups,
+        "localAttributes": []
+      }
+    }
+    else{
+      groupData = {
+        "filterGroups": filterGroups,
+        "localAttributes": localattribute
+      }
     }
 
     console.log("Filter Data : " +groupData)
@@ -447,19 +459,19 @@ export class PortfolioCenterComponent implements OnInit {
             "milstoneTile": [
               {
                 "title": "All Completed On-Time",
-                "value": 48
+                "value": res.milestoneTile.allCompleted
               },
               {
                 "title": "On-Time Last 30 Days",
-                "value": 0
+                "value": res.milestoneTile.lastThirtyDay
               },
               {
                 "title": "Predicted On-Time Next 30 Days",
-                "value": 48
+                "value": res.milestoneTile.predicted30Day
               },
               {
                 "title": "Curent Year Completion Rate",
-                "value": 53
+                "value": res.milestoneTile.completionRate
               },
             ],
             "nextThreeTile": [
@@ -483,23 +495,23 @@ export class PortfolioCenterComponent implements OnInit {
             "budgetTile": [
               {
                 "title": "Plan",
-                "value": 3329,
-                "value2": 315
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.plan).toFixed(4)  : 0
               },
               {
                 "title": "Previous",
-                "value": 7762,
-                "value2": 64
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.previous).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.previous).toFixed(4)  : 0
               },
               {
                 "title": "Current",
-                "value": 2151,
-                "value2": 515
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.current).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.current).toFixed(4)  : 0
               },
               {
                 "title": "YTD",
-                "value": 1891,
-                "value2": 121
+                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.ytd).toFixed(4)  : 0,
+                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.ytd).toFixed(4)  : 0
               }
             ],
             "lastThreeTile": [
@@ -564,26 +576,6 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
-        if(portfolioOwners != "" || executionScope != ""){
-        //For Local Attributes
-        this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
-          console.log(res);
-          res.forEach(response => {
-            localattribute.forEach(LA => {
-              if (LA.uniqueId == response.uniqueId){
-                response.data = LA.data
-              }
-            })
-          })
-          const originalData = Object.assign([{}], res)
-          res.forEach(i => {
-            this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
-          })
-          this.dataLoader(res);
-          this.originalData = originalData;
-          this.showLA = true
-        })
-      }
 })
 })
 })
@@ -726,7 +718,7 @@ export class PortfolioCenterComponent implements OnInit {
       },
       dataLabels: {
         enabled: true,
-        offsetY: 15
+        offsetY: 4
       },
     };
 
@@ -738,7 +730,6 @@ export class PortfolioCenterComponent implements OnInit {
   applyfilters() {
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
     var mainObj = this.originalData
-    var i = -1;
     var dataToSend = []
     var emptyObject = {
       "uniqueId": "",
@@ -746,8 +737,8 @@ export class PortfolioCenterComponent implements OnInit {
     }
     Object.keys(this.localAttributeForm.controls).forEach((name) => {
       const currentControl = this.localAttributeForm.controls[name];
-      i++;
-      if (currentControl.dirty) {
+      var i = mainObj.findIndex(x => x.uniqueId === name);
+      if (currentControl.dirty && i>=0) {
         if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
@@ -780,14 +771,19 @@ export class PortfolioCenterComponent implements OnInit {
           else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
             emptyObject = {
               "uniqueId": "",
-              "value": ""
+              "value": moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
             }
             mainObj[i].data.push(emptyObject)
-            mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            emptyObject = {
+              "uniqueId": "",
+              "value": moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            }
+            mainObj[i].data.push(emptyObject)
             dataToSend.push(mainObj[i])
           }
           else {
-            mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            mainObj[i].data[1].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
             dataToSend.push(mainObj[i])
           }
         }
@@ -842,16 +838,34 @@ export class PortfolioCenterComponent implements OnInit {
         }
         else {
           if (mainObj[i].data.length == 0) {
-            emptyObject = {
-              "uniqueId": "",
-              "value": ""
-            }
-            mainObj[i].data.push(emptyObject)
             if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              emptyObject = {
+                "uniqueId": "",
+                "value": ""
+              }
+              mainObj[i].data.push(emptyObject)
               mainObj[i].data[0].value = null
               dataToSend.push(mainObj[i])
             }
-            else {
+            else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].name].value
+              }
+              mainObj[i].data.push(emptyObject)
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
+              }
+              mainObj[i].data.push(emptyObject)
+              dataToSend.push(mainObj[i])
+            }
+            else{
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
+              }
+              mainObj[i].data.push(emptyObject)
               mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
               dataToSend.push(mainObj[i])
             }
@@ -859,6 +873,20 @@ export class PortfolioCenterComponent implements OnInit {
           else {
             if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
               mainObj[i].data[0].value = null
+              dataToSend.push(mainObj[i])
+            }
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+              mainObj[i].data = []
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].name].value
+              }
+              mainObj[i].data.push(emptyObject)
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
+              }
+              mainObj[i].data.push(emptyObject)
               dataToSend.push(mainObj[i])
             }
             else {
@@ -870,6 +898,19 @@ export class PortfolioCenterComponent implements OnInit {
       }
     })
     console.log(dataToSend)
+    if(this.changeES == false && this.changePO == false){
+      var c = 0;
+      var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
+      if(LA != null || LA != undefined){
+      var secondArray = LA.filter(o => !dataToSend.some(i => i.uniqueId === o.uniqueId));
+      console.log(secondArray)
+        if (secondArray.length != 0){
+          for (var z = 0; z < secondArray.length; z++){
+            dataToSend.push(secondArray[z])
+          }
+        }
+      }
+    }
     localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     this.filterDrawer.close()
     this.resetpage()
@@ -882,6 +923,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
   resetfilters() {
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
+    localStorage.setItem('spot-localattribute', null)
     this.resetpage()
   }
 
@@ -903,11 +945,61 @@ export class PortfolioCenterComponent implements OnInit {
     }
   }
 
+  CloseLA(){
+    this.showLA = false;
+  }
+
   OpenLA(){
     console.log("Inside drawer function")
-    if (this.PortfolioFilterForm.controls.PortfolioOwner == null && this.PortfolioFilterForm.controls.ExecutionScope == null){
-      this.filterDrawerOver.toggle();
+    if (this.PortfolioFilterForm.controls.PortfolioOwner.value == null && this.PortfolioFilterForm.controls.ExecutionScope.value == null){
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please select a portfolio owner and Execution Scope",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
     }
+    if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
+      
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please select a portfolio owner and Execution Scope",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+  }
     else{
     var portfolioOwners = ""
     var executionScope = ""
@@ -923,22 +1015,120 @@ export class PortfolioCenterComponent implements OnInit {
     }
   }
     if (portfolioOwners == "" && executionScope == ""){
-      this.filterDrawerOver.toggle();
+      
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Please select a portfolio owner and Execution Scope",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    var noChangePO = false
+    var noChangeES = false
+    var filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+    if (portfolioOwners != "" && filtersnew != null){
+      var count = 0;
+      var list = portfolioOwners.split(',');
+      list.pop()
+      if (filtersnew.PortfolioOwner.length == list.length){
+        for (var i = 0; i < filtersnew.PortfolioOwner.length; i++){
+          for(var j=0;j<list.length;j++){
+            if (filtersnew.PortfolioOwner[i].portfolioOwnerId == list[j]){
+              count++;
+            }
+          }
+        }
+      }
+      if(count == list.length){
+        noChangePO = true
+      }
+    }
+    if (executionScope != "" && filtersnew != null) {
+      var count = 0;
+      var list = executionScope.split(',');
+      list.pop()
+      if (filtersnew.ExecutionScope.length == list.length) {
+        for (var i = 0; i < filtersnew.ExecutionScope.length; i++) {
+          for (var j = 0; j < list.length; j++) {
+            if (filtersnew.ExecutionScope[i].portfolioOwnerId == list[j]) {
+              count++;
+            }
+          }
+        }
+      }
+      if (count == list.length) {
+        noChangeES = true
+      }
+    }
+    var localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
+    if (noChangePO == true && noChangeES == true && localattribute != null){
+      this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+        console.log(res);
+        this.localAttributeFormRaw.controls = {}
+        this.localAttributeFormRaw.value = {}
+        this.localAttributeForm.controls = {}
+        this.localAttributeForm.value = {}
+        res.forEach(response => {
+          localattribute.forEach(LA => {
+            if (LA.uniqueId == response.uniqueId) {
+              if (response.dataType == 2 || response.dataType == 4){
+                response.data = LA.data
+                this.localAttributeFormRaw.addControl(response.name, new FormControl(LA.data[0]))
+                this.localAttributeFormRaw.addControl(response.uniqueId, new FormControl(LA.data[1]))
+              }
+              else{
+                response.data = LA.data
+                this.localAttributeFormRaw.addControl(response.uniqueId, new FormControl(response.data))
+              }
+            }
+            else{
+              this.localAttributeFormRaw.addControl(response.uniqueId, new FormControl(response.data))
+            }
+          })
+        })
+        const originalData = Object.assign([{}], res)
+        this.dataLoader(res);
+        this.originalData = originalData;
+      })
+      this.showLA = true
     }
     else{
-      localStorage.setItem('spot-localattribute', null)
+      this.showLA = false
+    localStorage.setItem('spot-localattribute', null)
     this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
       console.log(res);
-      this.showLA = false
       const originalData = Object.assign([{}], res)
+      this.originalData = []
+      this.localAttributeFormRaw.controls = {}
+      this.localAttributeFormRaw.value = {}
+      this.localAttributeForm.controls = {}
+      this.localAttributeForm.value = {}
       res.forEach(i => {
+        if (i.dataType == 2 || i.dataType == 4) {
+          this.localAttributeFormRaw.addControl(i.name, new FormControl(i.data))
+        }
         this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
       })
       this.dataLoader(res);
       this.originalData = originalData;
-      this.showLA = true
-    this.filterDrawerOver.toggle();
     })
+      this.showLA = true
   }
   }
 
@@ -989,28 +1179,8 @@ export class PortfolioCenterComponent implements OnInit {
     })
   }
 
-  // open(): void {
-
-  //   // Return if it's already opened
-  //   if (this.opened) {
-  //     this.opened = false;
-  //   }
-  //   else{
-  //   // window.scroll(0, 0);
-  //   // Open the search
-  //   this.opened = true;
-  //   }
-  // }
-
-  // SelectColumns(name) {
-  //   this.showContent = false;
-  //   console.log(name)
-  //   this.hide = false;
-  //   this.showContent = true
-  // }
-
   dataLoader(res) {
-
+    this.dataLA = []
     res.forEach(data => {
       var i = Object.assign({}, data)
       if (i.dataType == 1 && i.data.length == 0) {
@@ -1023,11 +1193,14 @@ export class PortfolioCenterComponent implements OnInit {
       }
       else if (i.dataType == 2 && i.data.length == 0) {
         i.data = ""
+        this.localAttributeForm.addControl(i.name, new FormControl(i.data))
+        // this.dataLA.push(i);
         this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
       }
       else if (i.dataType == 2 && i.data.length > 0) {
-        i.data = i.data[0].value
-        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        this.localAttributeForm.addControl(i.name, new FormControl(i.data[0].value))
+        this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data[1].value))
+        i.data = i.data[1].value
       }
       else if (i.dataType == 3 && i.isMulti == true) {
         if (i.data.length == 0) {
@@ -1069,6 +1242,7 @@ export class PortfolioCenterComponent implements OnInit {
           i.linesCount = 13
         }
         i.data = ""
+        this.localAttributeForm.addControl(i.name, new FormControl(i.data))
         this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
       }
       else if (i.dataType == 4 && i.data.length > 0) {
@@ -1077,10 +1251,12 @@ export class PortfolioCenterComponent implements OnInit {
         }
         if (i.data[0].value == null) {
           i.data = ""
+          this.localAttributeForm.addControl(i.name, new FormControl(i.data))
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
         }
         else {
-          i.data = i.data[0].value
+          this.localAttributeForm.addControl(i.name, new FormControl(i.data[0].value))
+          i.data = i.data[1].value
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
         }
       }

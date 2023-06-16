@@ -38,7 +38,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!warehousingTableEditStack.includes(rowIndex) && editWarehousing"
                             (click)="warehousingTableEditRow(rowIndex)">
-                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="value">{{value  | number:'1.0-0'}}</p>
                             <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="warehousingForm.controls[rowIndex]"
@@ -53,7 +53,7 @@
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!warehousingTableEditStack.includes(rowIndex) && editWarehousing"
                             (click)="warehousingTableEditRow(rowIndex)">
-                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="value">{{value  | number:'1.0-0'}}</p>
                             <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="warehousingForm.controls[rowIndex]"
