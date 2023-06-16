@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { GlobalVariables } from 'app/shared/global-variables';
 import { RoleController } from 'app/shared/role-controller';
 import { lastValueFrom } from 'rxjs';
-import {F} from "@angular/cdk/keycodes";
+import { F } from "@angular/cdk/keycodes";
 
 @Injectable({
   providedIn: 'root'
@@ -50,25 +50,43 @@ export class RoleService {
           baselineproject: true,
           phaseState: false,
           keyAssumptionsEdit: false,
-          operationalBenefitsEdit:false,
+          operationalBenefitsEdit: false,
         }
         localroleController.projectTeam = false
         localroleController.projectBenefits = false
         localroleController.projectHub.hubSettings = false
         localroleController.projectHub.hubSettings = false
-        localroleController.generalInfo = {
-          basicFields: false,
-          porfolioOwner: false
-        }
+        localroleController.generalInfo.basicFields = false
+        localroleController.generalInfo.porfolioOwner = false
         localroleController.projectHub.localAttributes = false
         localroleController.projectHub.CAPS = false
+        if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
+          localroleController.budgetEdit = false
+        }
+        if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
+          localroleController.generalInfo.confidentialEdit = false
+        }
       }
-      else{
+      else {
         localroleController.generalInfo.porfolioOwner = false
       }
     }
     else if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
       localroleController.generalInfo.porfolioOwner = false
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
+        localroleController.budgetEdit = false
+      }
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
+        localroleController.generalInfo.confidentialEdit = false
+      }
+    }
+    else if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0') {
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
+        localroleController.budgetEdit = false
+      }
+      if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
+        localroleController.generalInfo.confidentialEdit = false
+      }
     }
     console.log("hello")
     return localroleController
