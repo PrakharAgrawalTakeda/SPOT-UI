@@ -112,7 +112,6 @@ export class PortfolioCenterComponent implements OnInit {
   })
 
   filterlist: any = {}
-  separatorKeysCodes: number[] = [ENTER, COMMA];
   lookup: any = [];
   activeaccount: any
   newmainnav: any = [
@@ -123,7 +122,6 @@ export class PortfolioCenterComponent implements OnInit {
       link: '/portfolio-center'
     },
     {
-      // id: 'create-project',
       title: 'Create Project',
       type: 'collapsable',
       link: '/create-project',
@@ -173,10 +171,8 @@ export class PortfolioCenterComponent implements OnInit {
   changePO = false
   changeES = false
   
-  columns = [{ name: 'Name' }, { name: 'Gender' }, { name: 'Company' }];
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
-  @ViewChild('filterDrawerOver') filterDrawerOver: MatSidenav
-  recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
+  // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
       if(this.showContent){
@@ -242,12 +238,6 @@ export class PortfolioCenterComponent implements OnInit {
       "userIsActive": true
     }]
 
-      // var user = [{
-      //   "userAdid": "8195b08b-caf6-4119-85b4-42ae8d7f9e97",
-      //   "userDisplayName": "Waglawala, Zenab (ext)",
-      //   "userIsActive": true
-      // }]
-
     var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
     if (localStorage.getItem('spot-filtersNew') == null) {
       this.filtersnew = this.defaultfilter
@@ -264,7 +254,6 @@ export class PortfolioCenterComponent implements OnInit {
       this.PortfolioFilterForm.patchValue({
         PortfolioOwner: this.filtersnew.PortfolioOwner,
         ProjectTeamMember: this.filtersnew.ProjectTeamMember,
-        // ProjectTeamMember: user,
         ExecutionScope: this.filtersnew.ExecutionScope,
         OwningOrganization: this.filtersnew.OwningOrganization,
         ProjectState: this.filtersnew.ProjectState,
@@ -343,7 +332,6 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
         else if (attribute == "ProjectTeamMember") {
-          // this.filtersnew[attribute][j].userAdid = '8195b08b-caf6-4119-85b4-42ae8d7f9e97'
           var filterItems1 =
           {
             "filterAttribute": attribute,
@@ -372,7 +360,7 @@ export class PortfolioCenterComponent implements OnInit {
           {
             "filterAttribute": "Project/Program",
             "filterOperator": "=",
-            "filterValue": this.filtersnew[attribute][j].ProblemUniqueId,
+            "filterValue": this.filtersnew[attribute][j].problemUniqueId,
             "unionOperator": 2
           }
         }
@@ -470,19 +458,19 @@ export class PortfolioCenterComponent implements OnInit {
             "milstoneTile": [
               {
                 "title": "All Completed On-Time",
-                "value": 48
+                "value": res.milestoneTile.allCompleted
               },
               {
                 "title": "On-Time Last 30 Days",
-                "value": 0
+                "value": res.milestoneTile.lastThirtyDay
               },
               {
                 "title": "Predicted On-Time Next 30 Days",
-                "value": 48
+                "value": res.milestoneTile.predicted30Day
               },
               {
                 "title": "Curent Year Completion Rate",
-                "value": 53
+                "value": res.milestoneTile.completionRate
               },
             ],
             "nextThreeTile": [
@@ -506,23 +494,23 @@ export class PortfolioCenterComponent implements OnInit {
             "budgetTile": [
               {
                 "title": "Plan",
-                "value": 3329,
-                "value2": 315
+                "value": res.budgetTile.capex ? res.budgetTile.capex.plan : 0,
+                "value2": res.budgetTile.opex ? res.budgetTile.opex.plan : 0
               },
               {
                 "title": "Previous",
-                "value": 7762,
-                "value2": 64
+                "value": res.budgetTile.capex ? res.budgetTile.capex.previous : 0,
+                "value2": res.budgetTile.opex ? res.budgetTile.opex.previous : 0
               },
               {
                 "title": "Current",
-                "value": 2151,
-                "value2": 515
+                "value": res.budgetTile.capex ? res.budgetTile.capex.current : 0,
+                "value2": res.budgetTile.opex ? res.budgetTile.opex.current : 0
               },
               {
                 "title": "YTD",
-                "value": 1891,
-                "value2": 121
+                "value": res.budgetTile.capex ? res.budgetTile.capex.ytd : 0,
+                "value2": res.budgetTile.opex ? res.budgetTile.opex.ytd : 0
               }
             ],
             "lastThreeTile": [
@@ -729,7 +717,7 @@ export class PortfolioCenterComponent implements OnInit {
       },
       dataLabels: {
         enabled: true,
-        offsetY: 15
+        offsetY: 4
       },
     };
 
@@ -739,11 +727,6 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   applyfilters() {
-    // var defaultFilter = JSON.parse(localStorage.getItem('spot-filtersNew'))
-    // var Concatenate = false
-    // if (defaultFilter.PortfolioOwner == this.PortfolioFilterForm.controls.PortfolioOwner.value && defaultFilter.ExecutionScope == this.PortfolioFilterForm.controls.ExecutionScope.value){
-    //   Concatenate = true
-    // }
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
     var mainObj = this.originalData
     var dataToSend = []
@@ -869,13 +852,11 @@ export class PortfolioCenterComponent implements OnInit {
                 "value": this.localAttributeForm.controls[mainObj[i].name].value
               }
               mainObj[i].data.push(emptyObject)
-              // mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].name].value
               emptyObject = {
                 "uniqueId": "",
                 "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
               }
               mainObj[i].data.push(emptyObject)
-              // mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
               dataToSend.push(mainObj[i])
             }
             else{
@@ -941,6 +922,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
   resetfilters() {
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
+    localStorage.setItem('spot-localattribute', null)
     this.resetpage()
   }
 
@@ -993,7 +975,7 @@ export class PortfolioCenterComponent implements OnInit {
       const alert = this.fuseAlert.open(comfirmConfig)
     }
     if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
-      // this.filterDrawerOver.toggle();
+      
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please select a portfolio owner and Execution Scope",
         "message": "",
@@ -1032,7 +1014,7 @@ export class PortfolioCenterComponent implements OnInit {
     }
   }
     if (portfolioOwners == "" && executionScope == ""){
-      // this.filterDrawerOver.toggle();
+      
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Please select a portfolio owner and Execution Scope",
         "message": "",
@@ -1120,16 +1102,9 @@ export class PortfolioCenterComponent implements OnInit {
           })
         })
         const originalData = Object.assign([{}], res)
-        // res.forEach(i => {
-        //   if(i.dataType == 2){
-        //     this.localAttributeFormRaw.addControl(i.name, new FormControl(i.data))
-        //   }
-        //   this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
-        // })
         this.dataLoader(res);
         this.originalData = originalData;
       })
-      // this.filterDrawerOver.toggle();
       this.showLA = true
     }
     else{
@@ -1151,7 +1126,6 @@ export class PortfolioCenterComponent implements OnInit {
       })
       this.dataLoader(res);
       this.originalData = originalData;
-    this.filterDrawerOver.toggle();
     })
       this.showLA = true
   }
