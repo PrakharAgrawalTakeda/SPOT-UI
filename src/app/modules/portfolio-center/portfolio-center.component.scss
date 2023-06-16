@@ -56,6 +56,15 @@
     background: white !important;
 }
 
+.datatable-body-cell{
+    cursor: pointer;
+}
+
+.datatable-header{
+    top: 10px;
+    position: relative;
+}
+
 .columnFilter{
     top: 12px !important;
     position: relative !important;

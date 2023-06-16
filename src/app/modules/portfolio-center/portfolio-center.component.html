@@ -324,7 +324,7 @@
                         class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
                 
                         <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30" [sortable]="false" [frozenLeft]="true">
+                            [width]="30" [sortable]="true" [frozenLeft]="true">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon style ="margin-bottom: 30px;" svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
                                     class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
