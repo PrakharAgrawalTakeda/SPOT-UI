@@ -735,6 +735,10 @@ export class PortfolioCenterComponent implements OnInit {
       "uniqueId": "",
       "value": ""
     }
+    if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)){
+      dataToSend = []
+    }
+    else{
     Object.keys(this.localAttributeForm.controls).forEach((name) => {
       const currentControl = this.localAttributeForm.controls[name];
       var i = mainObj.findIndex(x => x.uniqueId === name);
@@ -897,8 +901,9 @@ export class PortfolioCenterComponent implements OnInit {
         }
       }
     })
+  }
     console.log(dataToSend)
-    if(this.changeES == false && this.changePO == false){
+    if (this.changeES == false && this.changePO == false && dataToSend.length != 0){
       var c = 0;
       var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
       if(LA != null || LA != undefined){
