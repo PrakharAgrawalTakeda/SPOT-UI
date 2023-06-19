@@ -72,6 +72,8 @@
             *ngIf="projecthubservice.itemtype == 'FundingBulkEdit'" [mode]="'Project-Charter'"></app-funding-bulk-edit>
             <app-cost-edit
             *ngIf="projecthubservice.itemtype == 'CostEdit'" [mode]="'Project-Charter'"></app-cost-edit>
+            <app-email-notifications-edit
+            *ngIf="projecthubservice.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
             <app-funding-bulk-edit
             *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'" [optionType]="'recommended-option'"></app-funding-bulk-edit>
             <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO2'"
