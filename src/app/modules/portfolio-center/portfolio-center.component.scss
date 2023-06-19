@@ -42,11 +42,11 @@
 }
 
 .frozen-header-class {
-    top: 73px !important;
+    top: 89px !important;
 }
 
 .frozen-header-classID {
-    top: 52px !important;
+    top: 68px !important;
 }
 .datatable-body{
     height: 72vh !important;
@@ -62,8 +62,12 @@
 
 .datatable-header{
     top: 10px;
-    position: relative;
+    // position: relative;
 }
+
+// .datatable-scroll{
+//     background: white !important;
+// }
 
 .columnFilter{
     top: 12px !important;
