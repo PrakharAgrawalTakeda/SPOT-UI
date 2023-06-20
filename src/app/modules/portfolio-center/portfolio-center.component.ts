@@ -170,6 +170,15 @@ export class PortfolioCenterComponent implements OnInit {
   showLA:boolean=false
   changePO = false
   changeES = false
+  // The number of elements in the page
+  size= 0
+  // The total number of elements
+  totalElements= 0
+  // The total number of pages
+  totalPages= 0
+  // The current page number
+  pageNumber= 0
+  groupData:any;
   
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
@@ -393,28 +402,29 @@ export class PortfolioCenterComponent implements OnInit {
   }
     }
     filterGroups[filterGroups.length - 1].groupCondition = 0
-      var groupData
+    this.groupData
     if (localattribute == null){
-      groupData = {
+      this.groupData = {
         "filterGroups": filterGroups,
         "localAttributes": []
       }
     }
     else{
-      groupData = {
+      this.groupData = {
         "filterGroups": filterGroups,
         "localAttributes": localattribute
       }
     }
 
-    console.log("Filter Data : " +groupData)
+    console.log("Filter Data : " +this.groupData)
     //Filtering Projects
-      this.apiService.Filters(groupData).then((res: any) => {
+      this.apiService.Filters(this.groupData).then((response: any) => {
+        this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
       mainNavComponent.refresh()
           console.log(res)
-          this.totalproject = res.totalProjects
+          this.totalproject = response.totalProjects
           this.data = {
             "budgetDistribution": {
               "categories": [
@@ -539,24 +549,25 @@ export class PortfolioCenterComponent implements OnInit {
           };
           this.projectNames = res.projectDetails;
           this.projects.data = res.portfolioDetails;
-          this.projectOverview = res.portfolioDetails
-          for(var i=0;i<this.projectOverview.length;i++){
-            this.projectOverview[i].projectCapitalOe= this.projects.data[i].phase +
-                ' - ' +
-                (this.projects.data[i].capitalPhaseAbbreviation
-                ? this.projects.data[i].capitalPhaseAbbreviation
-                  : 'NA') +
-                ' - ' +
-                (this.projects.data[i].oePhaseAbbreviation
-                ? this.projects.data[i].oePhaseAbbreviation
-                  : 'NA');
-            this.projectOverview[i].calculatedEmissionsImpact= this.projectNames[i].calculatedEmissionsImpact;
-            this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
-            this.projectOverview[i].problemId = this.projectNames[i].problemId;
-            this.projectOverview[i].nextMilestoneFinishDate= this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
-            this.projectOverview[i].executionCompleteDate= this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
-            this.projectOverview[i].totalApprovedCapex= this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
-          }
+          this.setPage(res, 0)
+          // this.projectOverview = res.portfolioDetails
+          // for(var i=0;i<this.projectOverview.length;i++){
+          //   this.projectOverview[i].projectCapitalOe= this.projects.data[i].phase +
+          //       ' - ' +
+          //       (this.projects.data[i].capitalPhaseAbbreviation
+          //       ? this.projects.data[i].capitalPhaseAbbreviation
+          //         : 'NA') +
+          //       ' - ' +
+          //       (this.projects.data[i].oePhaseAbbreviation
+          //       ? this.projects.data[i].oePhaseAbbreviation
+          //         : 'NA');
+          //   this.projectOverview[i].calculatedEmissionsImpact= this.projectNames[i].calculatedEmissionsImpact;
+          //   this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
+          //   this.projectOverview[i].problemId = this.projectNames[i].problemId;
+          //   this.projectOverview[i].nextMilestoneFinishDate= this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
+          //   this.projectOverview[i].executionCompleteDate= this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
+          //   this.projectOverview[i].totalApprovedCapex= this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
+          // }
           
           this.projects.sort = this.recentTransactionsTableMatSort;
           this.showContent = true
@@ -578,6 +589,7 @@ export class PortfolioCenterComponent implements OnInit {
           };
 })
 })
+    })
 })
   this.showcontent = true;
   }
@@ -1308,6 +1320,70 @@ export class PortfolioCenterComponent implements OnInit {
 
   getLookup(key) {
     return this.lookup.filter(x => x.lookUpParentId == key)
+  }
+
+  setPage(res:any, offset){
+    console.log(res)
+    // this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
+    if (res != ''){
+      this.projectOverview = res.portfolioDetails
+      for (var i = 0; i < this.projectOverview.length; i++) {
+        this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
+          ' - ' +
+          (this.projects.data[i].capitalPhaseAbbreviation
+            ? this.projects.data[i].capitalPhaseAbbreviation
+            : 'NA') +
+          ' - ' +
+          (this.projects.data[i].oePhaseAbbreviation
+            ? this.projects.data[i].oePhaseAbbreviation
+            : 'NA');
+        this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+        this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
+        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
+        this.projectOverview[i].problemId = this.projectNames[i].problemId;
+        this.projectOverview[i].nextMilestoneFinishDate = this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
+        this.projectOverview[i].executionCompleteDate = this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
+        // this.projectOverview[i].totalApprovedCapex = this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
+      }
+      this.size = 100;
+      this.totalElements = this.totalproject;
+      this.totalPages = this.totalproject /100;
+      this.pageNumber = 1
+    }
+    else{
+      this.projectOverview = []
+      this.projects.data = [];
+        this.apiService.FiltersByPage(this.groupData, (offset.offset)*100, 100).then((res: any) => {
+          this.projectOverview = res.portfolioDetails
+          this.projects.data = res.portfolioDetails;
+          for (var i = 0; i < this.projectOverview.length; i++) {
+            this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
+              ' - ' +
+              (this.projects.data[i].capitalPhaseAbbreviation
+                ? this.projects.data[i].capitalPhaseAbbreviation
+                : 'NA') +
+              ' - ' +
+              (this.projects.data[i].oePhaseAbbreviation
+                ? this.projects.data[i].oePhaseAbbreviation
+                : 'NA');
+            this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+            this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits;
+            this.projectOverview[i].problemId = res.projectDetails[i].problemId;
+            this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
+            this.projectOverview[i].nextMilestoneFinishDate = this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
+            this.projectOverview[i].executionCompleteDate = this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
+            // this.projectOverview[i].totalApprovedCapex = this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
+          }
+          this.size = 100;
+          this.totalElements = this.totalproject;
+          this.totalPages = this.totalproject / 100;
+          this.pageNumber = offset.offset
+        })
+    }
+    // })
   }
 
 }
