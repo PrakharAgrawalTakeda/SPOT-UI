@@ -80,13 +80,12 @@
                 </spot-input>
                 <spot-input class="w-full read-only" formControlName="predefinedInvestmentId" [label]="'Global/Regional Predefined Investment'">
                 </spot-input>
-
                 <spot-input class="w-full read-only" formControlName="where" [label]="'Where'">
                 </spot-input>
                 <spot-input class="w-full read-only" formControlName="why" [label]="'Why'">
                 </spot-input>
-                <spot-input class="w-full read-only" formControlName="fundingApprovalNeedDate" [label]="'Funding Approval Need Date'">
-                </spot-input>
+                <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate" [label]="'Funding Approval Need Date'">
+                </spot-input-date>
             </div>
             <spot-textarea class="w-full read-only" formControlName="budgetCommentary" name="projectDescription"
                            [label]="'Budget Commentary'">

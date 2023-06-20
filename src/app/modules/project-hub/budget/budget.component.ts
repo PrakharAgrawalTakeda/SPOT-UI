@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../../core/auth/auth.service";
 import {ProjectApiService} from "../common/project-api.service";
 import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
+import {takeUntil} from "rxjs";
 @Component({
     selector: 'app-budget',
     templateUrl: './budget.component.html',
@@ -24,6 +25,11 @@ export class BudgetComponent implements OnInit {
                 private portApiService: PortfolioApiService,
                 private authService: AuthService,
                 private apiService: ProjectApiService,) {
+        this.projectHubService.submitbutton.subscribe(res => {
+            if (res == true) {
+                this.dataloader()
+            }
+        })
     }
 
     budgetForm = new FormGroup({
@@ -82,9 +88,9 @@ export class BudgetComponent implements OnInit {
             assetPlaced:  response.budget.definitiveCrapprovalDate,
             budgetId:  response.budget.capitalBudgetId,
             gmsBudgetowner:  this.getPortfolioOwnerNameById(response.budget.budgetOwner),
-            predefinedInvestmentId:  response.budget.predefinedInvestmentId,
-            where:  response.budget.whereId,
-            why:  response.budget.whyId,
+            predefinedInvestmentId:  this.getLookUpName(response.budget.predefinedInvestmentId),
+            where:  this.getLookUpName(response.budget.whereId),
+            why:  this.getLookUpName(response.budget.whyId),
             fundingApprovalNeedDate:  response.budget.fundingApprovalNeedDate,
             projectFundingStatus:  this.getLookUpName(response.budget.fundingStatusId),
             totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
@@ -95,7 +101,7 @@ export class BudgetComponent implements OnInit {
     }
 
     getLookUpName(id: string): string {
-        return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id).lookUpName : ''
+        return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
     }
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0].portfolioOwner;
