@@ -1351,7 +1351,7 @@ export class PortfolioCenterComponent implements OnInit {
       this.totalPages = this.totalproject /100;
       this.pageNumber = 1
     }
-    else if (offset.offset != 0){
+    else{
       this.projectOverview = []
       this.projects.data = [];
         this.apiService.FiltersByPage(this.groupData, (offset.offset)*100, 100).then((res: any) => {
