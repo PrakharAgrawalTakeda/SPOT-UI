@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import { FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {ProjectApiService} from "../../common/project-api.service";
 import {FormControl, FormGroup} from "@angular/forms";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-budget-additional-edit',
@@ -30,31 +31,46 @@ export class BudgetAdditionalEditComponent {
     budgetInfo: any = {}
     required: boolean = false;
     budgetInfoForm = new FormGroup({
-        assetPlaced: new FormControl(''),
+        apisdate: new FormControl(''),
         opexRequired: new FormControl(false),
     })
 
     ngOnInit(): void {
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        this.budgetInfo = this.projectHubService.all;
         if(this.mode=='Asset-In-Service'){
-            this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-            this.apiService.getBudgetPageInfo(this.projectHubService.projectid).then((res: any) => {
-                this.budgetInfo = res
-                this.budgetInfoForm.patchValue({
-                    assetPlaced: res.budget.definitiveCrapprovalDate,
-                })
-                this.viewContent = true
+            this.budgetInfoForm.patchValue({
+                apisdate: this.budgetInfo.apisdate,
             })
+            this.viewContent = true
         }
         else{
             this.budgetInfoForm.patchValue({
-                opexRequired: this.projectHubService.all,
+                opexRequired: this.budgetInfo.opexRequired,
             })
             this.viewContent = true
         }
 
     }
+    prepareDataforSubmit(formValue): any {
+        const mainObj = this.budgetInfo;
+        if(this.mode=='Asset-In-Service'){
+            mainObj.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
+        }else{
+            mainObj.opexRequired = formValue.opexRequired;
+        }
+        return mainObj;
+    }
 
     submitBudgetInfo() {
-
+        this.projectHubService.isFormChanged = false
+        const formValue = this.budgetInfoForm.getRawValue();
+        const mainObj =this.prepareDataforSubmit(formValue)
+        this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
+            this.projectHubService.isNavChanged.next(true)
+            this.projectHubService.submitbutton.next(true)
+            this.projectHubService.successSave.next(true)
+            this.projectHubService.toggleDrawerOpen('', '', [], '')
+        })
     }
 }

@@ -5,7 +5,6 @@ import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../../core/auth/auth.service";
 import {ProjectApiService} from "../common/project-api.service";
 import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
-import {takeUntil} from "rxjs";
 @Component({
     selector: 'app-budget',
     templateUrl: './budget.component.html',
@@ -19,6 +18,7 @@ export class BudgetComponent implements OnInit {
     filterCriteria: any = {}
     opexField:boolean = false;
     capexField:boolean = false;
+    budgetPageInfo:any;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -37,7 +37,7 @@ export class BudgetComponent implements OnInit {
         opexRequired: new FormControl(false),
         parentProgram: new FormControl(''),
         localCurrency: new FormControl(''),
-        assetPlaced: new FormControl(''),
+        apisdate: new FormControl(''),
         budgetId: new FormControl(''),
         gmsBudgetowner: new FormControl(''),
         predefinedInvestmentId: new FormControl(''),
@@ -66,6 +66,7 @@ export class BudgetComponent implements OnInit {
             this.lookUpData = lookup
             this.projectHubService.lookUpMaster = lookup
             this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
+                this.budgetPageInfo = res.budget;
                 this.opexField = !!res.budget.opExRequired;
                 this.capexField = !!res.budget.capexRequired;
                 this.generalInfoPatchValue(res)
@@ -85,7 +86,7 @@ export class BudgetComponent implements OnInit {
             opexRequired:  !!response.budget.opExRequired,
             parentProgram:  response.parentProgram,
             localCurrency:  this.localCurrency.localCurrencyAbbreviation,
-            assetPlaced:  response.budget.definitiveCrapprovalDate,
+            apisdate:  response.budget.apisdate,
             budgetId:  response.budget.capitalBudgetId,
             gmsBudgetowner:  this.getPortfolioOwnerNameById(response.budget.budgetOwner),
             predefinedInvestmentId:  this.getLookUpName(response.budget.predefinedInvestmentId),
@@ -97,7 +98,6 @@ export class BudgetComponent implements OnInit {
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
             budgetCommentary:  response.budget.budgetComment,
         })
-
     }
 
     getLookUpName(id: string): string {

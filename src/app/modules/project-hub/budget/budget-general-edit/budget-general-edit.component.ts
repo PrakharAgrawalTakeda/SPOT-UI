@@ -228,7 +228,7 @@ export class BudgetGeneralEditComponent {
         mainObj.predefinedInvestmentId = formValue.predefinedInvestmentId.lookUpId
         mainObj.whereId = formValue.where
         mainObj.whyId = formValue.why
-        mainObj.fundingApprovalNeedDate = formValue.fundingApprovalNeedDate
+        mainObj.fundingApprovalNeedDate = formValue.fundingApprovalNeedDate ? moment(formValue.fundingApprovalNeedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
         mainObj.capExRequired = formValue.capexRequired
         mainObj.projectFundingStatus = formValue.projectFundingStatus
         mainObj.totalApprovedCapEx = formValue.totalApprovedCapex
