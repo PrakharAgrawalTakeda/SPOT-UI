@@ -5,7 +5,7 @@
         <!-- Drawer -->
         <mat-drawer class="absolute inset-0 w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             #filterDrawer>
-            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm"
+            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent"
                 style="overflow-y: scroll; height: 95vh;">
                 <div class=" form-ask-need h-[106.5vh]  overflow-y-scroll">
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
@@ -36,6 +36,16 @@
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.phase" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
+
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="CapitalPhase" class="w-full" name="CapitalPhase"
+                        [label]="'Capital Phase'" [placeholder]="'Capital Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="filteredPhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                    </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="OEPhase" class="w-full" name="OEPhase"
+                        [label]="'OE Phase'" [placeholder]="'OE Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="oePhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                    </spot-multiselect-autocomplete>
+
                     <spot-multiselect-autocomplete formControlName="ProjectType" class="w-full" name="ProjectType"
                         [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
                         [idPointer]="'name'" [dropDownArray]="projectType">

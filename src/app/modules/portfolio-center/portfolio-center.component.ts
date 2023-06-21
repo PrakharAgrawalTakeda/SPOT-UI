@@ -66,6 +66,8 @@ export class PortfolioCenterComponent implements OnInit {
     "OwningOrganization": [],
     "ProjectState": [],
     "ProjectPhase": [],
+    "CapitalPhase": [],
+    "OEPhase": [],
     "ProjectType": [],
     "Product": [],
     "TotalCAPEX": [],
@@ -83,6 +85,8 @@ export class PortfolioCenterComponent implements OnInit {
     "OwningOrganization": [],
     "ProjectState": [],
     "ProjectPhase": [],
+    "CapitalPhase": [],
+    "OEPhase": [],
     "ProjectType": [],
     "Product": [],
     "TotalCAPEX": [],
@@ -100,6 +104,8 @@ export class PortfolioCenterComponent implements OnInit {
     OwningOrganization: new FormControl(),
     ProjectState: new FormControl(),
     ProjectPhase: new FormControl(),
+    CapitalPhase: new FormControl(),
+    OEPhase: new FormControl(),
     ProjectType: new FormControl(),
     Product: new FormControl(),
     TotalCAPEX: new FormControl(),
@@ -110,6 +116,10 @@ export class PortfolioCenterComponent implements OnInit {
     projectName: new FormControl(),
     OverallStatus: new FormControl(),
   })
+
+  filteredPhaseArray = []
+  oePhaseArray = []
+  capitalPhaseArray: any
 
   filterlist: any = {}
   lookup: any = [];
@@ -193,6 +203,11 @@ export class PortfolioCenterComponent implements OnInit {
         this.changeES = true
       }
     })
+    this.PortfolioFilterForm.controls.ProjectPhase.valueChanges.subscribe((value) => {
+      if (this.showContent) {
+        this.changePhase(value);
+      }
+      })
   }
 
   ngOnInit(): void {
@@ -241,6 +256,9 @@ export class PortfolioCenterComponent implements OnInit {
       this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
       this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
 
+      this.apiService.getCapitalPhase().then((res: any) => {
+        this.capitalPhaseArray = res;
+
     var user = [{
       "userAdid": this.activeaccount.localAccountId,
       "userDisplayName": this.activeaccount.name,
@@ -266,6 +284,8 @@ export class PortfolioCenterComponent implements OnInit {
         OwningOrganization: this.filtersnew.OwningOrganization,
         ProjectState: this.filtersnew.ProjectState,
         ProjectPhase: this.filtersnew.ProjectPhase,
+        CapitalPhase: this.filtersnew.CapitalPhase,
+        OEPhase: this.filtersnew.OEPhase,
         ProjectType: this.filtersnew.ProjectType,
         Product: this.filtersnew.Product,
         TotalCAPEX: this.filtersnew.TotalCAPEX,
@@ -383,6 +403,15 @@ export class PortfolioCenterComponent implements OnInit {
             "unionOperator": 2
           }
         }
+        else if (attribute == "CapitalPhase" || attribute == "OEPhase") {
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute][j].capitalPhaseID,
+            "unionOperator": 2
+          }
+        }
         else {
           var filterItems1 =
           {
@@ -418,13 +447,12 @@ export class PortfolioCenterComponent implements OnInit {
 
     console.log("Filter Data : " +this.groupData)
     //Filtering Projects
-      this.apiService.Filters(this.groupData).then((response: any) => {
-        this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
+      this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
       mainNavComponent.refresh()
           console.log(res)
-          this.totalproject = response.totalProjects
+          this.totalproject = res.totalProjects
           this.data = {
             "budgetDistribution": {
               "categories": [
@@ -550,24 +578,6 @@ export class PortfolioCenterComponent implements OnInit {
           this.projectNames = res.projectDetails;
           this.projects.data = res.portfolioDetails;
           this.setPage(res, 0)
-          // this.projectOverview = res.portfolioDetails
-          // for(var i=0;i<this.projectOverview.length;i++){
-          //   this.projectOverview[i].projectCapitalOe= this.projects.data[i].phase +
-          //       ' - ' +
-          //       (this.projects.data[i].capitalPhaseAbbreviation
-          //       ? this.projects.data[i].capitalPhaseAbbreviation
-          //         : 'NA') +
-          //       ' - ' +
-          //       (this.projects.data[i].oePhaseAbbreviation
-          //       ? this.projects.data[i].oePhaseAbbreviation
-          //         : 'NA');
-          //   this.projectOverview[i].calculatedEmissionsImpact= this.projectNames[i].calculatedEmissionsImpact;
-          //   this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
-          //   this.projectOverview[i].problemId = this.projectNames[i].problemId;
-          //   this.projectOverview[i].nextMilestoneFinishDate= this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
-          //   this.projectOverview[i].executionCompleteDate= this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
-          //   this.projectOverview[i].totalApprovedCapex= this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
-          // }
           
           this.projects.sort = this.recentTransactionsTableMatSort;
           this.showContent = true
@@ -588,8 +598,8 @@ export class PortfolioCenterComponent implements OnInit {
             }
           };
 })
-})
     })
+  })
 })
   this.showcontent = true;
   }
@@ -1342,6 +1352,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact;
         this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
         this.projectOverview[i].problemId = this.projectNames[i].problemId;
+        this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
         this.projectOverview[i].nextMilestoneFinishDate = this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
         this.projectOverview[i].executionCompleteDate = this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
         // this.projectOverview[i].totalApprovedCapex = this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
@@ -1384,6 +1395,36 @@ export class PortfolioCenterComponent implements OnInit {
         })
     }
     // })
+  }
+
+  changePhase(phaseId) {
+    var data = this.filteredPhaseArray
+    var dataOE = this.oePhaseArray
+    var result = []
+    var resultOE = []
+    for(var i=0;i<phaseId.length;i++){
+      result = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId[i].lookUpId && item.isOEPhase == false);
+      // this.filteredPhaseArray.push(data)
+    }
+    if(data.length == 0){
+      this.filteredPhaseArray = result
+    }
+    else{
+      this.filteredPhaseArray = [...data, ...result]
+    }
+
+    for (var i = 0; i < phaseId.length; i++) {
+      resultOE = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId[i].lookUpId && item.isOEPhase == true);
+      // this.filteredPhaseArray.push(data)
+    }
+    if (dataOE.length == 0) {
+      this.oePhaseArray = resultOE
+    }
+    else {
+      this.oePhaseArray = [...dataOE, ...resultOE]
+    }
+
+    // this.oePhaseArray = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId && item.isOEPhase == true)
   }
 
 }
