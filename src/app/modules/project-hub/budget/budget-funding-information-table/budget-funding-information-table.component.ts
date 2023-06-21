@@ -3,6 +3,7 @@ import {ProjectApiService} from "../../common/project-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 @Component({
     selector: 'app-budget-funding-information-table',
     templateUrl: './budget-funding-information-table.component.html',
@@ -10,11 +11,15 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
 })
 export class BudgetFundingInformationTableComponent {
     @Input() editable: boolean
-    fundingRequests: any = []
+    @Input() fundingRequests: any = []
     id: string = ''
+    localCurrency:any = [];
 
-    constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
-        , public fuseAlert: FuseConfirmationService, private router: Router) {
+    constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute,
+                public projecthubservice: ProjectHubService,
+                private portfoliService: PortfolioApiService,
+                public fuseAlert: FuseConfirmationService,
+                private router: Router) {
         this.projecthubservice.submitbutton.subscribe(res => {
             if (res == true) {
                 this.dataloader()
@@ -28,9 +33,15 @@ export class BudgetFundingInformationTableComponent {
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        this.portfoliService.getLocalCurrency().then(currency => {
+            this.localCurrency = currency
+        })
         this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
             this.fundingRequests = res
         })
+    }
+    getCurrency(id: string): string{
+        return id && id != '' ? this.localCurrency.find(x => x.localCurrencyId == id).localCurrencyAbbreviation : ''
     }
 
     deleteFundingRequest(id: string) {

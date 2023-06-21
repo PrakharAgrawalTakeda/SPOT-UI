@@ -7,6 +7,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
 import {Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
+import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 
 @Component({
     selector: 'app-budget-funding-information-bulk-edit',
@@ -14,8 +15,13 @@ import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case
     styleUrls: ['./budget-funding-information-bulk-edit.component.scss']
 })
 export class BudgetFundingInformationBulkEditComponent {
-    constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService,
-                public fuseAlert: FuseConfirmationService, private router: Router) {
+    constructor(public apiService: ProjectApiService,
+                public projecthubservice: ProjectHubService,
+                public authService: AuthService,
+                public role: RoleService,
+                private portfoliService: PortfolioApiService,
+                public fuseAlert: FuseConfirmationService,
+                private router: Router) {
         this.fundingRequestForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
                 this.formValue()
@@ -35,59 +41,71 @@ export class BudgetFundingInformationBulkEditComponent {
     lookupdata: any[]
     frTableEditStack = []
     fundingRequestForm = new FormArray([])
+    localCurrency:any = [];
 
     ngOnInit(): void {
         this.dataloader()
     }
 
     dataloader() {
-        this.apiService.getKeyAssumptionsByOption(this.projecthubservice.projectid, GlobalBusinessCaseOptions.OPTION_1).then((res: any) => {
-            this.fundingRequests = res
-            if (this.fundingRequests.length > 0) {
-                this.fundingRequestsDb = this.fundingRequests.map(x => {
-                    return {
-                        "fundingRequestId": x.fundingRequestId,
-                        "approvalCurrency": x.approvalCurrency,
-                        "CAPEXAmount": x.CAPEXAmount,
-                        "OPEXAmount": x.opexAmount,
-                        "amendedCAR": x.amendedCAR,
-                        "fundingStatus": x.fundingStatus,
-                    }
-                })
-                for (var i of this.fundingRequests) {
-                    this.fundingRequestForm.push(new FormGroup({
-                        fundingRequestId: new FormControl(i.fundingRequestId),
-                        approvalCurrency: new FormControl(i.approvalCurrency),
-                        CAPEXAmount: new FormControl(i.CAPEXAmount),
-                        OPEXAmount: new FormControl(i.OPEXAmount),
-                        amendedCAR: new FormControl(i.amendedCAR),
-                        fundingStatus: new FormControl(i.fundingStatus),
-                    }))
-                }
-            }
-            this.disabler();
-            this.viewContent = true;
+        this.fundingRequests = this.projecthubservice.all;
+        this.portfoliService.getLocalCurrency().then(currency => {
+            this.localCurrency = currency
         })
+        if (this.fundingRequests.length > 0) {
+                    this.fundingRequestsDb = this.fundingRequests.map(x => {
+                        return {
+                            "budgetIoid": x.budgetIoid,
+                            "projectId": x.projectId,
+                            "budgetIo1": x.budgetIo1,
+                            "carapprovedCapex": x.carapprovedCapex,
+                            "carapprovedOpex": x.carapprovedOpex,
+                            "ammendedCar": x.ammendedCar,
+                            "localCarapprovedCapex": x.localCarapprovedCapex,
+                            "localCarapprovedOpex": x.localCarapprovedOpex,
+                            "localCurrencyId": x.localCurrencyId,
+                            "approvalStatus": x.approvalStatus,
+                            "approvalCurrency": x.approvalCurrency,
+                            "keep": x.keep
+                        }
+                    })
+                    for (var i of this.fundingRequests) {
+                        this.fundingRequestForm.push(new FormGroup({
+                            budgetIoid: new FormControl(i.budgetIoid),
+                            projectId: new FormControl(i.projectId),
+                            budgetIo1: new FormControl(i.budgetIo1),
+                            carapprovedCapex: new FormControl(i.carapprovedCapex),
+                            carapprovedOpex: new FormControl(i.carapprovedOpex),
+                            ammendedCar: new FormControl(i.ammendedCar),
+                            localCarapprovedCapex: new FormControl(i.localCarapprovedCapex),
+                            localCarapprovedOpex: new FormControl(i.localCarapprovedOpex),
+                            localCurrencyId: new FormControl(i.localCurrencyId),
+                            approvalStatus: new FormControl(i.approvalStatus),
+                            approvalCurrency: new FormControl(i.approvalCurrency),
+                            keep: new FormControl(i.keep),
+                        }))
+                    }
+                }
+        this.viewContent = true;
     }
-
-    disabler() {
-        var formValue = this.fundingRequestForm.getRawValue()
-        if (formValue.length > 0) {
-        }
-    }
-
     formValue() {
         var form = this.fundingRequestForm.getRawValue()
         if (form.length > 0) {
             this.fundingRequestsSubmit = []
             for (var i of form) {
                 this.fundingRequestsSubmit.push({
-                    "fundingRequestId": i.fundingRequestId,
+                    "budgetIoid": i.budgetIoid,
+                    "projectId": this.projecthubservice.projectid,
+                    "budgetIo1": i.budgetIo1,
+                    "carapprovedCapex": i.carapprovedCapex,
+                    "carapprovedOpex": i.carapprovedOpex,
+                    "ammendedCar": i.ammendedCar,
+                    "localCarapprovedCapex": i.localCarapprovedCapex,
+                    "localCarapprovedOpex": i.localCarapprovedOpex,
+                    "localCurrencyId": i.localCurrencyId,
+                    "approvalStatus": i.approvalStatus,
                     "approvalCurrency": i.approvalCurrency,
-                    "CAPEXAmount": i.CAPEXAmount,
-                    "OPEXAmount": i.OPEXAmount,
-                    "amendedCAR": i.amendedCAR,
-                    "fundingStatus": i.fundingStatus,
+                    "keep": i.keep,
 
                 })
             }
@@ -99,22 +117,33 @@ export class BudgetFundingInformationBulkEditComponent {
     addFR() {
         var j = [{}]
         j = [{
-            fundingRequestId: '',
-            approvalCurrency: '',
-            OPEXAmount: '',
-            CAPEXAmount: '',
-            amendedCAR: '',
-            fundingStatus: '',
+            budgetIoid: '',
+            projectId: '',
+            budgetIo1: '',
+            carapprovedCapex:null,
+            carapprovedOpex: null,
+            ammendedCar: '',
+            localCarapprovedCapex: '',
+            localCarapprovedOpex: '',
+            localCurrencyId: '',
+            approvalStatus:'Approved',
+            approvalCurrency:'',
+            keep: true,
         }]
         this.fundingRequestForm.push(new FormGroup({
-            fundingRequestId: new FormControl(''),
+            budgetIoid: new FormControl(''),
+            projectId: new FormControl(''),
+            budgetIo1: new FormControl(''),
+            carapprovedCapex: new FormControl(null),
+            carapprovedOpex: new FormControl(null),
+            ammendedCar: new FormControl(''),
+            localCarapprovedCapex: new FormControl(''),
+            localCarapprovedOpex: new FormControl(''),
+            localCurrencyId: new FormControl(''),
+            approvalStatus: new FormControl('Approved'),
             approvalCurrency: new FormControl(''),
-            CAPEXAmount: new FormControl(''),
-            OPEXAmount: new FormControl(''),
-            amendedCAR: new FormControl(''),
-            fundingStatus: new FormControl(''),
+            keep: new FormControl(true),
         }))
-        this.disabler()
         this.fundingRequests = [...this.fundingRequests, ...j]
         this.frTableEditStack.push(this.fundingRequests.length - 1)
         var div = document.getElementsByClassName('datatable-scroll')[0]
@@ -128,13 +157,28 @@ export class BudgetFundingInformationBulkEditComponent {
 
     }
 
-    frTableEditRow(rowIndex) {
+    frTableEditRow(rowIndex,row?) {
         if (!this.frTableEditStack.includes(rowIndex)) {
             this.frTableEditStack.push(rowIndex)
         }
-        this.disabler()
     }
-
+    checkRow(row,rowIndex):boolean {
+        if (this.frTableEditStack.includes(rowIndex)) {
+            return !!row.keep;
+        }else{
+            return false;
+        }
+    }
+    checkFundingCell(row,rowIndex):boolean {
+        if (this.frTableEditStack.includes(rowIndex) && row.budgetIoid=="") {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    getCurrency(id: string): string{
+        return id && id != '' ? this.localCurrency.find(x => x.localCurrencyId == id)?.localCurrencyAbbreviation : ''
+    }
     deleteFR(rowIndex: number) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
@@ -168,22 +212,95 @@ export class BudgetFundingInformationBulkEditComponent {
                     this.frTableEditStack = this.frTableEditStack.map(function (value) {
                         return value > rowIndex ? value - 1 : value;
                     })
-                    this.disabler()
                     this.fundingRequests = [...this.fundingRequests]
                 }
             }
         )
     }
-
+    checkDuplicateIds(objects: any[]): string {
+        const ids = new Set<string>();
+        for (const obj of objects) {
+            if (ids.has(obj.budgetIoid)) {
+                return obj.budgetIoid;
+            }
+            ids.add(obj.budgetIoid);
+        }
+        return '';
+    }
+     checkEmptyIds(myList: any[]): boolean {
+        const idMap: { [id: string]: boolean } = {};
+        for (const object of myList) {
+            const id = object.budgetIoid;
+            if (!id || id.trim() === '') {
+                return true;
+            }
+            if (!object.approvalCurrency || object.approvalCurrency.trim() === '') {
+                return true;
+            }
+            idMap[id] = true;
+        }
+        return false;
+    }
     submitFundingRequests() {
         if (JSON.stringify(this.fundingRequestsDb) != JSON.stringify(this.fundingRequestsSubmit)) {
-            this.projecthubservice.isFormChanged = false
-            this.formValue()
-            this.apiService.bulkEditKeyAssumptions(this.fundingRequestsSubmit, this.projecthubservice.projectid).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                this.projecthubservice.isNavChanged.next(true)
-            })
+            if(this.checkEmptyIds(this.fundingRequestsSubmit)){
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "To save your changes it is required to populate all mandatory fields highlighted in yellow!",
+                    "message": "",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": false,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+            }else{
+                let duplicate = this.checkDuplicateIds(this.fundingRequestsSubmit)
+                if(duplicate!="") {
+                    var comfirmConfig: FuseConfirmationConfig = {
+                        "title": "The Approval ID (" + duplicate + ") you have entered does already exist and cannot be added a second time. Please change or remove it",
+                        "message": "",
+                        "icon": {
+                            "show": true,
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warning"
+                        },
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Okay",
+                                "color": "primary"
+                            },
+                            "cancel": {
+                                "show": false,
+                                "label": "Cancel"
+                            }
+                        },
+                        "dismissible": true
+                    }
+                    const alert = this.fuseAlert.open(comfirmConfig)
+                }else{
+                    this.projecthubservice.isFormChanged = false
+                    this.formValue()
+                    this.apiService.bulkEditFundingRequests(this.fundingRequestsSubmit, this.projecthubservice.projectid).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
+            }
 
         } else {
             this.projecthubservice.submitbutton.next(true)

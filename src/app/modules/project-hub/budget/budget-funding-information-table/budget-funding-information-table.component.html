@@ -19,32 +19,32 @@
     <div class="overflow-x-auto">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                        class="font-medium text-sm text-default whitespace-nowrap" [rows]="fundingRequests">
-            <ngx-datatable-column name="Funding Request ID" prop="fundingRequestID" [flexGrow]="2">
+            <ngx-datatable-column name="Funding Request ID" prop="budgetIoid" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Approval Currency" prop="approvalCurrency" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
+                    <p>{{getCurrency(value)}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="CAPEX Amount" prop="capexAmount" [flexGrow]="2">
+            <ngx-datatable-column name="CAPEX Amount" prop="localCarapprovedCapex" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="OPEX Amount" prop="opexAmmunt" [flexGrow]="2">
+            <ngx-datatable-column name="OPEX Amount" prop="localCarapprovedOpex" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Amended CAR" prop="amendedCAR" [flexGrow]="2">
+            <ngx-datatable-column name="Amended CAR" prop="ammendedCar" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="FundingStatus" prop="fundingStatus" [flexGrow]="2">
+            <ngx-datatable-column name="Funding Status" prop="approvalStatus" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>

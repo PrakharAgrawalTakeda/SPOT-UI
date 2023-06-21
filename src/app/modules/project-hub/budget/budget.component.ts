@@ -19,6 +19,7 @@ export class BudgetComponent implements OnInit {
     opexField:boolean = false;
     capexField:boolean = false;
     budgetPageInfo:any;
+    fundingInformations: any = []
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -67,6 +68,7 @@ export class BudgetComponent implements OnInit {
             this.projectHubService.lookUpMaster = lookup
             this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
                 this.budgetPageInfo = res.budget;
+                this.fundingInformations = res.budgetIo;
                 this.opexField = !!res.budget.opExRequired;
                 this.capexField = !!res.budget.capexRequired;
                 this.generalInfoPatchValue(res)
