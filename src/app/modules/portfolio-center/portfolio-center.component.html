@@ -5,7 +5,7 @@
         <!-- Drawer -->
         <mat-drawer class="absolute inset-0 w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             #filterDrawer>
-            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm"
+            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent"
                 style="overflow-y: scroll; height: 95vh;">
                 <div class=" form-ask-need h-[106.5vh]  overflow-y-scroll">
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
@@ -36,6 +36,16 @@
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.phase" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
+
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="CapitalPhase" class="w-full" name="CapitalPhase"
+                        [label]="'Capital Phase'" [placeholder]="'Capital Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="filteredPhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                    </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="OEPhase" class="w-full" name="OEPhase"
+                        [label]="'OE Phase'" [placeholder]="'OE Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="oePhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                    </spot-multiselect-autocomplete>
+
                     <spot-multiselect-autocomplete formControlName="ProjectType" class="w-full" name="ProjectType"
                         [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
                         [idPointer]="'name'" [dropDownArray]="projectType">
@@ -319,9 +329,13 @@
                             Generate Reports
                         </button>
                 </div>
-                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showcontent">
-                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
-                        class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
+                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showContent">
+                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force" [externalPaging]="true"
+        [count]="totalElements"
+        [offset]="pageNumber"
+        [limit]="size"
+        (page)="setPage('',$event)"
+        [footerHeight]="50" [virtualization]="false" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
                 
                         <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30" [sortable]="true" [frozenLeft]="true">
@@ -415,7 +429,16 @@
 
                         <ngx-datatable-column name="Total CAPEX Approved/Forecast" prop="totalApprovedCapex" [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value}}<br> {{ row.budgetId }}</p>
+                                <!-- <p>{{value}}</p> -->
+                                <div class="grid grid-cols-1 text-right">
+                                    {{
+                                    row.totalApprovedCapex ? row.totalApprovedCapex.toLocaleString() : 0
+                                    }} &nbsp; {{row.currencyAbb}}
+                                </div>
+                                <br />
+                                <div class="text-right">
+                                    {{ row.forecast ? row.forecast.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
+                                </div>
                             </ng-template>
                         </ngx-datatable-column>
 
