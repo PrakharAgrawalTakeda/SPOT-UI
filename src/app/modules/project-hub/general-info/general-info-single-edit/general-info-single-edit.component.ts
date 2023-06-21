@@ -192,7 +192,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
           portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
           excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-          enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+          enviornmentalPortfolio: res.enviornmentalPortfolio,
           isArchived: res.projectData.isArchived,
           isConfidential: res.projectData.isConfidential,
           isCapsProject: res.projectData.isCapsProject,
