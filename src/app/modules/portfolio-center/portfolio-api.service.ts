@@ -83,4 +83,11 @@ export class PortfolioApiService {
     return response
   }
 
+  getCapitalPhase() {
+    var url = GlobalVariables.apiurl + "ProjectHubData/CapitalPhase"
+    const abc$ = this.http.get(url)
+    const response = lastValueFrom(abc$)
+    return response
+  }
+
 }
