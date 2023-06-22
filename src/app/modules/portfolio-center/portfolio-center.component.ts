@@ -338,10 +338,15 @@ export class PortfolioCenterComponent implements OnInit {
       localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
     }
     // var ObjectToSend = this.PortfolioFilterForm.getRawValue()
-        if (this.filtersnew.AGILEWorkstream.filter(data => data.lookUpId == "6e9c3845-5a1f-4891-8825-a1add299a455").length > 0) {
-          this.filtersnew.AGILEWorkstream = this.AgileWorkstream
-          this.filtersnew.AGILEWorkstream.splice(0, 1)
-    }
+        if (this.filtersnew.AGILEWorkstream != null){
+          if (this.filtersnew.AGILEWorkstream.length != 0){
+            if (this.filtersnew.AGILEWorkstream.filter(data => data.lookUpId == "6e9c3845-5a1f-4891-8825-a1add299a455").length > 0) {
+              this.filtersnew.AGILEWorkstream = this.AgileWorkstream
+              this.filtersnew.AGILEWorkstream.splice(0, 1)
+            }
+          }
+        }
+    
     var filterKeys = Object.keys(this.filtersnew);
     var filterGroups = []
     if (this.filtersnew.PortfolioOwner != null && this.filtersnew.PortfolioOwner.length != 0){
