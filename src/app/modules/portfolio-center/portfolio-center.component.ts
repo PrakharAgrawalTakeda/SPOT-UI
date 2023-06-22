@@ -250,14 +250,31 @@ export class PortfolioCenterComponent implements OnInit {
       })
 
     this.auth.lookupMaster().then(data => {
+      var AGILEall = {
+        isActive: true,
+        kpiImpact:null,
+        lookUpId:"6e9c3845-5a1f-4891-8825-a1add299a455",
+        lookUpName:"All Workstream",
+        lookUpOrder:50,
+        lookUpParentId:"f4486388-4c52-48fc-8c05-836878da2247",
+      }
       this.lookup = data
       this.totalCAPEX = this.lookup.filter(result => result.lookUpParentId == "10F36AC1-23CB-4326-8701-2416F8AE679E")
       this.AgileWorkstream = this.lookup.filter(result => result.lookUpParentId == "f4486388-4c52-48fc-8c05-836878da2247")
       this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
       this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
+      this.AgileWorkstream.push(AGILEall)
 
       this.apiService.getCapitalPhase().then((res: any) => {
         this.capitalPhaseArray = res;
+        for (var z = 0; z < this.capitalPhaseArray.length;z++){
+          if (this.capitalPhaseArray[z].capitalPhaseID == "70538E71-D9F5-42BC-884C-F1824D40D211"){
+            this.capitalPhaseArray[z].capitalPhaseName = "Define (Plan Phase)"
+          }
+          if (this.capitalPhaseArray[z].capitalPhaseID == "CB72B543-CDF8-4C09-8372-60A8784D52D5") {
+            this.capitalPhaseArray[z].capitalPhaseName = "Define (Define Phase)"
+          }
+        }
 
     var user = [{
       "userAdid": this.activeaccount.localAccountId,
@@ -272,11 +289,15 @@ export class PortfolioCenterComponent implements OnInit {
       this.filtersnew.ProjectTeamMember = user
       this.PortfolioFilterForm.patchValue({
         ProjectTeamMember: user,
-        ProjectState: state
+        ProjectState: state,
+        ProjectPhase: []
       })
     }
     else {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      if (this.filtersnew.ProjectPhase == null){
+        this.filtersnew.ProjectPhase = []
+      }
       this.PortfolioFilterForm.patchValue({
         PortfolioOwner: this.filtersnew.PortfolioOwner,
         ProjectTeamMember: this.filtersnew.ProjectTeamMember,
@@ -316,6 +337,16 @@ export class PortfolioCenterComponent implements OnInit {
     if (localStorage.getItem('spot-localattribute') != null) {
       localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
     }
+    // var ObjectToSend = this.PortfolioFilterForm.getRawValue()
+        if (this.filtersnew.AGILEWorkstream != null){
+          if (this.filtersnew.AGILEWorkstream.length != 0){
+            if (this.filtersnew.AGILEWorkstream.filter(data => data.lookUpId == "6e9c3845-5a1f-4891-8825-a1add299a455").length > 0) {
+              this.filtersnew.AGILEWorkstream = this.AgileWorkstream
+              this.filtersnew.AGILEWorkstream.splice(0, 1)
+            }
+          }
+        }
+    
     var filterKeys = Object.keys(this.filtersnew);
     var filterGroups = []
     if (this.filtersnew.PortfolioOwner != null && this.filtersnew.PortfolioOwner.length != 0){

@@ -166,17 +166,6 @@
                                         <br />
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Is Confidential?</label>
-                                            </div>
-                                            <div class="child" *ngIf="createProjectForm.value.isConfidential">
-                                                <label class="reviewText">Yes</label>
-                                            </div>
-                                            <div class="child" *ngIf="!createProjectForm.value.isConfidential">
-                                                <label class="reviewText">No</label>
-                                            </div>
-                                        </div>
-                                        <div class="test">
-                                            <div class="parent">
                                                 <label>Parent Program</label>
                                             </div>
                                             <div class="child">
@@ -424,7 +413,17 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        
+                                        <div class="test">
+                                            <div class="parent">
+                                                <label>Is Confidential?</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isConfidential">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isConfidential">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
                                         
                                         </div>
                                     </div>
