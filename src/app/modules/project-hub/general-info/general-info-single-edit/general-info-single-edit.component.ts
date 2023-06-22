@@ -86,12 +86,17 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
         else if (this.callLocation == 'CreateNew') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
+          if (this.generalInfoForm.value.portfolioOwner == null){
+            this.generalInfoForm.controls.localCurrency.enable()
+          }
+          else{
           if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
             this.generalInfoForm.controls.localCurrency.enable()
           }
           else {
             this.generalInfoForm.controls.localCurrency.disable()
           }
+        }
         }
         else if (history.state.callLocation == 'CopyProject') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
@@ -317,7 +322,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   }
 
   clickEvent(value: string, name: string) {
-    if ((name == "Project Name *" || name == "Portfolio Ownerhelp *" || name == "None\nOwning Organizationhelp *" || name == "Submitted By *" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)) {
+    if ((name == "Project Name" || name == "Portfolio Owner\nhelp" || name == "None\nOwning Organizationhelp *" || name == "Submitted By" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)) {
       this.showMessage = true
     }
     else {
