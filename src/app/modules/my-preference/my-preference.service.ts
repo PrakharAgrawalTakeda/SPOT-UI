@@ -42,7 +42,6 @@ export class MyPreferenceService {
     }
 
     drawerOpenedChanged(event: any): void {
-debugger
         if (this.drawerOpenedright != event) {
             if (event == false) {
                 this.drawerOpenedright = event
@@ -64,7 +63,7 @@ debugger
     }
     toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false, isBulkEdit: boolean = false): void {
         console.log(itemtype)
-        debugger
+        
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert)
             alertopener.afterClosed().subscribe(res => {
@@ -90,7 +89,7 @@ debugger
         this.fuseDrawerLarge = fuseDrawerLarge
     }
     alertopener() {
-        debugger
+        
         const alertopener = this.fusealert.open(this.alert)
         this.isFormChanged = false
         alertopener.afterClosed().subscribe(res => {
