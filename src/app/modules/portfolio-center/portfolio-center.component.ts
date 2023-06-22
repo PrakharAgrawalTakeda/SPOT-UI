@@ -272,11 +272,15 @@ export class PortfolioCenterComponent implements OnInit {
       this.filtersnew.ProjectTeamMember = user
       this.PortfolioFilterForm.patchValue({
         ProjectTeamMember: user,
-        ProjectState: state
+        ProjectState: state,
+        ProjectPhase: []
       })
     }
     else {
       this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      if (this.filtersnew.ProjectPhase == null){
+        this.filtersnew.ProjectPhase = []
+      }
       this.PortfolioFilterForm.patchValue({
         PortfolioOwner: this.filtersnew.PortfolioOwner,
         ProjectTeamMember: this.filtersnew.ProjectTeamMember,
