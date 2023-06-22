@@ -87,4 +87,11 @@ export class MyPreferenceApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
+
+    async editEmailSettings(body, userid) {
+        var link = GlobalVariables.apiurl + "EmailNotificationSettings/ByUserADId/" + userid
+        const abc$ = this.http.put(link, body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 }

@@ -14,6 +14,7 @@ export class MyPreferenceService {
     all: any = []
     isFormChanged: boolean = false
     fuseDrawerLarge: boolean = false
+    isBulkEdit: boolean = false
     projectid: string = ""
     successSave = new BehaviorSubject<boolean>(false)
     alert: FuseConfirmationConfig = {
@@ -41,7 +42,6 @@ export class MyPreferenceService {
     }
 
     drawerOpenedChanged(event: any): void {
-
         if (this.drawerOpenedright != event) {
             if (event == false) {
                 this.drawerOpenedright = event
@@ -61,8 +61,9 @@ export class MyPreferenceService {
             }
         }
     }
-    toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false): void {
+    toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false, isBulkEdit: boolean = false): void {
         console.log(itemtype)
+        
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert)
             alertopener.afterClosed().subscribe(res => {
@@ -84,14 +85,20 @@ export class MyPreferenceService {
             this.projectid = pid
             this.drawerOpenedright = !this.drawerOpenedright
         }
+        this.isBulkEdit = isBulkEdit
         this.fuseDrawerLarge = fuseDrawerLarge
     }
     alertopener() {
+        
         const alertopener = this.fusealert.open(this.alert)
         this.isFormChanged = false
         alertopener.afterClosed().subscribe(res => {
-            if (res != 'confirmed') {
-                this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid)
+            if (res != 'confirmed' && this.isBulkEdit == true) {
+                this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid,true)
+                this.isFormChanged = true
+            }
+            else if (res != 'confirmed' && this.isBulkEdit == false) {
+                this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid, false)
                 this.isFormChanged = true
             }
             else {
@@ -101,6 +108,7 @@ export class MyPreferenceService {
                 this.all = []
                 this.projectid = ""
                 this.isFormChanged = false
+                
             }
         })
     }
