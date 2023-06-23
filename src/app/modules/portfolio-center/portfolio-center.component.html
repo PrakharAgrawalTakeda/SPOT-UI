@@ -5,13 +5,13 @@
         <!-- Drawer -->
         <mat-drawer class="absolute inset-0 w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             #filterDrawer>
-            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm"
+            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent"
                 style="overflow-y: scroll; height: 95vh;">
-                <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+                <div class=" form-ask-need h-[106.5vh]  overflow-y-scroll">
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
                         [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                         [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
-                        [customSortPointer]="'pfid'">
+                        [customSortPointer]="'pfid'" [showHint]="true" [hint]="'The group which is responsible for the oversight and process adherence of the record'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
                         [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
@@ -20,29 +20,39 @@
                     <spot-multiselect-autocomplete formControlName="ExecutionScope" class="w-full"
                         name="ExecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
-                        [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
+                        [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'" [customSortPointer]="'pfid'" [showHint]="true" [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="OwningOrganization" class="w-full"
                         name="OwningOrganization" [label]="'Owning Organization'" [placeholder]="'Owning Organization'"
-                        [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'">
+                        [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'" [showHint]="true" [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
                         [label]="'Project State'" [placeholder]="'Project State'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.state" [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'">
+                        [customSortPointer]="'lookUpOrder'" [showHint]="true" [hint]="'Status of the project (Active-Hold-Cancelled-Completed)'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ProjectPhase" class="w-full" name="ProjectPhase"
                         [label]="'Project Phase'" [placeholder]="'Project Phase'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.phase" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
+
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="CapitalPhase" class="w-full" name="CapitalPhase"
+                        [label]="'Capital Phase'" [placeholder]="'Capital Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="filteredPhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                    </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="OEPhase" class="w-full" name="OEPhase"
+                        [label]="'OE Phase'" [placeholder]="'OE Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="oePhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                    </spot-multiselect-autocomplete>
+
                     <spot-multiselect-autocomplete formControlName="ProjectType" class="w-full" name="ProjectType"
                         [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
                         [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
-                        [label]="'Product'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
-                        [idPointer]="'productId'" [dropDownArray]="filterlist.products">
+                        [label]="'Product (s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true" [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="TotalCAPEX" class="w-full" name="TotalCAPEX"
                         [label]="'Total CAPEX'" [placeholder]="'Total CAPEX'" [valuePointer]="'lookUpName'"
@@ -63,15 +73,20 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="AnnualInitiatives" class="w-full" name="AnnualInitiatives"
+                        [label]="'Annual Initiatives'" [placeholder]="'Annual Initiatives'" [valuePointer]="'name'" [idPointer]="'name'"
+                        [dropDownArray]="projectType">
+                    </spot-multiselect-autocomplete>
                     <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
-                        [label]="'CAPS Project '">
+                        [label]="'CAPS Project '" [showHint]="true" [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
                     </spot-toggle>
                     <app-spot-multiselect-project-autocomplete formControlName="projectName" [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
                         [label]="'Project Name'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
                     <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
+                        [idPointer]="'lookUpId'" [dropDownArray]="overallStatus">
                     </spot-multiselect-autocomplete>
                     <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;" (click)="OpenLA()">+ Add Local Attribute</mat-label>
                     <mat-label *ngIf="showLA" id="localAttribute" style="color: #a0cbf1;" (click)="CloseLA()">+ Hide Local
@@ -158,88 +173,7 @@
                 </div>
             </form>
         </mat-drawer>
-        <!-- <mat-drawer class="absolute inset-0 w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
-            #filterDrawerOver>
-            <div>
-                <div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-top: 15px;">
-                    <div class="text-on-primary" style="padding-top: 6px">Local Attributes</div>
-                    <div style="padding-top: 2px">
-                        <a (click)="filterDrawerOver.toggle()" href="javascript:void(0)" title="Close">
-                            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-                        </a>
-                    </div>
-                </div>
-            <form class="pl-3 w-full overflow-hidden" [formGroup]="localAttributeForm" *ngIf="showLA">
-                <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[80.5vh] pt-3 pr-3': viewType == 'SidePanel'}">
-                    <div *ngFor="let item of dataLA">
-                        <div [ngSwitch]="item.dataType">
-                            <div *ngSwitchCase="'1'" class="w-full mt-4 mb-6" #checkbox>
-                                <spot-toggle class="w-full"
-                                    formControlName={{item.uniqueId}} [mode]="'toggle'" [label]=item.name>
-                                </spot-toggle>
-                            </div>
-                            <div *ngIf="!item.isMulti" #input>
-                                <spot-input *ngSwitchCase="'6'" class="w-full" formControlName={{item.uniqueId}}
-                                    name={{item.uniqueId}} [label]=item.name [placeholder]=item.name>
-                                </spot-input>
-                            </div>
-                            <div *ngIf="item.isMulti" #textarea>
-                                <spot-textarea *ngSwitchCase="'6'" formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                    [label]=item.name [rows]="item.linesCount">
-                                </spot-textarea>
-                            </div>
-                            <div *ngIf="!item.isMulti" #Lookup>
-                                <spot-singleselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
-                                    name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
-                                    [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'"
-                                    [customSortPointer]="'lookUpOrder'">
-                                </spot-singleselect-autocomplete>
-                            </div>
-                            <div *ngIf="item.isMulti" #multiLookup>
-                                <spot-multiselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
-                                    name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
-                                    [idPointer]="'lookUpId'" [dropDownArray]="getLookup(item.lookupParentId)"
-                                    [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-                                </spot-multiselect-autocomplete>
-                            </div>
-                            <div style="display: flex;">
-                                <spot-input style="display: flex;" *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                    [label]=item.name [decimalCount]=item.linesCount [inputType]="'Number'"
-                                    [callLocation]="'LocalAttribute'" [placeholder]=item.name>
-                                </spot-input>
-                                <spot-input style="display: flex; left: 10px; position: relative;" *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                    [decimalCount]=item.linesCount [inputType]="'Number'" [callLocation]="'LocalAttribute'"
-                                    [placeholder]=item.name>
-                                </spot-input>
-                            </div>
-                            <div style="display: flex;">
-                                <spot-input-date style="display: flex;" *ngSwitchCase="'2'" class="w-full read-only" formControlName={{item.name}}
-                                    name={{item.name}} [label]=item.name [placeholder]=item.name>
-                                </spot-input-date>
-                                <spot-input-date style="display: flex; left: 10px; position: relative;" *ngSwitchCase="'2'" class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                    [placeholder]=item.name>
-                                </spot-input-date>
-                            </div>
-                            <div *ngIf="!item.isMulti" #people>
-                                <spot-singleselect-user-autocomplete *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
-                                    [label]=item.name name={{item.uniqueId}} [showLabel]="true"
-                                    [placeholder]="'Last Name, First Name'">
-                                </spot-singleselect-user-autocomplete>
-                            </div>
-                            <div *ngIf="item.isMulti" #multiPeople>
-                                <spot-multiselect-user-autocomplete *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
-                                    [label]=item.name name={{item.uniqueId}} [showLabel]="true"
-                                    [placeholder]="'Last Name, First Name'">
-                                </spot-multiselect-user-autocomplete>
-                            </div>
-                        </div>
-                    </div>
-                </div> 
-            </form> 
-            </div>
-        </mat-drawer> -->
-
-
+        
         <mat-drawer class="w-3qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             [position]="'end'" #matDrawerRight>
             <div class="p-4">
@@ -257,12 +191,6 @@
                 <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
                     Reset Filters (only dev)
                 </button>
-                <!-- <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)" class="dashboard-chip-list">
-                    {{fruit}}
-                    <button matChipRemove>
-                        <mat-icon>cancel</mat-icon>
-                    </button>
-                </mat-chip> -->
                 <div *ngIf='showContent'
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 mt-8 " @slideInRight>
                     <!-- <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
@@ -303,11 +231,6 @@
                                     [dataLabels]="chartBudgetDistribution.dataLabels"></apx-chart>
                             </div>
                         </div>
-                        <!-- <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
-                                View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
-                            </button>
-                        </div> -->
                     </div>
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
@@ -323,11 +246,6 @@
                                 </div>
                             </ng-container>
                         </div>
-                        <!-- <div class="p-4 text-right">
-                            <button class="ml-4" mat-button [color]="'primary-200'" (click)="matDrawerRight.toggle()">
-                                View Details <mat-icon svgIcon="heroicons_solid:arrow-sm-right"></mat-icon>
-                            </button>
-                        </div> -->
                     </div>
                     <!-- Milestones -->
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
@@ -406,7 +324,6 @@
                     <div class="mr-4 tile-title font-medium tracking-tight text-primary leading-6 truncate">Project Overview</div>
                 </div>
                 <div style="height: auto;">
-                    <!-- <form [formGroup]="ColumnFilterForm"> -->
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
                             Portfolio Report
                         </button>
@@ -416,40 +333,17 @@
                         <button class="ml-4" mat-flat-button [color]="'primary'">
                             Generate Reports
                         </button>
-                        <!-- <button class="ml-4" mat-flat-button [color]="'primary'" (click)="open()">
-                            Available Columns
-                        </button>
-                        <div class="checkbox">
-                        <ul *ngIf="opened">
-                            <li *ngFor="let col of columnList " (click)="SelectColumns(col.name)">
-                                <input type="checkbox" [id]="col.name" />
-                                <label [attr.for]="col.name">{{ col.name }}</label>
-                            </li>
-                        </ul>
-                        </div> -->
-                        <!-- <form class="columnFilter"> -->
-                            <!-- <spot-multiselect-autocomplete class="columnFilter" formControlName="SelectColumns" name="SelectColumns"
-                                [label]="'Select Columns'" [placeholder]="'Select Columns'" [valuePointer]="'name'"
-                                [idPointer]="'name'" [dropDownArray]="columnList">
-                            </spot-multiselect-autocomplete> -->
-                        <!-- </form> -->
-                        <!-- <div class="selected-column">
-                            <label (click)="open()">Available Columns</label>
-                            <ul *ngIf="opened">
-                                <li *ngFor="let col of columns ">
-                                    <input type="checkbox" [id]="col.name" (click)="toggle(col)" [checked]="isChecked(col)" />
-                                    <label [attr.for]="col.name">{{ col.name }}</label>
-                                </li>
-                            </ul>
-                        </div> -->
-                        <!-- </form> -->
                 </div>
-                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showcontent">
-                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
-                        class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
+                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showContent">
+                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force" [externalPaging]="true"
+        [count]="totalElements"
+        [offset]="pageNumber"
+        [limit]="size"
+        (page)="setPage('',$event)"
+        [footerHeight]="50" [virtualization]="false" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
                 
                         <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30" [sortable]="false" [frozenLeft]="true">
+                            [width]="30" [sortable]="true" [frozenLeft]="true">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon style ="margin-bottom: 30px;" svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
                                     class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
@@ -540,7 +434,16 @@
 
                         <ngx-datatable-column name="Total CAPEX Approved/Forecast" prop="totalApprovedCapex" [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value}}<br> {{ row.budgetId }}</p>
+                                <!-- <p>{{value}}</p> -->
+                                <div class="grid grid-cols-1 text-right">
+                                    {{
+                                    row.totalApprovedCapex ? row.totalApprovedCapex.toLocaleString() : 0
+                                    }} &nbsp; {{row.currencyAbb}}
+                                </div>
+                                <br />
+                                <div class="text-right">
+                                    {{ row.forecast ? row.forecast.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
+                                </div>
                             </ng-template>
                         </ngx-datatable-column>
 

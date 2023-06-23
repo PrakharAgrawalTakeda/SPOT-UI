@@ -3,10 +3,6 @@
     width: 100%;
 }
 
-/*.chiplist {
-    padding: 10px;
-}*/
-
 .w-half {
     width: 50vw;
 }
@@ -46,11 +42,11 @@
 }
 
 .frozen-header-class {
-    top: 73px !important;
+    top: 89px !important;
 }
 
 .frozen-header-classID {
-    top: 52px !important;
+    top: 68px !important;
 }
 .datatable-body{
     height: 72vh !important;
@@ -60,17 +56,17 @@
     background: white !important;
 }
 
-// .columnFilter {
-//     // width: 38% !important;
-//     display: flex;
-//     justify-content: center;
-//     position: relative;
-//     bottom: 62px;
-//     width: 69%;
-// }
+.datatable-body-cell{
+    cursor: pointer;
+}
 
-// .mat-mdc-form-field{
-//     width: 500% !important;
+.datatable-header{
+    top: 10px;
+    // position: relative;
+}
+
+// .datatable-scroll{
+//     background: white !important;
 // }
 
 .columnFilter{
@@ -101,4 +97,26 @@ ul {
 li{
     padding: 4px;
     font-weight: 500;
+}
+
+.pager li{
+    padding-right: 15px !important;
+    margin-right: 2px !important;
+}
+
+.pager{
+    font-size: large !important;
+    width: 300px !important;
+}
+
+.pages.active{
+    background: #ffffff !important;
+    border: 2px solid green;
+}
+
+.pages{
+    cursor: pointer;
+    padding: 5px 12px;
+    background: aquamarine;
+    margin: 0px 5px;
 }

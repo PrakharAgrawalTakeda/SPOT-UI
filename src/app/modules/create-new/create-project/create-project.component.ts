@@ -12,6 +12,7 @@ import { __classPrivateFieldSet } from 'tslib';
 import { MatStepper } from '@angular/material/stepper';
 import { CreateNewApiService } from '../create-new-api.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 
 
 @Component({
@@ -127,7 +128,7 @@ export class CreateProjectComponent implements OnInit {
   capturedValues = ['', '']
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService) {
   }
 
   
@@ -135,6 +136,7 @@ export class CreateProjectComponent implements OnInit {
     const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
     mainNavComponent.navigation = this.newmainnav
     mainNavComponent.refresh()
+    this.projectHubService.projectidInjector("")
     console.log("Inside init")
     this.auth.lookupMaster().then(res => {
       this.apiService.getLocalCurrency().then(currency => {
@@ -196,7 +198,8 @@ export class CreateProjectComponent implements OnInit {
         isCapsProject: event.isCapsProject,
         owningOrganization: event.owningOrganization,
         SubmittedBy: event.SubmittedBy,
-        targetGoalSituation: event.targetGoalSituation
+        targetGoalSituation: event.targetGoalSituation,
+        isConfidential: event.isConfidential
       })
     }
     else if (index == 1) {
@@ -204,8 +207,7 @@ export class CreateProjectComponent implements OnInit {
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
-        isCapsProject: event.isCapsProject,
-        isConfidential: event.isConfidential
+        isCapsProject: event.isCapsProject
       })
     }
     else if (index == 2) {

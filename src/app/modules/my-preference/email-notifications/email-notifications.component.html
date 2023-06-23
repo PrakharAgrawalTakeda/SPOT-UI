@@ -1,22 +1,241 @@
 <div class="flex flex-col min-w-0 p-3 pt-3 w-full ml-3">
     <div class="p-6 bg-card rounded-2xl shadow w-full mb-6">
         <div>
-            <div class="p-6 pb-3 pt-0 flex items-center justify-between">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">E-mail Notifications</div>
+            <div class="flex justify-between items-center pb-6">
+                <h3 class="text-xl text-primary font-medium tracking-tight leading-6 truncate ">E-mail
+                    Notifications
+                </h3>
+                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    (click)="preferenceservice.toggleDrawerOpen(emailNotiEditType, '' , emailNoti , id)">
+                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                </button>
             </div>
             <div class="overflow-x-auto">
-                <form class="w-full p-[20px]" [formGroup]="emailNotiForm" (ngSubmit)="submitnotifications()">
-        <div class="h-[84vh]">
-            <div class="w-full mt-4 mb-6">
-                <spot-toggle class="w-full" formControlName="" [mode]="'toggle'"
-                    [label]="'Receive Email Notifications?'">
-                </spot-toggle>
-            </div>
-            <div *ngIf="emailNotiForm.controls['flag'].value">
-                </div>
-                </div>
+                <form class="w-full read-only p-[20px]" [formGroup]="emailNotiForm" (ngSubmit)="submitnotifications()">
+                    <div>
+                        <!-- class="h-[80vh]" -->
+                        <div class="flex justify-start items-center gap-3 pb-6">
+                            Receive Email Notifications?
+                            <mat-icon svgIcon="heroicons_outline:x-circle"
+                                *ngIf="!emailNotiForm.controls.recieveEmailNotification.value">
+                            </mat-icon>
+                            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                *ngIf="emailNotiForm.controls.recieveEmailNotification.value">
+                            </mat-icon>
+                        </div>
+                        <div *ngIf="emailNotiForm.controls['recieveEmailNotification'].value">
+                            <!-- *ngIf="emailNotiForm.controls['recieveEmailNotification'].value" -->
+
+                            <spot-singleselect-autocomplete formControlName="reportFrequencyId" class="w-full read-only"
+                                name="reportFrequencyId" [label]="'Report Frequency'" [placeholder]="'Report Frequency'"
+                                [valuePointer]="'lookUpName'" [dropDownArray]="lookUpData" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'">
+                            </spot-singleselect-autocomplete>
+
+                            <spot-singleselect-autocomplete formControlName="emailNotifcationNotifcationReportScopeIds"
+                                class="w-full read-only" name="emailNotifcationNotifcationReportScopeIds"
+                                [label]="'Notification Report Scope'" [placeholder]="'Notification Report Scope'"
+                                [valuePointer]="'lookUpName'" [dropDownArray]="lookUpData2" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'">
+                            </spot-singleselect-autocomplete>
+
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'" -->
+                            <spot-multiselect-autocomplete formControlName="portfolioOwner" class="w-full read-only"
+                                name="portfolioOwner" [label]="''" [placeholder]="'Portfolio Owner'"
+                                [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
+                                [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
+                                [customSortPointer]="'pfid'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'">
+                            </spot-multiselect-autocomplete>
+                            <spot-singleselect-autocomplete formControlName="emailNotifcationPortfolioReportTypes" class="w-full read-only"
+                                name="emailNotifcationPortfolioReportTypes" [label]="''" [placeholder]="'Project Type'"
+                                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                [dropDownArray]="lookUpData3" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'">
+                            </spot-singleselect-autocomplete>
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '11336470-8b35-4c7a-abe4-d62d58d33fca'" -->
+                            <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full"
+                                name="excecutionScope" [label]="''" [placeholder]="'Execution Scope'"
+                                [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
+                                [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'"
+                                [customSortPointer]="'pfid'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '11336470-8b35-4c7a-abe4-d62d58d33fca'">
+                            </spot-multiselect-autocomplete>
+                            <spot-singleselect-autocomplete formControlName="emailNotifcationPortfolioReportTypes" class="w-full read-only"
+                                name="emailNotifcationPortfolioReportTypes" [label]="''" [placeholder]="'Project Type'"
+                                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                [dropDownArray]="lookUpData3" [sortByType]="'custom'"
+                                [customSortPointer]="'lookUpOrder'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '11336470-8b35-4c7a-abe4-d62d58d33fca'">
+                            </spot-singleselect-autocomplete>
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '897633cf-3516-49b0-9f45-a6ddc9374c0e'" -->
+                            <spot-multiselect-autocomplete formControlName="role" name="role" [label]="''"
+                                [placeholder]="'Role'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
+                                [dropDownArray]="getRoles()"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '897633cf-3516-49b0-9f45-a6ddc9374c0e'">
+                            </spot-multiselect-autocomplete>
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'" -->
+                            <spot-multiselect-autocomplete class="w-full read-only" formControlName="products"
+                                name="products" [label]="'Products'" [valuePointer]="'fullProductName'"
+                                [idPointer]="'productId'" [dropDownArray]="filterCriteria.products" [showHint]="true"
+                                [hint]="'Selections here will generate a summary report based on projects where the selected Product(s) are either the documented Primary or Impacted Product'"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'">
+                            </spot-multiselect-autocomplete>
+
+                            <!-- ---------------------------------------------------------------------------------------- -->
+                            <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'dca7a55b-6b8d-448e-b2be-0796a043775c'" -->
+                            <div class="p-6 pt-0 flex w-full"
+                                *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
+                                <mat-form-field class="w-5/6 pt-2" appearance="fill">
+                                    <mat-icon class="flex-initial" [svgIcon]="'heroicons_outline:search'"></mat-icon>
+                                    <input matInput (keydown)="onKeydown($event)" [formControl]="searchControl"
+                                        [matAutocomplete]="matAutocomplete"
+                                        [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
+                                        class="flex-1 w-64" id="myText">
+                                    <mat-autocomplete class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
+                                        [disableRipple]="true" (optionSelected)="onOptionSelected()"
+                                        [displayWith]="displayFn.bind(this)" #matAutocomplete="matAutocomplete">
+                                        <mat-option
+                                            class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                                            *ngIf="resultSets && !resultSets.length">
+                                            No results found!
+                                        </mat-option>
+                                        <ng-container *ngIf="resultSets && resultSets.length">
+                                            <mat-optgroup class="flex items-center mt-2 px-2">
+                                                <span
+                                                    class="text-sm font-semibold tracking-wider text-secondary">Projects</span>
+                                            </mat-optgroup>
+                                            <ng-container *ngFor="let result of resultSets; trackBy: trackByFn">
+                                                <mat-option
+                                                    class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                                                    [value]="result.problemUniqueId">
+                                                    <!-- Contacts -->
+                                                    {{result.isParent ? "[PGM] " : "" }}{{result.problemId}}
+                                                    {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </ng-container>
+                                    </mat-autocomplete>
+                                    <button type="button" *ngIf="searchControl.value!=''" matSuffix mat-icon-button
+                                        aria-label="Clear"
+                                        (click)="searchControl.setValue(''); this.selectedValueExists.setValue(true)">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                                <div class="w-1/6">
+                                    <div class="grid w-full justify-items-end align-middle mt-2">
+                                        <button mat-flat-button [color]="'primary'" type="button" class="btn"
+                                            (click)="onAdd(searchControl.value)">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="overflow-x-auto  h-[15vh]">
+                                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
+                                    columnMode="flex"
+                                    class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                                    [rows]="rows">
+                                    <ngx-datatable-column name="Projects" prop="projectName" [flexGrow]="9"
+                                        [resizeable]="false" [draggable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <div class="flex items-center justify-start gap-6">
+                                                {{ value ? value : ( (row.isParent ? "[PGM] ": "") + row.problemId + " -
+                                                " + row.problemTitle)}}
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                    <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1" [resizeable]="false"
+                                        [sortable]="false" [draggable]="false">
+                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                            <a href="javascript:void(0)" title="Remove"
+                                                (click)="onRemoveLink(row.problemUniqueId, rowIndex)">
+                                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                            </a>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+                                </ngx-datatable>
+                            </div>
+                            <!-- <div class="w-full mt-4 mb-2">
+                                <spot-toggle class="w-full" formControlName="includeChild"
+                                    [label]="'Include Children Records'">
+                                </spot-toggle>
+                            </div> -->
+                            <div class="flex justify-start items-center gap-3 pb-6">
+                                Include Children Records
+                                <mat-icon svgIcon="heroicons_outline:x-circle"
+                                    *ngIf="!emailNotiForm.controls.includeChild.value">
+                                </mat-icon>
+                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                    *ngIf="emailNotiForm.controls.includeChild.value">
+                                </mat-icon>
+                            </div>
+
+                        </div>
+                    </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- ---------------------------------------------------------------------------------------- -->
+
+    <div class="p-6 bg-card rounded-2xl shadow w-full mb-6"
+        *ngIf="emailNotiForm.controls['recieveEmailNotification'].value">
+        <div class="flex justify-between items-center pb-6">
+            <h3 class="text-xl text-primary font-medium tracking-tight leading-6 truncate ">
+            </h3>
+            <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                (click)="preferenceservice.toggleDrawerOpen(emailNotiTableEditType, '' , emailNotiTable , id, true, true)">
+                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+            </button>
+        </div>
+        <div class="overflow-x-auto">
+            <form class="w-full p-[20px]" [formGroup]="emailNotiForm" (ngSubmit)="submitnotificationsTable()">
+                <div class="h-[53vh]">
+                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                        class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="eventsData"
+                        #emailNotiTable>
+
+                        <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="0.4">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                {{value}}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column name="Event" prop="event" [flexGrow]="0.4">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                {{value}}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column name="Description" prop="description" [flexGrow]="0.8">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                {{value}}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+
+                        <ngx-datatable-column name="On/Off" prop="onoff" [resizeable]="false" [sortable]="false"
+                            [flexGrow]="0.4">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                                ngx-datatable-cell-template>
+                                <mat-icon svgIcon="heroicons_outline:x-circle"
+                                    *ngIf="!emailNotiForm.controls.onoff.value">
+                                </mat-icon>
+                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                    *ngIf="emailNotiForm.controls.onoff.value">
+                                </mat-icon>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                    </ngx-datatable>
+                </div>
+            </form>
         </div>
     </div>
 </div>

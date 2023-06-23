@@ -192,10 +192,10 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [sortable]="false" name="Shipment Distance (km)" prop="shipmentDistance" [width]="30">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <p *ngIf="!editTransportation">{{value}}</p>
+                        <p *ngIf="!editTransportation">{{value  | number:'1.0-0'}}</p>
                         <a *ngIf="!transportationTableEditStack.includes(rowIndex)"
                             (click)="transportationTableEditRow(rowIndex)">
-                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="value">{{value  | number:'1.0-0'}}</p>
                             <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="transportationForm.controls[rowIndex]"
@@ -209,10 +209,10 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [sortable]="false" name="Shipment Weight (kg)" prop="shipmentWeight" [width]="30">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <p *ngIf="!editTransportation">{{value}}</p>
+                        <p *ngIf="!editTransportation">{{value  | number:'1.0-0'}}</p>
                         <a *ngIf="!transportationTableEditStack.includes(rowIndex) && editTransportation"
                             (click)="transportationTableEditRow(rowIndex)">
-                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="value">{{value  | number:'1.0-0'}}</p>
                             <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="transportationForm.controls[rowIndex]"
@@ -226,10 +226,10 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column [sortable]="false" name="Shipment Frequency" prop="shipmentFrequency" [width]="30">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <p *ngIf="!editTransportation">{{value}}</p>
+                        <p *ngIf="!editTransportation">{{value  | number:'1.0-0'}}</p>
                         <a *ngIf="!transportationTableEditStack.includes(rowIndex) && editTransportation"
                             (click)="transportationTableEditRow(rowIndex)">
-                            <p class="cost" *ngIf="value">{{value}}</p>
+                            <p class="cost" *ngIf="value">{{value  | number:'1.0-0'}}</p>
                             <p class="cost" *ngIf="!value">0</p>
                         </a>
                         <form [formGroup]="transportationForm.controls[rowIndex]"
