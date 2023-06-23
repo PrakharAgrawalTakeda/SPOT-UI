@@ -21,6 +21,10 @@ export class BudgetAdditionalEditComponent {
                 private _Activatedroute: ActivatedRoute,
                 public fuseAlert: FuseConfirmationService,
                 private apiService: ProjectApiService) {
+        this.budgetInfoForm.valueChanges.subscribe(res => {
+               this.projectHubService.isFormChanged = true
+            }
+        )
     }
 
     viewContent: boolean = false;
@@ -40,24 +44,25 @@ export class BudgetAdditionalEditComponent {
         this.budgetInfo = this.projectHubService.all;
         if(this.mode=='Asset-In-Service'){
             this.budgetInfoForm.patchValue({
-                apisdate: this.budgetInfo.apisdate,
+                apisdate: this.budgetInfo.budget.apisdate,
             })
             this.viewContent = true
         }
         else{
             this.budgetInfoForm.patchValue({
-                opexRequired: this.budgetInfo.opexRequired,
+                opexRequired: this.budgetInfo.budget.opExRequired,
             })
             this.viewContent = true
         }
+        this.projectHubService.isFormChanged = false
 
     }
     prepareDataforSubmit(formValue): any {
         const mainObj = this.budgetInfo;
         if(this.mode=='Asset-In-Service'){
-            mainObj.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
+            mainObj.budget.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
         }else{
-            mainObj.opexRequired = formValue.opexRequired;
+            mainObj.budget.opexRequired = formValue.opexRequired;
         }
         return mainObj;
     }

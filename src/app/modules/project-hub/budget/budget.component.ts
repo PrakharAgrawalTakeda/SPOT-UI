@@ -67,7 +67,7 @@ export class BudgetComponent implements OnInit {
             this.lookUpData = lookup
             this.projectHubService.lookUpMaster = lookup
             this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
-                this.budgetPageInfo = res.budget;
+                this.budgetPageInfo = res;
                 this.fundingInformations = res.budgetIo;
                 this.opexField = !!res.budget.opExRequired;
                 this.capexField = !!res.budget.capexRequired;
@@ -106,6 +106,6 @@ export class BudgetComponent implements OnInit {
         return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
     }
     getPortfolioOwnerNameById(id: string): any {
-        return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0].portfolioOwner;
+        return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0]?.portfolioOwner || null;
     }
 }

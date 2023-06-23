@@ -1,6 +1,9 @@
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
-        <div class="text-on-primary" style="padding-top: 6px">Budget Details Edit</div>
+        <div class="text-on-primary" style="padding-top: 6px">
+            <ng-container *ngIf="mode === 'OPEX'">Opex Details Edit</ng-container>
+            <ng-container *ngIf="mode === 'Asset-In-Service'">Asset Placed In Service Edit</ng-container>
+        </div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
                                          href="javascript:void(0)" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>

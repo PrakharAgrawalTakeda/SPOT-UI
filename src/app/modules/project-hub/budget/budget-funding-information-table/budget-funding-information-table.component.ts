@@ -36,9 +36,6 @@ export class BudgetFundingInformationTableComponent {
         this.portfoliService.getLocalCurrency().then(currency => {
             this.localCurrency = currency
         })
-        this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
-            this.fundingRequests = res
-        })
     }
     getCurrency(id: string): string{
         return id && id != '' ? this.localCurrency.find(x => x.localCurrencyId == id).localCurrencyAbbreviation : ''

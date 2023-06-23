@@ -26,9 +26,9 @@ export class BudgetCapexOpexTableComponent {
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
-            this.fundingRequests = res
-        })
+        // this.apiService.getKeyAssumptionsByProject(this.id).then((res) => {
+        //     this.fundingRequests = res
+        // })
     }
 
 }
