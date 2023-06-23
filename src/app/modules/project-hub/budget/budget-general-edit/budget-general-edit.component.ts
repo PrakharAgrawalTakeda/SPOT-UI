@@ -47,9 +47,6 @@ export class BudgetGeneralEditComponent {
                  public fuseAlert: FuseConfirmationService,
                  private apiService: ProjectApiService){
 
-        if(this.capexRequired.value ==true){
-            this.capexRequired.disable()
-        }
         this.budgetInfoForm.controls.budgetId.valueChanges.subscribe(res => {
             this.budgetId.updateValueAndValidity({emitEvent : false})
         })
@@ -76,14 +73,16 @@ export class BudgetGeneralEditComponent {
         this.capexRequired.valueChanges.subscribe(res => {
             // Choosing Yes
             if(this.budgetInfoForm.controls.capexRequired.value ==true){
-                this.capexRequired.disable({emitEvent : false});
+                if(!this.isBudgetAdmin){
+                    this.capexRequired.disable({emitEvent : false});
+                }
                 this.required = true;
                 this.budgetId.setValidators(Validators.required)
                 this.predefinedInvestmentId.setValidators(Validators.required)
                 this.gmsBudgetowner.setValidators(Validators.required)
                 this.where.setValidators(Validators.required)
                 this.why.setValidators(Validators.required)
-                if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+                if(!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
                     this.budgetId.enable({emitEvent : false})
                     this.predefinedInvestmentId.enable({emitEvent : false})
                     this.where.enable({emitEvent : false})
@@ -97,11 +96,12 @@ export class BudgetGeneralEditComponent {
                 }else{
                     if(!this.isBudgetAdmin){
                         if(this.capexRequired.disabled){
-                            this.showBudgetIdButton = false;
-                            this.gmsBudgetowner.disable();
+                            this.showBudgetIdButton = true;
+                            if(!this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
+                                this.gmsBudgetowner.disable();
+                            }
                             this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                         }else{
-
                             this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                             this.showBudgetIdButton = true;
                         }
@@ -113,11 +113,6 @@ export class BudgetGeneralEditComponent {
             }else{
                 this.budgetInfoForm.controls.budgetId.disable()
                 this.required = false;
-                this.budgetId.clearValidators()
-                this.predefinedInvestmentId.clearValidators()
-                this.gmsBudgetowner.clearValidators()
-                this.where.clearValidators()
-                this.why.clearValidators()
                 this.showBudgetIdButton = false;
                 this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
                 if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
@@ -139,9 +134,21 @@ export class BudgetGeneralEditComponent {
         this.apiService.getBudgetPageInfo(this.projectHubService.projectid).then((res: any) => {
             this.budgetInfo = res
             this.generalInfoPatchValue(res)
+            if(this.capexRequired.value ==true && !this.isBudgetAdmin){
+                this.capexRequired.disable()
+                this.budgetId.disable()
+                this.gmsBudgetowner.disable();
+            }
+            if(!this.gmsBudgetowner.value.gmsbudgetOwnerEditable ){
+                if(!this.capexRequired.value && !this.isBudgetAdmin){
+                    this.gmsBudgetowner.disable()
+                }
+            }
+            this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
         this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+        // this.isBudgetAdmin = false;
     }
 
     getPredifinedInvestment(): any {
@@ -267,12 +274,6 @@ export class BudgetGeneralEditComponent {
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
             budgetCommentary:  response.budget.budgetComment,
         })
-        if(!this.gmsBudgetowner.value.gmsbudgetOwnerEditable ){
-            if(!this.capexRequired.value){
-                this.gmsBudgetowner.disable()
-            }
-        }
-        this.projectHubService.isFormChanged = false
     }
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0];
