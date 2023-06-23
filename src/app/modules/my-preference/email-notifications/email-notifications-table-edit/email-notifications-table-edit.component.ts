@@ -33,6 +33,7 @@ export class EmailNotificationsTableEditComponent {
   emailTableEditStack: any = []
   emailTableDb = []
   submitObj = {}
+  viewContent: boolean = false
 
 
   constructor(public projecthubservice: ProjectHubService,
@@ -71,6 +72,8 @@ export class EmailNotificationsTableEditComponent {
           frequencyId: new FormControl(i.frequencyId)
         }))
       }
+      this.preferenceservice.isFormChanged = false
+      this.viewContent = true;
     })
   }
 
@@ -104,27 +107,28 @@ export class EmailNotificationsTableEditComponent {
       {
         this.submitObj = {
           reportOptions: {
-          emailNotifcationNotifcationReportScopeIds: this.emailTable.reportOptions.emailNotifcationNotifcationReportScopeIds,
-          emailNotifcationPortfolioReportTypes: this.emailTable.reportOptions.emailNotifcationPortfolioReportTypes,
-            executionScopeIds: this.emailTable.reportOptions.executionScopeIds,
-            includeChild: this.emailTable.reportOptions.includeChild,
-            notificationId: this.emailTable.reportOptions.notificationId,
-            portfolioScopeIds: this.emailTable.reportOptions.portfolioScopeIds,
-            productIds: this.emailTable.reportOptions.productIds,
-            projectIds: this.emailTable.reportOptions.projectIds,
-            recieveEmailNotification: this.emailTable.reportOptions.recieveEmailNotification,
-            reportFrequencyId: this.emailTable.reportOptions.reportFrequencyId,
-            roleIds: this.emailTable.reportOptions.roleIds,
-            userId: this.msalService.instance.getActiveAccount().localAccountId
-          }
-          ,
-          eventsMasterData: [],
+            emailNotifcationNotifcationReportScopeIds: this.emailTable.reportOptions.emailNotifcationNotifcationReportScopeIds,
+            emailNotifcationPortfolioReportTypes: this.emailTable.reportOptions.emailNotifcationPortfolioReportTypes,
+              executionScopeIds: this.emailTable.reportOptions.executionScopeIds,
+              includeChild: this.emailTable.reportOptions.includeChild,
+              notificationId: this.emailTable.reportOptions.notificationId,
+              portfolioScopeIds: this.emailTable.reportOptions.portfolioScopeIds,
+              productIds: this.emailTable.reportOptions.productIds,
+              projectIds: this.emailTable.reportOptions.projectIds,
+              recieveEmailNotification: this.emailTable.reportOptions.recieveEmailNotification,
+              reportFrequencyId: this.emailTable.reportOptions.reportFrequencyId,
+              roleIds: this.emailTable.reportOptions.roleIds,
+              userId: this.emailTable.reportOptions.userId
+            }
+            ,
+            eventsMasterData: [],
           eventsUserData: this.emailTable.eventsMasterData.map(masterData => {
             const matchingValue = formValue.find(value => value.frequencyId == masterData.frequencyId)
+            console.log
             const onOffValue = matchingValue ? matchingValue.onoff : false;
             return {
               frequencyId: masterData.frequencyId,
-              onOff: onOffValue,
+              onOff: onOffValue == true? onOffValue : false,
               resourceId: this.msalService.instance.getActiveAccount().localAccountId
             };
           })
@@ -134,9 +138,11 @@ export class EmailNotificationsTableEditComponent {
       console.log(this.submitObj)
     console.log(this.emailTableDb)
     if (JSON.stringify(this.submitObj) == JSON.stringify(this.emailTableDb)) {
+     console.log("WRONG")
       this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
+      console.log("RIGHT")
           this.apiService.editEmailSettings(this.submitObj, this.msalService.instance.getActiveAccount().localAccountId).then(resp => {
             this.projecthubservice.isFormChanged = false
             this.projecthubservice.isNavChanged.next(true)

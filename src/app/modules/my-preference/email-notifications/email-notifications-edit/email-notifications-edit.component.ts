@@ -29,21 +29,20 @@ export class EmailNotificationsEditComponent {
   id: string = ""
   emailNotiForm = new FormGroup({
     recieveEmailNotification: new FormControl(false),
-    onoff: new FormControl(false),
-    description: new FormControl(''),
-    event: new FormControl(''),
-    priority: new FormControl(''),
     reportFrequencyId: new FormControl(null),
     emailNotifcationNotifcationReportScopeIds: new FormControl(null),
-    portfolioOwner: new FormControl(),
-    excecutionScope: new FormControl(),
+    portfolioOwner: new FormControl([]),
+    excecutionScope: new FormControl([]),
     role: new FormControl(),
     rows: new FormControl(),
     includeChild: new FormControl(false),
     products: new FormControl(),
     emailNotifcationPortfolioReportTypes: new FormControl(null),
-    notificationId: new FormControl('')
+    notificationId: new FormControl(''),
+    problemId: new FormControl([]),
+    problemTitle: new FormControl([])
   })
+  viewContent: boolean = false
   emailNoti: any;
   eventsData: any;
   lookUpData: any;
@@ -66,6 +65,9 @@ export class EmailNotificationsEditComponent {
   emailDb: any;
   lookUpData3: any;
   reportsData: any;
+  addedProjects: any[] = [];
+
+
 
 
   constructor(public projecthubservice: ProjectHubService,
@@ -104,11 +106,6 @@ export class EmailNotificationsEditComponent {
             .subscribe((resultSets: any) => {
               for (var i = 0; i < resultSets.projectData.length; i++) {
                 var obj = resultSets.projectData[i];
-                console.log(this.projecthubservice)
-                // if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
-                //     resultSets.projectData.splice(i, 1);
-                //     i--;
-                // }
               }
               console.log(this.resultSets)
               this.resultSets = resultSets.projectData;
@@ -146,31 +143,41 @@ export class EmailNotificationsEditComponent {
           this.emailDb = this.emailNoti
           this.eventsData = res.eventsMasterData
           res.eventsMasterData.sort((a, b) => a.priority - b.priority)
-          console.log(res)
+          console.log("DB", res)
+          console.log("ROWS", this.rows)
+          console.log(this.filterCriteria.products)
           if (this.emailNoti != null) {
             this.emailNotiForm.patchValue({
               recieveEmailNotification: res.reportOptions.recieveEmailNotification ? res.reportOptions.recieveEmailNotification : false,
-              priority: res.eventsMasterData.priority,
-              event: res.eventsMasterData.event,
-              description: res.eventsMasterData.description,
-              onoff: res.eventsUserData.find(eventUserData => eventUserData.frequencyId === res.eventsMasterData.frequencyId)?.onoff,
               reportFrequencyId: res.reportOptions.reportFrequencyId ? this.lookUpData.find(x => x.lookUpId == res.reportOptions.reportFrequencyId) : '',
               emailNotifcationNotifcationReportScopeIds: res.reportOptions.emailNotifcationNotifcationReportScopeIds ? this.lookUpData2.find(x => x.lookUpId == res.reportOptions.emailNotifcationNotifcationReportScopeIds) : '',
-              portfolioOwner: Array.isArray(res.reportOptions.portfolioScopeIds)
-              ? res.reportOptions.portfolioScopeIds
-              : [],
-              excecutionScope: res.reportOptions.executionScopeIds ? res.reportOptions.executionScopeIds : [],
-              role: res.reportOptions.roleId ? res.reportOptions.roleId : [],
-              rows: res.reportOptions.projectIds ? res.reportOptions.projectIds : [],
+              portfolioOwner: res.reportOptions.portfolioScopeIds && this.filterCriteria.portfolioOwner
+                ? res.reportOptions.portfolioScopeIds.split(',').map(id => this.filterCriteria.portfolioOwner.find(x => x.portfolioOwnerId === id)).filter(Boolean)
+                : [],
+              excecutionScope: res.reportOptions.executionScopeIds && this.filterCriteria.portfolioOwner
+                ? res.reportOptions.executionScopeIds.split(',').map(id => this.filterCriteria.portfolioOwner.find(x => x.portfolioOwnerId === id)).filter(Boolean)
+                : [],
+                role: res.reportOptions.roleIds && this.getRoles()
+                ? res.reportOptions.roleIds.split(',').map(id => this.getRoles().find(x => x.lookUpId === id)).filter(Boolean)
+                : [],
+                rows: res.reportOptions.projectIds && this.rows
+                ? res.reportOptions.projectIds.split(',').filter(id => this.rows.some(row => row.problemUniqueId === id))
+                : [],
               includeChild: res.reportOptions.includeChild,
-              products: res.reportOptions.products ? res.reportOptions.products : [],
+              products: res.reportOptions.productIds && this.filterCriteria.products ? 
+              res.reportOptions.productIds.split(',').map(id => this.filterCriteria.products.find(x => x.productId === id)).filter(Boolean) : [],
               emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes
                 ? this.lookUpData3.find(x => x.lookUpId === res.reportOptions.emailNotifcationPortfolioReportTypes)
                 : this.lookUpData3.find(x => x.lookUpName === 'All Projects'),
-                notificationId: res.reportOptions.notificationId
+              notificationId: res.reportOptions.notificationId
             })
-            console.log(this.emailNotiForm.getRawValue())
+            console.log("FORM", this.emailNotiForm.getRawValue())
+console.log(this.getRoles())
+
           }
+          this.preferenceservice.isFormChanged = false
+          this.projecthubservice.isFormChanged = false
+          this.viewContent = true;
         })
       })
     })
@@ -178,6 +185,7 @@ export class EmailNotificationsEditComponent {
   getPortfolioOwner(): any {
     if (this.filterCriteria && this.filterCriteria.portfolioOwner) {
       return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true);
+
     }
     return [];
   }
@@ -232,9 +240,6 @@ export class EmailNotificationsEditComponent {
 
     deleteAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        //const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === projectId);
-        //const index = this.projecthubservice.removedIds.indexOf(projectId);
-        //this.projecthubservice.removedIds.splice(index, 1);
         this.searchControl.setValue('');
         this.selectedValueExists.setValue(true)
         this.rows.splice(rowIndex, 1);
@@ -312,6 +317,8 @@ export class EmailNotificationsEditComponent {
         this.rows.push(addedProject);
         this.rows = [...this.rows];
         console.log(this.rows)
+        this.addedProjects.push(addedProject); // Add the project to the addedProjects array
+    console.log(this.addedProjects);
         this.detailsHaveBeenChanged.setValue(true);
       }
     })
@@ -325,56 +332,47 @@ export class EmailNotificationsEditComponent {
     return returnValue;
   }
   submitnotifications() {
-    this.projecthubservice.isFormChanged = false
-    this.preferenceservice.isFormChanged = false
-    //var mainObj = this.costfundingData
+    debugger
     var formValue = this.emailNotiForm.getRawValue()
     console.log(formValue)
     if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
+      this.preferenceservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
     }
     else {
       console.log(formValue.emailNotifcationNotifcationReportScopeIds)
       var mainObj = {
         reportOptions: {
-        emailNotifcationNotifcationReportScopeIds: formValue.emailNotifcationNotifcationReportScopeIds.lookUpId || '',
-        emailNotifcationPortfolioReportTypes: formValue.emailNotifcationPortfolioReportTypes?.lookUpId || '77b04381-623f-4ab4-887d-8d4192d1bf4b',
-          executionScopeIds: formValue.excecutionScope.length > 0 ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : [],
+          emailNotifcationNotifcationReportScopeIds: formValue.emailNotifcationNotifcationReportScopeIds.lookUpId || '',
+          emailNotifcationPortfolioReportTypes: formValue.emailNotifcationPortfolioReportTypes?.lookUpId || '77b04381-623f-4ab4-887d-8d4192d1bf4b',
+          executionScopeIds: formValue.excecutionScope ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : '',
           includeChild: formValue.includeChild ? formValue.includeChild : false,
           notificationId: formValue.notificationId ? formValue.notificationId : null,
-          portfolioScopeIds: Array.isArray(formValue.portfolioOwner)
-          ? formValue.portfolioOwner.map(x => x.portfolioOwnerId).join()
-          : [],
-          productIds: formValue.products.length > 0 ? formValue.products.map(x => x.productId).join() : [],
-          projectIds: this.rows.length > 0 ? this.rows.map(x => x.problemUniqueId).join() : [],
+          portfolioScopeIds: formValue.portfolioOwner
+            ? formValue.portfolioOwner.map(x => x.portfolioOwnerId).join()
+            : '',
+          productIds: formValue.products ? formValue.products.map(x => x.productId).join() : '',
+          projectIds: this.rows ? this.rows.map(x => x.problemUniqueId).join() : '',
           recieveEmailNotification: formValue.recieveEmailNotification ? formValue.recieveEmailNotification : false,
           reportFrequencyId: formValue.reportFrequencyId ? formValue.reportFrequencyId.lookUpId : '',
-          roleIds: formValue.role.length > 0 ? formValue.role.map(x => x.lookUpId).join() : '',
-          userId: this.msalService.instance.getActiveAccount().localAccountId
-        }
-        ,
-  eventsMasterData: [],
-  eventsUserData: []
+          roleIds: formValue.role ? formValue.role.map(x => x.lookUpId).join() : '',
+          userId: this.msalService.instance.getActiveAccount().localAccountId,
+        },
+        eventsMasterData: [],
+        eventsUserData: []
       }
-      }
+    }
+    console.log("Main Object", mainObj)
+    this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
+      this.preferenceservice.isFormChanged = false
+      this.projecthubservice.isFormChanged = false
+      this.preferenceservice.submitbutton.next(true)
+      this.preferenceservice.toggleDrawerOpen('', '', [], '')
 
-      console.log("Main Object", mainObj)
-       this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
-      //   this.apiService.updateReportDates(this.projectHubService.projectid, "ModifiedDate").then(secondRes => {
-          //this.projectHubService.isFormChanged = false
-          // this.projecthubservice.isNavChanged.next(true)
-          // this.projecthubservice.submitbutton.next(true)
-          // this.projecthubservice.successSave.next(true)
-          // this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          // this.preferenceservice.submitbutton.next(true)
-          // this.preferenceservice.successSave.next(true)
-          // this.preferenceservice.toggleDrawerOpen('', '', [], '')
 
-          this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
       //   })
-       })
-    
+    })
+
   }
 
 }

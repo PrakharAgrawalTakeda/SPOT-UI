@@ -1,5 +1,5 @@
 
-    <div>
+    <div *ngIf="viewContent">
         <div class="flex items-start justify-between bg-primary sidepanel-header">
             <div class="text-on-primary" style="padding-top: 6px">Edit Email Notifications</div>
             <div style="padding-top: 2px"><a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)"
@@ -38,7 +38,7 @@
                             [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
                             [customSortPointer]="'pfid'"
                             *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId === 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'">
-                        </spot-multiselect-autocomplete>
+                        </spot-multiselect-autocomplete> 
                         <spot-singleselect-autocomplete formControlName="emailNotifcationPortfolioReportTypes" class="w-full read-only"
                                 name="emailNotifcationPortfolioReportTypes" [label]="''" [placeholder]="'Project Type'"
                                 [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
@@ -130,7 +130,7 @@
                                 columnMode="flex"
                                 class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
                                 [rows]="rows">
-                                <ngx-datatable-column name="Projects" prop="projectName" [flexGrow]="9"
+                                <ngx-datatable-column name="Projects" prop="rows.problemTitle" [flexGrow]="9"
                                     [resizeable]="false" [draggable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <div class="flex items-center justify-start gap-6">
@@ -139,7 +139,7 @@
                                         </div>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1" [resizeable]="false"
+                                <ngx-datatable-column name=" " prop="rows.problemId" [flexGrow]="1" [resizeable]="false"
                                     [sortable]="false" [draggable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <a href="javascript:void(0)" title="Remove"
@@ -150,11 +150,6 @@
                                 </ngx-datatable-column>
                             </ngx-datatable>
                         </div>
-                        <!-- <div class="w-full mt-4 mb-2">
-                            <spot-toggle class="w-full" formControlName="includeChild"
-                                [label]="'Include Children Records'">
-                            </spot-toggle>
-                        </div> -->
                         <div class="flex justify-start items-center gap-3 pb-6" 
                         *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
                             <spot-toggle class="w-full"  formControlName="includeChild" [label]="'Include Children Records'">
