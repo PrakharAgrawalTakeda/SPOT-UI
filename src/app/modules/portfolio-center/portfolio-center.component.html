@@ -11,7 +11,7 @@
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
                         [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                         [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
-                        [customSortPointer]="'pfid'">
+                        [customSortPointer]="'pfid'" [showHint]="true" [hint]="'The group which is responsible for the oversight and process adherence of the record'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
                         [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
@@ -20,16 +20,16 @@
                     <spot-multiselect-autocomplete formControlName="ExecutionScope" class="w-full"
                         name="ExecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
-                        [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
+                        [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'" [customSortPointer]="'pfid'" [showHint]="true" [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="OwningOrganization" class="w-full"
                         name="OwningOrganization" [label]="'Owning Organization'" [placeholder]="'Owning Organization'"
-                        [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'">
+                        [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'" [showHint]="true" [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
                         [label]="'Project State'" [placeholder]="'Project State'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.state" [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'">
+                        [customSortPointer]="'lookUpOrder'" [showHint]="true" [hint]="'Status of the project (Active-Hold-Cancelled-Completed)'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ProjectPhase" class="w-full" name="ProjectPhase"
                         [label]="'Project Phase'" [placeholder]="'Project Phase'" [valuePointer]="'lookUpName'"
@@ -51,8 +51,8 @@
                         [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
-                        [label]="'Product'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
-                        [idPointer]="'productId'" [dropDownArray]="filterlist.products">
+                        [label]="'Product (s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true" [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="TotalCAPEX" class="w-full" name="TotalCAPEX"
                         [label]="'Total CAPEX'" [placeholder]="'Total CAPEX'" [valuePointer]="'lookUpName'"
@@ -73,15 +73,20 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="AnnualInitiatives" class="w-full" name="AnnualInitiatives"
+                        [label]="'Annual Initiatives'" [placeholder]="'Annual Initiatives'" [valuePointer]="'name'" [idPointer]="'name'"
+                        [dropDownArray]="projectType">
+                    </spot-multiselect-autocomplete>
                     <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
-                        [label]="'CAPS Project '">
+                        [label]="'CAPS Project '" [showHint]="true" [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
                     </spot-toggle>
                     <app-spot-multiselect-project-autocomplete formControlName="projectName" [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
                         [label]="'Project Name'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
                     <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
+                        [idPointer]="'lookUpId'" [dropDownArray]="overallStatus">
                     </spot-multiselect-autocomplete>
                     <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;" (click)="OpenLA()">+ Add Local Attribute</mat-label>
                     <mat-label *ngIf="showLA" id="localAttribute" style="color: #a0cbf1;" (click)="CloseLA()">+ Hide Local

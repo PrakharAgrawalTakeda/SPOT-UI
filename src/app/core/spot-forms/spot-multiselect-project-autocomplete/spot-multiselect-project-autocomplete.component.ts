@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, forwardRef } from '@angular/core';
 import { FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { RoleService } from 'app/core/auth/role.service';
 import { GlobalVariables } from 'app/shared/global-variables';
 import { Subject, debounceTime, filter, map, takeUntil } from 'rxjs';
 
@@ -28,8 +29,10 @@ export class SpotMultiselectProjectAutocompleteComponent {
   valuePointer: string = 'problemTitle'
   idPointer: string = 'problemUniqueId'
   @Input() sortByType: 'valuePointer' | 'custom' = 'valuePointer'
+  @Input() confiedentialProjects: 'None' | 'User' = 'User'
   @Input() customSortPointer: string = ''
   @Input() Required: boolean = false
+  @Input() confidentialProjects: 'None' | 'User' | 'Only' = 'User'
 
   @ViewChild('input', {static: false}) Input: ElementRef<HTMLInputElement>
 
@@ -53,7 +56,7 @@ export class SpotMultiselectProjectAutocompleteComponent {
   
   private unSubscribeAll: Subject<any> = new Subject<any>();
 
-  constructor(private _httpClient: HttpClient){
+  constructor(private _httpClient: HttpClient, private roleService: RoleService){
     // this.form.controls.control.valueChanges.subscribe((res: any) => {
     //   if (this.form.controls.control.value == "") {
     //     //this.onChange({})
@@ -76,7 +79,22 @@ export class SpotMultiselectProjectAutocompleteComponent {
       const params = new HttpParams().set('query', value);
       this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
       .subscribe((resultSets:any) =>{
-        this.resultSets = resultSets.projectData;
+        if (this.confidentialProjects != 'Only') 
+        {
+          this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+        }
+        else{
+          this.resultSets = []
+        }
+        if (this.roleService.roleMaster?.confidentialProjects && this.confidentialProjects != 'None') {
+          if (this.roleService.roleMaster.confidentialProjects.length > 0) {
+            var confProjectUserList = resultSets.projectData?.filter(x => this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId))
+            if (confProjectUserList?.length > 0) {
+              console.log(confProjectUserList)
+              this.resultSets = [...this.resultSets, ...confProjectUserList]
+            }
+          }
+        }
         this.search.next(resultSets);
       })
     })

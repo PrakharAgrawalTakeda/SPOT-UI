@@ -97,4 +97,10 @@ export class RoleService {
     var url = GlobalVariables.apiurl + "SecurityRoles/" + userid
     return this.http.get(url)
   }
+  async getCurrentRole(userid) {
+      var url = GlobalVariables.apiurl + "SecurityRoles/"+userid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
 }

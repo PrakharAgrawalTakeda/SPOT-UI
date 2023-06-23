@@ -88,6 +88,24 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+    async getBudgetPageInfo(projectId) {
+        var url = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async updateBudgetPageInfo(projectId,body) {
+        var link = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
+        const abc$ = this.http.put(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async getNewBudgetId(projectId) {
+        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
   async getfilterlist(){
     var userid = GlobalVariables.apiurl+"FilterProjects/FilterCriteria"
     const abc$ = this.http.get(userid)
@@ -424,6 +442,12 @@ async addBCFunding(body,optionId,projectId){
   }
   async bulkEditKeyAssumptions(body,projectId){
       var link = GlobalVariables.apiurl+"KeyAssumption/BulkEdit/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
+  async bulkEditFundingRequests(body,projectId){
+      var link = GlobalVariables.apiurl+"Budget/BulkEditFundingInfo/" + projectId
       const abc$ = this.http.put(link,body)
       const response = await lastValueFrom(abc$)
       return response

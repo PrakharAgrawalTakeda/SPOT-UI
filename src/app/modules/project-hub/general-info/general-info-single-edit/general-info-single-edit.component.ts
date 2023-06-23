@@ -168,7 +168,14 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         }
       })
-
+      this.generalInfoForm.controls.isConfidential.valueChanges.subscribe(res=>{
+        if(this.viewContent){
+          this.generalInfoForm.patchValue({
+            projectsingleid: '',
+            projectsingle: ''
+          })
+        }
+      })
   }
 
   ngOnChanges(changes: SimpleChanges): void {

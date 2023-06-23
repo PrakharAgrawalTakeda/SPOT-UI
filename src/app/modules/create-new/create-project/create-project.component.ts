@@ -198,16 +198,16 @@ export class CreateProjectComponent implements OnInit {
         isCapsProject: event.isCapsProject,
         owningOrganization: event.owningOrganization,
         SubmittedBy: event.SubmittedBy,
-        targetGoalSituation: event.targetGoalSituation
+        targetGoalSituation: event.targetGoalSituation,
       })
     }
     else if (index == 1) {
       this.createProjectForm.patchValue({
+        isConfidential: event.isConfidential,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
-        isCapsProject: event.isCapsProject,
-        isConfidential: event.isConfidential
+        isCapsProject: event.isCapsProject
       })
     }
     else if (index == 2) {
