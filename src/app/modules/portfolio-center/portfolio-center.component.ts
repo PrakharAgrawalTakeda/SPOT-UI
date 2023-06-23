@@ -245,6 +245,7 @@ export class PortfolioCenterComponent implements OnInit {
     }
     this.apiService.getfilterlist().then(data => {
       this.filterlist = data
+      this.owningOrg=[]
       this.filterlist.defaultOwningOrganizations.forEach(res => {
         this.owningOrg.push({ name: res })
       })
@@ -273,6 +274,12 @@ export class PortfolioCenterComponent implements OnInit {
           }
           if (this.capitalPhaseArray[z].capitalPhaseID == "CB72B543-CDF8-4C09-8372-60A8784D52D5") {
             this.capitalPhaseArray[z].capitalPhaseName = "Define (Define Phase)"
+          }
+          if (this.capitalPhaseArray[z].capitalPhaseID == "FCE86580-0CE5-4B9A-9F3A-761FAFC76CEF"){
+            this.capitalPhaseArray[z].capitalPhaseName = "Control (Close Phase)"
+          }
+          if (this.capitalPhaseArray[z].capitalPhaseID == "EA995703-7A78-4689-A013-C9733B26980C") {
+            this.capitalPhaseArray[z].capitalPhaseName = "Control (Track Phase)"
           }
         }
 
@@ -1445,33 +1452,19 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   changePhase(phaseId) {
-    var data = this.filteredPhaseArray
-    var dataOE = this.oePhaseArray
     var result = []
     var resultOE = []
+    this.filteredPhaseArray = []
+    this.oePhaseArray= []
     for(var i=0;i<phaseId.length;i++){
       result = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId[i].lookUpId && item.isOEPhase == false);
-      // this.filteredPhaseArray.push(data)
+      this.filteredPhaseArray=[...this.filteredPhaseArray, ...result]
     }
-    if(data.length == 0){
-      this.filteredPhaseArray = result
-    }
-    else{
-      this.filteredPhaseArray = [...data, ...result]
-    }
-
+    
     for (var i = 0; i < phaseId.length; i++) {
       resultOE = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId[i].lookUpId && item.isOEPhase == true);
-      // this.filteredPhaseArray.push(data)
+      this.oePhaseArray = [...this.oePhaseArray, ...resultOE]
     }
-    if (dataOE.length == 0) {
-      this.oePhaseArray = resultOE
-    }
-    else {
-      this.oePhaseArray = [...dataOE, ...resultOE]
-    }
-
-    // this.oePhaseArray = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId && item.isOEPhase == true)
   }
 
 }
