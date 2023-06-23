@@ -22,6 +22,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
     @Output() newItemEvent = new EventEmitter<string>();
     @Input() opened: boolean = false;
     @Input() calledFrom: string = "";
+    @Input() confidentialProjects: 'None' | 'User' | 'Only' = 'User'
     projectdata: any;
     // opened: boolean = false;
     resultSets: any[];
@@ -127,11 +128,16 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                     .subscribe((resultSets: any) => {
 
                         // Store the result sets
-                        this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
-                        if (this.roleService.roleMaster?.confidentialProjects) {
+                        if (this.confidentialProjects != 'Only') {
+                            this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+                        }
+                        else {
+                            this.resultSets = []
+                        }
+                        if (this.roleService.roleMaster?.confidentialProjects && this.confidentialProjects != 'None') {
                             if (this.roleService.roleMaster.confidentialProjects.length > 0) {
-                                var confProjectUserList = resultSets.projectData?.filter(x=>this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId) )
-                                if(confProjectUserList?.length>0){
+                                var confProjectUserList = resultSets.projectData?.filter(x => this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId))
+                                if (confProjectUserList?.length > 0) {
                                     console.log(confProjectUserList)
                                     this.resultSets = [...this.resultSets, ...confProjectUserList]
                                 }
