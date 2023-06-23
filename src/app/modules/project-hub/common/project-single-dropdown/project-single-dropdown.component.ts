@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { GlobalVariables } from 'app/shared/global-variables';
 import {debounceTime, filter, lastValueFrom, map, Observable, startWith, Subject, takeUntil} from 'rxjs';
 import {ProjectHubService} from "../../project-hub.service";
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
   selector: 'app-project-single-dropdown',
@@ -17,6 +18,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
   @Input() showHint: boolean = false
   @Input() hint: string = ''
   @Input() hideRelations: boolean = false
+  @Input() confiedentialProjects: 'None' | 'User' = 'User'
 
   options: string[] = ['One', 'Two', 'Three'];
   resultSets: any[];
@@ -24,7 +26,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
   debounce = 400
   filteredOptions: any
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(private _httpClient: HttpClient,public projecthubservice: ProjectHubService) {
+  constructor(private _httpClient: HttpClient,public projecthubservice: ProjectHubService,private roleService: RoleService) {
   }
 
   ngOnInit(): void {
@@ -79,7 +81,16 @@ export class ProjectSingleDropdownComponent implements OnInit {
 
               }
             // Store the result sets
-            this.resultSets = resultSets.projectData;
+            this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+            if (this.roleService.roleMaster?.confidentialProjects && this.confiedentialProjects == 'User') {
+                if (this.roleService.roleMaster.confidentialProjects.length > 0) {
+                    var confProjectUserList = resultSets.projectData?.filter(x=>this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId) )
+                    if(confProjectUserList?.length>0){
+                        console.log(confProjectUserList)
+                        this.resultSets = [...this.resultSets, ...confProjectUserList]
+                    }
+                }
+            }
             console.log(this.resultSets)
             console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
             // Execute the event
