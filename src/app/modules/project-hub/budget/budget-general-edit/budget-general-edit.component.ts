@@ -289,10 +289,14 @@ export class BudgetGeneralEditComponent {
     }
     getGmsBudgetOwner(): any {
         if(this.isBudgetAdmin){
-            return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+            if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
+            }else{
+                return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+            }
         }else{
             if(!this.gmsBudgetowner.invalid){
-                return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.gmsbudgetOwnerEditable)
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             }
