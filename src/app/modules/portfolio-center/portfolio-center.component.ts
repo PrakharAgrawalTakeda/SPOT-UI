@@ -76,7 +76,7 @@ export class PortfolioCenterComponent implements OnInit {
     "AGILEWave": [],
     "CAPSProject": [],
     "Project/Program": [],
-    "OverallStatus": [],
+    "OverallStatus": []
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -95,7 +95,7 @@ export class PortfolioCenterComponent implements OnInit {
     "AGILEWave": [],
     "CAPSProject": [],
     "Project/Program": [],
-    "OverallStatus": [],
+    "OverallStatus": []
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
@@ -114,7 +114,7 @@ export class PortfolioCenterComponent implements OnInit {
     AGILEWave: new FormControl(),
     CAPSProject: new FormControl(),
     projectName: new FormControl(),
-    OverallStatus: new FormControl(),
+    OverallStatus: new FormControl()
   })
 
   filteredPhaseArray = []
@@ -781,6 +781,22 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   applyfilters() {
+    if (this.PortfolioFilterForm.controls.ProjectPhase.value == null){
+      if (this.PortfolioFilterForm.controls.CapitalPhase.value != null && this.PortfolioFilterForm.controls.CapitalPhase.value.length != 0) {
+        this.PortfolioFilterForm.patchValue({ CapitalPhase: [] })
+      }
+      if (this.PortfolioFilterForm.controls.OEPhase.value != null && this.PortfolioFilterForm.controls.OEPhase.value.length != 0) {
+        this.PortfolioFilterForm.patchValue({ OEPhase: [] })
+      }
+    }
+    else if (this.PortfolioFilterForm.controls.ProjectPhase.value.length == 0){
+        if (this.PortfolioFilterForm.controls.CapitalPhase.value != null && this.PortfolioFilterForm.controls.CapitalPhase.value.length != 0){
+          this.PortfolioFilterForm.patchValue({ CapitalPhase : []})
+        }
+        if (this.PortfolioFilterForm.controls.OEPhase.value != null && this.PortfolioFilterForm.controls.OEPhase.value.length != 0) {
+          this.PortfolioFilterForm.patchValue({ OEPhase: [] })
+        }
+    }
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
     var mainObj = this.originalData
     var dataToSend = []
@@ -1391,7 +1407,7 @@ export class PortfolioCenterComponent implements OnInit {
       this.size = 100;
       this.totalElements = this.totalproject;
       this.totalPages = this.totalproject /100;
-      this.pageNumber = 1
+      this.pageNumber = 0
     }
     else{
       this.projectOverview = []
@@ -1422,7 +1438,7 @@ export class PortfolioCenterComponent implements OnInit {
           this.size = 100;
           this.totalElements = this.totalproject;
           this.totalPages = this.totalproject / 100;
-          this.pageNumber = offset.offset
+          this.pageNumber = offset.offset-1
         })
     }
     // })
