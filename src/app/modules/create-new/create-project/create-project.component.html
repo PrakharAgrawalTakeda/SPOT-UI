@@ -68,17 +68,6 @@
                                         <br />
                                         <div class="test">
                                             <div class="parent">
-                                                <label>Is Confidential</label>
-                                            </div>
-                                            <div class="child" *ngIf="createProjectForm.value.isConfidential">
-                                                <label class="reviewText">Yes</label>
-                                            </div>
-                                            <div class="child" *ngIf="!createProjectForm.value.isConfidential">
-                                                <label class="reviewText">No</label>
-                                            </div>
-                                        </div>
-                                        <div class="test">
-                                            <div class="parent">
                                                 <label><label style="color:red">*</label>Submitted By </label>
                                             </div>
                                             <div class="child">
@@ -175,6 +164,17 @@
                                         <br />
                                         <label style="color: rgba(76,155,207);font-size: 16px;"><b>Project Details</b></label>
                                         <br />
+                                        <div class="test" *ngIf="projectHubService.roleControllerControl.generalInfo.confidentialEdit">
+                                            <div class="parent">
+                                                <label>Is Confidential</label>
+                                            </div>
+                                            <div class="child" *ngIf="createProjectForm.value.isConfidential">
+                                                <label class="reviewText">Yes</label>
+                                            </div>
+                                            <div class="child" *ngIf="!createProjectForm.value.isConfidential">
+                                                <label class="reviewText">No</label>
+                                            </div>
+                                        </div>
                                         <div class="test">
                                             <div class="parent">
                                                 <label>Parent Program</label>
