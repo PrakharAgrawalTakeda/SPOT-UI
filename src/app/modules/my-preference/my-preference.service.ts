@@ -7,6 +7,7 @@ import {BehaviorSubject} from "rxjs";
 })
 export class MyPreferenceService {
     submitbutton = new BehaviorSubject<boolean>(false)
+    isNavChanged = new BehaviorSubject<boolean>(false)
     drawerOpenedright: boolean = false;
     itemid: string = "new"
     itemtype: string = ""

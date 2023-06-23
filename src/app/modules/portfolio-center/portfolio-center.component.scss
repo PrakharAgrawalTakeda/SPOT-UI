@@ -100,10 +100,23 @@ li{
 }
 
 .pager li{
-    padding-right: 10px !important;
+    padding-right: 15px !important;
+    margin-right: 2px !important;
 }
 
 .pager{
     font-size: large !important;
     width: 300px !important;
+}
+
+.pages.active{
+    background: #ffffff !important;
+    border: 2px solid green;
+}
+
+.pages{
+    cursor: pointer;
+    padding: 5px 12px;
+    background: aquamarine;
+    margin: 0px 5px;
 }
