@@ -494,7 +494,7 @@ export class PortfolioCenterComponent implements OnInit {
           this.data = {
             "budgetDistribution": {
               "categories": [
-                "Intitate",
+                "Initiate",
                 "Define",
                 "Plan",
                 "Excecute",
@@ -761,7 +761,7 @@ export class PortfolioCenterComponent implements OnInit {
         categories: this.data.budgetDistribution.categories
       },
       yaxis: {
-        max: (max: number): number => max,
+        // max: (max: number): number => max,
         show: false
       },
       plotOptions: {
@@ -778,7 +778,19 @@ export class PortfolioCenterComponent implements OnInit {
       },
       dataLabels: {
         enabled: true,
-        offsetY: 4
+        offsetY: -20,
+        style: {
+          fontSize: "12px",
+          colors: ["#304758"]
+        },
+        formatter: function (val:any) {
+          if (isNaN(val)){
+            return ""
+          }
+          else{
+            return val
+          }
+        },
       },
     };
 
@@ -1401,7 +1413,26 @@ export class PortfolioCenterComponent implements OnInit {
           (this.projects.data[i].oePhaseAbbreviation
             ? this.projects.data[i].oePhaseAbbreviation
             : 'NA');
-        this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+        if (this.projectOverview[i].overallStatus == "YellowStop"){
+          this.projectOverview[i].OverAllStatusSort = "RedStop"
+        }
+        else if (this.projectOverview[i].overallStatus == "RedStop"){
+          this.projectOverview[i].OverAllStatusSort = "YellowStop"
+        }
+        else{
+          this.projectOverview[i].OverAllStatusSort = this.projectOverview[i].overallStatus
+        }
+        
+        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+          this.projectOverview[i].CAPEX = this.projectOverview[i].totalApprovedCapex
+          this.projectOverview[i].FORECAST = this.projectOverview[i].annualForecast
+          this.projectOverview[i].currencyAbb = "OY"
+        }
+        else {
+          this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
+          this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
+          this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+        }
         this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
         this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact;
         this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
@@ -1432,7 +1463,25 @@ export class PortfolioCenterComponent implements OnInit {
               (this.projects.data[i].oePhaseAbbreviation
                 ? this.projects.data[i].oePhaseAbbreviation
                 : 'NA');
-            this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+            if (this.projectOverview[i].overallStatus == "YellowStop") {
+              this.projectOverview[i].OverAllStatusSort = "RedStop"
+            }
+            else if (this.projectOverview[i].overallStatus == "RedStop") {
+              this.projectOverview[i].OverAllStatusSort = "YellowStop"
+            }
+            else {
+              this.projectOverview[i].OverAllStatusSort = this.projectOverview[i].overallStatus
+            }
+            if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+              this.projectOverview[i].CAPEX = this.projectOverview[i].totalApprovedCapex
+              this.projectOverview[i].FORECAST = this.projectOverview[i].annualForecast
+              this.projectOverview[i].currencyAbb = "OY"
+            }
+            else {
+              this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
+              this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
+              this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+            }
             this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
             this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact;
             this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits;
