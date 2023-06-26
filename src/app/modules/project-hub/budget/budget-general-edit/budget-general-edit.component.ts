@@ -246,7 +246,7 @@ export class BudgetGeneralEditComponent {
             this.projectHubService.successSave.next(true)
             this.projectHubService.toggleDrawerOpen('', '', [], '')
         }).catch(err => {
-            if(err.status == 403 || err.status == 418){
+            if(err.status == 400){
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "This budget ID is used by another project. Please select another one",
                     "message": "",
