@@ -73,10 +73,10 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="AnnualInitiatives" class="w-full" name="AnnualInitiatives"
+                    <!-- <spot-multiselect-autocomplete formControlName="AnnualInitiatives" class="w-full" name="AnnualInitiatives"
                         [label]="'Annual Initiatives'" [placeholder]="'Annual Initiatives'" [valuePointer]="'name'" [idPointer]="'name'"
                         [dropDownArray]="projectType">
-                    </spot-multiselect-autocomplete>
+                    </spot-multiselect-autocomplete> -->
                     <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
                         [label]="'CAPS Project '" [showHint]="true" [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
 CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
@@ -340,7 +340,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
         [offset]="pageNumber"
         [limit]="size"
         (page)="setPage('',$event)"
-        [footerHeight]="50" [virtualization]="false" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
+        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'OverAllStatusSort', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
                 
                         <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30" [sortable]="true" [frozenLeft]="true">
@@ -437,12 +437,12 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                 <!-- <p>{{value}}</p> -->
                                 <div class="grid grid-cols-1 text-right">
                                     {{
-                                    row.totalApprovedCapex ? row.totalApprovedCapex.toLocaleString() : 0
+                                    row.CAPEX ? row.CAPEX.toLocaleString() : 0
                                     }} &nbsp; {{row.currencyAbb}}
                                 </div>
                                 <br />
                                 <div class="text-right">
-                                    {{ row.forecast ? row.forecast.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
+                                    {{ row.FORECAST ? row.FORECAST.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
                                 </div>
                             </ng-template>
                         </ngx-datatable-column>
