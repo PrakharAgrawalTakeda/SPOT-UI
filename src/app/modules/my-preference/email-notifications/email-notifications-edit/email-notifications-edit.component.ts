@@ -65,7 +65,7 @@ export class EmailNotificationsEditComponent {
   emailDb: any;
   lookUpData3: any;
   reportsData: any;
-  addedProjects: any[] = [];
+  projects: any;
 
 
 
@@ -160,8 +160,8 @@ export class EmailNotificationsEditComponent {
                 role: res.reportOptions.roleIds && this.getRoles()
                 ? res.reportOptions.roleIds.split(',').map(id => this.getRoles().find(x => x.lookUpId === id)).filter(Boolean)
                 : [],
-                rows: res.reportOptions.projectIds && this.rows
-                ? res.reportOptions.projectIds.split(',').filter(id => this.rows.some(row => row.problemUniqueId === id))
+                rows: res.reportOptions.projectIds
+                ? res.reportOptions.projectIds.split(',')
                 : [],
               includeChild: res.reportOptions.includeChild,
               products: res.reportOptions.productIds && this.filterCriteria.products ? 
@@ -175,6 +175,18 @@ export class EmailNotificationsEditComponent {
 console.log(this.getRoles())
 
           }
+          if(res.reportOptions.projectIds)
+          {
+            this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
+              if(id)
+              {
+                this.projects = id
+                console.log(this.projects)
+              }
+              
+                        })
+          }
+
           this.preferenceservice.isFormChanged = false
           this.projecthubservice.isFormChanged = false
           this.viewContent = true;
@@ -244,6 +256,8 @@ console.log(this.getRoles())
         this.selectedValueExists.setValue(true)
         this.rows.splice(rowIndex, 1);
         this.rows = [...this.rows];
+        this.projects.splice(rowIndex, 1);
+        this.projects = [...this.projects];
         this.detailsHaveBeenChanged.setValue(true);
       }
     })
@@ -317,8 +331,8 @@ console.log(this.getRoles())
         this.rows.push(addedProject);
         this.rows = [...this.rows];
         console.log(this.rows)
-        this.addedProjects.push(addedProject); // Add the project to the addedProjects array
-    console.log(this.addedProjects);
+    this.projects.push(addedProject)
+    this.projects = [...this.projects]
         this.detailsHaveBeenChanged.setValue(true);
       }
     })
@@ -352,7 +366,7 @@ console.log(this.getRoles())
             ? formValue.portfolioOwner.map(x => x.portfolioOwnerId).join()
             : '',
           productIds: formValue.products ? formValue.products.map(x => x.productId).join() : '',
-          projectIds: this.rows ? this.rows.map(x => x.problemUniqueId).join() : '',
+          projectIds: this.projects ? this.projects.map(x => x.problemUniqueId).join() : '',
           recieveEmailNotification: formValue.recieveEmailNotification ? formValue.recieveEmailNotification : false,
           reportFrequencyId: formValue.reportFrequencyId ? formValue.reportFrequencyId.lookUpId : '',
           roleIds: formValue.role ? formValue.role.map(x => x.lookUpId).join() : '',

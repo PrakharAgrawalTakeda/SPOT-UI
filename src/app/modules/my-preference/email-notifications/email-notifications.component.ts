@@ -19,7 +19,6 @@ import { GlobalVariables } from 'app/shared/global-variables';
   styleUrls: ['./email-notifications.component.scss']
 })
 export class EmailNotificationsComponent {
-  @Input() addedProjects: any[];
   @Input() debounce: number = 300;
   @Input() minLength: number = 4;
   @Input() appearance: 'basic' | 'bar' = 'bar';
@@ -66,6 +65,7 @@ export class EmailNotificationsComponent {
   isParent: boolean = false;
   lookUpData3: any;
   emailNotiTable: any;
+  projects: any;
 
   constructor(public projecthubservice: ProjectHubService,
     public preferenceservice: MyPreferenceService,
@@ -122,7 +122,7 @@ export class EmailNotificationsComponent {
     this.apiService.getemailNoti(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
         this.apiservice.getfilterlist().then(filter => {
-          console.log(this.addedProjects)
+          
           this.emailNoti = res
           this.emailNotiTable = res
           this.lookup = lookup
@@ -167,8 +167,9 @@ export class EmailNotificationsComponent {
               role: res.reportOptions.roleIds && this.getRoles()
                 ? res.reportOptions.roleIds.split(',').map(id => this.getRoles().find(x => x.lookUpId === id)).filter(Boolean)
                 : [],
-              rows: res.reportOptions.projectIds && this.rows
-                ? res.reportOptions.projectIds.split(',').map(id => this.rows.find(x => x.problemUniqueId === id)).filter(Boolean) : [],
+                rows: res.reportOptions.projectIds
+                ? res.reportOptions.projectIds.split(',')
+                : [],
               includeChild: res.reportOptions.includeChild,
               products: res.reportOptions.productIds && this.filterCriteria.products ?
                 res.reportOptions.productIds.split(',').map(id => this.filterCriteria.products.find(x => x.productId === id)).filter(Boolean) : [], emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes
@@ -179,6 +180,17 @@ export class EmailNotificationsComponent {
 
           }
           console.log("FORM", this.emailNotiForm.getRawValue())
+          if(res.reportOptions.projectIds)
+          {
+            this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
+              if(id)
+              {
+                this.projects = id
+                console.log(this.projects)
+              }
+              
+                        })
+          }
         })
       })
     })
@@ -208,6 +220,9 @@ export class EmailNotificationsComponent {
     }
     if (this.emailNotiForm.controls['role']) {
       this.emailNotiForm.controls['role'].disable()
+    }
+    if (this.emailNotiForm.controls['products']) {
+      this.emailNotiForm.controls['products'].disable()
     }
     if (this.emailNotiForm.controls['rows']) {
       this.emailNotiForm.controls['rows'].disable()

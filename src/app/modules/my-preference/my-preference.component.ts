@@ -14,7 +14,6 @@ import {MsalService} from "@azure/msal-angular";
 export class MyPreferenceComponent implements OnInit {
     milestoneAccess = false;
     checkAccessError = false;
-    addedProjects: any[] = [];
 
     constructor(private _Activatedroute: ActivatedRoute,
                 private router: Router,
