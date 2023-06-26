@@ -103,7 +103,7 @@
                 <spot-input class="w-full" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
                 </spot-input>
             </div>
-            <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit" [fundingRequests]="fundingInformations"></app-budget-funding-information-table>
+            <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit" [budgetInfo]="budgetPageInfo"></app-budget-funding-information-table>
         </div>
 
         <div>

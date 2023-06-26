@@ -11,7 +11,8 @@ import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.servi
 })
 export class BudgetFundingInformationTableComponent {
     @Input() editable: boolean
-    @Input() fundingRequests: any = []
+    @Input() budgetInfo: any;
+    fundingRequests = [];
     id: string = ''
     localCurrency:any = [];
 
@@ -30,9 +31,13 @@ export class BudgetFundingInformationTableComponent {
     ngOnInit(): void {
         this.dataloader()
     }
+    ngOnChanges() {
+        this.dataloader()
+    }
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        this.fundingRequests = this.budgetInfo.budgetIOs
         // this.portfoliService.getLocalCurrency().then(currency => {
         //     this.localCurrency = currency
         // })

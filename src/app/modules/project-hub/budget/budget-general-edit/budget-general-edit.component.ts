@@ -87,7 +87,12 @@ export class BudgetGeneralEditComponent {
                     this.predefinedInvestmentId.enable({emitEvent : false})
                     this.where.enable({emitEvent : false})
                     this.why.enable({emitEvent : false})
-                    this.showBudgetIdButton = false;
+                    if(!this.isBudgetAdmin){
+                        this.showBudgetIdButton = false;
+                    }else{
+                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
+                        this.showBudgetIdButton = true;
+                    }
                 }else{
                     if(!this.isBudgetAdmin){
                         if(this.capexRequired.disabled){
@@ -109,6 +114,7 @@ export class BudgetGeneralEditComponent {
                 this.budgetInfoForm.controls.budgetId.disable()
                 this.required = false;
                 this.showBudgetIdButton = false;
+                this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
                 if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
                     this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                 }
@@ -142,7 +148,6 @@ export class BudgetGeneralEditComponent {
             this.viewContent = true
         })
         this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
-        // this.isBudgetAdmin = false;
     }
 
     getPredifinedInvestment(): any {
@@ -223,30 +228,45 @@ export class BudgetGeneralEditComponent {
                         }
                     })
                 }else{
-                    this.projectHubService.isFormChanged = false
-                    const formValue = this.budgetInfoForm.getRawValue();
-                    const mainObj =this.prepareDataforSubmit(formValue)
-                    this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
-                        this.projectHubService.isNavChanged.next(true)
-                        this.projectHubService.submitbutton.next(true)
-                        this.projectHubService.successSave.next(true)
-                        this.projectHubService.toggleDrawerOpen('', '', [], '')
-                    })
+                    this.submitInfo()
                 }
             }
             else{
-                this.projectHubService.isFormChanged = false
-                const formValue = this.budgetInfoForm.getRawValue();
-                const mainObj =this.prepareDataforSubmit(formValue)
-                this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
-                    this.projectHubService.isNavChanged.next(true)
-                    this.projectHubService.submitbutton.next(true)
-                    this.projectHubService.successSave.next(true)
-                    this.projectHubService.toggleDrawerOpen('', '', [], '')
-                })
+                this.submitInfo()
             }
         }
-
+    }
+    submitInfo(){
+        this.projectHubService.isFormChanged = false
+        const formValue = this.budgetInfoForm.getRawValue();
+        const mainObj =this.prepareDataforSubmit(formValue)
+        this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
+            this.projectHubService.isNavChanged.next(true)
+            this.projectHubService.submitbutton.next(true)
+            this.projectHubService.successSave.next(true)
+            this.projectHubService.toggleDrawerOpen('', '', [], '')
+        }).catch(err => {
+            if(err.status == 403 || err.status == 418){
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "This budget ID is used by another project. Please select another one",
+                    "message": "",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                    },
+                    "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+            }
+        })
     }
     prepareDataforSubmit(formValue): any {
         const mainObj = this.budgetInfo;
@@ -296,22 +316,19 @@ export class BudgetGeneralEditComponent {
                 budgetId:  res.BudgetId,
             })
             this.showBudgetIdButton = false;
-            if(!this.isBudgetAdmin){
-                this.budgetId.disable();
-            }
+            this.budgetId.disable();
         })
     }
     getGmsBudgetOwner(): any {
         if(this.isBudgetAdmin){
             if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
-
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             }
         }else{
             if(!this.gmsBudgetowner.invalid){
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             }
