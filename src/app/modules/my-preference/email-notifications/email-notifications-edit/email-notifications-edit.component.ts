@@ -346,7 +346,6 @@ console.log(this.getRoles())
     return returnValue;
   }
   submitnotifications() {
-    debugger
     var formValue = this.emailNotiForm.getRawValue()
     console.log(formValue)
     if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
