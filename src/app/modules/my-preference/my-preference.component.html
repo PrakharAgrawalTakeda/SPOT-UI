@@ -3,7 +3,6 @@
              [ngClass]="{'fuse-drawer-large':myPreferenceService.fuseDrawerLarge}">
     <div>
         <app-milestone-set-view-edit *ngIf="myPreferenceService.itemtype == 'MilestoneSetsAddNew'"></app-milestone-set-view-edit>
-        <app-email-notifications *ngIf="myPreferenceService.itemtype != 'EmailNotiEdit'" [addedProjects]="addedProjects"></app-email-notifications>
         <app-email-notifications-edit 
             *ngIf="myPreferenceService.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
             <app-email-notifications-table-edit
