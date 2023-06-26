@@ -199,11 +199,11 @@ export class CreateProjectComponent implements OnInit {
         owningOrganization: event.owningOrganization,
         SubmittedBy: event.SubmittedBy,
         targetGoalSituation: event.targetGoalSituation,
-        isConfidential: event.isConfidential
       })
     }
     else if (index == 1) {
       this.createProjectForm.patchValue({
+        isConfidential: event.isConfidential,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,

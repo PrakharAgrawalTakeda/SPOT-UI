@@ -7,7 +7,7 @@ import { ProjectApiService } from 'app/modules/project-hub/common/project-api.se
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { MsalService } from '@azure/msal-angular';
 import { MyPreferenceApiService } from '../my-preference-api.service';
-import {MyPreferenceService} from '../my-preference.service'
+import { MyPreferenceService } from '../my-preference.service'
 
 import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { HttpClient, HttpParams } from "@angular/common/http";
@@ -19,11 +19,12 @@ import { GlobalVariables } from 'app/shared/global-variables';
   styleUrls: ['./email-notifications.component.scss']
 })
 export class EmailNotificationsComponent {
+  @Input() addedProjects: any[];
   @Input() debounce: number = 300;
-    @Input() minLength: number = 4;
-    @Input() appearance: 'basic' | 'bar' = 'bar';
-    @Output() search: EventEmitter<any> = new EventEmitter<any>();
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
+  @Input() minLength: number = 4;
+  @Input() appearance: 'basic' | 'bar' = 'bar';
+  @Output() search: EventEmitter<any> = new EventEmitter<any>();
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   emailNotiEditType: string = 'EmailNotiEdit';
   emailNotiTableEditType: string = 'EmailNotiTableEdit';
   id: string = ""
@@ -33,15 +34,18 @@ export class EmailNotificationsComponent {
     description: new FormControl(''),
     event: new FormControl(''),
     priority: new FormControl(''),
-    reportFrequencyId: new FormControl(''),
-    emailNotifcationNotifcationReportScopeIds: new FormControl(''),
-    portfolioOwner: new FormControl([]),
-    excecutionScope: new FormControl([]),
-    role: new FormControl([]),
-    rows: new FormControl([]),
+    reportFrequencyId: new FormControl(null),
+    emailNotifcationNotifcationReportScopeIds: new FormControl(null),
+    portfolioOwner: new FormControl(),
+    excecutionScope: new FormControl(),
+    role: new FormControl(),
+    rows: new FormControl(),
     includeChild: new FormControl(false),
-    products: new FormControl([]),
-    emailNotifcationPortfolioReportTypes: new FormControl('')
+    products: new FormControl(),
+    emailNotifcationPortfolioReportTypes: new FormControl(null),
+    notificationId: new FormControl(''),
+    problemId: new FormControl(''),
+    problemTitle: new FormControl('')
   })
   emailNoti: any;
   eventsData: any;
@@ -62,62 +66,67 @@ export class EmailNotificationsComponent {
   isParent: boolean = false;
   lookUpData3: any;
   emailNotiTable: any;
-  
+
   constructor(public projecthubservice: ProjectHubService,
     public preferenceservice: MyPreferenceService,
     private _httpClient: HttpClient,
     private _Activatedroute: ActivatedRoute, private msalService: MsalService, private apiService: MyPreferenceApiService,
-    public auth: AuthService, public fuseAlert: FuseConfirmationService,private authService: AuthService,private apiservice: ProjectApiService) {
+    public auth: AuthService, public fuseAlert: FuseConfirmationService, private authService: AuthService, private apiservice: ProjectApiService) {
+    this.preferenceservice.submitbutton.subscribe(res => {
+      if (res) {
+        this.dataloader()
+      }
+    })
   }
   ngOnInit(): void {
     this.dataloader()
-    
-        this.dataloader();
-        window.dispatchEvent(new Event('resize'));
-        this.searchControl.valueChanges
-            .pipe(
-                debounceTime(this.debounce),
-                takeUntil(this._unsubscribeAll),
-                startWith(''),
-                map((value) => {
-                    if (!value || value.length < this.minLength) {
-                        this.resultSets = null;
-                    }
-                    this.temp = value
-                    return value;
-                }),
-                filter(value => value && value.length >= this.minLength)
-            )
-            .subscribe((value) => {
-                const params = new HttpParams().set('query', value);
-                if (this.selectedValueExists.value == true && this.searchControl.value != "") {
-                    this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
-                        .subscribe((resultSets: any) => {
-                            for (var i = 0; i < resultSets.projectData.length; i++) {
-                                var obj = resultSets.projectData[i];
-                                console.log(this.projecthubservice)
-                                // if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
-                                //     resultSets.projectData.splice(i, 1);
-                                //     i--;
-                                // }
-                            }
-                            this.resultSets = resultSets.projectData;
-                            this.budget = resultSets.budget
-                            this.search.next(resultSets);
-                        });
-
-                }
+    window.dispatchEvent(new Event('resize'));
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(this.debounce),
+        takeUntil(this._unsubscribeAll),
+        startWith(''),
+        map((value) => {
+          if (!value || value.length < this.minLength) {
+            this.resultSets = null;
+          }
+          this.temp = value
+          return value;
+        }),
+        filter(value => value && value.length >= this.minLength)
+      )
+      .subscribe((value) => {
+        const params = new HttpParams().set('query', value);
+        if (this.selectedValueExists.value == true && this.searchControl.value != "") {
+          this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
+            .subscribe((resultSets: any) => {
+              for (var i = 0; i < resultSets.projectData.length; i++) {
+                var obj = resultSets.projectData[i];
+                console.log(this.projecthubservice)
+                // if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
+                //     resultSets.projectData.splice(i, 1);
+                //     i--;
+                // }
+              }
+              this.resultSets = resultSets.projectData;
+              this.budget = resultSets.budget
+              this.search.next(resultSets);
             });
+
+        }
+      });
   }
   dataloader() {
+    
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getemailNoti(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
         this.apiservice.getfilterlist().then(filter => {
+          console.log(this.addedProjects)
           this.emailNoti = res
           this.emailNotiTable = res
           this.lookup = lookup
-        this.filterCriteria = filter
+          this.filterCriteria = filter
           console.log('LookUp Data', lookup)
           this.lookUpData = lookup.filter(x => x.lookUpParentId == '3df298d8-fcac-4b2c-b571-c7ddfdeafbdc')
           this.lookUpData.sort((a, b) => {
@@ -133,235 +142,236 @@ export class EmailNotificationsComponent {
           this.lookUpData3.sort((a, b) => {
             return a.lookUpOrder - b.lookUpOrder;
           })
-      
-      this.eventsData = res.eventsMasterData
-      res.eventsMasterData.sort((a, b) => a.priority - b.priority)
-      console.log(res)
-      if (this.emailNoti != null) {
-        this.emailNotiForm.patchValue({
-          recieveEmailNotification: res.reportOptions.recieveEmailNotification ? res.reportOptions.recieveEmailNotification : false,
-          priority: res.eventsMasterData.priority,
-          event: res.eventsMasterData.event,
-          description: res.eventsMasterData.description,
-          onoff: res.eventsUserData.find(eventUserData => eventUserData.frequencyId === res.eventsMasterData.frequencyId)?.onoff,
-          reportFrequencyId: res.reportOptions.reportFrequencyId ? this.lookUpData.find(x => x.lookUpId == res.reportOptions.reportFrequencyId) : {},
-          emailNotifcationNotifcationReportScopeIds: res.reportOptions.emailNotifcationNotifcationReportScopeIds ? this.lookUpData2.find(x => x.lookUpId == res.reportOptions.emailNotifcationNotifcationReportScopeIds) : {},
-          portfolioOwner: res.reportOptions.portfolioScopeIds ? res.reportOptions.portfolioScopeIds : [],
-          excecutionScope: res.reportOptions.executionScopeIds ? res.reportOptions.executionScopeIds : [],
-          role: res.reportOptions.roleId ? res.reportOptions.roleId : [],
-          rows: res.reportOptions.projectIds ? res.reportOptions.projectIds : [],
-          includeChild: res.reportOptions.includeChild,
-          products: res.reportOptions.products ? res.reportOptions.products : [],
-          emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes ? this.lookUpData3.find(x => x.lookUpId == res.reportOptions.emailNotifcationPortfolioReportTypes) : {}
+
+          this.eventsData = res.eventsMasterData
+          res.eventsMasterData.sort((a, b) => a.priority - b.priority)
+          console.log("DB OBJECT", res)
+          //this.rows = res.reportOptions.projectIds.split(',').map(id => this.rows.find(x => x.problemUniqueId === id)).filter(Boolean)
+          console.log("ROWS", this.rows)
+
+          if (this.emailNoti != null) {
+            this.emailNotiForm.patchValue({
+              recieveEmailNotification: res.reportOptions.recieveEmailNotification ? res.reportOptions.recieveEmailNotification : false,
+              priority: res.eventsMasterData.priority,
+              event: res.eventsMasterData.event,
+              description: res.eventsMasterData.description,
+              onoff: res.eventsUserData.find(eventUserData => eventUserData.frequencyId === res.eventsMasterData.frequencyId)?.onoff,
+              reportFrequencyId: res.reportOptions.reportFrequencyId ? this.lookUpData.find(x => x.lookUpId == res.reportOptions.reportFrequencyId) : '',
+              emailNotifcationNotifcationReportScopeIds: res.reportOptions.emailNotifcationNotifcationReportScopeIds ? this.lookUpData2.find(x => x.lookUpId == res.reportOptions.emailNotifcationNotifcationReportScopeIds) : '',
+              portfolioOwner: res.reportOptions.portfolioScopeIds && this.filterCriteria.portfolioOwner
+                ? res.reportOptions.portfolioScopeIds.split(',').map(id => this.filterCriteria.portfolioOwner.find(x => x.portfolioOwnerId === id)).filter(Boolean)
+                : [],
+              excecutionScope: res.reportOptions.executionScopeIds && this.filterCriteria.portfolioOwner
+                ? res.reportOptions.executionScopeIds.split(',').map(id => this.filterCriteria.portfolioOwner.find(x => x.portfolioOwnerId === id)).filter(Boolean)
+                : [],
+              role: res.reportOptions.roleIds && this.getRoles()
+                ? res.reportOptions.roleIds.split(',').map(id => this.getRoles().find(x => x.lookUpId === id)).filter(Boolean)
+                : [],
+              rows: res.reportOptions.projectIds && this.rows
+                ? res.reportOptions.projectIds.split(',').map(id => this.rows.find(x => x.problemUniqueId === id)).filter(Boolean) : [],
+              includeChild: res.reportOptions.includeChild,
+              products: res.reportOptions.productIds && this.filterCriteria.products ?
+                res.reportOptions.productIds.split(',').map(id => this.filterCriteria.products.find(x => x.productId === id)).filter(Boolean) : [], emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes
+                  ? this.lookUpData3.find(x => x.lookUpId === res.reportOptions.emailNotifcationPortfolioReportTypes)
+                  : this.lookUpData3.find(x => x.lookUpName === 'All Projects'),
+              notificationId: res.reportOptions.notificationId
+            })
+
+          }
+          console.log("FORM", this.emailNotiForm.getRawValue())
         })
-
-      }
+      })
     })
-    })
-  })
-  if(this.emailNotiForm.controls['priority'])
-  {
-    this.emailNotiForm.controls['priority'].disable()
-  }
-  if(this.emailNotiForm.controls['event'])
-  {
-    this.emailNotiForm.controls['event'].disable()
-  }
-  if(this.emailNotiForm.controls['description'])
-  {
-    this.emailNotiForm.controls['description'].disable()
-  }
-  if(this.emailNotiForm.controls['onoff'])
-  {
-    this.emailNotiForm.controls['onoff'].disable()
-  }
-  if(this.emailNotiForm.controls['reportFrequencyId'])
-  {
-    this.emailNotiForm.controls['reportFrequencyId'].disable()
-  }
-  if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'])
-  {
-    this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].disable()
-  }
-  if(this.emailNotiForm.controls['portfolioOwner'])
-  {
-    this.emailNotiForm.controls['portfolioOwner'].disable()
-  }
-  if(this.emailNotiForm.controls['excecutionScope'])
-  {
-    this.emailNotiForm.controls['excecutionScope'].disable()
-  }
-  if(this.emailNotiForm.controls['role'])
-  {
-    this.emailNotiForm.controls['role'].disable()
-  }
-  if(this.emailNotiForm.controls['rows'])
-  {
-    this.emailNotiForm.controls['rows'].disable()
-  }
-  if(this.emailNotiForm.controls['includeChild'])
-  {
-    this.emailNotiForm.controls['includeChild'].disable()
-  }
-  if(this.emailNotiForm.controls['emailNotifcationPortfolioReportTypes'])
-  {
-    this.emailNotiForm.controls['emailNotifcationPortfolioReportTypes'].disable()
-  }
-  if(this.emailNotiForm.controls['recieveEmailNotification'])
-  {
-    this.emailNotiForm.controls['recieveEmailNotification'].disable()
-  }
+    if (this.emailNotiForm.controls['priority']) {
+      this.emailNotiForm.controls['priority'].disable()
+    }
+    if (this.emailNotiForm.controls['event']) {
+      this.emailNotiForm.controls['event'].disable()
+    }
+    if (this.emailNotiForm.controls['description']) {
+      this.emailNotiForm.controls['description'].disable()
+    }
+    if (this.emailNotiForm.controls['onoff']) {
+      this.emailNotiForm.controls['onoff'].disable()
+    }
+    if (this.emailNotiForm.controls['reportFrequencyId']) {
+      this.emailNotiForm.controls['reportFrequencyId'].disable()
+    }
+    if (this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds']) {
+      this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].disable()
+    }
+    if (this.emailNotiForm.controls['portfolioOwner']) {
+      this.emailNotiForm.controls['portfolioOwner'].disable()
+    }
+    if (this.emailNotiForm.controls['excecutionScope']) {
+      this.emailNotiForm.controls['excecutionScope'].disable()
+    }
+    if (this.emailNotiForm.controls['role']) {
+      this.emailNotiForm.controls['role'].disable()
+    }
+    if (this.emailNotiForm.controls['rows']) {
+      this.emailNotiForm.controls['rows'].disable()
+    }
+    if (this.emailNotiForm.controls['includeChild']) {
+      this.emailNotiForm.controls['includeChild'].disable()
+    }
+    if (this.emailNotiForm.controls['emailNotifcationPortfolioReportTypes']) {
+      this.emailNotiForm.controls['emailNotifcationPortfolioReportTypes'].disable()
+    }
+    if (this.emailNotiForm.controls['recieveEmailNotification']) {
+      this.emailNotiForm.controls['recieveEmailNotification'].disable()
+    }
 
-  
+
   }
   getPortfolioOwner(): any {
     if (this.filterCriteria && this.filterCriteria.portfolioOwner) {
-        return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true);
+      return this.filterCriteria.portfolioOwner.filter(x => x.isPortfolioOwner == true);
     }
     return [];
-}
+  }
 
-getExcecutionScope(): any {
-  if (this.filterCriteria && this.filterCriteria.portfolioOwner) {
-    return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true);
-}
-return [];
-}
-getRoles(): any {
-  var j = this.projecthubservice.all
-  if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
-    return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc', 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
+  getExcecutionScope(): any {
+    if (this.filterCriteria && this.filterCriteria.portfolioOwner) {
+      return this.filterCriteria.portfolioOwner.filter(x => x.isExecutionScope == true);
+    }
+    return [];
   }
-  else if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc')) {
-    return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != '17d65016-0541-4fcc-8a9c-1db0597817cc')
+  getRoles(): any {
+    var j = this.projecthubservice.all
+    if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+      return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && !['17d65016-0541-4fcc-8a9c-1db0597817cc', 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8'].includes(x.lookUpId))
+    }
+    else if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc')) {
+      return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != '17d65016-0541-4fcc-8a9c-1db0597817cc')
+    }
+    else if (j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
+      return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')
+    }
+    return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
   }
-  else if (j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
-    return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77" && x.lookUpId != 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')
-  }
-  return this.lookup.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
-}
 
-ngOnDestroy() {
-  if (this.detailsHaveBeenChanged.value == true)
+  ngOnDestroy() {
+    if (this.detailsHaveBeenChanged.value == true)
       window.location.reload();
-}
-onRemoveLink(projectId: string, rowIndex: number) {
-  var comfirmConfig: FuseConfirmationConfig = {
+  }
+  onRemoveLink(projectId: string, rowIndex: number) {
+    var comfirmConfig: FuseConfirmationConfig = {
       "title": "Remove project",
       "message": "Are you sure you want to remove this project?",
       "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warn"
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
       },
       "actions": {
-          "confirm": {
-              "show": true,
-              "label": "Remove",
-              "color": "warn"
-          },
-          "cancel": {
-              "show": true,
-              "label": "Cancel"
-          }
+        "confirm": {
+          "show": true,
+          "label": "Remove",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
       },
       "dismissible": true
-  }
-  const deleteAlert = this.fuseAlert.open(comfirmConfig)
+    }
+    const deleteAlert = this.fuseAlert.open(comfirmConfig)
 
-  deleteAlert.afterClosed().subscribe(close => {
+    deleteAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-          //const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === projectId);
-          //const index = this.projecthubservice.removedIds.indexOf(projectId);
-          //this.projecthubservice.removedIds.splice(index, 1);
-          this.searchControl.setValue('');
-          this.selectedValueExists.setValue(true)
-          this.rows.splice(rowIndex, 1);
-          this.rows = [...this.rows];
-          this.detailsHaveBeenChanged.setValue(true);
+        //const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === projectId);
+        //const index = this.projecthubservice.removedIds.indexOf(projectId);
+        //this.projecthubservice.removedIds.splice(index, 1);
+        this.searchControl.setValue('');
+        this.selectedValueExists.setValue(true)
+        this.rows.splice(rowIndex, 1);
+        this.rows = [...this.rows];
+        this.detailsHaveBeenChanged.setValue(true);
       }
-  })
-}
+    })
+  }
 
-onKeydown(event: KeyboardEvent): void {
-  if (this.appearance === 'bar') {
+  onKeydown(event: KeyboardEvent): void {
+    if (this.appearance === 'bar') {
       if (event.code === 'Escape') {
-          this.close();
+        this.close();
       }
+    }
   }
-}
 
-close(): void {
-  if (!this.opened) {
+  close(): void {
+    if (!this.opened) {
       return;
+    }
+    this.searchControl.setValue('');
+
+    this.opened = false;
   }
-  this.searchControl.setValue('');
 
-  this.opened = false;
-}
+  onOptionSelected() {
+    this.selectedValueExists.setValue(false)
+  }
 
-onOptionSelected() {
-  this.selectedValueExists.setValue(false)
-}
-
-budgetfind(projectid: string): string {
-  if (this.resultSets.length > 0) {
+  budgetfind(projectid: string): string {
+    if (this.resultSets.length > 0) {
       if (this.budget.length > 0) {
-          var temp = this.budget.find(x => x.projectId == projectid)
-          if (temp != null) {
-              return temp.capitalBudgetId
-          }
+        var temp = this.budget.find(x => x.projectId == projectid)
+        if (temp != null) {
+          return temp.capitalBudgetId
+        }
       }
+    }
+    return ""
   }
-  return ""
-}
 
-trackByFn(index: number, item: any): any {
-  return item.id || index;
-}
-onAdd(childId) {
-  var comfirmConfig: FuseConfirmationConfig = {
+  trackByFn(index: number, item: any): any {
+    return item.id || index;
+  }
+  onAdd(childId) {
+    var comfirmConfig: FuseConfirmationConfig = {
       "title": "Add child",
       "message": "Are you sure you want to add this project?",
       "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "primary"
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "primary"
       },
       "actions": {
-          "confirm": {
-              "show": true,
-              "label": "Yes",
-              "color": "primary"
-          },
-          "cancel": {
-              "show": true,
-              "label": "No"
-          }
+        "confirm": {
+          "show": true,
+          "label": "Yes",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": true,
+          "label": "No"
+        }
       },
       "dismissible": true
-  }
-  const addAlert = this.fuseAlert.open(comfirmConfig)
-  addAlert.afterClosed().subscribe(close => {
+    }
+    const addAlert = this.fuseAlert.open(comfirmConfig)
+    addAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-          var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
-          this.searchControl.setValue('');
-          this.selectedValueExists.setValue(true);
-          //this.projecthubservice.removedIds.push(childId, 1);
-          this.rows.push(addedProject);
-          this.rows = [...this.rows];
-          this.detailsHaveBeenChanged.setValue(true);
+        var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
+        this.searchControl.setValue('');
+        this.selectedValueExists.setValue(true);
+        //this.projecthubservice.removedIds.push(childId, 1);
+        this.rows.push(addedProject);
+        this.rows = [...this.rows];
+        this.detailsHaveBeenChanged.setValue(true);
       }
-  })
-}
-displayFn(value?: number) {
-  let returnValue = "";
-  if (value) {
+    })
+  }
+  displayFn(value?: number) {
+    let returnValue = "";
+    if (value) {
       const selectedValue = this.resultSets.find(_ => _.problemUniqueId === value);
       returnValue = (selectedValue.isParent ? "[PGM] " : "") + selectedValue.problemId + " - " + this.budgetfind(selectedValue.problemUniqueId) + selectedValue.problemTitle;
+    }
+    return returnValue;
   }
-  return returnValue;
-}
   submitnotifications() {
 
   }
