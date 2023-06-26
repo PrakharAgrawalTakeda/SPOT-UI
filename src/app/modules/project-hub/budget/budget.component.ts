@@ -64,13 +64,14 @@ export class BudgetComponent implements OnInit {
             this.localCurrency = currency
         });
         this.authService.lookupMaster().then((lookup: any) => {
+
             this.lookUpData = lookup
             this.projectHubService.lookUpMaster = lookup
             this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
                 this.budgetPageInfo = res;
                 this.fundingInformations = res.budgetIo;
                 this.opexField = !!res.budget.opExRequired;
-                this.capexField = !!res.budget.capexRequired;
+                this.capexField = !!res.budget.capExRequired;
                 this.generalInfoPatchValue(res)
                 this.viewContent = true
             })

@@ -87,12 +87,7 @@ export class BudgetGeneralEditComponent {
                     this.predefinedInvestmentId.enable({emitEvent : false})
                     this.where.enable({emitEvent : false})
                     this.why.enable({emitEvent : false})
-                    if(!this.isBudgetAdmin){
-                        this.showBudgetIdButton = false;
-                    }else{
-                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                        this.showBudgetIdButton = true;
-                    }
+                    this.showBudgetIdButton = false;
                 }else{
                     if(!this.isBudgetAdmin){
                         if(this.capexRequired.disabled){
@@ -114,7 +109,6 @@ export class BudgetGeneralEditComponent {
                 this.budgetInfoForm.controls.budgetId.disable()
                 this.required = false;
                 this.showBudgetIdButton = false;
-                this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
                 if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
                     this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                 }
@@ -162,57 +156,85 @@ export class BudgetGeneralEditComponent {
     }
 
     submitBudgetInfo() {
-        if (this.required) {
-            var fieldsMissing = 0;
-            var missingFields = [];
-            if(this.budgetId.value==null || this.budgetId.value==""){
-                fieldsMissing ++;
-                missingFields.push("Budget ID")
-            }
-            if(!this.predefinedInvestmentId.value){
-                fieldsMissing ++;
-                missingFields.push("Global/Regional Predefined Investment")
-            }
-            // if(this.gmsBudgetowner.value.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
-            //     fieldsMissing ++;
-            //     missingFields.push("GMS Budget Owner")
-            // }
-            if(this.where.invalid){
-                fieldsMissing ++;
-                missingFields.push("Where")
-            }
-            if(this.why.invalid){
-                fieldsMissing ++;
-                missingFields.push("Why")
-            }
+        if(this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)){
             var comfirmConfig: FuseConfirmationConfig = {
-                "title": "The following fields are required",
-                "message": this.getMissingFieldsString(missingFields),
+                "title": "Please select another Budget ID",
+                "message": "",
                 "icon": {
                     "show": true,
                     "name": "heroicons_outline:exclamation",
-                    "color": "warn"
+                    "color": "warning"
                 },
                 "actions": {
                     "confirm": {
                         "show": true,
-                        "label": "OK",
-                        "color": "warn"
+                        "label": "Okay",
+                        "color": "primary"
                     },
-                    "cancel": {
-                        "show": true,
-                        "label": "Cancel"
-                    }
                 },
                 "dismissible": true
             }
-            if(fieldsMissing!=0){
-                const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
-                riskIssueAlert.afterClosed().subscribe(close => {
-                    if (close == 'confirmed') {
-                    }
-                })
-            }else{
+            const alert = this.fuseAlert.open(comfirmConfig)
+        }else{
+            if (this.required) {
+                var fieldsMissing = 0;
+                var missingFields = [];
+                if(this.budgetId.value==null || this.budgetId.value==""){
+                    fieldsMissing ++;
+                    missingFields.push("Budget ID")
+                }
+                if(!this.predefinedInvestmentId.value){
+                    fieldsMissing ++;
+                    missingFields.push("Global/Regional Predefined Investment")
+                }
+                if(this.where.invalid){
+                    fieldsMissing ++;
+                    missingFields.push("Where")
+                }
+                if(this.why.invalid){
+                    fieldsMissing ++;
+                    missingFields.push("Why")
+                }
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "The following fields are required",
+                    "message": this.getMissingFieldsString(missingFields),
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warn"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "OK",
+                            "color": "warn"
+                        },
+                        "cancel": {
+                            "show": true,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                if(fieldsMissing!=0){
+                    const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
+                    riskIssueAlert.afterClosed().subscribe(close => {
+                        if (close == 'confirmed') {
+                        }
+                    })
+                }else{
+                    this.projectHubService.isFormChanged = false
+                    const formValue = this.budgetInfoForm.getRawValue();
+                    const mainObj =this.prepareDataforSubmit(formValue)
+                    this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
+                        this.projectHubService.isNavChanged.next(true)
+                        this.projectHubService.submitbutton.next(true)
+                        this.projectHubService.successSave.next(true)
+                        this.projectHubService.toggleDrawerOpen('', '', [], '')
+                    })
+                }
+            }
+            else{
                 this.projectHubService.isFormChanged = false
                 const formValue = this.budgetInfoForm.getRawValue();
                 const mainObj =this.prepareDataforSubmit(formValue)
@@ -224,17 +246,7 @@ export class BudgetGeneralEditComponent {
                 })
             }
         }
-        else{
-            this.projectHubService.isFormChanged = false
-            const formValue = this.budgetInfoForm.getRawValue();
-            const mainObj =this.prepareDataforSubmit(formValue)
-            this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
-                this.projectHubService.isNavChanged.next(true)
-                this.projectHubService.submitbutton.next(true)
-                this.projectHubService.successSave.next(true)
-                this.projectHubService.toggleDrawerOpen('', '', [], '')
-            })
-        }
+
     }
     prepareDataforSubmit(formValue): any {
         const mainObj = this.budgetInfo;
@@ -284,19 +296,22 @@ export class BudgetGeneralEditComponent {
                 budgetId:  res.BudgetId,
             })
             this.showBudgetIdButton = false;
-            this.budgetId.disable();
+            if(!this.isBudgetAdmin){
+                this.budgetId.disable();
+            }
         })
     }
     getGmsBudgetOwner(): any {
         if(this.isBudgetAdmin){
             if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
+
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             }
         }else{
             if(!this.gmsBudgetowner.invalid){
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             }

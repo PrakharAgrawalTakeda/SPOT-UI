@@ -33,9 +33,9 @@ export class BudgetFundingInformationTableComponent {
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        this.portfoliService.getLocalCurrency().then(currency => {
-            this.localCurrency = currency
-        })
+        // this.portfoliService.getLocalCurrency().then(currency => {
+        //     this.localCurrency = currency
+        // })
     }
     getCurrency(id: string): string{
         return id && id != '' ? this.localCurrency.find(x => x.localCurrencyId == id).localCurrencyAbbreviation : ''
