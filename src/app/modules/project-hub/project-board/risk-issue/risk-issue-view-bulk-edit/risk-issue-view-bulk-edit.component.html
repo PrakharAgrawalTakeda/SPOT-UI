@@ -20,7 +20,7 @@
                 </mat-slide-toggle>
             </form>
         </div>
-        <div class="h-[80vh] pl-3" id="askNeedTableDiv">
+        <div class="h-[80vh] w-screen pl-3" id="askNeedTableDiv">
             <ngx-datatable *ngIf="viewContent" [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                            columnMode="force"
                            class="material datatable-ri-73 font-medium text-sm text-default whitespace-nowrap cursor-pointer"
@@ -75,7 +75,7 @@
                             <p>{{value}}</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-textarea formControlName="ifHappens" [showLabel]="false" [maxLength]=1000></spot-textarea>
+                            <spot-textarea class=" px-1" formControlName="ifHappens" [showLabel]="false" [maxLength]=1000></spot-textarea>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>

@@ -7,11 +7,36 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
 import { forEach } from 'lodash';
 import moment from 'moment';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MMM-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-biogenics-bulk-edit',
   templateUrl: './biogenics-bulk-edit.component.html',
-  styleUrls: ['./biogenics-bulk-edit.component.scss']
+  styleUrls: ['./biogenics-bulk-edit.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class BiogenicsBulkEditComponent {
   unitCost = ""
@@ -51,7 +76,7 @@ export class BiogenicsBulkEditComponent {
       }
     })
   }
-  
+
   ngOnInit(): void {
     this.dataloader()
   }
@@ -167,7 +192,7 @@ export class BiogenicsBulkEditComponent {
   deleteBio(rowIndex: number){
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
-      "message": "Are you sure you want Delete this Record?",
+      "message": "Are you sure you want to delete this Record?",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
@@ -257,29 +282,31 @@ export class BiogenicsBulkEditComponent {
       console.log(this.biogenicsDb)
       this.projecthubservice.isFormChanged = false
       this.submitPrep()
+      if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
+        var formValue = this.CAPSform.getRawValue()
+        var mainObj = this.ProjectData
+
+        mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+
+        this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+          this.apiService.bulkeditBiogenics(this.biogenicsDb, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        })
+      })
+      }
+      else{
       this.apiService.bulkeditBiogenics(this.biogenicsDb, this.projecthubservice.projectid).then(res => {
-        if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
-          var formValue = this.CAPSform.getRawValue()
-          var mainObj = this.ProjectData
-
-          mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-
-          this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
-            this.projecthubservice.isFormChanged = false
-            this.projecthubservice.isNavChanged.next(true)
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.successSave.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          })
-        }
-        else {
           this.projecthubservice.isFormChanged = false
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.successSave.next(true)
-        }
       })
+        }
     }
   }
 
@@ -291,13 +318,17 @@ export class BiogenicsBulkEditComponent {
         biogenicDataId: i.biogenicDataId,
         projectId: this.projecthubservice.projectid,
         biogenicMasterUniqueId: i.biogenicMasterUniqueId,
-        biogenicEmissionFactor: i.biogenicEmissionFactor == "" && i.biogenicEmissionFactor != 0 ? null : i.biogenicEmissionFactor,
-        biogenicUnit: (i.biogenicUnit == "" || isNaN(i.biogenicUnit)) && i.biogenicUnit != 0  ? null : i.biogenicUnit,
+        biogenicEmissionFactor: i.biogenicEmissionFactor == "" && i.biogenicEmissionFactor !== 0 ? null : i.biogenicEmissionFactor,
+        biogenicUnit: (i.biogenicUnit == "" || isNaN(i.biogenicUnit)) && i.biogenicUnit !== 0  ? null : i.biogenicUnit,
         standardUoM: i.standardUoM,
-        biogenicUnitCost: (i.biogenicUnitCost == "" || isNaN(i.biogenicUnitCost)) && i.biogenicUnitCost != 0 ? null : i.biogenicUnitCost,
+        biogenicUnitCost: (i.biogenicUnitCost == "" || isNaN(i.biogenicUnitCost)) && i.biogenicUnitCost !== 0 ? null : i.biogenicUnitCost,
         biogenicBasisOfEstimate: i.biogenicBasisOfEstimate
       })
     }
 
+  }
+
+  getNgxDatatableNumberHeader(): any {
+    return ' ngx-number-header';
   }
 }

@@ -1,0 +1,80 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Transportation</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="w-full overflow-hidden" [formGroup]="TransportationForm" (ngSubmit)="submitTransportation()"
+    style="overflow-y: scroll; height: 95vh;">
+    <div class=" form-ask-need h-[86.5vh]  overflow-y-scroll">
+        <spot-select formControlName="transportationMode" name="transportationMode" [label]="'Mode'"
+            [placeholder]="'Transportation Mode'" [dropDownArrayType]="'string'" [dropDownArray]="modeDropDownValues"
+            [showNoneOption]="false">
+        </spot-select>
+
+        <spot-select formControlName="transportationType" name="transportationType" [label]="'Type'"
+            [placeholder]="'Transportation Type'" [dropDownArrayType]="'string'" [dropDownArray]="TransportationForm.controls.transportationMode.value == '' ? [] :
+  TransportationForm.controls.transportationMode.value == 'Road freight' ? roadTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Air freight' ? airTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Sea freight' ? seaTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Train' ? trainTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Courier' ? courierTypeDropDownValues :
+  TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelTypeDropDownValues : []"
+            [showNoneOption]="false">
+        </spot-select>
+
+        <spot-select formControlName="fuelType" name="fuelType" [label]="'Fuel'" [placeholder]="'Fuel'"
+            [dropDownArrayType]="'string'" [dropDownArray]="TransportationForm.controls.transportationMode.value == '' ? [] :
+            TransportationForm.controls.transportationMode.value == 'Road freight' && (TransportationForm.controls.transportationType.value == 'LTL / RDC - Reefer' || TransportationForm.controls.transportationType.value == 'Partial Load Reefer (Truck load fill rate <60%)'
+            || TransportationForm.controls.transportationType.value == 'Standard - Reefer (if truck load fill rate > 60%)' || TransportationForm.controls.transportationType.value == 'Van - Ambiant' || TransportationForm.controls.transportationType.value == 'Van - Reefer') ? roadFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Road freight' && (TransportationForm.controls.transportationType.value == 'Ambient (truck load fill rate > 60%)' || TransportationForm.controls.transportationType.value == 'LTL / RDC - Ambient'
+            || TransportationForm.controls.transportationType.value == 'Partial Load Ambiant (Truck load fill rate <60%)') ? roadFuelDropDownValues2 :
+            TransportationForm.controls.transportationMode.value == 'Air freight' ? airFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Sea freight' && (TransportationForm.controls.transportationType.value == 'Standard 20 Ft - Reefer' || TransportationForm.controls.transportationType.value == 'Standard 40 Ft - Reefer') ? seaFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Sea freight' && (TransportationForm.controls.transportationType.value == 'Standard 20 Ft - Ambiant' || TransportationForm.controls.transportationType.value == 'Standard 40 Ft - Ambiant') ? seaFuelDropDownValues2 :
+            TransportationForm.controls.transportationMode.value == 'Train' ? trainFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Courier' ? courierFuelDropDownValues :
+            TransportationForm.controls.transportationMode.value == 'Parcel/ Express' ? parcelFuelDropDownValues : []"
+            [showNoneOption]="false">
+        </spot-select>
+
+        <spot-input class="w-full" formControlName="co2intensityFactorValue" name="co2intensityFactorValue"
+            [label]="'CO2 Intensity (Factor Value)'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="co2intensityFactorMeasure" name="co2intensityFactorMeasure"
+            [label]="'UoM'">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="shipmentDistance" name="shipmentDistance"
+            [label]="'Shipment Distance (km)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeDistance">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
+            [label]="'Shipment Weight (kg)'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeWeight">
+        </spot-input>
+
+        <spot-input class="w-full" formControlName="shipmentFrequency" name="shipmentFrequency"
+            [label]="'Shipment Frequency'" [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false"
+            [placeholder]="'0'" [callLocation]="'View'" [allowNegativeValues]="allowNegativeFrequency">
+        </spot-input>
+
+
+        <spot-textarea formControlName="embasisOfEstimate" name="embasisOfEstimate" [label]="'Basis of Estimate'"
+            [placeholder]="'Basis of Estimate'">
+        </spot-textarea>
+
+    </div>
+    <div class="flex items-start justify-between form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
+</form>

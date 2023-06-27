@@ -160,6 +160,21 @@ import { BudgetPerformanceEditComponent } from './close-out/close-out-budget-per
 import { WaterWasteBulkEditComponent } from './common/water-waste-table/water-waste-bulk-edit/water-waste-bulk-edit.component';
 import { WaterWasteSingleEditComponent } from './common/water-waste-table/water-waste-single-edit/water-waste-single-edit.component';
 import {MyPreferenceModule} from "../my-preference/my-preference.module";
+import { TransportationSingleEditComponent } from './common/transportation-table/transportation-single-edit/transportation-single-edit.component';
+import { WarehousingSingleEditComponent } from './common/warehousing-table/warehousing-single-edit/warehousing-single-edit.component';
+import { ShippingSingleEditComponent } from './common/shipping-table/shipping-single-edit/shipping-single-edit.component';
+import { TransportationBulkEditComponent } from './common/transportation-table/transportation-bulk-edit/transportation-bulk-edit.component';
+import { ShippingBulkEditComponent } from './common/shipping-table/shipping-bulk-edit/shipping-bulk-edit.component';
+import { WarehousingBulkEditComponent } from './common/warehousing-table/warehousing-bulk-edit/warehousing-bulk-edit.component';
+import { ProjectDashboardComponent } from './project-dashboard/project-dashboard.component';
+import { ProjectDashboardPerformanceComponent } from './project-dashboard/project-dashboard-performance/project-dashboard-performance.component';
+import { ProjectDashboardBudgetComponent } from './project-dashboard/project-dashboard-budget/project-dashboard-budget.component';
+import { ProjectDashboardProductTeamComponent } from './project-dashboard/project-dashboard-product-team/project-dashboard-product-team.component';
+import {BudgetGeneralEditComponent} from "./budget/budget-general-edit/budget-general-edit.component";
+import { BudgetFundingInformationTableComponent } from './budget/budget-funding-information-table/budget-funding-information-table.component';
+import { BudgetFundingInformationBulkEditComponent } from './budget/budget-funding-information-bulk-edit/budget-funding-information-bulk-edit.component';
+import { BudgetAdditionalEditComponent } from './budget/budget-additional-edit/budget-additional-edit.component';
+import { BudgetCapexOpexTableComponent } from './budget/budget-capex-opex-table/budget-capex-opex-table.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -228,6 +243,11 @@ export const projectRoutes: Route[] = [
     {
       path: 'hub-settings',
       component: HubSettingsComponent,
+      pathMatch: 'full'
+    },
+    {
+      path: 'project-dashboards',
+      component: ProjectDashboardComponent,
       pathMatch: 'full'
     },
     {
@@ -369,10 +389,6 @@ export const projectRoutes: Route[] = [
               component: BusinessCaseBenefitsComponent,
             },
             {
-              path: 'caps',
-              component: BusinessCaseCapsComponent,
-            },
-            {
               path: 'risks',
               component: BusinessCaseRiskIssuesComponent,
             }
@@ -396,10 +412,6 @@ export const projectRoutes: Route[] = [
             {
               path: 'benefits',
               component: BusinessCaseBenefitsComponent,
-            },
-            {
-              path: 'caps',
-              component: BusinessCaseCapsComponent,
             },
             {
               path: 'risks',
@@ -450,6 +462,7 @@ export const projectRoutes: Route[] = [
     OperationalPerformanceBulkEditComponent,
     PrimaryKpiSingleEditComponent,
     GeneralInfoSingleEditComponent,
+    BudgetGeneralEditComponent,
     OeProjectSingleEditComponent,
     TechTransferSingleEditComponent,
     QualityRefBulkEditComponent,
@@ -538,7 +551,21 @@ export const projectRoutes: Route[] = [
     OperationalBenefitsBulkEditComponent,
     BudgetPerformanceEditComponent,
     WaterWasteBulkEditComponent,
-    WaterWasteSingleEditComponent
+    WaterWasteSingleEditComponent,
+    TransportationSingleEditComponent,
+    WarehousingSingleEditComponent,
+    ShippingSingleEditComponent,
+    TransportationBulkEditComponent,
+    ShippingBulkEditComponent,
+    WarehousingBulkEditComponent,
+    ProjectDashboardComponent,
+    ProjectDashboardPerformanceComponent,
+    ProjectDashboardBudgetComponent,
+    ProjectDashboardProductTeamComponent,
+    BudgetFundingInformationTableComponent,
+    BudgetFundingInformationBulkEditComponent,
+    BudgetAdditionalEditComponent,
+    BudgetCapexOpexTableComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),

@@ -1,9 +1,9 @@
 .Unit{
-    margin-top: 34px;
+    margin-top: 38px;
     font-weight: 500;
     color: rgba(var(--fuse-text-default-rgb), var(--tw-text-opacity)) !important;
     --tw-text-opacity: 1 !important;
-    margin-left: 4px;
+    margin-left: 12px;
 }
 
 .label{
@@ -21,5 +21,6 @@
 
 .customCost{
         width: 60% !important;
-        margin-left: -107px !important;
+        // margin-left: -107px !important;
+        margin-left: -6px !important;
     }

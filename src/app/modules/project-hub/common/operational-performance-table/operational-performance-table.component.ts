@@ -65,7 +65,6 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
                   i.kpiname = this.kpi.find(x => x.kpiid == i.kpiid) ? this.kpi.find(x => x.kpiid == i.kpiid).kpiname : ''
               }
               this.viewContent = true
-              this.initializationComplete = false
               this.initializationComplete = true
           })
       }else{
@@ -157,7 +156,11 @@ export class OperationalPerformanceTableComponent implements OnInit, OnChanges {
                     this.projecthubservice.submitbutton.next(true)
                 })
             }else if(this.mode == 'Project-Close-Out'){
-                this.apiService.updateReportDates(this.projecthubservice.projectid, "CloseoutModifiedDate").then(secondRes => {
+                this.apiService.updateReportDates(this.id , "CloseoutModifiedDate").then(secondRes => {
+                    this.projecthubservice.submitbutton.next(true)
+                })
+            }else if(this.mode == 'Project-Charter'){
+                this.apiService.updateReportDates(this.id , "ModifiedDate").then(secondRes => {
                     this.projecthubservice.submitbutton.next(true)
                 })
             }else{

@@ -36,6 +36,12 @@ export class PortfolioApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  async FiltersByPage(body, from, count) {
+    var userid = GlobalVariables.apiurl + "FilterProjects/PageFilters" + "?from=" + from + "&count=" + count
+    const abc$ = this.http.post(userid, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   async MainFilters(body){
     var userid = GlobalVariables.apiurl+"FilterProjects/MainFilters"
     const abc$ = this.http.post(userid,body)
@@ -68,6 +74,20 @@ export class PortfolioApiService {
       const abc$ = this.http.get(userid)
       const response = await lastValueFrom(abc$)
       return response
+  }
+
+  async getLocalAttributes(portfolioOwners: string, executionScope: string) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/ByOwners" + "?portfolioOwners=" + portfolioOwners + "&executionScopes=" + executionScope
+    const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  getCapitalPhase() {
+    var url = GlobalVariables.apiurl + "ProjectHubData/CapitalPhase"
+    const abc$ = this.http.get(url)
+    const response = lastValueFrom(abc$)
+    return response
   }
 
 }

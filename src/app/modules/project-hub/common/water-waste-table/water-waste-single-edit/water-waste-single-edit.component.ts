@@ -8,6 +8,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { truncate } from 'lodash';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -59,28 +60,16 @@ export class WaterWasteSingleEditComponent {
 
   constructor(public fuseAlert: FuseConfirmationService, private authService: MsalService, private apiService: ProjectApiService, public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
     this.waterWasteForm.controls.wwstream.valueChanges.subscribe(res => {
+      if (this.projecthubservice.all[4][1] == true && (this.projecthubservice.all[1].projectData.waterImpactCost != "" && this.projecthubservice.all[1].projectData.waterImpactCost != null && this.projecthubservice.all[1].projectData.waterImpactCost != 0)) {
+        this.waterWasteForm.controls['emwwunitCost'].disable()
+      }
+      else if (this.projecthubservice.all[4][2] == true && (this.projecthubservice.all[1].projectData.wasteImpactCost != "" && this.projecthubservice.all[1].projectData.wasteImpactCost != null && this.projecthubservice.all[1].projectData.wasteImpactCost != 0)) {
+        this.waterWasteForm.controls['emwwunitCost'].disable()
+      }
       if(res == "Water"){
-        if (this.projecthubservice.all[4][1] == false && (this.projecthubservice.all[1].projectData.waterImpactCost != "" && this.projecthubservice.all[1].projectData.waterImpactCost != null && this.projecthubservice.all[1].projectData.waterImpactCost != 0)) {
-          this.waterWasteForm.controls['emwwunitCost'].enable()
-        }
-        else if (this.projecthubservice.all[4][1] == true && (this.projecthubservice.all[1].projectData.waterImpactCost == "" || this.projecthubservice.all[1].projectData.waterImpactCost == null || this.projecthubservice.all[1].projectData.waterImpactCost == 0)) {
-          this.waterWasteForm.controls['emwwunitCost'].enable()
-        }
-        else if (this.projecthubservice.all[4][1] == true && (this.projecthubservice.all[1].projectData.waterImpactCost != "" && this.projecthubservice.all[1].projectData.waterImpactCost != null && this.projecthubservice.all[1].projectData.waterImpactCost != 0)) {
-          this.waterWasteForm.controls['emwwunitCost'].disable()
-        }
         this.waterWasteForm.patchValue({ standardUoM : "m3"})
       }
       else if (res == "Waste") {
-        if (this.projecthubservice.all[4][2] == false && (this.projecthubservice.all[1].projectData.wasteImpactCost != "" && this.projecthubservice.all[1].projectData.wasteImpactCost != null && this.projecthubservice.all[1].projectData.wasteImpactCost != 0)) {
-          this.waterWasteForm.controls['emwwunitCost'].enable()
-        }
-        else if (this.projecthubservice.all[4][2] == true && (this.projecthubservice.all[1].projectData.wasteImpactCost == "" || this.projecthubservice.all[1].projectData.wasteImpactCost == null || this.projecthubservice.all[1].projectData.wasteImpactCost == 0)) {
-          this.waterWasteForm.controls['emwwunitCost'].enable()
-        }
-        else if (this.projecthubservice.all[4][2] == true && (this.projecthubservice.all[1].projectData.wasteImpactCost != "" && this.projecthubservice.all[1].projectData.wasteImpactCost != null && this.projecthubservice.all[1].projectData.wasteImpactCost != 0)) {
-          this.waterWasteForm.controls['emwwunitCost'].disable()
-        }
         this.waterWasteForm.patchValue({ standardUoM: "kg" })
       }
       else{
@@ -97,6 +86,10 @@ export class WaterWasteSingleEditComponent {
     this.unitCost = "Unit Cost (" + this.projecthubservice.all[2] + ")"
     this.impactRealizationDate = this.projecthubservice.all[1].projectData.emissionsImpactRealizationDate
     this.waterwasteValues = this.projecthubservice.all[3]
+    console.log(this.projecthubservice.all[1])
+    console.log(this.projecthubservice.all[2])
+    console.log(this.projecthubservice.all[3])
+    console.log(this.projecthubservice.all[4])
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
     for (var j = 0; j < waterValues.length; j++) {
       this.waterTypeDropDrownValues.push(waterValues[j].wwtype)

@@ -6,6 +6,9 @@ import { RoleService } from 'app/core/auth/role.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 import moment from 'moment';
+import { Constants } from 'app/shared/constants';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -20,7 +23,19 @@ export const MY_FORMATS = {
 @Component({
   selector: 'app-caps-single-edit',
   templateUrl: './caps-single-edit.component.html',
-  styleUrls: ['./caps-single-edit.component.scss']
+  styleUrls: ['./caps-single-edit.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class CapsSingleEditComponent implements OnInit {
 viewType = 'SidePanel'
@@ -28,6 +43,7 @@ viewType = 'SidePanel'
   filterCriteria : any = {}
   today = new Date("2036-03-31");
   viewContent = false
+  showDefault= true
   CAPSdata : any
   energyCost: any
   waterCost: any
@@ -54,6 +70,12 @@ viewType = 'SidePanel'
   ngOnInit(): void {
     this.apiService.getCAPSbyProjectID(this.projectHubService.projectid).then((res: any) => {
       this.apiService.getfilterlist().then(filter => {
+        if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
+          this.showDefault = false;
+        }
+        else{
+            this.showDefault = true;
+        }
         this.filterCriteria = filter
         this.CAPSdata = res
         this.CAPSform.patchValue({
@@ -119,7 +141,7 @@ viewType = 'SidePanel'
       mainObj.energyCostImpactPerYear = formValue.EnergyCost
       mainObj.waterImpactCost = formValue.WaterCost
       mainObj.wasteImpactCost = formValue.WasteCost
-      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+      this.apiService.editCAPSData(this.projectHubService.projectid, mainObj).then(res => {
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)

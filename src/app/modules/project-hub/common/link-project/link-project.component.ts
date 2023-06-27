@@ -1,12 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {FuseConfirmationConfig, FuseConfirmationService} from '@fuse/services/confirmation';
-import {debounceTime, filter, map, Observable, startWith, Subject, takeUntil} from 'rxjs';
-import {ProjectHubService} from '../../project-hub.service';
-import {ProjectApiService} from "../project-api.service";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {GlobalVariables} from "../../../../shared/global-variables";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
+import { ProjectHubService } from '../../project-hub.service';
+import { ProjectApiService } from "../project-api.service";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { GlobalVariables } from "../../../../shared/global-variables";
+import { ActivatedRoute, Router } from "@angular/router";
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
     selector: 'app-link-project',
@@ -27,7 +28,7 @@ export class LinkProjectComponent implements OnInit {
         private apiService: ProjectApiService,
         private _httpClient: HttpClient,
         private _Activatedroute: ActivatedRoute,
-        private router: Router) {
+        private router: Router, private roleService: RoleService) {
     }
 
     searchControl: FormControl = new FormControl();
@@ -41,10 +42,11 @@ export class LinkProjectComponent implements OnInit {
     viewContent = false;
     id: string = '';
     isParent: boolean = false;
-
+    isConfidential: boolean = false;
     ngOnInit(): void {
         this.rows = this.projecthubservice.projectChildren;
         this.dataloader();
+        console.log(this.projecthubservice.all)
         window.dispatchEvent(new Event('resize'));
         this.searchControl.valueChanges
             .pipe(
@@ -62,11 +64,12 @@ export class LinkProjectComponent implements OnInit {
             )
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
-                if (this.selectedValueExists.value == true && this.searchControl.value !="") {
-                    this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
+                if (this.selectedValueExists.value == true && this.searchControl.value != "") {
+                    this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
                         .subscribe((resultSets: any) => {
                             for (var i = 0; i < resultSets.projectData.length; i++) {
                                 var obj = resultSets.projectData[i];
+                                console.log(this.projecthubservice)
                                 if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
                                     resultSets.projectData.splice(i, 1);
                                     i--;
@@ -74,9 +77,22 @@ export class LinkProjectComponent implements OnInit {
                             }
                             this.resultSets = resultSets.projectData;
                             this.budget = resultSets.budget
+                            if (!this.isConfidential) {
+                                this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+                                console.log("Confidential Projects", this.resultSets)
+                            }
+                            else {
+                                if (this.roleService.roleMaster.confidentialProjects.length > 0) {
+                                    var confProjectUserList = resultSets.projectData?.filter(x => this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId))
+                                    if (confProjectUserList?.length > 0) {
+                                        console.log(confProjectUserList)
+                                        this.resultSets = [...confProjectUserList]
+                                    }
+                                }
+                            }
                             this.search.next(resultSets);
-                            if(this.resultSets.length <= 5){
-                                this.resultSets.forEach(x=> {
+                            if (this.resultSets.length <= 5) {
+                                this.resultSets.forEach(x => {
                                     this.apiService.isParent(x.problemUniqueId).then((res: any) => {
                                         x.isParent = res;
                                     });
@@ -90,10 +106,14 @@ export class LinkProjectComponent implements OnInit {
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        this.viewContent = true;
+        this.apiService.getproject(this.projecthubservice.projectid).then((res:any)=>{
+            this.isConfidential = res.isConfidential
+            this.viewContent = true;
+        })
+        
     }
     ngOnDestroy() {
-        if(this.detailsHaveBeenChanged.value==true)
+        if (this.detailsHaveBeenChanged.value == true)
             window.location.reload();
     }
     onRemoveLink(projectId) {
@@ -205,6 +225,7 @@ export class LinkProjectComponent implements OnInit {
                 this.projecthubservice.removedIds.push(childId, 1);
                 this.rows.push(addedProject);
                 this.rows = [...this.rows];
+                console.log(this.rows)
                 this.detailsHaveBeenChanged.setValue(true);
             }
         })

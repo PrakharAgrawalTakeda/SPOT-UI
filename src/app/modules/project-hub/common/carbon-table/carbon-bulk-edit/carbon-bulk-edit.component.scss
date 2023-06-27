@@ -1,7 +1,7 @@
 .unit {
     text-align: right;
     right: 58%;
-    padding-right: 55%;
+    padding-right: 5%;
 }
 
 .date{
@@ -9,4 +9,10 @@
     display: flex;
     position: relative;
     left: -1526px;
+}
+
+::ng-deep .ngx-datatable.datatable-carbon-80 .datatable-body .datatable-scroll {
+    height: 65vh !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
 }

@@ -22,7 +22,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
-  @Input() viewElements: any = ["isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
+  @Input() viewElements: any = ["isConfidential","isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   @Input() createform: any
   @Input() portfolio
   activeaccount: any;
@@ -50,6 +50,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     excecutionScope: new FormControl([]),
     enviornmentalPortfolio: new FormControl(null),
     isArchived: new FormControl(false),
+    isConfidential: new FormControl(false),
     isCapsProject: new FormControl(false),
     owningOrganization: new FormControl(''),
     closeOutApprovedDate: new FormControl(''),
@@ -85,12 +86,17 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
         else if (this.callLocation == 'CreateNew') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
+          if (this.generalInfoForm.value.portfolioOwner == null){
+            this.generalInfoForm.controls.localCurrency.enable()
+          }
+          else{
           if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
             this.generalInfoForm.controls.localCurrency.enable()
           }
           else {
             this.generalInfoForm.controls.localCurrency.disable()
           }
+        }
         }
         else if (history.state.callLocation == 'CopyProject') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
@@ -162,7 +168,14 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         }
       })
-
+      this.generalInfoForm.controls.isConfidential.valueChanges.subscribe(res=>{
+        if(this.viewContent){
+          this.generalInfoForm.patchValue({
+            projectsingleid: '',
+            projectsingle: ''
+          })
+        }
+      })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -191,8 +204,9 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           otherImpactedProducts: res.otherImpactedProducts ? res.otherImpactedProducts : [],
           portfolioOwner: res.portfolioOwner ? res.portfolioOwner : {},
           excecutionScope: res.excecutionScope ? res.excecutionScope : [],
-          enviornmentalPortfolio: res.enviornmentalPortfolio ? res.enviornmentalPortfolio : {},
+          enviornmentalPortfolio: res.enviornmentalPortfolio,
           isArchived: res.projectData.isArchived,
+          isConfidential: res.projectData.isConfidential,
           isCapsProject: res.projectData.isCapsProject,
           owningOrganization: res.projectData.defaultOwningOrganizationId,
           closeOutApprovedDate: res.projectData.closeOutApprovedDate,
@@ -315,7 +329,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   }
 
   clickEvent(value: string, name: string) {
-    if ((name == "Project Name *" || name == "Portfolio Ownerhelp *" || name == "None\nOwning Organizationhelp *" || name == "Submitted By *" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)) {
+    if ((name == "Project Name" || name == "Portfolio Owner\nhelp" || name == "None\nOwning Organizationhelp *" || name == "Submitted By" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)) {
       this.showMessage = true
     }
     else {
@@ -441,7 +455,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio && (this.generalInfo.enviornmentalPortfolio != null || Object.keys(formValue.enviornmentalPortfolio).length == 0)) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you sure?",
-          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "message": "If you change the currently selected Environmental Portfolio, all CAPS data will be removed! Do you want to proceed ?",
           "icon": {
             "show": true,
             "name": "heroicons_outline:exclamation",
@@ -557,7 +571,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       else if (this.generalInfo.enviornmentalPortfolio != formValue.enviornmentalPortfolio && (this.generalInfo.enviornmentalPortfolio != null || Object.keys(formValue.enviornmentalPortfolio).length == 0)) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you sure?",
-          "message": "If you change the currently selected Emission Portfolio, all CAPS data will be removed! Do you want to proceed ?",
+          "message": "If you change the currently selected Environmental Portfolio, all CAPS data will be removed! Do you want to proceed ?",
           "icon": {
             "show": true,
             "name": "heroicons_outline:exclamation",
@@ -590,10 +604,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   }
 
   submitLogic() {
-    this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
     mainObj.isArchived = formValue.isArchived
+    mainObj.isConfidential = formValue.isConfidential
     mainObj.problemTitle = formValue.problemTitle
     mainObj.problemType = formValue.problemType
     mainObj.projectDescription = formValue.projectDescription
@@ -622,6 +636,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
 
     if (this.subCallLocation == 'ProjectHub') {
       this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+        this.projectHubService.isFormChanged = false
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
@@ -629,6 +644,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       })
     } else {
       this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, this.subCallLocation).then(res => {
+        this.projectHubService.isFormChanged = false
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)

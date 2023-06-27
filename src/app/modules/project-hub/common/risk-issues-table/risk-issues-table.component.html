@@ -83,9 +83,9 @@
                 <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Owner" prop="ownerName" [flexGrow]="2" *ngIf="callLocation== 'Business-Case'">
+        <ngx-datatable-column name="Functional Owner" prop="functionGroupId" [flexGrow]="2" *ngIf="callLocation== 'Business-Case'">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p [ngClass]="{'closed': row.closeDate != null}">{{value}}</p>
+                <p [ngClass]="{'closed': row.closeDate != null}">{{getLookUpName(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Due Date" prop="dueDate" [flexGrow]="1" *ngIf="callLocation== 'Normal'">

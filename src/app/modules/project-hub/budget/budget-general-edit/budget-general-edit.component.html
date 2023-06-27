@@ -1,0 +1,79 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Budget CAPEX Edit</div>
+        <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
+                                         href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+        </div>
+    </div>
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="budgetInfoForm" >
+        <div [ngClass]="'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3'">
+            <div class="flex justify-between items-center mt-3 mb-6">
+                <div class="flex justify-start gap-1 items-center font-medium">CAPEX Required
+                </div>
+                <div>
+                    <mat-slide-toggle formControlName="capexRequired"></mat-slide-toggle>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mt-3">
+                <spot-input class="w-full read-only" id="budgetId"  formControlName="budgetId" [label]="'Budget ID'" [Required]="required">
+                </spot-input>
+                <div>
+                    <button *ngIf="showBudgetIdButton" class="min-w-26" mat-flat-button [color]="'primary'"  (click)="requestBudgetId()">
+                        Request a new Budget ID
+                    </button>
+                </div>
+            </div>
+            <h1 *ngIf="required; then ifBlock else elseBlock"></h1>
+            <ng-template #ifBlock>
+                <spot-singleselect-autocomplete class="w-full" formControlName="gmsBudgetowner" [label]="'GMS Budget Owner'"  [Required]="true"
+                                                [valuePointer]="'portfolioOwner'"
+                                                [dropDownArray]="getGmsBudgetOwner()" [sortByType]="'custom'"
+                                                [customSortPointer]="'pfid'">
+                </spot-singleselect-autocomplete>
+                <spot-singleselect-autocomplete class="w-full" formControlName="predefinedInvestmentId"
+                                                [label]="'Global/Regional Predefined Investment '" [placeholder]="'Global/Regional Predefined Investment '" [valuePointer]="'lookUpName'"  [Required]="true"
+                                                [dropDownArray]="getPredifinedInvestment()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                </spot-singleselect-autocomplete>
+            </ng-template>
+            <ng-template #elseBlock>
+                <spot-singleselect-autocomplete class="w-full" formControlName="gmsBudgetowner" [label]="'GMS Budget Owner'"  [Required]="false"
+                                                [valuePointer]="'portfolioOwner'"
+                                                [dropDownArray]="getGmsBudgetOwner()" [sortByType]="'custom'"
+                                                [customSortPointer]="'pfid'">
+                </spot-singleselect-autocomplete>
+                <spot-singleselect-autocomplete class="w-full" formControlName="predefinedInvestmentId"
+                                                [label]="'Global/Regional Predefined Investment '" [placeholder]="'Global/Regional Predefined Investment '" [valuePointer]="'lookUpName'"  [Required]="false"
+                                                [dropDownArray]="getPredifinedInvestment()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                </spot-singleselect-autocomplete>
+            </ng-template>
+            <spot-select  class="w-full" formControlName="where" [label]="'Where'"  [Required]="required"
+                          [placeholder]="'Where'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                          [dropDownArray]="getWhereLookup()">
+            </spot-select>
+            <spot-select  class="w-full" formControlName="why" [label]="'Why'"  [Required]="required"
+                          [placeholder]="'Why'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+                          [dropDownArray]="getWhyLookup()">
+            </spot-select>
+            <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate"
+                             [label]="'Funding Approval Need Date'" [placeholder]="'Funding Approval Need Date'">
+            </spot-input-date>
+            <spot-textarea formControlName="budgetCommentary"
+                           [label]="'Budget Commentary'"
+                           [placeholder]="'Budget Commentary'">
+            </spot-textarea>
+        </div>
+        <div class="pr-3 flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+               (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitBudgetInfo()">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

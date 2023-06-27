@@ -156,6 +156,12 @@ export class ProjectHubComponent implements OnInit {
     getdata(): void {
         this.apiService.getProjectHubData(this.id).then((res: any) => {
             this.projectDetails = res.projectData
+            if(this.projectDetails.isConfidential){
+               if(!this.role.roleMaster.confidentialProjects?.some(x=>x==this.projectDetails.problemUniqueId))
+                {
+                    this.routes.navigate(['portfolio-center'])
+                }
+            }
             this.projecthubservice.hasChildren = res.hasChildren
             this.portfolioDetails = res.portfolioCeterData
             console.log(res.indicator)

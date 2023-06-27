@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from 'app/shared/constants';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { toLower } from 'lodash';
 
 @Component({
   selector: 'app-caps',
@@ -12,6 +13,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   styleUrls: ['./caps.component.scss']
 })
 export class CapsComponent implements OnInit {
+  @Input() callLocation: 'Normal' | 'Project-Charter' | 'Business-Case' = 'Normal'
   viewContent = false
   id=""
   editable= false
@@ -33,9 +35,12 @@ export class CapsComponent implements OnInit {
     WaterCost: new FormControl(''),
     WasteCost: new FormControl('')
   })
-  carbonngx: any
-  Biogenicsngx: any
-  WaterWastengx: any
+  carbonngx: any = []
+  Biogenicsngx: any = []
+  Transportationngx: any
+  Warehousingngx: any
+  Shippingngx: any
+  WaterWastengx: any = []
   WaterWasteParam: any
   DateRequired: boolean = false
   carbonUnitData: boolean = false
@@ -45,7 +50,8 @@ export class CapsComponent implements OnInit {
   NoCarbonForm = new FormGroup({
     NoCarbonImpact: new FormControl(false)
   })
-  constructor(public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
+  gdlList: any;
+  constructor(private router: Router, public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService, public projectHubService: ProjectHubService) { 
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
         this.viewContent = false
@@ -149,8 +155,15 @@ export class CapsComponent implements OnInit {
     if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
       this.editable = true
     }
-    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    console.log(this.editable)
+    if(this.callLocation == 'Business-Case'){
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
+    }
+    else{
+      this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    }
     this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+      console.log(res)
       this.CAPSdata = res
       if (res.localCurrency == null){
         this.currencyLabel = ""
@@ -160,6 +173,9 @@ export class CapsComponent implements OnInit {
       }
       if (res.envionmentPortfolio == "" || res.envionmentPortfolio == null) {
         this.editableEnv = false
+      }
+      else{
+        this.editableEnv = true
       }
       if (this.editableEnv == true){
       if (res.envionmentPortfolio.portfolioOwnerId == Constants.ENVIRONMENTAL_PORTFOLIO_ID.toString()){
@@ -171,7 +187,7 @@ export class CapsComponent implements OnInit {
     }
       this.CAPSform.patchValue({
         isCapsProject: res.projectData.isCapsProject,
-        enviornmentalPortfolio: res.envionmentPortfolio.portfolioOwner,
+        enviornmentalPortfolio: res.envionmentPortfolio == null || res.envionmentPortfolio == "" ? "" : res.envionmentPortfolio.portfolioOwner,
         impactRealizationDate: res.projectData.emissionsImpactRealizationDate,
         EmissionsImpact: res.projectData.calculatedEmissionsImpact,
         EnergyImpact: res.projectData.energyImpact,
@@ -187,16 +203,20 @@ export class CapsComponent implements OnInit {
         //carbon data
         var carbonParam = res.carbonParameters
         var carbonData = res.carbonData
+        var carbonCurrency = res.carbonPortfolioData
         var carbonngx = []
         if (carbonParam != null && carbonData != null) {
           carbonParam.forEach(function (arrayItem) {
             var data = []
             var param = []
-            data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
-            param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
+            var currency = []
+            data = carbonData.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
+            param = carbonParam.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
+            currency = carbonCurrency.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
             var carbonObject = {
               ...data[0],
-              ...param[0]
+              ...param[0],
+              ...currency[0]
             }
             carbonngx.push(carbonObject)
           })
@@ -205,10 +225,10 @@ export class CapsComponent implements OnInit {
         this.Biogenicsngx = res.biogenicsData
         
         //water waste data
-        if (this.editable == false) {
-          this.WaterWastengx = null
-        }
-        else {
+        // if (this.editable == false) {
+        //   this.WaterWastengx = null
+        // }
+        // else {
           var wwParam = res.waterWasteParameter
           var wwData = res.waterWasteData
           var WaterWastengx = []
@@ -224,7 +244,7 @@ export class CapsComponent implements OnInit {
             }
             this.WaterWastengx = WaterWastengx
           }
-        }
+        // }
         this.carbonUnitData = false
         this.biogenicUnitData = false
         this.wwUnitData = false
@@ -254,12 +274,98 @@ export class CapsComponent implements OnInit {
     else{
 
       //Transportation, Warehousing, Shipping API call
+      this.gdlList = res.gldDropDownList
+      console.log("TRANSPORTATION", res.transportationData)
+      var transportationData = res.transportationData
+      var Transportationngx = []
+      if (transportationData != null && this.gdlList != null) {
+        for (var i = 0; i < transportationData.length; i++) {
+          var data = []
+          data = this.gdlList.filter(x => x.environmentalSourceId == transportationData[i].environmentalSourceId)
+          var transportationObject = {
+            ...data[0],
+            ...transportationData[i]
+          }
+          console.log(transportationObject)
+          Transportationngx.push(transportationObject)
+        }
+        this.Transportationngx = Transportationngx
+      }
+      console.log("WAREHOUSING", res.warehouseData)
+      var warehousingData = res.warehouseData
+      var Warehousingngx = []
+      if (warehousingData != null && this.gdlList != null) {
+        for (var i = 0; i < warehousingData.length; i++) {
+          var data = []
+          data = this.gdlList.filter(x => x.environmentalSourceId == warehousingData[i].environmentalSourceId)
+          var warehouseObject = {
+            ...data[0],
+            ...warehousingData[i]
+          }
+          Warehousingngx.push(warehouseObject)
+        }
+        this.Warehousingngx = Warehousingngx
+      }
+      console.log("SHIPPING", res.shippingData)
+      var shippingData = res.shippingData
+      var Shippingngx = []
+      if (shippingData != null && this.gdlList != null) {
+        for (var i = 0; i < shippingData.length; i++) {
+          var data = []
+          data = this.gdlList.filter(x => x.environmentalSourceId == shippingData[i].environmentalSourceId)
+          var shippingObject = {
+            ...data[0],
+            ...shippingData[i]
+          }
+          Shippingngx.push(shippingObject)
+        }
+        this.Shippingngx = Shippingngx
+      }
     }
       this.noCarbonImpact = res.projectData.noCarbonImpact
       this.NoCarbonForm.patchValue({ NoCarbonImpact: res.projectData.noCarbonImpact })
       this.viewContent = true
       this.CAPSform.disable()
     })
+  }
+
+  openCAPS() {
+    var message = "";
+    if(this.callLocation == 'Business-Case'){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Business Case Recommended Options page and switch to the CAPS page?"
+    }
+    else if(this.callLocation == "Project-Charter"){
+      message = "The details can be edited only in the CAPS page. Do you want to leave the Project Charter page and switch to the CAPS page?"
+    }
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": message,
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Go to CAPS",
+          // "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.router.navigate([`./project-hub/` + this.id + `/caps`]);
+      }
+    }
+    )
+    
   }
 
 }
