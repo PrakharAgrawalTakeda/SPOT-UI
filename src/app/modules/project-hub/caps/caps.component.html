@@ -39,7 +39,7 @@
                             [label]="'Energy Impact (per Year)'" [decimalCount]="0" [inputType]="'Number'"
                                 [autoAddDecimal]="false" [placeholder]="'0'">
                         </spot-input>
-                        <label class="Unit">kWh</label>
+                        <label class="Unit">GJ</label>
                         </div>
                         <div *ngIf="this.showDefault && callLocation != 'Business-Case'" class="label">
                         <spot-input class="w-full read-only customCost" formControlName="EnergyCost" name="EnergyCost"
