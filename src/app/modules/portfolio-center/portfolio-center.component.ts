@@ -497,7 +497,7 @@ export class PortfolioCenterComponent implements OnInit {
                 "Initiate",
                 "Define",
                 "Plan",
-                "Excecute",
+                "Execute",
                 "Close",
                 "Track"
               ],
@@ -508,7 +508,7 @@ export class PortfolioCenterComponent implements OnInit {
                     res.phaseTile.initiate,
                     res.phaseTile.define,
                     res.phaseTile.plan,
-                    res.phaseTile.excecute,
+                    res.phaseTile.execute,
                     res.phaseTile.close,
                     res.phaseTile.track
                   ]
