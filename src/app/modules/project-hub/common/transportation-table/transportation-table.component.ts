@@ -20,9 +20,11 @@ export class TransportationTableComponent {
   @Input() ProjectData: any
   @Input() editCost: any
   @Input() data: any
+  @Input() GDLList: any
   lookupdata: any
   editable= false
   sortDir = ""
+  gdlList: any;
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -42,20 +44,21 @@ export class TransportationTableComponent {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+      //this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
         if (this.Editable == false) {
           this.Transportationngx = null
         }
         else {
           this.Transportationngx = this.data
+          this.gdlList = this.GDLList
           console.log(this.Transportationngx)
         }
         this.transportationBulkEditData.push(this.Transportationngx)
-        this.transportationBulkEditData.push(res.gldDropDownList)
-        this.transportationBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
+        this.transportationBulkEditData.push(this.gdlList)
+        //this.transportationBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
         this.viewContent = true
       })
-    })
+    //})
   }
 
   getLookUpName(id: any): any {

@@ -4,8 +4,8 @@
             <div class=" pb-3 pt-0 flex items-center justify-between">
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget</div>
                 <div class="flex items-start justify-between">
-                    <div style="padding-right: 5px;">
-                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    <div style="padding-right: 5px;" >
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
                                 (click)="projectHubService.toggleDrawerOpen('BudgetAssetPlacedServiceEdit', '', budgetPageInfo , id)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
@@ -103,7 +103,7 @@
                 <spot-input class="w-full" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
                 </spot-input>
             </div>
-            <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit" [fundingRequests]="fundingInformations"></app-budget-funding-information-table>
+            <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit" [budgetInfo]="budgetPageInfo"></app-budget-funding-information-table>
         </div>
 
         <div>

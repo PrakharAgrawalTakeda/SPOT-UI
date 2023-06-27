@@ -15,7 +15,6 @@ export class MyPreferenceService {
     all: any = []
     isFormChanged: boolean = false
     fuseDrawerLarge: boolean = false
-    isBulkEdit: boolean = false
     projectid: string = ""
     successSave = new BehaviorSubject<boolean>(false)
     alert: FuseConfirmationConfig = {
@@ -62,7 +61,7 @@ export class MyPreferenceService {
             }
         }
     }
-    toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false, isBulkEdit: boolean = false): void {
+    toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false): void {
         console.log(itemtype)
         
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
@@ -86,7 +85,6 @@ export class MyPreferenceService {
             this.projectid = pid
             this.drawerOpenedright = !this.drawerOpenedright
         }
-        this.isBulkEdit = isBulkEdit
         this.fuseDrawerLarge = fuseDrawerLarge
     }
     alertopener() {
@@ -94,12 +92,8 @@ export class MyPreferenceService {
         const alertopener = this.fusealert.open(this.alert)
         this.isFormChanged = false
         alertopener.afterClosed().subscribe(res => {
-            if (res != 'confirmed' && this.isBulkEdit == true) {
-                this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid,true)
-                this.isFormChanged = true
-            }
-            else if (res != 'confirmed' && this.isBulkEdit == false) {
-                this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid, false)
+            if (res != 'confirmed') {
+                this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid)
                 this.isFormChanged = true
             }
             else {

@@ -57,12 +57,14 @@ export class EmailNotificationsTableEditComponent {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getemailNoti(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
       this.emailTable = res
+      console.log(this.emailTable)
       this.MasterData = res.eventsMasterData
       this.userData = res.eventsUserData
       this.MasterData = this.sortbyPriority(this.MasterData)
+      console.log(this.userData)
       for (var i of this.MasterData) {
         this.emailTableDb.push(i)
-        console.log(i)
+        //console.log(i)
 
         this.emailTableForm.push(new FormGroup({
           onoff: new FormControl(i.onoff),
@@ -103,6 +105,7 @@ export class EmailNotificationsTableEditComponent {
 
   submitnotificationsTable() {
       var formValue = this.emailTableForm.getRawValue()
+      console.log(formValue)
       if(formValue.length > 0) 
       {
         this.submitObj = {
@@ -123,13 +126,10 @@ export class EmailNotificationsTableEditComponent {
             ,
             eventsMasterData: [],
           eventsUserData: this.emailTable.eventsMasterData.map(masterData => {
-            const matchingValue = formValue.find(value => value.frequencyId == masterData.frequencyId)
-            console.log
-            const onOffValue = matchingValue ? matchingValue.onoff : false;
             return {
               frequencyId: masterData.frequencyId,
-              onOff: onOffValue == true? onOffValue : false,
-              resourceId: this.msalService.instance.getActiveAccount().localAccountId
+              onOff: formValue.find(value => value.frequencyId == masterData.frequencyId) == true ? formValue.find(value => value.frequencyId == masterData.frequencyId) : false,
+              resourceId: masterData.resourceId
             };
           })
         }

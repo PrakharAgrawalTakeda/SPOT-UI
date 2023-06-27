@@ -148,7 +148,6 @@ export class BudgetGeneralEditComponent {
             this.viewContent = true
         })
         this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
-        // this.isBudgetAdmin = false;
     }
 
     getPredifinedInvestment(): any {
@@ -162,79 +161,112 @@ export class BudgetGeneralEditComponent {
     }
 
     submitBudgetInfo() {
-        if (this.required) {
-            var fieldsMissing = 0;
-            var missingFields = [];
-            if(this.budgetId.value==null || this.budgetId.value==""){
-                fieldsMissing ++;
-                missingFields.push("Budget ID")
-            }
-            if(!this.predefinedInvestmentId.value){
-                fieldsMissing ++;
-                missingFields.push("Global/Regional Predefined Investment")
-            }
-            // if(this.gmsBudgetowner.value.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
-            //     fieldsMissing ++;
-            //     missingFields.push("GMS Budget Owner")
-            // }
-            if(this.where.invalid){
-                fieldsMissing ++;
-                missingFields.push("Where")
-            }
-            if(this.why.invalid){
-                fieldsMissing ++;
-                missingFields.push("Why")
-            }
+        if(this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)){
             var comfirmConfig: FuseConfirmationConfig = {
-                "title": "The following fields are required",
-                "message": this.getMissingFieldsString(missingFields),
+                "title": "Please select another Budget ID",
+                "message": "",
                 "icon": {
                     "show": true,
                     "name": "heroicons_outline:exclamation",
-                    "color": "warn"
+                    "color": "warning"
                 },
                 "actions": {
                     "confirm": {
                         "show": true,
-                        "label": "OK",
-                        "color": "warn"
+                        "label": "Okay",
+                        "color": "primary"
                     },
-                    "cancel": {
-                        "show": true,
-                        "label": "Cancel"
-                    }
                 },
                 "dismissible": true
             }
-            if(fieldsMissing!=0){
-                const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
-                riskIssueAlert.afterClosed().subscribe(close => {
-                    if (close == 'confirmed') {
-                    }
-                })
-            }else{
-                this.projectHubService.isFormChanged = false
-                const formValue = this.budgetInfoForm.getRawValue();
-                const mainObj =this.prepareDataforSubmit(formValue)
-                this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
-                    this.projectHubService.isNavChanged.next(true)
-                    this.projectHubService.submitbutton.next(true)
-                    this.projectHubService.successSave.next(true)
-                    this.projectHubService.toggleDrawerOpen('', '', [], '')
-                })
+            const alert = this.fuseAlert.open(comfirmConfig)
+        }else{
+            if (this.required) {
+                var fieldsMissing = 0;
+                var missingFields = [];
+                if(this.budgetId.value==null || this.budgetId.value==""){
+                    fieldsMissing ++;
+                    missingFields.push("Budget ID")
+                }
+                if(!this.predefinedInvestmentId.value){
+                    fieldsMissing ++;
+                    missingFields.push("Global/Regional Predefined Investment")
+                }
+                if(this.where.invalid){
+                    fieldsMissing ++;
+                    missingFields.push("Where")
+                }
+                if(this.why.invalid){
+                    fieldsMissing ++;
+                    missingFields.push("Why")
+                }
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "The following fields are required",
+                    "message": this.getMissingFieldsString(missingFields),
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warn"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "OK",
+                            "color": "warn"
+                        },
+                        "cancel": {
+                            "show": true,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                if(fieldsMissing!=0){
+                    const riskIssueAlert = this.fuseAlert.open(comfirmConfig)
+                    riskIssueAlert.afterClosed().subscribe(close => {
+                        if (close == 'confirmed') {
+                        }
+                    })
+                }else{
+                    this.submitInfo()
+                }
+            }
+            else{
+                this.submitInfo()
             }
         }
-        else{
-            this.projectHubService.isFormChanged = false
-            const formValue = this.budgetInfoForm.getRawValue();
-            const mainObj =this.prepareDataforSubmit(formValue)
-            this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
-                this.projectHubService.isNavChanged.next(true)
-                this.projectHubService.submitbutton.next(true)
-                this.projectHubService.successSave.next(true)
-                this.projectHubService.toggleDrawerOpen('', '', [], '')
-            })
-        }
+    }
+    submitInfo(){
+        this.projectHubService.isFormChanged = false
+        const formValue = this.budgetInfoForm.getRawValue();
+        const mainObj =this.prepareDataforSubmit(formValue)
+        this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
+            this.projectHubService.isNavChanged.next(true)
+            this.projectHubService.submitbutton.next(true)
+            this.projectHubService.successSave.next(true)
+            this.projectHubService.toggleDrawerOpen('', '', [], '')
+        }).catch(err => {
+            if(err.status == 400){
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "This budget ID is used by another project. Please select another one",
+                    "message": "",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                    },
+                    "dismissible": true
+                }
+                const alert = this.fuseAlert.open(comfirmConfig)
+            }
+        })
     }
     prepareDataforSubmit(formValue): any {
         const mainObj = this.budgetInfo;

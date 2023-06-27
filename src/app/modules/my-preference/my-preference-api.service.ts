@@ -94,4 +94,11 @@ export class MyPreferenceApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
+
+    async getprojectDetails(id: string) {
+        var url = GlobalVariables.apiurl + "Projects/GetBulk/" + id
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 }
