@@ -7,6 +7,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {GlobalVariables} from "../../../../shared/global-variables";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectApiService} from "../project-api.service";
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
     selector: 'app-update-parent',
@@ -30,7 +31,7 @@ export class UpdateParentComponent implements OnInit {
     id: string = '';
     removedIds: any[];
     rows = [];
-
+    isConfidential: boolean = false;
 
     constructor(
         public fuseAlert: FuseConfirmationService,
@@ -38,7 +39,7 @@ export class UpdateParentComponent implements OnInit {
         private _httpClient: HttpClient,
         private _Activatedroute: ActivatedRoute,
         private apiService: ProjectApiService,
-        private router: Router
+        private router: Router,  private roleService: RoleService
     ) {
     }
 
@@ -73,7 +74,19 @@ export class UpdateParentComponent implements OnInit {
                                     i--;
                                 }
                             }
-                            this.resultSets = resultSets.projectData;
+                            if (!this.isConfidential) {
+                                this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+                                console.log("Confidential Projects", this.resultSets)
+                            }
+                            else {
+                                if (this.roleService.roleMaster.confidentialProjects.length > 0) {
+                                    var confProjectUserList = resultSets.projectData?.filter(x => this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId))
+                                    if (confProjectUserList?.length > 0) {
+                                        console.log(confProjectUserList)
+                                        this.resultSets = [...confProjectUserList]
+                                    }
+                                }
+                            }
                             this.budget = resultSets.budget
                             this.search.next(resultSets);
                         });
@@ -88,7 +101,10 @@ export class UpdateParentComponent implements OnInit {
             var parrentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === currentProj.parentId);
             this.rows.push(parrentProj);
         }
-        this.viewContent = true;
+        this.apiService.getproject(this.projecthubservice.projectid).then((res:any)=>{
+            this.isConfidential = res.isConfidential
+            this.viewContent = true;
+        })
     }
 
     onKeydown(event: KeyboardEvent): void {
