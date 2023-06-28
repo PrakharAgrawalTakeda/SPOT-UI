@@ -43,6 +43,7 @@ export class BudgetFundingInformationBulkEditComponent {
     frTableEditStack = []
     fundingRequestForm = new FormArray([])
     localCurrency:any = [];
+    showAddNewButton: boolean = false;
 
     ngOnInit(): void {
         this.dataloader()
@@ -54,6 +55,9 @@ export class BudgetFundingInformationBulkEditComponent {
         this.portfoliService.getLocalCurrency().then(currency => {
             this.localCurrency = currency
         })
+        if(this.budgetInfo.budget.budgetOwner=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC" || this.budgetInfo.budget.budgetOwner==null){
+            this.showAddNewButton = true;
+        }
         if (this.fundingRequests.length > 0) {
                     this.fundingRequestsDb = this.fundingRequests.map(x => {
                         return {

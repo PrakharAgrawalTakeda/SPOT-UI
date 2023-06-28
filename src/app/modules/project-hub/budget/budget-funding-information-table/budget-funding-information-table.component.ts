@@ -12,10 +12,10 @@ import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.servi
 export class BudgetFundingInformationTableComponent {
     @Input() editable: boolean
     @Input() budgetInfo: any;
+    @Input() addButtonShow: boolean;
     fundingRequests = [];
     id: string = ''
     localCurrency:any = [];
-
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute,
                 public projecthubservice: ProjectHubService,
                 private portfoliService: PortfolioApiService,
@@ -69,7 +69,7 @@ export class BudgetFundingInformationTableComponent {
                 if (indexToRemove !== -1) {
                     this.fundingRequests.splice(indexToRemove, 1);
                     this.budgetInfo.budgetIOs = this.fundingRequests;
-                    this.apiService.updateBudgetPageInfo(this.projecthubservice.projectid,this.budgetInfo).then(res => {
+                    this.apiService.updateBudgetPageInfo(this.id,this.budgetInfo).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.isNavChanged.next(true)
                     })

@@ -12,7 +12,7 @@
             <div></div>
             <div class="flex justify-between items-center gap-3">
                 <div class="pr-3">
-                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                    <button *ngIf="showAddNewButton" class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                             [color]="'primary-200'"
                             (click)="addFR()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -113,7 +113,7 @@
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" [draggable]="false" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                                  ngx-datatable-cell-template>
-                        <div class="flex justify-start items-center gap-6">
+                        <div *ngIf="row.keep==true" class="flex justify-start items-center gap-6">
                             <a href="javascript:void(0)" title="Delete Single" (click)="deleteFR(rowIndex)">
                                 <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                             </a>

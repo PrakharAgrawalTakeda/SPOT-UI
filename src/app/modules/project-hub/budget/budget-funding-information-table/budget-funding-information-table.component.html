@@ -4,6 +4,10 @@
         <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
             <div class="flex items-start justify-between">
                 <div >
+                    <button *ngIf="addButtonShow" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projecthubservice.toggleDrawerOpen('BudgetFundingAddNew', '', budgetInfo, id, false)">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             (click)="projecthubservice.toggleDrawerOpen('BudgetFundingBulkEdit', '', budgetInfo, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
@@ -51,7 +55,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
                 <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                    <div class="flex items-center justify-start gap-6">
+                    <div *ngIf="row.keep==true" class="flex items-center justify-start gap-6">
                         <a href="javascript:void(0)" title="Delete Single"
                            *ngIf="editable"
                            (click)="deleteFundingRequest(row.budgetIoid)">
