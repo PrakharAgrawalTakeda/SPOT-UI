@@ -143,49 +143,43 @@
             </button>
         </div>
         <div class="overflow-x-auto">
-            <form class="w-full p-[20px]" [formGroup]="emailNotiForm" (ngSubmit)="submitnotificationsTable()">
-                <div class="h-[53vh]">
-                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                        class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="eventsData"
-                        #emailNotiTable>
-
-                        <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="0.4">
-                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{value}}
-                            </ng-template>
-                        </ngx-datatable-column>
-
-
-                        <ngx-datatable-column name="Event" prop="event" [flexGrow]="0.4">
-                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{value}}
-                            </ng-template>
-                        </ngx-datatable-column>
-
-
-                        <ngx-datatable-column name="Description" prop="description" [flexGrow]="0.8">
-                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{value}}
-                            </ng-template>
-                        </ngx-datatable-column>
-
-
-                        <ngx-datatable-column name="On/Off" prop="onoff" [resizeable]="false" [sortable]="false"
-                            [flexGrow]="0.4">
-                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
-                                ngx-datatable-cell-template>
-                                <mat-icon svgIcon="heroicons_outline:x-circle"
-                                    *ngIf="!emailNotiForm.controls.onoff.value">
-                                </mat-icon>
-                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
-                                    *ngIf="emailNotiForm.controls.onoff.value">
-                                </mat-icon>
-                            </ng-template>
-                        </ngx-datatable-column>
-
-                    </ngx-datatable>
-                </div>
+            <form class="w-full p-[20px]" [formGroup]="emailNotiTableForm" (ngSubmit)="submitnotificationsTable()">
+              <div class="h-[53vh]">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                  class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="eventsData"
+                  #emailNotiTable>
+          
+                  <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="0.4">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.priority }}
+                    </ng-template>
+                  </ngx-datatable-column>
+          
+                  <ngx-datatable-column name="Event" prop="event" [flexGrow]="0.4">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.event }}
+                    </ng-template>
+                  </ngx-datatable-column>
+          
+                  <ngx-datatable-column name="Description" prop="description" [flexGrow]="0.8">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.description }}
+                    </ng-template>
+                  </ngx-datatable-column>
+          
+                  <ngx-datatable-column name="On/Off" prop="onoff" [resizeable]="false" [sortable]="false" [flexGrow]="0.4">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                      <mat-icon svgIcon="heroicons_outline:x-circle" *ngIf="row.onOff == false"></mat-icon>
+                      <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="row.onOff == true"></mat-icon>
+                    </ng-template>
+                  </ngx-datatable-column>
+          
+                </ngx-datatable>
+              </div>
             </form>
-        </div>
+          </div>
+          
+          
+          
     </div>
 </div>

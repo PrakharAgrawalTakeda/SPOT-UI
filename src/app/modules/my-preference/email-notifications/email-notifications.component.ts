@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
@@ -29,10 +29,6 @@ export class EmailNotificationsComponent {
   id: string = ""
   emailNotiForm = new FormGroup({
     recieveEmailNotification: new FormControl(false),
-    onoff: new FormControl(false),
-    description: new FormControl(''),
-    event: new FormControl(''),
-    priority: new FormControl(''),
     reportFrequencyId: new FormControl(null),
     emailNotifcationNotifcationReportScopeIds: new FormControl(null),
     portfolioOwner: new FormControl(),
@@ -46,6 +42,14 @@ export class EmailNotificationsComponent {
     problemId: new FormControl(''),
     problemTitle: new FormControl('')
   })
+  emailNotiTableForm = new FormArray([]);
+  // emailNotiTableForm = new FormGroup({
+  //   onoff: new FormControl(false), // Set default value to false
+  //   description: new FormControl(''), // Set default value as an empty string
+  //   event: new FormControl(''), // Set default value as an empty string
+  //   priority: new FormControl('') // Set default value as an empty string
+  // });
+  
   emailNoti: any;
   eventsData: any;
   lookUpData: any;
@@ -66,6 +70,7 @@ export class EmailNotificationsComponent {
   lookUpData3: any;
   emailNotiTable: any;
   projects: any;
+  onoff: any;
 
   constructor(public projecthubservice: ProjectHubService,
     public preferenceservice: MyPreferenceService,
@@ -117,12 +122,12 @@ export class EmailNotificationsComponent {
       });
   }
   dataloader() {
-    
+
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.apiService.getemailNoti(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
         this.apiservice.getfilterlist().then(filter => {
-          
+
           this.emailNoti = res
           this.emailNotiTable = res
           this.lookup = lookup
@@ -143,19 +148,26 @@ export class EmailNotificationsComponent {
             return a.lookUpOrder - b.lookUpOrder;
           })
 
-          this.eventsData = res.eventsMasterData
+          this.eventsData = res.eventsMasterData.map(masterData => {
+            const eventsUserDataItem = res.eventsUserData.find(data => data.frequencyId == masterData.frequencyId);
+            const onOffValue = eventsUserDataItem ? eventsUserDataItem.onOff : false;
+            
+            return { ...masterData, onOff: onOffValue };
+          });
+          console.log(this.eventsData)
+          
+          this.eventsData.sort((a, b) => a.priority - b.priority);
+          
           res.eventsMasterData.sort((a, b) => a.priority - b.priority)
           console.log("DB OBJECT", res)
-          //this.rows = res.reportOptions.projectIds.split(',').map(id => this.rows.find(x => x.problemUniqueId === id)).filter(Boolean)
           console.log("ROWS", this.rows)
 
+
           if (this.emailNoti != null) {
+
+
             this.emailNotiForm.patchValue({
               recieveEmailNotification: res.reportOptions.recieveEmailNotification ? res.reportOptions.recieveEmailNotification : false,
-              priority: res.eventsMasterData.priority,
-              event: res.eventsMasterData.event,
-              description: res.eventsMasterData.description,
-              onoff: res.eventsUserData.find(eventUserData => eventUserData.frequencyId === res.eventsMasterData.frequencyId)?.onoff,
               reportFrequencyId: res.reportOptions.reportFrequencyId ? this.lookUpData.find(x => x.lookUpId == res.reportOptions.reportFrequencyId) : '',
               emailNotifcationNotifcationReportScopeIds: res.reportOptions.emailNotifcationNotifcationReportScopeIds ? this.lookUpData2.find(x => x.lookUpId == res.reportOptions.emailNotifcationNotifcationReportScopeIds) : '',
               portfolioOwner: res.reportOptions.portfolioScopeIds && this.filterCriteria.portfolioOwner
@@ -167,29 +179,47 @@ export class EmailNotificationsComponent {
               role: res.reportOptions.roleIds && this.getRoles()
                 ? res.reportOptions.roleIds.split(',').map(id => this.getRoles().find(x => x.lookUpId === id)).filter(Boolean)
                 : [],
-                rows: res.reportOptions.projectIds
+              rows: res.reportOptions.projectIds
                 ? res.reportOptions.projectIds.split(',')
                 : [],
               includeChild: res.reportOptions.includeChild,
               products: res.reportOptions.productIds && this.filterCriteria.products ?
-                res.reportOptions.productIds.split(',').map(id => this.filterCriteria.products.find(x => x.productId === id)).filter(Boolean) : [], emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes
-                  ? this.lookUpData3.find(x => x.lookUpId === res.reportOptions.emailNotifcationPortfolioReportTypes)
-                  : this.lookUpData3.find(x => x.lookUpName === 'All Projects'),
+                res.reportOptions.productIds.split(',').map(id => this.filterCriteria.products.find(x => x.productId === id)).filter(Boolean) : [],
+              emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes
+                ? this.lookUpData3.find(x => x.lookUpId === res.reportOptions.emailNotficationPortfolioReportTypes)
+                : this.lookUpData3.find(x => x.lookUpName === 'All Projects'),
               notificationId: res.reportOptions.notificationId
-            })
+            });
+            
+           
+            for (var i of res.eventsMasterData) {
+              const eventsUserDataItem = res.eventsUserData.find(data => data.frequencyId === i.frequencyId);
+              const onoffValue = eventsUserDataItem ? eventsUserDataItem.onOff : false;
+            
+              const formGroup = new FormGroup({
+                onoff: new FormControl(onoffValue == true ? onoffValue : false),
+                description: new FormControl(i.description),
+                event: new FormControl(i.event),
+                priority: new FormControl(i.priority)
+              });
+            
+              (this.emailNotiTableForm as FormArray).push(formGroup);
+            }
+            
 
+            
           }
+          console.log("TABLE FORM", this.emailNotiTableForm.getRawValue())
+
           console.log("FORM", this.emailNotiForm.getRawValue())
-          if(res.reportOptions.projectIds)
-          {
+          if (res.reportOptions.projectIds) {
             this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
-              if(id)
-              {
+              if (id) {
                 this.projects = id
                 console.log(this.projects)
               }
-              
-                        })
+
+            })
           }
         })
       })

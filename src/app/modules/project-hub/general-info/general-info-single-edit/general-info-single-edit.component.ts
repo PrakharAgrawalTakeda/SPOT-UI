@@ -604,7 +604,6 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   }
 
   submitLogic() {
-    this.projectHubService.isFormChanged = false
     var formValue = this.generalInfoForm.getRawValue()
     var mainObj = this.generalInfo.projectData
     mainObj.isArchived = formValue.isArchived
@@ -637,6 +636,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
 
     if (this.subCallLocation == 'ProjectHub') {
       this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+        this.projectHubService.isFormChanged = false
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
@@ -644,6 +644,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       })
     } else {
       this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, this.subCallLocation).then(res => {
+        this.projectHubService.isFormChanged = false
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)
         this.projectHubService.successSave.next(true)
