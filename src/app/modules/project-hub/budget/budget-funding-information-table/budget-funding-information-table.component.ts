@@ -38,12 +38,6 @@ export class BudgetFundingInformationTableComponent {
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.fundingRequests = this.budgetInfo.budgetIOs
-        // this.portfoliService.getLocalCurrency().then(currency => {
-        //     this.localCurrency = currency
-        // })
-    }
-    getCurrency(id: string): string{
-        return id && id != '' ? this.localCurrency.find(x => x.localCurrencyId == id).localCurrencyAbbreviation : ''
     }
 
     deleteFundingRequest(id: string) {
@@ -71,9 +65,15 @@ export class BudgetFundingInformationTableComponent {
         const fundingRequestAlert = this.fuseAlert.open(comfirmConfig)
         fundingRequestAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                this.apiService.deleteKeyAssumption(id).then(res => {
-                    this.projecthubservice.submitbutton.next(true)
-                })
+                const indexToRemove = this.fundingRequests.findIndex(obj => obj.budgetIoid === id);
+                if (indexToRemove !== -1) {
+                    this.fundingRequests.splice(indexToRemove, 1);
+                    this.budgetInfo.budgetIOs = this.fundingRequests;
+                    this.apiService.updateBudgetPageInfo(this.projecthubservice.projectid,this.budgetInfo).then(res => {
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                    })
+                }
             }
         })
     }

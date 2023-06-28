@@ -144,6 +144,9 @@ export class BudgetGeneralEditComponent {
                     this.gmsBudgetowner.disable()
                 }
             }
+            if(this.capexRequired.value == true && (!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC")){
+                this.showBudgetIdButton = false;
+            }
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
@@ -322,13 +325,13 @@ export class BudgetGeneralEditComponent {
     getGmsBudgetOwner(): any {
         if(this.isBudgetAdmin){
             if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             }
         }else{
             if(!this.gmsBudgetowner.invalid){
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerEditable)
+                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             }
