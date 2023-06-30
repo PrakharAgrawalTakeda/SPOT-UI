@@ -22,7 +22,6 @@ export class BudgetGeneralEditComponent {
     budgetInfo: any = {}
     filterCriteria: any = {}
     isBudgetAdmin: boolean = false;
-    isBudgetOwnerEditable: boolean = false;
     showBudgetIdButton: boolean = false;
     required:boolean = false;
     budgetInfoForm = new FormGroup({
@@ -97,7 +96,7 @@ export class BudgetGeneralEditComponent {
                     if(!this.isBudgetAdmin){
                         if(this.capexRequired.disabled){
                             this.showBudgetIdButton = true;
-                            if(!this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
+                            if(!this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue){
                                 this.gmsBudgetowner.disable();
                             }
                             this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
@@ -139,7 +138,7 @@ export class BudgetGeneralEditComponent {
                 this.budgetId.disable()
                 this.gmsBudgetowner.disable();
             }
-            if(!this.gmsBudgetowner.value.gmsbudgetOwnerEditable ){
+            if(!this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue ){
                 if(!this.capexRequired.value && !this.isBudgetAdmin){
                     this.gmsBudgetowner.disable()
                 }
@@ -164,7 +163,7 @@ export class BudgetGeneralEditComponent {
     }
 
     submitBudgetInfo() {
-        if(this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)){
+        if(this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value?.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)){
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "Please select another Budget ID",
                 "message": "",
@@ -324,7 +323,7 @@ export class BudgetGeneralEditComponent {
     }
     getGmsBudgetOwner(): any {
         if(this.isBudgetAdmin){
-            if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
+            if(this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue){
                 return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
             }else{
                 return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
