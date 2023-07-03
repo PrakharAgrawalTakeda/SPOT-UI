@@ -1042,96 +1042,34 @@ export class PortfolioCenterComponent implements OnInit {
     this.showLA = false;
   }
 
-  OpenLA(){
-    console.log("Inside drawer function")
-    if (this.PortfolioFilterForm.controls.PortfolioOwner.value == null && this.PortfolioFilterForm.controls.ExecutionScope.value == null){
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a portfolio owner and Execution Scope",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-    }
-    if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
-      
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a portfolio owner and Execution Scope",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-  }
-    else{
+  OpenLA() {
     var portfolioOwners = ""
     var executionScope = ""
-      if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
-        for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
-          portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
-      }
-    }
-      if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
-        for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
-          executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
-      }
-    }
-  }
-    if (portfolioOwners == "" && executionScope == ""){
+    console.log("Inside drawer function")
+    if (this.PortfolioFilterForm.controls.PortfolioOwner.value == null && this.PortfolioFilterForm.controls.ExecutionScope.value == null){
       
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a portfolio owner and Execution Scope",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
     }
+    else if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
+      
+      
+  }
+    else{
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null){
+        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+  }
+    
     var noChangePO = false
     var noChangeES = false
     var filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
@@ -1152,6 +1090,14 @@ export class PortfolioCenterComponent implements OnInit {
         noChangePO = true
       }
     }
+    // else if (portfolioOwners == "") {
+    //   if (filtersnew == null){
+    //     noChangePO = false
+    //   }
+    //   else{
+    //     (filtersnew.PortfolioOwner && filtersnew.PortfolioOwner.length == 0) ? noChangePO = true : noChangePO = false
+    //   }
+    // }
     if (executionScope != "" && filtersnew != null) {
       var count = 0;
       var list = executionScope.split(',');
@@ -1169,6 +1115,14 @@ export class PortfolioCenterComponent implements OnInit {
         noChangeES = true
       }
     }
+    // else if (executionScope == ""){
+    //   if (filtersnew == null) {
+    //     noChangePO = false
+    //   }
+    //   else {
+    //     (filtersnew.ExecutionScope && filtersnew.ExecutionScope.length == 0) ? noChangeES = true : noChangeES = false
+    //   }
+    // }
     var localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
     if (noChangePO == true && noChangeES == true && localattribute != null){
       this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
