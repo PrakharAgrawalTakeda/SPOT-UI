@@ -4,8 +4,12 @@
         <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
             <div class="flex items-start justify-between">
                 <div >
+                    <button *ngIf="addButtonShow" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projecthubservice.toggleDrawerOpen('BudgetFundingAddNew', '', budgetInfo, id, false)">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                            (click)="projecthubservice.toggleDrawerOpen('BudgetFundingBulkEdit', '', fundingRequests, id, true)">
+                            (click)="projecthubservice.toggleDrawerOpen('BudgetFundingBulkEdit', '', budgetInfo, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
                 </div>
@@ -19,14 +23,14 @@
     <div class="overflow-x-auto">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                        class="font-medium text-sm text-default whitespace-nowrap" [rows]="fundingRequests">
-            <ngx-datatable-column name="Funding Request ID" prop="budgetIoid" [flexGrow]="2">
+            <ngx-datatable-column name="Funding Request ID" prop="budgetIo1" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Approval Currency" prop="approvalCurrency" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{getCurrency(value)}}</p>
+                    <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="CAPEX Amount" prop="localCarapprovedCapex" [flexGrow]="2">
@@ -51,10 +55,10 @@
             </ngx-datatable-column>
             <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
                 <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-                    <div class="flex items-center justify-start gap-6">
+                    <div *ngIf="row.keep==true" class="flex items-center justify-start gap-6">
                         <a href="javascript:void(0)" title="Delete Single"
                            *ngIf="editable"
-                           (click)="deleteFundingRequest(row.keyAssumptionUniqueId)">
+                           (click)="deleteFundingRequest(row.budgetIoid)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>
                     </div>

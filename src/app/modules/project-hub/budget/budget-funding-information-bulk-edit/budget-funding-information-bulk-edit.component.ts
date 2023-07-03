@@ -34,6 +34,7 @@ export class BudgetFundingInformationBulkEditComponent {
         })
     }
 
+    budgetInfo: any;
     fundingRequests = []
     fundingRequestsDb = []
     fundingRequestsSubmit = []
@@ -42,16 +43,21 @@ export class BudgetFundingInformationBulkEditComponent {
     frTableEditStack = []
     fundingRequestForm = new FormArray([])
     localCurrency:any = [];
+    showAddNewButton: boolean = false;
 
     ngOnInit(): void {
         this.dataloader()
     }
 
     dataloader() {
-        this.fundingRequests = this.projecthubservice.all;
+        this.budgetInfo = this.projecthubservice.all
+        this.fundingRequests = this.projecthubservice.all.budgetIOs;
         this.portfoliService.getLocalCurrency().then(currency => {
             this.localCurrency = currency
         })
+        if(this.budgetInfo.budget.budgetOwner=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC" || this.budgetInfo.budget.budgetOwner==null){
+            this.showAddNewButton = true;
+        }
         if (this.fundingRequests.length > 0) {
                     this.fundingRequestsDb = this.fundingRequests.map(x => {
                         return {
@@ -131,8 +137,8 @@ export class BudgetFundingInformationBulkEditComponent {
             keep: true,
         }]
         this.fundingRequestForm.push(new FormGroup({
-            budgetIoid: new FormControl(''),
-            projectId: new FormControl(''),
+            budgetIoid: new FormControl(null),
+            projectId: new FormControl(this.projecthubservice.projectid),
             budgetIo1: new FormControl(''),
             carapprovedCapex: new FormControl(null),
             carapprovedOpex: new FormControl(null),
@@ -230,11 +236,11 @@ export class BudgetFundingInformationBulkEditComponent {
      checkEmptyIds(myList: any[]): boolean {
         const idMap: { [id: string]: boolean } = {};
         for (const object of myList) {
-            const id = object.budgetIoid;
+            const id = object.budgetIo1;
             if (!id || id.trim() === '') {
                 return true;
             }
-            if (!object.approvalCurrency || object.approvalCurrency.trim() === '') {
+            if (!object.localCurrencyId || object.localCurrencyId.trim() === '') {
                 return true;
             }
             idMap[id] = true;
@@ -294,7 +300,8 @@ export class BudgetFundingInformationBulkEditComponent {
                 }else{
                     this.projecthubservice.isFormChanged = false
                     this.formValue()
-                    this.apiService.bulkEditFundingRequests(this.fundingRequestsSubmit, this.projecthubservice.projectid).then(res => {
+                    this.budgetInfo.budgetIOs  = this.fundingRequestsSubmit;
+                    this.apiService.updateBudgetPageInfo(this.projecthubservice.projectid,this.budgetInfo).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                         this.projecthubservice.isNavChanged.next(true)

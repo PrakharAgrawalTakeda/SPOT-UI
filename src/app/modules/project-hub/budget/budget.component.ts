@@ -18,8 +18,9 @@ export class BudgetComponent implements OnInit {
     filterCriteria: any = {}
     opexField:boolean = false;
     capexField:boolean = false;
-    budgetPageInfo:any = "asadasd";
-    fundingInformations: any = []
+    budgetPageInfo:any = "";
+    fundingInformations: any = [];
+    showAddNewButton: boolean = false;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -46,8 +47,8 @@ export class BudgetComponent implements OnInit {
         why: new FormControl(''),
         fundingApprovalNeedDate: new FormControl(''),
         projectFundingStatus: new FormControl(''),
-        totalApprovedCapex: new FormControl(''),
-        totalApprovedOpex: new FormControl(''),
+        totalApprovedCapex: new FormControl(0),
+        totalApprovedOpex: new FormControl(0),
         budgetCommentary: new FormControl(''),
     })
 
@@ -64,7 +65,6 @@ export class BudgetComponent implements OnInit {
             this.localCurrency = currency
         });
         this.authService.lookupMaster().then((lookup: any) => {
-
             this.lookUpData = lookup
             this.projectHubService.lookUpMaster = lookup
             this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
@@ -84,6 +84,14 @@ export class BudgetComponent implements OnInit {
     }
 
     generalInfoPatchValue(response){
+        let totalCapex = 0;
+        let totalOpex=0;
+        response.budgetIOs.forEach((x)=>{
+            if(x.approvalStatus=='Approved'){
+                totalCapex = totalCapex + x.localCarapprovedCapex
+                totalOpex= totalOpex + x.localCarapprovedOpex
+            }
+        })
         this.budgetForm.patchValue({
             capexRequired: !!response.budget.capExRequired,
             opexRequired:  !!response.budget.opExRequired,
@@ -97,10 +105,14 @@ export class BudgetComponent implements OnInit {
             why:  this.getLookUpName(response.budget.whyId),
             fundingApprovalNeedDate:  response.budget.fundingApprovalNeedDate,
             projectFundingStatus:  this.getLookUpName(response.budget.fundingStatusId),
-            totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
-            totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
+            totalApprovedCapex:  totalCapex,
+            totalApprovedOpex:   totalOpex,
             budgetCommentary:  response.budget.budgetComment,
         })
+        if(response.budget.budgetOwner=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC" || response.budget.budgetOwner==null){
+            this.showAddNewButton = true;
+        }
+
     }
 
     getLookUpName(id: string): string {

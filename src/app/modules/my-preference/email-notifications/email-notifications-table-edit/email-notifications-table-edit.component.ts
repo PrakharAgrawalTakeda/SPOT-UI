@@ -25,7 +25,7 @@ export class EmailNotificationsTableEditComponent {
   //   event: new FormControl(''),
   //   priority: new FormControl('')
   // })
-  emailTableForm = new FormArray([])
+  emailNotiTableForm = new FormArray([]);
   id: string = ""
   emailTable: any;
   MasterData: any;
@@ -34,6 +34,7 @@ export class EmailNotificationsTableEditComponent {
   emailTableDb = []
   submitObj = {}
   viewContent: boolean = false
+  eventsData: any;
 
 
   constructor(public projecthubservice: ProjectHubService,
@@ -41,7 +42,7 @@ export class EmailNotificationsTableEditComponent {
     private _Activatedroute: ActivatedRoute, private msalService: MsalService, private apiService: MyPreferenceApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService, private authService: AuthService, private apiservice: ProjectApiService,
     public preferenceservice: MyPreferenceService) {
-      this.emailTableForm.valueChanges.subscribe(res => {
+      this.emailNotiTableForm.valueChanges.subscribe(res => {
         //this.projecthubservice.isFormChanged = true
         this.preferenceservice.isFormChanged = true
   
@@ -61,18 +62,30 @@ export class EmailNotificationsTableEditComponent {
       this.MasterData = res.eventsMasterData
       this.userData = res.eventsUserData
       this.MasterData = this.sortbyPriority(this.MasterData)
+      console.log(this.MasterData)
       console.log(this.userData)
-      for (var i of this.MasterData) {
-        this.emailTableDb.push(i)
-        //console.log(i)
-
-        this.emailTableForm.push(new FormGroup({
-          onoff: new FormControl(i.onoff),
+      this.eventsData = res.eventsMasterData.map(masterData => {
+        const eventsUserDataItem = res.eventsUserData.find(data => data.frequencyId == masterData.frequencyId);
+        const onOffValue = eventsUserDataItem ? eventsUserDataItem.onOff : false;
+        
+        return { ...masterData, onOff: onOffValue };
+      });
+      console.log(this.eventsData)
+      
+      this.eventsData.sort((a, b) => a.priority - b.priority);
+      for (var i of res.eventsMasterData) {
+        const eventsUserDataItem = res.eventsUserData.find(data => data.frequencyId === i.frequencyId);
+        const onoffValue = eventsUserDataItem ? eventsUserDataItem.onOff : false;
+      
+        const formGroup = new FormGroup({
+          frequencyId: new FormControl(i.frequencyId),
+          onoff: new FormControl(onoffValue == true ? onoffValue : false),
           description: new FormControl(i.description),
           event: new FormControl(i.event),
-          priority: new FormControl(i.priority),
-          frequencyId: new FormControl(i.frequencyId)
-        }))
+          priority: new FormControl(i.priority)
+        });
+      
+        (this.emailNotiTableForm as FormArray).push(formGroup);
       }
       this.preferenceservice.isFormChanged = false
       this.viewContent = true;
@@ -103,8 +116,9 @@ export class EmailNotificationsTableEditComponent {
     }
   }
 
+
   submitnotificationsTable() {
-      var formValue = this.emailTableForm.getRawValue()
+      var formValue = this.emailNotiTableForm.getRawValue()
       console.log(formValue)
       if(formValue.length > 0) 
       {
@@ -125,13 +139,17 @@ export class EmailNotificationsTableEditComponent {
             }
             ,
             eventsMasterData: [],
-          eventsUserData: this.emailTable.eventsMasterData.map(masterData => {
-            return {
-              frequencyId: masterData.frequencyId,
-              onOff: formValue.find(value => value.frequencyId == masterData.frequencyId) == true ? formValue.find(value => value.frequencyId == masterData.frequencyId) : false,
-              resourceId: masterData.resourceId
-            };
-          })
+            eventsUserData: this.emailTable.eventsMasterData.map(masterData => {
+              const formItem = formValue.find(value => value.frequencyId == masterData.frequencyId);
+              console.log(formItem)
+              const onOff = formItem.onoff
+              
+              return {
+                frequencyId: masterData.frequencyId,
+                onOff: onOff ? onOff : false,
+                resourceId: this.msalService.instance.getActiveAccount().localAccountId
+              };
+            })
         }
       }
 
@@ -144,11 +162,16 @@ export class EmailNotificationsTableEditComponent {
     else {
       console.log("RIGHT")
           this.apiService.editEmailSettings(this.submitObj, this.msalService.instance.getActiveAccount().localAccountId).then(resp => {
-            this.projecthubservice.isFormChanged = false
-            this.projecthubservice.isNavChanged.next(true)
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.successSave.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            // this.projecthubservice.isFormChanged = false
+            // this.projecthubservice.isNavChanged.next(true)
+            // this.projecthubservice.submitbutton.next(true)
+            // this.projecthubservice.successSave.next(true)
+            // this.projecthubservice.toggleDrawerOpen('', '', [], '')
+         this.emailTableEditStack = []
+            this.preferenceservice.isFormChanged = false
+      this.projecthubservice.isFormChanged = false
+      this.preferenceservice.submitbutton.next(true)
+      this.preferenceservice.toggleDrawerOpen('', '', [], '')
 
 
             // this.preferenceservice.isFormChanged = false

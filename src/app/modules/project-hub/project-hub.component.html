@@ -198,6 +198,7 @@
         <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetAssetPlacedServiceEdit'" [mode]="'Asset-In-Service'"></app-budget-additional-edit>
         <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetOPEXEdit'" [mode]="'OPEX'"></app-budget-additional-edit>
         <app-budget-funding-information-bulk-edit *ngIf="projecthubservice.itemtype == 'BudgetFundingBulkEdit'"></app-budget-funding-information-bulk-edit>
+        <app-budget-funding-add-view *ngIf="projecthubservice.itemtype == 'BudgetFundingAddNew'"></app-budget-funding-add-view>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"
