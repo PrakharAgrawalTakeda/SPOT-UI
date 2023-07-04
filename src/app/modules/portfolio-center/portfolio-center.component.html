@@ -185,12 +185,17 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
             <!-- Header -->
             <div [hidden]='!showContent' class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
-                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="filterDrawer.toggle()">
-                    Filters
-                </button>
-                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
-                    Reset Filters (only dev)
-                </button>
+                <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px;">
+                    <h1 class="text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 text-primary">Portfolio Center</h1>
+                <div class=" flex items-center">
+                    <button class="ml-4" mat-flat-button [color]="'primary'" (click)="filterDrawer.toggle()">
+                        Filters
+                    </button>
+                    <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
+                        Reset Filters (only dev)
+                    </button>
+                </div>
+                </div>
                 <div *ngIf='showContent'
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 mt-8 " @slideInRight>
                     <!-- <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
@@ -218,7 +223,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
                         @slideInLeft>
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col flex-auto p-6 overflow-hidden">
-                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-8">
+                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-0">
                                 Phase Distribution
                             </div>
                             <div class="flex flex-col flex-auto h-60">
@@ -234,15 +239,15 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </div>
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-8">
-                                Milestones</div>
+                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-0">
+                                Milestone Performance</div>
 
                             <ng-container *ngFor="let dataset of data.milstoneTile">
-                                <div class="grid grid-cols-2 py-3">
-                                    <div class="flex items-center">
-                                        <div class="ml-3">{{dataset.title}}</div>
+                                <div class="flex py-3">
+                                    <div class="flex items-center text-secondary w-14 font-extrabold">{{dataset.value}}%</div>
+                                    <div class="flex items-right">
+                                        <div>{{dataset.title}}</div>
                                     </div>
-                                    <div class="text-right text-secondary">{{dataset.value}}%</div>
                                 </div>
                             </ng-container>
                         </div>
@@ -250,22 +255,22 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     <!-- Milestones -->
                     <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="tile-title font-medium tracking-tight leading-6 text-primary truncate mb-2">
+                            <div class="tile-title font-medium tracking-tight leading-6 text-primary truncate mb-0">
                                 Budget</div>
 
                             <div class="flex flex-col mt-2">
                                 <div class="grid grid-cols-3 py-3">
-                                    <div class="flex items-center"></div>
-                                    <div class="text-right font-medium">CAPEX</div>
-                                    <div class="text-right font-medium">OPEX</div>
+                                    <div class="flex items-center">Reference</div>
+                                    <div class="text-right font-extrabold">CAPEX ({{budgetCurrency}})</div>
+                                    <div class="text-right font-extrabold">OPEX ({{budgetCurrency}})</div>
                                 </div>
                                 <ng-container *ngFor="let dataset of data.budgetTile">
                                     <div class="grid grid-cols-3 py-3">
                                         <div class="flex items-center">
                                             <div class="ml-3">{{dataset.title}}</div>
                                         </div>
-                                        <div class="text-right text-secondary">{{dataset.value}}</div>
-                                        <div class="text-right text-secondary">{{dataset.value2}}</div>
+                                        <div class="text-right text-secondary font-extrabold">{{dataset.value}}</div>
+                                        <div class="text-right text-secondary font-extrabold">{{dataset.value2}}</div>
                                     </div>
                                 </ng-container>
                             </div>
@@ -320,7 +325,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </div> -->
 
                 </div>
-                <div class="p-6">
+                <!-- <div class="p-6">
                     <div class="mr-4 tile-title font-medium tracking-tight text-primary leading-6 truncate">Project Overview</div>
                 </div>
                 <div style="height: auto;">
@@ -333,25 +338,39 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <button class="ml-4" mat-flat-button [color]="'primary'">
                             Generate Reports
                         </button>
+                </div> -->
+                <div class="flex justify-between gap-8 mt-2 p-6" style="margin-bottom: -30px;">
+                    <h1 class="text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 text-primary">Project Overview</h1>
+                    <div class=" flex items-center">
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
+                            Portfolio Report
+                        </button>
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenSPOTReport()">
+                            SPOT Data (Power BI)
+                        </button>
+                        <button class="ml-4" mat-flat-button [color]="'primary'">
+                            Generate Reports
+                        </button>
+                    </div>
                 </div>
                 <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showContent">
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force" [externalPaging]="true"
-        [count]="totalElements"
-        [offset]="pageNumber"
-        [limit]="size"
-        (page)="setPage('',$event)"
-        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'OverAllStatusSort', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
-                
-                        <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30" [sortable]="true" [frozenLeft]="true">
+                        [count]="totalElements"
+                        [offset]="pageNumber"
+                        [limit]="size"
+                        (page)="setPage('',$event)"
+                        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'OverAllStatusSort', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
+
+                        <ngx-datatable-column name="Overall status" prop="OverAllStatusSort" [headerClass]="getFrozenHeaderClassID"
+                            [width]="90" [sortable]="true" [frozenLeft]="true">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon style ="margin-bottom: 30px;" svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon style ="margin-bottom: 30px;" svgIcon="{{(indicator.getIndicators(row.overallStatus, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.overallStatus, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Project ID / Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
+                        <ngx-datatable-column name="Project ID/ Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                 <p style="margin-bottom: 30px;">{{ value }} <br> {{ row.budgetId }}</p>
                             </ng-template>
@@ -359,7 +378,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="210" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="margin-bottom: 34px;" (click)="OpenProject(value)">{{ value }}</p>
+                                <p style="margin-bottom: 34px; color: rgb(81, 174, 245);text-decoration: underline;" (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
@@ -381,67 +400,67 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Schedule" prop="scheduleIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Schedule" prop="scheduleIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon svgIcon="{{(indicator.getIndicators(row.scheduleIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.scheduleIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Risk/Issues" prop="riskIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Risk/Issue" prop="riskIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon svgIcon="{{(indicator.getIndicators(row.riskIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.riskIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Ask/Needs" prop="askNeedIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Ask/Need" prop="askNeedIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon svgIcon="{{(indicator.getIndicators(row.askNeedIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.askNeedIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Budget" prop="budgetIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon svgIcon="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon svgIcon="{{(indicator.getIndicators(row.budgetSpendIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.budgetSpendIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="DQ%" prop="projectDataQuality" [width]="70">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value}}</p>
+                                <p style="text-align: right;margin-right: 10px;">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Total CAPEX Approved/Forecast" prop="totalApprovedCapex" [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <!-- <p>{{value}}</p> -->
-                                <div class="grid grid-cols-1 text-right">
+                                <div class="grid grid-cols-1 text-right" style="margin-right: 10px;">
                                     {{
                                     row.CAPEX ? row.CAPEX.toLocaleString() : 0
                                     }} &nbsp; {{row.currencyAbb}}
                                 </div>
                                 <br />
-                                <div class="text-right">
+                                <div class="text-right" style="margin-right: 12px;">
                                     {{ row.FORECAST ? row.FORECAST.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
                                 </div>
                             </ng-template>
@@ -449,13 +468,13 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
                         <ngx-datatable-column name="Carbon Impact (Tons CO2)" prop="calculatedEmissionsImpact" [width]="130">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                <p style="text-align: right;margin-right: 15px;">{{value | number:'1.1-1'}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Water Impact (m3)" prop="waterImpactUnits" [width]="110">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
@@ -522,21 +541,21 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate" [resizeable]="false"
                             [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                {{ value | date:'dd-MMM-yyyy' }}
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate" [resizeable]="false"
                             [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                {{ value | date:'dd-MMM-yyyy'}}
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration" [resizeable]="false" [width]="150"
                             >
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
                 

@@ -42,11 +42,11 @@
 }
 
 .frozen-header-class {
-    top: 89px !important;
+    top: 60px !important;
 }
 
 .frozen-header-classID {
-    top: 68px !important;
+    top: 40px !important;
 }
 .datatable-body{
     height: 72vh !important;
@@ -56,8 +56,16 @@
     background: white !important;
 }
 
-.datatable-body-cell{
+// .datatable-body-cell{
+//     cursor: pointer;
+// }
+.projectNames {
     cursor: pointer;
+    margin-bottom: 34px;
+    color: rgb(81, 174, 245);
+}
+.projectNames:hover {
+    text-decoration: underline;
 }
 
 .datatable-header{
@@ -100,23 +108,53 @@ li{
 }
 
 .pager li{
-    padding-right: 15px !important;
+    padding-right: 10px !important;
     margin-right: 2px !important;
+    border-radius: 10px;
+    padding-left: 10px !important;
 }
 
 .pager{
-    font-size: large !important;
+    font-size: small !important;
     width: 300px !important;
 }
 
 .pages.active{
     background: #ffffff !important;
     border: 2px solid green;
+    color: black;
 }
 
 .pages{
     cursor: pointer;
     padding: 5px 12px;
-    background: aquamarine;
+    background: lightgrey;
     margin: 0px 5px;
+    color: black;
+}
+.page-count{
+    font-size: small !important;
+}
+
+.vertical-header-class {
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);
+    left: -1px;
+}
+
+.datatable-icon-prev {
+    top: 2px;
+    position: relative;
+}
+.datatable-icon-left{
+    top: 2px;
+    position: relative;
+}
+.datatable-icon-right{
+    top: 2px;
+    position: relative;
+}
+.datatable-icon-skip {
+    top: 2px;
+    position: relative;
 }
