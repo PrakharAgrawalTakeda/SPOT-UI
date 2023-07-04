@@ -106,7 +106,7 @@ export class BudgetGeneralEditComponent {
                         }
                     }else{
                         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                        this.showBudgetIdButton = true;
+                        this.showBudgetIdButton = false;
                     }
                 }
             }else{
@@ -163,7 +163,8 @@ export class BudgetGeneralEditComponent {
     }
 
     submitBudgetInfo() {
-        if(this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value?.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)){
+        const prefixCheck =this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value?.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)
+        if(prefixCheck){
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "Please select another Budget ID",
                 "message": "",

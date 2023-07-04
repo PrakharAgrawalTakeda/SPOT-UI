@@ -1,4 +1,4 @@
-<div class="w-full min-w-0 p-8 pt-0">
+<div class="w-full min-w-0 p-8 pt-0" *ngIf="viewContent">
     <form [formGroup]="budgetForm"  class="space-y-6">
         <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
             <div class=" pb-3 pt-0 flex items-center justify-between">
@@ -110,7 +110,7 @@
             <h1 *ngIf="capexField; then capexTrueBlock else capexFalseBlock"></h1>
             <ng-template #capexTrueBlock>
                 <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                    <app-budget-capex-opex-table ></app-budget-capex-opex-table>
+                    <app-budget-capex-opex-table [mode]="'Capex'"></app-budget-capex-opex-table>
                 </div>
             </ng-template>
             <ng-template #capexFalseBlock>
@@ -130,7 +130,7 @@
             <h1 *ngIf="opexField; then opexTrueBlock else opexFalseBlock"></h1>
             <ng-template #opexTrueBlock>
                 <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                    <app-budget-capex-opex-table ></app-budget-capex-opex-table>
+                    <app-budget-capex-opex-table [mode]="'Opex'" ></app-budget-capex-opex-table>
                 </div>
             </ng-template>
             <ng-template #opexFalseBlock>
