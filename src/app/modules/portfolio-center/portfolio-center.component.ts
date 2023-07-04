@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { PortfolioApiService } from './portfolio-api.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -24,6 +24,8 @@ import { RoleService } from 'app/core/auth/role.service';
 import moment from 'moment';
 import { forEach } from 'lodash';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -40,7 +42,19 @@ export const MY_FORMATS = {
   templateUrl: './portfolio-center.component.html',
   styleUrls: ['./portfolio-center.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations: fuseAnimations
+  animations: fuseAnimations,
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class PortfolioCenterComponent implements OnInit {
   @ViewChild('recentTransactionsTable', { read: MatSort }) recentTransactionsTableMatSort: MatSort;
@@ -120,10 +134,11 @@ export class PortfolioCenterComponent implements OnInit {
   filteredPhaseArray = []
   oePhaseArray = []
   capitalPhaseArray: any
-
+  scroll = false
   filterlist: any = {}
   lookup: any = [];
   activeaccount: any
+  budgetCurrency:string = ""
   newmainnav: any = [
     {
       id: 'portfolio-center',
@@ -192,14 +207,20 @@ export class PortfolioCenterComponent implements OnInit {
   
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
+  constructor(private renderer: Renderer2,private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
       if(this.showContent){
+        if(this.showLA){
+          this.showLA = false
+        }
         this.changePO = true
       }
     })
     this.PortfolioFilterForm.controls.ExecutionScope.valueChanges.subscribe(res => {
       if (this.showContent) {
+        if (this.showLA) {
+          this.showLA = false
+        }
         this.changeES = true
       }
     })
@@ -208,6 +229,9 @@ export class PortfolioCenterComponent implements OnInit {
         this.changePhase(value);
       }
       })
+
+    this.renderer.listen('window', 'scroll', this.scrollHandler.bind(this));
+    
   }
 
   ngOnInit(): void {
@@ -491,6 +515,60 @@ export class PortfolioCenterComponent implements OnInit {
       mainNavComponent.refresh()
           console.log(res)
           this.totalproject = res.totalProjects
+        var budgetData;
+        if (res.budgetTile.isPreliminaryPeriod){
+          budgetData = [
+            {
+              "title": "Plan",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.plan).toFixed(4) : 0
+            },
+            {
+              "title": "Previous",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.previous).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.previous).toFixed(4) : 0
+            },
+            {
+              "title": "Current",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.current).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.current).toFixed(4) : 0
+            },
+            {
+              "title": "Current (YTD)",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.ytd).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.ytd).toFixed(4) : 0
+            },
+            {
+              "title": "Preliminary",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.preliminaryForecast).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.preliminaryForecast).toFixed(4) : 0
+            }
+          ]
+        }
+        else{
+          budgetData = [
+            {
+              "title": "Plan",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.plan).toFixed(4) : 0
+            },
+            {
+              "title": "Previous",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.previous).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.previous).toFixed(4) : 0
+            },
+            {
+              "title": "Current",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.current).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.current).toFixed(4) : 0
+            },
+            {
+              "title": "Current (YTD)",
+              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.ytd).toFixed(4) : 0,
+              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.ytd).toFixed(4) : 0
+            }
+          ]
+        }
           this.data = {
             "budgetDistribution": {
               "categories": [
@@ -568,28 +646,7 @@ export class PortfolioCenterComponent implements OnInit {
                 "value": res.nextThreeMonths.askNeedDue
               }
             ],
-            "budgetTile": [
-              {
-                "title": "Plan",
-                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4)  : 0,
-                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.plan).toFixed(4)  : 0
-              },
-              {
-                "title": "Previous",
-                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.previous).toFixed(4)  : 0,
-                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.previous).toFixed(4)  : 0
-              },
-              {
-                "title": "Current",
-                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.current).toFixed(4)  : 0,
-                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.current).toFixed(4)  : 0
-              },
-              {
-                "title": "YTD",
-                "value": res.budgetTile.capex ? Number(res.budgetTile.capex.ytd).toFixed(4)  : 0,
-                "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.ytd).toFixed(4)  : 0
-              }
-            ],
+            "budgetTile": budgetData,
             "lastThreeTile": [
               {
                 "title": "Milestones Completed",
@@ -613,6 +670,12 @@ export class PortfolioCenterComponent implements OnInit {
               }
             ]
           };
+        res.portfolioDetails.sort((a, b) => {
+          return (a.projectUid < b.projectUid ? -1 : a.projectUid == b.projectUid ? 0 : 1);
+        })
+        res.projectDetails.sort((a, b) => {
+          return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
+        })
           this.projectNames = res.projectDetails;
           this.projects.data = res.portfolioDetails;
           this.setPage(res, 0)
@@ -635,12 +698,26 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
+        // var fieldNameElement = document.getElementById('page-count');
+        // fieldNameElement.innerHTML = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
 })
     })
   })
 })
   this.showcontent = true;
   }
+  
+  scrollHandler(event) {
+    if (!this.scroll) {
+      this.scroll = true
+        this.showContent = false
+        var fieldNameElement: any;
+        fieldNameElement = document.getElementsByClassName('page-count');
+        fieldNameElement[0].innerText = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
+        this.showContent = true
+    }
+}
+
   routeProject(projectid): void {
     window.open('project-hub/' + projectid, "_blank")
 
@@ -1042,96 +1119,25 @@ export class PortfolioCenterComponent implements OnInit {
     this.showLA = false;
   }
 
-  OpenLA(){
-    console.log("Inside drawer function")
-    if (this.PortfolioFilterForm.controls.PortfolioOwner.value == null && this.PortfolioFilterForm.controls.ExecutionScope.value == null){
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a portfolio owner and Execution Scope",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-    }
-    if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length == 0 && this.PortfolioFilterForm.controls.ExecutionScope.value.length == 0){
-      
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a portfolio owner and Execution Scope",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-  }
-    else{
+  OpenLA() {
     var portfolioOwners = ""
     var executionScope = ""
-      if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
-        for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
-          portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
-      }
-    }
-      if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
-        for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
-          executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
-      }
-    }
-  }
-    if (portfolioOwners == "" && executionScope == ""){
-      
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a portfolio owner and Execution Scope",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
+    console.log("Inside drawer function")
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null){
+        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
           }
-        },
-        "dismissible": true
+        }
       }
-      const alert = this.fuseAlert.open(comfirmConfig)
-    }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+    
     var noChangePO = false
     var noChangeES = false
     var filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
@@ -1244,13 +1250,13 @@ export class PortfolioCenterComponent implements OnInit {
     return ' frozen-header-classID';
   }
 
-  formatDate(date) {
-  return [
-    this.padTo2Digits(date.getDate()),
-    this.padTo2Digits(date.getMonth() + 1),
-    date.getFullYear(),
-  ].join('/');
-  }
+  // formatDate(date) {
+  // return [
+  //   this.padTo2Digits(date.getDate()),
+  //   this.padTo2Digits(date.getMonth() + 1),
+  //   date.getFullYear(),
+  // ].join('/');
+  // }
 
   padTo2Digits(num) {
     return num.toString().padStart(2, '0');
@@ -1400,7 +1406,6 @@ export class PortfolioCenterComponent implements OnInit {
 
   setPage(res:any, offset){
     console.log(res)
-    // this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
     if (res != ''){
       this.projectOverview = res.portfolioDetails
       for (var i = 0; i < this.projectOverview.length; i++) {
@@ -1422,25 +1427,69 @@ export class PortfolioCenterComponent implements OnInit {
         else{
           this.projectOverview[i].OverAllStatusSort = this.projectOverview[i].overallStatus
         }
-        
-        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
-          this.projectOverview[i].CAPEX = this.projectOverview[i].totalApprovedCapex
-          this.projectOverview[i].FORECAST = this.projectOverview[i].annualForecast
-          this.projectOverview[i].currencyAbb = "OY"
+        if (this.projectOverview[i].scheduleIndicator == "YellowStop") {
+          this.projectOverview[i].scheduleIndicatorSort = "RedStop"
+        }
+        else if (this.projectOverview[i].scheduleIndicator == "RedStop") {
+          this.projectOverview[i].scheduleIndicatorSort = "YellowStop"
         }
         else {
-          this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
-          this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
-          this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+          this.projectOverview[i].scheduleIndicatorSort = this.projectOverview[i].scheduleIndicator
         }
+        if (this.projectOverview[i].riskIndicator == "YellowStop") {
+          this.projectOverview[i].riskIndicatorSort = "RedStop"
+        }
+        else if (this.projectOverview[i].riskIndicator == "RedStop") {
+          this.projectOverview[i].riskIndicatorSort = "YellowStop"
+        }
+        else {
+          this.projectOverview[i].riskIndicatorSort = this.projectOverview[i].riskIndicator
+        }
+        if (this.projectOverview[i].askNeedIndicator == "YellowStop") {
+          this.projectOverview[i].askNeedIndicatorSort = "RedStop"
+        }
+        else if (this.projectOverview[i].askNeedIndicator == "RedStop") {
+          this.projectOverview[i].askNeedIndicatorSort = "YellowStop"
+        }
+        else {
+          this.projectOverview[i].askNeedIndicatorSort = this.projectOverview[i].askNeedIndicator
+        }
+        if (this.projectOverview[i].budgetIndicator == "YellowStop") {
+          this.projectOverview[i].budgetIndicatorSort = "RedStop"
+        }
+        else if (this.projectOverview[i].budgetIndicator == "RedStop") {
+          this.projectOverview[i].budgetIndicatorSort = "YellowStop"
+        }
+        else {
+          this.projectOverview[i].budgetIndicatorSort = this.projectOverview[i].budgetIndicator
+        }
+        if (this.projectOverview[i].budgetSpendIndicator == "YellowStop") {
+          this.projectOverview[i].budgetSpendIndicatorSort = "RedStop"
+        }
+        else if (this.projectOverview[i].budgetSpendIndicator == "RedStop") {
+          this.projectOverview[i].budgetSpendIndicatorSort = "YellowStop"
+        }
+        else {
+          this.projectOverview[i].budgetSpendIndicatorSort = this.projectOverview[i].budgetSpendIndicator
+        }
+        
+        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+          this.budgetCurrency = "OY"
+        }
+        else {
+          this.budgetCurrency = this.projects.data[i].localCurrencyAbbreviation
+        }
+        this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
+        this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
+        this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
         this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact;
-        this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits;
+        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
         this.projectOverview[i].problemId = this.projectNames[i].problemId;
         this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
-        this.projectOverview[i].nextMilestoneFinishDate = this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
-        this.projectOverview[i].executionCompleteDate = this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
-        // this.projectOverview[i].totalApprovedCapex = this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
+        this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
+        this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
+        this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
       }
       this.size = 100;
       this.totalElements = this.totalproject;
@@ -1451,6 +1500,12 @@ export class PortfolioCenterComponent implements OnInit {
       this.projectOverview = []
       this.projects.data = [];
         this.apiService.FiltersByPage(this.groupData, (offset.offset)*100, 100).then((res: any) => {
+          res.portfolioDetails.sort((a, b) => {
+            return (a.projectUid < b.projectUid ? -1 : a.projectUid == b.projectUid ? 0 : 1);
+          })
+          res.projectDetails.sort((a, b) => {
+            return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
+          })
           this.projectOverview = res.portfolioDetails
           this.projects.data = res.portfolioDetails;
           for (var i = 0; i < this.projectOverview.length; i++) {
@@ -1472,24 +1527,63 @@ export class PortfolioCenterComponent implements OnInit {
             else {
               this.projectOverview[i].OverAllStatusSort = this.projectOverview[i].overallStatus
             }
-            if (res.budgetTile.localCurrencyAbbreviation == "OY") {
-              this.projectOverview[i].CAPEX = this.projectOverview[i].totalApprovedCapex
-              this.projectOverview[i].FORECAST = this.projectOverview[i].annualForecast
-              this.projectOverview[i].currencyAbb = "OY"
+            if (this.projectOverview[i].scheduleIndicator == "YellowStop") {
+              this.projectOverview[i].scheduleIndicatorSort = "RedStop"
+            }
+            else if (this.projectOverview[i].scheduleIndicator == "RedStop") {
+              this.projectOverview[i].scheduleIndicatorSort = "YellowStop"
             }
             else {
+              this.projectOverview[i].scheduleIndicatorSort = this.projectOverview[i].scheduleIndicator
+            }
+            if (this.projectOverview[i].riskIndicator == "YellowStop") {
+              this.projectOverview[i].riskIndicatorSort = "RedStop"
+            }
+            else if (this.projectOverview[i].riskIndicator == "RedStop") {
+              this.projectOverview[i].riskIndicatorSort = "YellowStop"
+            }
+            else {
+              this.projectOverview[i].riskIndicatorSort = this.projectOverview[i].riskIndicator
+            }
+            if (this.projectOverview[i].askNeedIndicator == "YellowStop") {
+              this.projectOverview[i].askNeedIndicatorSort = "RedStop"
+            }
+            else if (this.projectOverview[i].askNeedIndicator == "RedStop") {
+              this.projectOverview[i].askNeedIndicatorSort = "YellowStop"
+            }
+            else {
+              this.projectOverview[i].askNeedIndicatorSort = this.projectOverview[i].askNeedIndicator
+            }
+            if (this.projectOverview[i].budgetIndicator == "YellowStop") {
+              this.projectOverview[i].budgetIndicatorSort = "RedStop"
+            }
+            else if (this.projectOverview[i].budgetIndicator == "RedStop") {
+              this.projectOverview[i].budgetIndicatorSort = "YellowStop"
+            }
+            else {
+              this.projectOverview[i].budgetIndicatorSort = this.projectOverview[i].budgetIndicator
+            }
+            if (this.projectOverview[i].budgetSpendIndicator == "YellowStop") {
+              this.projectOverview[i].budgetSpendIndicatorSort = "RedStop"
+            }
+            else if (this.projectOverview[i].budgetSpendIndicator == "RedStop") {
+              this.projectOverview[i].budgetSpendIndicatorSort = "YellowStop"
+            }
+            else {
+              this.projectOverview[i].budgetSpendIndicatorSort = this.projectOverview[i].budgetSpendIndicator
+            }
               this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
               this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
               this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
-            }
+            
             this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact;
-            this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits;
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
             this.projectOverview[i].problemId = res.projectDetails[i].problemId;
             this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
-            this.projectOverview[i].nextMilestoneFinishDate = this.formatDate(new Date(this.projects.data[i].nextMilestoneFinishDate));
-            this.projectOverview[i].executionCompleteDate = this.formatDate(new Date(this.projects.data[i].executionCompleteDate));
-            // this.projectOverview[i].totalApprovedCapex = this.projects.data[i].totalApprovedCapex + " " + this.projects.data[i].localCurrencyAbbreviation;
+            this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
+            this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
+            this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
           }
           this.size = 100;
           this.totalElements = this.totalproject;
