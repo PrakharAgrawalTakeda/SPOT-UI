@@ -42,11 +42,11 @@
 }
 
 .frozen-header-class {
-    top: 89px !important;
+    top: 60px !important;
 }
 
 .frozen-header-classID {
-    top: 68px !important;
+    top: 40px !important;
 }
 .datatable-body{
     height: 72vh !important;
@@ -56,8 +56,16 @@
     background: white !important;
 }
 
-.datatable-body-cell{
+// .datatable-body-cell{
+//     cursor: pointer;
+// }
+.projectNames {
     cursor: pointer;
+    margin-bottom: 34px;
+    color: rgb(81, 174, 245);
+}
+.projectNames:hover {
+    text-decoration: underline;
 }
 
 .datatable-header{
@@ -107,7 +115,7 @@ li{
 }
 
 .pager{
-    font-size: large !important;
+    font-size: small !important;
     width: 300px !important;
 }
 
@@ -120,7 +128,33 @@ li{
 .pages{
     cursor: pointer;
     padding: 5px 12px;
-    background: rgb(8 91 246 / 50%);
+    background: lightgrey;
     margin: 0px 5px;
-    color: white;
+    color: black;
+}
+.page-count{
+    font-size: small !important;
+}
+
+.vertical-header-class {
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);
+    left: -1px;
+}
+
+.datatable-icon-prev {
+    top: 2px;
+    position: relative;
+}
+.datatable-icon-left{
+    top: 2px;
+    position: relative;
+}
+.datatable-icon-right{
+    top: 2px;
+    position: relative;
+}
+.datatable-icon-skip {
+    top: 2px;
+    position: relative;
 }
