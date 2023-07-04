@@ -36,7 +36,6 @@ export class BudgetGeneralEditComponent {
         projectFundingStatus: new FormControl(''),
         totalApprovedCapex: new FormControl(''),
         totalApprovedOpex: new FormControl(''),
-        budgetCommentary: new FormControl(''),
     })
     constructor (public projectHubService: ProjectHubService,
                  private portApiService: PortfolioApiService,
@@ -277,7 +276,7 @@ export class BudgetGeneralEditComponent {
         mainObj.budget.projectId = this.id;
         mainObj.budget.definitiveCrapprovalDate = formValue.assetPlaced
         mainObj.budget.budgetOwner = formValue.gmsBudgetowner.portfolioOwnerId
-        mainObj.budget.predefinedInvestmentId = formValue.predefinedInvestmentId.lookUpId
+        mainObj.budget.predefinedInvestmentId = formValue.predefinedInvestmentId?.lookUpId
         mainObj.budget.whereId = formValue.where
         mainObj.budget.whyId = formValue.why
         mainObj.budget.fundingApprovalNeedDate = formValue.fundingApprovalNeedDate ? moment(formValue.fundingApprovalNeedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
@@ -285,7 +284,6 @@ export class BudgetGeneralEditComponent {
         mainObj.budget.projectFundingStatus = formValue.projectFundingStatus
         mainObj.budget.totalApprovedCapEx = formValue.totalApprovedCapex
         mainObj.budget.totalApprovedOpEx = formValue.totalApprovedOpex
-        mainObj.budget.budgetComment = formValue.budgetCommentary
         return mainObj;
     }
     getMissingFieldsString(fields) : string {
@@ -307,7 +305,7 @@ export class BudgetGeneralEditComponent {
             projectFundingStatus:  response.budget.fundingStatusId,
             totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
-            budgetCommentary:  response.budget.budgetComment,
+
         })
     }
     getPortfolioOwnerNameById(id: string): any {
