@@ -118,6 +118,17 @@ export class EmailNotificationsEditComponent {
 
     })
 
+    // this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].valueChanges.subscribe(value => {
+    //   if (value && value.lookUpId === 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868') {
+    //     // Reset the form values for excecutionScope, role, rows, and products
+    //     this.emailNotiForm.controls['excecutionScope'].setValue([]);
+    //     this.emailNotiForm.controls['role'].setValue(null);
+    //     this.emailNotiForm.controls['rows'].setValue(null);
+    //     this.emailNotiForm.controls['products'].setValue(null);
+    //     //this.emailNotiForm.controls['emailNotifcationPortfolioReportTypes'].setValue('')
+    //   }
+    // })
+
     // this.emailNotiForm.controls.emailNotifcationNotifcationReportScopeIds.valueChanges.subscribe(res => {
        
     //   if(res == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868')
