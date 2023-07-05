@@ -175,6 +175,7 @@ import { BudgetFundingInformationTableComponent } from './budget/budget-funding-
 import { BudgetFundingInformationBulkEditComponent } from './budget/budget-funding-information-bulk-edit/budget-funding-information-bulk-edit.component';
 import { BudgetAdditionalEditComponent } from './budget/budget-additional-edit/budget-additional-edit.component';
 import { BudgetCapexOpexTableComponent } from './budget/budget-capex-opex-table/budget-capex-opex-table.component';
+import { BudgetFundingAddViewComponent } from './budget/budget-funding-add-view/budget-funding-add-view.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -565,7 +566,8 @@ export const projectRoutes: Route[] = [
     BudgetFundingInformationTableComponent,
     BudgetFundingInformationBulkEditComponent,
     BudgetAdditionalEditComponent,
-    BudgetCapexOpexTableComponent
+    BudgetCapexOpexTableComponent,
+    BudgetFundingAddViewComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),

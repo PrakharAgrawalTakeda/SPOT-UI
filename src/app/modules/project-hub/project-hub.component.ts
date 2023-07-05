@@ -157,10 +157,13 @@ export class ProjectHubComponent implements OnInit {
         this.apiService.getProjectHubData(this.id).then((res: any) => {
             this.projectDetails = res.projectData
             if(this.projectDetails.isConfidential){
-               if(!this.role.roleMaster.confidentialProjects?.some(x=>x==this.projectDetails.problemUniqueId))
-                {
-                    this.routes.navigate(['portfolio-center'])
-                }
+                this.role.getCurrentRole(this.msal.instance.getActiveAccount().localAccountId).then((res:any)=>{
+                    if(!res.confidentialProjects?.some(x=>x==this.projectDetails.problemUniqueId))
+                    {
+                        this.routes.navigate(['portfolio-center'])
+                    }
+                })
+               
             }
             this.projecthubservice.hasChildren = res.hasChildren
             this.portfolioDetails = res.portfolioCeterData

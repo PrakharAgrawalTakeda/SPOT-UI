@@ -7,6 +7,7 @@ import { ProjectApiService } from "../project-api.service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { GlobalVariables } from "../../../../shared/global-variables";
 import { ActivatedRoute, Router } from "@angular/router";
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
     selector: 'app-link-project',
@@ -27,7 +28,7 @@ export class LinkProjectComponent implements OnInit {
         private apiService: ProjectApiService,
         private _httpClient: HttpClient,
         private _Activatedroute: ActivatedRoute,
-        private router: Router) {
+        private router: Router, private roleService: RoleService) {
     }
 
     searchControl: FormControl = new FormControl();
@@ -41,10 +42,11 @@ export class LinkProjectComponent implements OnInit {
     viewContent = false;
     id: string = '';
     isParent: boolean = false;
-
+    isConfidential: boolean = false;
     ngOnInit(): void {
         this.rows = this.projecthubservice.projectChildren;
         this.dataloader();
+        console.log(this.projecthubservice.all)
         window.dispatchEvent(new Event('resize'));
         this.searchControl.valueChanges
             .pipe(
@@ -75,6 +77,19 @@ export class LinkProjectComponent implements OnInit {
                             }
                             this.resultSets = resultSets.projectData;
                             this.budget = resultSets.budget
+                            if (!this.isConfidential) {
+                                this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+                                console.log("Confidential Projects", this.resultSets)
+                            }
+                            else {
+                                if (this.roleService.roleMaster.confidentialProjects.length > 0) {
+                                    var confProjectUserList = resultSets.projectData?.filter(x => this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId))
+                                    if (confProjectUserList?.length > 0) {
+                                        console.log(confProjectUserList)
+                                        this.resultSets = [...confProjectUserList]
+                                    }
+                                }
+                            }
                             this.search.next(resultSets);
                             if (this.resultSets.length <= 5) {
                                 this.resultSets.forEach(x => {
@@ -91,7 +106,11 @@ export class LinkProjectComponent implements OnInit {
 
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        this.viewContent = true;
+        this.apiService.getproject(this.projecthubservice.projectid).then((res:any)=>{
+            this.isConfidential = res.isConfidential
+            this.viewContent = true;
+        })
+        
     }
     ngOnDestroy() {
         if (this.detailsHaveBeenChanged.value == true)

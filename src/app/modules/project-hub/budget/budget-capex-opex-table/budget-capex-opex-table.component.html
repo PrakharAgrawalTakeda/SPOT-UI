@@ -1,12 +1,13 @@
 <div class="pb-6 ">
     <div class="pb-3 pt-0 flex items-center justify-between">
-        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Non-FTE OPEX</div>
+        <div *ngIf="mode=='Capex'" class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">CAPEX</div>
+        <div *ngIf="mode=='Opex'" class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Non-FTE OPEX</div>
         <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
             <div class="flex items-start justify-between">
                 <div >
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             (click)="projecthubservice.toggleDrawerOpen('', '', '', id, true)">
-                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                     </button>
                 </div>
             </div>
