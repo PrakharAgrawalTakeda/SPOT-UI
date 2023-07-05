@@ -1,4 +1,4 @@
-<div *ngIf="viewContent">
+<div *ngIf="viewContent" class="h-screen">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Funding Requests</div>
         <div style="padding-top: 2px">
@@ -7,12 +7,12 @@
             </a>
         </div>
     </div>
-    <div class="py-3 px-0">
+    <div class="py-3 px-0 relative h-fit">
         <div class="flex justify-between items-center">
             <div></div>
             <div class="flex justify-between items-center gap-3">
                 <div class="pr-3">
-                    <button *ngIf="showAddNewButton" class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                    <button *ngIf="!showAddNewButton" class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                             [color]="'primary-200'"
                             (click)="addFR()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-y-hidden h-[80vh] w-screen pl-3" id="fundingRequestsTableDiv">
+        <div class="overflow-y-hidden h-auto w-screen pl-3" id="fundingRequestsTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="fundingRequests">
@@ -122,7 +122,9 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="flex items-start justify-between mt-6 px-3">
+    </div>
+    <div class="absolute bottom-1 w-full">
+        <div class="flex bottom-0 justify-between mt-6 px-3">
             <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
                (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
                 Cancel

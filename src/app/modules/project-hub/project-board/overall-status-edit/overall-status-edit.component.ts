@@ -72,7 +72,7 @@ export class OverallStatusEditComponent implements OnInit {
     this.overallStatusform.controls['statusLastUpdated'].disable()
     this.overallStatusform.valueChanges.subscribe(res=>{
       this.projecthubservice.isFormChanged = true
-    })    
+    })
   }
   submitoverall() {
     this.projecthubservice.isFormChanged = false
