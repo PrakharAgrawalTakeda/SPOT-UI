@@ -3,6 +3,7 @@
         <div class="text-on-primary" style="padding-top: 6px">
             <ng-container *ngIf="mode === 'OPEX'">Opex Details Edit</ng-container>
             <ng-container *ngIf="mode === 'Asset-In-Service'">Asset Placed In Service Edit</ng-container>
+            <ng-container *ngIf="mode === 'Budget-Commentary'">Budget Commentary Edit</ng-container>
         </div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
                                          href="javascript:void(0)" title="Close">
@@ -22,6 +23,10 @@
                     <mat-slide-toggle formControlName="opexRequired"></mat-slide-toggle>
                 </div>
             </div>
+            <spot-textarea formControlName="budgetCommentary" *ngIf="mode=='Budget-Commentary'"
+                           [label]="'Budget Commentary'"
+                           [placeholder]="'Budget Commentary'">
+            </spot-textarea>
         </div>
         <div class="pr-3 flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"

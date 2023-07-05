@@ -39,6 +39,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { EmailNotificationsComponent } from './email-notifications/email-notifications.component';
 import { EmailNotificationsEditComponent } from './email-notifications/email-notifications-edit/email-notifications-edit.component';
 import { EmailNotificationsTableEditComponent } from './email-notifications/email-notifications-table-edit/email-notifications-table-edit.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -107,7 +108,9 @@ export const projectRoutes: Route[] = [
         MatTooltipModule,
         FuseAlertModule,
         SpotFormsModule,
-        DragDropModule
+        DragDropModule,
+        
+    MatSnackBarModule
     ]
 })
 export class MyPreferenceModule { }

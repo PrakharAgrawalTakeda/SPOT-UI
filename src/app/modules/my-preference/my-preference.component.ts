@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MyPreferenceService} from "./my-preference.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {Title} from '@angular/platform-browser';
 import {MyPreferenceApiService} from "./my-preference-api.service";
 import {MsalService} from "@azure/msal-angular";
@@ -20,7 +20,15 @@ export class MyPreferenceComponent implements OnInit {
                 public myPreferenceService: MyPreferenceService,
                 public myPreferenceApiService: MyPreferenceApiService,
                 private msalService: MsalService,
-                private titleService: Title,) {
+                private titleService: Title, private snack: MatSnackBar) {
+                    // this.myPreferenceService.successSave.subscribe(res => {
+                    //     if (res == true) {
+                    //         this.snack.open("The information has been saved successfully", "", {
+                    //             duration: 2000,
+                    //             panelClass: ["bg-primary", "text-on-primary"]
+                    //         })
+                    //     }
+                    // })
         // this.myPreferenceService.successSave.subscribe(res => {
         //     if (res == true) {
         //         this.snack.open("The information has been saved successfully", "", {
@@ -29,6 +37,14 @@ export class MyPreferenceComponent implements OnInit {
         //         })
         //     }
         // })
+        this.myPreferenceService.successSave.subscribe(res => {
+            if (res == true) {
+                this.snack.open("You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.", "", {
+                    duration: 4500,
+                    panelClass: ["bg-primary", "text-on-primary"]
+                })
+            }
+        })
         this.router.events.subscribe(res => {
 
             if (this.viewContent) {

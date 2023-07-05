@@ -1,4 +1,4 @@
-<div *ngIf="viewContent">
+<div *ngIf="viewContent" class="h-screen">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Funding Requests</div>
         <div style="padding-top: 2px">
@@ -7,12 +7,12 @@
             </a>
         </div>
     </div>
-    <div class="py-3 px-0">
+    <div class="py-3 px-0 relative h-fit">
         <div class="flex justify-between items-center">
             <div></div>
             <div class="flex justify-between items-center gap-3">
                 <div class="pr-3">
-                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                    <button *ngIf="!showAddNewButton" class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                             [color]="'primary-200'"
                             (click)="addFR()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -20,11 +20,11 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-y-hidden h-[80vh] w-screen pl-3" id="fundingRequestsTableDiv">
+        <div class="overflow-y-hidden h-auto w-screen pl-3" id="fundingRequestsTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="fundingRequests">
-                <ngx-datatable-column name="Funding Request ID" prop="budgetIoid" [flexGrow]="1"
+                <ngx-datatable-column name="Funding Request ID" prop="budgetIo1" [flexGrow]="1"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -33,13 +33,13 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                        <form class="mt-6" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkFundingCell(row, rowIndex)">
-                            <spot-input formControlName="budgetIoid" [showLabel]="false"></spot-input>
+                            <spot-input formControlName="budgetIo1" [showLabel]="false"></spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Approval Currency" prop="approvalCurrency" [flexGrow]="1"
+                <ngx-datatable-column name="Approval Currency" prop="localCurrencyId" [flexGrow]="1"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
@@ -48,9 +48,9 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{getCurrency(value)}}</p>
                         </a>
-                        <form  class="w-full px-1" [formGroup]="fundingRequestForm.controls[rowIndex]"
+                        <form class="w-full px-1" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
-                            <spot-select class="w-full" formControlName="approvalCurrency"
+                            <spot-select class="w-full" formControlName="localCurrencyId"
                                          [placeholder]="'Approval Currency'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'localCurrencyId'"
                                          [dropDownArray]="localCurrency" [valuePointer]="'localCurrencyAbbreviation'" [customSortPointer]="'displayOrder'">
                             </spot-select>
@@ -66,7 +66,7 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                        <form class="mt-6" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
                             <spot-input class="w-full" formControlName="localCarapprovedCapex" [showLabel]="false"
                                         [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
@@ -82,7 +82,7 @@
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
-                        <form [formGroup]="fundingRequestForm.controls[rowIndex]"
+                        <form class="mt-6" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
                             <spot-input class="w-full" formControlName="localCarapprovedOpex" [showLabel]="false"
                                         [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
@@ -113,7 +113,7 @@
                 <ngx-datatable-column [resizeable]="false" [sortable]="false" [draggable]="false" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
                                  ngx-datatable-cell-template>
-                        <div class="flex justify-start items-center gap-6">
+                        <div *ngIf="row.keep==true" class="flex justify-start items-center gap-6">
                             <a href="javascript:void(0)" title="Delete Single" (click)="deleteFR(rowIndex)">
                                 <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                             </a>
@@ -122,7 +122,9 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="flex items-start justify-between mt-6 px-3">
+    </div>
+    <div class="absolute bottom-1 w-full">
+        <div class="flex bottom-0 justify-between mt-6 px-3">
             <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
                (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
                 Cancel
