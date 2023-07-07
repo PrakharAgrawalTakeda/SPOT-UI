@@ -45,6 +45,10 @@
                                     <hr>
                                     <h2 style="color: rgba(76,155,207);font-size: 20px;"><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
+                                    <div id="comp-render" *ngIf="showLocalAttributes">
+                                    <h2 *ngIf="showLocalAttributes" style="color: rgba(76,155,207);font-size: 20px;"><b>Local Attributes</b></h2>
+                                    <app-local-attribute-single-edit [viewType]="'Form'" *ngIf="showLocalAttributes" (formValueLA)="captureValueLA(1,$event)" [callLocation]="'CreateNew'" [PortfolioOwner]="portfolioOwners" [ExecutionScope]="executionScope"></app-local-attribute-single-edit>
+                                    </div>
                                     </div>
                                     <p style="margin-top: 20px; font-style:italic;color: red;">*Required</p>
                                     <div style="text-align: right;">
