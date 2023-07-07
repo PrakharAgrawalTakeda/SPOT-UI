@@ -617,11 +617,11 @@ export class PortfolioCenterComponent implements OnInit {
               },
               {
                 "title": "On-Time Last 30 Days",
-                "value": res.milestoneTile.lastThirtyDay
+                "value": res.milestoneTile.lastThirtyDays
               },
               {
                 "title": "Predicted On-Time Next 30 Days",
-                "value": res.milestoneTile.predicted30Day
+                "value": res.milestoneTile.predicted30Days
               },
               {
                 "title": "Curent Year Completion Rate",
@@ -1418,8 +1418,8 @@ export class PortfolioCenterComponent implements OnInit {
             ? this.projects.data[i].capitalPhaseAbbreviation
             : 'NA') +
           ' - ' +
-          (this.projects.data[i].oePhaseAbbreviation
-            ? this.projects.data[i].oePhaseAbbreviation
+          (this.projects.data[i].oephaseAbbreviation
+            ? this.projects.data[i].oephaseAbbreviation
             : 'NA');
         if (this.projectOverview[i].overallStatus == "YellowStop"){
           this.projectOverview[i].OverAllStatusSort = "RedStop"
