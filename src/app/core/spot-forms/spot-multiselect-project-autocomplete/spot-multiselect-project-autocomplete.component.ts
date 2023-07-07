@@ -33,6 +33,7 @@ export class SpotMultiselectProjectAutocompleteComponent {
   @Input() customSortPointer: string = ''
   @Input() Required: boolean = false
   @Input() confidentialProjects: 'None' | 'User' | 'Only' = 'User'
+  budget: any = [];
 
   @ViewChild('input', {static: false}) Input: ElementRef<HTMLInputElement>
 
@@ -95,6 +96,7 @@ export class SpotMultiselectProjectAutocompleteComponent {
             }
           }
         }
+        this.budget = resultSets.budget
         this.search.next(resultSets);
       })
     })
@@ -112,6 +114,18 @@ export class SpotMultiselectProjectAutocompleteComponent {
     return this.form.get('control');
   }
   
+  budgetfind(projectid: string): string {
+    if (this.resultSets.length > 0) {
+      if (this.budget.length > 0) {
+        var temp = this.budget.find(x => x.projectId == projectid)
+        if (temp != null) {
+          return temp.capitalBudgetId
+        }
+      }
+    }
+    return ""
+  }
+
   onFunctionSelect(event: any) {
     console.log(this.selectedOption)
     this.selectedOption.push(event.option.value)
