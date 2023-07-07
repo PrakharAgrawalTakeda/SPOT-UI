@@ -161,6 +161,7 @@ export class EmailNotificationsComponent {
           res.eventsMasterData.sort((a, b) => a.priority - b.priority)
           console.log("DB OBJECT", res)
           console.log("ROWS", this.rows)
+          console.log("LOOKUP",this.lookUpData3)
 
 
           if (this.emailNoti != null) {
@@ -185,8 +186,8 @@ export class EmailNotificationsComponent {
               includeChild: res.reportOptions.includeChild,
               products: res.reportOptions.productIds && this.filterCriteria.products ?
                 res.reportOptions.productIds.split(',').map(id => this.filterCriteria.products.find(x => x.productId === id)).filter(Boolean) : [],
-              emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes
-                ? this.lookUpData3.find(x => x.lookUpId === res.reportOptions.emailNotficationPortfolioReportTypes)
+                emailNotifcationPortfolioReportTypes: res.reportOptions.emailNotifcationPortfolioReportTypes
+                ? this.lookUpData3.find(x => x.lookUpId === res.reportOptions.emailNotifcationPortfolioReportTypes)
                 : this.lookUpData3.find(x => x.lookUpName === 'All Projects'),
               notificationId: res.reportOptions.notificationId
             });

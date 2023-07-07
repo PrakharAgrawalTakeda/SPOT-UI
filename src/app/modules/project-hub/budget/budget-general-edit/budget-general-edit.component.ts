@@ -36,7 +36,6 @@ export class BudgetGeneralEditComponent {
         projectFundingStatus: new FormControl(''),
         totalApprovedCapex: new FormControl(''),
         totalApprovedOpex: new FormControl(''),
-        budgetCommentary: new FormControl(''),
     })
     constructor (public projectHubService: ProjectHubService,
                  private portApiService: PortfolioApiService,
@@ -106,7 +105,7 @@ export class BudgetGeneralEditComponent {
                         }
                     }else{
                         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                        this.showBudgetIdButton = true;
+                        this.showBudgetIdButton = false;
                     }
                 }
             }else{
@@ -163,7 +162,9 @@ export class BudgetGeneralEditComponent {
     }
 
     submitBudgetInfo() {
-        if(this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value?.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)){
+        const prefixCheck =this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value?.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)
+        const gmsbudgetOwnerCheck = !this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC";
+        if(prefixCheck && gmsbudgetOwnerCheck && this.capexRequired.value == true){
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "Please select another Budget ID",
                 "message": "",
@@ -276,7 +277,7 @@ export class BudgetGeneralEditComponent {
         mainObj.budget.projectId = this.id;
         mainObj.budget.definitiveCrapprovalDate = formValue.assetPlaced
         mainObj.budget.budgetOwner = formValue.gmsBudgetowner.portfolioOwnerId
-        mainObj.budget.predefinedInvestmentId = formValue.predefinedInvestmentId.lookUpId
+        mainObj.budget.predefinedInvestmentId = formValue.predefinedInvestmentId?.lookUpId
         mainObj.budget.whereId = formValue.where
         mainObj.budget.whyId = formValue.why
         mainObj.budget.fundingApprovalNeedDate = formValue.fundingApprovalNeedDate ? moment(formValue.fundingApprovalNeedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
@@ -284,7 +285,6 @@ export class BudgetGeneralEditComponent {
         mainObj.budget.projectFundingStatus = formValue.projectFundingStatus
         mainObj.budget.totalApprovedCapEx = formValue.totalApprovedCapex
         mainObj.budget.totalApprovedOpEx = formValue.totalApprovedOpex
-        mainObj.budget.budgetComment = formValue.budgetCommentary
         return mainObj;
     }
     getMissingFieldsString(fields) : string {
@@ -306,7 +306,7 @@ export class BudgetGeneralEditComponent {
             projectFundingStatus:  response.budget.fundingStatusId,
             totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
-            budgetCommentary:  response.budget.budgetComment,
+
         })
     }
     getPortfolioOwnerNameById(id: string): any {

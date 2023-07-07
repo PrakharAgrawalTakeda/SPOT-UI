@@ -635,7 +635,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     mainObj.businessCaseApprovedDate = formValue.businessCaseApprovedDate ? moment(formValue.businessCaseApprovedDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null
 
     if (this.subCallLocation == 'ProjectHub') {
-      this.apiService.editGeneralInfo(this.projectHubService.projectid, mainObj).then(res => {
+        this.apiService.editGeneralInfoWizzard(this.projectHubService.projectid, mainObj, '').then(res => {
         this.projectHubService.isFormChanged = false
         this.projectHubService.isNavChanged.next(true)
         this.projectHubService.submitbutton.next(true)

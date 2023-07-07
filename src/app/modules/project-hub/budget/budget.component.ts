@@ -96,7 +96,7 @@ export class BudgetComponent implements OnInit {
             capexRequired: !!response.budget.capExRequired,
             opexRequired:  !!response.budget.opExRequired,
             parentProgram:  response.parentProgram,
-            localCurrency:  this.localCurrency.localCurrencyAbbreviation,
+            localCurrency:  this.localCurrency?.localCurrencyAbbreviation,
             apisdate:  response.budget.apisdate,
             budgetId:  response.budget.capitalBudgetId,
             gmsBudgetowner:  this.getPortfolioOwnerNameById(response.budget.budgetOwner),

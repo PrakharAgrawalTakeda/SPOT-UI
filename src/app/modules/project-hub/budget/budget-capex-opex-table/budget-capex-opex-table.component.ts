@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
@@ -10,6 +10,7 @@ import {FuseConfirmationService} from "../../../../../@fuse/services/confirmatio
   styleUrls: ['./budget-capex-opex-table.component.scss']
 })
 export class BudgetCapexOpexTableComponent {
+    @Input() mode: 'Capex' | 'Opex' = 'Capex'
     fundingRequests: any = []
     id: string = ''
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService

@@ -1,4 +1,4 @@
-<div class="w-full min-w-0 p-8 pt-0">
+<div class="w-full min-w-0 p-8 pt-0" *ngIf="viewContent">
     <form [formGroup]="budgetForm"  class="space-y-6">
         <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
             <div class=" pb-3 pt-0 flex items-center justify-between">
@@ -87,9 +87,6 @@
                 <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate" [label]="'Funding Approval Need Date'">
                 </spot-input-date>
             </div>
-            <spot-textarea class="w-full read-only" formControlName="budgetCommentary" name="projectDescription"
-                           [label]="'Budget Commentary'">
-            </spot-textarea>
         </div>
         <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
             <div class="text-primary text-xl mb-4">Funding Information</div>
@@ -105,12 +102,29 @@
             </div>
             <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit" [budgetInfo]="budgetPageInfo" [addButtonShow]="showAddNewButton"></app-budget-funding-information-table>
         </div>
-
+        <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+            <div class=" pb-3 pt-0 flex items-center justify-between">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget Commentary</div>
+                <div class="flex items-start justify-between">
+                    <div style="padding-right: 5px;">
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                (click)="projectHubService.toggleDrawerOpen('BudgetCommentaryEdit', '', budgetPageInfo ,'' )">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="grid  gap-x-6 gap-y-0 w-full">
+                <spot-textarea class="w-full read-only" formControlName="budgetCommentary" name="projectDescription"
+                               [label]="'Budget Commentary'">
+                </spot-textarea>
+            </div>
+        </div>
         <div>
             <h1 *ngIf="capexField; then capexTrueBlock else capexFalseBlock"></h1>
             <ng-template #capexTrueBlock>
                 <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                    <app-budget-capex-opex-table ></app-budget-capex-opex-table>
+                    <app-budget-capex-opex-table [mode]="'Capex'"></app-budget-capex-opex-table>
                 </div>
             </ng-template>
             <ng-template #capexFalseBlock>
@@ -130,7 +144,7 @@
             <h1 *ngIf="opexField; then opexTrueBlock else opexFalseBlock"></h1>
             <ng-template #opexTrueBlock>
                 <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                    <app-budget-capex-opex-table ></app-budget-capex-opex-table>
+                    <app-budget-capex-opex-table [mode]="'Opex'" ></app-budget-capex-opex-table>
                 </div>
             </ng-template>
             <ng-template #opexFalseBlock>
