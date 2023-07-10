@@ -251,7 +251,7 @@ export class BudgetFundingInformationBulkEditComponent {
         if (JSON.stringify(this.fundingRequestsDb) != JSON.stringify(this.fundingRequestsSubmit)) {
             if(this.checkEmptyIds(this.fundingRequestsSubmit)){
                 var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "To save your changes it is required to populate all mandatory fields highlighted in yellow!",
+                    "title": "To save your changes it is required to populate all mandatory fields!",
                     "message": "",
                     "icon": {
                         "show": true,
