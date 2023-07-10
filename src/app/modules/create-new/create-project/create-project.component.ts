@@ -542,6 +542,8 @@ export class CreateProjectComponent implements OnInit {
     }
     else {
       this.showLocalAttributes = false
+      this.portfolioOwners = ""
+      this.executionScope = ""
       this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
       for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
         this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
@@ -596,6 +598,8 @@ export class CreateProjectComponent implements OnInit {
       }
       else {
         this.showLocalAttributes = false
+        this.portfolioOwners = ""
+        this.executionScope = ""
         this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
         for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
           this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
