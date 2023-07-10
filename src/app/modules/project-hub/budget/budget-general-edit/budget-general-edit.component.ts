@@ -163,7 +163,8 @@ export class BudgetGeneralEditComponent {
 
     submitBudgetInfo() {
         const prefixCheck =this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value?.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)
-        if(prefixCheck){
+        const gmsbudgetOwnerCheck = !this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC";
+        if(prefixCheck && gmsbudgetOwnerCheck && this.capexRequired.value == true){
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "Please select another Budget ID",
                 "message": "",

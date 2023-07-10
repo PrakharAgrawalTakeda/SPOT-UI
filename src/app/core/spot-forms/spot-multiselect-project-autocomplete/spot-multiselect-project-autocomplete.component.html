@@ -18,7 +18,7 @@
             (optionSelected)="onFunctionSelect($event)">
             <ng-container *ngFor="let function of resultSets">
                 <mat-option [value]="function" *ngIf="isOptionSelected(function)">
-                    {{function[valuePointer]}}
+                    {{function.problemId}} {{budgetfind(function.problemUniqueId)}} - {{function[valuePointer]}}
                 </mat-option>
             </ng-container>
         </mat-autocomplete>

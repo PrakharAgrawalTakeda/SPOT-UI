@@ -616,7 +616,8 @@ export const projectRoutes: Route[] = [
     QualityRefBulkEditComponent,
     OeProjectSingleEditComponent,
     TechTransferSingleEditComponent,
-    StrategicDriversComponent
+    StrategicDriversComponent,
+    LocalAttributeSingleEditComponent
   ]
 })
 export class ProjectHubModule { }
