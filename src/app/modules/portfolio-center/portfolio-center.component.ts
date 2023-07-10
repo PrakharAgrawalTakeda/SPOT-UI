@@ -617,11 +617,11 @@ export class PortfolioCenterComponent implements OnInit {
               },
               {
                 "title": "On-Time Last 30 Days",
-                "value": res.milestoneTile.lastThirtyDay
+                "value": res.milestoneTile.lastThirtyDays
               },
               {
                 "title": "Predicted On-Time Next 30 Days",
-                "value": res.milestoneTile.predicted30Day
+                "value": res.milestoneTile.predicted30Days
               },
               {
                 "title": "Curent Year Completion Rate",
@@ -1118,7 +1118,10 @@ export class PortfolioCenterComponent implements OnInit {
   CloseLA(){
     this.showLA = false;
   }
-
+  Closefilter(){
+    this.filterDrawer.close()
+  }
+  
   OpenLA() {
     var portfolioOwners = ""
     var executionScope = ""
@@ -1415,8 +1418,8 @@ export class PortfolioCenterComponent implements OnInit {
             ? this.projects.data[i].capitalPhaseAbbreviation
             : 'NA') +
           ' - ' +
-          (this.projects.data[i].oePhaseAbbreviation
-            ? this.projects.data[i].oePhaseAbbreviation
+          (this.projects.data[i].oephaseAbbreviation
+            ? this.projects.data[i].oephaseAbbreviation
             : 'NA');
         if (this.projectOverview[i].overallStatus == "YellowStop"){
           this.projectOverview[i].OverAllStatusSort = "RedStop"
@@ -1483,7 +1486,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
         this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
         this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? parseInt(this.projectNames[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')) : this.projectNames[i].calculatedEmissionsImpact;
         this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
         this.projectOverview[i].problemId = this.projectNames[i].problemId;
         this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -1577,7 +1580,7 @@ export class PortfolioCenterComponent implements OnInit {
               this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
             
             this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? parseInt(res.projectDetails[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')) : res.projectDetails[i].calculatedEmissionsImpact;
             this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
             this.projectOverview[i].problemId = res.projectDetails[i].problemId;
             this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -1599,6 +1602,7 @@ export class PortfolioCenterComponent implements OnInit {
     var resultOE = []
     this.filteredPhaseArray = []
     this.oePhaseArray= []
+    var index = []
     for(var i=0;i<phaseId.length;i++){
       result = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId[i].lookUpId && item.isOEPhase == false);
       this.filteredPhaseArray=[...this.filteredPhaseArray, ...result]
@@ -1607,6 +1611,56 @@ export class PortfolioCenterComponent implements OnInit {
     for (var i = 0; i < phaseId.length; i++) {
       resultOE = this.capitalPhaseArray.filter(item => item.associatedPhaseID == phaseId[i].lookUpId && item.isOEPhase == true);
       this.oePhaseArray = [...this.oePhaseArray, ...resultOE]
+    }
+    if (this.PortfolioFilterForm.controls.ProjectPhase.value.length == 1 && this.PortfolioFilterForm.controls.ProjectPhase.value[0].lookUpId == "7bf185af-1fda-4086-839e-2aa38fbc19d0"){
+      this.PortfolioFilterForm.controls.CapitalPhase.disable();
+      this.PortfolioFilterForm.controls.OEPhase.disable();
+    }
+    else{
+      this.PortfolioFilterForm.controls.CapitalPhase.enable();
+      this.PortfolioFilterForm.controls.OEPhase.enable();
+    }
+    var PO = this.PortfolioFilterForm.controls.ProjectPhase.value ? this.PortfolioFilterForm.controls.ProjectPhase.value.length != 0 ? true : false : false
+    var CP = this.PortfolioFilterForm.controls.CapitalPhase.value ? this.PortfolioFilterForm.controls.CapitalPhase.value.length != 0 ? true : false : false
+    var OP = this.PortfolioFilterForm.controls.OEPhase.value ? this.PortfolioFilterForm.controls.OEPhase.value.length != 0 ? true : false : false
+    if (PO && (CP || OP)) {
+      if (this.PortfolioFilterForm.controls.CapitalPhase.value != null){
+      for (var i = 0; i < this.PortfolioFilterForm.controls.CapitalPhase.value.length;i++){
+        var c=0;
+        for (var j = 0; j < this.filteredPhaseArray.length;j++){
+          if (this.filteredPhaseArray[j].capitalPhaseID == this.PortfolioFilterForm.controls.CapitalPhase.value[i].capitalPhaseID){
+            c++;
+          }
+        }
+        if(c==0){
+          index.push(i);
+        }
+      }
+      if(index.length != 0){
+        for(var z=0;z<index.length;z++){
+          this.PortfolioFilterForm.controls.CapitalPhase.value.splice(index[z], 1);
+        }
+      }
+    }
+      if (this.PortfolioFilterForm.controls.OEPhase.value != null) {
+        index = []
+        for (var i = 0; i < this.PortfolioFilterForm.controls.OEPhase.value.length; i++) {
+          var c = 0;
+          for (var j = 0; j < this.oePhaseArray.length; j++) {
+            if (this.oePhaseArray[j].capitalPhaseID == this.PortfolioFilterForm.controls.OEPhase.value[i].capitalPhaseID) {
+              c++;
+            }
+          }
+          if (c == 0) {
+            index.push(i);
+          }
+        }
+        if (index.length != 0) {
+          for (var z = 0; z < index.length; z++) {
+            this.PortfolioFilterForm.controls.OEPhase.value.splice(index[z], 1);
+          }
+        }
+      }
     }
   }
 
