@@ -105,8 +105,8 @@ export class BudgetComponent implements OnInit {
             why:  this.getLookUpName(response.budget.whyId),
             fundingApprovalNeedDate:  response.budget.fundingApprovalNeedDate,
             projectFundingStatus:  this.getLookUpName(response.budget.fundingStatusId),
-            totalApprovedCapex:  totalCapex,
-            totalApprovedOpex:   totalOpex,
+            totalApprovedCapex:  response.budget.totalApprovedCapex,
+            totalApprovedOpex:   response.budget.totalApprovedOpEx,
             budgetCommentary:  response.budget.budgetComment,
         })
         if(response.budget.budgetOwner=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC" || response.budget.budgetOwner==null){
