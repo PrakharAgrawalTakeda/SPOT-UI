@@ -59,6 +59,7 @@ export class LocalAttributeSingleEditComponent {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.PortfolioOwner != undefined){
       this.PortfolioOwner = changes.PortfolioOwner?.currentValue
+    }
       var scope = changes.ExecutionScope?.currentValue.split(',')
       for(var i=0;i<scope.length;i++){
         if(scope[i]==scope[i+1]){
@@ -67,7 +68,6 @@ export class LocalAttributeSingleEditComponent {
       }
       this.ExecutionScope = scope.join(',')
       this.ngOnInit()
-    }
   }
   ngOnInit(): void {
     var api;
