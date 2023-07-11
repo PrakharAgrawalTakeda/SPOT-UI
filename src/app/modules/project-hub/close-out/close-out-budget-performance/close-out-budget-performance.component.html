@@ -70,22 +70,22 @@
                                 </ngx-datatable>
                                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                                                class="pr-6 font-medium text-sm text-default whitespace-nowrap" [rows]="budgetPerformanceDetailEvents">
-                                    <ngx-datatable-column name="Event" prop="event" [flexGrow]="2">
+                                    <ngx-datatable-column name="Event" prop="event" [flexGrow]="3">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Target"  prop="target" [flexGrow]="3">
+                                    <ngx-datatable-column name="Target"  prop="target" [flexGrow]="2">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p >{{value | date:'dd-MMM-yyyy'}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Approved" prop="approved" [flexGrow]="3">
+                                    <ngx-datatable-column name="Approved" prop="approved" [flexGrow]="2">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p >{{value | date:'dd-MMM-yyyy'}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Variance (Days)" prop="variance"  [flexGrow]="3">
+                                    <ngx-datatable-column name="Variance (Days)" prop="variance"  [flexGrow]="1">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
