@@ -226,10 +226,10 @@ export class BudgetFundingInformationBulkEditComponent {
     checkDuplicateIds(objects: any[]): string {
         const ids = new Set<string>();
         for (const obj of objects) {
-            if (ids.has(obj.budgetIoid)) {
-                return obj.budgetIoid;
+            if (ids.has(obj.budgetIo1)) {
+                return obj.budgetIo1;
             }
-            ids.add(obj.budgetIoid);
+            ids.add(obj.budgetIo1);
         }
         return '';
     }
@@ -251,7 +251,7 @@ export class BudgetFundingInformationBulkEditComponent {
         if (JSON.stringify(this.fundingRequestsDb) != JSON.stringify(this.fundingRequestsSubmit)) {
             if(this.checkEmptyIds(this.fundingRequestsSubmit)){
                 var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "To save your changes it is required to populate all mandatory fields highlighted in yellow!",
+                    "title": "To save your changes it is required to populate all mandatory fields!",
                     "message": "",
                     "icon": {
                         "show": true,
@@ -276,7 +276,7 @@ export class BudgetFundingInformationBulkEditComponent {
                 let duplicate = this.checkDuplicateIds(this.fundingRequestsSubmit)
                 if(duplicate!="") {
                     var comfirmConfig: FuseConfirmationConfig = {
-                        "title": "The Approval ID (" + duplicate + ") you have entered does already exist and cannot be added a second time. Please change or remove it",
+                        "title": "The Funding Request ID (" + duplicate + ") you have entered does already exist and cannot be added a second time. Please change or remove it",
                         "message": "",
                         "icon": {
                             "show": true,

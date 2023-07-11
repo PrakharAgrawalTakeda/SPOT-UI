@@ -28,6 +28,7 @@
 .apply-button{
     margin: 20px 0px 175px 0px !important;
     width: 100%;
+    width: 20%;
 }
 
 .tile-title{
@@ -42,11 +43,13 @@
 }
 
 .frozen-header-class {
-    top: 60px !important;
+    top: 17px !important;
+    left: 200px !important;
 }
 
 .frozen-header-classID {
     top: 40px !important;
+    margin-left: 6px !important;
 }
 .datatable-body{
     height: 72vh !important;
@@ -60,12 +63,13 @@
 //     cursor: pointer;
 // }
 .projectNames {
-    cursor: pointer;
+    cursor: pointer !important;
     margin-bottom: 34px;
     color: rgb(81, 174, 245);
 }
 .projectNames:hover {
     text-decoration: underline;
+    cursor: pointer !important;
 }
 
 .datatable-header{

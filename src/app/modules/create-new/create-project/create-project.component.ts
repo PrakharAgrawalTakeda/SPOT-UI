@@ -40,6 +40,9 @@ export class CreateProjectComponent implements OnInit {
   productionStepName: string = "";
   localCurrency:any = [];
   viewContent:boolean = false
+  showLocalAttributes:boolean = false
+  portfolioOwners = ""
+  executionScope = ""
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(),
     projectsingle: new FormControl(),
@@ -509,6 +512,7 @@ export class CreateProjectComponent implements OnInit {
     this.router.navigate([`./portfolio-center`]);
     window.location.reload()
   }
+  
   CheckMandatory(index: number){
     this.stepper.selectedIndex = index;
     if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
@@ -536,11 +540,25 @@ export class CreateProjectComponent implements OnInit {
       const alert = this.fuseAlert.open(comfirmConfig)
       this.stepper.selectedIndex = index-1;
     }
-    else{
-    this.stepper.selectedIndex = index;
+    else {
+      this.showLocalAttributes = false
+      this.portfolioOwners = ""
+      this.executionScope = ""
+      this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
+      for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
+        this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
+      }
+      this.showLocalAttributes = true
+      this.stepper.selectedIndex = index;
     }
   }
 
+  captureValueLA(index, event){
+    this.showLocalAttributes = event
+    console.log(event)
+    console.log(this.showLocalAttributes)
+    this.showLocalAttributes = event
+  }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){
       return id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
@@ -579,6 +597,14 @@ export class CreateProjectComponent implements OnInit {
         this.stepper.selectedIndex = "0"
       }
       else {
+        this.showLocalAttributes = false
+        this.portfolioOwners = ""
+        this.executionScope = ""
+        this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
+        for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
+          this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
+        }
+        this.showLocalAttributes = true
         this.stepper.selectedIndex = index._selectedIndex;
       }
     }

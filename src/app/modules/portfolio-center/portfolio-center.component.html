@@ -6,17 +6,16 @@
         <mat-drawer class="absolute inset-0 w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             #filterDrawer>
             <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent"
-                style="overflow-y: scroll; height: 95vh;">
-                <div class=" form-ask-need h-[106.5vh]  overflow-y-scroll">
+                style="overflow-y: scroll; height: 85vh;">
+                <div class=" form-ask-need h-[77.5vh]  overflow-y-scroll">
+                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember" [placeholder]="'Last Name, First Name'"
+                        [label]="'Project Team Member'" name="ProjectTeamMember" [showLabel]="true">
+                    </spot-multiselect-user-autocomplete>
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
                         [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                         [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
                         [customSortPointer]="'pfid'" [showHint]="true" [hint]="'The group which is responsible for the oversight and process adherence of the record'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
-                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
-                        [showLabel]="true">
-                    </spot-multiselect-user-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ExecutionScope" class="w-full"
                         name="ExecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
@@ -63,7 +62,7 @@
                         [label]="'GMS Budget Owner'" [placeholder]="'GMS Budget Owner'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                         [dropDownArray]="getGMSBudgetOwner()" [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'">
+                        [customSortPointer]="'pfid'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="AGILEWorkstream" class="w-full"
                         name="AGILEWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
@@ -73,24 +72,21 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
-                    <!-- <spot-multiselect-autocomplete formControlName="AnnualInitiatives" class="w-full" name="AnnualInitiatives"
-                        [label]="'Annual Initiatives'" [placeholder]="'Annual Initiatives'" [valuePointer]="'name'" [idPointer]="'name'"
-                        [dropDownArray]="projectType">
-                    </spot-multiselect-autocomplete> -->
                     <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
                         [label]="'CAPS Project '" [showHint]="true" [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
 CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
                     </spot-toggle>
                     <app-spot-multiselect-project-autocomplete formControlName="projectName" [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
-                        [label]="'Project Name'" name="projectName" [showLabel]="true">
+                        [label]="'Project/Program'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
                     <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'" [dropDownArray]="overallStatus">
+                        [idPointer]="'lookUpId'" [dropDownArray]="overallStatus" [sortByType]="'custom'"
+                        [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;" (click)="OpenLA()">+ Add Local Attribute</mat-label>
-                    <mat-label *ngIf="showLA" id="localAttribute" style="color: #a0cbf1;" (click)="CloseLA()">+ Hide Local
-                        Attribute</mat-label>
+                    <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;" (click)="OpenLA()">+ Show Local Attributes</mat-label>
+                    <mat-label *ngIf="showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;" (click)="CloseLA()">+ Hide Local
+                        Attributes</mat-label>
 
 
 
@@ -165,11 +161,22 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </form>
 
 
-                    <div style="width: 15%;">
+                    <!-- <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px;">
                     <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyfilters()">
                         Apply Filters
                     </button>
-                    </div>
+                    <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyfilters()">
+                        Cancel
+                    </button>
+                    </div> -->
+                </div>
+                <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px;">
+                    <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyfilters()">
+                        Apply Filters
+                    </button>
+                    <button class="apply-button" mat-flat-button [color]="'primary'" (click)="Closefilter()">
+                        Cancel
+                    </button>
                 </div>
             </form>
         </mat-drawer>
@@ -186,7 +193,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
             <!-- Header -->
             <div [hidden]='!showContent' class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
                 <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px;">
-                    <h1 class="text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 text-primary">Portfolio Center</h1>
+                    <h1 class="text-4xl tracking-tight leading-7 sm:leading-10 text-primary">Portfolio Center</h1>
                 <div class=" flex items-center">
                     <button class="ml-4" mat-flat-button [color]="'primary'" (click)="filterDrawer.toggle()">
                         Filters
@@ -243,7 +250,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                 Milestone Performance</div>
 
                             <ng-container *ngFor="let dataset of data.milstoneTile">
-                                <div class="flex py-3">
+                                <div class="flex py-1">
                                     <div class="flex items-center text-secondary w-14 font-extrabold">{{dataset.value}}%</div>
                                     <div class="flex items-right">
                                         <div>{{dataset.title}}</div>
@@ -259,13 +266,13 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                 Budget</div>
 
                             <div class="flex flex-col mt-2">
-                                <div class="grid grid-cols-3 py-3">
-                                    <div class="flex items-center">Reference</div>
+                                <div class="grid grid-cols-3 py-1">
+                                    <div class="flex items-center font-extrabold">Reference</div>
                                     <div class="text-right font-extrabold">CAPEX ({{budgetCurrency}})</div>
                                     <div class="text-right font-extrabold">OPEX ({{budgetCurrency}})</div>
                                 </div>
                                 <ng-container *ngFor="let dataset of data.budgetTile">
-                                    <div class="grid grid-cols-3 py-3">
+                                    <div class="grid grid-cols-3 py-1">
                                         <div class="flex items-center">
                                             <div class="ml-3">{{dataset.title}}</div>
                                         </div>
@@ -340,7 +347,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         </button>
                 </div> -->
                 <div class="flex justify-between gap-8 mt-2 p-6" style="margin-bottom: -30px;">
-                    <h1 class="text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 text-primary">Project Overview</h1>
+                    <h1 class="text-4xl tracking-tight leading-7 sm:leading-10 text-primary">Project Overview</h1>
                     <div class=" flex items-center">
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
                             Portfolio Report
@@ -364,7 +371,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Overall status" prop="OverAllStatusSort" [headerClass]="getFrozenHeaderClassID"
                             [width]="90" [sortable]="true" [frozenLeft]="true">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon style ="margin-bottom: 30px;" svgIcon="{{(indicator.getIndicators(row.overallStatus, 'overall')).icontype}}"
+                                <mat-icon style ="margin-bottom: 30px; margin-left: 4px;" svgIcon="{{(indicator.getIndicators(row.overallStatus, 'overall')).icontype}}"
                                     class="{{(indicator.getIndicators(row.overallStatus, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
@@ -378,7 +385,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="210" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="margin-bottom: 34px; color: rgb(81, 174, 245);text-decoration: underline;" (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
+                                <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
