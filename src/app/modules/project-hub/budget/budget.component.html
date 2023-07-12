@@ -93,11 +93,11 @@
             <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
                 <spot-input class="w-full" formControlName="projectFundingStatus" [label]="'Project Funding Status'">
                 </spot-input>
-                <spot-input class="w-full" formControlName="totalApprovedCapex"
+                <spot-input class="w-full" formControlName="totalApprovedCapex" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
                             [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [showHint]="true"
                             [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
                 </spot-input>
-                <spot-input class="w-full" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
+                <spot-input class="w-full"  [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
                 </spot-input>
             </div>
             <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit" [budgetInfo]="budgetPageInfo" [addButtonShow]="showAddNewButton"></app-budget-funding-information-table>
