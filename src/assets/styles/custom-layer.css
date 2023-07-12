@@ -96,6 +96,9 @@ ngx-datatable .datatable-row-center, .ngx-datatable .datatable-row-group, .ngx-d
 .form-ask-need {
     padding: 20px 20px;
 }
+.sliding-panel-padding {
+    padding: 10px 10px;
+}
 
 .sidepanel-header {
     padding: 10px;
