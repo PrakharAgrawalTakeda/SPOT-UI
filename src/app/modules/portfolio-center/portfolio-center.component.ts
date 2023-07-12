@@ -26,6 +26,7 @@ import { forEach } from 'lodash';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { Constants } from 'app/shared/constants';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -195,6 +196,8 @@ export class PortfolioCenterComponent implements OnInit {
   showLA:boolean=false
   changePO = false
   changeES = false
+  targetPercentage = Constants.QUALITY_TARGET_PERCENTAGE;
+  lowerTargetPercentage = Constants.QUALITY_LOWER_TARGET_PERCENTAGE;
   // The number of elements in the page
   size= 0
   // The total number of elements
@@ -395,6 +398,23 @@ export class PortfolioCenterComponent implements OnInit {
       var attribute = filterKeys[i]
       var filterItems = []
       if (this.filtersnew[attribute] != null && this.filtersnew[attribute].length != 0){
+        if (attribute == "CAPSProject") {
+          if (this.filtersnew[attribute] == true) {
+            this.filtersnew[attribute] = "Yes";
+          }
+          else {
+            this.filtersnew[attribute] = "No"
+          }
+          var filterItems1 =
+          {
+            "filterAttribute": attribute,
+            "filterOperator": "=",
+            "filterValue": this.filtersnew[attribute],
+            "unionOperator": 2
+          }
+          filterItems.push(filterItems1)
+        }
+          else{
       for (var j = 0; j < this.filtersnew[attribute].length; j++){
         if (attribute == "PortfolioOwner" || attribute == "ExecutionScope"){
           var filterItems1 =
@@ -432,21 +452,21 @@ export class PortfolioCenterComponent implements OnInit {
             "unionOperator": 2
           }
         }
-        else if (attribute == "CAPSProject") {
-          if(this.filtersnew[attribute] == true){
-            this.filtersnew[attribute] = "Yes";
-          }
-          else{
-            this.filtersnew[attribute] ="No"
-          }
-          var filterItems1 =
-          {
-            "filterAttribute": attribute,
-            "filterOperator": "=",
-            "filterValue": this.filtersnew[attribute],
-            "unionOperator": 2
-          }
-        }
+        // else if (attribute == "CAPSProject") {
+        //   if(this.filtersnew[attribute] == true){
+        //     this.filtersnew[attribute] = "Yes";
+        //   }
+        //   else{
+        //     this.filtersnew[attribute] ="No"
+        //   }
+        //   var filterItems1 =
+        //   {
+        //     "filterAttribute": attribute,
+        //     "filterOperator": "=",
+        //     "filterValue": this.filtersnew[attribute],
+        //     "unionOperator": 2
+        //   }
+        // }
         else if (attribute == "projectName") {
           var filterItems1 =
           {
@@ -485,6 +505,7 @@ export class PortfolioCenterComponent implements OnInit {
         }
         filterItems.push(filterItems1)
       }
+    }
     // }
       filterGroups.push({
           filterItems,
@@ -520,28 +541,29 @@ export class PortfolioCenterComponent implements OnInit {
           budgetData = [
             {
               "title": "Plan",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.plan).toFixed(4) : 0
+              // "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4) : 0,
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Previous",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.previous).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.previous).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.current).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.current).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current (YTD)",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.ytd).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.ytd).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Preliminary",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.preliminaryForecast).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.preliminaryForecast).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             }
           ]
         }
@@ -549,23 +571,23 @@ export class PortfolioCenterComponent implements OnInit {
           budgetData = [
             {
               "title": "Plan",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.plan).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Previous",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.previous).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.previous).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.current).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.current).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current (YTD)",
-              "value": res.budgetTile.capex ? Number(res.budgetTile.capex.ytd).toFixed(4) : 0,
-              "value2": res.budgetTile.opex ? Number(res.budgetTile.opex.ytd).toFixed(4) : 0
+              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             }
           ]
         }
@@ -713,7 +735,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.showContent = false
         var fieldNameElement: any;
         fieldNameElement = document.getElementsByClassName('page-count');
-        fieldNameElement[0].innerText = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
+        fieldNameElement[0].innerText = "Total Projects based on the applied filter criteria: " + this.totalproject + " Project(s)";
         this.showContent = true
     }
 }
@@ -1119,6 +1141,65 @@ export class PortfolioCenterComponent implements OnInit {
     this.showLA = false;
   }
   Closefilter(){
+    this.showContent = false
+    var user = [{
+      "userAdid": this.activeaccount.localAccountId,
+      "userDisplayName": this.activeaccount.name,
+      "userIsActive": true
+    }]
+
+    var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
+    if (localStorage.getItem('spot-filtersNew') == null) {
+      this.filtersnew = this.defaultfilter
+      this.filtersnew.ProjectState = state
+      this.filtersnew.ProjectTeamMember = user
+      this.PortfolioFilterForm.patchValue({
+        ProjectTeamMember: user,
+        ProjectState: state,
+        ProjectPhase: []
+      })
+    }
+    else {
+      this.filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
+      if (this.filtersnew.ProjectPhase == null) {
+        this.filtersnew.ProjectPhase = []
+      }
+      this.PortfolioFilterForm.patchValue({
+        PortfolioOwner: this.filtersnew.PortfolioOwner ? this.filtersnew.PortfolioOwner : [],
+        ProjectTeamMember: this.filtersnew.ProjectTeamMember ? this.filtersnew.ProjectTeamMember : [],
+        ExecutionScope: this.filtersnew.ExecutionScope ? this.filtersnew.ExecutionScope : [],
+        OwningOrganization: this.filtersnew.OwningOrganization ? this.filtersnew.OwningOrganization : [],
+        ProjectState: this.filtersnew.ProjectState ? this.filtersnew.ProjectState : [],
+        ProjectPhase: this.filtersnew.ProjectPhase ? this.filtersnew.ProjectPhase : [],
+        CapitalPhase: this.filtersnew.CapitalPhase ? this.filtersnew.CapitalPhase : [],
+        OEPhase: this.filtersnew.OEPhase ? this.filtersnew.OEPhase : [],
+        ProjectType: this.filtersnew.ProjectType ? this.filtersnew.ProjectType : [],
+        Product: this.filtersnew.Product ? this.filtersnew.Product : [],
+        TotalCAPEX: this.filtersnew.TotalCAPEX ? this.filtersnew.TotalCAPEX : [],
+        GMSBudgetOwner: this.filtersnew.GMSBudgetOwner ? this.filtersnew.GMSBudgetOwner : [],
+        AGILEWorkstream: this.filtersnew.AGILEWorkstream ? this.filtersnew.AGILEWorkstream : [],
+        AGILEWave: this.filtersnew.AGILEWave ? this.filtersnew.AGILEWave : [],
+        CAPSProject: this.filtersnew.CAPSProject ? this.filtersnew.CAPSProject : [],
+        projectName: this.filtersnew.projectName ? this.filtersnew.projectName : [],
+        OverallStatus: this.filtersnew.OverallStatus ? this.filtersnew.OverallStatus : [],
+      })
+      if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
+        if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
+          this.filtersnew.ProjectTeamMember = user
+          this.PortfolioFilterForm.patchValue({
+            ProjectTeamMember: user
+          })
+        }
+        if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
+          this.filtersnew.ProjectState = state
+          this.PortfolioFilterForm.patchValue({
+            ProjectState: state
+          })
+        }
+      }
+
+    }
+    this.showContent = true
     this.filterDrawer.close()
   }
   
@@ -1482,11 +1563,22 @@ export class PortfolioCenterComponent implements OnInit {
         else {
           this.budgetCurrency = this.projects.data[i].localCurrencyAbbreviation
         }
+        var preffix = ""
+        if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential){
+          preffix = "[ARCHIVED]"
+        }
+        else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived){
+          preffix = "[CONF]"
+        }
+        else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived){
+          preffix = "[ARCHIVED CONF]"
+        }
+        res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
         this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
         this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
         this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
-        this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? parseInt(this.projectNames[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')) : this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
+        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
         this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
         this.projectOverview[i].problemId = this.projectNames[i].problemId;
         this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -1575,12 +1667,23 @@ export class PortfolioCenterComponent implements OnInit {
             else {
               this.projectOverview[i].budgetSpendIndicatorSort = this.projectOverview[i].budgetSpendIndicator
             }
+            var preffix = ""
+            if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
+              preffix = "[ARCHIVED]"
+            }
+            else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived) {
+              preffix = "[CONF]"
+            }
+            else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
+              preffix = "[ARCHIVED CONF]"
+            }
+            res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
               this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
               this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
               this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
             
-            this.projectOverview[i].projectDataQuality = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? parseInt(res.projectDetails[i].calculatedEmissionsImpact.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')) : res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
             this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
             this.projectOverview[i].problemId = res.projectDetails[i].problemId;
             this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -1662,6 +1765,22 @@ export class PortfolioCenterComponent implements OnInit {
         }
       }
     }
+  }
+
+  getColor(percentage: number) {
+      if (percentage < this.lowerTargetPercentage) {
+        return "red";
+      }
+      if (this.targetPercentage > percentage && percentage >= this.lowerTargetPercentage) {
+        return "orange";
+      }
+      if (this.targetPercentage < percentage) {
+        return "green";
+      }
+  }
+
+  tootlipFormatter(value, series) {
+    return value.toString();
   }
 
 }
