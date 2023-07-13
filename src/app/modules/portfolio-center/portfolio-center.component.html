@@ -71,10 +71,18 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
-                    <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
+                    <!-- <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
                         [label]="'CAPS Project '" [showHint]="true" [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
 CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-                    </spot-toggle>
+                    </spot-toggle> -->
+
+                    <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject" [label]="'CAPS Project'" [placeholder]="'CAPS Project'"
+                        [showNoneOption]="true" [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues"
+                        [showHint]="true"
+                        [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
+                    </spot-select>
+
                     <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
                         [dropDownArray]="overallStatus" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -268,12 +276,12 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             <div class="flex flex-col mt-2">
                                 <div class="grid grid-cols-3 py-1">
                                     <div class="flex items-center font-extrabold text-lg">Reference</div>
-                                    <div class="text-right font-extrabold text-lg">CAPEX ({{budgetCurrency}})</div>
-                                    <div class="text-right font-extrabold text-lg">OPEX ({{budgetCurrency}})</div>
+                                    <div class="text-right font-extrabold text-lg" style="right: 10px; position: relative;">CAPEX ({{budgetCurrency}})</div>
+                                    <div class="text-right font-extrabold text-lg" style="right: 10px; position: relative;">OPEX ({{budgetCurrency}})</div>
                                 </div>
                                 <ng-container *ngFor="let dataset of data.budgetTile">
-                                    <div class="grid grid-cols-3 py-1">
-                                        <div class="flex items-center">
+                                    <div class="grid grid-cols-3 py-1" style="right: 10px; position: relative;">
+                                        <div class="flex items-left">
                                             <div class="ml-3 text-lg">{{dataset.title}}</div>
                                         </div>
                                         <div class="text-right text-secondary font-extrabold text-lg">{{dataset.value}}</div>
@@ -369,21 +377,21 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'OverAllStatusSort', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
 
                         <ngx-datatable-column name="Overall status" prop="OverAllStatusSort" [headerClass]="getFrozenHeaderClassID"
-                            [width]="90" [sortable]="true" [frozenLeft]="true">
+                            [width]="70" [sortable]="true" [frozenLeft]="true" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon style ="margin-bottom: 30px; margin-left: 4px;" svgIcon="{{(indicator.getIndicators(row.overallStatus, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(row.overallStatus, 'overall')).iconcolor}} ">
+                                <mat-icon style ="margin-bottom: 30px; margin-left: 4px;" svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Project ID/ Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
+                        <ngx-datatable-column name="Project ID/ Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID" [resizeable]="false">
                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                 <p style="margin-bottom: 30px;">{{ value }} <br> {{ row.budgetId }}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                       <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="210" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
+                       <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="210" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
                             </ng-template>
@@ -419,8 +427,8 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Risk/Issue" prop="riskIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(row.riskIndicator, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(row.riskIndicator, 'overall')).iconcolor}} ">
+                                <mat-icon svgIcon="{{(indicator.getIndicators(row.riskIssueIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.riskIssueIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
@@ -446,8 +454,8 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(row.budgetSpendIndicator, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(row.budgetSpendIndicator, 'overall')).iconcolor}} ">
+                                <mat-icon svgIcon="{{(indicator.getIndicators(row.spendIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.spendIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>

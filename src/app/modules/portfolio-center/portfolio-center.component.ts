@@ -68,6 +68,7 @@ export class PortfolioCenterComponent implements OnInit {
   totalproject = 0;
   owningOrg = []
   projectType = [{ name: 'Standard Project / Program' }, { name: 'Simple Project' }]
+  CAPSDropDrownValues = ["Yes", "No"]
   totalCAPEX = []
   AgileWorkstream = []
   AgileWave = []
@@ -399,12 +400,6 @@ export class PortfolioCenterComponent implements OnInit {
       var filterItems = []
       if (this.filtersnew[attribute] != null && this.filtersnew[attribute].length != 0){
         if (attribute == "CAPSProject") {
-          if (this.filtersnew[attribute] == true) {
-            this.filtersnew[attribute] = "Yes";
-          }
-          else {
-            this.filtersnew[attribute] = "No"
-          }
           var filterItems1 =
           {
             "filterAttribute": attribute,
@@ -698,6 +693,9 @@ export class PortfolioCenterComponent implements OnInit {
         res.projectDetails.sort((a, b) => {
           return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
         })
+        res.trendingIndicators.sort((a, b) => {
+          return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+        })
           this.projectNames = res.projectDetails;
           this.projects.data = res.portfolioDetails;
           this.setPage(res, 0)
@@ -730,14 +728,14 @@ export class PortfolioCenterComponent implements OnInit {
   }
   
   scrollHandler(event) {
-    if (!this.scroll) {
+    // if (!this.scroll) {
       this.scroll = true
         this.showContent = false
         var fieldNameElement: any;
         fieldNameElement = document.getElementsByClassName('page-count');
         fieldNameElement[0].innerText = "Total Projects based on the applied filter criteria: " + this.totalproject + " Project(s)";
         this.showContent = true
-    }
+    // }
 }
 
   routeProject(projectid): void {
@@ -1225,7 +1223,7 @@ export class PortfolioCenterComponent implements OnInit {
     var noChangePO = false
     var noChangeES = false
     var filtersnew = JSON.parse(localStorage.getItem('spot-filtersNew'))
-    if (portfolioOwners != "" && filtersnew != null){
+    if (portfolioOwners != "" && filtersnew != null && filtersnew.PortfolioOwner != null){
       var count = 0;
       var list = portfolioOwners.split(',');
       list.pop()
@@ -1242,7 +1240,7 @@ export class PortfolioCenterComponent implements OnInit {
         noChangePO = true
       }
     }
-    if (executionScope != "" && filtersnew != null) {
+    if (executionScope != "" && filtersnew != null && filtersnew.ExecutionScope != null) {
       var count = 0;
       var list = executionScope.split(',');
       list.pop()
@@ -1574,8 +1572,8 @@ export class PortfolioCenterComponent implements OnInit {
           preffix = "[ARCHIVED CONF]"
         }
         res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-        this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
-        this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
+        this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+        this.projectOverview[i].FORECAST = this.projectOverview[i].localPreviousForecastCapex
         this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
         this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
         this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
@@ -1585,6 +1583,12 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
         this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
         this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
+        this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
+        this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
+        this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
+        this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
+        this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
+        this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
       }
       this.size = 100;
       this.totalElements = this.totalproject;
@@ -1600,6 +1604,9 @@ export class PortfolioCenterComponent implements OnInit {
           })
           res.projectDetails.sort((a, b) => {
             return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
+          })
+          res.trendingIndicators.sort((a, b) => {
+            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
           })
           this.projectOverview = res.portfolioDetails
           this.projects.data = res.portfolioDetails;
@@ -1678,8 +1685,8 @@ export class PortfolioCenterComponent implements OnInit {
               preffix = "[ARCHIVED CONF]"
             }
             res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-              this.projectOverview[i].CAPEX = this.projectOverview[i].LocalCurrentYrCapExPlan
-              this.projectOverview[i].FORECAST = this.projectOverview[i].LocalPreviousForecastCapex
+            this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+            this.projectOverview[i].FORECAST = this.projectOverview[i].localPreviousForecastCapex
               this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
             
             this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
@@ -1690,6 +1697,12 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
             this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
             this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
+            this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
+            this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
+            this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
+            this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
+            this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
+            this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
           }
           this.size = 100;
           this.totalElements = this.totalproject;
