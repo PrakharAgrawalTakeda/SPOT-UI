@@ -1,4 +1,4 @@
-<div *ngIf="viewContent">
+<div *ngIf="viewContent" class="h-screen">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">
             <ng-container *ngIf="mode === 'OPEX'">Opex Details Edit</ng-container>
@@ -28,6 +28,9 @@
                            [placeholder]="'Budget Commentary'">
             </spot-textarea>
         </div>
+
+    </form>
+    <div class="absolute bottom-2 w-full px-3">
         <div class="pr-3 flex items-start justify-between mt-6">
             <a class="min-w-26" mat-flat-button [color]="'primary'"
                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
@@ -37,5 +40,5 @@
                 Submit
             </button>
         </div>
-    </form>
+    </div>
 </div>
