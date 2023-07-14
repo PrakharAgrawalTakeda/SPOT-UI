@@ -384,7 +384,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
                         <ngx-datatable-column name="Project ID/ Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID" [resizeable]="false">
                             <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                                <p>{{ value }}</p>
+                                <p>{{ value }} <br> {{row.budgetId}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
