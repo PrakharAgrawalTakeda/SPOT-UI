@@ -73,6 +73,7 @@ export class PortfolioCenterComponent implements OnInit {
   AgileWorkstream = []
   AgileWave = []
   overallStatus = []
+  sorting:any = {name: "", dir: ""}
   viewBaseline = false
   projectOverview:any = []
   filtersnew: any = {
@@ -115,22 +116,22 @@ export class PortfolioCenterComponent implements OnInit {
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
-    ProjectTeamMember: new FormControl(),
     ExecutionScope: new FormControl(),
     OwningOrganization: new FormControl(),
+    ProjectType: new FormControl(),
     ProjectState: new FormControl(),
     ProjectPhase: new FormControl(),
     CapitalPhase: new FormControl(),
     OEPhase: new FormControl(),
-    ProjectType: new FormControl(),
-    Product: new FormControl(),
     TotalCAPEX: new FormControl(),
+    Product: new FormControl(),
+    ProjectTeamMember: new FormControl(),
     GMSBudgetOwner: new FormControl(),
     AGILEWorkstream: new FormControl(),
     AGILEWave: new FormControl(),
     CAPSProject: new FormControl(),
-    projectName: new FormControl(),
-    OverallStatus: new FormControl()
+    OverallStatus: new FormControl(),
+    projectName: new FormControl()
   })
 
   filteredPhaseArray = []
@@ -197,6 +198,7 @@ export class PortfolioCenterComponent implements OnInit {
   showLA:boolean=false
   changePO = false
   changeES = false
+  filterList = []
   targetPercentage = Constants.QUALITY_TARGET_PERCENTAGE;
   lowerTargetPercentage = Constants.QUALITY_LOWER_TARGET_PERCENTAGE;
   // The number of elements in the page
@@ -394,12 +396,128 @@ export class PortfolioCenterComponent implements OnInit {
         executionScope += this.filtersnew.ExecutionScope[z].portfolioOwnerId + ','
       }
     }
-        
+    this.filterList = []  
     for (var i = 0; i < Object.keys(this.filtersnew).length; i++){
       var attribute = filterKeys[i]
       var filterItems = []
       if (this.filtersnew[attribute] != null && this.filtersnew[attribute].length != 0){
+        //to display list of filters
+        if (attribute == "PortfolioOwner" || attribute == "ExecutionScope" || attribute == "GMSBudgetOwner") {
+          if (attribute == "GMSBudgetOwner") {
+            var name = "GMS Budget Owner"
+            var order = 10
+          }
+          else if (attribute == "PortfolioOwner"){
+            var name = "Portfolio Owner"
+            var order = 1
+          }
+          else if (attribute == "ExecutionScope") {
+            var name = "Execution Scope"
+            var order = 2
+          }
+            var filterdata = {
+              "name": name,
+              "value": this.filtersnew[attribute][0].portfolioOwner,
+              "count": this.filtersnew[attribute].length,
+              "order": order
+            }
+        }
+        else if (attribute == "OwningOrganization" || attribute == "ProjectType"){
+          if (attribute == "OwningOrganization"){
+            var order = 3
+          }
+          else{
+            var order = 4
+          }
+            var filterdata = {
+              "name": attribute.replace(/([A-Z])/g, ' $1').trim(),
+              "value": this.filtersnew[attribute][0].name,
+              "count": this.filtersnew[attribute].length,
+              "order": order
+            }
+        }
+        else if (attribute == "ProjectTeamMember") {
+            var filterdata = {
+              "name": attribute.replace(/([A-Z])/g, ' $1').trim(),
+              "value": this.filtersnew[attribute][0].userDisplayName,
+              "count": this.filtersnew[attribute].length,
+              "order": 11
+            }
+        }
+        else if (attribute == "projectName") {
+            var filterdata = {
+              "name": "Project Name",
+              "value": this.filtersnew[attribute][0].problemTitle,
+              "count": this.filtersnew[attribute].length,
+              "order": 17
+            }
+        }
+        else if (attribute == "Product") {
+            var filterdata = {
+              "name": "Product(s)",
+              "value": this.filtersnew[attribute][0].fullProductName,
+              "count": this.filtersnew[attribute].length,
+              "order": 10
+            }
+        }
+        else if (attribute == "CapitalPhase" || attribute == "OEPhase") {
+          if (attribute == "OEPhase") {
+            var name = "OE Phase"
+            var order = 8
+          }
+          else {
+            var name = "Capital Phase"
+            var order = 7
+          }
+            var filterdata = {
+              "name": name,
+              "value": this.filtersnew[attribute][0].capitalPhaseName,
+              "count": this.filtersnew[attribute].length,
+              "order": order
+            }
+        }
+        else{
+          if (attribute == "TotalCAPEX") {
+            var name = "Total CAPEX"
+            var order = 9
+          }
+          else if (attribute == "ProjectState") {
+            var name = "Project State"
+            var order = 5
+          }
+          else if (attribute == "ProjectPhase") {
+            var name = "Project Phase"
+            var order = 6
+          }
+          else if (attribute == "AGILEWorkstream"){
+            var name = "AGILE Worktream"
+            var order = 13
+          }
+          else if(attribute=="AGILEWave"){
+            var name = "AGILE Wave"
+            var order = 14
+          }
+          else if (attribute == "OverallStatus") {
+            var name = "Overall Status"
+            var order = 16
+          }
+            var filterdata = {
+              "name": name,
+              "value": this.filtersnew[attribute][0].lookUpName,
+              "count": this.filtersnew[attribute].length,
+              "order": order
+            }
+        }
+
+// to send to API
         if (attribute == "CAPSProject") {
+          var length:any = 1
+          var filterdata = {
+            "name": "CAPS Project",
+            "value": this.filtersnew[attribute],
+            "count": length,
+            "order": 15
+          }
           var filterItems1 =
           {
             "filterAttribute": attribute,
@@ -447,21 +565,6 @@ export class PortfolioCenterComponent implements OnInit {
             "unionOperator": 2
           }
         }
-        // else if (attribute == "CAPSProject") {
-        //   if(this.filtersnew[attribute] == true){
-        //     this.filtersnew[attribute] = "Yes";
-        //   }
-        //   else{
-        //     this.filtersnew[attribute] ="No"
-        //   }
-        //   var filterItems1 =
-        //   {
-        //     "filterAttribute": attribute,
-        //     "filterOperator": "=",
-        //     "filterValue": this.filtersnew[attribute],
-        //     "unionOperator": 2
-        //   }
-        // }
         else if (attribute == "projectName") {
           var filterItems1 =
           {
@@ -502,12 +605,16 @@ export class PortfolioCenterComponent implements OnInit {
       }
     }
     // }
+      this.filterList.push(filterdata)
       filterGroups.push({
           filterItems,
           "groupCondition": 1
     })
   }
     }
+    this.filterList.sort((a, b) => {
+      return (a.order < b.order ? -1 : a.order == b.order ? 0 : 1);
+    })
     filterGroups[filterGroups.length - 1].groupCondition = 0
     this.groupData
     if (localattribute == null){
@@ -1704,6 +1811,19 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
           }
+          if(this.sorting.name != ""){
+            this.projectOverview.sort
+            if (this.sorting.dir == "asc"){
+              this.projectOverview.sort((a, b) => {
+                return (a.this.sorting.name < b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
+              })
+            }
+            else{
+              this.projectOverview.sort((a, b) => {
+                return (a.this.sorting.name > b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
+              })
+            }
+          }
           this.size = 100;
           this.totalElements = this.totalproject;
           this.totalPages = this.totalproject / 100;
@@ -1794,6 +1914,12 @@ export class PortfolioCenterComponent implements OnInit {
 
   tootlipFormatter(value, series) {
     return value.toString();
+  }
+
+  sort(event){
+    console.log(event)
+    this.sorting.name = event.sorts[0].prop;
+    this.sorting.dir = event.sorts[0].dir;
   }
 
 }
