@@ -123,6 +123,36 @@
             <h1 *ngIf="capexField; then capexTrueBlock else capexFalseBlock"></h1>
             <ng-template #capexTrueBlock>
                 <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+                    <div class="grid grid-cols-5 gap-x-6 gap-y-0 w-full">
+                        <div  class="col-span-4">
+                            <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full">
+                                <div><strong>Reference</strong></div>
+                                <div><strong>Period</strong></div>
+                                <div><strong>Last Submitted</strong></div>
+                                <div><strong>Submited By</strong></div>
+                            </div>
+                            <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full mb-8">
+                                <spot-input class="w-full" formControlName="parentProgram"  showLabel="false" placeholder="Current">
+                                </spot-input>
+                                <spot-input class="w-full" formControlName="parentProgram" showLabel="false" placeholder="'2023LBE03'">
+                                </spot-input>
+                                <spot-input class="w-full" formControlName="parentProgram" showLabel="false" placeholder="">
+                                </spot-input>
+                                <spot-input class="w-full" formControlName="parentProgram" showLabel="false" placeholder="">
+                                </spot-input>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'">
+                                <mat-icon svgIcon="heroicons_solid:document"></mat-icon>&nbsp; Submit Forecasts
+                            </button>
+                            <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                    (click)="projectHubService.toggleDrawerOpen('BudgetFxRates', '', budgetPageInfo , id)">
+                                <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full mb-8">
                         <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">CAPEX</div>
                         <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-secondary">Current 2023LBE06 versus Plan 2023LBE02
