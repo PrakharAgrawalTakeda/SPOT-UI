@@ -43,12 +43,12 @@
 }
 
 .frozen-header-class {
-    top: 17px !important;
+    top: 33px !important;
     left: 200px !important;
 }
 
 .frozen-header-classID {
-    top: 40px !important;
+    top: 55px !important;
     margin-left: 6px !important;
 }
 .datatable-body{
@@ -65,7 +65,7 @@
 // }
 .projectNames {
     cursor: pointer !important;
-    // margin-bottom: 34px;
+    margin-left: 15px !important;
     color: rgb(81, 174, 245);
 }
 .projectNames:hover {
@@ -78,9 +78,6 @@
     // position: relative;
 }
 
-// .datatable-scroll{
-//     background: white !important;
-// }
 
 .columnFilter{
     top: 12px !important;

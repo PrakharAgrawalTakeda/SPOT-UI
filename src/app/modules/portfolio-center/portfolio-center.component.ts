@@ -446,7 +446,7 @@ export class PortfolioCenterComponent implements OnInit {
         }
         else if (attribute == "projectName") {
             var filterdata = {
-              "name": "Project Name",
+              "name": "Project/Program",
               "value": this.filtersnew[attribute][0].problemTitle,
               "count": this.filtersnew[attribute].length,
               "order": 17
@@ -1246,6 +1246,41 @@ export class PortfolioCenterComponent implements OnInit {
     this.showLA = false;
   }
   Closefilter(){
+    if(this.PortfolioFilterForm.dirty){
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure you want to exit?",
+      "message": "All unsaved data will be lost.",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.clearForm()
+      }
+    })
+  }
+  else{
+      this.filterDrawer.close()
+  }
+  }
+
+  clearForm(){
     this.showContent = false
     var user = [{
       "userAdid": this.activeaccount.localAccountId,
@@ -1679,11 +1714,11 @@ export class PortfolioCenterComponent implements OnInit {
           preffix = "[ARCHIVED CONF]"
         }
         res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-        this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+        this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
         this.projectOverview[i].FORECAST = this.projectOverview[i].localPreviousForecastCapex
         this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
         this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
         this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
         this.projectOverview[i].problemId = this.projectNames[i].problemId;
         this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -1792,12 +1827,13 @@ export class PortfolioCenterComponent implements OnInit {
               preffix = "[ARCHIVED CONF]"
             }
             res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-            this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+            // this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+            this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
             this.projectOverview[i].FORECAST = this.projectOverview[i].localPreviousForecastCapex
               this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
             
             this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
             this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
             this.projectOverview[i].problemId = res.projectDetails[i].problemId;
             this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
