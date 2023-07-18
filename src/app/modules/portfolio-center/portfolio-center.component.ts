@@ -168,7 +168,7 @@ export class PortfolioCenterComponent implements OnInit {
     },
     {
       id: 'spot-documents',
-      title: 'SPOT Resources',
+      title: 'SPOT Supporting Documents',
       type: 'basic',
       externalLink: true,
       link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
@@ -257,7 +257,7 @@ export class PortfolioCenterComponent implements OnInit {
         },
         {
           id: 'spot-documents',
-          title: 'SPOT Resources',
+          title: 'SPOT Supporting Documents',
           type: 'basic',
           externalLink: true,
           link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
