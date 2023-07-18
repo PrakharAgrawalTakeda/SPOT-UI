@@ -142,48 +142,7 @@ export class PortfolioCenterComponent implements OnInit {
   lookup: any = [];
   activeaccount: any
   budgetCurrency:string = ""
-  newmainnav: any = [
-    {
-      id: 'portfolio-center',
-      title: 'Portfolio Center',
-      type: 'basic',
-      link: '/portfolio-center'
-    },
-    {
-      title: 'Create Project',
-      type: 'collapsable',
-      link: '/create-project',
-      children: [
-        {
-          title: 'Create Project',
-          type: 'basic',
-          link: '/create-project/create-new-project'
-        },
-        {
-          title: 'Copy Project',
-          type: 'basic',
-          link: '/create-project/copy-project'
-        }
-      ],
-    },
-    {
-      id: 'spot-documents',
-      title: 'SPOT Supporting Documents',
-      type: 'basic',
-      externalLink: true,
-      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-      target: '_blank'
-    },
-    {
-      id: 'report-navigator',
-      title: 'Report Navigator',
-      type: 'basic',
-      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-      externalLink: true,
-      target: "_blank"
-
-    }
-  ]
+  newmainnav: any 
 
   //For Local Attributes
   localAttributeForm: any = new FormGroup({})
@@ -271,6 +230,59 @@ export class PortfolioCenterComponent implements OnInit {
           externalLink: true,
           target: "_blank"
 
+        }
+      ]
+    }
+    else{
+      this.newmainnav = [
+        {
+          id: 'portfolio-center',
+          title: 'Portfolio Center',
+          type: 'basic',
+          link: '/portfolio-center'
+        },
+        {
+          title: 'Create Project',
+          type: 'collapsable',
+          link: '/create-project',
+          children: [
+            {
+              title: 'Create Project',
+              type: 'basic',
+              link: '/create-project/create-new-project'
+            },
+            {
+              title: 'Copy Project',
+              type: 'basic',
+              link: '/create-project/copy-project'
+            }
+          ],
+        },
+        {
+          id: 'spot-documents',
+          title: 'SPOT Supporting Documents',
+          type: 'basic',
+          externalLink: true,
+          link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+          target: '_blank'
+        },
+        {
+          id: 'report-navigator',
+          title: 'Report Navigator',
+          type: 'basic',
+          link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+          externalLink: true,
+          target: "_blank"
+    
+        },
+        {
+          id: 'spot-support',
+          title: 'Need Help or Propose a Change',
+          type: 'basic',
+          link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request '+ this.activeaccount.name +' (Logged on '+ moment().format('llll')+')',
+          externalLink: true,
+          target: "_blank"
+    
         }
       ]
     }
