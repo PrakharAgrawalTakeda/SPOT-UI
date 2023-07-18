@@ -41,51 +41,52 @@
                             <div class="flex flex-col space-y-4 pt-8">
                                 <div class="text-primary text-xl">Budget Performance Detail</div>
                                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                                               class="pr-6 font-medium text-sm text-default whitespace-nowrap" [rows]="[]">
-                                    <ngx-datatable-column name="Type"[flexGrow]="2">
+                                               class="font-medium text-sm text-default whitespace-nowrap" [rows]="budgetPerformanceDetailCapexOpex">
+                                    <ngx-datatable-column name="Type" prop="type" [flexGrow]="1">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Total Approved"  [flexGrow]="3">
+                                    <ngx-datatable-column name="Total Approved"  prop="totalApproved" [flexGrow]="1">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Actual Spend" [flexGrow]="3">
+                                    <ngx-datatable-column name="Actual Spend" prop="actualSpend"  [flexGrow]="1">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Remaining Spend (Forecast)"  [flexGrow]="3">
+                                    <ngx-datatable-column name="Remaining Spend (Forecast)" prop="forecast"  [flexGrow]="3">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Variance"  [flexGrow]="3">
+                                    <ngx-datatable-column name="Variance" prop="variance"   [flexGrow]="1">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
                                 </ngx-datatable>
+                                <br>
                                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                                               class="pr-6 font-medium text-sm text-default whitespace-nowrap" [rows]="[]">
-                                    <ngx-datatable-column name="Event"[flexGrow]="2">
+                                               class="font-medium text-sm text-default whitespace-nowrap" [rows]="budgetPerformanceDetailEvents">
+                                    <ngx-datatable-column name="Event" prop="event" [flexGrow]="3">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Target"  [flexGrow]="3">
+                                    <ngx-datatable-column name="Target"  prop="target" [flexGrow]="2">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                            <p>{{value}}</p>
+                                            <p >{{value | date:'dd-MMM-yyyy'}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Approved" [flexGrow]="3">
+                                    <ngx-datatable-column name="Approved" prop="approved" [flexGrow]="2">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                            <p>{{value}}</p>
+                                            <p >{{value | date:'dd-MMM-yyyy'}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Variance (Days)"  [flexGrow]="3">
+                                    <ngx-datatable-column name="Variance (Days)" prop="variance"  [flexGrow]="1">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>

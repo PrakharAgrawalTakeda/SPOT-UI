@@ -89,7 +89,7 @@ export class BudgetGeneralEditComponent {
                         this.showBudgetIdButton = false;
                     }else{
                         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                        this.showBudgetIdButton = true;
+                        this.showBudgetIdButton = false;
                     }
                 }else{
                     if(!this.isBudgetAdmin){
@@ -105,7 +105,7 @@ export class BudgetGeneralEditComponent {
                         }
                     }else{
                         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                        this.showBudgetIdButton = false;
+                        this.showBudgetIdButton = true;
                     }
                 }
             }else{
@@ -133,7 +133,7 @@ export class BudgetGeneralEditComponent {
             this.budgetInfo = res
             this.generalInfoPatchValue(res)
             if(this.capexRequired.value ==true && !this.isBudgetAdmin){
-                this.capexRequired.disable()
+                this.capexRequired.disable({emitEvent : false})
                 this.budgetId.disable()
                 this.gmsBudgetowner.disable();
             }
@@ -144,6 +144,9 @@ export class BudgetGeneralEditComponent {
             }
             if(this.capexRequired.value == true && (!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC")){
                 this.showBudgetIdButton = false;
+            }
+            if(this.isBudgetAdmin && (this.capexRequired.value==false || this.capexRequired.value==null)){
+                this.budgetId.disable()
             }
             this.projectHubService.isFormChanged = false
             this.viewContent = true
@@ -306,8 +309,7 @@ export class BudgetGeneralEditComponent {
             projectFundingStatus:  response.budget.fundingStatusId,
             totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
-
-        })
+        }, {emitEvent : false})
     }
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0];
@@ -323,17 +325,9 @@ export class BudgetGeneralEditComponent {
     }
     getGmsBudgetOwner(): any {
         if(this.isBudgetAdmin){
-            if(this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue){
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
-            }else{
-                return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
-            }
+            return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
         }else{
-            if(!this.gmsBudgetowner.invalid){
-                return this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue)
-            }else{
-                return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
-            }
+            return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
         }
 
     }

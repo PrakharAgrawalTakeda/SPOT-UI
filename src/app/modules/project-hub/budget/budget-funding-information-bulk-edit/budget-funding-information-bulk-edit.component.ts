@@ -106,8 +106,8 @@ export class BudgetFundingInformationBulkEditComponent {
                     "carapprovedCapex": i.carapprovedCapex,
                     "carapprovedOpex": i.carapprovedOpex,
                     "ammendedCar": i.ammendedCar,
-                    "localCarapprovedCapex": i.localCarapprovedCapex,
-                    "localCarapprovedOpex": i.localCarapprovedOpex,
+                    "localCarapprovedCapex": i.localCarapprovedCapex =="" ? null : i.localCarapprovedCapex,
+                    "localCarapprovedOpex": i.localCarapprovedOpex=="" ? null : i.localCarapprovedOpex,
                     "localCurrencyId": i.localCurrencyId,
                     "approvalStatus": i.approvalStatus,
                     "approvalCurrency": i.approvalCurrency,
@@ -251,7 +251,7 @@ export class BudgetFundingInformationBulkEditComponent {
         if (JSON.stringify(this.fundingRequestsDb) != JSON.stringify(this.fundingRequestsSubmit)) {
             if(this.checkEmptyIds(this.fundingRequestsSubmit)){
                 var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "To save your changes it is required to populate all mandatory fields!",
+                    "title": "To save your changes it is required to populate all 'Funding Request ID' and 'Approval Currency' fields !",
                     "message": "",
                     "icon": {
                         "show": true,
