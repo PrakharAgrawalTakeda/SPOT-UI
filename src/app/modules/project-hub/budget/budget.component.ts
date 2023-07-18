@@ -112,13 +112,12 @@ export class BudgetComponent implements OnInit {
         if(response.budget.budgetOwner=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC" || response.budget.budgetOwner==null){
             this.showAddNewButton = true;
         }
-
     }
 
     getLookUpName(id: string): string {
         return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
     }
     getPortfolioOwnerNameById(id: string): any {
-        return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0]?.portfolioOwner || null;
+        return this.filterCriteria?.portfolioOwner?.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0]?.portfolioOwner || null;
     }
 }
