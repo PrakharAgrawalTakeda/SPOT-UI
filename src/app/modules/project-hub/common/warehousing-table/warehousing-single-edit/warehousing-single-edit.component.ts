@@ -105,32 +105,32 @@ this.WarehousingForm.controls.affectedLocations.valueChanges.subscribe(res => {
        this.projecthubservice.isFormChanged = false
       var formValue = this.WarehousingForm.getRawValue()
        formValue.affectedLocations = isNaN(formValue.affectedLocations) ? null : formValue.affectedLocations
-       if (formValue.shipmentWeight == "") {
-        var comfirmConfig: FuseConfirmationConfig = {
-          "title": "In order to save the Warehousing information it is required to enter a Shipment Weight (kg)!",
-          "message": "",
-          "icon": {
-            "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
-          },
-          "actions": {
-            "confirm": {
-              "show": true,
-              "label": "Okay",
-              "color": "primary"
-            },
-            "cancel": {
-              "show": false,
-              "label": "Cancel"
-            }
-          },
-          "dismissible": true
-        }
-        const alert = this.fuseAlert.open(comfirmConfig)
-      }
+      //  if (formValue.shipmentWeight == "") {
+      //   var comfirmConfig: FuseConfirmationConfig = {
+      //     "title": "In order to save the Warehousing information it is required to enter a Shipment Weight (kg)!",
+      //     "message": "",
+      //     "icon": {
+      //       "show": true,
+      //       "name": "heroicons_outline:exclamation",
+      //       "color": "warning"
+      //     },
+      //     "actions": {
+      //       "confirm": {
+      //         "show": true,
+      //         "label": "Okay",
+      //         "color": "primary"
+      //       },
+      //       "cancel": {
+      //         "show": false,
+      //         "label": "Cancel"
+      //       }
+      //     },
+      //     "dismissible": true
+      //   }
+      //   const alert = this.fuseAlert.open(comfirmConfig)
+      // }
       
-      else {
+     // else {
         var mainObj: any = {
           emenvironmentId: '',
   environmentalSourceTypeId: 'af83f434-2e3d-42fc-b506-f93ce2f74503',
@@ -146,5 +146,5 @@ this.WarehousingForm.controls.affectedLocations.valueChanges.subscribe(res => {
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
         })
       }
-  }
+  //}
 }

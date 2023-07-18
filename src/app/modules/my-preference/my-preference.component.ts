@@ -39,8 +39,8 @@ export class MyPreferenceComponent implements OnInit {
         // })
         this.myPreferenceService.successSave.subscribe(res => {
             if (res == true) {
-                this.snack.open("You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.", "", {
-                    duration: 4500,
+                this.snack.open("The information has been saved successfully", "", {
+                    duration: 2000,
                     panelClass: ["bg-primary", "text-on-primary"]
                 })
             }
@@ -97,7 +97,7 @@ export class MyPreferenceComponent implements OnInit {
                     link: 'my-preference/settings'
                 },
                 {
-                    title: 'Email Notifications',
+                    title: 'e-mail Notifications',
                     link: 'my-preference/email-notifications'
                 }
             ]

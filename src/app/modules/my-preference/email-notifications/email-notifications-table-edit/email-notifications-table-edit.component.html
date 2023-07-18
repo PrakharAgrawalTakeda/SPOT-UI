@@ -38,7 +38,7 @@
                             ngx-datatable-cell-template>
                             <a *ngIf="!emailTableEditStack.includes(rowIndex)" (click)="emailTableEditRow(rowIndex)">
                                 <p *ngIf="!value">&nbsp;</p>
-                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="row.onOff == true"></mat-icon>
+                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle" *ngIf="row.onOff == true"></mat-icon>
                               </a>
                               <form [formGroup]="emailNotiTableForm.controls[rowIndex]" *ngIf="emailTableEditStack.includes(rowIndex)"
                                 class="p-2">

@@ -206,6 +206,7 @@ export class PortfolioCenterComponent implements OnInit {
   groupData:any;
   
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
+  @ViewChild('bulkreportDrawer') bulkreportDrawer: MatDrawer
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private renderer: Renderer2,private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
