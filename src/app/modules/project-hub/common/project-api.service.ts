@@ -163,7 +163,7 @@ export class ProjectApiService {
     return response
   }
   async editOverallStatus(body){
-    var link = GlobalVariables.apiurl+"OverAllStatus/" + body.statusUnquieId
+    var link = GlobalVariables.apiurl+"OverAllStatus"
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
