@@ -46,6 +46,7 @@ export class BudgetFundingAddViewComponent {
     }
 
     submitFundingInformation() {
+        console.log("Aaaaaaaaaaaa")
         this.projecthubservice.isFormChanged = false
         var fundingRequest = this.fundingRequestForm.getRawValue();
         if(fundingRequest.fundingRequestId=="" || fundingRequest.approvalCurrency==null) {
