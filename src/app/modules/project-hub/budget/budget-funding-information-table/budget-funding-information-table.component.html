@@ -8,7 +8,7 @@
                             (click)="projecthubservice.toggleDrawerOpen('BudgetFundingAddNew', '', budgetInfo, id, false)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
                     </button>
-                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf ="projecthubservice.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
                             (click)="projecthubservice.toggleDrawerOpen('BudgetFundingBulkEdit', '', budgetInfo, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp;Edit
                     </button>

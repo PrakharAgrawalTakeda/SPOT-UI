@@ -105,7 +105,7 @@ export class BudgetGeneralEditComponent {
                         }
                     }else{
                         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                        this.showBudgetIdButton = false;
+                        this.showBudgetIdButton = true;
                     }
                 }
             }else{
@@ -148,7 +148,7 @@ export class BudgetGeneralEditComponent {
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
-        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+        this.isBudgetAdmin = true;
     }
 
     getPredifinedInvestment(): any {
@@ -306,8 +306,7 @@ export class BudgetGeneralEditComponent {
             projectFundingStatus:  response.budget.fundingStatusId,
             totalApprovedCapex:  response.budget.totalApprovedCapExFxconv,
             totalApprovedOpex:  response.budget.totalApprovedOpExFxconv,
-
-        })
+        }, {emitEvent : false})
     }
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0];
