@@ -51,7 +51,7 @@
                         [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
-                        [label]="'Product (s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
                         [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true" [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember" [placeholder]="'Last Name, First Name'"
@@ -199,10 +199,10 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                 </div>
                 <div style="top: 25px; display: inline;position: relative;left: 10px;">
                 <span *ngFor="let item of filterList; last as isLast">
-                    <span *ngIf="item.count == 1" class="text-primary text-lg">
+                    <span *ngIf="item.count == 1" class="text-primary text-base">
                         {{item.name}} :  {{item.value}} {{isLast?'':', '}}
                     </span>
-                    <span *ngIf="item.count > 1"class="text-primary text-lg">
+                    <span *ngIf="item.count > 1"class="text-primary text-base">
                         {{item.name}}( {{item.count}} ) {{isLast?'':', '}}
                     </span>
                 </span>
@@ -376,7 +376,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Overall status" prop="OverAllStatusSort" [headerClass]="getFrozenHeaderClassID"
                             [width]="70" [sortable]="true" [frozenLeft]="true" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon style ="margin-left: 4px;" svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
+                                <mat-icon style ="margin-left: 12px;" svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
                                     class="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
@@ -560,14 +560,15 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate" [resizeable]="false"
                             [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value | date:'dd-MMM-yyyy'}}
+                                <p [ngClass]="{'red': row.redExecutionCompleteDate}">{{ value | date:'dd-MMM-yyyy'}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration" [resizeable]="false" [width]="150"
                             >
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p> <br *ngIf="row.completed"> <p style="text-align: right;margin-right: 15px;" *ngIf="row.completed">Completed</p> <br *ngIf="row.notBaselined">
+                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.notBaselined">Not Baselined</p> 
                             </ng-template>
                         </ngx-datatable-column>
                 
