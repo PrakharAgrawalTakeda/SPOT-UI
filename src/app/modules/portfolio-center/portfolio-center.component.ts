@@ -800,6 +800,9 @@ export class PortfolioCenterComponent implements OnInit {
         res.projectDetails.sort((a, b) => {
           return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
         })
+        res.conditionalFormattingLabels.sort((a, b) => {
+          return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+        })
         res.trendingIndicators.sort((a, b) => {
           return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
         })
@@ -1731,6 +1734,9 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels[i].redExecutionCompleteDate
+        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels[i].notBaselined
+        this.projectOverview[i].completed = res.conditionalFormattingLabels[i].completed
       }
       this.size = 100;
       this.totalElements = this.totalproject;
@@ -1748,6 +1754,9 @@ export class PortfolioCenterComponent implements OnInit {
             return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
           })
           res.trendingIndicators.sort((a, b) => {
+            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+          })
+          res.conditionalFormattingLabels.sort((a, b) => {
             return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
           })
           this.projectOverview = res.portfolioDetails
@@ -1846,6 +1855,9 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+            this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels[i].redExecutionCompleteDate
+            this.projectOverview[i].notBaselined = res.conditionalFormattingLabels[i].notBaselined
+            this.projectOverview[i].completed = res.conditionalFormattingLabels[i].completed
           }
           if(this.sorting.name != ""){
             this.projectOverview.sort
