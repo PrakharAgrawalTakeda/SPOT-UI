@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations/public-api';
 import { Router } from '@angular/router';
 import { GlobalVariables } from 'app/shared/global-variables';
 import { RoleService } from 'app/core/auth/role.service';
+import { MsalService } from '@azure/msal-angular';
 
 @Component({
     selector: 'search',
@@ -40,7 +41,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         private _httpClient: HttpClient,
         private _renderer2: Renderer2,
         private routes: Router,
-        private roleService: RoleService
+        private roleService: RoleService,
+        private msalService: MsalService
     ) {
     }
 
@@ -128,26 +130,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                     .subscribe((resultSets: any) => {
 
                         // Store the result sets
-                        if (this.confidentialProjects != 'Only') {
-                            this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
-                        }
-                        else {
-                            this.resultSets = []
-                        }
-                        if (this.roleService.roleMaster?.confidentialProjects && this.confidentialProjects != 'None') {
-                            if (this.roleService.roleMaster.confidentialProjects.length > 0) {
-                                var confProjectUserList = resultSets.projectData?.filter(x => this.roleService.roleMaster.confidentialProjects.includes(x.problemUniqueId))
-                                if (confProjectUserList?.length > 0) {
-                                    console.log(confProjectUserList)
-                                    this.resultSets = [...this.resultSets, ...confProjectUserList]
-                                }
-                            }
-                        }
-                        this.budget = resultSets.budget
-                        console.log(resultSets)
-                        console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
-                        // Execute the event
-                        this.search.next(resultSets);
+                        this.refreshData(value)
                     });
             });
     }
@@ -169,6 +152,43 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
             }
         }
         return ""
+    }
+    onFocus(event: FocusEvent): void {
+        // Add your logic here to refresh the dropdown list. 
+        // You might retrigger the HTTP call as done on value change of searchControl.
+        const value = this.searchControl.value;
+        if (value && value.length >= this.minLength) {
+            this.refreshData(value);
+        }
+    }
+    private refreshData(value: string) {
+        const params = new HttpParams().set('query', value);
+        this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
+            .subscribe((resultSets: any) => {
+    
+                // Store the result sets
+                if (this.confidentialProjects != 'Only') {
+                    this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+                }
+                else {
+                    this.resultSets = [];
+                }
+                if (this.confidentialProjects != 'None') {
+                    var activeaccount = this.msalService.instance.getActiveAccount()
+                    this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
+                    if (resp.confidentialProjects.length > 0) {
+                        var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
+                        if (confProjectUserList?.length > 0) {
+                            this.resultSets = [...this.resultSets, ...confProjectUserList];
+                        }
+                    }
+                });
+                }
+                this.budget = resultSets.budget;
+    
+                // Execute the event
+                this.search.next(resultSets);
+            });
     }
     /**
      * On destroy
