@@ -7,7 +7,7 @@
         </a>
         </div>
     </div>
-    <form class="w-full overflow-hidden" [formGroup]="fundingRequestForm" (ngSubmit)="submitFundingInformation()">
+    <form class="w-full overflow-hidden" [formGroup]="fundingRequestForm" >
         <div class=" sliding-panel-padding overflow-auto">
             <spot-textarea class="w-full read-only" Required formControlName="fundingRequestId" [rows]="1"
                            [label]="'Funding Request ID'">
@@ -23,7 +23,6 @@
             <spot-input class="w-full read-only" [showLabel]="true" [label]="'OPEX Amount'" formControlName="opexAmount"
                         [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"></spot-input>
         </div>
-
     </form>
     <div class="absolute bottom-2 w-full px-3">
         <div class="flex items-start justify-between ">
@@ -31,7 +30,7 @@
                (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
                 Cancel
             </a>
-            <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
+            <button class="w-25" mat-flat-button [color]="'primary'" (click)="submitFundingInformation()"  type="submit">
                 Submit
             </button>
         </div>

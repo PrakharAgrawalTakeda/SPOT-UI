@@ -312,8 +312,8 @@ export class EmailNotificationsEditComponent {
   }
 
   ngOnDestroy() {
-    if (this.detailsHaveBeenChanged.value == true)
-      window.location.reload();
+    //if (this.detailsHaveBeenChanged.value == true)
+      //window.location.reload();
   }
   onRemoveLink(projectId: string, rowIndex: number) {
     var comfirmConfig: FuseConfirmationConfig = {
@@ -389,31 +389,9 @@ export class EmailNotificationsEditComponent {
     return item.id || index;
   }
   onAdd(childId) {
-    var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Add project",
-      "message": "Are you sure you want to add this project?",
-      "icon": {
-        "show": true,
-        "name": "heroicons_outline:exclamation",
-        "color": "primary"
-      },
-      "actions": {
-        "confirm": {
-          "show": true,
-          "label": "Yes",
-          "color": "primary"
-        },
-        "cancel": {
-          "show": true,
-          "label": "No"
-        }
-      },
-      "dismissible": true
-    }
-    const addAlert = this.fuseAlert.open(comfirmConfig)
-    addAlert.afterClosed().subscribe(close => {
-      if (close == 'confirmed') {
+
         var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
+        console.log(this.projects)
         this.searchControl.setValue('');
         this.selectedValueExists.setValue(true);
         //this.projecthubservice.removedIds.push(childId, 1);
@@ -423,8 +401,6 @@ export class EmailNotificationsEditComponent {
         this.projects.push(addedProject)
         this.projects = [...this.projects]
         this.detailsHaveBeenChanged.setValue(true);
-      }
-    })
   }
   displayFn(value?: number) {
     let returnValue = "";
@@ -437,7 +413,33 @@ export class EmailNotificationsEditComponent {
   submitnotifications() {
     this.preferenceservice.isFormChanged = false
     var formValue = this.emailNotiForm.getRawValue()
-    console.log(formValue)
+    console.log(formValue.emailNotifcationNotifcationReportScopeIds)
+    if (formValue.reportFrequencyId == null || formValue.emailNotifcationNotifcationReportScopeIds == null) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "In order to save the information it is required to enter Report Frequency and Report Scope!",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+    }
+    
+   else {
     if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
       this.preferenceservice.submitbutton.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
@@ -477,7 +479,29 @@ export class EmailNotificationsEditComponent {
 
       //   })
     })
-
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+  }
   }
 
 }
