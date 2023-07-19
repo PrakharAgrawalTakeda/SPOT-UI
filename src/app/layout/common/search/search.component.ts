@@ -125,13 +125,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                 filter(value => value && value.length >= this.minLength)
             )
             .subscribe((value) => {
-                const params = new HttpParams().set('query', value);
-                this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
-                    .subscribe((resultSets: any) => {
-
-                        // Store the result sets
-                        this.refreshData(value)
-                    });
+                this.refreshData(value)
             });
     }
     routeProject(projectid): void {
@@ -154,8 +148,6 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         return ""
     }
     onFocus(event: FocusEvent): void {
-        // Add your logic here to refresh the dropdown list. 
-        // You might retrigger the HTTP call as done on value change of searchControl.
         const value = this.searchControl.value;
         if (value && value.length >= this.minLength) {
             this.refreshData(value);
@@ -165,7 +157,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
         const params = new HttpParams().set('query', value);
         this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
             .subscribe((resultSets: any) => {
-    
+
                 // Store the result sets
                 if (this.confidentialProjects != 'Only') {
                     this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
@@ -176,16 +168,16 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
                 if (this.confidentialProjects != 'None') {
                     var activeaccount = this.msalService.instance.getActiveAccount()
                     this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
-                    if (resp.confidentialProjects.length > 0) {
-                        var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
-                        if (confProjectUserList?.length > 0) {
-                            this.resultSets = [...this.resultSets, ...confProjectUserList];
+                        if (resp.confidentialProjects.length > 0) {
+                            var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
+                            if (confProjectUserList?.length > 0) {
+                                this.resultSets = [...this.resultSets, ...confProjectUserList];
+                            }
                         }
-                    }
-                });
+                    });
                 }
                 this.budget = resultSets.budget;
-    
+
                 // Execute the event
                 this.search.next(resultSets);
             });
