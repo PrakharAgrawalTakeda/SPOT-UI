@@ -20,6 +20,7 @@
             [matAutocomplete]="matAutocomplete"
             [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
             (keydown)="onKeydown($event)"
+            (focus)="onFocus($event)"
             #barSearchInput
             id="myText">
         <mat-autocomplete

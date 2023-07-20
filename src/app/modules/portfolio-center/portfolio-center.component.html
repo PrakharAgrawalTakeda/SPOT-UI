@@ -51,7 +51,7 @@
                         [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
-                        [label]="'Product (s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
                         [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true" [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember" [placeholder]="'Last Name, First Name'"
@@ -199,10 +199,10 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                 </div>
                 <div style="top: 25px; display: inline;position: relative;left: 10px;">
                 <span *ngFor="let item of filterList; last as isLast">
-                    <span *ngIf="item.count == 1" class="text-primary text-lg">
+                    <span *ngIf="item.count == 1" class="text-primary text-base">
                         {{item.name}} :  {{item.value}} {{isLast?'':', '}}
                     </span>
-                    <span *ngIf="item.count > 1"class="text-primary text-lg">
+                    <span *ngIf="item.count > 1"class="text-primary text-base">
                         {{item.name}}( {{item.count}} ) {{isLast?'':', '}}
                     </span>
                 </span>
@@ -359,7 +359,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenSPOTReport()">
                             SPOT Data (Power BI)
                         </button>
-                        <button class="ml-4" mat-flat-button [color]="'primary'">
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="bulkreportDrawer.toggle()">
                             Generate Reports
                         </button>
                     </div>
@@ -371,12 +371,12 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         [limit]="size"
                         (page)="setPage('',$event)"
                         (sort)="sort($event)"
-                        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'OverAllStatusSort', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
+                        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
 
-                        <ngx-datatable-column name="Overall status" prop="OverAllStatusSort" [headerClass]="getFrozenHeaderClassID"
+                        <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getFrozenHeaderClassID"
                             [width]="70" [sortable]="true" [frozenLeft]="true" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon style ="margin-left: 4px;" svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
+                                <mat-icon style ="margin-left: 12px;" svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
                                     class="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
@@ -412,7 +412,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Schedule" prop="scheduleIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Schedule" prop="scheduleIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.scheduleIndicator, 'overall')).icontype}}"
@@ -421,7 +421,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Risk/Issue" prop="riskIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Risk/Issue" prop="riskIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.riskIssueIndicator, 'overall')).icontype}}"
@@ -430,7 +430,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Ask/Need" prop="askNeedIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Ask/Need" prop="askNeedIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.askNeedIndicator, 'overall')).icontype}}"
@@ -439,7 +439,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Budget" prop="budgetIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).icontype}}"
@@ -448,7 +448,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.spendIndicator, 'overall')).icontype}}"
@@ -560,14 +560,15 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate" [resizeable]="false"
                             [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value | date:'dd-MMM-yyyy'}}
+                                <p [ngClass]="{'red': row.redExecutionCompleteDate}">{{ value | date:'dd-MMM-yyyy'}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration" [resizeable]="false" [width]="150"
                             >
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p> <br *ngIf="row.completed"> <p style="text-align: right;margin-right: 15px;" *ngIf="row.completed">Completed</p> <br *ngIf="row.notBaselined">
+                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.notBaselined">Not Baselined</p> 
                             </ng-template>
                         </ngx-datatable-column>
                 

@@ -44,35 +44,32 @@ export class OverallStatusEditComponent implements OnInit {
     overallStatusId: new FormControl(''),
     overallStatusDescription: new FormControl(''),
     recentAccomplishments: new FormControl(''),
-    statusLastUpdated: new FormControl(null),
+    statusLastUpdated: new FormControl(this.today),
     statusThrough: new FormControl(this.today),
   })
   constructor(public projecthubservice: ProjectHubService, private apiService: ProjectApiService) { }
 
   ngOnInit(): void {
-    this.apiService.overallStatusSingle(this.projecthubservice.itemid).then((res: any) => {
-      console.log(res)
-      this.item = res
-      this.overallStatusform.patchValue({
-        nextSteps: res.nextSteps,
-        overallStatusId: res.overallStatusId,
-        overallStatusDescription: res.overallStatusDescription,
-        recentAccomplishments: res.recentAccomplishments,
-        statusLastUpdated: res.statusLastUpdated,
-        //statusThrough: res.statusThrough,
-      })
-      if(res.statusLastUpdated == null){
-        this.overallStatusform.patchValue({
-          statusLastUpdated: this.today
-        })
-        console.log(this.overallStatusform.controls.statusLastUpdated.value)
-      }
-      this.projecthubservice.isFormChanged = false
-    })
     this.overallStatusform.controls['statusLastUpdated'].disable()
-    this.overallStatusform.valueChanges.subscribe(res=>{
-      this.projecthubservice.isFormChanged = true
-    })
+    if (this.projecthubservice.itemid) {
+      this.apiService.overallStatusSingle(this.projecthubservice.itemid).then((res: any) => {
+        console.log(res)
+        this.item = res
+        this.overallStatusform.patchValue({
+          nextSteps: res.nextSteps,
+          overallStatusId: res.overallStatusId,
+          overallStatusDescription: res.overallStatusDescription,
+          recentAccomplishments: res.recentAccomplishments,
+          statusLastUpdated: res.statusLastUpdated,
+          //statusThrough: res.statusThrough,
+        })
+        this.projecthubservice.isFormChanged = false
+      })
+      
+      this.overallStatusform.valueChanges.subscribe(res => {
+        this.projecthubservice.isFormChanged = true
+      })
+    }
   }
   submitoverall() {
     this.projecthubservice.isFormChanged = false
@@ -80,7 +77,7 @@ export class OverallStatusEditComponent implements OnInit {
       nextSteps: this.overallStatusform.value.nextSteps,
       overallStatusDescription: this.overallStatusform.value.overallStatusDescription,
       overallStatusId: this.overallStatusform.value.overallStatusId,
-      projectId: this.item.projectId,
+      projectId: this.projecthubservice.projectid,
       recentAccomplishments: this.overallStatusform.value.recentAccomplishments,
       statusUnquieId: this.item.statusUnquieId,
       statusThrough: moment(this.overallStatusform.value.statusThrough).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
