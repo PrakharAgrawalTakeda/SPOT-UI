@@ -13,14 +13,13 @@ export class BudgetFundingInformationTableComponent {
     @Input() editable: boolean
     @Input() budgetInfo: any;
     @Input() addButtonShow: boolean;
+    bulkEditButtonShow: boolean = false;
     fundingRequests = [];
     id: string = ''
     localCurrency:any = [];
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute,
                 public projecthubservice: ProjectHubService,
-                private portfoliService: PortfolioApiService,
-                public fuseAlert: FuseConfirmationService,
-                private router: Router) {
+                public fuseAlert: FuseConfirmationService) {
         this.projecthubservice.submitbutton.subscribe(res => {
             if (res == true) {
                 this.dataloader()
@@ -30,6 +29,12 @@ export class BudgetFundingInformationTableComponent {
 
     ngOnInit(): void {
         this.dataloader()
+        for(let ios of this.budgetInfo.budgetIOs){
+            if(ios.keep == true){
+                this.bulkEditButtonShow = true;
+                break;
+            }
+        }
     }
     ngOnChanges() {
         this.dataloader()
