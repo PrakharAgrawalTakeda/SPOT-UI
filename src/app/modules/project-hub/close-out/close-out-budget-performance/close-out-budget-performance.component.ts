@@ -54,7 +54,9 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
             this.budgetPerformanceDetailEvents = res.budgetPerformanceDetails.budgetPerformanceDetailEvents
             this.viewContent = true;
         })
-
+    }
+    getHeaderClass(): any {
+        return ' right-aligned-header-class';
     }
 
 }

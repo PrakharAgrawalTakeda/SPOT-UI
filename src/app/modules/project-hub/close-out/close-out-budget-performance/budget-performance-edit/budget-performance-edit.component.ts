@@ -1,11 +1,9 @@
 import {Component} from '@angular/core';
 import {ProjectApiService} from "../../../common/project-api.service";
 import {ProjectHubService} from "../../../project-hub.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
+import { FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
 import {RoleService} from "../../../../../core/auth/role.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PortfolioApiService} from "../../../../portfolio-center/portfolio-api.service";
-import {GlobalBusinessCaseOptions} from "../../../../../shared/global-business-case-options";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
@@ -34,6 +32,11 @@ export class BudgetPerformanceEditComponent {
                 public role: RoleService,
                 private router: Router,
                 private _Activatedroute: ActivatedRoute) {
+        this.budgetPerformanceForm.valueChanges.subscribe(res => {
+            if (this.viewContent) {
+                this.projectHubService.isFormChanged = true
+            }
+        })
     }
 
     ngOnInit(): void {

@@ -94,6 +94,12 @@ export class ProjectApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
+    async checkBudgetIdPrefix(budgetId) {
+        var url = GlobalVariables.apiurl + "Budget/ValidateBudgetId/"+budgetId
+        const abc$ = this.http.get(url)
+         const response = await lastValueFrom(abc$)
+        return response
+    }
     async updateBudgetPageInfo(projectId,body) {
         var link = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
         const abc$ = this.http.put(link,body)
