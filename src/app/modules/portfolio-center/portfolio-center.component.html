@@ -371,9 +371,9 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         [limit]="size"
                         (page)="setPage('',$event)"
                         (sort)="sort($event)"
-                        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'OverAllStatusSort', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
+                        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
 
-                        <ngx-datatable-column name="Overall status" prop="OverAllStatusSort" [headerClass]="getFrozenHeaderClassID"
+                        <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getFrozenHeaderClassID"
                             [width]="70" [sortable]="true" [frozenLeft]="true" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon style ="margin-left: 12px;" svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
@@ -412,7 +412,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Schedule" prop="scheduleIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Schedule" prop="scheduleIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.scheduleIndicator, 'overall')).icontype}}"
@@ -421,7 +421,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Risk/Issue" prop="riskIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Risk/Issue" prop="riskIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.riskIssueIndicator, 'overall')).icontype}}"
@@ -430,7 +430,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Ask/Need" prop="askNeedIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Ask/Need" prop="askNeedIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.askNeedIndicator, 'overall')).icontype}}"
@@ -439,7 +439,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Budget" prop="budgetIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).icontype}}"
@@ -448,7 +448,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorSort" [headerClass]="getHeaderClass" [resizeable]="false"
+                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
                             [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon svgIcon="{{(indicator.getIndicators(row.spendIndicator, 'overall')).icontype}}"

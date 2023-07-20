@@ -1,8 +1,4 @@
 @import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
-.example-chip-list {
-    width: 100%;
-}
-
 .w-half {
     width: 50vw;
 }
@@ -16,14 +12,6 @@
 }
 .w-2qua {
     width: 55vw;
-}
-.dashboard-chip-list {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    padding-right: 20px !important;
-    padding-left: 20px !important;
-    margin-left: 10px !important;
-    border-radius: 20px !important;
 }
 .apply-button{
     margin: 20px 15px 175px 15px !important;
@@ -60,9 +48,6 @@
     height: 102px !important;
 }
 
-// .datatable-body-cell{
-//     cursor: pointer;
-// }
 .projectNames {
     cursor: pointer !important;
     margin-left: 15px !important;
@@ -144,23 +129,9 @@ li{
     transform: rotate(-180deg);
     left: -1px;
 }
-
-.datatable-icon-prev {
-    top: 2px;
-    position: relative;
-}
-.datatable-icon-left{
-    top: 2px;
-    position: relative;
-}
-.datatable-icon-right{
-    top: 2px;
-    position: relative;
-}
-.datatable-icon-skip {
-    top: 2px;
-    position: relative;
-}
 .red{
     color: red !important;
 }
+// datatable-scroller {
+//     color: red !important;
+// }
