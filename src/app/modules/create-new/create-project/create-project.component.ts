@@ -13,6 +13,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { CreateNewApiService } from '../create-new-api.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { LocalAttributeSingleEditComponent } from 'app/modules/project-hub/local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 
 export class CreateProjectComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild(LocalAttributeSingleEditComponent, { static: false }) localAttribute: LocalAttributeSingleEditComponent
   filterCriteria: any = {};
   getData: boolean = false;
   lookupdata: any = [];
@@ -482,6 +484,7 @@ export class CreateProjectComponent implements OnInit {
       }
       else{
           this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+            this.localAttribute.submitLA(res.problemUniqueId)
             this.viewContent = true
           })
       }
