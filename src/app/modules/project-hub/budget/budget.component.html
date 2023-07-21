@@ -27,6 +27,7 @@
                 <div class="flex items-start justify-between">
                     <div style="padding-right: 5px;">
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                *ngIf ="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
                                 (click)="projectHubService.toggleDrawerOpen('BudgetOPEXEdit', '', budgetPageInfo ,'' )">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
@@ -51,7 +52,7 @@
             <div class="pb-3 pt-0 flex items-center justify-between">
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Required for CAPEX Project</div>
                 <div class="flex items-start justify-between">
-                    <div style="padding-right: 5px;">
+                    <div style="padding-right: 5px;" *ngIf ="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit">
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                                 (click)="projectHubService.toggleDrawerOpen('BudgetRequiredForCapexEdit', '', filterCriteria , id)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
@@ -107,7 +108,7 @@
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget Commentary</div>
                 <div class="flex items-start justify-between">
                     <div style="padding-right: 5px;">
-                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf ="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
                                 (click)="projectHubService.toggleDrawerOpen('BudgetCommentaryEdit', '', budgetPageInfo ,'' )">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>

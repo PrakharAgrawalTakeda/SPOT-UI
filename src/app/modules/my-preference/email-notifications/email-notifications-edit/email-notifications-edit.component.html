@@ -82,7 +82,7 @@
                         </spot-multiselect-autocomplete>
                         <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'" -->
                         <spot-multiselect-autocomplete class="w-full read-only" formControlName="products"
-                            name="products" [label]="'Product(s)'" [valuePointer]="'fullProductName'"
+                            name="products" [label]="'Product(s)'" [valuePointer]="'fullProductName'" [placeholder]="'Product'"
                             [idPointer]="'productId'" [dropDownArray]="filterCriteria.products" [showHint]="true"
                             [hint]="'Selections here will generate a summary report based on projects where the selected Product(s) are either the documented Primary or Impacted Product'"
                             *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'">

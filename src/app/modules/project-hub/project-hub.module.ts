@@ -177,6 +177,10 @@ import { BudgetAdditionalEditComponent } from './budget/budget-additional-edit/b
 import { BudgetCapexOpexTableComponent } from './budget/budget-capex-opex-table/budget-capex-opex-table.component';
 import { BudgetFundingAddViewComponent } from './budget/budget-funding-add-view/budget-funding-add-view.component';
 import { BudgetFxrateComponent } from './budget/budget-fxrate/budget-fxrate.component';
+import { ProjectProposalValueCreationComponent } from './project-proposal/project-proposal-value-creation/project-proposal-value-creation.component';
+import { ProjectCharterValueCreationComponent } from './project-charter/project-charter-value-creation/project-charter-value-creation.component';
+import { CloseOutValueCreationComponent } from './close-out/close-out-value-creation/close-out-value-creation.component';
+import { BusinessCaseValueCreationComponent } from './business-case/business-case-value-creation/business-case-value-creation.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -267,6 +271,10 @@ export const projectRoutes: Route[] = [
         {
           path: 'planning-team',
           component: ProjectProposalPlanningTeamComponent,
+        },
+        {
+          path: 'value-creation',
+          component: ProjectProposalValueCreationComponent,
         }
       ]
     },
@@ -301,6 +309,10 @@ export const projectRoutes: Route[] = [
         {
           path: 'caps',
           component: ProjectCharterCapsComponent,
+        },
+        {
+          path: 'value-creation',
+          component: ProjectCharterValueCreationComponent,
         }
       ]
     },
@@ -331,6 +343,10 @@ export const projectRoutes: Route[] = [
         {
           path: 'lessons-learned',
           component: CloseOutLessonsLearnedComponent,
+        },
+        {
+          path: 'value-creation',
+          component: CloseOutValueCreationComponent,
         }
       ]
     },
@@ -368,6 +384,10 @@ export const projectRoutes: Route[] = [
             {
               path: 'risks',
               component: BusinessCaseRiskIssuesComponent,
+            },
+            {
+              path: 'value-creation',
+              component: BusinessCaseValueCreationComponent,
             }
           ]
         },
@@ -569,7 +589,11 @@ export const projectRoutes: Route[] = [
     BudgetAdditionalEditComponent,
     BudgetCapexOpexTableComponent,
     BudgetFundingAddViewComponent,
-    BudgetFxrateComponent
+    BudgetFxrateComponent,
+    ProjectProposalValueCreationComponent,
+    ProjectCharterValueCreationComponent,
+    CloseOutValueCreationComponent,
+    BusinessCaseValueCreationComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),

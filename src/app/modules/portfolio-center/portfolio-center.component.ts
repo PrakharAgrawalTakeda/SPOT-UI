@@ -142,48 +142,7 @@ export class PortfolioCenterComponent implements OnInit {
   lookup: any = [];
   activeaccount: any
   budgetCurrency:string = ""
-  newmainnav: any = [
-    {
-      id: 'portfolio-center',
-      title: 'Portfolio Center',
-      type: 'basic',
-      link: '/portfolio-center'
-    },
-    {
-      title: 'Create Project',
-      type: 'collapsable',
-      link: '/create-project',
-      children: [
-        {
-          title: 'Create Project',
-          type: 'basic',
-          link: '/create-project/create-new-project'
-        },
-        {
-          title: 'Copy Project',
-          type: 'basic',
-          link: '/create-project/copy-project'
-        }
-      ],
-    },
-    {
-      id: 'spot-documents',
-      title: 'SPOT Resources',
-      type: 'basic',
-      externalLink: true,
-      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-      target: '_blank'
-    },
-    {
-      id: 'report-navigator',
-      title: 'Report Navigator',
-      type: 'basic',
-      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-      externalLink: true,
-      target: "_blank"
-
-    }
-  ]
+  newmainnav: any 
 
   //For Local Attributes
   localAttributeForm: any = new FormGroup({})
@@ -212,6 +171,7 @@ export class PortfolioCenterComponent implements OnInit {
   groupData:any;
   
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
+  @ViewChild('bulkreportDrawer') bulkreportDrawer: MatDrawer
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private renderer: Renderer2,private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
@@ -256,7 +216,7 @@ export class PortfolioCenterComponent implements OnInit {
         },
         {
           id: 'spot-documents',
-          title: 'SPOT Resources',
+          title: 'SPOT Supporting Documents',
           type: 'basic',
           externalLink: true,
           link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
@@ -270,6 +230,59 @@ export class PortfolioCenterComponent implements OnInit {
           externalLink: true,
           target: "_blank"
 
+        }
+      ]
+    }
+    else{
+      this.newmainnav = [
+        {
+          id: 'portfolio-center',
+          title: 'Portfolio Center',
+          type: 'basic',
+          link: '/portfolio-center'
+        },
+        {
+          title: 'Create Project',
+          type: 'collapsable',
+          link: '/create-project',
+          children: [
+            {
+              title: 'Create Project',
+              type: 'basic',
+              link: '/create-project/create-new-project'
+            },
+            {
+              title: 'Copy Project',
+              type: 'basic',
+              link: '/create-project/copy-project'
+            }
+          ],
+        },
+        {
+          id: 'spot-documents',
+          title: 'SPOT Supporting Documents',
+          type: 'basic',
+          externalLink: true,
+          link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+          target: '_blank'
+        },
+        {
+          id: 'report-navigator',
+          title: 'Report Navigator',
+          type: 'basic',
+          link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+          externalLink: true,
+          target: "_blank"
+    
+        },
+        {
+          id: 'spot-support',
+          title: 'Need Help or Propose a Change',
+          type: 'basic',
+          link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request '+ this.activeaccount.name +' (Logged on '+ moment().format('llll')+')',
+          externalLink: true,
+          target: "_blank"
+    
         }
       ]
     }
@@ -446,7 +459,7 @@ export class PortfolioCenterComponent implements OnInit {
         }
         else if (attribute == "projectName") {
             var filterdata = {
-              "name": "Project Name",
+              "name": "Project/Program",
               "value": this.filtersnew[attribute][0].problemTitle,
               "count": this.filtersnew[attribute].length,
               "order": 17
@@ -639,33 +652,36 @@ export class PortfolioCenterComponent implements OnInit {
           console.log(res)
           this.totalproject = res.totalProjects
         var budgetData;
+          this.projects.data = res.portfolioDetails;
+        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+          this.budgetCurrency = "OY"
+        }
         if (res.budgetTile.isPreliminaryPeriod){
           budgetData = [
             {
               "title": "Plan",
-              // "value": res.budgetTile.capex ? Number(res.budgetTile.capex.plan).toFixed(4) : 0,
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Previous",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current (YTD)",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Preliminary",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.preliminaryForecast).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.preliminaryForecast).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             }
           ]
         }
@@ -673,23 +689,23 @@ export class PortfolioCenterComponent implements OnInit {
           budgetData = [
             {
               "title": "Plan",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Previous",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             },
             {
               "title": "Current (YTD)",
-              "value": res.budgetTile.capex ? parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-              "value2": res.budgetTile.opex ? parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+              "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+              "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
             }
           ]
         }
@@ -800,11 +816,13 @@ export class PortfolioCenterComponent implements OnInit {
         res.projectDetails.sort((a, b) => {
           return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
         })
+        res.conditionalFormattingLabels.sort((a, b) => {
+          return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+        })
         res.trendingIndicators.sort((a, b) => {
           return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
         })
           this.projectNames = res.projectDetails;
-          this.projects.data = res.portfolioDetails;
           this.setPage(res, 0)
           
           this.projects.sort = this.recentTransactionsTableMatSort;
@@ -1246,6 +1264,41 @@ export class PortfolioCenterComponent implements OnInit {
     this.showLA = false;
   }
   Closefilter(){
+    if(this.PortfolioFilterForm.dirty){
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure you want to exit?",
+      "message": "All unsaved data will be lost.",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warn"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "warn"
+        },
+        "cancel": {
+          "show": true,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    alert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.clearForm()
+      }
+    })
+  }
+  else{
+      this.filterDrawer.close()
+  }
+  }
+
+  clearForm(){
     this.showContent = false
     var user = [{
       "userAdid": this.activeaccount.localAccountId,
@@ -1607,67 +1660,13 @@ export class PortfolioCenterComponent implements OnInit {
           (this.projects.data[i].oephaseAbbreviation
             ? this.projects.data[i].oephaseAbbreviation
             : 'NA');
-        if (this.projectOverview[i].overallStatus == "YellowStop"){
-          this.projectOverview[i].OverAllStatusSort = "RedStop"
-        }
-        else if (this.projectOverview[i].overallStatus == "RedStop"){
-          this.projectOverview[i].OverAllStatusSort = "YellowStop"
-        }
-        else{
-          this.projectOverview[i].OverAllStatusSort = this.projectOverview[i].overallStatus
-        }
-        if (this.projectOverview[i].scheduleIndicator == "YellowStop") {
-          this.projectOverview[i].scheduleIndicatorSort = "RedStop"
-        }
-        else if (this.projectOverview[i].scheduleIndicator == "RedStop") {
-          this.projectOverview[i].scheduleIndicatorSort = "YellowStop"
-        }
-        else {
-          this.projectOverview[i].scheduleIndicatorSort = this.projectOverview[i].scheduleIndicator
-        }
-        if (this.projectOverview[i].riskIndicator == "YellowStop") {
-          this.projectOverview[i].riskIndicatorSort = "RedStop"
-        }
-        else if (this.projectOverview[i].riskIndicator == "RedStop") {
-          this.projectOverview[i].riskIndicatorSort = "YellowStop"
-        }
-        else {
-          this.projectOverview[i].riskIndicatorSort = this.projectOverview[i].riskIndicator
-        }
-        if (this.projectOverview[i].askNeedIndicator == "YellowStop") {
-          this.projectOverview[i].askNeedIndicatorSort = "RedStop"
-        }
-        else if (this.projectOverview[i].askNeedIndicator == "RedStop") {
-          this.projectOverview[i].askNeedIndicatorSort = "YellowStop"
-        }
-        else {
-          this.projectOverview[i].askNeedIndicatorSort = this.projectOverview[i].askNeedIndicator
-        }
-        if (this.projectOverview[i].budgetIndicator == "YellowStop") {
-          this.projectOverview[i].budgetIndicatorSort = "RedStop"
-        }
-        else if (this.projectOverview[i].budgetIndicator == "RedStop") {
-          this.projectOverview[i].budgetIndicatorSort = "YellowStop"
-        }
-        else {
-          this.projectOverview[i].budgetIndicatorSort = this.projectOverview[i].budgetIndicator
-        }
-        if (this.projectOverview[i].budgetSpendIndicator == "YellowStop") {
-          this.projectOverview[i].budgetSpendIndicatorSort = "RedStop"
-        }
-        else if (this.projectOverview[i].budgetSpendIndicator == "RedStop") {
-          this.projectOverview[i].budgetSpendIndicatorSort = "YellowStop"
-        }
-        else {
-          this.projectOverview[i].budgetSpendIndicatorSort = this.projectOverview[i].budgetSpendIndicator
-        }
+        this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
+        this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
+        this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
+        this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
+        this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
+        this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
         
-        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
-          this.budgetCurrency = "OY"
-        }
-        else {
-          this.budgetCurrency = this.projects.data[i].localCurrencyAbbreviation
-        }
         var preffix = ""
         if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential){
           preffix = "[ARCHIVED]"
@@ -1678,12 +1677,18 @@ export class PortfolioCenterComponent implements OnInit {
         else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived){
           preffix = "[ARCHIVED CONF]"
         }
+        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+          this.budgetCurrency = "OY"
+        }
+        else {
+          this.budgetCurrency = this.projects.data[i].localCurrencyAbbreviation
+        }
         res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-        this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
-        this.projectOverview[i].FORECAST = this.projectOverview[i].localPreviousForecastCapex
+        this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
+        this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
         this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
         this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
         this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
         this.projectOverview[i].problemId = this.projectNames[i].problemId;
         this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -1696,6 +1701,9 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels[i].redExecutionCompleteDate
+        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels[i].notBaselined
+        this.projectOverview[i].completed = res.conditionalFormattingLabels[i].completed
       }
       this.size = 100;
       this.totalElements = this.totalproject;
@@ -1715,6 +1723,9 @@ export class PortfolioCenterComponent implements OnInit {
           res.trendingIndicators.sort((a, b) => {
             return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
           })
+          res.conditionalFormattingLabels.sort((a, b) => {
+            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+          })
           this.projectOverview = res.portfolioDetails
           this.projects.data = res.portfolioDetails;
           for (var i = 0; i < this.projectOverview.length; i++) {
@@ -1727,60 +1738,12 @@ export class PortfolioCenterComponent implements OnInit {
               (this.projects.data[i].oePhaseAbbreviation
                 ? this.projects.data[i].oePhaseAbbreviation
                 : 'NA');
-            if (this.projectOverview[i].overallStatus == "YellowStop") {
-              this.projectOverview[i].OverAllStatusSort = "RedStop"
-            }
-            else if (this.projectOverview[i].overallStatus == "RedStop") {
-              this.projectOverview[i].OverAllStatusSort = "YellowStop"
-            }
-            else {
-              this.projectOverview[i].OverAllStatusSort = this.projectOverview[i].overallStatus
-            }
-            if (this.projectOverview[i].scheduleIndicator == "YellowStop") {
-              this.projectOverview[i].scheduleIndicatorSort = "RedStop"
-            }
-            else if (this.projectOverview[i].scheduleIndicator == "RedStop") {
-              this.projectOverview[i].scheduleIndicatorSort = "YellowStop"
-            }
-            else {
-              this.projectOverview[i].scheduleIndicatorSort = this.projectOverview[i].scheduleIndicator
-            }
-            if (this.projectOverview[i].riskIndicator == "YellowStop") {
-              this.projectOverview[i].riskIndicatorSort = "RedStop"
-            }
-            else if (this.projectOverview[i].riskIndicator == "RedStop") {
-              this.projectOverview[i].riskIndicatorSort = "YellowStop"
-            }
-            else {
-              this.projectOverview[i].riskIndicatorSort = this.projectOverview[i].riskIndicator
-            }
-            if (this.projectOverview[i].askNeedIndicator == "YellowStop") {
-              this.projectOverview[i].askNeedIndicatorSort = "RedStop"
-            }
-            else if (this.projectOverview[i].askNeedIndicator == "RedStop") {
-              this.projectOverview[i].askNeedIndicatorSort = "YellowStop"
-            }
-            else {
-              this.projectOverview[i].askNeedIndicatorSort = this.projectOverview[i].askNeedIndicator
-            }
-            if (this.projectOverview[i].budgetIndicator == "YellowStop") {
-              this.projectOverview[i].budgetIndicatorSort = "RedStop"
-            }
-            else if (this.projectOverview[i].budgetIndicator == "RedStop") {
-              this.projectOverview[i].budgetIndicatorSort = "YellowStop"
-            }
-            else {
-              this.projectOverview[i].budgetIndicatorSort = this.projectOverview[i].budgetIndicator
-            }
-            if (this.projectOverview[i].budgetSpendIndicator == "YellowStop") {
-              this.projectOverview[i].budgetSpendIndicatorSort = "RedStop"
-            }
-            else if (this.projectOverview[i].budgetSpendIndicator == "RedStop") {
-              this.projectOverview[i].budgetSpendIndicatorSort = "YellowStop"
-            }
-            else {
-              this.projectOverview[i].budgetSpendIndicatorSort = this.projectOverview[i].budgetSpendIndicator
-            }
+            this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
+            this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
+            this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
+            this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
+            this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
+            this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
             var preffix = ""
             if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
               preffix = "[ARCHIVED]"
@@ -1792,12 +1755,13 @@ export class PortfolioCenterComponent implements OnInit {
               preffix = "[ARCHIVED CONF]"
             }
             res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-            this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
-            this.projectOverview[i].FORECAST = this.projectOverview[i].localPreviousForecastCapex
+            // this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+            this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
+            this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
               this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
             
             this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
             this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
             this.projectOverview[i].problemId = res.projectDetails[i].problemId;
             this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -1810,6 +1774,9 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+            this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels[i].redExecutionCompleteDate
+            this.projectOverview[i].notBaselined = res.conditionalFormattingLabels[i].notBaselined
+            this.projectOverview[i].completed = res.conditionalFormattingLabels[i].completed
           }
           if(this.sorting.name != ""){
             this.projectOverview.sort

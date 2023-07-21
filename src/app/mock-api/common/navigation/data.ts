@@ -29,7 +29,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     },
     {
         id   : 'spot-documents',
-        title: 'SPOT Documents',
+        title: 'SPOT Supporting Documents',
         type : 'basic',
         icon : 'heroicons_outline:document-text',
         link : '/spot-documents'
@@ -130,7 +130,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
     },
     {
         id   : 'spot-documents',
-        title: 'SPOT Resources',
+        title: 'SPOT Supporting Documents',
         type : 'basic',
         externalLink : true,
         link : 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
