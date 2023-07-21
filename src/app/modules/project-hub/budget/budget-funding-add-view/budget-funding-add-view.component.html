@@ -17,10 +17,10 @@
                          [valuePointer]="'localCurrencyAbbreviation'" [idPointer]="'localCurrencyId'"
                          [dropDownArray]="localCurrency">
             </spot-select>
-            <spot-input class="w-full read-only" [showLabel]="true" [label]="'CAPEX Amount'"
+            <spot-input class="w-full read-only" [showLabel]="true" [label]="'CAPEX Amount'" [callLocation]="'View'"
                         formControlName="capexAmount"
                         [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"></spot-input>
-            <spot-input class="w-full read-only" [showLabel]="true" [label]="'OPEX Amount'" formControlName="opexAmount"
+            <spot-input class="w-full read-only" [showLabel]="true" [label]="'OPEX Amount'" formControlName="opexAmount"  [callLocation]="'View'"
                         [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"></spot-input>
         </div>
     </form>

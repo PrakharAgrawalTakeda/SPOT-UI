@@ -11,7 +11,7 @@
         </a>
         </div>
     </div>
-    <form class="pl-3 w-full overflow-hidden" [formGroup]="budgetInfoForm" (ngSubmit)="submitBudgetInfo()">
+    <form class="pl-3 w-full overflow-hidden" [formGroup]="budgetInfoForm" >
         <div [ngClass]="'overflow-y-scroll overflow-x-hidden h-[86.5vh] pt-3 pr-3'">
             <spot-input-date class="w-full read-only" formControlName="apisdate" *ngIf="mode=='Asset-In-Service'"
                              [label]="'Asset Placed In Service (Estimate)'" [placeholder]="'Asset Placed In Service (Estimate)'">
@@ -36,7 +36,7 @@
                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
                 Cancel
             </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" >
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitBudgetInfo()">
                 Submit
             </button>
         </div>

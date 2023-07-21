@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../../core/auth/auth.service";
@@ -164,13 +164,12 @@ export class BudgetGeneralEditComponent {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '927293cb-d4ca-4f31-8af6-c33c9e4792d1')
     }
 
-    submitBudgetInfo() {
-        const prefixCheck =this.gmsBudgetowner.value.capitalBudgetIdabbreviation && this.budgetId.value?.startsWith(this.gmsBudgetowner.value.capitalBudgetIdabbreviation)
-        const gmsbudgetOwnerCheck = !this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC";
-        if(prefixCheck && gmsbudgetOwnerCheck && this.capexRequired.value == true){
+    async submitBudgetInfo() {
+        const isPrefixValid = await this.checkPrefix(this.budgetId.value);
+        if (!isPrefixValid && this.budgetId.status === "VALID") {
             var comfirmConfig: FuseConfirmationConfig = {
-                "title": "Please select another Budget ID",
-                "message": "",
+                "title": "The Capital Budget ID with existing prefix abbreviations is not allowed.",
+                "message": "Please change or remove it",
                 "icon": {
                     "show": true,
                     "name": "heroicons_outline:exclamation",
@@ -329,7 +328,14 @@ export class BudgetGeneralEditComponent {
         }else{
             return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
         }
-
+    }
+    async checkPrefix(budgetId: string) {
+        try {
+            const response: any = await this.apiService.checkBudgetIdPrefix(budgetId.toUpperCase());
+            return !!(response && response.IsBudgetIdValid);
+        } catch (error) {
+            console.error("Error:", error);
+        }
     }
     get budgetId() {
         return this.budgetInfoForm.get('budgetId');
