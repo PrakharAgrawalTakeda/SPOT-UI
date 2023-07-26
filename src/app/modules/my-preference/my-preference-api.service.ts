@@ -18,6 +18,13 @@ export class MyPreferenceApiService {
         return response
     }
 
+    async DeleteLink(projectId:string){
+        var url = GlobalVariables.apiurl + "ProjectHubData/DeleteLink/"+ projectId
+        const abc$ = this.http.delete(url,)
+        const response =  lastValueFrom(abc$)
+        return response
+    }
+
     async getuserPreference(userid: string) {
         var url = GlobalVariables.apiurl + "UserPreference/" + userid
         const abc$ = this.http.get(url)

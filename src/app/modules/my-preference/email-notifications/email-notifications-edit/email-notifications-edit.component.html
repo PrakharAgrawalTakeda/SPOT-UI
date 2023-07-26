@@ -138,21 +138,21 @@
                             </div>
 
                         </div>
-                        <div class="overflow-x-auto  h-[15vh]" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
+                        <!-- <div class="overflow-x-auto  h-[15vh]" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
                             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                                 columnMode="flex"
                                 class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
                                 [rows]="projects">
-                                <ngx-datatable-column name="Projects" prop="rows.problemTitle" [flexGrow]="9"
+                                <ngx-datatable-column name="Projects" prop="problemTitle" [flexGrow]="9"
                                     [resizeable]="false" [draggable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <div class="flex items-center justify-start gap-6">
-                                            {{ value ? value : ( (row.isParent ? "[PGM] ": "") + row.problemId + " -
+                                            {{ value ? value : ( row.problemId + " -
                                             " + row.problemTitle)}}
                                         </div>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name=" " prop="rows.problemId" [flexGrow]="1" [resizeable]="false"
+                                <ngx-datatable-column name=" " prop="problemId" [flexGrow]="1" [resizeable]="false"
                                     [sortable]="false" [draggable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <a href="javascript:void(0)" title="Remove"
@@ -161,6 +161,20 @@
                                         </a>
                                     </ng-template>
                                 </ngx-datatable-column>
+                            </ngx-datatable>
+                        </div> -->
+                        <div class="overflow-x-auto  h-[15vh]" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
+                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
+                                columnMode="flex"
+                                class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
+                                [rows]="projects">
+                                <ngx-datatable-column name="Projects" prop="problemTitle" [flexGrow]="9" [resizeable]="false" [draggable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                      <div class="flex items-center justify-start gap-6">
+                                        {{ value ? ( row.problemId + " - " + row.problemTitle) : ''}}
+                                      </div>
+                                    </ng-template>
+                                  </ngx-datatable-column>
                             </ngx-datatable>
                         </div>
                         <div class="flex justify-start items-center gap-3 pb-6" 
