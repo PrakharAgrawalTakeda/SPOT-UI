@@ -89,7 +89,7 @@ export class EmailNotificationsEditComponent {
     })
 
     this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].valueChanges.subscribe(value => {
-      console.log(this.viewContent)
+      console.log(value)
       if (this.viewContent == true) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You have changed the notification scope. Do you want to proceed?",
@@ -289,7 +289,6 @@ export class EmailNotificationsEditComponent {
                     this.isConfidential = id.isConfidential
                     this.projects = id
                     console.log(this.projects)
-                    this.viewContent = true
                   }
 
                 })
@@ -463,7 +462,8 @@ export class EmailNotificationsEditComponent {
     this.preferenceservice.isFormChanged = false
     var formValue = this.emailNotiForm.getRawValue()
     console.log(formValue.emailNotifcationNotifcationReportScopeIds)
-    if (formValue.reportFrequencyId == null || formValue.emailNotifcationNotifcationReportScopeIds == null) {
+    debugger
+    if (Object.keys(formValue.reportFrequencyId).length == 0 || Object.keys(formValue.emailNotifcationNotifcationReportScopeIds).length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "In order to save the information it is required to enter Report Frequency and Report Scope!",
         "message": "",
