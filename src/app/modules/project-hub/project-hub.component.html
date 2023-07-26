@@ -72,6 +72,10 @@
             *ngIf="projecthubservice.itemtype == 'FundingBulkEdit'" [mode]="'Project-Charter'"></app-funding-bulk-edit>
             <app-cost-edit
             *ngIf="projecthubservice.itemtype == 'CostEdit'" [mode]="'Project-Charter'"></app-cost-edit>
+            <app-email-notifications-edit
+            *ngIf="projecthubservice.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
+            <app-email-notifications-edit
+            *ngIf="projecthubservice.itemtype == 'EmailNotiTableEdit'"></app-email-notifications-edit>
             <app-funding-bulk-edit
             *ngIf="projecthubservice.itemtype == 'FundingBCBulkEdit'" [optionType]="'recommended-option'"></app-funding-bulk-edit>
             <app-funding-bulk-edit *ngIf="projecthubservice.itemtype == 'FundingBCEditO2'"
@@ -190,6 +194,13 @@
         <app-operational-benefits-bulk-edit *ngIf="projecthubservice.itemtype == 'OperationalBenefitsBulkEdit'"></app-operational-benefits-bulk-edit>
         <app-water-waste-bulk-edit *ngIf="projecthubservice.itemtype == 'WaterWasteBulkEdit'"></app-water-waste-bulk-edit>
         <app-water-waste-single-edit *ngIf="projecthubservice.itemtype == 'WaterWasteSingleEdit'"></app-water-waste-single-edit>
+        <app-budget-general-edit *ngIf="projecthubservice.itemtype == 'BudgetRequiredForCapexEdit'"></app-budget-general-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetAssetPlacedServiceEdit'" [mode]="'Asset-In-Service'"></app-budget-additional-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetOPEXEdit'" [mode]="'OPEX'"></app-budget-additional-edit>
+        <app-budget-additional-edit *ngIf="projecthubservice.itemtype == 'BudgetCommentaryEdit'" [mode]="'Budget-Commentary'"></app-budget-additional-edit>
+        <app-budget-funding-information-bulk-edit *ngIf="projecthubservice.itemtype == 'BudgetFundingBulkEdit'"></app-budget-funding-information-bulk-edit>
+        <app-budget-funding-add-view *ngIf="projecthubservice.itemtype == 'BudgetFundingAddNew'"></app-budget-funding-add-view>
+        <app-budget-fxrate *ngIf="projecthubservice.itemtype == 'BudgetFxRates'"></app-budget-fxrate>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projecthubservice.menuData" [mode]="'side'"

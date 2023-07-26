@@ -88,6 +88,30 @@ export class ProjectApiService {
       const response = await lastValueFrom(abc$)
       return response
   }
+    async getBudgetPageInfo(projectId) {
+        var url = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async checkBudgetIdPrefix(budgetId) {
+        var url = GlobalVariables.apiurl + "Budget/ValidateBudgetId/"+budgetId
+        const abc$ = this.http.get(url)
+         const response = await lastValueFrom(abc$)
+        return response
+    }
+    async updateBudgetPageInfo(projectId,body) {
+        var link = GlobalVariables.apiurl + "Budget/BudgetPageInfo/"+projectId
+        const abc$ = this.http.put(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async getNewBudgetId(projectId) {
+        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
   async getfilterlist(){
     var userid = GlobalVariables.apiurl+"FilterProjects/FilterCriteria"
     const abc$ = this.http.get(userid)
@@ -145,7 +169,7 @@ export class ProjectApiService {
     return response
   }
   async editOverallStatus(body){
-    var link = GlobalVariables.apiurl+"OverAllStatus/" + body.statusUnquieId
+    var link = GlobalVariables.apiurl+"OverAllStatus"
     const abc$ = this.http.put(link,body)
     const response = await lastValueFrom(abc$)
     return response
@@ -428,6 +452,12 @@ async addBCFunding(body,optionId,projectId){
       const response = await lastValueFrom(abc$)
       return response
   }
+  async bulkEditFundingRequests(body,projectId){
+      var link = GlobalVariables.apiurl+"Budget/BulkEditFundingInfo/" + projectId
+      const abc$ = this.http.put(link,body)
+      const response = await lastValueFrom(abc$)
+      return response
+  }
   async bulkEditTimelineForOption(body,optionId,projectId){
       var link = GlobalVariables.apiurl+"BusinessCase/Timeline/BulkEdit/"+optionId + "/" + projectId;
       const abc$ = this.http.put(link,body)
@@ -595,12 +625,20 @@ async addBCFunding(body,optionId,projectId){
       const response = await lastValueFrom(abc$)
       return response
     }
+    async getProjectDashboard(projectid) {
+      var url = GlobalVariables.apiurl + "ProjectDashboard/GetProjectDashboard/" + projectid
+      const abc$ = this.http.get(url)
+      const response = await lastValueFrom(abc$)
+      return response
+    }
+
     async getReportInfoData(projectid) {
       var url = GlobalVariables.apiurl + "ProjectHubData/ReportPageInfo/" + projectid
       const abc$ = this.http.get(url)
       const response = await lastValueFrom(abc$)
       return response
     }
+
     async updateReportDates(projectid:string ,itemid: string){
       var userid = GlobalVariables.apiurl+"ProjectCharter/UpdateDate/"+projectid+"/"+itemid
       const abc$ = this.http.patch(userid,itemid)
@@ -789,6 +827,13 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async bulkeditD(body, projectId, environmentalSourceTypeId) {
+    var link = GlobalVariables.apiurl + "CAPS/BulkEditDistribution/" + projectId+ "/"+environmentalSourceTypeId
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   async bulkeditBiogenics(body, projectId) {
     var link = GlobalVariables.apiurl + "CAPS/BulkEditBiogenics/" + projectId
     const abc$ = this.http.put(link, body)
@@ -805,6 +850,12 @@ async updateBusinessCaseFunding(body, projectId, optionid){
   async editCAPSData(projectid, body) {
     var url = GlobalVariables.apiurl + "CAPS/" + projectid
     const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+  async getLocalAttributesByOwner(portfolioOwners: string, executionScope: string) {
+    var url = GlobalVariables.apiurl + "LocalAttributes/ByOwners" + "?portfolioOwners=" + portfolioOwners + "&executionScopes=" + executionScope
+    const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
   }

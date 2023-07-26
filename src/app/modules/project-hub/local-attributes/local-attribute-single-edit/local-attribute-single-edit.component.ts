@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -37,10 +37,14 @@ export const MY_FORMATS = {
   ],
 })
 export class LocalAttributeSingleEditComponent {
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' = 'ProjectHub'
+  @Input() ExecutionScope = ""
+  @Input() PortfolioOwner = ""
+  @Output() formValueLA = new EventEmitter<any>();
   localAttributeForm: any = new FormGroup({})
   localAttributeFormRaw: any = new FormGroup({})
   viewContent = false
-  viewType = 'SidePanel'
+  @Input() viewType : 'SidePanel' | 'Form' = 'Form'
   data: any = [];
   originalData: any
   rawData: any
@@ -52,18 +56,45 @@ export class LocalAttributeSingleEditComponent {
       }
     })
   }
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.PortfolioOwner != undefined){
+      this.PortfolioOwner = changes.PortfolioOwner?.currentValue
+    }
+      var scope = changes.ExecutionScope?.currentValue.split(',')
+      for(var i=0;i<scope.length;i++){
+        if(scope[i]==scope[i+1]){
+          scope.pop(scope[i+1])
+        }
+      }
+      this.ExecutionScope = scope.join(',')
+      this.ngOnInit()
+  }
   ngOnInit(): void {
-    this.apiService.getLocalAttributes(this.projectHubService.projectid).then((res: any) => {
+    var api;
+    if(this.callLocation == "CreateNew"){
+      console.log(this.PortfolioOwner)
+      console.log(this.ExecutionScope)
+      api = this.apiService.getLocalAttributesByOwner(this.PortfolioOwner, this.ExecutionScope)
+    }
+    else{
+      this.apiService.getLocalAttributes(this.projectHubService.projectid)
+    }
+    api.then((res: any) => {
       this.auth.lookupMaster().then(res1 => {
         this.lookupData = res1
         const originalData = Object.assign([{}], res)
+        this.localAttributeFormRaw.value = {}
+        this.localAttributeFormRaw.controls = {}
         res.forEach(i => {
           this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
         })
+          this.originalData = []
         this.dataLoader(res);
         this.originalData = originalData;
         this.viewContent = true
+        if (this.callLocation == "CreateNew"){
+          this.formValueLA.emit(true)
+        }
       })
     })
 
@@ -75,6 +106,13 @@ export class LocalAttributeSingleEditComponent {
   }
 
   submitLA(data) {
+    var projectId = ""
+    if(this.callLocation == "CreateNew"){
+      projectId = data
+    }
+    else{
+      projectId = this.projectHubService.projectid
+    }
     var mainObj = this.originalData
     var dataToSend = []
     var i = -1;
@@ -209,7 +247,7 @@ export class LocalAttributeSingleEditComponent {
         }
       }
     });
-    this.apiService.editLocalAttributes(this.projectHubService.projectid, dataToSend).then(res => {
+    this.apiService.editLocalAttributes(projectId, dataToSend).then(res => {
       this.projectHubService.toggleDrawerOpen('', '', [], '')
       this.projectHubService.submitbutton.next(true)
       this.projectHubService.isNavChanged.next(true)
@@ -219,7 +257,7 @@ export class LocalAttributeSingleEditComponent {
   }
 
   dataLoader(res) {
-
+    this.data = []
     res.forEach(data => {
       var i = Object.assign({}, data)
       if (i.dataType == 1 && i.data.length == 0) {

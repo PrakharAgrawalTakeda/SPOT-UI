@@ -45,6 +45,7 @@ export class SpotInputDateComponent implements OnInit, ControlValueAccessor {
   @Input() max: 'today' | 'end' | 'custom' = 'end'
   @Input() customMax: Date = new Date()
   @Input() hintPostion: 'tooltip' | 'mat-hint' = 'tooltip'
+  @Input() Required: boolean = false
   today = new Date();
 
 

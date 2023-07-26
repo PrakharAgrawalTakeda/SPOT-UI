@@ -94,7 +94,7 @@
     </div>
 
 
-    <div class="mt-3 pl-3 h-[78vh] w-screen  overflow-hidden" #target id="scheduleTableDiv">
+    <div class="mt-3 pl-3 h-[78vh] w-full" #target id="scheduleTableDiv">
       <ngx-datatable
         class="datatable-schedule-74 w-full material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
         [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'" [rowHeight]="'auto'"
@@ -145,8 +145,8 @@
               </strong>
               <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
             </a>
-            <form [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
-              <spot-textarea [rows]="3" formControlName="milestone" name="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
+            <form class="pr-1" [formGroup]="milestoneForm.controls[rowIndex]" *ngIf="milestoneTableEditStack.includes(rowIndex)">
+              <spot-textarea [rows]="3"  formControlName="milestone" name="milestone" [showLabel]="false" [showHint]="true" [hintPostion]="'mat-hint'" [hint]="(row.milestoneType > 0 ? (row.milestoneType == 1 ? 'Execution Start - ...' : (row.milestoneType == 2 ? 'Execution End - ...' : ' ')) : ' ')">
                 <!--  -->
                 <!-- [showHint]="true"
                 [hint]="hi" [hintPosition]="'mat-hint'" -->

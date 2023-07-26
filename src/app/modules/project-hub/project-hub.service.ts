@@ -84,7 +84,7 @@ export class ProjectHubService {
           link: 'general-info'
         },
         {
-          title: 'Project Benefits',
+          title: 'Value Creation',
           type: 'basic',
           icon: 'feather:target',
           link: 'project-benefits'
@@ -155,7 +155,7 @@ export class ProjectHubService {
               link: 'project-proposal/general-info'
             },
             {
-              title: 'Benefits and Requirements',
+              title: 'Requirements',
               type: 'basic',
               link: 'project-proposal/benefits'
             },
@@ -163,6 +163,11 @@ export class ProjectHubService {
               title: 'Planning Team',
               type: 'basic',
               link: 'project-proposal/planning-team'
+            },
+            {
+              title: 'Value Creation',
+              type: 'basic',
+              link: 'project-proposal/value-creation'
             },
           ]
         },
@@ -211,6 +216,11 @@ export class ProjectHubService {
                   type: 'basic',
                   link: 'business-case/recommended-option/risks'
                 },
+                {
+                  title: 'Value Creation',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/value-creation'
+                }
               ]
             },
             {
@@ -320,28 +330,43 @@ export class ProjectHubService {
               type: 'basic',
               link: 'project-charter/caps'
             },
+            {
+              title: 'Value Creation',
+              type: 'basic',
+              link: 'project-charter/value-creation'
+            },
           ]
         },
-        {
-          id: 'project-dashboard',
-          title: 'Project Dashboards',
-          type: 'collapsable',
-          icon: 'heroicons_outline:presentation-chart-line',
-          children: [
-            {
-              title: 'Performance',
-              type: 'basic',
+        // {
+        //   id: 'project-dashboard',
+        //   title: 'Project Dashboards',
+        //   type: 'collapsable',
+        //   icon: 'heroicons_outline:presentation-chart-line'
+        //   ,
+        //   children: [
+        //     {
+        //       title: 'Performance',
+        //       type: 'basic',
+        //       link: 'project-dashboard/performance'
 
-            },
-            {
-              title: 'Budget',
-              type: 'basic',
-            },
-            {
-              title: 'GMSGQ Product Team',
-              type: 'basic',
-            }
-          ]
+        //     },
+        //     {
+        //       title: 'Budget',
+        //       type: 'basic',
+        //       link: 'project-dashboard/budget'
+        //     },
+        //     {
+        //       title: 'GMSGQ Product Team',
+        //       type: 'basic',
+        //       link: 'project-dashboard/product-team'
+        //     }
+        //   ]
+        // },
+        {
+          title: 'Project Dashboards',
+          type: 'basic',
+          icon: 'heroicons_outline:presentation-chart-line',
+          link: 'project-dashboards'
         },
         {
           id: 'project-closeout',
@@ -378,6 +403,11 @@ export class ProjectHubService {
               title: 'Lessons Learned',
               type: 'basic',
               link: 'close-out/lessons-learned'
+            },
+            {
+              title: 'Value Creation',
+              type: 'basic',
+              link: 'close-out/value-creation'
             },
           ]
         },

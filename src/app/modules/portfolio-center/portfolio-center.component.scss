@@ -1,11 +1,4 @@
-.example-chip-list {
-    width: 100%;
-}
-
-/*.chiplist {
-    padding: 10px;
-}*/
-
+@import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
 .w-half {
     width: 50vw;
 }
@@ -17,19 +10,125 @@
 .w-1qua {
     width: 25vw;
 }
-.dashboard-chip-list {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    padding-right: 20px !important;
-    padding-left: 20px !important;
-    margin-left: 10px !important;
-    border-radius: 20px !important;
+.w-2qua {
+    width: 55vw;
 }
 .apply-button{
-    margin: 20px 0px 175px 0px !important;
-    width: 100%;
+    margin: 20px 15px 175px 15px !important;
+    // width: 100%;
+    width: 20%;
 }
 
 .tile-title{
     font-size: 20px;
+}
+
+::ng-deep .ngx-datatable .datatable-PO-80 .datatable-body .datatable-scroll {
+    height: 80vh !important;
+    width: 100vw !important;
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+}
+
+.frozen-header-class {
+    top: 33px !important;
+    left: 200px !important;
+}
+
+.frozen-header-classID {
+    top: 55px !important;
+    margin-left: 6px !important;
+}
+.datatable-body{
+    height: 72vh !important;
+}
+
+.datatable-row-left{
+    background: white !important;
+    height: 102px !important;
+}
+
+.projectNames {
+    cursor: pointer !important;
+    margin-left: 15px !important;
+    color: rgb(81, 174, 245);
+}
+.projectNames:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
+}
+
+.datatable-header{
+    top: 10px;
+    // position: relative;
+}
+
+
+.columnFilter{
+    top: 12px !important;
+    position: relative !important;
+    display: flex;
+    width: 50%;
+    left: 21px;
+}
+
+.checkbox{
+        width: 50%;
+        position: relative;
+        left: 30%;
+}
+
+ul {
+    columns: 2;
+    -webkit-columns: 4;
+    -moz-columns: 2;
+     background-color: white;
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 2px;
+        border-radius: 15px;
+}
+
+li{
+    padding: 4px;
+    font-weight: 500;
+}
+
+.pager li{
+    padding-right: 10px !important;
+    margin-right: 2px !important;
+    border-radius: 10px;
+    padding-left: 10px !important;
+}
+
+.pager{
+    font-size: small !important;
+    width: 300px !important;
+}
+
+.pages.active{
+    background: #ffffff !important;
+    border: 2px solid green;
+    color: black;
+}
+
+.pages{
+    cursor: pointer;
+    padding: 5px 12px;
+    background: lightgrey;
+    margin: 0px 5px;
+    color: black;
+}
+.page-count{
+    font-size: small !important;
+    margin-left: 6px !important;
+}
+
+.vertical-header-class {
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);
+    left: -1px;
+}
+.red{
+    color: red !important;
 }

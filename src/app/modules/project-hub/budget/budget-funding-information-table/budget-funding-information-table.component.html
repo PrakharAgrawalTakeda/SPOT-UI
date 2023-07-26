@@ -1,0 +1,69 @@
+<div class=" pb-6 ">
+    <div class="pb-3 pt-0 flex items-center justify-between">
+        <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Funding Requests</div>
+        <div class="text-primary">
+            <div class="flex items-start justify-between">
+                <div *ngIf ="projecthubservice.roleControllerControl.projectHub.projectBoard.riskIssuesEdit">
+                    <button *ngIf="addButtonShow" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                            (click)="projecthubservice.toggleDrawerOpen('BudgetFundingAddNew', '', budgetInfo, id, false)">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"  *ngIf="bulkEditButtonShow"
+                            (click)="projecthubservice.toggleDrawerOpen('BudgetFundingBulkEdit', '', budgetInfo, id, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp;Edit
+                    </button>
+                </div>
+                <!-- <div>
+                    Table&nbsp;&nbsp;<mat-slide-toggle class="primary slider-adjust"></mat-slide-toggle>
+                    &nbsp;&nbsp;Grid
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+                       class="font-medium text-sm text-default whitespace-nowrap" [rows]="fundingRequests">
+            <ngx-datatable-column name="Funding Request ID" prop="budgetIo1" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Approval Currency" prop="approvalCurrency" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="CAPEX Amount" prop="localCarapprovedCapex" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="OPEX Amount" prop="localCarapprovedOpex" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Amended CAR" prop="ammendedCar" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Funding Status" prop="approvalStatus" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                    <div *ngIf="row.keep==true" class="flex items-center justify-start gap-6">
+                        <a href="javascript:void(0)" title="Delete Single"
+                           *ngIf="editable"
+                           (click)="deleteFundingRequest(row.budgetIoid)">
+                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                        </a>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>

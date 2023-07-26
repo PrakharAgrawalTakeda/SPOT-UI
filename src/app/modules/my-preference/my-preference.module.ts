@@ -36,6 +36,10 @@ import { ProjectSettingsComponent } from './project-settings/project-settings.co
 import { MilestoneSetsComponent } from './milestone-sets/milestone-sets.component';
 import { MilestoneSetViewEditComponent } from './milestone-sets/milestone-set-view-edit/milestone-set-view-edit.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { EmailNotificationsComponent } from './email-notifications/email-notifications.component';
+import { EmailNotificationsEditComponent } from './email-notifications/email-notifications-edit/email-notifications-edit.component';
+import { EmailNotificationsTableEditComponent } from './email-notifications/email-notifications-table-edit/email-notifications-table-edit.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -49,6 +53,10 @@ export const projectRoutes: Route[] = [
   {
       path: 'milestone-sets',
       component: MilestoneSetsComponent,
+  },
+  {
+      path: 'email-notifications',
+      component: EmailNotificationsComponent,
   }
 ]
 }];
@@ -59,7 +67,10 @@ export const projectRoutes: Route[] = [
         MyPreferenceComponent,
         ProjectSettingsComponent,
         MilestoneSetsComponent,
-        MilestoneSetViewEditComponent
+        MilestoneSetViewEditComponent,
+        EmailNotificationsComponent,
+        EmailNotificationsEditComponent,
+        EmailNotificationsTableEditComponent
     ],
     exports: [
         MilestoneSetViewEditComponent
@@ -97,7 +108,9 @@ export const projectRoutes: Route[] = [
         MatTooltipModule,
         FuseAlertModule,
         SpotFormsModule,
-        DragDropModule
+        DragDropModule,
+        
+    MatSnackBarModule
     ]
 })
 export class MyPreferenceModule { }

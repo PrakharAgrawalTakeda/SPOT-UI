@@ -7,6 +7,7 @@ import {BehaviorSubject} from "rxjs";
 })
 export class MyPreferenceService {
     submitbutton = new BehaviorSubject<boolean>(false)
+    isNavChanged = new BehaviorSubject<boolean>(false)
     drawerOpenedright: boolean = false;
     itemid: string = "new"
     itemtype: string = ""
@@ -41,7 +42,6 @@ export class MyPreferenceService {
     }
 
     drawerOpenedChanged(event: any): void {
-
         if (this.drawerOpenedright != event) {
             if (event == false) {
                 this.drawerOpenedright = event
@@ -63,6 +63,7 @@ export class MyPreferenceService {
     }
     toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false): void {
         console.log(itemtype)
+        
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert)
             alertopener.afterClosed().subscribe(res => {
@@ -87,6 +88,7 @@ export class MyPreferenceService {
         this.fuseDrawerLarge = fuseDrawerLarge
     }
     alertopener() {
+        
         const alertopener = this.fusealert.open(this.alert)
         this.isFormChanged = false
         alertopener.afterClosed().subscribe(res => {
@@ -101,6 +103,7 @@ export class MyPreferenceService {
                 this.all = []
                 this.projectid = ""
                 this.isFormChanged = false
+                
             }
         })
     }

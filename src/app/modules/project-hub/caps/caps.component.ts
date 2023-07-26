@@ -5,6 +5,7 @@ import { Constants } from 'app/shared/constants';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { toLower } from 'lodash';
 
 @Component({
   selector: 'app-caps',
@@ -154,6 +155,7 @@ export class CapsComponent implements OnInit {
     if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
       this.editable = true
     }
+    console.log(this.editable)
     if(this.callLocation == 'Business-Case'){
       this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
     }
@@ -201,16 +203,20 @@ export class CapsComponent implements OnInit {
         //carbon data
         var carbonParam = res.carbonParameters
         var carbonData = res.carbonData
+        var carbonCurrency = res.carbonPortfolioData
         var carbonngx = []
         if (carbonParam != null && carbonData != null) {
           carbonParam.forEach(function (arrayItem) {
             var data = []
             var param = []
-            data = carbonData.filter(x => x.emsourceId == arrayItem.emsourceId)
-            param = carbonParam.filter(x => x.emsourceId == arrayItem.emsourceId)
+            var currency = []
+            data = carbonData.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
+            param = carbonParam.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
+            currency = carbonCurrency.filter(x => toLower(x.emsourceId) == toLower(arrayItem.emsourceId))
             var carbonObject = {
               ...data[0],
-              ...param[0]
+              ...param[0],
+              ...currency[0]
             }
             carbonngx.push(carbonObject)
           })
@@ -219,10 +225,10 @@ export class CapsComponent implements OnInit {
         this.Biogenicsngx = res.biogenicsData
         
         //water waste data
-        if (this.editable == false) {
-          this.WaterWastengx = null
-        }
-        else {
+        // if (this.editable == false) {
+        //   this.WaterWastengx = null
+        // }
+        // else {
           var wwParam = res.waterWasteParameter
           var wwData = res.waterWasteData
           var WaterWastengx = []
@@ -238,7 +244,7 @@ export class CapsComponent implements OnInit {
             }
             this.WaterWastengx = WaterWastengx
           }
-        }
+        // }
         this.carbonUnitData = false
         this.biogenicUnitData = false
         this.wwUnitData = false

@@ -215,7 +215,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
 
   }
 
-  
+
   lessonLearnedTableEditRow(rowIndex) {
     if (!this.lessonLearnedTableEditStack.includes(rowIndex)) {
       this.lessonLearnedTableEditStack.push(rowIndex)
@@ -226,7 +226,7 @@ export class LessonLearnedBulkEditComponent implements OnInit {
   deleteLL(rowIndex: number) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
-      "message": "Are you sure you want Delete this Record?",
+      "message": "Are you sure you want to delete this record?",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",

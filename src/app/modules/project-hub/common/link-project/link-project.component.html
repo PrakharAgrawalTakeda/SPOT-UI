@@ -1,45 +1,25 @@
 <div>
-    <div
-        class="flex items-start justify-between bg-primary sidepanel-header"
-        style="margin-bottom: 10px"
-    >
+    <div class="flex items-start justify-between bg-primary sidepanel-header" style="margin-bottom: 10px">
         <div class="text-on-primary" style="padding-top: 6px">Link Child Project/Program</div>
         <div style="padding-top: 2px">
-            <a
-                (click)="
+            <a (click)="
                     this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                "
-                href="javascript:void(0)"
-                title="Close"
-            >
-                <mat-icon
-                    class="text-on-primary"
-                    svgIcon="heroicons_outline:x"
-                ></mat-icon>
+                " href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
             </a>
         </div>
     </div>
-    <div class="p-6 pt-0 flex w-full" >
+    <div class="p-6 pt-0 flex w-full">
         <mat-form-field class="w-5/6 pt-2" appearance="fill">
-            <mat-icon
-                class="flex-initial"
-                [svgIcon]="'heroicons_outline:search'"></mat-icon>
-            <input
-                matInput
-                (keydown)="onKeydown($event)"
-                [formControl]="searchControl"
-                [matAutocomplete]="matAutocomplete"
-                [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
-                class="flex-1 w-64"
+            <mat-icon class="flex-initial" [svgIcon]="'heroicons_outline:search'"></mat-icon>
+            <input matInput (keydown)="onKeydown($event)" [formControl]="searchControl"
+                [matAutocomplete]="matAutocomplete" (focus)="onFocus($event)"
+                [placeholder]="'Search for a Project by Project ID / Title / Budget ID'" class="flex-1 w-64"
                 id="myText">
-            <mat-autocomplete
-                class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
-                [disableRipple]="true"
-                (optionSelected)="onOptionSelected()"
-                [displayWith]="displayFn.bind(this)"
+            <mat-autocomplete class="max-h-128 sm:px-2 border-t rounded-b shadow-md" [disableRipple]="true"
+                (optionSelected)="onOptionSelected()" [displayWith]="displayFn.bind(this)"
                 #matAutocomplete="matAutocomplete">
-                <mat-option
-                    class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+                <mat-option class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
                     *ngIf="resultSets && !resultSets.length">
                     No results found!
                 </mat-option>
@@ -52,19 +32,21 @@
                             class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
                             [value]="result.problemUniqueId">
                             <!-- Contacts -->
-                            {{result.isParent ? "[PGM] " : "" }}{{result.problemId}} {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
+                            {{result.isParent ? "[PGM] " : "" }}{{result.problemId}}
+                            {{budgetfind(result.problemUniqueId)}} - {{result.problemTitle}}
                         </mat-option>
                     </ng-container>
                 </ng-container>
             </mat-autocomplete>
             <button type="button" *ngIf="searchControl.value!=''" matSuffix mat-icon-button aria-label="Clear"
-                    (click)="searchControl.setValue(''); this.selectedValueExists.setValue(true)">
+                (click)="searchControl.setValue(''); this.selectedValueExists.setValue(true)">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
         <div class="w-1/6">
             <div class="grid w-full justify-items-end align-middle mt-2">
-                <button mat-flat-button [color]="'primary'" type="button" class="btn" (click)="onAdd(searchControl.value)">
+                <button mat-flat-button [color]="'primary'" type="button" class="btn"
+                    (click)="onAdd(searchControl.value)">
                     Add
                 </button>
             </div>
@@ -72,34 +54,20 @@
 
     </div>
     <div class="overflow-x-auto  h-[75vh]">
-        <ngx-datatable
-            [headerHeight]="'auto'"
-            [rowHeight]="'auto'"
-            [scrollbarV]="false"
-            columnMode="flex"
-            class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-            [rows]="rows"
-        >
-            <ngx-datatable-column name="Child Project/Program" prop="projectName" [flexGrow]="9"  [resizeable]="false" [draggable]="false">
-                <ng-template
-                    let-row="row"
-                    let-value="value"
-                    ngx-datatable-cell-template
-                >
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+            class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default" [rows]="rows">
+            <ngx-datatable-column name="Child Project/Program" prop="projectName" [flexGrow]="9" [resizeable]="false"
+                [draggable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <div class="flex items-center justify-start gap-6">
                         {{ value ? value : ( (row.isParent ? "[PGM] ": "") + row.problemId + " - " + row.problemTitle)}}
                     </div>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1"  [resizeable]="false"
-            [sortable]="false" [draggable]="false">
-                <ng-template
-                    let-row="row"
-                    let-value="value"
-                    ngx-datatable-cell-template
-                >
-                    <a href="javascript:void(0)" title="Remove child"
-                       (click)="onRemoveLink(row.problemUniqueId)">
+            <ngx-datatable-column name=" " prop="projectId" [flexGrow]="1" [resizeable]="false" [sortable]="false"
+                [draggable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <a href="javascript:void(0)" title="Remove child" (click)="onRemoveLink(row.problemUniqueId)">
                         <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                     </a>
                 </ng-template>
@@ -107,6 +75,6 @@
         </ngx-datatable>
     </div>
     <button mat-flat-button [color]="'primary'" type="button" class='absolute bottom-5 right-5'
-            (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')">Ok
+        (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')">Ok
     </button>
 </div>

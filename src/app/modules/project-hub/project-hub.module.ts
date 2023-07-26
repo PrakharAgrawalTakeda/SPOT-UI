@@ -161,6 +161,26 @@ import { WaterWasteBulkEditComponent } from './common/water-waste-table/water-wa
 import { WaterWasteSingleEditComponent } from './common/water-waste-table/water-waste-single-edit/water-waste-single-edit.component';
 import {MyPreferenceModule} from "../my-preference/my-preference.module";
 import { TransportationSingleEditComponent } from './common/transportation-table/transportation-single-edit/transportation-single-edit.component';
+import { WarehousingSingleEditComponent } from './common/warehousing-table/warehousing-single-edit/warehousing-single-edit.component';
+import { ShippingSingleEditComponent } from './common/shipping-table/shipping-single-edit/shipping-single-edit.component';
+import { TransportationBulkEditComponent } from './common/transportation-table/transportation-bulk-edit/transportation-bulk-edit.component';
+import { ShippingBulkEditComponent } from './common/shipping-table/shipping-bulk-edit/shipping-bulk-edit.component';
+import { WarehousingBulkEditComponent } from './common/warehousing-table/warehousing-bulk-edit/warehousing-bulk-edit.component';
+import { ProjectDashboardComponent } from './project-dashboard/project-dashboard.component';
+import { ProjectDashboardPerformanceComponent } from './project-dashboard/project-dashboard-performance/project-dashboard-performance.component';
+import { ProjectDashboardBudgetComponent } from './project-dashboard/project-dashboard-budget/project-dashboard-budget.component';
+import { ProjectDashboardProductTeamComponent } from './project-dashboard/project-dashboard-product-team/project-dashboard-product-team.component';
+import {BudgetGeneralEditComponent} from "./budget/budget-general-edit/budget-general-edit.component";
+import { BudgetFundingInformationTableComponent } from './budget/budget-funding-information-table/budget-funding-information-table.component';
+import { BudgetFundingInformationBulkEditComponent } from './budget/budget-funding-information-bulk-edit/budget-funding-information-bulk-edit.component';
+import { BudgetAdditionalEditComponent } from './budget/budget-additional-edit/budget-additional-edit.component';
+import { BudgetCapexOpexTableComponent } from './budget/budget-capex-opex-table/budget-capex-opex-table.component';
+import { BudgetFundingAddViewComponent } from './budget/budget-funding-add-view/budget-funding-add-view.component';
+import { BudgetFxrateComponent } from './budget/budget-fxrate/budget-fxrate.component';
+import { ProjectProposalValueCreationComponent } from './project-proposal/project-proposal-value-creation/project-proposal-value-creation.component';
+import { ProjectCharterValueCreationComponent } from './project-charter/project-charter-value-creation/project-charter-value-creation.component';
+import { CloseOutValueCreationComponent } from './close-out/close-out-value-creation/close-out-value-creation.component';
+import { BusinessCaseValueCreationComponent } from './business-case/business-case-value-creation/business-case-value-creation.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -232,6 +252,11 @@ export const projectRoutes: Route[] = [
       pathMatch: 'full'
     },
     {
+      path: 'project-dashboards',
+      component: ProjectDashboardComponent,
+      pathMatch: 'full'
+    },
+    {
       path: 'project-proposal',
       component: ProjectProposalComponent,
       children: [
@@ -246,6 +271,10 @@ export const projectRoutes: Route[] = [
         {
           path: 'planning-team',
           component: ProjectProposalPlanningTeamComponent,
+        },
+        {
+          path: 'value-creation',
+          component: ProjectProposalValueCreationComponent,
         }
       ]
     },
@@ -280,6 +309,10 @@ export const projectRoutes: Route[] = [
         {
           path: 'caps',
           component: ProjectCharterCapsComponent,
+        },
+        {
+          path: 'value-creation',
+          component: ProjectCharterValueCreationComponent,
         }
       ]
     },
@@ -310,6 +343,10 @@ export const projectRoutes: Route[] = [
         {
           path: 'lessons-learned',
           component: CloseOutLessonsLearnedComponent,
+        },
+        {
+          path: 'value-creation',
+          component: CloseOutValueCreationComponent,
         }
       ]
     },
@@ -347,6 +384,10 @@ export const projectRoutes: Route[] = [
             {
               path: 'risks',
               component: BusinessCaseRiskIssuesComponent,
+            },
+            {
+              path: 'value-creation',
+              component: BusinessCaseValueCreationComponent,
             }
           ]
         },
@@ -443,6 +484,7 @@ export const projectRoutes: Route[] = [
     OperationalPerformanceBulkEditComponent,
     PrimaryKpiSingleEditComponent,
     GeneralInfoSingleEditComponent,
+    BudgetGeneralEditComponent,
     OeProjectSingleEditComponent,
     TechTransferSingleEditComponent,
     QualityRefBulkEditComponent,
@@ -532,7 +574,26 @@ export const projectRoutes: Route[] = [
     BudgetPerformanceEditComponent,
     WaterWasteBulkEditComponent,
     WaterWasteSingleEditComponent,
-    TransportationSingleEditComponent
+    TransportationSingleEditComponent,
+    WarehousingSingleEditComponent,
+    ShippingSingleEditComponent,
+    TransportationBulkEditComponent,
+    ShippingBulkEditComponent,
+    WarehousingBulkEditComponent,
+    ProjectDashboardComponent,
+    ProjectDashboardPerformanceComponent,
+    ProjectDashboardBudgetComponent,
+    ProjectDashboardProductTeamComponent,
+    BudgetFundingInformationTableComponent,
+    BudgetFundingInformationBulkEditComponent,
+    BudgetAdditionalEditComponent,
+    BudgetCapexOpexTableComponent,
+    BudgetFundingAddViewComponent,
+    BudgetFxrateComponent,
+    ProjectProposalValueCreationComponent,
+    ProjectCharterValueCreationComponent,
+    CloseOutValueCreationComponent,
+    BusinessCaseValueCreationComponent
   ],
     imports: [
     RouterModule.forChild(projectRoutes),
@@ -581,7 +642,8 @@ export const projectRoutes: Route[] = [
     QualityRefBulkEditComponent,
     OeProjectSingleEditComponent,
     TechTransferSingleEditComponent,
-    StrategicDriversComponent
+    StrategicDriversComponent,
+    LocalAttributeSingleEditComponent
   ]
 })
 export class ProjectHubModule { }

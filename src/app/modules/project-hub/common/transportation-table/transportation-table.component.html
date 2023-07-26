@@ -7,12 +7,12 @@
         <div class="text-primary">
             <div class="flex items-start justify-between">
                 <div style="padding-right: 5px;">
-                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="Editable" [color]="'primary-200'"
+                    <button class="text-primary bg-gray-200" mat-flat-button *ngIf="Editable && editable" [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('TransportationBulkEdit', '', transportationBulkEditData, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
                     <button class="ml-4 text-primary bg-gray-200"
-                        *ngIf="Editable" mat-flat-button
+                        *ngIf="Editable && editable" mat-flat-button
                         [color]="'primary-200'"
                         (click)="projecthubservice.toggleDrawerOpen('TransportationSingleEdit', 'new', transportationBulkEditData , id)">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -25,58 +25,61 @@
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
             class="pr-6 material font-medium text-sm text-default whitespace-nowrap cursor-default"
             [rows]="Transportationngx" #transportationTable>
-            <ngx-datatable-column name="Mode" prop="transportationMode" [flexGrow]="0.8">
+            <ngx-datatable-column name="Mode" prop="transportationMode" [flexGrow]="0.4">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Type" prop="transportationType" [flexGrow]="1">
+            <ngx-datatable-column name="Type" prop="transportationType" [flexGrow]="0.6">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Fuel" prop="fuelType" [flexGrow]="0.8">
+            <ngx-datatable-column name="Fuel" prop="fuelType" [flexGrow]="0.4">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="CO2 Intensity (Factor Value)" prop="co2intensityFactorValue" [flexGrow]="1">
+            <ngx-datatable-column name="CO2 Intensity (Factor Value)" prop="co2intensityFactorValue" [flexGrow]="0.28">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                   <p class="right">{{value}}</p> 
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.5">
+            <ngx-datatable-column name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.45">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Distance (km)" prop="shipmentDistance" [flexGrow]="1.1">
+            <ngx-datatable-column name="Shipment Distance (km)" prop="shipmentDistance" [flexGrow]="0.28">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="right"  *ngIf="value">{{value  | number:'1.0-0'}}</p> 
+                    <p class="right" *ngIf="!value">0</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="1.1">
+            <ngx-datatable-column name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="0.3">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="right"  *ngIf="value">{{value  | number:'1.0-0'}}</p> 
+                    <p class="right" *ngIf="!value">0</p> 
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Shipment Frequency" prop="shipmentFrequency" [flexGrow]="1">
+            <ngx-datatable-column name="Shipment Frequency" prop="shipmentFrequency" [flexGrow]="0.3">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    {{value}}
+                    <p class="right"  *ngIf="value">{{value  | number:'1.0-0'}}</p> 
+                    <p class="right" *ngIf="!value">0</p> 
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1">
+            <ngx-datatable-column name="Basis of Estimate" prop="embasisOfEstimate" [flexGrow]="1.1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     {{ value}}
                 </ng-template>
             </ngx-datatable-column>
 
 
-            <ngx-datatable-column [flexGrow]="0.4" [resizeable]="false" [sortable]="false" [draggable]="false">
+            <ngx-datatable-column [flexGrow]="0.28" [resizeable]="false" [sortable]="false" [draggable]="false">
                 <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                     <div class="flex items-center justify-start gap-6">
-                        <a href="javascript:void(0)" title="Delete Single" *ngIf="Editable"
+                        <a href="javascript:void(0)" title="Delete Single" *ngIf="Editable && editable"
                             (click)="deleteDistribution(row.emenvironmentId)">
                             <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
                         </a>

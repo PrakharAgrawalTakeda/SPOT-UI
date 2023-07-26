@@ -23,7 +23,7 @@
                 {{value}}
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Units" prop="emunit" [flexGrow]="0.8">
+        <ngx-datatable-column name="Units" prop="emunit" [flexGrow]="1.2">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <ng-container>
                     <span class="datatable-header-cell-wrapper" (click)="sort()">
@@ -43,7 +43,7 @@
                 <p class="unit">{{value | number:'1.0-0'}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="UoM" prop="standardUoM" [flexGrow]="0.7">
+        <ngx-datatable-column name="UoM" prop="localInputUoM" [flexGrow]="0.7">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 {{ value}}
             </ng-template>

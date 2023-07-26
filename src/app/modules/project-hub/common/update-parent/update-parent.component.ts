@@ -1,12 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {FuseConfirmationConfig, FuseConfirmationService} from '@fuse/services/confirmation';
-import {debounceTime, filter, map, Observable, startWith, Subject, takeUntil} from 'rxjs';
-import {ProjectHubService} from '../../project-hub.service';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {GlobalVariables} from "../../../../shared/global-variables";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ProjectApiService} from "../project-api.service";
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil } from 'rxjs';
+import { ProjectHubService } from '../../project-hub.service';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { GlobalVariables } from "../../../../shared/global-variables";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ProjectApiService } from "../project-api.service";
+import { RoleService } from 'app/core/auth/role.service';
+import { MsalService } from '@azure/msal-angular';
 
 @Component({
     selector: 'app-update-parent',
@@ -30,7 +32,7 @@ export class UpdateParentComponent implements OnInit {
     id: string = '';
     removedIds: any[];
     rows = [];
-
+    isConfidential: boolean = false;
 
     constructor(
         public fuseAlert: FuseConfirmationService,
@@ -38,7 +40,7 @@ export class UpdateParentComponent implements OnInit {
         private _httpClient: HttpClient,
         private _Activatedroute: ActivatedRoute,
         private apiService: ProjectApiService,
-        private router: Router
+        private router: Router, private roleService: RoleService, private msalService: MsalService
     ) {
     }
 
@@ -62,25 +64,47 @@ export class UpdateParentComponent implements OnInit {
                 filter(value => value && value.length >= this.minLength)
             )
             .subscribe((value) => {
-                const params = new HttpParams().set('query', value);
-                if (this.selectedValueExists.value == true && this.searchControl.value !="") {
-                    this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
-                        .subscribe((resultSets: any) => {
-                            for (var i = 0; i < resultSets.projectData.length; i++) {
-                                var obj = resultSets.projectData[i];
-                                if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
-                                    resultSets.projectData.splice(i, 1);
-                                    i--;
-                                }
-                            }
-                            this.resultSets = resultSets.projectData;
-                            this.budget = resultSets.budget
-                            this.search.next(resultSets);
-                        });
-                }
+                this.refreshData(value)
             });
     }
-
+    onFocus(event: FocusEvent): void {
+        const value = this.searchControl.value;
+        if (value && value.length >= this.minLength) {
+          this.refreshData(value);
+        }
+      }
+    private refreshData(value: string) {
+        const params = new HttpParams().set('query', value);
+        if (this.selectedValueExists.value == true && this.searchControl.value != "") {
+            this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
+                .subscribe((resultSets: any) => {
+                    for (var i = 0; i < resultSets.projectData.length; i++) {
+                        var obj = resultSets.projectData[i];
+                        if (this.projecthubservice.removedIds.indexOf(obj.problemUniqueId) !== -1) {
+                            resultSets.projectData.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    if (!this.isConfidential) {
+                        this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+                        console.log("Confidential Projects", this.resultSets)
+                    }
+                    else {
+                        var activeaccount = this.msalService.instance.getActiveAccount()
+                        this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
+                            if (resp.confidentialProjects.length > 0) {
+                                var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
+                                if (confProjectUserList?.length > 0) {
+                                    this.resultSets = [...confProjectUserList];
+                                }
+                            }
+                        });
+                    }
+                    this.budget = resultSets.budget
+                    this.search.next(resultSets);
+                });
+        }
+    }
     dataloader() {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         var currentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === this.id);
@@ -88,7 +112,10 @@ export class UpdateParentComponent implements OnInit {
             var parrentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === currentProj.parentId);
             this.rows.push(parrentProj);
         }
-        this.viewContent = true;
+        this.apiService.getproject(this.projecthubservice.projectid).then((res: any) => {
+            this.isConfidential = res.isConfidential
+            this.viewContent = true;
+        })
     }
 
     onKeydown(event: KeyboardEvent): void {
@@ -100,7 +127,7 @@ export class UpdateParentComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        if(this.detailsHaveBeenChanged.value==true)
+        if (this.detailsHaveBeenChanged.value == true)
             window.location.reload();
     }
 

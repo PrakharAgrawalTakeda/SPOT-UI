@@ -19,8 +19,11 @@ export class ShippingTableComponent {
   @Input() ProjectData: any
   @Input() editCost: any
   @Input() data: any
+  @Input() GDLList: any
   lookupdata: any
   sortDir = ""
+  editable= false
+  gdlList: any;
   constructor(public projecthubservice: ProjectHubService, private _Activatedroute: ActivatedRoute, private apiService: ProjectApiService,
     public auth: AuthService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -34,27 +37,32 @@ export class ShippingTableComponent {
     this.dataloader()
   }
   dataloader() {
+    if (this.projecthubservice.roleControllerControl.projectHub.CAPS) {
+      this.editable = true
+    }
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-      this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+      //this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
         if (this.Editable == false) {
           this.Shippingngx = null
         }
         else {
           this.Shippingngx = this.data
+          this.gdlList = this.GDLList
           console.log(this.Shippingngx)
         }
         this.shippingBulkEditData.push(this.Shippingngx)
-        this.shippingBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
+        this.shippingBulkEditData.push(this.gdlList)
+        //this.shippingBulkEditData.push(res.projectData.emissionsImpactRealizationDate)
         this.viewContent = true
-      })
+      //})
     })
   }
 
   deleteDistribution(id: string) {
     var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Remove Shipping?",
+      "title": "Remove Shipping Record?",
       "message": "Are you sure you want to remove this record permanently? ",
       "icon": {
         "show": true,
@@ -80,6 +88,8 @@ export class ShippingTableComponent {
       if (close == 'confirmed') {
         this.apiService.deleteDistribution(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.isNavChanged.next(true)
+          
         })
       }
     })

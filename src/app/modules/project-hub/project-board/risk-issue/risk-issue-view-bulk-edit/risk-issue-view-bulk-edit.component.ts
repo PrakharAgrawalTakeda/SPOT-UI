@@ -600,7 +600,7 @@ export class RisIssueViewBulkEditComponent implements OnInit {
     deleteRI(rowIndex: number) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Are you sure?",
-            "message": "Are you sure you want Delete this Record?",
+            "message": "Are you sure you want to delete this record?",
             "icon": {
                 "show": true,
                 "name": "heroicons_outline:exclamation",

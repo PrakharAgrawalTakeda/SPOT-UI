@@ -80,4 +80,25 @@ export class MyPreferenceApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
+
+    async getemailNoti(userid: string) {
+        var url = GlobalVariables.apiurl + "EmailNotificationsSettings/ByUserADId/" + userid
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+
+    async editEmailSettings(body, userid) {
+        var link = GlobalVariables.apiurl + "EmailNotificationsSettings/ByUserADId/" + userid
+        const abc$ = this.http.put(link, body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+
+    async getprojectDetails(id: string) {
+        var url = GlobalVariables.apiurl + "Projects/GetBulk/" + id
+        const abc$ = this.http.get(url)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 }

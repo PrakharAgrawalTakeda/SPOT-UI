@@ -6,11 +6,36 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
 import moment from 'moment';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MMM-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-water-waste-bulk-edit',
   templateUrl: './water-waste-bulk-edit.component.html',
-  styleUrls: ['./water-waste-bulk-edit.component.scss']
+  styleUrls: ['./water-waste-bulk-edit.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class WaterWasteBulkEditComponent {
   unitCost = ""
@@ -52,7 +77,7 @@ export class WaterWasteBulkEditComponent {
         this.projecthubservice.isFormChanged = true
       }
     })
-    
+
   }
 
   getData(id){
@@ -87,6 +112,9 @@ export class WaterWasteBulkEditComponent {
     this.WaterWaste = this.projecthubservice.all[0]
     this.WaterWaste = this.sortbyNameandType(this.WaterWaste)
     this.waterwasteValues = this.projecthubservice.all[3]
+    console.log(this.WaterWaste)
+    console.log(this.waterwasteValues)
+    console.log(this.ProjectData)
     var waterValues = this.projecthubservice.all[3].filter(x => x.wwstream == "Water")
     for(var j=0;j<waterValues.length;j++){
       this.waterTypeDropDrownValues.push(waterValues[j].wwtype)
@@ -129,7 +157,7 @@ export class WaterWasteBulkEditComponent {
       }
     }) : array
   }
-  
+
 
   addWaterWaste() {
     var j = [{}]
@@ -192,7 +220,7 @@ export class WaterWasteBulkEditComponent {
   deleteWaterWaste(rowIndex: number) {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "Are you sure?",
-      "message": "Are you sure you want Delete this Record?",
+      "message": "Are you sure you want to delete this record?",
       "icon": {
         "show": true,
         "name": "heroicons_outline:exclamation",
@@ -306,29 +334,32 @@ export class WaterWasteBulkEditComponent {
         console.log(this.waterWasteDb)
         this.projecthubservice.isFormChanged = false
         this.submitPrep()
-        this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
-          if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate){
-            var formValue = this.CAPSform.getRawValue()
-            var mainObj = this.ProjectData.projectData
-            
-            mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+      if (this.ProjectData.projectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
+        var formValue = this.CAPSform.getRawValue()
+        var mainObj = this.ProjectData.projectData
 
-            this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
-              this.projecthubservice.isFormChanged = false
-              this.projecthubservice.isNavChanged.next(true)
-              this.projecthubservice.submitbutton.next(true)
-              this.projecthubservice.successSave.next(true)
-              this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
-          }
-          else {
+        mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+
+        this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+          this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+        })
+      })
+      }
+      else{
+        this.apiService.bulkeditWW(this.waterWasteDb, this.projecthubservice.projectid).then(res => {
             this.projecthubservice.isFormChanged = false
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.isNavChanged.next(true)
             this.projecthubservice.successSave.next(true)
-          }
         })
+            
+          }
     }
   }
 

@@ -6,6 +6,8 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { ProjectApiService } from '../../project-api.service';
 import moment from 'moment';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -20,7 +22,19 @@ export const MY_FORMATS = {
 @Component({
   selector: 'app-carbon-bulk-edit',
   templateUrl: './carbon-bulk-edit.component.html',
-  styleUrls: ['./carbon-bulk-edit.component.scss']
+  styleUrls: ['./carbon-bulk-edit.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class CarbonBulkEditComponent {
   today = new Date("2036-03-31");
@@ -98,6 +112,7 @@ export class CarbonBulkEditComponent {
           emunit: new FormControl(i.emunit),
           emimpactTonsCo2year: new FormControl(i.emimpactTonsCo2year),
           embasisOfEstimate: new FormControl(i.embasisOfEstimate),
+          localInputUoM: new FormControl(i.localInputUoM),
           unitCost: new FormControl(i.unitCost)
         }))
       }
@@ -118,7 +133,8 @@ export class CarbonBulkEditComponent {
         emunit: x.emunit,
         emimpactTonsCo2year: x.emimpactTonsCo2year,
         embasisOfEstimate: x.embasisOfEstimate,
-        unitCost: x.unitCost
+        unitCost: x.unitCost,
+        localInputUoM: x.localInputUoM
       }
     }) : this.submitObj = []
   }
@@ -160,29 +176,32 @@ export class CarbonBulkEditComponent {
     else {
       console.log(this.carbonDb)
       this.projecthubservice.isFormChanged = false
-      this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
-        if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
-          var formValue = this.CAPSform.getRawValue()
-          var mainObj = this.ProjectData
+      if (this.ProjectData.emissionsImpactRealizationDate != this.CAPSform.value.impactRealizationDate) {
+        var formValue = this.CAPSform.getRawValue()
+        var mainObj = this.ProjectData
 
-          mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+        mainObj.emissionsImpactRealizationDate = formValue.impactRealizationDate == null ? null : moment(formValue.impactRealizationDate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
 
-          this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
-            this.projecthubservice.isFormChanged = false
-            this.projecthubservice.isNavChanged.next(true)
-            this.projecthubservice.submitbutton.next(true)
-            this.projecthubservice.successSave.next(true)
-            this.projecthubservice.toggleDrawerOpen('', '', [], '')
-          })
-        }
-        else {
+        this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+        this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
           this.projecthubservice.isFormChanged = false
           this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
           this.projecthubservice.isNavChanged.next(true)
           this.projecthubservice.successSave.next(true)
-        }
+        
       })
+        })
+      }
+      else{
+        this.apiService.bulkeditCarbon(this.carbonDb, this.projecthubservice.projectid).then(res => {
+          this.projecthubservice.isFormChanged = false
+          this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.successSave.next(true)
+        })
+      }
     }
   }
 

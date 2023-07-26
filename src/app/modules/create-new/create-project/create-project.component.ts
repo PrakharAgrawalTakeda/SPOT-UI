@@ -12,6 +12,8 @@ import { __classPrivateFieldSet } from 'tslib';
 import { MatStepper } from '@angular/material/stepper';
 import { CreateNewApiService } from '../create-new-api.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { LocalAttributeSingleEditComponent } from 'app/modules/project-hub/local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
 
 
 @Component({
@@ -23,6 +25,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 
 export class CreateProjectComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild(LocalAttributeSingleEditComponent, { static: false }) localAttribute: LocalAttributeSingleEditComponent
   filterCriteria: any = {};
   getData: boolean = false;
   lookupdata: any = [];
@@ -39,6 +42,9 @@ export class CreateProjectComponent implements OnInit {
   productionStepName: string = "";
   localCurrency:any = [];
   viewContent:boolean = false
+  showLocalAttributes:boolean = false
+  portfolioOwners = ""
+  executionScope = ""
   createProjectForm = new FormGroup({
     problemTitle: new FormControl(),
     projectsingle: new FormControl(),
@@ -75,7 +81,8 @@ export class CreateProjectComponent implements OnInit {
     strategicYear: new FormControl(),
     annualMustWinID: new FormControl(),
     localCurrency: new FormControl(),
-    isArchived: new FormControl()
+    isArchived: new FormControl(),
+    isConfidential: new FormControl(),
   })
   newmainnav: any = [
     {
@@ -126,7 +133,7 @@ export class CreateProjectComponent implements OnInit {
   capturedValues = ['', '']
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService) {
   }
 
   
@@ -134,6 +141,7 @@ export class CreateProjectComponent implements OnInit {
     const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
     mainNavComponent.navigation = this.newmainnav
     mainNavComponent.refresh()
+    this.projectHubService.projectidInjector("")
     console.log("Inside init")
     this.auth.lookupMaster().then(res => {
       this.apiService.getLocalCurrency().then(currency => {
@@ -195,11 +203,12 @@ export class CreateProjectComponent implements OnInit {
         isCapsProject: event.isCapsProject,
         owningOrganization: event.owningOrganization,
         SubmittedBy: event.SubmittedBy,
-        targetGoalSituation: event.targetGoalSituation
+        targetGoalSituation: event.targetGoalSituation,
       })
     }
     else if (index == 1) {
       this.createProjectForm.patchValue({
+        isConfidential: event.isConfidential,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
         enviornmentalPortfolio: event.enviornmentalPortfolio,
@@ -373,6 +382,7 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].ProjectDescription = formValue.projectDescription
       mainObjCreate[0].TargetEndState = formValue.targetGoalSituation
       mainObjCreate[0].ProblemType = formValue.problemType
+      mainObjCreate[0].IsConfidential =  formValue.isConfidential == "" || formValue.isConfidential == "No" ? false : true
       mainObjCreate[0].DefaultOwningOrganizationID = formValue.owningOrganization
     mainObjCreate[0].IsOEProject = formValue.isOeproject == "" ? false : formValue.isOeproject
       if (mainObjCreate[0].IsOEProject) {
@@ -474,6 +484,7 @@ export class CreateProjectComponent implements OnInit {
       }
       else{
           this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+            this.localAttribute.submitLA(res.problemUniqueId)
             this.viewContent = true
           })
       }
@@ -504,9 +515,10 @@ export class CreateProjectComponent implements OnInit {
     this.router.navigate([`./portfolio-center`]);
     window.location.reload()
   }
+  
   CheckMandatory(index: number){
     this.stepper.selectedIndex = index;
-    if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
+    if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -531,11 +543,25 @@ export class CreateProjectComponent implements OnInit {
       const alert = this.fuseAlert.open(comfirmConfig)
       this.stepper.selectedIndex = index-1;
     }
-    else{
-    this.stepper.selectedIndex = index;
+    else {
+      this.showLocalAttributes = false
+      this.portfolioOwners = ""
+      this.executionScope = ""
+      this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
+      for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
+        this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
+      }
+      this.showLocalAttributes = true
+      this.stepper.selectedIndex = index;
     }
   }
 
+  captureValueLA(index, event){
+    this.showLocalAttributes = event
+    console.log(event)
+    console.log(this.showLocalAttributes)
+    this.showLocalAttributes = event
+  }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){
       return id != '' ? this.qualityType.find(x => x.lookUpId == id).lookUpName : ''
@@ -548,7 +574,7 @@ export class CreateProjectComponent implements OnInit {
   selectionChange(index){
     console.log(index)
     if (index._selectedIndex == 1 || index._selectedIndex == 2){
-      if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
+      if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You must complete all mandatory fields.",
           "message": "",
@@ -574,6 +600,14 @@ export class CreateProjectComponent implements OnInit {
         this.stepper.selectedIndex = "0"
       }
       else {
+        this.showLocalAttributes = false
+        this.portfolioOwners = ""
+        this.executionScope = ""
+        this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
+        for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
+          this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
+        }
+        this.showLocalAttributes = true
         this.stepper.selectedIndex = index._selectedIndex;
       }
     }

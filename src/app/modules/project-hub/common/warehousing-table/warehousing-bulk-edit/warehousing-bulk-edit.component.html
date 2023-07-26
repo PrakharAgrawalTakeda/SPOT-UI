@@ -1,0 +1,110 @@
+<div *ngIf="viewContent">
+    <div class="flex items-start justify-between bg-primary sidepanel-header">
+        <div class="text-on-primary" style="padding-top: 6px">Bulk Edit Warehousing</div>
+        <div style="padding-top: 2px">
+            <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)" href="javascript:void(0)" title="Close">
+                <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="w-full bg-card rounded-2xl">
+        <div class="flex items-center justify-end gap-3 pt-3 pr-3 grid-cols-2">
+            <button class="ml-4 text-primary bg-gray-200"
+                *ngIf="projecthubservice.roleControllerControl.projectHub.CAPS" mat-flat-button [color]="'primary-200'"
+                (click)="addWarehousing()">
+                <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+            </button>
+
+        </div>
+        <div class="h-[78vh] w-[94vw] overflow-y-hidden pl-3">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="force"
+                class="w-full datatable-op-80 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+                [rows]="Warehousing" #warehousingTable>
+                <ngx-datatable-column [sortable]="false" name="CO2 Intensity" prop="co2intensityFactorValue" [flexGrow]="0.8">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div class = "cost2">
+                            11.7 
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="UoM" prop="co2intensityFactorMeasure" [flexGrow]="0.5">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <div>
+                            kg CO2e/t
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Shipment Weight (kg)" prop="shipmentWeight" [flexGrow]="0.8">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!warehousingTableEditStack.includes(rowIndex) && editWarehousing"
+                            (click)="warehousingTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value  | number:'1.0-0'}}</p>
+                            <p class="cost" *ngIf="!value">0</p>
+                        </a>
+                        <form [formGroup]="warehousingForm.controls[rowIndex]"
+                            *ngIf="warehousingTableEditStack.includes(rowIndex) && editWarehousing">
+                            <spot-input class="w-full" formControlName="shipmentWeight" name="shipmentWeight"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0" [allowNegativeValues]="warehousingForm.controls[rowIndex].get('affectedLocations').value >= 0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [sortable]="false" name="Affected Locations" prop="affectedLocations" [flexGrow]="0.8">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!warehousingTableEditStack.includes(rowIndex) && editWarehousing"
+                            (click)="warehousingTableEditRow(rowIndex)">
+                            <p class="cost" *ngIf="value">{{value  | number:'1.0-0'}}</p>
+                            <p class="cost" *ngIf="!value">0</p>
+                        </a>
+                        <form [formGroup]="warehousingForm.controls[rowIndex]"
+                            *ngIf="warehousingTableEditStack.includes(rowIndex) && editWarehousing">
+                            <spot-input class="w-full" formControlName="affectedLocations" name="affectedLocations"
+                                [decimalCount]="0" [inputType]="'Number'" [autoAddDecimal]="false" [placeholder]="0" [allowNegativeValues]="warehousingForm.controls[rowIndex].get('shipmentWeight').value >= 0">
+                            </spot-input>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" name="Basis of Estimate"
+                    prop="embasisOfEstimate" [flexGrow]="2">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a *ngIf="!warehousingTableEditStack.includes(rowIndex)"
+                            (click)="warehousingTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>{{value}}
+                        </a>
+                        <form [formGroup]="warehousingForm.controls[rowIndex]"
+                            *ngIf="warehousingTableEditStack.includes(rowIndex)">
+                            <spot-textarea formControlName="embasisOfEstimate" [showLabel]="false"
+                                [label]="'Basis of Estimate'" [placeholder]="'Basis of Estimate'" [rows]="3">
+                            </spot-textarea>
+                        </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [resizeable]="false" [sortable]="false" [flexGrow]="0.5" [resizeable]="false"
+                    [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded"
+                        ngx-datatable-cell-template>
+
+                        <div class="flex items-center justify-end pr-5">
+                            <a href="javascript:void(0)" title="Delete Single"
+                                *ngIf="this.projecthubservice.roleControllerControl.projectHub.CAPS"
+                                (click)="deleteWarehousing(rowIndex)">
+                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                            </a>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+
+
+            </ngx-datatable>
+        </div>
+    </div>
+    <div class="flex items-start justify-between mt-6 px-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+            (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitWarehousing()" type="button">
+            Submit
+        </button>
+    </div>
+</div>

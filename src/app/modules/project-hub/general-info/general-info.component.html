@@ -19,8 +19,18 @@
             [label]="'Local Currency'">
           </spot-input>
           <div
-            *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
+            *ngIf="projectHubService.roleControllerControl.generalInfo.confidentialEdit && viewElementChecker('isConfidential')"
             class="flex justify-start w-full gap-3 items-center font-medium">
+            Is Confidential
+            <mat-icon svgIcon="heroicons_outline:x-circle"
+              *ngIf="!generalInfoForm.controls.isConfidential.value"></mat-icon>
+            <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+              *ngIf="generalInfoForm.controls.isConfidential.value">
+            </mat-icon>
+          </div>
+          <div
+            *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
+            class="flex justify-start w-full gap-3 items-center font-medium"  [ngClass]="{'pt-2 pb-6': projectHubService.roleControllerControl.generalInfo.confidentialEdit}">
             Is Archived?
             <mat-icon svgIcon="heroicons_outline:x-circle"
               *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
