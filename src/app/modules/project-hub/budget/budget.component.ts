@@ -57,25 +57,47 @@ export class BudgetComponent implements OnInit {
     }
 
     dataloader(): void {
-        this.portApiService.getfilterlist().then(filterres => {
-            this.filterCriteria = filterres;
-        })
+        // this.portApiService.getfilterlist().then(filterres => {
+        //     this.filterCriteria = filterres;
+        // })
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        this.portApiService.getOnlyLocalCurrency(this.id).then(currency => {
-            this.localCurrency = currency
-        });
-        this.authService.lookupMaster().then((lookup: any) => {
-            this.lookUpData = lookup
-            this.projectHubService.lookUpMaster = lookup
-            this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
-                this.budgetPageInfo = res;
-                this.fundingInformations = res.budgetIOs;
-                this.opexField = !!res.budget.opExRequired;
-                this.capexField = !!res.budget.capExRequired;
-                this.generalInfoPatchValue(res)
+        // this.portApiService.getOnlyLocalCurrency(this.id).then(currency => {
+        //
+        // });
+        // this.authService.lookupMaster().then((lookup: any) => {
+        //     this.lookUpData = lookup
+        //     this.projectHubService.lookUpMaster = lookup
+        //     this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
+        //         this.budgetPageInfo = res;
+        //         this.fundingInformations = res.budgetIOs;
+        //         this.opexField = !!res.budget.opExRequired;
+        //         this.capexField = !!res.budget.capExRequired;
+        //         this.generalInfoPatchValue(res)
+        //         this.viewContent = true
+        //     })
+        // })
+        const promises = [
+            this.portApiService.getfilterlist(),
+            this.portApiService.getOnlyLocalCurrency(this.id),
+            this.authService.lookupMaster(),
+            this.apiService.getBudgetPageInfo(this.id)
+        ];
+        Promise.all(promises)
+            .then((response: any[]) => {
+                this.filterCriteria = response[0];
+                this.localCurrency = response[1];
+                this.lookUpData = response[2];
+                this.projectHubService.lookUpMaster = response[2];
+                this.budgetPageInfo =  response[3];
+                this.fundingInformations =  response[3];
+                this.opexField = !! response[3].budget.opExRequired;
+                this.capexField = !!response[3].budget.capExRequired;
+                this.generalInfoPatchValue(response[3])
                 this.viewContent = true
             })
-        })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
         this.disabler()
     }
 

@@ -300,7 +300,7 @@ export class BudgetFundingInformationBulkEditComponent {
                 }else{
                     this.projecthubservice.isFormChanged = false
                     this.formValue()
-                    this.budgetInfo.budgetIOs  = this.fundingRequestsSubmit;
+                    this.budgetInfo.budgetIOs  = this.fundingRequestsSubmit.filter((item) => item.keep);
                     this.apiService.updateBudgetPageInfo(this.projecthubservice.projectid,this.budgetInfo).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')

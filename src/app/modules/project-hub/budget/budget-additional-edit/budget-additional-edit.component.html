@@ -4,6 +4,7 @@
             <ng-container *ngIf="mode === 'OPEX'">Opex Details Edit</ng-container>
             <ng-container *ngIf="mode === 'Asset-In-Service'">Asset Placed In Service Edit</ng-container>
             <ng-container *ngIf="mode === 'Budget-Commentary'">Budget Commentary Edit</ng-container>
+            <ng-container *ngIf="mode === 'Deviation'">Deviation Code Edit</ng-container>
         </div>
         <div style="padding-top: 2px"><a (click)="projectHubService.toggleDrawerOpen('', '',[],'')"
                                          href="javascript:void(0)" title="Close">
@@ -27,6 +28,14 @@
                            [label]="'Budget Commentary'"
                            [placeholder]="'Budget Commentary'">
             </spot-textarea>
+            <spot-singleselect-autocomplete class="w-full" formControlName="afpDeviationCode"
+                                            [label]="'AFP Deviation Code'" [placeholder]="'AFP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
+                                            [dropDownArray]="getAfdDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
+            <spot-singleselect-autocomplete class="w-full" formControlName="mtdpDeviationCode"
+                                            [label]="'MTDP Deviation Code'" [placeholder]="'mtdpDeviationCode'" [valuePointer]="'lookUpName'"  [Required]="false"
+                                            [dropDownArray]="getMtdpDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+            </spot-singleselect-autocomplete>
         </div>
 
     </form>
