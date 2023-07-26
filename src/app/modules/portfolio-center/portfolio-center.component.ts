@@ -134,9 +134,7 @@ export class PortfolioCenterComponent implements OnInit {
     projectName: new FormControl()
   })
 
-  BulkReportForm = new FormGroup({
-    
-  })
+  bulkreportdata: any;
 
   filteredPhaseArray = []
   oePhaseArray = []
@@ -205,6 +203,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     var executionScope = ""
     var portfolioOwners = ""
     this.activeaccount = this.msal.instance.getActiveAccount();
@@ -649,6 +648,9 @@ export class PortfolioCenterComponent implements OnInit {
 
     console.log("Filter Data : " +this.groupData)
     //Filtering Projects
+    this.apiService.Filters(this.groupData).then((res: any) => {
+      console.log("PROJECTS DATA",res)
+    })
       this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
@@ -657,6 +659,8 @@ export class PortfolioCenterComponent implements OnInit {
           this.totalproject = res.totalProjects
         var budgetData;
           this.projects.data = res.portfolioDetails;
+          this.bulkreportdata = res.portfolioDetails
+          console.log(this.bulkreportdata)
         if (res.budgetTile.localCurrencyAbbreviation == "OY") {
           this.budgetCurrency = "OY"
         }
