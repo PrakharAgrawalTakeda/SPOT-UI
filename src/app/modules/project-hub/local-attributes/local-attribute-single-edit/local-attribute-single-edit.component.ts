@@ -106,6 +106,13 @@ export class LocalAttributeSingleEditComponent {
   }
 
   submitLA(data) {
+    var projectId = ""
+    if(this.callLocation == "CreateNew"){
+      projectId = data
+    }
+    else{
+      projectId = this.projectHubService.projectid
+    }
     var mainObj = this.originalData
     var dataToSend = []
     var i = -1;
@@ -240,7 +247,7 @@ export class LocalAttributeSingleEditComponent {
         }
       }
     });
-    this.apiService.editLocalAttributes(this.projectHubService.projectid, dataToSend).then(res => {
+    this.apiService.editLocalAttributes(projectId, dataToSend).then(res => {
       this.projectHubService.toggleDrawerOpen('', '', [], '')
       this.projectHubService.submitbutton.next(true)
       this.projectHubService.isNavChanged.next(true)

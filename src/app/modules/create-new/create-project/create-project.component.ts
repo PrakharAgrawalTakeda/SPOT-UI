@@ -13,6 +13,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { CreateNewApiService } from '../create-new-api.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { LocalAttributeSingleEditComponent } from 'app/modules/project-hub/local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 
 export class CreateProjectComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild(LocalAttributeSingleEditComponent, { static: false }) localAttribute: LocalAttributeSingleEditComponent
   filterCriteria: any = {};
   getData: boolean = false;
   lookupdata: any = [];
@@ -482,6 +484,7 @@ export class CreateProjectComponent implements OnInit {
       }
       else{
           this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+            this.localAttribute.submitLA(res.problemUniqueId)
             this.viewContent = true
           })
       }
@@ -515,7 +518,7 @@ export class CreateProjectComponent implements OnInit {
   
   CheckMandatory(index: number){
     this.stepper.selectedIndex = index;
-    if (this.createProjectForm.value.problemTitle == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
+    if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -571,7 +574,7 @@ export class CreateProjectComponent implements OnInit {
   selectionChange(index){
     console.log(index)
     if (index._selectedIndex == 1 || index._selectedIndex == 2){
-      if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
+      if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You must complete all mandatory fields.",
           "message": "",

@@ -1701,9 +1701,9 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
-        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels[i].redExecutionCompleteDate
-        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels[i].notBaselined
-        this.projectOverview[i].completed = res.conditionalFormattingLabels[i].completed
+        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined
+        this.projectOverview[i].completed = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed
+        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate
       }
       this.size = 100;
       this.totalElements = this.totalproject;
@@ -1774,9 +1774,9 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
-            this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels[i].redExecutionCompleteDate
-            this.projectOverview[i].notBaselined = res.conditionalFormattingLabels[i].notBaselined
-            this.projectOverview[i].completed = res.conditionalFormattingLabels[i].completed
+            this.projectOverview[i].notBaselined = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined
+            this.projectOverview[i].completed = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed
+            this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate
           }
           if(this.sorting.name != ""){
             this.projectOverview.sort
