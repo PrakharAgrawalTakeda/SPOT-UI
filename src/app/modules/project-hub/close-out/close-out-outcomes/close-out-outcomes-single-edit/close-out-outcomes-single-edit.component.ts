@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
-import { CloseOutApiService } from '../../close-out.service';
 
 @Component({
   selector: 'app-close-out-outcomes-single-edit',
@@ -20,8 +19,7 @@ export class CloseOutOutcomesSingleEditComponent implements OnInit {
   outcomeInfo: any = {}
   outcomeInfoCharter: any = {}
   viewContent = false
-  constructor(public projectHubService: ProjectHubService, private apiService: ProjectApiService,
-        public closeoutApiService: CloseOutApiService) {
+  constructor(public projectHubService: ProjectHubService, private apiService: ProjectApiService) {
     this.outcomeForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
           this.projectHubService.isFormChanged = true

@@ -132,6 +132,9 @@ export class BudgetGeneralEditComponent {
         this.apiService.getBudgetPageInfo(this.projectHubService.projectid).then((res: any) => {
             this.budgetInfo = res
             this.generalInfoPatchValue(res)
+            if(this.budgetInfoForm.controls.capexRequired.value ==true) {
+                this.required = true;
+            }
             if(this.capexRequired.value ==true && !this.isBudgetAdmin){
                 this.capexRequired.disable({emitEvent : false})
                 this.budgetId.disable()
@@ -193,17 +196,21 @@ export class BudgetGeneralEditComponent {
                     fieldsMissing ++;
                     missingFields.push("Budget ID")
                 }
-                if(!this.predefinedInvestmentId.value){
+                if(!this.predefinedInvestmentId.value || this.predefinedInvestmentId.value.lookUpName == "NA"){
                     fieldsMissing ++;
                     missingFields.push("Global/Regional Predefined Investment")
                 }
-                if(this.where.invalid){
+                if(this.where.invalid || this.where.value == ""){
                     fieldsMissing ++;
                     missingFields.push("Where")
                 }
-                if(this.why.invalid){
+                if(this.why.invalid || this.why.value == ""){
                     fieldsMissing ++;
                     missingFields.push("Why")
+                }
+                if(this.fundingApprovalNeedDate.invalid){
+                    fieldsMissing ++;
+                    missingFields.push("Fundiong Approval Need Date")
                 }
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "The following fields are required",
@@ -354,6 +361,9 @@ export class BudgetGeneralEditComponent {
     }
     get capexRequired() {
         return this.budgetInfoForm.get('capexRequired');
+    }
+    get fundingApprovalNeedDate() {
+        return this.budgetInfoForm.get('fundingApprovalNeedDate');
     }
     getLookup(key) {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpId == key)[0]

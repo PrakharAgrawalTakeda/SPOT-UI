@@ -95,5 +95,10 @@ export class BudgetPerformanceEditComponent {
             this.projectHubService.toggleDrawerOpen('', '', [], '')
         })
     }
+    onSlideToggleChange() {
+        if(this.projectHubService.isFormChanged == false){
+            this.projectHubService.isFormChanged = true;
+        }
+    }
 
 }
