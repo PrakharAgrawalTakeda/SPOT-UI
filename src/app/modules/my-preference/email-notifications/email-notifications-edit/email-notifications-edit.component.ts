@@ -522,35 +522,39 @@ export class EmailNotificationsEditComponent {
         this.preferenceservice.isFormChanged = false
         this.projecthubservice.isFormChanged = false
         this.preferenceservice.submitbutton.next(true)
-        this.preferenceservice.successSave.next(true)
+        //this.preferenceservice.successSave.next(true)
         this.preferenceservice.toggleDrawerOpen('', '', [], '')
 
-
+this.showConfirmationMessage()
         //   })
       })
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:check",
-          "color": "success"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
+      
     }
+  }
+
+  showConfirmationMessage(): void {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
   }
 
 }
