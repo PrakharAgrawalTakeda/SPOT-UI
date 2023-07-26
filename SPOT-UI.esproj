@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.62-alpha">
+  <PropertyGroup>
+    <JavaScriptTestFramework>Jasmine</JavaScriptTestFramework>
+    <BuildCommand>npm run start</BuildCommand>
+    <!-- Command to run on project build -->
+    <!-- Command to create an optimized build of the project that's ready for publishing -->
+    <!-- Folder where production build objects will be placed -->
+  </PropertyGroup>
+</Project>
