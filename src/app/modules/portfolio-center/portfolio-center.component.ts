@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
-import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
+import { MatSidenav } from '@angular/material/sidenav';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Title } from '@angular/platform-browser';
 import { ProjectHubService } from '../project-hub/project-hub.service';
@@ -134,6 +134,10 @@ export class PortfolioCenterComponent implements OnInit {
     projectName: new FormControl()
   })
 
+  BulkReportForm = new FormGroup({
+    
+  })
+
   filteredPhaseArray = []
   oePhaseArray = []
   capitalPhaseArray: any
@@ -171,7 +175,7 @@ export class PortfolioCenterComponent implements OnInit {
   groupData:any;
   
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
-  @ViewChild('bulkreportDrawer') bulkreportDrawer: MatDrawer
+  @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private renderer: Renderer2,private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
