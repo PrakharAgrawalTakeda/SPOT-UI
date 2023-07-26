@@ -144,13 +144,13 @@
                 [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('primaryProduct')" class="w-full"
                 formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
                 [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
-                [dropDownArray]="filterCriteria.products" [showHint]="true"
+                [dropDownArray]="getActiveProducts()" [showHint]="true"
                 [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
             </spot-singleselect-autocomplete>
             <spot-multiselect-autocomplete *ngIf="viewElementChecker('otherImpactedProducts')" class="w-full"
                 formControlName="otherImpactedProducts" name="otherImpactedProducts" [label]="'Other Impacted Products'"
                 [placeholder]="'Other Impacted Products'" [valuePointer]="'fullProductName'" [idPointer]="'productId'"
-                [dropDownArray]="filterCriteria.products" [showHint]="true"
+                [dropDownArray]="getActiveProducts()" [showHint]="true"
                 [hint]="'Any additional products which are impacted by the project execution'">
             </spot-multiselect-autocomplete>
             <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"

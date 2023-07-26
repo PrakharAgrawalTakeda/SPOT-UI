@@ -327,6 +327,12 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   getSponsor(): any {
     return this.filterCriteria.sponsor
   }
+  getActiveProducts(): any {
+    if (this.filterCriteria && this.filterCriteria.products) {
+      return this.filterCriteria.products.filter(x => x.showProduct == true);
+    }
+    return [];
+  }
 
   clickEvent(value: string, name: string) {
     if ((name == "Project Name" || name == "Portfolio Owner\nhelp" || name == "None\nOwning Organizationhelp *" || name == "Submitted By" || name == "Primary Producthelp *" || name == "Problem Description / Present Situation / Submission Description *" || name == "Project Type *") && (value == '' || value == undefined)) {

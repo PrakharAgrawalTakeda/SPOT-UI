@@ -332,6 +332,14 @@ export class EmailNotificationsEditComponent {
     }
     return [];
   }
+
+  getActiveProducts(): any {
+    if (this.filterCriteria && this.filterCriteria.products) {
+      return this.filterCriteria.products.filter(x => x.showProduct == true);
+    }
+    return [];
+  }
+
   getRoles(): any {
     var j = this.projecthubservice.all
     if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
