@@ -15,7 +15,7 @@ import {NoopAnimationPlayer, ɵAnimationGroupPlayer} from "@angular/animations";
   styleUrls: ['./budget-additional-edit.component.scss']
 })
 export class BudgetAdditionalEditComponent {
-    @Input() mode: 'Asset-In-Service' | 'OPEX' | 'Budget-Commentary'  = 'OPEX'
+    @Input() mode: 'Asset-In-Service' | 'OPEX' | 'Budget-Commentary' | 'Deviation' = 'OPEX'
     constructor(public projectHubService: ProjectHubService,
                 private portApiService: PortfolioApiService,
                 public auth: AuthService,
@@ -39,6 +39,8 @@ export class BudgetAdditionalEditComponent {
         apisdate: new FormControl(''),
         opexRequired: new FormControl(false),
         budgetCommentary: new FormControl(''),
+        afpDeviationCode: new FormControl(null),
+        mtdpDeviationCode: new FormControl(null),
     })
 
     ngOnInit(): void {
@@ -63,6 +65,14 @@ export class BudgetAdditionalEditComponent {
                 })
                 this.viewContent = true
                 break;
+            case 'Deviation':
+                this.budgetInfoForm.patchValue({
+                    afpDeviationCode: null,
+                    mtdpDeviationCode: null
+                })
+                this.viewContent = true
+                break;
+
         }
         this.projectHubService.isFormChanged = false
 
@@ -94,4 +104,11 @@ export class BudgetAdditionalEditComponent {
             this.projectHubService.toggleDrawerOpen('', '', [], '')
         })
     }
+    getAfdDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
+    }
+    getMtdpDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
+    }
+
 }
