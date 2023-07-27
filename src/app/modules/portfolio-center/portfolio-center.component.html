@@ -1,7 +1,7 @@
 <div class="flex flex-col min-w-0 overflow-hidden pt-12">
 
     <mat-drawer-container class="flex-auto h-full"
-        [ngStyle]="{ 'position' : filterDrawer.opened || bulkreportDrawer.opened ? 'fixed' : 'relative'}">
+        [ngStyle]="{ 'position' : filterDrawer.opened ? 'fixed' : 'relative'}">
         <!-- Drawer -->
         <mat-drawer class="w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             [position]="'end'" #filterDrawer>
@@ -202,14 +202,14 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     [rowHeight]="'auto'" [scrollbarV]="false"> -->
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
-                    [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)"
-                    [virtualization]="false" [sorts]="[{ prop: 'problemTitle', dir: 'asc' }]"
+                    [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false"
+                    [sorts]="[{ prop: 'problemTitle', dir: 'asc' }]"
                     class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="bulkreportdata"
                     #projectOverviewTable>
 
                     <!-- Define columns -->
                     <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="1.5">
+                        [flexGrow]="0.5">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -217,7 +217,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Budget ID" prop="budgetId" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="1.5">
+                        [flexGrow]="0.5">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -225,14 +225,14 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Project Name" prop="problemTitle" [resizeable]="false"
-                        [sortable]="false" [flexGrow]="4">
+                        [sortable]="false" [width]="200">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
-                            <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
+                            <p (click)="OpenProject(value)" class="projectName">{{ value }}</p>
                         </ng-template>
                     </ngx-datatable-column>
 
-                    <ngx-datatable-column name="PM" prop="pm" [resizeable]="false" [sortable]="false" [flexGrow]="2.5">
+                    <ngx-datatable-column name="PM" prop="pm" [resizeable]="false" [sortable]="false" [flexGrow]="1.5">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -240,7 +240,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </ngx-datatable-column>
 
                     <ngx-datatable-column name="Sponsor" prop="sponsor" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="2.5">
+                        [flexGrow]="1.5">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -248,72 +248,101 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </ngx-datatable-column>
 
                     <!-- Toggle column -->
-                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
-                        <ng-template ngx-datatable-header-template let-value="value">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
-                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                    <!-- <ngx-datatable-column name="Project Proposal" prop="projectProposal" [sortable]="false"
+                        [resizeable]="false" [flexGrow]="0.1" [headerClass]="getHeaderClass">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            <a *ngIf="!bulkreportTableEditStack.includes(rowIndex)"
+                                (click)="bulkreportTableEditRow(rowIndex)">
+                                <p *ngIf="!value">&nbsp;</p>
+                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
+                            </a>
+                            <form [formGroup]="bulkreportForm.controls[rowIndex]"
+                                *ngIf="bulkreportTableEditStack.includes(rowIndex)" class="h-[45px]">
+                                <mat-slide-toggle class="h-full overflow-hidden"
+                                    formControlName="projectProposal">
+                                </mat-slide-toggle>
+                            </form>
+                        </ng-template>
+                    </ngx-datatable-column> -->
+                    <ngx-datatable-column [flexGrow]="0.4" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+                                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
                             Project Proposal
                         </ng-template>
-                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
-                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
-                        <ng-template ngx-datatable-header-template let-value="value">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
-                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                            let-onCheckboxChangeFn="onCheckboxChangeFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+                                (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+                                </ng-template>
+                                </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.4" [sortable]="false"  [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+                                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
                             Project Charter
                         </ng-template>
-                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
-                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
-                        <ng-template ngx-datatable-header-template let-value="value">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
-                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                            let-onCheckboxChangeFn="onCheckboxChangeFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+                                (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+                                </ng-template>
+                                </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.4" [sortable]="false"  [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+                                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
                             Performance Dashboard
                         </ng-template>
-                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
-                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
-                        <ng-template ngx-datatable-header-template let-value="value">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
-                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                            let-onCheckboxChangeFn="onCheckboxChangeFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+                                (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+                                </ng-template>
+                                </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.4" [sortable]="false"  [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+                                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
                             Budget Dashboard
                         </ng-template>
-                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
-                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
-                        <ng-template ngx-datatable-header-template let-value="value">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
-                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                            let-onCheckboxChangeFn="onCheckboxChangeFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+                                (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+                                </ng-template>
+                                </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.4" [sortable]="false"  [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+                                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
                             Project Closeout
                         </ng-template>
-                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
-                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
-                        <ng-template ngx-datatable-header-template let-value="value">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
-                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                            let-onCheckboxChangeFn="onCheckboxChangeFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+                                (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+                                </ng-template>
+                                </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.3" [sortable]="false"  [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value"
+                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
+                                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
                             GMSGQ Product Team
                         </ng-template>
-                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
-                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
-                        </ng-template>
-                    </ngx-datatable-column>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                            let-onCheckboxChangeFn="onCheckboxChangeFn">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="isSelected"
+                                (change)="onCheckboxChangeFn($event)"></mat-slide-toggle>
+                                </ng-template>
+                                </ngx-datatable-column>
 
                 </ngx-datatable>
 

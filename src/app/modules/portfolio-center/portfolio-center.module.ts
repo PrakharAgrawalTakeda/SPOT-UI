@@ -23,6 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 export const projectRoutes: Route[] = [
   {
@@ -58,6 +59,7 @@ export const projectRoutes: Route[] = [
     SpotFormsModule,
     NgScrollbarModule,
     NgxDatatableModule,
+    MatSlideToggleModule
   ]
 })
 export class PortfolioCenterModule { }

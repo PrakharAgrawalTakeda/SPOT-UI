@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { MsalService } from '@azure/msal-angular';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
@@ -27,6 +27,7 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Constants } from 'app/shared/constants';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -135,6 +136,8 @@ export class PortfolioCenterComponent implements OnInit {
   })
 
   bulkreportdata: any;
+  bulkreportTableEditStack: any = []
+  bulkreportForm = new FormArray([])
 
   filteredPhaseArray = []
   oePhaseArray = []
@@ -648,9 +651,6 @@ export class PortfolioCenterComponent implements OnInit {
 
     console.log("Filter Data : " +this.groupData)
     //Filtering Projects
-    this.apiService.Filters(this.groupData).then((res: any) => {
-      console.log("PROJECTS DATA",res)
-    })
       this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
@@ -660,6 +660,9 @@ export class PortfolioCenterComponent implements OnInit {
         var budgetData;
           this.projects.data = res.portfolioDetails;
           this.bulkreportdata = res.portfolioDetails
+          this.bulkreportForm.push(new FormGroup({
+            projectProposal: new FormControl(false)
+          }))
           console.log(this.bulkreportdata)
         if (res.budgetTile.localCurrencyAbbreviation == "OY") {
           this.budgetCurrency = "OY"
@@ -860,6 +863,12 @@ export class PortfolioCenterComponent implements OnInit {
   this.showcontent = true;
   }
   
+  bulkreportTableEditRow(row: number) {
+    if (!this.bulkreportTableEditStack.includes(row)) {
+        this.bulkreportTableEditStack.push(row)
+    }
+}
+
   scrollHandler(event) {
     // if (!this.scroll) {
       this.scroll = true
