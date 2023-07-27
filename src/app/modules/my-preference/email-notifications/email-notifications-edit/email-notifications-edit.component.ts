@@ -89,7 +89,7 @@ export class EmailNotificationsEditComponent {
     })
 
     this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].valueChanges.subscribe(value => {
-      console.log(this.viewContent)
+      console.log(value)
       if (this.viewContent == true) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You have changed the notification scope. Do you want to proceed?",
@@ -289,7 +289,6 @@ export class EmailNotificationsEditComponent {
                     this.isConfidential = id.isConfidential
                     this.projects = id
                     console.log(this.projects)
-                    this.viewContent = true
                   }
 
                 })
@@ -332,6 +331,14 @@ export class EmailNotificationsEditComponent {
     }
     return [];
   }
+
+  getActiveProducts(): any {
+    if (this.filterCriteria && this.filterCriteria.products) {
+      return this.filterCriteria.products.filter(x => x.showProduct == true);
+    }
+    return [];
+  }
+
   getRoles(): any {
     var j = this.projecthubservice.all
     if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
@@ -455,7 +462,8 @@ export class EmailNotificationsEditComponent {
     this.preferenceservice.isFormChanged = false
     var formValue = this.emailNotiForm.getRawValue()
     console.log(formValue.emailNotifcationNotifcationReportScopeIds)
-    if (formValue.reportFrequencyId == null || formValue.emailNotifcationNotifcationReportScopeIds == null) {
+    debugger
+    if (Object.keys(formValue.reportFrequencyId).length == 0 || Object.keys(formValue.emailNotifcationNotifcationReportScopeIds).length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "In order to save the information it is required to enter Report Frequency and Report Scope!",
         "message": "",
@@ -514,35 +522,39 @@ export class EmailNotificationsEditComponent {
         this.preferenceservice.isFormChanged = false
         this.projecthubservice.isFormChanged = false
         this.preferenceservice.submitbutton.next(true)
-        this.preferenceservice.successSave.next(true)
+        //this.preferenceservice.successSave.next(true)
         this.preferenceservice.toggleDrawerOpen('', '', [], '')
 
-
+this.showConfirmationMessage()
         //   })
       })
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:check",
-          "color": "success"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
+      
     }
+  }
+
+  showConfirmationMessage(): void {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
   }
 
 }
