@@ -250,16 +250,21 @@ export class PortfolioCenterComponent implements OnInit {
           link: '/create-project',
           children: [
             {
-              title: 'Create Project',
-              type: 'basic',
-              link: '/create-project/create-new-project'
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '*'
             },
             {
-              title: 'Copy Project',
-              type: 'basic',
-              link: '/create-project/copy-project'
+                title: 'Create a Standard/Simple Project/Program',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy an existing Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
             }
-          ],
+        ],
         },
         {
           id: 'spot-documents',

@@ -10,7 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { MsalService } from '@azure/msal-angular';
 import { CreateNewApiService } from '../create-new-api.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
-
+import moment from 'moment';
 
 @Component({
   selector: 'app-copy-project',
@@ -28,9 +28,9 @@ export class CopyProjectComponent implements OnInit {
   userid: string = "";
   projectid: string = "";
   projectname: string = "";
-  viewContent:boolean = false
+  viewContent: boolean = false
   CopyProjectForm = new FormGroup({
-    projectTitle: new FormControl({value: true, disabled: true}),
+    projectTitle: new FormControl({ value: true, disabled: true }),
     projectType: new FormControl({ value: true, disabled: true }),
     problemDescription: new FormControl(true),
     proposedStatement: new FormControl(true),
@@ -41,60 +41,81 @@ export class CopyProjectComponent implements OnInit {
     categoricalDriver: new FormControl(true),
     StrategicalDriver: new FormControl(true)
   })
-  newmainnav: any = [
-    {
-      id: 'portfolio-center',
-      title: 'Portfolio Center',
-      type: 'basic',
-      link: '/portfolio-center'
-    },
-    {
-      // id: 'create-project',
-      title: 'Create Project',
-      type: 'collapsable',
-      active: true,
-      link: '/create-project',
-      children: [
-        {
-          title: 'Create Project',
-          type: 'basic',
-          link: '/create-project/create-new-project'
-        },
-        {
-          title: 'Copy Project',
-          type: 'basic',
-          link: '/create-project/copy-project'
-        }
-      ],
-    },
-    {
-      id: 'spot-documents',
-      title: 'SPOT Resources',
-      type: 'basic',
-      externalLink: true,
-      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-      target: '_blank'
-    },
-    {
-      id: 'report-navigator',
-      title: 'Report Navigator',
-      type: 'basic',
-      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-      externalLink: true,
-      target: "_blank"
-
-    }
-  ]
+  newmainnav: any = []
 
   constructor(public auth: AuthService, private router: Router, private apiService: PortfolioApiService,
     private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService, public fuseAlert: FuseConfirmationService) { }
 
   ngOnInit(): void {
     const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+    this.activeaccount = this.authService.instance.getActiveAccount();
+    this.newmainnav = [
+      {
+        id: 'portfolio-center',
+        title: 'Portfolio Center',
+        type: 'basic',
+        link: '/portfolio-center'
+      },
+      {
+        // id: 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+          {
+            title: 'Create a Strategic Initiative/Program',
+            type: 'basic',
+            link: '*'
+          },
+          {
+            title: 'Create a Standard/Simple Project/Program',
+            type: 'basic',
+            link: '/create-project/create-new-project'
+          },
+          {
+            title: 'Copy an existing Project',
+            type: 'basic',
+            link: '/create-project/copy-project'
+          }
+        ],
+      },
+      {
+        id: 'project-hub',
+        title: 'Project Hub',
+        type: 'basic',
+        link: '/project-hub'
+      },
+      {
+        id: 'spot-documents',
+        title: 'SPOT Supporting Documents',
+        type: 'basic',
+        externalLink: true,
+        link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+        target: '_blank'
+      },
+      {
+        id: 'report-navigator',
+        title: 'Report Navigator',
+        type: 'basic',
+        link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+        externalLink: true,
+        target: "_blank"
+
+      },
+      {
+        id: 'spot-support',
+        title: 'Need Help or Propose a Change',
+        type: 'basic',
+        link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+        externalLink: true,
+        target: "_blank"
+
+      }
+    ]
     mainNavComponent.navigation = this.newmainnav
     mainNavComponent.refresh()
-    this.activeaccount = this.authService.instance.getActiveAccount();
-    this.titleService.setTitle("Copy Project")
+
+    this.titleService.setTitle("Copy an existing Project")
     this.auth.lookupMaster().then(res => {
       this.lookupdata = res;
       this.lookupTemplate = this.lookupdata.filter(x => x.lookUpParentId == 'a378aa1b-dadf-4592-8dc6-fee59b75f51d');
@@ -118,7 +139,7 @@ export class CopyProjectComponent implements OnInit {
   }
 
   SubmitCopyProject(data: any) {
-    if (this.projectid == ""){
+    if (this.projectid == "") {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must select a project to copy.",
         "message": "",
@@ -142,68 +163,68 @@ export class CopyProjectComponent implements OnInit {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    else{
-    console.log(this.CopyProjectForm)
-    for (var i = 0; i < data.currentTarget.length; i++) {
-      if (data.currentTarget[i].checked == true) {
-        this.finalIndex.push(i);
-      }
-    }
-    var copyProjectParameter= {
-      projectTitle: true,
-      projectType: true,
-      problemDescription: true,
-      proposedStatement: true,
-      keySuccessCriteria: true,
-      inOutOfScope: true,
-      milestones: true,
-      projectTeam: true,
-      categoricalData: true,
-      strategicDriverDetails: true
-    }
-    if (!this.CopyProjectForm.value.problemDescription) {
-      copyProjectParameter.problemDescription = false
-    }
-    if (!this.CopyProjectForm.value.proposedStatement) {
-      copyProjectParameter.proposedStatement = false
-    }
-    if (!this.CopyProjectForm.value.keySuccess) {
-      copyProjectParameter.keySuccessCriteria = false
-    }
-    if (!this.CopyProjectForm.value.scope) {
-      copyProjectParameter.inOutOfScope = false
-    }
-    if (!this.CopyProjectForm.value.milestone) {
-      copyProjectParameter.milestones = false
-    }
-    if (!this.CopyProjectForm.value.projectTeam) {
-      copyProjectParameter.projectTeam = false
-    }
-    if (!this.CopyProjectForm.value.categoricalDriver) {
-      copyProjectParameter.categoricalData = false
-    }
-    if (!this.CopyProjectForm.value.StrategicalDriver) {
-      copyProjectParameter.strategicDriverDetails = false
-    }
-    for (var i = 0; i < this.finalIndex.length; i++) {
-      this.finalData.push(this.lookupTemplate[i].lookUpId);
-      console.log(this.finalData);
-    }
-    var dataToSend = {
-      ProjectIDTemplate: this.projectid,
-      CopyUserID: this.activeaccount.localAccountId,
-      CopyProjectParameter: copyProjectParameter
-    }
-    this.createApiservice.getTemplateInfo(dataToSend).then(res => {
-      this.createApiservice.getQuality(this.projectid).then(quality => {
-        console.log(quality);
-        console.log(res);
-        if (res != "") {
-          this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+    else {
+      console.log(this.CopyProjectForm)
+      for (var i = 0; i < data.currentTarget.length; i++) {
+        if (data.currentTarget[i].checked == true) {
+          this.finalIndex.push(i);
         }
+      }
+      var copyProjectParameter = {
+        projectTitle: true,
+        projectType: true,
+        problemDescription: true,
+        proposedStatement: true,
+        keySuccessCriteria: true,
+        inOutOfScope: true,
+        milestones: true,
+        projectTeam: true,
+        categoricalData: true,
+        strategicDriverDetails: true
+      }
+      if (!this.CopyProjectForm.value.problemDescription) {
+        copyProjectParameter.problemDescription = false
+      }
+      if (!this.CopyProjectForm.value.proposedStatement) {
+        copyProjectParameter.proposedStatement = false
+      }
+      if (!this.CopyProjectForm.value.keySuccess) {
+        copyProjectParameter.keySuccessCriteria = false
+      }
+      if (!this.CopyProjectForm.value.scope) {
+        copyProjectParameter.inOutOfScope = false
+      }
+      if (!this.CopyProjectForm.value.milestone) {
+        copyProjectParameter.milestones = false
+      }
+      if (!this.CopyProjectForm.value.projectTeam) {
+        copyProjectParameter.projectTeam = false
+      }
+      if (!this.CopyProjectForm.value.categoricalDriver) {
+        copyProjectParameter.categoricalData = false
+      }
+      if (!this.CopyProjectForm.value.StrategicalDriver) {
+        copyProjectParameter.strategicDriverDetails = false
+      }
+      for (var i = 0; i < this.finalIndex.length; i++) {
+        this.finalData.push(this.lookupTemplate[i].lookUpId);
+        console.log(this.finalData);
+      }
+      var dataToSend = {
+        ProjectIDTemplate: this.projectid,
+        CopyUserID: this.activeaccount.localAccountId,
+        CopyProjectParameter: copyProjectParameter
+      }
+      this.createApiservice.getTemplateInfo(dataToSend).then(res => {
+        this.createApiservice.getQuality(this.projectid).then(quality => {
+          console.log(quality);
+          console.log(res);
+          if (res != "") {
+            this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+          }
+        })
       })
-    })
-  }
+    }
   }
 
   callCreateProject() {
