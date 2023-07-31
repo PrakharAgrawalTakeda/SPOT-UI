@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
-import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
+import { MatSidenav } from '@angular/material/sidenav';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Title } from '@angular/platform-browser';
 import { ProjectHubService } from '../project-hub/project-hub.service';
@@ -134,6 +134,8 @@ export class PortfolioCenterComponent implements OnInit {
     projectName: new FormControl()
   })
 
+  bulkreportdata: any;
+
   filteredPhaseArray = []
   oePhaseArray = []
   capitalPhaseArray: any
@@ -171,7 +173,7 @@ export class PortfolioCenterComponent implements OnInit {
   groupData:any;
   
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
-  @ViewChild('bulkreportDrawer') bulkreportDrawer: MatDrawer
+  @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private renderer: Renderer2,private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
@@ -201,6 +203,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     var executionScope = ""
     var portfolioOwners = ""
     this.activeaccount = this.msal.instance.getActiveAccount();
@@ -247,16 +250,21 @@ export class PortfolioCenterComponent implements OnInit {
           link: '/create-project',
           children: [
             {
-              title: 'Create Project',
-              type: 'basic',
-              link: '/create-project/create-new-project'
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '*'
             },
             {
-              title: 'Copy Project',
-              type: 'basic',
-              link: '/create-project/copy-project'
+                title: 'Create a Standard/Simple Project/Program',
+                type: 'basic',
+                link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Copy an existing Project',
+                type: 'basic',
+                link: '/create-project/copy-project'
             }
-          ],
+        ],
         },
         {
           id: 'spot-documents',
@@ -645,6 +653,9 @@ export class PortfolioCenterComponent implements OnInit {
 
     console.log("Filter Data : " +this.groupData)
     //Filtering Projects
+    this.apiService.Filters(this.groupData).then((res: any) => {
+      console.log("PROJECTS DATA",res)
+    })
       this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
@@ -653,6 +664,8 @@ export class PortfolioCenterComponent implements OnInit {
           this.totalproject = res.totalProjects
         var budgetData;
           this.projects.data = res.portfolioDetails;
+          this.bulkreportdata = res.portfolioDetails
+          console.log(this.bulkreportdata)
         if (res.budgetTile.localCurrencyAbbreviation == "OY") {
           this.budgetCurrency = "OY"
         }

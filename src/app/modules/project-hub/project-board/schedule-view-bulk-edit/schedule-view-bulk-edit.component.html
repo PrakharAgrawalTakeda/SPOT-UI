@@ -117,7 +117,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name=" " prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode== 'Project-Close-Out'" [sortable]="false">
+        <ngx-datatable-column name="" prop="indicator" [resizeable]="false" [flexGrow]="0.1" *ngIf="mode== 'Project-Close-Out'" [sortable]="false">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
               <mat-icon [matTooltip]="getlinkname(row.scheduleUniqueId)" *ngIf="islink(row.scheduleUniqueId)"

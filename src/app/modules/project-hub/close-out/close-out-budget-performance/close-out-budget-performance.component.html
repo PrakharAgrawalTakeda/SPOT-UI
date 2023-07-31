@@ -43,27 +43,27 @@
                                 <div class="flex flex-col min-[1600px]:flex-row">
                                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                                                class="font-medium text-sm text-default whitespace-nowrap w-8/12 min-[1600px]:w-3/5" [rows]="budgetPerformanceDetailCapexOpex">
-                                    <ngx-datatable-column name="Type" prop="type" [flexGrow]="0.5">
+                                    <ngx-datatable-column name="Type" prop="type" [flexGrow]="0.5" [resizeable]="false" [draggable]="false">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p>{{value}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Total Approved"  prop="totalApproved" [flexGrow]="1" [headerClass]="getHeaderClass"  >
+                                    <ngx-datatable-column name="Total Approved"  prop="totalApproved" [flexGrow]="1" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false" >
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p class="text-right">{{value | number: '1.' }}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Actual Spend" prop="actualSpend"  [flexGrow]="1" [headerClass]="getHeaderClass">
+                                    <ngx-datatable-column name="Actual Spend" prop="actualSpend"  [flexGrow]="1" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p class="text-right">{{value | number: '1.' }}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Remaining Spend (Forecast)" prop="forecast"  [flexGrow]="1.5" [headerClass]="getHeaderClass">
+                                    <ngx-datatable-column name="Remaining Spend (Forecast)" prop="forecast"  [flexGrow]="1.5" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p class="text-right">{{value | number: '1.' }}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Variance" prop="variance"   [flexGrow]="0.75" [headerClass]="getHeaderClass">
+                                    <ngx-datatable-column name="Variance" prop="variance"   [flexGrow]="0.75" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                             <p class="text-right">{{value}}</p>
                                         </ng-template>

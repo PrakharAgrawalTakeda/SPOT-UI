@@ -1064,7 +1064,7 @@
 /* -------------------------------------------------------------------------- */
 .mat-mdc-menu-panel {
     min-width: 144px !important;
-
+    max-width: 500px !important;
     .mat-mdc-menu-content {
 
         .mat-mdc-menu-item {

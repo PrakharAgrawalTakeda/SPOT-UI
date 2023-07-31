@@ -88,7 +88,7 @@ export class ShippingTableComponent {
       if (close == 'confirmed') {
         this.apiService.deleteDistribution(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.isNavChanged.next(true)
+          this.projecthubservice.successSave.next(true)
           
         })
       }

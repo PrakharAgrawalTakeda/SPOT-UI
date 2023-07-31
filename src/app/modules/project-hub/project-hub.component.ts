@@ -120,12 +120,17 @@ export class ProjectHubComponent implements OnInit {
                     link: '/create-project',
                     children: [
                         {
-                            title: 'Create Project',
+                            title: 'Create a Strategic Initiative/Program',
+                            type: 'basic',
+                            link: '*'
+                        },
+                        {
+                            title: 'Create a Standard/Simple Project/Program',
                             type: 'basic',
                             link: '/create-project/create-new-project'
                         },
                         {
-                            title: 'Copy Project',
+                            title: 'Copy an existing Project',
                             type: 'basic',
                             link: '/create-project/copy-project'
                         }

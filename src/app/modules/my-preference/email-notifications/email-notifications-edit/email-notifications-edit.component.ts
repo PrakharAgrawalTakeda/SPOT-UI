@@ -12,6 +12,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { GlobalVariables } from 'app/shared/global-variables';
 import { MyPreferenceApiService } from '../../my-preference-api.service';
 import { MyPreferenceService } from '../../my-preference.service';
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
   selector: 'app-email-notifications-edit',
@@ -65,8 +66,9 @@ export class EmailNotificationsEditComponent {
   emailDb: any;
   lookUpData3: any;
   reportsData: any;
-  projects: any;
+  projects: any[] = [];
   reportScopechange: boolean;
+  isConfidential: boolean = false;
 
 
 
@@ -74,7 +76,7 @@ export class EmailNotificationsEditComponent {
   constructor(public projecthubservice: ProjectHubService,
     private _httpClient: HttpClient,
     private _Activatedroute: ActivatedRoute, private msalService: MsalService, private apiService: MyPreferenceApiService,
-    public auth: AuthService, public fuseAlert: FuseConfirmationService, private authService: AuthService, private apiservice: ProjectApiService,
+    public auth: AuthService, private roleService: RoleService, public fuseAlert: FuseConfirmationService, private authService: AuthService, private apiservice: ProjectApiService,
     public preferenceservice: MyPreferenceService) {
     this.emailNotiForm.valueChanges.subscribe(res => {
       console.log(this.preferenceservice.isFormChanged)
@@ -87,9 +89,8 @@ export class EmailNotificationsEditComponent {
     })
 
     this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].valueChanges.subscribe(value => {
-      console.log(this.viewContent)
-      if(this.viewContent == true)
-      {
+      console.log(value)
+      if (this.viewContent == true) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You have changed the notification scope. Do you want to proceed?",
           "message": "",
@@ -167,6 +168,7 @@ export class EmailNotificationsEditComponent {
   ngOnInit(): void {
 
     this.dataloader()
+    console.log(this.projecthubservice.all)
     window.dispatchEvent(new Event('resize'));
     this.searchControl.valueChanges
       .pipe(
@@ -187,12 +189,30 @@ export class EmailNotificationsEditComponent {
         if (this.selectedValueExists.value == true && this.searchControl.value != "") {
           this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
             .subscribe((resultSets: any) => {
-              for (var i = 0; i < resultSets.projectData.length; i++) {
-                var obj = resultSets.projectData[i];
+              console.log(resultSets)
+              console.log(this.isConfidential)
+
+              // Store the result sets
+              if (!this.isConfidential) {
+                this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+              }
+              // else {
+              //   this.resultSets = [];
+              // }
+              else {
+                var activeaccount = this.msalService.instance.getActiveAccount()
+                this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
+                  if (resp.confidentialProjects.length > 0) {
+                    var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
+                    if (confProjectUserList?.length > 0) {
+                      this.resultSets = [...this.resultSets, ...confProjectUserList];
+                    }
+                  }
+                });
               }
               console.log(this.resultSets)
-              this.resultSets = resultSets.projectData;
-              this.budget = resultSets.budget
+              //this.resultSets = resultSets.projectData;
+              //this.budget = resultSets.budget
               this.search.next(resultSets);
             });
 
@@ -201,6 +221,7 @@ export class EmailNotificationsEditComponent {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+
     this.apiService.getemailNoti(this.msalService.instance.getActiveAccount().localAccountId).then((res: any) => {
       this.authService.lookupMaster().then((lookup: any) => {
         this.apiservice.getfilterlist().then(filter => {
@@ -259,10 +280,13 @@ export class EmailNotificationsEditComponent {
 
           }
           this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].valueChanges.subscribe(value => {
-            if (value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c' && res.reportOptions.emailNotifcationNotifcationReportScopeIds.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c') {
+            if (value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'  && res.reportOptions.emailNotifcationNotifcationReportScopeIds.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c')
+            //
+             {
               if (res.reportOptions.projectIds) {
                 this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
                   if (id) {
+                    this.isConfidential = id.isConfidential
                     this.projects = id
                     console.log(this.projects)
                   }
@@ -271,6 +295,16 @@ export class EmailNotificationsEditComponent {
               }
             }
           })
+
+          if (res.reportOptions.projectIds) {
+            this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
+              if (id) {
+                this.projects = id
+                console.log(this.projects)
+              }
+
+            })
+          }
 
 
           this.preferenceservice.isFormChanged = false
@@ -297,6 +331,14 @@ export class EmailNotificationsEditComponent {
     }
     return [];
   }
+
+  getActiveProducts(): any {
+    if (this.filterCriteria && this.filterCriteria.products) {
+      return this.filterCriteria.products.filter(x => x.showProduct == true);
+    }
+    return [];
+  }
+
   getRoles(): any {
     var j = this.projecthubservice.all
     if (j.some(x => x.roleId == '17d65016-0541-4fcc-8a9c-1db0597817cc') && j.some(x => x.roleId == 'e42f20f9-1913-4f17-bd8b-5d2fc46bf4e8')) {
@@ -312,8 +354,8 @@ export class EmailNotificationsEditComponent {
   }
 
   ngOnDestroy() {
-    //if (this.detailsHaveBeenChanged.value == true)
-      //window.location.reload();
+    // if (this.detailsHaveBeenChanged.value == true)
+    //   window.location.reload();
   }
   onRemoveLink(projectId: string, rowIndex: number) {
     var comfirmConfig: FuseConfirmationConfig = {
@@ -341,6 +383,11 @@ export class EmailNotificationsEditComponent {
 
     deleteAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
+        // this.apiService.DeleteLink(projectId).then((res: any) => {
+        // });
+        //const objWithIdIndex = this.projecthubservice.projectChildren.findIndex((obj) => obj.problemUniqueId === projectId);
+        //const index = this.projecthubservice.removedIds.indexOf(projectId);
+        //this.projecthubservice.removedIds.splice(index, 1);
         this.searchControl.setValue('');
         this.selectedValueExists.setValue(true)
         this.rows.splice(rowIndex, 1);
@@ -390,17 +437,18 @@ export class EmailNotificationsEditComponent {
   }
   onAdd(childId) {
 
-        var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
-        console.log(this.projects)
-        this.searchControl.setValue('');
-        this.selectedValueExists.setValue(true);
-        //this.projecthubservice.removedIds.push(childId, 1);
-        this.rows.push(addedProject);
-        this.rows = [...this.rows];
-        console.log(this.rows)
-        this.projects.push(addedProject)
-        this.projects = [...this.projects]
-        this.detailsHaveBeenChanged.setValue(true);
+    var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
+    console.log(this.projects)
+    this.searchControl.setValue('');
+    this.selectedValueExists.setValue(true);
+    //this.projecthubservice.removedIds.push(childId, 1);
+    this.rows.push(addedProject);
+    this.rows = [...this.rows];
+    console.log(this.rows)
+    this.projects.push(addedProject)
+    this.projects = [...this.projects]
+    console.log(this.projects)
+    this.detailsHaveBeenChanged.setValue(true);
   }
   displayFn(value?: number) {
     let returnValue = "";
@@ -414,7 +462,8 @@ export class EmailNotificationsEditComponent {
     this.preferenceservice.isFormChanged = false
     var formValue = this.emailNotiForm.getRawValue()
     console.log(formValue.emailNotifcationNotifcationReportScopeIds)
-    if (formValue.reportFrequencyId == null || formValue.emailNotifcationNotifcationReportScopeIds == null) {
+    debugger
+    if (Object.keys(formValue.reportFrequencyId).length == 0 || Object.keys(formValue.emailNotifcationNotifcationReportScopeIds).length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "In order to save the information it is required to enter Report Frequency and Report Scope!",
         "message": "",
@@ -438,47 +487,52 @@ export class EmailNotificationsEditComponent {
       }
       const alert = this.fuseAlert.open(comfirmConfig)
     }
-    
-   else {
-    if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
-      this.preferenceservice.submitbutton.next(true)
-      this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
-    }
+
     else {
-      
-      console.log(formValue.emailNotifcationNotifcationReportScopeIds)
-      var mainObj = {
-        reportOptions: {
-          emailNotifcationNotifcationReportScopeIds: formValue.emailNotifcationNotifcationReportScopeIds.lookUpId || '',
-          emailNotifcationPortfolioReportTypes: formValue.emailNotifcationPortfolioReportTypes?.lookUpId || '77b04381-623f-4ab4-887d-8d4192d1bf4b',
-          executionScopeIds: formValue.excecutionScope ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : '',
-          includeChild: formValue.includeChild ? formValue.includeChild : false,
-          notificationId: formValue.notificationId ? formValue.notificationId : null,
-          portfolioScopeIds: formValue.portfolioOwner
-            ? formValue.portfolioOwner.map(x => x.portfolioOwnerId).join()
-            : '',
-          productIds: formValue.products ? formValue.products.map(x => x.productId).join() : '',
-          projectIds: this.projects ? this.projects.map(x => x.problemUniqueId).join() : '',
-          recieveEmailNotification: formValue.recieveEmailNotification ? formValue.recieveEmailNotification : false,
-          reportFrequencyId: formValue.reportFrequencyId ? formValue.reportFrequencyId.lookUpId : '',
-          roleIds: formValue.role ? formValue.role.map(x => x.lookUpId).join() : '',
-          userId: this.msalService.instance.getActiveAccount().localAccountId,
-        },
-        eventsMasterData: [],
-        eventsUserData: []
+      if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
+        this.preferenceservice.submitbutton.next(true)
+        this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
       }
+      else {
+
+        console.log(formValue.emailNotifcationNotifcationReportScopeIds)
+        var mainObj = {
+          reportOptions: {
+            emailNotifcationNotifcationReportScopeIds: formValue.emailNotifcationNotifcationReportScopeIds.lookUpId || '',
+            emailNotifcationPortfolioReportTypes: formValue.emailNotifcationPortfolioReportTypes?.lookUpId || '77b04381-623f-4ab4-887d-8d4192d1bf4b',
+            executionScopeIds: formValue.excecutionScope ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : '',
+            includeChild: formValue.includeChild ? formValue.includeChild : false,
+            notificationId: formValue.notificationId ? formValue.notificationId : null,
+            portfolioScopeIds: formValue.portfolioOwner
+              ? formValue.portfolioOwner.map(x => x.portfolioOwnerId).join()
+              : '',
+            productIds: formValue.products ? formValue.products.map(x => x.productId).join() : '',
+            projectIds: this.projects ? this.projects.map(x => x.problemUniqueId).join() : '',
+            recieveEmailNotification: formValue.recieveEmailNotification ? formValue.recieveEmailNotification : false,
+            reportFrequencyId: formValue.reportFrequencyId ? formValue.reportFrequencyId.lookUpId : '',
+            roleIds: formValue.role ? formValue.role.map(x => x.lookUpId).join() : '',
+            userId: this.msalService.instance.getActiveAccount().localAccountId,
+          },
+          eventsMasterData: [],
+          eventsUserData: []
+        }
+      }
+      console.log("Main Object", mainObj)
+      this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
+        this.preferenceservice.isFormChanged = false
+        this.projecthubservice.isFormChanged = false
+        this.preferenceservice.submitbutton.next(true)
+        //this.preferenceservice.successSave.next(true)
+        this.preferenceservice.toggleDrawerOpen('', '', [], '')
+
+this.showConfirmationMessage()
+        //   })
+      })
+      
     }
-    console.log("Main Object", mainObj)
-    this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
-      this.preferenceservice.isFormChanged = false
-      this.projecthubservice.isFormChanged = false
-      this.preferenceservice.submitbutton.next(true)
-      this.preferenceservice.successSave.next(true)
-      this.preferenceservice.toggleDrawerOpen('', '', [], '')
+  }
 
-
-      //   })
-    })
+  showConfirmationMessage(): void {
     var comfirmConfig: FuseConfirmationConfig = {
       "title": "You have successfully activated the e-mail notification feature. The report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification.",
       "message": "",
@@ -501,7 +555,6 @@ export class EmailNotificationsEditComponent {
       "dismissible": true
     }
     const alert = this.fuseAlert.open(comfirmConfig)
-  }
   }
 
 }
