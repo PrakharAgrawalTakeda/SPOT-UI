@@ -77,7 +77,7 @@ export class LocalAttributeSingleEditComponent {
       api = this.apiService.getLocalAttributesByOwner(this.PortfolioOwner, this.ExecutionScope)
     }
     else{
-      this.apiService.getLocalAttributes(this.projectHubService.projectid)
+      api = this.apiService.getLocalAttributes(this.projectHubService.projectid)
     }
     api.then((res: any) => {
       this.auth.lookupMaster().then(res1 => {

@@ -1901,5 +1901,8 @@ export class PortfolioCenterComponent implements OnInit {
     this.sorting.name = event.sorts[0].prop;
     this.sorting.dir = event.sorts[0].dir;
   }
+  goToForecast(){
+    window.open('/portfolio-center/forecast', "_blank")
+  }
 
 }
