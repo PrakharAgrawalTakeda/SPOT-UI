@@ -59,7 +59,6 @@ export class QualityRefBulkEditComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.callLocation =='CreateNew'){
-debugger
       this.generalInfoData={
         agilePrimaryWorkstream:null,
         agileSecondaryWorkstream:null,
