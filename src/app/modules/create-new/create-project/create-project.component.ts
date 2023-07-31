@@ -44,6 +44,7 @@ export class CreateProjectComponent implements OnInit {
   localCurrency:any = [];
   viewContent:boolean = false
   showLocalAttributes:boolean = false
+  showLocalAttributesTitle:boolean = false
   portfolioOwners = ""
   executionScope = ""
   createProjectForm = new FormGroup({
@@ -580,9 +581,7 @@ export class CreateProjectComponent implements OnInit {
 
   captureValueLA(index, event){
     this.showLocalAttributes = event
-    console.log(event)
-    console.log(this.showLocalAttributes)
-    this.showLocalAttributes = event
+    this.showLocalAttributesTitle = event
   }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){
