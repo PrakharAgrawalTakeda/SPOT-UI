@@ -44,7 +44,7 @@ export class LocalAttributeSingleEditComponent {
   localAttributeForm: any = new FormGroup({})
   localAttributeFormRaw: any = new FormGroup({})
   viewContent = false
-  @Input() viewType : 'SidePanel' | 'Form' = 'Form'
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   data: any = [];
   originalData: any
   rawData: any

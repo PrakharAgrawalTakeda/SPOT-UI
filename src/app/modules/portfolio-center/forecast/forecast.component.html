@@ -1,1 +1,213 @@
-<p>forecast works!</p>
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12">
+        <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
+            <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full" style="height: 90vh !important;">
+                <div>
+                    <!-- <div> -->
+                        <div class="pb-3 pt-0 flex items-center justify-between">
+                            <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
+                                <spot-singleselect-autocomplete class="w-full custom" formControlName="ForecastType" name="ForecastType"
+                                    [label]="'Forecast Type'" [placeholder]="'Forecast Type'" [valuePointer]="'lookUpName'"
+                                    [dropDownArray]="getForecastType()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                                </spot-singleselect-autocomplete>
+                                <spot-singleselect-autocomplete *ngIf="ForecastForm.controls.PM.value != '' || ForecastForm.controls.PM.value.length != 0" class="w-full custom" formControlName="Currency" name="Currency"
+                                    [label]="'Currency'" [placeholder]="'Currency'" [valuePointer]="'lookUpName'"
+                                    [dropDownArray]="getForecastType()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                                </spot-singleselect-autocomplete>
+                                <spot-multiselect-user-autocomplete formControlName="PM" [placeholder]="'Project Manager'" [label]="'Project Manager'"
+                                    name="PM" [showLabel]="true">
+                                </spot-multiselect-user-autocomplete>
+                                <a class="customIcon" *ngIf="ForecastForm.controls.PM.value != '' || ForecastForm.controls.PM.value.length != 0" href="mailto:someone@example.com ? Subject = SPOT Project Management – Forecast / Budget Updates"><mat-icon [svgIcon]="'heroicons_solid:mail'"></mat-icon></a>
+                            </form>
+                        </div>
+                        <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden">
+                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true" [scrollbarV]="false" columnMode="force"
+                                class="font-medium text-sm text-default whitespace-nowrap datatable-CX-80" [rows]="fundingRequests">
+                                <ngx-datatable-column name="Reference" prop="reference" [width]="100" [sortable]="false"
+                                    [resizeable]="false" [frozenLeft]="true">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Currency" prop="reference" [width]="100" [sortable]="false"
+                                    [resizeable]="false" [frozenLeft]="true">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="LBE" prop="reference" [width]="100" [sortable]="false" [resizeable]="false" [frozenLeft]="true">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Historical" prop="reference" [width]="120" [sortable]="false"
+                                    [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Apr" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="May" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Jun" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Jul" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Aug" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Sep" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Oct" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Nov" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Dec" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Jan" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Feb" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Mar" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="FY2023" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Apr" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="May" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Jun" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Jul" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Aug" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Sep" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Oct" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Nov" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Dec" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Jan" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Feb" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Mar" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="FY2024" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="FY2025" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="FY2026" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="FY2027" prop="reference" [width]="120" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="FY2028+" prop="reference" [width]="120" [sortable]="false"
+                                    [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="TotalCAPEX" prop="reference" [width]="120" [sortable]="false"
+                                    [resizeable]="false">
+                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                        <p>{{value}}</p>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                            </ngx-datatable>
+                        </div>
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</div>
