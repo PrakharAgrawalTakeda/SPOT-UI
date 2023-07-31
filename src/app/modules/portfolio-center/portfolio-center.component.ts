@@ -653,9 +653,9 @@ export class PortfolioCenterComponent implements OnInit {
 
     console.log("Filter Data : " +this.groupData)
     //Filtering Projects
-    this.apiService.Filters(this.groupData).then((res: any) => {
-      console.log("PROJECTS DATA",res)
-    })
+    // this.apiService.Filters(this.groupData).then((res: any) => {
+    //   console.log("PROJECTS DATA",res)
+    // })
       this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
       const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
       mainNavComponent.navigation = this.newmainnav
@@ -1660,6 +1660,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   setPage(res:any, offset){
+    if (this.groupData != undefined){
     console.log(res)
     if (res != ''){
       this.projectOverview = res.portfolioDetails
@@ -1810,7 +1811,7 @@ export class PortfolioCenterComponent implements OnInit {
           this.pageNumber = offset.offset-1
         })
     }
-    // })
+    }
   }
 
   changePhase(phaseId) {

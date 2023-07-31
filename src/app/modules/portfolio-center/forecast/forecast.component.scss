@@ -1,0 +1,22 @@
+::ng-deep .ngx-datatable .datatable-CX-80 .datatable-body .datatable-scroll {
+    height: 50vh !important;
+    width: 100vw !important;
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+}
+
+.custom {
+    width: 80% !important;
+}
+
+.customIcon{
+    top: 31px;
+    position: relative;
+    right: -25px;
+    height: 40px;
+    width: 25px;
+}
+.datatable-header {
+    top: 10px;
+    // position: relative;
+}
