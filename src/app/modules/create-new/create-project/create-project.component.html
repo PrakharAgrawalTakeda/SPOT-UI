@@ -428,7 +428,41 @@
                                                 </span>
                                             </div>
                                         </div>
-
+                                        <br />
+                                        <div *ngIf="showLocalAttributesTitle">
+                                        <label style="color: rgba(76,155,207);font-size: 16px;"><b>Local Attributes</b></label>
+                                        <br />
+                                        <div class="test" *ngFor="let item of LAData; let i = index">
+                                            <div class="parent">
+                                                <label>{{item.name}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 1 || item.dataType == 6 || item.dataType == 4">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 2">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value | date : 'dd-MMM-yyyy'}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 5 && !item.isMulti">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value.userDisplayName}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 3 && !item.isMulti">
+                                                <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value.lookUpName}}</label>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 3 && item.isMulti">
+                                                <span *ngFor="let data1 of localAttribute.localAttributeForm.controls[item.uniqueId].value; let i = index">
+                                                    <label class="reviewText" *ngIf="i > 0 && i<localAttribute.localAttributeForm.controls[item.uniqueId].value.length">,</label>
+                                                    <label class="reviewText">{{data1.lookUpName}}</label>
+                                                </span>
+                                            </div>
+                                            <div class="child" *ngIf="item.dataType == 5 && item.isMulti">
+                                                <span *ngFor="let data1 of localAttribute.localAttributeForm.controls[item.uniqueId].value; let i = index">
+                                                    <label class="reviewText"
+                                                        *ngIf="i > 0 && i<localAttribute.localAttributeForm.controls[item.uniqueId].value.length">,</label>
+                                                    <label class="reviewText">{{data1.userDisplayName}}</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        </div>
                                         
                                         </div>
                                     </div>

@@ -94,10 +94,10 @@ export class LocalAttributeSingleEditComponent {
         this.viewContent = true
         if (this.callLocation == "CreateNew"){
           if(this.data.length == 0){
-            this.formValueLA.emit(false)
+            this.formValueLA.emit({show:false, data:this.data})
           }
           else{
-            this.formValueLA.emit(true)
+            this.formValueLA.emit({ show: true, data: this.data })
           }
         }
       })

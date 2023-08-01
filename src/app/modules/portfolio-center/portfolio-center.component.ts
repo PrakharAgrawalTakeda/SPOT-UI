@@ -862,7 +862,7 @@ export class PortfolioCenterComponent implements OnInit {
     })
   })
 })
-  this.showcontent = true;
+  this.showContent = false;
   }
   
   scrollHandler(event) {
