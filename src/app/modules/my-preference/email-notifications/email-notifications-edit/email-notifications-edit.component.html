@@ -1,5 +1,4 @@
-
-    <div *ngIf="viewContent">
+<div *ngIf="viewContent">
         <div class="flex items-start justify-between bg-primary sidepanel-header">
             <div class="text-on-primary" style="padding-top: 6px">Edit Email Notifications</div>
             <div style="padding-top: 2px"><a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)"
@@ -8,9 +7,9 @@
                 </a>
             </div>
         </div>
-        <div class="overflow-x-auto">
-            <form class="w-full p-[20px]" [formGroup]="emailNotiForm" (ngSubmit)="submitnotifications()">
-                <div class="h-[83vh]">
+        <div class="overflow-hidden  w-full">
+            <form class="w-full p-[20px]" [formGroup]="emailNotiForm" >
+                <div [ngClass]="'overflow-y-scroll overflow-x-hidden h-[83.5vh] pt-3 pr-3'">
                     <div class="flex justify-start items-center gap-3 pb-6">
                         <spot-toggle class="w-full"  formControlName="recieveEmailNotification" [label]="'Receive Email Notifications'"
                         [showHint]="true"
@@ -163,7 +162,7 @@
                                 </ngx-datatable-column>
                             </ngx-datatable>
                         </div> -->
-                        <div class="overflow-x-auto  h-[15vh]" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
+                        <div class="overflow-y-scroll" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
                             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                                 columnMode="flex"
                                 class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
@@ -186,25 +185,26 @@
                                 </ngx-datatable-column>
                             </ngx-datatable>
                         </div>
-                        <div class="flex justify-start items-center gap-3 pb-6"
+                        <div class="flex justify-start items-center gap-3 pb-6 mt-4"
                         *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
                             <spot-toggle class="w-full"  formControlName="includeChild" [label]="'Include Children Records'">
                             </spot-toggle>
 
                         </div>
-
                     </div>
-                </div>
-                <div class="flex items-start justify-between mt-6">
-                    <a class="min-w-26" mat-flat-button [color]="'primary'"
-                        (click)="preferenceservice.toggleDrawerOpen('', '',[],'')">
-                        Cancel
-                    </a>
-                    <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
-                        Submit
-                    </button>
                 </div>
             </form>
         </div>
+    <div class="absolute bottom-2 w-full px-3">
+        <div class="pr-3 flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+               (click)="preferenceservice.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitnotifications()">
+                Submit
+            </button>
+        </div>
+    </div>
     </div>
 
