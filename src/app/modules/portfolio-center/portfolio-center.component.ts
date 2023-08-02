@@ -1660,7 +1660,6 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   setPage(res:any, offset){
-    if (this.groupData != undefined){
     console.log(res)
     if (res != ''){
       this.projectOverview = res.portfolioDetails
@@ -1810,7 +1809,6 @@ export class PortfolioCenterComponent implements OnInit {
           this.totalPages = this.totalproject / 100;
           this.pageNumber = offset.offset-1
         })
-    }
     }
   }
 

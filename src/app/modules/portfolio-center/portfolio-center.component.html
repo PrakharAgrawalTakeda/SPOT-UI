@@ -195,7 +195,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
         <mat-drawer class="w-3qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             [position]="'end'" #bulkreportDrawer>
-            <div class="mt-6 pl-3 h-[78vh] w-full" #target id="scheduleTableDiv">
+            <div class="mt-6 pl-3 h-[78vh] w-full" #target id="scheduleTableDiv" *ngIf="showContent">
                 <!-- <ngx-datatable
                     class="datatable-schedule-74 w-full material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                     [rows]="bulkreportdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'"
