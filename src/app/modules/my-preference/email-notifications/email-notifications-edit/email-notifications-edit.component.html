@@ -44,7 +44,7 @@
                             [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
                             [customSortPointer]="'pfid'"
                             *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId === 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'">
-                        </spot-multiselect-autocomplete> 
+                        </spot-multiselect-autocomplete>
                         <spot-singleselect-autocomplete formControlName="emailNotifcationPortfolioReportTypes" class="w-full read-only"
                                 name="emailNotifcationPortfolioReportTypes" [label]="'Project Type'" [placeholder]="'Project Type'"
                                 [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
@@ -77,7 +77,7 @@
                             [dropDownArray]="getRoles()"
                             [showHint]="true"
                                 [hint]="'Selections here will generte a summary report based on projects where you are documented in the Project Team as the identified role(s)'"
-                                
+
                             *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '897633cf-3516-49b0-9f45-a6ddc9374c0e'">
                         </spot-multiselect-autocomplete>
                         <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'" -->
@@ -175,13 +175,22 @@
                                       </div>
                                     </ng-template>
                                   </ngx-datatable-column>
+                                <ngx-datatable-column [flexGrow]="0.3" [resizeable]="false" [sortable]="false" [draggable]="false">
+                                    <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                        <div class="flex items-center justify-start gap-6">
+                                            <a href="javascript:void(0)" title="Delete" (click)="deleteProject(row.problemUniqueId)">
+                                                <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
+                                            </a>
+                                        </div>
+                                    </ng-template>
+                                </ngx-datatable-column>
                             </ngx-datatable>
                         </div>
-                        <div class="flex justify-start items-center gap-3 pb-6" 
+                        <div class="flex justify-start items-center gap-3 pb-6"
                         *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
                             <spot-toggle class="w-full"  formControlName="includeChild" [label]="'Include Children Records'">
                             </spot-toggle>
-                            
+
                         </div>
 
                     </div>

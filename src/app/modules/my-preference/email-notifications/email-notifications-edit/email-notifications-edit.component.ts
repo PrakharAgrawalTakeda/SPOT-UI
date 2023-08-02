@@ -434,7 +434,6 @@ export class EmailNotificationsEditComponent {
     }
 
     onAdd(childId) {
-
         var addedProject = this.resultSets.find(_ => _.problemUniqueId === childId);
         console.log(this.projects)
         this.searchControl.setValue('');
@@ -445,8 +444,11 @@ export class EmailNotificationsEditComponent {
         console.log(this.rows)
         this.projects.push(addedProject)
         this.projects = [...this.projects]
-        console.log(this.projects)
         this.detailsHaveBeenChanged.setValue(true);
+    }
+    deleteProject(id: string) {
+        this.projects = this.projects.filter(obj => obj.problemUniqueId !== id);
+        this.rows = [...this.rows];
     }
 
     displayFn(value?: number) {

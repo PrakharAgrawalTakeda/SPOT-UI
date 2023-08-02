@@ -49,7 +49,7 @@ export class EmailNotificationsComponent {
   //   event: new FormControl(''), // Set default value as an empty string
   //   priority: new FormControl('') // Set default value as an empty string
   // });
-  
+
   emailNoti: any;
   eventsData: any;
   lookUpData: any;
@@ -151,19 +151,13 @@ export class EmailNotificationsComponent {
           this.eventsData = res.eventsMasterData.map(masterData => {
             const eventsUserDataItem = res.eventsUserData.find(data => data.frequencyId == masterData.frequencyId);
             const onOffValue = eventsUserDataItem ? eventsUserDataItem.onOff : false;
-            
             return { ...masterData, onOff: onOffValue };
           });
-          console.log(this.eventsData)
-          
           this.eventsData.sort((a, b) => a.priority - b.priority);
-          
           res.eventsMasterData.sort((a, b) => a.priority - b.priority)
           console.log("DB OBJECT", res)
           console.log("ROWS", this.rows)
           console.log("LOOKUP",this.lookUpData3)
-
-
           if (this.emailNoti != null) {
 
 
@@ -191,36 +185,31 @@ export class EmailNotificationsComponent {
                 : this.lookUpData3.find(x => x.lookUpName === 'All Projects'),
               notificationId: res.reportOptions.notificationId
             });
-            
-           
             for (var i of res.eventsMasterData) {
               const eventsUserDataItem = res.eventsUserData.find(data => data.frequencyId === i.frequencyId);
               const onoffValue = eventsUserDataItem ? eventsUserDataItem.onOff : false;
-            
               const formGroup = new FormGroup({
                 onoff: new FormControl(onoffValue == true ? onoffValue : false),
                 description: new FormControl(i.description),
                 event: new FormControl(i.event),
                 priority: new FormControl(i.priority)
               });
-            
               (this.emailNotiTableForm as FormArray).push(formGroup);
             }
-            
-
-            
           }
           console.log("TABLE FORM", this.emailNotiTableForm.getRawValue())
-
           console.log("FORM", this.emailNotiForm.getRawValue())
-          if (res.reportOptions.projectIds) {
-            this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
-              if (id) {
-                this.projects = id
-                console.log(this.projects)
+          if (res.reportOptions.projectIds || res.reportOptions.projectIds=="") {
+              if(res.reportOptions.projectIds!=""){
+                  this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
+                      if (id) {
+                          this.projects = id
+                      }
+                  })
+              }else{
+                  this.projects = [];
               }
 
-            })
           }
         })
       })
