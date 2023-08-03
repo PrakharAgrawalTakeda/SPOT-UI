@@ -80,9 +80,11 @@ export class BudgetFundingAddViewComponent {
                 localCurrencyId: fundingRequest.approvalCurrency,
                 approvalStatus:"",
                 approvalCurrency: "",
-                keep: false,
+                keep: true,
             }
+            this.budgetInfo.budgetIOs  = this.budgetInfo.budgetIOs.filter((item) => item.keep);
             this.budgetInfo.budgetIOs.push(mainObj);
+
             this.apiService.updateBudgetPageInfo(this.id,this.budgetInfo).then(res => {
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')

@@ -208,9 +208,9 @@ export class BudgetGeneralEditComponent {
                     fieldsMissing ++;
                     missingFields.push("Why")
                 }
-                if(this.fundingApprovalNeedDate.invalid){
+                if(this.fundingApprovalNeedDate.invalid || this.fundingApprovalNeedDate.value == null ){
                     fieldsMissing ++;
-                    missingFields.push("Fundiong Approval Need Date")
+                    missingFields.push("Funding Approval Need Date")
                 }
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "The following fields are required",

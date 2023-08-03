@@ -44,7 +44,7 @@ export class LocalAttributeSingleEditComponent {
   localAttributeForm: any = new FormGroup({})
   localAttributeFormRaw: any = new FormGroup({})
   viewContent = false
-  @Input() viewType : 'SidePanel' | 'Form' = 'Form'
+  @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
   data: any = [];
   originalData: any
   rawData: any
@@ -77,7 +77,7 @@ export class LocalAttributeSingleEditComponent {
       api = this.apiService.getLocalAttributesByOwner(this.PortfolioOwner, this.ExecutionScope)
     }
     else{
-      this.apiService.getLocalAttributes(this.projectHubService.projectid)
+      api = this.apiService.getLocalAttributes(this.projectHubService.projectid)
     }
     api.then((res: any) => {
       this.auth.lookupMaster().then(res1 => {
@@ -93,7 +93,12 @@ export class LocalAttributeSingleEditComponent {
         this.originalData = originalData;
         this.viewContent = true
         if (this.callLocation == "CreateNew"){
-          this.formValueLA.emit(true)
+          if(this.data.length == 0){
+            this.formValueLA.emit({show:false, data:this.data})
+          }
+          else{
+            this.formValueLA.emit({ show: true, data: this.data })
+          }
         }
       })
     })

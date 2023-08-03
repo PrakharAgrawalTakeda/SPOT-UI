@@ -14,7 +14,7 @@ import { CreateNewApiService } from '../create-new-api.service';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { LocalAttributeSingleEditComponent } from 'app/modules/project-hub/local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
-
+import moment from 'moment';
 
 @Component({
   selector: 'app-create-project',
@@ -29,6 +29,7 @@ export class CreateProjectComponent implements OnInit {
   filterCriteria: any = {};
   getData: boolean = false;
   lookupdata: any = [];
+  activeaccount: any;
   projectid: string = "";
   qualityformValue = [];
   qualityType: any = [];
@@ -43,6 +44,7 @@ export class CreateProjectComponent implements OnInit {
   localCurrency:any = [];
   viewContent:boolean = false
   showLocalAttributes:boolean = false
+  showLocalAttributesTitle:boolean = false
   portfolioOwners = ""
   executionScope = ""
   createProjectForm = new FormGroup({
@@ -84,61 +86,83 @@ export class CreateProjectComponent implements OnInit {
     isArchived: new FormControl(),
     isConfidential: new FormControl(),
   })
-  newmainnav: any = [
-    {
-      id: 'portfolio-center',
-      title: 'Portfolio Center',
-      type: 'basic',
-      link: '/portfolio-center'
-    },
-    {
-      // id: 'create-project',
-      title: 'Create Project',
-      type: 'collapsable',
-      active: true,
-      link: '/create-project',
-      children: [
-        {
-          title: 'Create Project',
-          type: 'basic',
-          link: '/create-project/create-new-project'
-        },
-        {
-          title: 'Copy Project',
-          type: 'basic',
-          link: '/create-project/copy-project'
-        }
-      ],
-    },
-    {
-      id: 'spot-documents',
-      title: 'SPOT Resources',
-      type: 'basic',
-      externalLink: true,
-      link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-      target: '_blank'
-    },
-    {
-      id: 'report-navigator',
-      title: 'Report Navigator',
-      type: 'basic',
-      link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-      externalLink: true,
-      target: "_blank"
-
-    }
-  ]
+  newmainnav: any = []
   envPortfolio:any
 
   capturedValues = ['', '']
+  LAData:any = []
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService, private msalService: MsalService) {
   }
 
   
   ngOnInit(): void {
     const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
+    this.activeaccount = this.msalService.instance.getActiveAccount();
+    this.newmainnav = [
+      {
+        id: 'portfolio-center',
+        title: 'Portfolio Center',
+        type: 'basic',
+        link: '/portfolio-center'
+      },
+      {
+        // id: 'create-project',
+        title: 'Create Project',
+        type: 'collapsable',
+        link: '/create-project',
+        children: [
+          {
+            title: 'Create a Strategic Initiative/Program',
+            type: 'basic',
+            link: '*'
+          },
+          {
+            title: 'Create a Standard/Simple Project/Program',
+            type: 'basic',
+            link: '/create-project/create-new-project'
+          },
+          {
+            title: 'Copy an existing Project',
+            type: 'basic',
+            link: '/create-project/copy-project'
+          }
+        ],
+      },
+      {
+        id: 'project-hub',
+        title: 'Project Hub',
+        type: 'basic',
+        link: '/project-hub'
+      },
+      {
+        id: 'spot-documents',
+        title: 'SPOT Supporting Documents',
+        type: 'basic',
+        externalLink: true,
+        link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+        target: '_blank'
+      },
+      {
+        id: 'report-navigator',
+        title: 'Report Navigator',
+        type: 'basic',
+        link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+        externalLink: true,
+        target: "_blank"
+  
+      },
+      {
+        id: 'spot-support',
+        title: 'Need Help or Propose a Change',
+        type: 'basic',
+        link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+        externalLink: true,
+        target: "_blank"
+  
+      }
+    ]
     mainNavComponent.navigation = this.newmainnav
     mainNavComponent.refresh()
     this.projectHubService.projectidInjector("")
@@ -477,6 +501,9 @@ export class CreateProjectComponent implements OnInit {
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
             this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+              if (this.localAttribute != undefined) {
+                this.localAttribute.submitLA(res.problemUniqueId)
+              }
               this.viewContent = true
             })
         })
@@ -484,7 +511,9 @@ export class CreateProjectComponent implements OnInit {
       }
       else{
           this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
-            this.localAttribute.submitLA(res.problemUniqueId)
+            if (this.localAttribute != undefined){
+              this.localAttribute.submitLA(res.problemUniqueId)
+            }
             this.viewContent = true
           })
       }
@@ -557,10 +586,9 @@ export class CreateProjectComponent implements OnInit {
   }
 
   captureValueLA(index, event){
-    this.showLocalAttributes = event
-    console.log(event)
-    console.log(this.showLocalAttributes)
-    this.showLocalAttributes = event
+    this.LAData = event.data
+    this.showLocalAttributes = event.show
+    this.showLocalAttributesTitle = event.show
   }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){

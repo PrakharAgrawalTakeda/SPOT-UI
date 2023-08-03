@@ -18,7 +18,7 @@ export class ProjectHubService {
   lookUpMaster: any = []
   kpiMasters: any = []
   projectid: string = ""
-  localCurrency:any = [];
+  localCurrency: any = [];
   hasChildren: boolean = false
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
@@ -197,6 +197,11 @@ export class ProjectHubService {
                   link: 'business-case/recommended-option/timeline'
                 },
                 {
+                  title: 'Value Creation',
+                  type: 'basic',
+                  link: 'business-case/recommended-option/value-creation'
+                },
+                {
                   title: 'Cost / Funding',
                   type: 'basic',
                   link: 'business-case/recommended-option/cost-funding'
@@ -215,11 +220,6 @@ export class ProjectHubService {
                   title: 'Risks / Assumptions',
                   type: 'basic',
                   link: 'business-case/recommended-option/risks'
-                },
-                {
-                  title: 'Value Creation',
-                  type: 'basic',
-                  link: 'business-case/recommended-option/value-creation'
                 }
               ]
             },
@@ -306,6 +306,11 @@ export class ProjectHubService {
               link: 'project-charter/scope'
             },
             {
+              title: 'Value Creation',
+              type: 'basic',
+              link: 'project-charter/value-creation'
+            },
+            {
               title: 'Milestones',
               type: 'basic',
               link: 'project-charter/milestones'
@@ -329,11 +334,6 @@ export class ProjectHubService {
               title: 'CAPS',
               type: 'basic',
               link: 'project-charter/caps'
-            },
-            {
-              title: 'Value Creation',
-              type: 'basic',
-              link: 'project-charter/value-creation'
             },
           ]
         },
@@ -385,6 +385,11 @@ export class ProjectHubService {
               link: 'close-out/outcomes'
             },
             {
+              title: 'Value Creation',
+              type: 'basic',
+              link: 'close-out/value-creation'
+            },
+            {
               title: 'Milestone Variance',
               type: 'basic',
               link: 'close-out/milestone-variance'
@@ -403,11 +408,6 @@ export class ProjectHubService {
               title: 'Lessons Learned',
               type: 'basic',
               link: 'close-out/lessons-learned'
-            },
-            {
-              title: 'Value Creation',
-              type: 'basic',
-              link: 'close-out/value-creation'
             },
           ]
         },
