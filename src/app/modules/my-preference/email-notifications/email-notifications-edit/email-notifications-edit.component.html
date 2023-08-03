@@ -37,7 +37,7 @@
                         </spot-singleselect-autocomplete>
 
                         <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868'" -->
-                        <spot-multiselect-autocomplete formControlName="portfolioOwner" class="w-full read-only"
+                        <spot-multiselect-autocomplete formControlName="portfolioOwner" class="w-full read-only" [Required]="portfolioOwnerRequired"
                             name="portfolioOwner" [label]="'Portfolio Owner(s)'" [placeholder]="'Portfolio Owner'"
                             [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                             [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
@@ -55,7 +55,7 @@
                             </spot-singleselect-autocomplete>
                         <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '11336470-8b35-4c7a-abe4-d62d58d33fca'" -->
                         <spot-multiselect-autocomplete formControlName="excecutionScope" class="w-full"
-                            name="excecutionScope" [label]="'Execution Scope(s)'" [placeholder]="'Execution Scope'"
+                            name="excecutionScope" [label]="'Execution Scope(s)'" [placeholder]="'Execution Scope'" [Required]="executionScopeRequired"
                             [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                             [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'"
                             [customSortPointer]="'pfid'"
@@ -71,7 +71,7 @@
                                 *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '11336470-8b35-4c7a-abe4-d62d58d33fca'">
                             </spot-singleselect-autocomplete>
                         <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == '897633cf-3516-49b0-9f45-a6ddc9374c0e'" -->
-                        <spot-multiselect-autocomplete formControlName="role" name="role" [label]="'Role(s)'"
+                        <spot-multiselect-autocomplete formControlName="role" name="role" [label]="'Role(s)'" [Required]="projectBasedRequired"
                             [placeholder]="'Role'" [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'"
                             [dropDownArray]="getRoles()"
                             [showHint]="true"
@@ -81,7 +81,7 @@
                         </spot-multiselect-autocomplete>
                         <!-- *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'" -->
                         <spot-multiselect-autocomplete class="w-full read-only" formControlName="products"
-                            name="products" [label]="'Product(s)'" [valuePointer]="'fullProductName'" [placeholder]="'Product'"
+                            name="products" [label]="'Product(s)'" [valuePointer]="'fullProductName'" [placeholder]="'Product'" [Required]="productsRequired"
                             [idPointer]="'productId'" [dropDownArray]="getActiveProducts()" [showHint]="true"
                             [hint]="'Selections here will generate a summary report based on projects where the selected Product(s) are either the documented Primary or Impacted Product'"
                             *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c'">

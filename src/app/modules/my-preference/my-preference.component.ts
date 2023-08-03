@@ -63,7 +63,7 @@ export class MyPreferenceComponent implements OnInit {
     }
 
     dataloader() {
-        this.titleService.setTitle("Standard Milestones Edit")
+        this.titleService.setTitle("My preferences")
         this.checkMilestoneSetsAccess();
         this.viewContent = true
         if(this.checkAccessError==false){

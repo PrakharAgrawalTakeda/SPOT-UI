@@ -69,6 +69,11 @@ export class EmailNotificationsEditComponent {
     projects: any[] = [];
     reportScopechange: boolean;
     isConfidential: boolean = false;
+    executionScopeRequired : boolean = false;
+    portfolioOwnerRequired : boolean = false;
+    projectBasedRequired : boolean = false;
+    individualProjectsRequired : boolean = false;
+    productsRequired : boolean = false;
 
 
     constructor(public projecthubservice: ProjectHubService,
@@ -77,17 +82,10 @@ export class EmailNotificationsEditComponent {
                 public auth: AuthService, private roleService: RoleService, public fuseAlert: FuseConfirmationService, private authService: AuthService, private apiservice: ProjectApiService,
                 public preferenceservice: MyPreferenceService) {
         this.emailNotiForm.valueChanges.subscribe(res => {
-            console.log(this.preferenceservice.isFormChanged)
-            console.log(this.viewContent)
-
-
             this.preferenceservice.isFormChanged = true
-
-
         })
 
         this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].valueChanges.subscribe(value => {
-            console.log(value)
             if (this.viewContent == true) {
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "You have changed the notification scope. Do you want to proceed?",
@@ -121,6 +119,8 @@ export class EmailNotificationsEditComponent {
                 this.resultSets = [];
                 this.rows = []
                 this.projects = []
+                this.resetRequired();
+                this.portfolioOwnerRequired = true;
             }
 
             if (value.lookUpId == '11336470-8b35-4c7a-abe4-d62d58d33fca') {
@@ -131,6 +131,8 @@ export class EmailNotificationsEditComponent {
                 this.resultSets = [];
                 this.rows = []
                 this.projects = []
+                this.resetRequired();
+                this.executionScopeRequired = true;
             }
 
 
@@ -142,6 +144,8 @@ export class EmailNotificationsEditComponent {
                 this.resultSets = [];
                 this.rows = []
                 this.projects = []
+                this.resetRequired();
+                this.projectBasedRequired = true;
             }
 
             if (value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c') {
@@ -149,6 +153,8 @@ export class EmailNotificationsEditComponent {
                 this.emailNotiForm.controls['role'].setValue(null);
                 this.emailNotiForm.controls['portfolioOwner'].setValue([]);
                 this.emailNotiForm.controls['products'].setValue(null);
+                this.resetRequired();
+                this.individualProjectsRequired = true;
             }
 
             if (value.lookUpId == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c') {
@@ -158,6 +164,8 @@ export class EmailNotificationsEditComponent {
                 this.resultSets = [];
                 this.rows = []
                 this.projects = []
+                this.resetRequired();
+                this.productsRequired = true;
             }
         });
 
@@ -322,6 +330,13 @@ export class EmailNotificationsEditComponent {
         }
         return [];
     }
+    resetRequired(): void {
+        this.executionScopeRequired = false;
+        this.portfolioOwnerRequired = false;
+        this.projectBasedRequired = false;
+        this.individualProjectsRequired = false;
+        this.productsRequired = false;
+    }
 
     getExcecutionScope(): any {
         if (this.filterCriteria && this.filterCriteria.portfolioOwner) {
@@ -463,7 +478,6 @@ export class EmailNotificationsEditComponent {
     submitnotifications() {
         this.preferenceservice.isFormChanged = false
         var formValue = this.emailNotiForm.getRawValue()
-        console.log(formValue.emailNotifcationNotifcationReportScopeIds)
         if (Object.keys(formValue.reportFrequencyId).length == 0 || Object.keys(formValue.emailNotifcationNotifcationReportScopeIds).length == 0) {
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "In order to save the information it is required to enter Report Frequency and Report Scope!",
@@ -488,78 +502,119 @@ export class EmailNotificationsEditComponent {
             }
             const alert = this.fuseAlert.open(comfirmConfig)
         } else {
-            if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
-                this.preferenceservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
-            } else {
-
-                console.log(formValue.emailNotifcationNotifcationReportScopeIds)
-                var mainObj = {
-                    reportOptions: {
-                        emailNotifcationNotifcationReportScopeIds: formValue.emailNotifcationNotifcationReportScopeIds.lookUpId || '',
-                        emailNotifcationPortfolioReportTypes: formValue.emailNotifcationPortfolioReportTypes?.lookUpId || '77b04381-623f-4ab4-887d-8d4192d1bf4b',
-                        executionScopeIds: formValue.excecutionScope ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : '',
-                        includeChild: formValue.includeChild ? formValue.includeChild : false,
-                        notificationId: formValue.notificationId ? formValue.notificationId : null,
-                        portfolioScopeIds: formValue.portfolioOwner
-                            ? formValue.portfolioOwner.map(x => x.portfolioOwnerId).join()
-                            : '',
-                        productIds: formValue.products ? formValue.products.map(x => x.productId).join() : '',
-                        projectIds: this.projects ? this.projects.map(x => x.problemUniqueId).join() : '',
-                        recieveEmailNotification: formValue.recieveEmailNotification ? formValue.recieveEmailNotification : false,
-                        reportFrequencyId: formValue.reportFrequencyId ? formValue.reportFrequencyId.lookUpId : '',
-                        roleIds: formValue.role ? formValue.role.map(x => x.lookUpId).join() : '',
-                        userId: this.msalService.instance.getActiveAccount().localAccountId,
-                    },
-                    eventsMasterData: [],
-                    eventsUserData: []
+            if(this.checkRequiredFields()){
+                if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
+                    this.preferenceservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
+                } else {
+                    var mainObj = {
+                        reportOptions: {
+                            emailNotifcationNotifcationReportScopeIds: formValue.emailNotifcationNotifcationReportScopeIds.lookUpId || '',
+                            emailNotifcationPortfolioReportTypes: formValue.emailNotifcationPortfolioReportTypes?.lookUpId || '77b04381-623f-4ab4-887d-8d4192d1bf4b',
+                            executionScopeIds: formValue.excecutionScope ? formValue.excecutionScope.map(x => x.portfolioOwnerId).join() : '',
+                            includeChild: formValue.includeChild ? formValue.includeChild : false,
+                            notificationId: formValue.notificationId ? formValue.notificationId : null,
+                            portfolioScopeIds: formValue.portfolioOwner
+                                ? formValue.portfolioOwner.map(x => x.portfolioOwnerId).join()
+                                : '',
+                            productIds: formValue.products ? formValue.products.map(x => x.productId).join() : '',
+                            projectIds: this.projects ? this.projects.map(x => x.problemUniqueId).join() : '',
+                            recieveEmailNotification: formValue.recieveEmailNotification ? formValue.recieveEmailNotification : false,
+                            reportFrequencyId: formValue.reportFrequencyId ? formValue.reportFrequencyId.lookUpId : '',
+                            roleIds: formValue.role ? formValue.role.map(x => x.lookUpId).join() : '',
+                            userId: this.msalService.instance.getActiveAccount().localAccountId,
+                        },
+                        eventsMasterData: [],
+                        eventsUserData: []
+                    }
+                }
+                if (this.emailNotiForm.get('recieveEmailNotification').value == true) {
+                    this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
+                        this.preferenceservice.isFormChanged = false
+                        this.preferenceservice.submitbutton.next(true)
+                        this.preferenceservice.toggleDrawerOpen('', '', [], '')
+                        this.showConfirmationMessage()
+                    })
+                } else {
+                    var deactivateConfig: FuseConfirmationConfig = {
+                        "message": "Are you sure you want to de-activate the e-mail notifications?",
+                        "icon": {
+                            "show": true,
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warn"
+                        },
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Yes",
+                                "color": "warn"
+                            },
+                            "cancel": {
+                                "show": true,
+                                "label": "Cancel"
+                            }
+                        },
+                        "dismissible": true
+                    }
+                    const deactivateAlert = this.fuseAlert.open(deactivateConfig)
+                    deactivateAlert.afterClosed().subscribe(close => {
+                        if (close == 'confirmed') {
+                            this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
+                                this.preferenceservice.isFormChanged = false
+                                this.preferenceservice.submitbutton.next(true)
+                                this.preferenceservice.toggleDrawerOpen('', '', [], '')
+                                this.showDeactivationMessage()
+                            })
+                        } else {
+                            this.preferenceservice.isFormChanged = true;
+                        }
+                    })
                 }
             }
-            if (this.emailNotiForm.get('recieveEmailNotification').value == true) {
-                this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
-                    this.preferenceservice.isFormChanged = false
-                    this.preferenceservice.submitbutton.next(true)
-                    this.preferenceservice.toggleDrawerOpen('', '', [], '')
-                    this.showConfirmationMessage()
-                })
-            } else {
-                var deactivateConfig: FuseConfirmationConfig = {
-                    "message": "Are you sure you want to de-activate the e-mail notifications?",
+            else{
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "In order to save the information , please select at least one value for the report scope",
+                    "message": "",
                     "icon": {
                         "show": true,
                         "name": "heroicons_outline:exclamation",
-                        "color": "warn"
+                        "color": "warning"
                     },
                     "actions": {
                         "confirm": {
                             "show": true,
-                            "label": "Yes",
-                            "color": "warn"
+                            "label": "Okay",
+                            "color": "primary"
                         },
                         "cancel": {
-                            "show": true,
-                            "label": "Cancel"
+                            "show": false,
                         }
                     },
                     "dismissible": true
                 }
-                const deactivateAlert = this.fuseAlert.open(deactivateConfig)
-                deactivateAlert.afterClosed().subscribe(close => {
-                    if (close == 'confirmed') {
-                        this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
-                            this.preferenceservice.isFormChanged = false
-                            this.preferenceservice.submitbutton.next(true)
-                            this.preferenceservice.toggleDrawerOpen('', '', [], '')
-                            this.showDeactivationMessage()
-                        })
-                    } else {
-                        this.preferenceservice.isFormChanged = true;
-                    }
-                })
+                this.fuseAlert.open(comfirmConfig)
             }
+
         }
     }
-
+    checkRequiredFields(): boolean{
+        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868' && this.emailNotiForm.controls['portfolioOwner'].value.length == 0){
+            return false;
+        }
+        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '11336470-8b35-4c7a-abe4-d62d58d33fca' && this.emailNotiForm.controls['excecutionScope'].value.length == 0){
+            return false;
+        }
+        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '897633cf-3516-49b0-9f45-a6ddc9374c0e' && this.emailNotiForm.controls['role'].value.length == 0){
+            return false;
+        }
+        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c' && this.projects.length == 0){
+            return false;
+        }
+        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c' && this.emailNotiForm.controls['products'].value.length == 0){
+            return false;
+        }
+        return true;
+    }
     showDeactivationMessage(): void {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "You have successfully de-activated the e-mail notification feature.",
