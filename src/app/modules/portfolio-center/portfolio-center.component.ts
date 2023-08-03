@@ -839,7 +839,6 @@ export class PortfolioCenterComponent implements OnInit {
           this.setPage(res, 0)
           
           this.projects.sort = this.recentTransactionsTableMatSort;
-          this.showContent = true
           for (var name of this.projectNames) {
             this.projects.data.find(ele => ele.projectUid == name.problemUniqueId).problemTitle = name.problemTitle
           }
@@ -856,6 +855,8 @@ export class PortfolioCenterComponent implements OnInit {
               }
             }
           };
+
+        this.showContent = true
         // var fieldNameElement = document.getElementById('page-count');
         // fieldNameElement.innerHTML = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
 })
