@@ -138,7 +138,11 @@ export class PortfolioCenterComponent implements OnInit {
 
   bulkreportdata: any;
   bulkreportTableEditStack: any = []
-  bulkreportForm = new FormArray([])
+   bulkreportForm = new FormGroup({
+    projectProposal: new FormControl()
+   })
+   toggleStates: boolean[] = [];
+   toggles: { [key: string]: { states: boolean[], selectAllFn: (checked: boolean) => void, toggleFn: (rowIndex: number) => void, allToggledFn: () => boolean } } = {};
 
   filteredPhaseArray = []
   oePhaseArray = []
@@ -208,7 +212,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+ 
     var executionScope = ""
     var portfolioOwners = ""
     this.activeaccount = this.msal.instance.getActiveAccount();
@@ -670,7 +674,17 @@ export class PortfolioCenterComponent implements OnInit {
             var budgetData;
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
+            this.bulkreportForm.patchValue({
+              projectProposal: false
+            })
             console.log(this.bulkreportdata)
+            // Initialize the toggleStates array with all toggles turned off by default
+            this.initializeToggle('Project Proposal');
+            this.initializeToggle('Project Charter');
+            this.initializeToggle('Performance Dashboard');
+            this.initializeToggle('Budget Dashboard');
+            this.initializeToggle('Project Closeout');
+            this.initializeToggle('GMSGQ Product Team');
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
             }
@@ -1315,6 +1329,73 @@ export class PortfolioCenterComponent implements OnInit {
     else {
       this.filterDrawer.close()
     }
+  }
+  // Function to get the number of toggles (e.g., number of rows in your table)
+  numberOfToggles(): number {
+    // Replace this with the actual number of toggles/rows in your table
+    // For example, if you are using an array of data for your table, you can use:
+    // return this.yourDataArray.length;
+    return this.bulkreportdata.length;
+  }
+  // Function to initialize a toggle and its associated functions
+  initializeToggle(toggleName: string) {
+    this.toggles[toggleName] = {
+      states: Array(this.numberOfToggles()).fill(false),
+      selectAllFn: (checked: boolean) => {
+        this.toggles[toggleName].states = this.toggles[toggleName].states.map(() => checked);
+      },
+      toggleFn: (rowIndex: number) => {
+        this.toggles[toggleName].states[rowIndex] = !this.toggles[toggleName].states[rowIndex];
+      },
+      allToggledFn: () => {
+        return this.toggles[toggleName].states.every((state) => state === true);
+      }
+    };
+  }
+
+  Close() {
+    if (this.bulkreportForm.dirty) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Are you sure you want to exit?",
+        "message": "All unsaved data will be lost.",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+      alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          this.clearBulkReportForm()
+        }
+      })
+    }
+    else {
+      this.filterDrawer.close()
+    }
+  }
+  clearBulkReportForm()
+  {
+    this.bulkreportForm.patchValue({
+      projectProposal: []
+    })
+  }
+
+  generateReports() {
+
   }
 
   clearForm() {
