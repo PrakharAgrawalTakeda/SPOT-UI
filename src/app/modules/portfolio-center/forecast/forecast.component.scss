@@ -16,7 +16,8 @@
     height: 40px;
     width: 25px;
 }
-.datatable-header {
-    top: 10px;
-    // position: relative;
+::ng-deep .datatable-header {
+    /* Set the background color with a linear gradient effect */
+    background-image: linear-gradient(to bottom, #FF0000 50%, transparent 50%) !important;
 }
+

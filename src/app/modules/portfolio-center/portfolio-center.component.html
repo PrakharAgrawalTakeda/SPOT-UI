@@ -5,7 +5,7 @@
         <!-- Drawer -->
         <mat-drawer class="w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             [position]="'end'" #filterDrawer>
-            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent"
+            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent && showFilter"
                 style="overflow-y: scroll; height: 85vh;">
                 <div class=" form-ask-need h-[77.5vh]  overflow-y-scroll">
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
@@ -191,25 +191,143 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
                 </div>
             </form>
+            <!-- GENERATE REPORT -->
+            <div class="mt-6 pl-3 h-[78vh] w-full" #target id="scheduleTableDiv" *ngIf="showContent && !showFilter">
+                <!-- <ngx-datatable
+                                                    class="datatable-schedule-74 w-full material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
+                                                    [rows]="bulkreportdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'"
+                                                    [rowHeight]="'auto'" [scrollbarV]="false"> -->
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
+                    columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
+                    [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)"
+                    [virtualization]="false" [sorts]="[{ prop: 'problemTitle', dir: 'asc' }]"
+                    class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="bulkreportdata"
+                    #projectOverviewTable>
+            
+                    <!-- Define columns -->
+                    <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="1.5">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+            
+                    <ngx-datatable-column name="Budget ID" prop="budgetId" [resizeable]="false" [sortable]="false" [flexGrow]="1.5">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Project Name" prop="problemTitle" [resizeable]="false"
+                        [sortable]="false" [flexGrow]="4">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+            
+                    <ngx-datatable-column name="PM" prop="pm" [resizeable]="false" [sortable]="false" [flexGrow]="2.5">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+            
+                    <ngx-datatable-column name="Sponsor" prop="sponsor" [resizeable]="false" [sortable]="false" [flexGrow]="2.5">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+        <!-- Toggle column -->
+        <!-- <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
+                        <ng-template ngx-datatable-header-template let-value="value">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
+                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                            Project Proposal
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
+                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
+                        <ng-template ngx-datatable-header-template let-value="value">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
+                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                            Project Charter
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
+                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
+                        <ng-template ngx-datatable-header-template let-value="value">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
+                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                            Performance Dashboard
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
+                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
+                        <ng-template ngx-datatable-header-template let-value="value">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
+                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                            Budget Dashboard
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
+                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
+                        <ng-template ngx-datatable-header-template let-value="value">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
+                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                            Project Closeout
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
+                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
+                        <ng-template ngx-datatable-header-template let-value="value">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
+                                (change)="toggleSelectAll()"></mat-slide-toggle>
+                            GMSGQ Product Team
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="row.isSelected"
+                                (change)="onCheckboxChangeFn(row, $event)"></mat-slide-toggle>
+                        </ng-template>
+                    </ngx-datatable-column>
+            
+                </ngx-datatable>
+            
+            </div>
         </mat-drawer>
 
-        <mat-drawer class="w-3qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
-            [position]="'end'" #bulkreportDrawer>
-            <div class="mt-6 pl-3 h-[78vh] w-full" #target id="scheduleTableDiv">
-                <!-- <ngx-datatable
+        <!-- <mat-drawer class="w-3qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
+            [position]="'end'" #filterDrawer>
+            <div class="mt-6 pl-3 h-[78vh] w-full" #target id="scheduleTableDiv" *ngIf="showContent && !showFilter"> -->
+        <!-- <ngx-datatable
                     class="datatable-schedule-74 w-full material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                     [rows]="bulkreportdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'"
                     [rowHeight]="'auto'" [scrollbarV]="false"> -->
-                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
+        <!-- <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
                     [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false"
                     [sorts]="[{ prop: 'problemTitle', dir: 'asc' }]"
                     class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="bulkreportdata"
-                    #projectOverviewTable>
+                    #projectOverviewTable> -->
 
-                    <!-- Define columns -->
-                    <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
-                        [flexGrow]="0.5">
+        <!-- Define columns -->
+        <!-- <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
+                        [flexGrow]="1.5">
                         <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
                             ngx-datatable-cell-template>
                             {{ value }}
@@ -245,31 +363,13 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
-                    </ngx-datatable-column>
-
-                    <!-- Toggle column -->
-                    <!-- <ngx-datatable-column name="Project Proposal" prop="projectProposal" [sortable]="false"
-                        [resizeable]="false" [flexGrow]="0.1" [headerClass]="getHeaderClass">
-                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
-                            ngx-datatable-cell-template>
-                            <a *ngIf="!bulkreportTableEditStack.includes(rowIndex)"
-                                (click)="bulkreportTableEditRow(rowIndex)">
-                                <p *ngIf="!value">&nbsp;</p>
-                                <mat-icon svgIcon="heroicons_outline:check-circle" *ngIf="value == true"></mat-icon>
-                            </a>
-                            <form [formGroup]="bulkreportForm.controls[rowIndex]"
-                                *ngIf="bulkreportTableEditStack.includes(rowIndex)" class="h-[45px]">
-                                <mat-slide-toggle class="h-full overflow-hidden"
-                                    formControlName="projectProposal">
-                                </mat-slide-toggle>
-                            </form>
-                        </ng-template>
                     </ngx-datatable-column> -->
-                    <ngx-datatable-column [flexGrow]="0.4" [sortable]="false" [resizeable]="false">
-                        <ng-template ngx-datatable-header-template let-value="value"
-                            let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
-                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected"
-                                (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
+
+        <!-- Toggle column -->
+        <!-- <ngx-datatable-column [flexGrow]="0.1" [sortable]="false" [resizeable]="false" [headerClass]="getHeaderClass">
+                        <ng-template ngx-datatable-header-template let-value="value">
+                            <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden"
+                                (change)="toggleSelectAll()"></mat-slide-toggle>
                             Project Proposal
                         </ng-template>
                         <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
@@ -348,7 +448,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
 
             </div>
 
-        </mat-drawer>
+        </mat-drawer> -->
 
         <!-- <mat-drawer class="w-3qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
             [position]="'end'" #matDrawerRight>
@@ -365,7 +465,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     <h1 class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary" style="margin-left: 10px;">
                         Portfolio Center</h1>
                     <div class=" flex items-center">
-                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="filterDrawer.toggle()">
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('Filter')">
                             Filters
                         </button>
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
@@ -527,7 +627,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenSPOTReport()">
                             SPOT Data (Power BI)
                         </button>
-                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="bulkreportDrawer.toggle()">
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('BulkReport')">
                             Generate Reports
                         </button>
                     </div>
