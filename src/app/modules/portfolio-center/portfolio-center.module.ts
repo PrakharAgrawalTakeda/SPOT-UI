@@ -30,6 +30,7 @@ export const projectRoutes: Route[] = [
   {
     path: '',
     component: PortfolioCenterComponent,
+  },
   {
     path: 'forecast',
     component: ForecastComponent,

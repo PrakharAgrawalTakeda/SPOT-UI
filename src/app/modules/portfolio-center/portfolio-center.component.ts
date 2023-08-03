@@ -28,6 +28,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Constants } from 'app/shared/constants';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -870,13 +871,13 @@ export class PortfolioCenterComponent implements OnInit {
 })
   this.showContent = false;
   }
-  
+
   bulkreportTableEditRow(row: number) {
     if (!this.bulkreportTableEditStack.includes(row)) {
         this.bulkreportTableEditStack.push(row)
     }
 }
-
+  
   scrollHandler(event) {
     // if (!this.scroll) {
       this.scroll = true
