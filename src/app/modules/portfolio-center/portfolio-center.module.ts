@@ -23,16 +23,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { ForecastComponent } from './forecast/forecast.component';
 
 export const projectRoutes: Route[] = [
   {
     path: '',
     component: PortfolioCenterComponent,
-  }
+  },
+  {
+    path: 'forecast',
+    component: ForecastComponent,
+    // pathMatch: 'full'
+  },
 ];
 @NgModule({
   declarations: [
-    PortfolioCenterComponent
+    PortfolioCenterComponent,
+    ForecastComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
@@ -58,6 +66,8 @@ export const projectRoutes: Route[] = [
     SpotFormsModule,
     NgScrollbarModule,
     NgxDatatableModule,
-  ]
+    MatSlideToggleModule
+  ],
+  exports: [RouterModule]
 })
 export class PortfolioCenterModule { }

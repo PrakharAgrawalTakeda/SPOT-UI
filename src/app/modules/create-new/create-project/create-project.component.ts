@@ -44,6 +44,7 @@ export class CreateProjectComponent implements OnInit {
   localCurrency:any = [];
   viewContent:boolean = false
   showLocalAttributes:boolean = false
+  showLocalAttributesTitle:boolean = false
   portfolioOwners = ""
   executionScope = ""
   createProjectForm = new FormGroup({
@@ -89,6 +90,7 @@ export class CreateProjectComponent implements OnInit {
   envPortfolio:any
 
   capturedValues = ['', '']
+  LAData:any = []
   // fuseAlert: any;
 
   constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService, private msalService: MsalService) {
@@ -499,6 +501,9 @@ export class CreateProjectComponent implements OnInit {
           this.apiService2.bulkeditQualityReference(this.qualityformValue, res.problemUniqueId).then(quality => {
             console.log(quality);
             this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+              if (this.localAttribute != undefined) {
+                this.localAttribute.submitLA(res.problemUniqueId)
+              }
               this.viewContent = true
             })
         })
@@ -506,7 +511,9 @@ export class CreateProjectComponent implements OnInit {
       }
       else{
           this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
-            this.localAttribute.submitLA(res.problemUniqueId)
+            if (this.localAttribute != undefined){
+              this.localAttribute.submitLA(res.problemUniqueId)
+            }
             this.viewContent = true
           })
       }
@@ -579,10 +586,9 @@ export class CreateProjectComponent implements OnInit {
   }
 
   captureValueLA(index, event){
-    this.showLocalAttributes = event
-    console.log(event)
-    console.log(this.showLocalAttributes)
-    this.showLocalAttributes = event
+    this.LAData = event.data
+    this.showLocalAttributes = event.show
+    this.showLocalAttributesTitle = event.show
   }
   getLookUpName(id: any): any {
     if (typeof (id) == 'string'){

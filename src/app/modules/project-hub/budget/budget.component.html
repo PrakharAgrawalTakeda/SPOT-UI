@@ -181,16 +181,36 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-                        <spot-input class="w-full" formControlName="parentProgram" [label]="'Total Forecast Projection TFP (' + this.localCurrency.localCurrencyAbbreviation + ')'">
-                        </spot-input>
-                        <spot-input class="w-full" formControlName="localCurrency" [label]="'Annual Forecast Performance AFP (' + this.localCurrency.localCurrencyAbbreviation + ')'">
-                        </spot-input>
+                        <mat-form-field  class="flex w-full" [floatLabel]="'always'">
+                            <mat-label class="flex">Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                            <div class="grid grid-cols-2 divide-x-2 w-full">
+                                <div><input matInput formControlName="parentProgram" placeholder="Parent Program"></div>
+                                <div><input  [ngClass]="'text-right'" matInput formControlName="parentProgram" placeholder="Child Program"></div>
+                            </div>
+                        </mat-form-field>
+                        <mat-form-field  class="flex w-full" [floatLabel]="'always'">
+                            <mat-label class="flex">Annual Forecast Performance AFP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                            <div class="grid grid-cols-2 divide-x-2 w-full">
+                                <div><input matInput formControlName="parentProgram" placeholder="Parent Program"></div>
+                                <div><input  [ngClass]="'text-right'" matInput formControlName="parentProgram" placeholder="Child Program"></div>
+                            </div>
+                        </mat-form-field>
                         <spot-input-date class="w-full" formControlName="apisdate" [label]="'AFP Deviation Code'">
                         </spot-input-date>
-                        <spot-input class="w-full" formControlName="parentProgram" [label]="'Year To Date Performance YTDP (' + this.localCurrency.localCurrencyAbbreviation + ')'">
-                        </spot-input>
-                        <spot-input class="w-full" formControlName="localCurrency" [label]="'Month To Date Performance MTDP (' + this.localCurrency.localCurrencyAbbreviation + ')'">
-                        </spot-input>
+                        <mat-form-field  class="flex w-full" [floatLabel]="'always'">
+                            <mat-label class="flex">Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                            <div class="grid grid-cols-2 divide-x-2 w-full">
+                                <div><input matInput formControlName="parentProgram" placeholder="Parent Program"></div>
+                                <div><input  [ngClass]="'text-right'" matInput formControlName="parentProgram" placeholder="Child Program"></div>
+                            </div>
+                        </mat-form-field>
+                        <mat-form-field  class="flex w-full" [floatLabel]="'always'">
+                            <mat-label class="flex">Month To Date Performance MTDP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                            <div class="grid grid-cols-2 divide-x-2 w-full">
+                                <div><input matInput formControlName="parentProgram" placeholder="Parent Program"></div>
+                                <div><input  [ngClass]="'text-right'" matInput formControlName="parentProgram" placeholder="Child Program"></div>
+                            </div>
+                        </mat-form-field>
                         <spot-input-date class="w-full" formControlName="apisdate" [label]="'MTDP Deviation Code'">
                         </spot-input-date>
                     </div>

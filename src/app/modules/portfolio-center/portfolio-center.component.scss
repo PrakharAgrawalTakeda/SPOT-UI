@@ -19,6 +19,12 @@
     width: 20%;
 }
 
+.submit-button{
+    margin: 20px 15px 15px 15px !important;
+    // width: 100%;
+    min-width: 26px;
+}
+
 .tile-title{
     font-size: 20px;
 }
@@ -52,15 +58,25 @@
     cursor: pointer !important;
     margin-left: 15px !important;
     color: rgb(81, 174, 245);
+
 }
 .projectNames:hover {
     text-decoration: underline;
     cursor: pointer !important;
 }
 
+.projectName {
+    cursor: pointer !important;
+    //margin-right: 50px !important;
+    color: rgb(81, 174, 245);
+}
+.projectName:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
+}
+
 .datatable-header{
     top: 10px;
-    // position: relative;
 }
 
 
@@ -131,4 +147,15 @@ li{
 }
 .red{
     color: red !important;
+}
+
+
+::ng-deep .ngx-datatable .datatable-PO-60 .datatable-body .datatable-scroll {
+    height: 80vh !important;
+    width: 100vw !important;
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+}
+.datatable-body{
+    height: 65vh !important;
 }
