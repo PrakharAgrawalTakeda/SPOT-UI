@@ -195,32 +195,14 @@ export class EmailNotificationsEditComponent {
                 if (this.selectedValueExists.value == true && this.searchControl.value != "") {
                     this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
                         .subscribe((resultSets: any) => {
-                            console.log(resultSets)
-                            console.log(this.isConfidential)
-
-                            // Store the result sets
-                            if (!this.isConfidential) {
-                                this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
-                            }
-                                // else {
-                                //   this.resultSets = [];
-                            // }
-                            else {
-                                var activeaccount = this.msalService.instance.getActiveAccount()
-                                this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
-                                    if (resp.confidentialProjects.length > 0) {
-                                        var confProjectUserList = resultSets.projectData?.filter(x => resp.confidentialProjects?.includes(x.problemUniqueId));
-                                        if (confProjectUserList?.length > 0) {
-                                            this.resultSets = [...this.resultSets, ...confProjectUserList];
-                                        }
-                                    }
-                                });
-                            }
-                            console.log(this.resultSets)
-                            //this.resultSets = resultSets.projectData;
-                            //this.budget = resultSets.budget
-                            this.search.next(resultSets);
-                        });
+                            for (var i = 0; i < resultSets.projectData.length; i++) {
+                                var obj = resultSets.projectData[i];
+                              }
+                              console.log(this.resultSets)
+                              this.resultSets = resultSets.projectData;
+                              this.budget = resultSets.budget
+                              this.search.next(resultSets);
+                            });
 
                 }
             });
