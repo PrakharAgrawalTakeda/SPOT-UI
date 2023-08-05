@@ -1,11 +1,8 @@
 {
     "routes": [
       {
-        "route": "/{*.html}",
-        "statusCode": 301,
-        "action": {
-          "type": "rewrite",
-          "value": "/portfolio-center"
+        "route": "/*.html",
+        "rewrite": "/portfolio-center"
         }
       }
     ]
