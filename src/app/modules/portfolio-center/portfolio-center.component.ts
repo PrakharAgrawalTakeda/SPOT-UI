@@ -1414,18 +1414,35 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   generateReports() {
-    Object.keys(this.toggles).forEach((toggleName) => {
-      const toggle = this.toggles[toggleName];
-      const toggleStates = toggle.states;
+    const reportsData = [];
+
+    this.bulkreportdata.forEach((item) => {
+      const problemId = item.problemId;
+      const toggleValues = [];
   
-      console.log(`Toggle "${toggleName}" states:`, toggleStates);
-     
+      // Iterate through the toggles and extract the values for the current problemId
+      Object.keys(this.toggles).forEach((toggleName) => {
+        const toggle = this.toggles[toggleName];
+        const toggleState = toggle.states[this.bulkreportdata.indexOf(item)];
+        toggleValues.push(toggleState);
+      });
+  
+      const reportObj = {
+        problemId: problemId,
+        toggleStates: toggleValues
+      };
+  
+      reportsData.push(reportObj);
     });
-    this.filterDrawer.close()
+  
+    this.filterDrawer.close();
+  
     // Reset toggle states to initial values
-  Object.keys(this.toggles).forEach((toggleName) => {
-    this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-  });
+    Object.keys(this.toggles).forEach((toggleName) => {
+      this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+    });
+  
+    console.log('Reports data', reportsData);
   }
 
   clearForm() {
