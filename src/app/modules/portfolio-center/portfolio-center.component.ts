@@ -142,6 +142,7 @@ export class PortfolioCenterComponent implements OnInit {
     projectProposal: new FormControl()
    })
    toggleStates: boolean[] = [];
+   initialToggleStates: { [key: string]: boolean[] } = {};
    toggles: { [key: string]: { states: boolean[], selectAllFn: (checked: boolean) => void, toggleFn: (rowIndex: number) => void, allToggledFn: () => boolean } } = {};
 
   filteredPhaseArray = []
@@ -1344,10 +1345,23 @@ export class PortfolioCenterComponent implements OnInit {
         return this.toggles[toggleName].states.every((state) => state === true);
       }
     };
+    // Set initial toggle states
+  this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
   }
 
   Close() {
-    if (this.bulkreportForm.dirty) {
+    let changesDetected = false;
+
+    Object.keys(this.toggles).forEach((toggleName) => {
+      const currentToggleStates = this.toggles[toggleName].states;
+      const initialToggleStates = this.initialToggleStates[toggleName];
+  
+      if (!changesDetected) {
+        changesDetected = !this.areArraysEqual(currentToggleStates, initialToggleStates);
+      }
+    });
+  
+    if (changesDetected) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure you want to exit?",
         "message": "All unsaved data will be lost.",
@@ -1372,7 +1386,10 @@ export class PortfolioCenterComponent implements OnInit {
       const alert = this.fuseAlert.open(comfirmConfig)
       alert.afterClosed().subscribe(close => {
         if (close == 'confirmed') {
-          this.clearBulkReportForm()
+          this.filterDrawer.close()
+          Object.keys(this.toggles).forEach((toggleName) => {
+            this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+          });
         }
       })
     }
@@ -1380,12 +1397,21 @@ export class PortfolioCenterComponent implements OnInit {
       this.filterDrawer.close()
     }
   }
-  clearBulkReportForm()
-  {
-    this.bulkreportForm.patchValue({
-      projectProposal: []
-    })
+
+  areArraysEqual(array1: any[], array2: any[]): boolean {
+    if (array1.length !== array2.length) {
+      return false;
+    }
+  
+    for (let i = 0; i < array1.length; i++) {
+      if (array1[i] !== array2[i]) {
+        return false;
+      }
+    }
+  
+    return true;
   }
+
 
   generateReports() {
     Object.keys(this.toggles).forEach((toggleName) => {
@@ -1393,8 +1419,13 @@ export class PortfolioCenterComponent implements OnInit {
       const toggleStates = toggle.states;
   
       console.log(`Toggle "${toggleName}" states:`, toggleStates);
-      this.filterDrawer.close()
+     
     });
+    this.filterDrawer.close()
+    // Reset toggle states to initial values
+  Object.keys(this.toggles).forEach((toggleName) => {
+    this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+  });
   }
 
   clearForm() {
