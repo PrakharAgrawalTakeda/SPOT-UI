@@ -661,10 +661,6 @@ export class PortfolioCenterComponent implements OnInit {
           }
 
           console.log("Filter Data : " + this.groupData)
-          //Filtering Projects
-          // this.apiService.Filters(this.groupData).then((res: any) => {
-          //   console.log("PROJECTS DATA",res)
-          // })
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
@@ -1330,11 +1326,8 @@ export class PortfolioCenterComponent implements OnInit {
       this.filterDrawer.close()
     }
   }
-  // Function to get the number of toggles (e.g., number of rows in your table)
+  // Function to get the number of toggles
   numberOfToggles(): number {
-    // Replace this with the actual number of toggles/rows in your table
-    // For example, if you are using an array of data for your table, you can use:
-    // return this.yourDataArray.length;
     return this.bulkreportdata.length;
   }
   // Function to initialize a toggle and its associated functions
@@ -1395,7 +1388,13 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   generateReports() {
-
+    Object.keys(this.toggles).forEach((toggleName) => {
+      const toggle = this.toggles[toggleName];
+      const toggleStates = toggle.states;
+  
+      console.log(`Toggle "${toggleName}" states:`, toggleStates);
+      this.filterDrawer.close()
+    });
   }
 
   clearForm() {
