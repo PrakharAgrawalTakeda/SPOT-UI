@@ -19,44 +19,53 @@ export class LandingHomeComponent implements OnInit {
      */
     constructor(private authService: MsalService, private router: Router, private auth: AuthService, private titleService: Title) { }
     ngOnInit(): void {
-        this.titleService.setTitle("SPOT")
-        this.authService.instance.handleRedirectPromise().then(res => {
-            if (res != null && res.account != null) {
-                console.log(res.account)
+        this.titleService.setTitle("SPOT");
 
-                this.authService.instance.setActiveAccount(res.account)
-                var scopes = {
-                    scopes: ["api://1457c97b-39c4-4789-9ac6-1c7a39211d9a/Api.Read"]
+        // Check if the user is already logged in
+        const currentAccount = this.authService.instance.getActiveAccount();
+
+        if (currentAccount) {
+            // If user is already logged in
+            this.handlePostLoginActions();
+        } else {
+            // Handle the MSAL response
+            this.authService.instance.handleRedirectPromise().then(res => {
+                if (res != null && res.account != null) {
+                    this.authService.instance.setActiveAccount(res.account);
+                    this.handlePostLoginActions();
+                } else {
+                    // Redirect to login page
+                    this.login();
                 }
-                this.authService.instance.acquireTokenSilent(scopes).then(response => {
-                    if (!localStorage.getItem('app-setting')) {
-                        var appSetting: IAppSetting ={
-                            projectHubPanel: 'Unlocked'
-                        }
-                        localStorage.setItem('app-setting', JSON.stringify(appSetting))
-                    }
-                    if (localStorage.getItem('spot-redirect') != null) {
-                        var temp = localStorage.getItem('spot-redirect')
-                        console.log("hey" + temp)
-                        localStorage.removeItem('spot-redirect')
-                        this.lookup()
-                        this.router.navigateByUrl(temp)
-                    }
-                    else {
-                        this.lookup()
-                        this.router.navigateByUrl('portfolio-center')
-                    }
-                })
-
-            }
-        })
+            });
+        }
     }
+
     lookup() {
         this.auth.lookupMaster().then((res: any) => {
             for (let i of res) {
                 lookupMaster.lookup.set(i.lookUpId, i.lookUpName)
             }
         })
+    }
+    handlePostLoginActions(): void {
+        if (!localStorage.getItem('app-setting')) {
+            const appSetting: IAppSetting = {
+                projectHubPanel: 'Unlocked'
+            };
+            localStorage.setItem('app-setting', JSON.stringify(appSetting));
+        }
+
+        if (localStorage.getItem('spot-redirect') != null) {
+            const temp = localStorage.getItem('spot-redirect');
+            console.log("Redirecting to: " + temp);
+            localStorage.removeItem('spot-redirect');
+            this.lookup();
+            this.router.navigateByUrl(temp);
+        } else {
+            this.lookup();
+            this.router.navigateByUrl('portfolio-center');
+        }
     }
     login() {
         var scopes = {

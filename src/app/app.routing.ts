@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
 import { MsalGuard } from './core/auth/msal.guard';
+import { OldUrlRedirectResolver } from './core/auth/old-url-redirect.resolver';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -9,29 +10,43 @@ import { MsalGuard } from './core/auth/msal.guard';
 export const appRoutes: Route[] = [
     {
         path: '',
-        component  : LayoutComponent,
+        component: LayoutComponent,
         data: {
             layout: 'empty'
         },
-        children   : [
-            {path: '', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
+        children: [
+            { path: '', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule) },
         ]
     },
     {
-        path       : '',
-        component  : LayoutComponent,
+        path: '',
+        component: LayoutComponent,
         canActivate: [MsalGuard],
-        resolve    : {
+        resolve: {
             initialData: InitialDataResolver,
         },
-        children   : [
-            {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
-            {path: 'dashboard', loadChildren: () => import('app/modules/dashboard/dashboard.module').then(m => m.DashboardModule)},
-            {path: 'portfolio-center', loadChildren: () => import('app/modules/portfolio-center/portfolio-center.module').then(m => m.PortfolioCenterModule)},
-            {path: 'create-project', loadChildren: () => import('app/modules/create-new/create-new.module').then(m => m.CreateNewModule) },
-            {path: 'project-hub/:id', loadChildren: () => import('app/modules/project-hub/project-hub.module').then(m => m.ProjectHubModule)},
-            {path: 'my-preference', loadChildren: () => import('app/modules/my-preference/my-preference.module').then(m => m.MyPreferenceModule)},
-            {path: 'create-project', loadChildren: () => import('app/modules/create-new/create-new.module').then(m => m.CreateNewModule)},
+        children: [
+            { path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule) },
+            { path: 'dashboard', loadChildren: () => import('app/modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
+            { path: 'portfolio-center', loadChildren: () => import('app/modules/portfolio-center/portfolio-center.module').then(m => m.PortfolioCenterModule) },
+            { path: 'create-project', loadChildren: () => import('app/modules/create-new/create-new.module').then(m => m.CreateNewModule) },
+            { path: 'project-hub/:id', loadChildren: () => import('app/modules/project-hub/project-hub.module').then(m => m.ProjectHubModule) },
+            { path: 'my-preference', loadChildren: () => import('app/modules/my-preference/my-preference.module').then(m => m.MyPreferenceModule) },
+            { path: 'create-project', loadChildren: () => import('app/modules/create-new/create-new.module').then(m => m.CreateNewModule) },
         ]
-    }
+    },
+    {
+        path: 'HTML/ProjectHub.html',
+        component: LayoutComponent,
+        data: {
+            layout: 'empty'
+        },
+        resolve: { redirect: OldUrlRedirectResolver }
+    },
+    {
+        path: 'HTML/MyPreferences.html',
+        redirectTo: '/my-preference/settings',
+        pathMatch: 'full'
+    },
+    { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
