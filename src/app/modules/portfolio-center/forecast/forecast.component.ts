@@ -1,11 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { PortfolioApiService } from '../portfolio-api.service';
 
 @Component({
   selector: 'app-forecast',
@@ -22,7 +24,10 @@ export class ForecastComponent {
     Currency: new FormControl(''),
     PM: new FormControl(''),
   })
-  constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
+  showContent = false
+  localCurrency: any = [];
+  @ViewChild('FxRateDrawer') FxRateDrawer: MatSidenav
+  constructor(private portfoliService: PortfolioApiService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     , public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService) {
     // this.projecthubservice.submitbutton.subscribe(res => {
     //   if (res == true) {
@@ -39,10 +44,17 @@ export class ForecastComponent {
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.auth.lookupMaster().then(data => {
+      this.portfoliService.getLocalCurrency().then(currency => {
+        this.localCurrency = currency
       this.lookUpData = data
+      })
     })
   }
   getForecastType(){
     return this.lookUpData.filter(x => x.lookUpParentId == 'bc786c6a-8f23-4161-9f2a-67e1897295c7')
+  }
+  openDrawer() {
+    this.showContent = true
+    this.FxRateDrawer.toggle()
   }
 }
