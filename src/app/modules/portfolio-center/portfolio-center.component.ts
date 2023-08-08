@@ -1414,35 +1414,39 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   generateReports() {
-    const reportsData = [];
+    const toggleArray = [];
 
-    this.bulkreportdata.forEach((item) => {
-      const problemId = item.problemId;
-      const toggleValues = [];
-  
-      // Iterate through the toggles and extract the values for the current problemId
-      Object.keys(this.toggles).forEach((toggleName) => {
-        const toggle = this.toggles[toggleName];
-        const toggleState = toggle.states[this.bulkreportdata.indexOf(item)];
-        toggleValues.push(toggleState);
-      });
-  
-      const reportObj = {
-        problemId: problemId,
-        toggleStates: toggleValues
-      };
-  
-      reportsData.push(reportObj);
+    // Iterate through each toggle
+  Object.keys(this.toggles).forEach((toggleName) => {
+    const toggle = this.toggles[toggleName];
+    const toggleValues = toggle.states;
+    const problemIdsWithTrueToggle = [];
+
+    // Iterate through each problemId to check if the toggle is true
+    this.bulkreportdata.forEach((item, index) => {
+      if (toggleValues[index]) {
+        problemIdsWithTrueToggle.push(item.problemId);
+      }
     });
-  
-    this.filterDrawer.close();
-  
-    // Reset toggle states to initial values
-    Object.keys(this.toggles).forEach((toggleName) => {
-      this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-    });
-  
-    console.log('Reports data', reportsData);
+
+    // Create an object for the current toggle
+    const toggleObj = {
+      toggleName: toggleName,
+      problemIds: problemIdsWithTrueToggle
+    };
+
+    toggleArray.push(toggleObj);
+  });
+
+  // Close the drawer
+  this.filterDrawer.close();
+
+  // Reset toggle states to initial values
+  Object.keys(this.toggles).forEach((toggleName) => {
+    this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+  });
+
+  console.log('Toggle Array:', toggleArray);
   }
 
   clearForm() {
