@@ -3,6 +3,7 @@ import { ProjectHubService } from '../../project-hub.service';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseNavigationService } from '@fuse/components/navigation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-project-dashboard-product-team',
@@ -10,7 +11,7 @@ import { FuseNavigationService } from '@fuse/components/navigation';
   styleUrls: ['./project-dashboard-product-team.component.scss']
 })
 export class ProjectDashboardProductTeamComponent {
-  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, private router: Router) { 
+  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService,private router: Router) { 
     this.projectHubService.submitbutton.subscribe(res=>{
       if(res == true){
         this.dataloader()
@@ -41,5 +42,36 @@ export class ProjectDashboardProductTeamComponent {
   }
   isNavActive(link: string): boolean {
     return this.router.url.includes(link)
+  }
+
+  generatePD() {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "The selected report will be processed and distributed by e-Mail and may take a few minutes. Please check your inbox.",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const generateAlert = this.fuseAlert.open(comfirmConfig)
+
+    generateAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        console.log("API CALL HERE")
+      }
+    })
   }
 }
