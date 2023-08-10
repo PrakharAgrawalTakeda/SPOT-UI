@@ -1422,17 +1422,19 @@ export class PortfolioCenterComponent implements OnInit {
       const toggleValues = toggle.states;
       const problemIdsWithTrueToggle = [];
   
-      // Iterate through each problemId to check if the toggle is true
+      // Iterate through each problem unique Id to check if the toggle is true
       this.bulkreportdata.forEach((item, index) => {
         if (toggleValues[index]) {
-          problemIdsWithTrueToggle.push(item.problemId.toString()); // Convert to string
+          problemIdsWithTrueToggle.push(item.projectUid.toString()); // Convert problem unique ID to string
         }
       });
   
-      // Store the problem IDs in the toggleObject
+      // Store the problem unique IDs in the toggleObject
       toggleObject[toggleName.toLowerCase()] = problemIdsWithTrueToggle;
     });
     console.log('Toggle Object:', toggleObject);
+
+    // Pass toggleObject 
     this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
       console.log('Toggle Object:', toggleObject);
       // Close the drawer
