@@ -1414,42 +1414,35 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   generateReports() {
-    const toggleArray = [];
+    const toggleObject = {};
 
     // Iterate through each toggle
-  Object.keys(this.toggles).forEach((toggleName) => {
-    const toggle = this.toggles[toggleName];
-    const toggleValues = toggle.states;
-    const problemIdsWithTrueToggle = [];
-
-    // Iterate through each problemId to check if the toggle is true
-    this.bulkreportdata.forEach((item, index) => {
-      if (toggleValues[index]) {
-        problemIdsWithTrueToggle.push(item.problemId);
-      }
-    });
-
-    // Create an object for the current toggle
-    const toggleObj = {
-      toggleName: toggleName,
-      problemIds: problemIdsWithTrueToggle
-    };
-
-    toggleArray.push(toggleObj);
-  });
-  this.apiService.bulkGenerateReports(toggleArray, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
-    console.log('Toggle Array:', toggleArray);
-      // Close the drawer
-  this.filterDrawer.close();
-
-  // Reset toggle states to initial values
-  Object.keys(this.toggles).forEach((toggleName) => {
-    this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-  });
-})
-
-
+    Object.keys(this.toggles).forEach((toggleName) => {
+      const toggle = this.toggles[toggleName];
+      const toggleValues = toggle.states;
+      const problemIdsWithTrueToggle = [];
   
+      // Iterate through each problemId to check if the toggle is true
+      this.bulkreportdata.forEach((item, index) => {
+        if (toggleValues[index]) {
+          problemIdsWithTrueToggle.push(item.problemId.toString()); // Convert to string
+        }
+      });
+  
+      // Store the problem IDs in the toggleObject
+      toggleObject[toggleName.toLowerCase()] = problemIdsWithTrueToggle;
+    });
+    console.log('Toggle Object:', toggleObject);
+    this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+      console.log('Toggle Object:', toggleObject);
+      // Close the drawer
+      this.filterDrawer.close();
+  
+      // Reset toggle states to initial values
+      Object.keys(this.toggles).forEach((toggleName) => {
+        this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+      });
+    });
 
   }
 
