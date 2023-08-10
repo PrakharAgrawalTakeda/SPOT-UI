@@ -1437,16 +1437,20 @@ export class PortfolioCenterComponent implements OnInit {
 
     toggleArray.push(toggleObj);
   });
-
-  // Close the drawer
+  this.apiService.bulkGenerateReports(toggleArray, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+    console.log('Toggle Array:', toggleArray);
+      // Close the drawer
   this.filterDrawer.close();
 
   // Reset toggle states to initial values
   Object.keys(this.toggles).forEach((toggleName) => {
     this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
   });
+})
 
-  console.log('Toggle Array:', toggleArray);
+
+  
+
   }
 
   clearForm() {
