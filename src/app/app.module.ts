@@ -17,6 +17,7 @@ import { IPublicClientApplication, PublicClientApplication } from '@azure/msal-b
 import { GlobalVariables } from './shared/global-variables';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
+import { OldUrlRedirectResolver } from './core/auth/old-url-redirect.resolver';
 export function MsalInstanceFactory(): IPublicClientApplication {
     return new PublicClientApplication({
         auth: {
@@ -71,7 +72,8 @@ const routerConfig: ExtraOptions = {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
             multi: true
-        }
+        },
+        OldUrlRedirectResolver
     ]
 })
 export class AppModule {
