@@ -168,10 +168,34 @@ export class BudgetGeneralEditComponent {
     }
 
     async submitBudgetInfo() {
-        let isPrefixValid:boolean;
-        if(this.budgetId.value){
-            isPrefixValid = await this.checkPrefix(this.budgetId.value);
-        }else{
+        let isPrefixValid:boolean =true;
+        if (this.budgetId.value) {
+            try {
+                isPrefixValid = await this.checkPrefix(this.budgetId.value);
+            } catch (error) {
+                var errorConfig: FuseConfirmationConfig = {
+                    "title": "An error has occured",
+                    "message": "Please try again",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": false,
+                        },
+                    },
+                    "dismissible": true
+                }
+                this.fuseAlert.open(errorConfig)
+            }
+        } else {
             isPrefixValid = true;
         }
         if (!isPrefixValid && this.budgetId.status === "VALID") {
