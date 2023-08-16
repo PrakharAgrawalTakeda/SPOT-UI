@@ -57,25 +57,7 @@ export class BudgetComponent implements OnInit {
     }
 
     dataloader(): void {
-        // this.portApiService.getfilterlist().then(filterres => {
-        //     this.filterCriteria = filterres;
-        // })
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-        // this.portApiService.getOnlyLocalCurrency(this.id).then(currency => {
-        //
-        // });
-        // this.authService.lookupMaster().then((lookup: any) => {
-        //     this.lookUpData = lookup
-        //     this.projectHubService.lookUpMaster = lookup
-        //     this.apiService.getBudgetPageInfo(this.id).then((res: any) => {
-        //         this.budgetPageInfo = res;
-        //         this.fundingInformations = res.budgetIOs;
-        //         this.opexField = !!res.budget.opExRequired;
-        //         this.capexField = !!res.budget.capExRequired;
-        //         this.generalInfoPatchValue(res)
-        //         this.viewContent = true
-        //     })
-        // })
         const promises = [
             this.portApiService.getfilterlist(),
             this.portApiService.getOnlyLocalCurrency(this.id),

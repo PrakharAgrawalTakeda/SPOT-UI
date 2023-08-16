@@ -181,7 +181,7 @@
                         <mat-form-field  class="flex w-full" [floatLabel]="'always'">
                             <mat-label class="flex"><strong>AFP Deviation Code</strong></mat-label>
                             <div class="grid grid-cols-2 divide-x-2 w-full">
-                                <div><input  matInput formControlName="apisdate"></div>
+                                <div><input  matInput formControlName="parentProgram"></div>
                             </div>
                         </mat-form-field>
                         <mat-form-field  class="flex w-full" [floatLabel]="'always'">
@@ -198,8 +198,12 @@
                                 <div><input  [ngClass]="'text-right'" matInput formControlName="parentProgram" placeholder="Child Program"></div>
                             </div>
                         </mat-form-field>
-                        <spot-input-date class="w-full" formControlName="apisdate" [label]="'MTDP Deviation Code'">
-                        </spot-input-date>
+                        <mat-form-field  class="flex w-full" [floatLabel]="'always'">
+                            <mat-label class="flex"><strong>MTDP Deviation Code</strong></mat-label>
+                            <div class="grid grid-cols-2 divide-x-2 w-full">
+                                <div><input  matInput formControlName="parentProgram"></div>
+                            </div>
+                        </mat-form-field>
                     </div>
                     <app-budget-capex-opex-table [mode]="'Capex'"></app-budget-capex-opex-table>
                 </div>
