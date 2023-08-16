@@ -24,23 +24,41 @@ import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
-import { ForecastComponent } from './forecast/forecast.component';
+import { ForecastComponent } from './budget-spend/forecast/forecast.component';
+import { BudgetSpendComponent } from './budget-spend/budget-spend.component';
+import { ProjectHubModule } from '../project-hub/project-hub.module';
+import { PortfolioPerformanceComponent } from './budget-spend/portfolio-performance/portfolio-performance.component';
+import { ProjectPerformanceComponent } from './budget-spend/project-performance/project-performance.component';
+import { ProjectHub } from 'app/shared/role-controller';
 
 export const projectRoutes: Route[] = [
   {
     path: '',
     component: PortfolioCenterComponent,
-  },
-  {
-    path: 'forecast',
-    component: ForecastComponent,
-    // pathMatch: 'full'
-  },
-];
+    children: [
+      {
+        path: 'forecast-bulk-edit',
+        component: ForecastComponent,
+      },
+      {
+        path: 'portfolio-performance',
+        component: PortfolioPerformanceComponent,
+      },
+      {
+        path: 'proejct-performance',
+        component: ProjectPerformanceComponent,
+      }
+    ]
+  }];
+
+
 @NgModule({
   declarations: [
     PortfolioCenterComponent,
-    ForecastComponent
+    ForecastComponent,
+    BudgetSpendComponent,
+    PortfolioPerformanceComponent,
+    ProjectPerformanceComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

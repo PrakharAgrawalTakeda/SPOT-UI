@@ -1,5 +1,13 @@
+<!-- Budget/Spend -->
+<fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpenedright"
+    (openedChanged)="PortfolioCenterService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
+    [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerLarge}">
+    <div>
+        <app-budget-spend *ngIf="PortfolioCenterService.itemtype == 'BudgetSpendOpen'"></app-budget-spend>
+    </div>
+</fuse-drawer>
+<!-- Budget/Spend -->
 <div class="flex flex-col min-w-0 overflow-hidden pt-12">
-
     <mat-drawer-container class="flex-auto h-full"
         [ngStyle]="{ 'position' : filterDrawer.opened ? 'fixed' : 'relative'}">
         <!-- Drawer -->
@@ -592,8 +600,12 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </div>
 
                         </div>
-                        <div class="p-4 text-right">
+                        <!-- <div class="p-4 text-right">
                             <label (click)="goToForecast()">Forecast Bulk Edit Page</label>
+                        </div> -->
+                        
+                        <div class="p-4 text-right">
+                            <button routerLink="{{'../portfolio-center/forecast-bulk-edit'}}" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , '' , '1', true)">Forecast Bulk Edit Page</button>
                         </div>
                     </div>
                     <!-- Ask Needs -->
