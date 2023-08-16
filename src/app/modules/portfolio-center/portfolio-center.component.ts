@@ -143,6 +143,7 @@ export class PortfolioCenterComponent implements OnInit {
     projectProposal: new FormControl()
    })
    toggleStates: boolean[] = [];
+   initialToggleStates: { [key: string]: boolean[] } = {};
    toggles: { [key: string]: { states: boolean[], selectAllFn: (checked: boolean) => void, toggleFn: (rowIndex: number) => void, allToggledFn: () => boolean } } = {};
 
   filteredPhaseArray = []
@@ -663,10 +664,6 @@ export class PortfolioCenterComponent implements OnInit {
 
           console.log("Filter Data : " + this.groupData)
           localStorage.setItem('filterObject', JSON.stringify(this.groupData))
-          //Filtering Projects
-          // this.apiService.Filters(this.groupData).then((res: any) => {
-          //   console.log("PROJECTS DATA",res)
-          // })
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
@@ -1332,11 +1329,8 @@ export class PortfolioCenterComponent implements OnInit {
       this.filterDrawer.close()
     }
   }
-  // Function to get the number of toggles (e.g., number of rows in your table)
+  // Function to get the number of toggles
   numberOfToggles(): number {
-    // Replace this with the actual number of toggles/rows in your table
-    // For example, if you are using an array of data for your table, you can use:
-    // return this.yourDataArray.length;
     return this.bulkreportdata.length;
   }
   // Function to initialize a toggle and its associated functions
@@ -1353,10 +1347,23 @@ export class PortfolioCenterComponent implements OnInit {
         return this.toggles[toggleName].states.every((state) => state === true);
       }
     };
+    // Set initial toggle states
+  this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
   }
 
   Close() {
-    if (this.bulkreportForm.dirty) {
+    let changesDetected = false;
+
+    Object.keys(this.toggles).forEach((toggleName) => {
+      const currentToggleStates = this.toggles[toggleName].states;
+      const initialToggleStates = this.initialToggleStates[toggleName];
+  
+      if (!changesDetected) {
+        changesDetected = !this.areArraysEqual(currentToggleStates, initialToggleStates);
+      }
+    });
+  
+    if (changesDetected) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure you want to exit?",
         "message": "All unsaved data will be lost.",
@@ -1381,7 +1388,10 @@ export class PortfolioCenterComponent implements OnInit {
       const alert = this.fuseAlert.open(comfirmConfig)
       alert.afterClosed().subscribe(close => {
         if (close == 'confirmed') {
-          this.clearBulkReportForm()
+          this.filterDrawer.close()
+          Object.keys(this.toggles).forEach((toggleName) => {
+            this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+          });
         }
       })
     }
@@ -1389,15 +1399,56 @@ export class PortfolioCenterComponent implements OnInit {
       this.filterDrawer.close()
     }
   }
-  clearBulkReportForm()
-  {
-    this.bulkreportForm.patchValue({
-      projectProposal: []
-    })
+
+  areArraysEqual(array1: any[], array2: any[]): boolean {
+    if (array1.length !== array2.length) {
+      return false;
+    }
+  
+    for (let i = 0; i < array1.length; i++) {
+      if (array1[i] !== array2[i]) {
+        return false;
+      }
+    }
+  
+    return true;
   }
 
-  generateReports() {
 
+  generateReports() {
+    const toggleArray = [];
+
+    // Iterate through each toggle
+  Object.keys(this.toggles).forEach((toggleName) => {
+    const toggle = this.toggles[toggleName];
+    const toggleValues = toggle.states;
+    const problemIdsWithTrueToggle = [];
+
+    // Iterate through each problemId to check if the toggle is true
+    this.bulkreportdata.forEach((item, index) => {
+      if (toggleValues[index]) {
+        problemIdsWithTrueToggle.push(item.problemId);
+      }
+    });
+
+    // Create an object for the current toggle
+    const toggleObj = {
+      toggleName: toggleName,
+      problemIds: problemIdsWithTrueToggle
+    };
+
+    toggleArray.push(toggleObj);
+  });
+
+  // Close the drawer
+  this.filterDrawer.close();
+
+  // Reset toggle states to initial values
+  Object.keys(this.toggles).forEach((toggleName) => {
+    this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+  });
+
+  console.log('Toggle Array:', toggleArray);
   }
 
   clearForm() {
