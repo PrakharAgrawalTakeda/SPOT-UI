@@ -27,9 +27,9 @@ export class AssociatedProjectsComponent implements OnInit {
         private msalService: MsalService,
         private portApiService: PortfolioApiService
     ) {
-        this.projecthubservice.submitbutton.subscribe(res => {
-            this.dataloader()
-        })
+        // this.projecthubservice.submitbutton.subscribe(res => {
+        //     this.dataloader()
+        // })
     }
     id: string = '';
     rows = [];
@@ -75,7 +75,7 @@ export class AssociatedProjectsComponent implements OnInit {
             this.projecthubservice.removedIds = ids;
             this.projecthubservice.projectChildren = children;
             this.projecthubservice.projects = projects;
-            this.rows = this.projecthubservice.projects;
+            this.rows = this.projecthubservice.projects.filter(row => row.problemUniqueId !== row.parentId);
         });
 
         this.viewContent = true;
