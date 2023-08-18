@@ -88,8 +88,7 @@ export class LinkProjectComponent implements OnInit {
                     }
                    this.budget = resultSets.budget
                     if (!this.isConfidential) {
-                        this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
-                        console.log("Confidential Projects", this.resultSets)
+                        this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential && !x.parentProgramId);
                     }
                     else {
                         if (this.roleService.roleMaster.confidentialProjects.length > 0) {

@@ -6,7 +6,7 @@
                 <button class="ml-4 text-primary bg-gray-200" *ngIf="!isCreate" mat-flat-button [color]="'primary-200'" (click)="newtab()">
                     <mat-icon svgIcon="feather:external-link"></mat-icon>&nbsp; Open In New Tab
                 </button>
-                <button class="ml-4 text-primary bg-gray-200" *ngIf="isCreate" mat-flat-button [color]="'primary-200'">
+                <button class="ml-4 text-primary bg-gray-200" *ngIf="isCreate" mat-flat-button [color]="'primary-200'" (click)="createNewLibrary()">
                     <mat-icon svgIcon="feather:external-link"></mat-icon>&nbsp; Create Library
                 </button>
             </div>

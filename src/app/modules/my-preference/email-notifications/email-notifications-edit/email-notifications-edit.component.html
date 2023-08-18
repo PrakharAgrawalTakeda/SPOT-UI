@@ -1,6 +1,6 @@
 <div *ngIf="viewContent">
         <div class="flex items-start justify-between bg-primary sidepanel-header">
-            <div class="text-on-primary" style="padding-top: 6px">Edit Email Notifications</div>
+            <div class="text-on-primary" style="padding-top: 6px">Edit e-Mail Notifications</div>
             <div style="padding-top: 2px"><a (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)"
                     href="javascript:void(0)" title="Close">
                     <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -11,7 +11,7 @@
             <form class="w-full p-[20px]" [formGroup]="emailNotiForm" >
                 <div [ngClass]="'overflow-y-scroll overflow-x-hidden h-[83.5vh] pt-3 pr-3'">
                     <div class="flex justify-start items-center gap-3 pb-6">
-                        <spot-toggle class="w-full"  formControlName="recieveEmailNotification" [label]="'Receive Email Notifications'"
+                        <spot-toggle class="w-full"  formControlName="recieveEmailNotification" [label]="'Receive e-Mail Notifications'"
                         [showHint]="true"
                         [hint]="'Receive a summary report of alerts and reminders based on the scope, events and frequency you define below'">
                 </spot-toggle>
@@ -137,31 +137,6 @@
                             </div>
 
                         </div>
-                        <!-- <div class="overflow-x-auto  h-[15vh]" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
-                            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
-                                columnMode="flex"
-                                class="ml-5 material font-medium text-sm text-secondary whitespace-nowrap cursor-default"
-                                [rows]="projects">
-                                <ngx-datatable-column name="Projects" prop="problemTitle" [flexGrow]="9"
-                                    [resizeable]="false" [draggable]="false">
-                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <div class="flex items-center justify-start gap-6">
-                                            {{ value ? value : ( row.problemId + " -
-                                            " + row.problemTitle)}}
-                                        </div>
-                                    </ng-template>
-                                </ngx-datatable-column>
-                                <ngx-datatable-column name=" " prop="problemId" [flexGrow]="1" [resizeable]="false"
-                                    [sortable]="false" [draggable]="false">
-                                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <a href="javascript:void(0)" title="Remove"
-                                            (click)="onRemoveLink(row.problemUniqueId, rowIndex)">
-                                            <mat-icon svgIcon="heroicons_outline:trash"></mat-icon>
-                                        </a>
-                                    </ng-template>
-                                </ngx-datatable-column>
-                            </ngx-datatable>
-                        </div> -->
                         <div class="overflow-y-scroll" *ngIf="emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c'">
                             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false"
                                 columnMode="flex"

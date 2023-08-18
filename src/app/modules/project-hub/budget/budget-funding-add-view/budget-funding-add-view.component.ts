@@ -68,27 +68,52 @@ export class BudgetFundingAddViewComponent {
             }
             const alert = this.fuseAlert.open(comfirmConfig)
         }else{
-            var mainObj = {
-                budgetIoid:null,
-                projectId: this.id,
-                budgetIo1: fundingRequest.fundingRequestId,
-                carapprovedCapex: null,
-                carapprovedOpex: null,
-                ammendedCar:"",
-                localCarapprovedCapex: fundingRequest.capexAmount,
-                localCarapprovedOpex: fundingRequest.opexAmount,
-                localCurrencyId: fundingRequest.approvalCurrency,
-                approvalStatus:"",
-                approvalCurrency: "",
-                keep: true,
+            if(this.budgetInfo.budgetIOs.some(obj => obj.budgetIo1 === fundingRequest.fundingRequestId)){
+                var comfirmConfig: FuseConfirmationConfig = {
+                    "title": "The Funding Request ID you have entered does already exist and cannot be added a second time. Please change or remove it",
+                    "message": "",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": false,
+                            "label": "Cancel"
+                        }
+                    },
+                    "dismissible": true
+                }
+                this.fuseAlert.open(comfirmConfig)
+            }else{
+                var mainObj = {
+                    budgetIoid:null,
+                    projectId: this.id,
+                    budgetIo1: fundingRequest.fundingRequestId,
+                    carapprovedCapex: null,
+                    carapprovedOpex: null,
+                    ammendedCar:"",
+                    localCarapprovedCapex: fundingRequest.capexAmount,
+                    localCarapprovedOpex: fundingRequest.opexAmount,
+                    localCurrencyId: fundingRequest.approvalCurrency,
+                    approvalStatus:"",
+                    approvalCurrency: "",
+                    keep: true,
+                }
+                this.budgetInfo.budgetIOs  = this.budgetInfo.budgetIOs.filter((item) => item.keep);
+                this.budgetInfo.budgetIOs.push(mainObj);
+                this.apiService.updateBudgetPageInfo(this.id,this.budgetInfo).then(res => {
+                    this.projecthubservice.submitbutton.next(true)
+                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                })
             }
-            this.budgetInfo.budgetIOs  = this.budgetInfo.budgetIOs.filter((item) => item.keep);
-            this.budgetInfo.budgetIOs.push(mainObj);
 
-            this.apiService.updateBudgetPageInfo(this.id,this.budgetInfo).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
-            })
         }
 
 

@@ -112,7 +112,7 @@ export class BudgetGeneralEditComponent {
                 this.budgetInfoForm.controls.budgetId.disable()
                 this.required = false;
                 this.showBudgetIdButton = false;
-                this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
+                // this.budgetInfoForm.controls.budgetId.setValue('',{emitEvent : false})
                 if(this.budgetInfoForm.controls.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
                     this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
                 }
@@ -168,7 +168,36 @@ export class BudgetGeneralEditComponent {
     }
 
     async submitBudgetInfo() {
-        const isPrefixValid = await this.checkPrefix(this.budgetId.value);
+        let isPrefixValid:boolean =true;
+        if (this.budgetId.value) {
+            try {
+                isPrefixValid = await this.checkPrefix(this.budgetId.value);
+            } catch (error) {
+                var errorConfig: FuseConfirmationConfig = {
+                    "title": "An error has occured",
+                    "message": "Please try again",
+                    "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warning"
+                    },
+                    "actions": {
+                        "confirm": {
+                            "show": true,
+                            "label": "Okay",
+                            "color": "primary"
+                        },
+                        "cancel": {
+                            "show": false,
+                        },
+                    },
+                    "dismissible": true
+                }
+                this.fuseAlert.open(errorConfig)
+            }
+        } else {
+            isPrefixValid = true;
+        }
         if (!isPrefixValid && this.budgetId.status === "VALID") {
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "The Capital Budget ID with existing prefix abbreviations is not allowed.",
@@ -184,6 +213,9 @@ export class BudgetGeneralEditComponent {
                         "label": "Okay",
                         "color": "primary"
                     },
+                    "cancel": {
+                        "show": false,
+                    },
                 },
                 "dismissible": true
             }
@@ -196,9 +228,13 @@ export class BudgetGeneralEditComponent {
                     fieldsMissing ++;
                     missingFields.push("Budget ID")
                 }
-                if(!this.predefinedInvestmentId.value || this.predefinedInvestmentId.value.lookUpName == "NA"){
+                if(!this.predefinedInvestmentId.value || this.predefinedInvestmentId.value.lookUpName == "NA" || Object.keys(this.predefinedInvestmentId.value).length==0 ){
                     fieldsMissing ++;
                     missingFields.push("Global/Regional Predefined Investment")
+                }
+                if(this.gmsBudgetowner.invalid || Object.keys(this.gmsBudgetowner.value).length==0 ){
+                    fieldsMissing ++;
+                    missingFields.push("GMS Budget Owner")
                 }
                 if(this.where.invalid || this.where.value == ""){
                     fieldsMissing ++;

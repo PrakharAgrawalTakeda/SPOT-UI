@@ -1,0 +1,115 @@
+[{
+    "getProjectBudgetForecastDataY1Result": [{
+
+        "BudgetGlobalID": "a969ad51-c641-429f-91d1-d3ced85dfb38",
+
+        "DateMasterID": "CA10EE4A-4802-4527-A8E5-D549E59A9832",
+
+        "FinancialMonthStartDate": "2023-08-01T00:00:00",
+
+        "Label": null,
+
+        "LabelID": null,
+
+        "Active": "Current",
+
+        "ActiveID": "257922a7-b3a0-4a3d-b80d-4ccc17350e6f",
+
+        "PeriodName": "2023LBE07",
+
+        "Isopen": 2,
+
+        "BudgetDataTypeID": "ec313be6-353d-413b-9805-b7519f2ede18",
+
+        "BudgetData": "CapEx Forecast",
+
+        "BudgetDataID": "C9CE46EF-CFCB-4D52-9F87-1AC9F84C3A24",
+
+        "ProjectID": "78b098ac-86c0-487a-8e32-53662dbc446e",
+
+        "Apr": null,
+
+        "May": null,
+
+        "Jun": null,
+
+        "Jul": null,
+
+        "Aug": null,
+
+        "Sep": 0.0,
+
+        "Oct": null,
+
+        "Nov": null,
+
+        "Dec": null,
+
+        "Jan": null,
+
+        "Feb": null,
+
+        "Mar": null,
+
+        "LocalCurrencyAbbreviation": "JPY"
+
+    },
+
+{
+
+    "BudgetGlobalID": "a969ad51-c641-429f-91d1-d3ced85dfb38",
+
+    "DateMasterID": "CA10EE4A-4802-4527-A8E5-D549E59A9832",
+
+    "FinancialMonthStartDate": "2023-08-01T00:00:00",
+
+    "Label": null,
+
+    "LabelID": null,
+
+    "Active": "Current",
+
+    "ActiveID": "257922a7-b3a0-4a3d-b80d-4ccc17350e6f",
+
+    "PeriodName": "2023LBE07",
+
+    "Isopen": 2,
+
+    "BudgetDataTypeID": "378e862f-8d49-4afc-9293-9c1e8ad74b55",
+
+    "BudgetData": "OpEx Forecast",
+
+    "BudgetDataID": "B10E4209-021B-47D0-A8BD-52A837BD64E2",
+
+    "ProjectID": "78b098ac-86c0-487a-8e32-53662dbc446e",
+
+    "Apr": null,
+
+    "May": null,
+
+    "Jun": null,
+
+    "Jul": null,
+
+    "Aug": null,
+
+    "Sep": null,
+
+    "Oct": null,
+
+    "Nov": null,
+
+    "Dec": null,
+
+    "Jan": null,
+
+    "Feb": null,
+
+    "Mar": null,
+
+    "LocalCurrencyAbbreviation": "JPY"
+
+}
+]
+}
+]

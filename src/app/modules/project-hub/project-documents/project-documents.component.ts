@@ -41,4 +41,10 @@ export class ProjectDocumentsComponent implements OnInit {
   newtab(){
     window.open(this.projectData.projectSiteUrl + '/Shared%20Documents/Forms/AllItems.aspx', '_blank');
   }
+
+  createNewLibrary(){
+    this.apiService.addProjectDocumentLibrary(null,this.id).then(res=>{
+      this.dataloader()
+    })
+  }
 }

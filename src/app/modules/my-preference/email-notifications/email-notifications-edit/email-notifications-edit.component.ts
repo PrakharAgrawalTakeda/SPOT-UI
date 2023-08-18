@@ -1,18 +1,18 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {FuseConfirmationConfig, FuseConfirmationService} from '@fuse/services/confirmation';
-import {AuthService} from 'app/core/auth/auth.service';
-import {ProjectApiService} from 'app/modules/project-hub/common/project-api.service';
-import {ProjectHubService} from 'app/modules/project-hub/project-hub.service';
-import {MsalService} from '@azure/msal-angular';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import { AuthService } from 'app/core/auth/auth.service';
+import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
+import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import { MsalService } from '@azure/msal-angular';
 
-import {debounceTime, filter, map, Observable, startWith, Subject, Subscription, takeUntil} from 'rxjs';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {GlobalVariables} from 'app/shared/global-variables';
-import {MyPreferenceApiService} from '../../my-preference-api.service';
-import {MyPreferenceService} from '../../my-preference.service';
-import {RoleService} from 'app/core/auth/role.service';
+import { debounceTime, filter, map, Observable, startWith, Subject, Subscription, takeUntil } from 'rxjs';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { GlobalVariables } from 'app/shared/global-variables';
+import { MyPreferenceApiService } from '../../my-preference-api.service';
+import { MyPreferenceService } from '../../my-preference.service';
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
     selector: 'app-email-notifications-edit',
@@ -69,18 +69,19 @@ export class EmailNotificationsEditComponent {
     projects: any[] = [];
     reportScopechange: boolean;
     isConfidential: boolean = false;
-    executionScopeRequired : boolean = false;
-    portfolioOwnerRequired : boolean = false;
-    projectBasedRequired : boolean = false;
-    individualProjectsRequired : boolean = false;
-    productsRequired : boolean = false;
+    executionScopeRequired: boolean = false;
+    portfolioOwnerRequired: boolean = false;
+    projectBasedRequired: boolean = false;
+    individualProjectsRequired: boolean = false;
+    productsRequired: boolean = false;
+    newVariable: any[];
 
 
     constructor(public projecthubservice: ProjectHubService,
-                private _httpClient: HttpClient,
-                private _Activatedroute: ActivatedRoute, private msalService: MsalService, private apiService: MyPreferenceApiService,
-                public auth: AuthService, private roleService: RoleService, public fuseAlert: FuseConfirmationService, private authService: AuthService, private apiservice: ProjectApiService,
-                public preferenceservice: MyPreferenceService) {
+        private _httpClient: HttpClient,
+        private _Activatedroute: ActivatedRoute, private msalService: MsalService, private apiService: MyPreferenceApiService,
+        public auth: AuthService, private roleService: RoleService, public fuseAlert: FuseConfirmationService, private authService: AuthService, private apiservice: ProjectApiService,
+        public preferenceservice: MyPreferenceService) {
         this.emailNotiForm.valueChanges.subscribe(res => {
             this.preferenceservice.isFormChanged = true
         })
@@ -185,7 +186,7 @@ export class EmailNotificationsEditComponent {
                     if (!value || value.length < this.minLength) {
                         this.resultSets = null;
                     }
-                    this.temp = value
+                    this.temp = value;
                     return value;
                 }),
                 filter(value => value && value.length >= this.minLength)
@@ -193,19 +194,31 @@ export class EmailNotificationsEditComponent {
             .subscribe((value) => {
                 const params = new HttpParams().set('query', value);
                 if (this.selectedValueExists.value == true && this.searchControl.value != "") {
-                    this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, {body: []})
+                    this._httpClient.post(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`, { body: [] })
                         .subscribe((resultSets: any) => {
-                            for (var i = 0; i < resultSets.projectData.length; i++) {
-                                var obj = resultSets.projectData[i];
-                              }
-                              console.log(this.resultSets)
-                              this.resultSets = resultSets.projectData;
-                              this.budget = resultSets.budget
-                              this.search.next(resultSets);
+                            console.log(resultSets.projectData);
+                            console.log(this.resultSets);
+                            // Debugging point: Check the filtered projects
+                            console.log(this.projects);
+                            const filteredProjects = resultSets.projectData.filter((project) => {
+                                // Check if the project is not already in the resultSets
+
+                                return !this.projects || !this.projects.some(existingProject => existingProject.problemUniqueId == project.problemUniqueId);
                             });
 
+                            console.log(filteredProjects)
+                            // Update resultSets with filtered projects
+                            this.resultSets = filteredProjects;
+                            //this.newVariable = this.resultSets
+
+
+
+                            this.budget = resultSets.budget;
+                            this.search.next(resultSets);
+                        });
                 }
             });
+
     }
 
     dataloader() {
@@ -270,7 +283,7 @@ export class EmailNotificationsEditComponent {
                     }
                     this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].valueChanges.subscribe(value => {
                         if (value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c' && res.reportOptions.emailNotifcationNotifcationReportScopeIds.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c')
-                            //
+                        //
                         {
                             if (res.reportOptions.projectIds) {
                                 this.apiService.getprojectDetails(res.reportOptions.projectIds.split(',')).then((id: any) => {
@@ -484,7 +497,7 @@ export class EmailNotificationsEditComponent {
             }
             const alert = this.fuseAlert.open(comfirmConfig)
         } else {
-            if(this.checkRequiredFields()){
+            if (this.checkRequiredFields()) {
                 if (JSON.stringify(formValue) == JSON.stringify(this.emailDb)) {
                     this.preferenceservice.submitbutton.next(true)
                     this.projecthubservice.toggleDrawerOpen('', '', [], '', true)
@@ -553,7 +566,7 @@ export class EmailNotificationsEditComponent {
                     })
                 }
             }
-            else{
+            else {
                 var comfirmConfig: FuseConfirmationConfig = {
                     "title": "In order to save the information , please select at least one value for the report scope",
                     "message": "",
@@ -579,20 +592,20 @@ export class EmailNotificationsEditComponent {
 
         }
     }
-    checkRequiredFields(): boolean{
-        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868' && this.emailNotiForm.controls['portfolioOwner'].value.length == 0){
+    checkRequiredFields(): boolean {
+        if (this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'ecbe5dae-7278-4b2f-906d-ec9aaa77d868' && this.emailNotiForm.controls['portfolioOwner'].value.length == 0) {
             return false;
         }
-        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '11336470-8b35-4c7a-abe4-d62d58d33fca' && this.emailNotiForm.controls['excecutionScope'].value.length == 0){
+        if (this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '11336470-8b35-4c7a-abe4-d62d58d33fca' && this.emailNotiForm.controls['excecutionScope'].value.length == 0) {
             return false;
         }
-        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '897633cf-3516-49b0-9f45-a6ddc9374c0e' && this.emailNotiForm.controls['role'].value.length == 0){
+        if (this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == '897633cf-3516-49b0-9f45-a6ddc9374c0e' && this.emailNotiForm.controls['role'].value.length == 0) {
             return false;
         }
-        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c' && this.projects.length == 0){
+        if (this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'dca7a55b-6b8d-448e-b2be-0796a043775c' && this.projects.length == 0) {
             return false;
         }
-        if(this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c' && this.emailNotiForm.controls['products'].value.length == 0){
+        if (this.emailNotiForm.controls['emailNotifcationNotifcationReportScopeIds'].value.lookUpId == 'd290915b-cda2-4ba3-87a3-ce504fd6f15c' && this.emailNotiForm.controls['products'].value.length == 0) {
             return false;
         }
         return true;

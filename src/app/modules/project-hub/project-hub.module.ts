@@ -181,6 +181,7 @@ import { ProjectProposalValueCreationComponent } from './project-proposal/projec
 import { ProjectCharterValueCreationComponent } from './project-charter/project-charter-value-creation/project-charter-value-creation.component';
 import { CloseOutValueCreationComponent } from './close-out/close-out-value-creation/close-out-value-creation.component';
 import { BusinessCaseValueCreationComponent } from './business-case/business-case-value-creation/business-case-value-creation.component';
+import { HttpClientModule } from '@angular/common/http';
 
 export const projectRoutes: Route[] = [
   {
@@ -596,6 +597,7 @@ export const projectRoutes: Route[] = [
     BusinessCaseValueCreationComponent
   ],
     imports: [
+    HttpClientModule,
     RouterModule.forChild(projectRoutes),
     MatButtonModule,
     MatButtonToggleModule,

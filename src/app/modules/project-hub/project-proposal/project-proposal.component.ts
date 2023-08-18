@@ -4,6 +4,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
   selector: 'app-project-proposal',
@@ -11,8 +12,10 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   styleUrls: ['./project-proposal.component.scss']
 })
 export class ProjectProposalComponent implements OnInit {
+  projectid: string[] = [];
 
-  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router) {
+  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router,
+    private msalService: MsalService) {
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
         this.dataloader()
@@ -34,6 +37,8 @@ export class ProjectProposalComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.projectid.push(this.id)
+    console.log(this.id)
     this.apiService.getReportInfoData(this.id).then(res => {
       console.log("Report Info", res)
       this.reportInfoData = res
@@ -75,7 +80,12 @@ export class ProjectProposalComponent implements OnInit {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        console.log("API CALL HERE")
+        console.log(this.projectid)
+        console.log(this.msalService.instance.getActiveAccount().localAccountId)
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Proposal').then(res => {
+          console.log("WORKS")
+          this.projectHubService.submitbutton.next(true)
+        })
       }
     })
   }
