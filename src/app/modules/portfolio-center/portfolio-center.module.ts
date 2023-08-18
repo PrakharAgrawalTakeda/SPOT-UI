@@ -30,25 +30,12 @@ import { ProjectHubModule } from '../project-hub/project-hub.module';
 import { PortfolioPerformanceComponent } from './budget-spend/portfolio-performance/portfolio-performance.component';
 import { ProjectPerformanceComponent } from './budget-spend/project-performance/project-performance.component';
 import { ProjectHub } from 'app/shared/role-controller';
+import { FxRateComponent } from './budget-spend/fx-rate/fx-rate.component';
 
 export const projectRoutes: Route[] = [
   {
     path: '',
-    component: PortfolioCenterComponent,
-    children: [
-      {
-        path: 'forecast-bulk-edit',
-        component: ForecastComponent,
-      },
-      {
-        path: 'portfolio-performance',
-        component: PortfolioPerformanceComponent,
-      },
-      {
-        path: 'proejct-performance',
-        component: ProjectPerformanceComponent,
-      }
-    ]
+    component: PortfolioCenterComponent
   }];
 
 
@@ -58,7 +45,8 @@ export const projectRoutes: Route[] = [
     ForecastComponent,
     BudgetSpendComponent,
     PortfolioPerformanceComponent,
-    ProjectPerformanceComponent
+    ProjectPerformanceComponent,
+    FxRateComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),

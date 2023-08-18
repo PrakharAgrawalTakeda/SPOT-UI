@@ -663,7 +663,7 @@ export class PortfolioCenterComponent implements OnInit {
           }
 
           console.log("Filter Data : " + this.groupData)
-          localStorage.setItem('filterObject', JSON.stringify(this.groupData))
+          // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
@@ -2041,7 +2041,7 @@ export class PortfolioCenterComponent implements OnInit {
     this.sorting.dir = event.sorts[0].dir;
   }
   goToForecast() {
-    localStorage.setItem('filterObject', JSON.stringify(this.groupData))
+    // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
     window.open('/portfolio-center/forecast', "_blank")
   }
   openDrawer(type) {

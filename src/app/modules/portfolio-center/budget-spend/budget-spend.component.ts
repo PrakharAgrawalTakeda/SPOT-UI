@@ -1,7 +1,7 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PortfolioCenterService } from '../portfolio-center.service';
-import { Location } from '@angular/common';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-budget-spend',
@@ -11,39 +11,38 @@ import { Location } from '@angular/common';
 export class BudgetSpendComponent {
   navItem: any
   viewContent:boolean = true
-
-  constructor(private router: Router, public PortfolioCenterService: PortfolioCenterService, public renderer: Renderer2, public location: Location){
-    this.renderer.listen('window', 'click', (e: any) => {
-      if (e.target.className == "fuse-drawer-overlay"){
-        this.location.replaceState('/portfolio-center');
-      }
-    })
+  filter: any = []
+  constructor(private router: Router, public PortfolioCenterService: PortfolioCenterService){
+    
   }
   
   ngOnInit(): void {
     this.dataloader()
   }
   dataloader(){
+    this.PortfolioCenterService.node = this.PortfolioCenterService.all
     this.navItem = {
     title: 'Budget/Spend',
       children: [
         {
           title: 'Portfolio Performance',
-          link: 'portfolio-center/portfolio-performance'
+          toggled: false
         },
         {
           title: 'Project Performance',
-          link: 'portfolio-center/project-performance'
+          toggled: false
         },
         {
           title: 'Forecast Bulk Edit',
-          link: 'portfolio-center/forecast-bulk-edit'
+          toggled: true
         },
         
       ]
     }
     }
-  isNavActive(link: string): boolean {
-    return this.router.url.includes(link)
+  ToggleButton(item){
+    this.navItem.children.forEach(element => {
+      element.toggled = element.title == item.title ? true : false
+    });
   }
 }

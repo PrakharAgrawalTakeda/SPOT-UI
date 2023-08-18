@@ -1,10 +1,16 @@
-.ngx-datatable .datatable-CX-80 .datatable-body .datatable-scroll {
-    height: 50vh !important;
+:host{
+    ::ng-deep .ngx-datatable .datatable-CX-80 .datatable-body .datatable-scroll {
+    height: 10vh !important;
     width: 100vw !important;
     overflow-x: scroll !important;
     overflow-y: scroll !important;
+    }
 }
-
+:host{
+    ::ng-deep .datatable-body {
+    height: 30vh !important;
+}
+}
 .custom {
     width: 80% !important;
 }
@@ -29,21 +35,18 @@
     width: 10% !important;
 }
 
-.datatable-row-left {
+:host{
+    ::ng-deep .datatable-row-left {
     background: white !important;
     height: 59px !important;
 }
-
-.datatable-row-center {
-    height: 57px !important;
 }
 
-.frozen-header-classID {
-    top: 36px !important;
-}
 
-.frozen-header-class {
-    top: 36px !important;
+:host{
+    ::ng-deep .datatable-row-center {
+    height: 60px !important;
+}
 }
 
 .blueBg {

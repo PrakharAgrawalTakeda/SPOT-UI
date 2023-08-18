@@ -1,8 +1,16 @@
-<!-- <div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10"> -->
-        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12">
-            <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
-                <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full" style="height: 90vh !important;">
+<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12">
+            <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;">
+                <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
                     <div>
+                        <!-- <mat-drawer-container class="flex-auto h-full" [ngStyle]="{ 'position' : FxRateDrawer.opened ? 'fixed' : 'relative'}">
+                            
+                            <mat-drawer [ngClass]="{'w-2qua': true, 'dark:bg-gray-900': true, 'overflow-hidden': true}" [autoFocus]="false"
+                                [mode]="'push'" [position]="'end'" #FxRateDrawer>
+                                <div>
+                                    <app-fx-rate></app-fx-rate>
+                                </div>
+                            </mat-drawer>
+                        <mat-drawer-content style="background-color: white;"> -->
                         <div class="pb-3 pt-0 flex items-center justify-between">
                             <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
                                 <spot-singleselect-autocomplete class="w-full custom" formControlName="ForecastType"
@@ -23,28 +31,36 @@
                                         [svgIcon]="'heroicons_solid:mail'"></mat-icon></a>
                             </form>
                             <div class="flex items-center justify-center">
+                                <button style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Changes
+                                </button>
                                 <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                    (click)="PortfolioCenterService.toggleDrawerOpen('BudgetFxRates', '', '', '1')">
+                                    (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , '' , '1')">
                                     <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
                                 </button>
                             </div>
                         </div>
 
                         <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden"
-                            *ngIf="showContent">
+                            *ngIf="showContent" #ForecastTable>
                             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
                                 [scrollbarV]="false" columnMode="force"
                                 class="font-medium text-sm text-default whitespace-nowrap datatable-CX-80"
-                                [rows]="fundingRequests">
+                                [rows]="fundingRequests" >
                                 <ngx-datatable-column name="" prop="active" [width]="100" [sortable]="false"
-                                    [resizeable]="false" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
+                                    [resizeable]="false" [frozenLeft]="true">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="margin-left: 2px;">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Currency" prop="localCurrencyAbbreviation" [width]="80"
-                                    [sortable]="false" [resizeable]="false" [frozenLeft]="true"
-                                    [headerClass]="getFrozenHeaderClassID">
+                                    [sortable]="false" [resizeable]="false" [frozenLeft]="true">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span style="top: 37px;position: fixed;left: 103px;">{{column.name}}</span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
@@ -298,7 +314,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="background-color: #89B4E0 !important;">{{value| number:'1.0-4'}}</p>
+                                        <div style="background-color: #89B4E0 !important; height: 60px;"><p>{{value| number:'1.0-4'}}</p></div>   
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Apr" prop="aprY1" [width]="120" [sortable]="false"
@@ -519,7 +535,9 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="background-color:#81FD84 ;">{{value| number:'1.0-4'}}</p>
+                                        <div style="background-color: #81FD84 !important; height: 60px;">
+                                            <p>{{value| number:'1.0-4'}}</p>
+                                        </div>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name={{yearLabel.Y1}} prop="y2" [width]="120" [sortable]="false"
@@ -593,7 +611,9 @@
                                 <ngx-datatable-column name="TotalCAPEX" prop="cumulativeTotal" [width]="120"
                                     [sortable]="false" [resizeable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="background-color: #AE8ED9;">{{value| number:'1.0-4'}}</p>
+                                        <div style="background-color: #AE8ED9 !important; height: 60px;">
+                                            <p>{{value| number:'1.0-4'}}</p>
+                                        </div>
                                     </ng-template>
                                 </ngx-datatable-column>
                             </ngx-datatable>
@@ -847,7 +867,8 @@
                                 </ngx-datatable-column>
                             </ngx-datatable>
                         </div>
-                    </div>
+                    <!-- </mat-drawer-content>
+                    </mat-drawer-container> -->
                 </div>
             </div>
         </div>

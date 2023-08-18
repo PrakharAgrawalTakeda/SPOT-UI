@@ -14,7 +14,7 @@ import { PortfolioCenterService } from '../../portfolio-center.service';
   selector: 'app-forecast',
   templateUrl: './forecast.component.html',
   styleUrls: ['./forecast.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class ForecastComponent {
   fundingRequests: any = []
@@ -37,6 +37,7 @@ export class ForecastComponent {
   temporaryHide = false
   showCurrency = false
   showEmail = false
+  showDrawer = false
   @ViewChild('FxRateDrawer') FxRateDrawer: MatSidenav
   constructor(private portfoliService: PortfolioApiService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     , public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService, public PortfolioCenterService: PortfolioCenterService) {
@@ -61,22 +62,6 @@ export class ForecastComponent {
         else {
           this.showEmail = false
         }
-        var filterItems = []
-        var filterGroups = []
-        var filterItems1 =
-        {
-          "filterAttribute": "ProjectTeamMember",
-          "filterOperator": "=",
-          "filterValue": res.userAdid,
-          "unionOperator": 2
-        }
-        filterItems.push(filterItems1)
-        filterGroups.push({
-          filterItems,
-          "groupCondition": 0
-        })
-        this.filterdata.filterGroups.push(filterGroups[0])
-        console.log(this.filterdata)
       }
     })
     this.ForecastForm.controls.Currency.valueChanges.subscribe((res: any) => {
@@ -105,13 +90,14 @@ export class ForecastComponent {
   }
   ngOnInit(): void {
     // this.titleService.setTitle("Project Forecast")
+    this.filterdata = this.PortfolioCenterService.all;
     console.log(this.ForecastForm)
     this.dataloader()
   }
 
   dataloader() {
     debugger;
-    this.filterdata = JSON.parse(localStorage.getItem('filterObject'))
+    // this.filterdata = JSON.parse(localStorage.getItem('filterObject'))
     console.log(this.filterdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.auth.lookupMaster().then((lookup: any) => {
@@ -165,16 +151,41 @@ export class ForecastComponent {
     })
   }
   openDrawer() {
-    this.showContent = true
+    this.showDrawer = true
     this.FxRateDrawer.toggle()
-  }
-  getFrozenHeaderClassID(): any {
-    return ' frozen-header-classID';
-  }
-  getFrozenHeaderClass(): any {
-    return ' frozen-header-class';
   }
   getBlue(): any {
     return ' blue';
+  }
+  ApplyFilter(){
+    if (this.ForecastForm.controls.PM.value){
+    if (this.ForecastForm.controls.PM.value.length == 0) {
+      this.filterdata = this.PortfolioCenterService.node;
+    }
+    else {
+      var filterItems = []
+      var filterGroups = []
+      for (var i = 0; i < this.ForecastForm.controls.PM.value.length;i++){
+        var filterItems1 =
+        {
+          "filterAttribute": "ProjectTeamMember",
+          "filterOperator": "=",
+          "filterValue": this.ForecastForm.controls.PM.value[i].userAdid,
+          "unionOperator": 2
+        }
+        filterItems.push(filterItems1)
+      }
+      filterGroups.push({
+        filterItems,
+        "groupCondition": 0
+      })
+      this.filterdata.filterGroups.push(filterGroups[0])
+      console.log(this.filterdata)
+    }
+  }
+  else{
+      this.filterdata = this.PortfolioCenterService.node;
+  }
+  this.dataloader()
   }
 }

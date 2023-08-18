@@ -1,22 +1,20 @@
-<div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Budget/Spend</div>
-    <div style="padding-top: 2px"><a (click)="PortfolioCenterService.toggleDrawerOpen('CloseBudget', '',[],'',true)"
-            href="javascript:void(0)" title="Close">
-            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
-        </a>
-    </div>
-</div>
-<div class="flex justify-between items-center w-full">
-    <div class="pt-3 flex w-full justify-start gap-3 items-center" *ngIf="navItem?.children.length>0">
-        <button *ngFor="let item of  navItem.children" mat-flat-button
-            [ngClass]="isNavActive(item.link)?'bg-primary text-on-primary':'bg-gray-200 text-primary'"
-            routerLink="{{'../'+item.link}}">
-            {{item.title}}
-        </button>
-    </div>
-</div>
-<div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
-    [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
-    <router-outlet></router-outlet>
-</div>
+   <div class="flex items-start justify-between bg-primary sidepanel-header">
+            <div class="text-on-primary" style="padding-top: 6px">Budget/Spend</div>
+            <div style="padding-top: 2px"><a (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '',[],'',true)"
+                    href="javascript:void(0)" title="Close">
+                    <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+                </a>
+            </div>
+        </div>
+        <div class="flex justify-between items-center w-full" style="margin-left: 10px;">
+            <div class="pt-3 flex w-full justify-start gap-3 items-center" *ngIf="navItem?.children.length>0">
+                <button *ngFor="let item of  navItem.children" mat-flat-button (click)="ToggleButton(item)" [ngClass]="item.toggled?'bg-primary text-on-primary':'bg-gray-200 text-primary'">
+                    {{item.title}}
+                </button>
+            </div>
+        </div>
+        <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
+            [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
+            <app-forecast></app-forecast>
+        </div>
         
