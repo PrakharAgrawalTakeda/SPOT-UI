@@ -4,6 +4,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
   selector: 'app-project-charter',
@@ -11,8 +12,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   styleUrls: ['./project-charter.component.scss']
 })
 export class ProjectCharterComponent implements OnInit {
-
-  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService,private router: Router) {
+  projectid: string[] = [];
+  constructor(private projectHubService: ProjectHubService, private msalService: MsalService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService,private router: Router) {
     this.projectHubService.submitbutton.subscribe(res => {
       if (res == true) {
         this.dataloader()
@@ -34,6 +35,7 @@ export class ProjectCharterComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.projectid.push(this.id)
     this.apiService.getReportInfoData(this.id).then(res => {
       console.log("Report Info", res)
       this.reportInfoData = res
@@ -75,7 +77,13 @@ export class ProjectCharterComponent implements OnInit {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        console.log("API CALL HERE")
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Charter').then(res => {
+
+          console.log("WORKS")
+
+          this.projectHubService.submitbutton.next(true)
+
+        })
       }
     })
   }

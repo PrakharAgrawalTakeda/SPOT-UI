@@ -4,6 +4,7 @@ import { ProjectApiService } from '../common/project-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -11,7 +12,8 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   styleUrls: ['./project-dashboard.component.scss']
 })
 export class ProjectDashboardComponent {
-  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router) { 
+  projectid: string[] = [];
+  constructor(private projectHubService: ProjectHubService,private msalService: MsalService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router) { 
     this.projectHubService.submitbutton.subscribe(res=>{
       if(res == true){
         this.dataloader()
@@ -33,6 +35,7 @@ export class ProjectDashboardComponent {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    this.projectid.push(this.id)
     this.apiService.getProjectDashboard(this.id).then(res => {
       console.log("Report Info", res)
       this.reportInfoData = res
@@ -70,7 +73,13 @@ export class ProjectDashboardComponent {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        console.log("API CALL HERE")
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Dashboard').then(res => {
+
+          console.log("WORKS")
+
+          this.projectHubService.submitbutton.next(true)
+
+        })
       }
     })
   } 
@@ -101,7 +110,13 @@ export class ProjectDashboardComponent {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        console.log("API CALL HERE")
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Dashboard Performance').then(res => {
+
+          console.log("WORKS")
+
+          this.projectHubService.submitbutton.next(true)
+
+        })
       }
     })
   } 
@@ -132,7 +147,13 @@ export class ProjectDashboardComponent {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        console.log("API CALL HERE")
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'GMSPT Program Dashboard').then(res => {
+
+          console.log("WORKS")
+
+          this.projectHubService.submitbutton.next(true)
+
+        })
       }
     })
   } 

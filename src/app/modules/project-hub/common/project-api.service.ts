@@ -859,5 +859,12 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     const response = await lastValueFrom(abc$)
     return response
   }
+
+  async generateReports(body, userid, reporttype) {
+    var link = GlobalVariables.apiurl + "Report/Generate/" + userid + "/" + reporttype
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   }
 

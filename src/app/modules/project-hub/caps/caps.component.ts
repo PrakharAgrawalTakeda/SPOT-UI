@@ -152,6 +152,7 @@ export class CapsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     if (this.projectHubService.roleControllerControl.projectHub.CAPS) {
       this.editable = true
     }
@@ -163,6 +164,7 @@ export class CapsComponent implements OnInit {
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     }
     this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
+
       console.log(res)
       this.CAPSdata = res
       if (res.localCurrency == null){
@@ -291,6 +293,10 @@ export class CapsComponent implements OnInit {
         }
         this.Transportationngx = Transportationngx
       }
+      else{
+        Transportationngx = []
+        this.Transportationngx = []
+      }
       console.log("WAREHOUSING", res.warehouseData)
       var warehousingData = res.warehouseData
       var Warehousingngx = []
@@ -306,6 +312,10 @@ export class CapsComponent implements OnInit {
         }
         this.Warehousingngx = Warehousingngx
       }
+      else{
+        Warehousingngx = []
+        this.Warehousingngx = []
+      }
       console.log("SHIPPING", res.shippingData)
       var shippingData = res.shippingData
       var Shippingngx = []
@@ -320,6 +330,10 @@ export class CapsComponent implements OnInit {
           Shippingngx.push(shippingObject)
         }
         this.Shippingngx = Shippingngx
+      }
+      else{
+        Shippingngx = []
+        this.Shippingngx = []
       }
     }
       this.noCarbonImpact = res.projectData.noCarbonImpact
