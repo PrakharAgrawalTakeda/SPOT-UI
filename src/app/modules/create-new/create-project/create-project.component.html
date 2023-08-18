@@ -1,4 +1,4 @@
-<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10" *ngIf="!viewContent">
     <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: 680px;">
         <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
             <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
@@ -46,6 +46,7 @@
                                     <h2 style="color: rgba(76,155,207);font-size: 20px;"><b>Strategic Drivers</b></h2>
                                     <app-strategic-drivers [callLocation]="'CreateNew'" [viewType]="'Form'" (formValueStrategic)="captureValue(5,$event)"></app-strategic-drivers>
                                     <!-- <div id="comp-render" *ngIf="showLocalAttributes"> -->
+                                    <hr>
                                     <h2 *ngIf="showLocalAttributesTitle" style="color: rgba(76,155,207);font-size: 20px;"><b>Local Attributes</b></h2>
                                     <app-local-attribute-single-edit [viewType]="'Form'" *ngIf="showLocalAttributes" (formValueLA)="captureValueLA(1,$event)" [callLocation]="'CreateNew'" [PortfolioOwner]="portfolioOwners" [ExecutionScope]="executionScope"></app-local-attribute-single-edit>
                                     <!-- </div> -->
@@ -436,9 +437,17 @@
                                             <div class="parent">
                                                 <label>{{item.name}}</label>
                                             </div>
-                                            <div class="child" *ngIf="item.dataType == 1 || item.dataType == 6 || item.dataType == 4">
+                                            <div class="child" *ngIf="item.dataType == 6 || item.dataType == 4">
                                                 <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value}}</label>
                                             </div>
+                                            <div class="child" *ngIf="item.dataType == 1">
+                                                <label class="reviewText"><mat-icon svgIcon="heroicons_outline:x-circle"
+                                                    *ngIf="!localAttribute.localAttributeForm.controls[item.uniqueId].value"></mat-icon>
+                                                <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                                    *ngIf="localAttribute.localAttributeForm.controls[item.uniqueId].value">
+                                                </mat-icon></label>
+                                            </div>
+                                            
                                             <div class="child" *ngIf="item.dataType == 2">
                                                 <label class="reviewText">{{localAttribute.localAttributeForm.controls[item.uniqueId].value | date : 'dd-MMM-yyyy'}}</label>
                                             </div>
@@ -475,23 +484,33 @@
                                             createProject()" type="button">Submit</button>
                                     </div>
                                 </form>
-                            </div>
-                            </mat-step>
-                            </mat-stepper>
-                            <!-- <mat-step *ngIf="viewContent"> -->
-                                <div *ngIf="viewContent">
-                                    <div style="margin-right: 13vw;margin-left: 16vw;">
-                                        <!-- <ng-template matStepLabel><span></span></ng-template> -->
-                                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px; margin-top: 42px;"><b style="margin-right: 58px;">Please select the next page</b></label>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoProposal()" mat-button>Project Proposal</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoBC()" mat-button>Business Case</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoCharter()" mat-button>Project Charter</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RoutetoBoard()" mat-button>Project Board</button></div>
-                                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;" (click)="RouteCreateProject()" mat-button>Create another Project</button></div>
-                                    </div>
-                                </div>
-                            <!-- </mat-step> -->
-                        <!-- </mat-stepper> -->
+                            </div>                            
+                            </mat-step>                           
+                            </mat-stepper>                            
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10" *ngIf="viewContent">
+    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 mt-12" style="min-height: auto;">
+        <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl">
+            <div class="flex flex-col flex-auto overflow-hidden p-6">
+                <div>
+                    <div style="margin-right: 13vw;margin-left: 16vw;">
+                        <label style="font-size: 16px;display: flex;justify-content: center;margin-bottom: 10px; margin-top: 42px;"><b
+                                style="margin-right: 58px;">Please select the next page</b></label>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoProposal()" mat-button>Project Proposal</button></div>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoBC()" mat-button>Business Case</button></div>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoCharter()" mat-button>Project Charter</button></div>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RoutetoBoard()" mat-button>Project Board</button></div>
+                        <div style="text-align: center; border-radius: 20px;" class="box"><button style="color:white;"
+                                (click)="RouteCreateProject()" mat-button>Create another Project</button></div>
                     </div>
                 </div>
             </div>

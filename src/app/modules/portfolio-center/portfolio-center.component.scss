@@ -29,7 +29,7 @@
     font-size: 20px;
 }
 
-::ng-deep .ngx-datatable .datatable-PO-80 .datatable-body .datatable-scroll {
+.ngx-datatable .datatable-PO-80 .datatable-body .datatable-scroll {
     height: 80vh !important;
     width: 100vw !important;
     overflow-x: scroll !important;
@@ -53,6 +53,9 @@
     background: white !important;
     height: 102px !important;
 }
+.datatable-row-center {
+    height: 102px !important;
+}
 
 .projectNames {
     cursor: pointer !important;
@@ -74,7 +77,14 @@
     text-decoration: underline;
     cursor: pointer !important;
 }
-
+.forecast{
+    cursor: pointer !important;
+    color: rgb(81, 174, 245);
+}
+.forecast:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
+}
 .datatable-header{
     top: 10px;
 }
@@ -150,12 +160,31 @@ li{
 }
 
 
-::ng-deep .ngx-datatable .datatable-PO-60 .datatable-body .datatable-scroll {
-    height: 80vh !important;
-    width: 100vw !important;
-    overflow-x: scroll !important;
-    overflow-y: scroll !important;
-}
+// ::ng-deep .ngx-datatable .datatable-PO-60 .datatable-body .datatable-scroll {
+//     height: 80vh !important;
+//     width: 100vw !important;
+//     overflow-x: scroll !important;
+//     overflow-y: scroll !important;
+// }
 .datatable-body{
     height: 65vh !important;
+}
+
+
+.fuse-drawer-large {
+    min-width: 95vw !important;
+    max-width: 95vw !important;
+    min-height: 143vh !important;
+    max-height: 143vh !important;
+}
+fuse-drawer {
+    min-width: 50vw;
+    max-width: 50vw;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+}
+
+fuse-drawer .fuse-drawer-content {
+    display: block !important;
+    overflow: hidden !important;
 }
