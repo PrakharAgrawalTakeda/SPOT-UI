@@ -866,5 +866,12 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     const response = await lastValueFrom(abc$)
     return response
   }
+  async addProjectDocumentLibrary(body,id) {
+    var link = GlobalVariables.apiurl + "ProjectDocuments/CreateLibrary/"+id
+    const abc$ = this.http.post(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 

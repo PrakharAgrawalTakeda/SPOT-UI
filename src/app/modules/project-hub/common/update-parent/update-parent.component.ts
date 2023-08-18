@@ -106,11 +106,15 @@ export class UpdateParentComponent implements OnInit {
         }
     }
     dataloader() {
-        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id")
         var currentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === this.id);
-        if (currentProj.parentId != null) {
+        if (currentProj?.parentId != null) {
             var parrentProj = this.projecthubservice.projects.find((obj) => obj.problemUniqueId === currentProj.parentId);
             this.rows.push(parrentProj);
+        }
+        //Add current project if there are no connections so it will be excluded from search
+        if(this.rows.length==0){
+            this.projecthubservice.removedIds.push( this.id)
         }
         this.apiService.getproject(this.projecthubservice.projectid).then((res: any) => {
             this.isConfidential = res.isConfidential

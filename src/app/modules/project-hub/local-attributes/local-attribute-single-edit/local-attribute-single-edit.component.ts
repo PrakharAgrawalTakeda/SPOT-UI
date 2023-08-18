@@ -253,10 +253,12 @@ export class LocalAttributeSingleEditComponent {
       }
     });
     this.apiService.editLocalAttributes(projectId, dataToSend).then(res => {
-      this.projectHubService.toggleDrawerOpen('', '', [], '')
-      this.projectHubService.submitbutton.next(true)
-      this.projectHubService.isNavChanged.next(true)
-      this.projectHubService.successSave.next(true)
+      if (this.callLocation != "CreateNew"){
+        this.projectHubService.toggleDrawerOpen('', '', [], '')
+        this.projectHubService.submitbutton.next(true)
+        this.projectHubService.isNavChanged.next(true)
+        this.projectHubService.successSave.next(true)
+      }
     })
 
   }

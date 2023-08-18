@@ -28,6 +28,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Constants } from 'app/shared/constants';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { PortfolioCenterService } from "./portfolio-center.service";
 
 export const MY_FORMATS = {
   parse: {
@@ -185,7 +186,7 @@ export class PortfolioCenterComponent implements OnInit {
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService) {
+  constructor(private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
       if (this.showContent) {
         if (this.showLA) {
@@ -662,6 +663,7 @@ export class PortfolioCenterComponent implements OnInit {
           }
 
           console.log("Filter Data : " + this.groupData)
+          // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
@@ -689,28 +691,28 @@ export class PortfolioCenterComponent implements OnInit {
               budgetData = [
                 {
                   "title": "Plan",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? res.budgetTile.capex.plan.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.plan.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? res.budgetTile.opex.plan.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.plan.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 },
                 {
                   "title": "Previous",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? res.budgetTile.capex.previous.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.previous.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? res.budgetTile.opex.previous.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.previous.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 },
                 {
                   "title": "Current",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? res.budgetTile.capex.current.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.current.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? res.budgetTile.opex.current.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.current.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 },
                 {
                   "title": "Current (YTD)",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? res.budgetTile.capex.ytd.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.ytd.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? res.budgetTile.opex.ytd.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.ytd.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 },
                 {
                   "title": "Preliminary",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.preliminaryForecast).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.preliminaryForecast).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.preliminaryForecast).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? res.budgetTile.capex.preliminaryForecast.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.preliminaryForecast.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? res.budgetTile.opex.preliminaryForecast.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.preliminaryForecast.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 }
               ]
             }
@@ -718,23 +720,23 @@ export class PortfolioCenterComponent implements OnInit {
               budgetData = [
                 {
                   "title": "Plan",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.plan).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.plan.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.plan).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.plan.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 },
                 {
                   "title": "Previous",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.previous).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.previous.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.previous).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.previous.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 },
                 {
                   "title": "Current",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.current).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.current.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.current).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.current.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 },
                 {
                   "title": "Current (YTD)",
-                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.capex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
-                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : parseInt(res.budgetTile.opex.ytd).toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
+                  "value": res.budgetTile.capex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.capex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.capex.ytd.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0,
+                  "value2": res.budgetTile.opex ? this.budgetCurrency != "OY" ? parseInt(res.budgetTile.opex.ytd).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.budgetTile.opex.ytd.toFixed(4).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : 0
                 }
               ]
             }
@@ -2038,6 +2040,7 @@ export class PortfolioCenterComponent implements OnInit {
     this.sorting.dir = event.sorts[0].dir;
   }
   goToForecast() {
+    // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
     window.open('/portfolio-center/forecast', "_blank")
   }
   openDrawer(type) {
