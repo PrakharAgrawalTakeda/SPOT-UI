@@ -20,7 +20,7 @@ export class BudgetSpendComponent {
     this.dataloader()
   }
   dataloader(){
-    this.PortfolioCenterService.node = this.PortfolioCenterService.all
+    // this.PortfolioCenterService.node = this.PortfolioCenterService.all
     this.navItem = {
     title: 'Budget/Spend',
       children: [
