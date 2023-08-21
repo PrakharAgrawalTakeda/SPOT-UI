@@ -5,6 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../../core/auth/auth.service";
 import {ProjectApiService} from "../common/project-api.service";
 import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
+import { HttpClient } from '@angular/common/http';
+
 @Component({
     selector: 'app-budget',
     templateUrl: './budget.component.html',
@@ -21,12 +23,16 @@ export class BudgetComponent implements OnInit {
     budgetPageInfo:any = "";
     fundingInformations: any = [];
     showAddNewButton: boolean = false;
+    forecastData: any;
+    forecastY1Data: any;
+    forecastGeneralData :any;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
                 private portApiService: PortfolioApiService,
                 private authService: AuthService,
-                private apiService: ProjectApiService,) {
+                private apiService: ProjectApiService,
+                private http: HttpClient) {
         this.projectHubService.submitbutton.subscribe(res => {
             if (res == true) {
                 this.dataloader()
@@ -51,8 +57,35 @@ export class BudgetComponent implements OnInit {
         totalApprovedOpex: new FormControl(0),
         budgetCommentary: new FormControl(''),
     })
+    budgetForecastForm = new FormGroup({
+        reference: new FormControl(''),
+        period: new FormControl(''),
+        lastSubmitted: new FormControl(''),
+        submittedBy: new FormControl(''),
+        headerLabel: new FormControl(''),
+        tfpPercentage: new FormControl(''),
+        tfpValue: new FormControl(''),
+        afpPercentage: new FormControl(''),
+        afpValue: new FormControl(''),
+        afpCodeId: new FormControl(''),
+        ytdpPercentage: new FormControl(''),
+        ytdpValue: new FormControl(''),
+        mtdpPercentage:new FormControl(''),
+        mtdpValue:new FormControl(''),
+        mtdpCodeId: new FormControl(''),
+    })
 
     ngOnInit(): void {
+        this.http.get('assets/budget-data.json').subscribe(data => {
+            this.forecastData = data;
+        });
+        this.http.get('assets/budget-data2.json').subscribe(data => {
+            this.forecastY1Data = data;
+        });
+        this.http.get('assets/budget-data3.json').subscribe(data => {
+            this.forecastGeneralData = data;
+            this.forecastPatchGeneralForm(data);
+        });
         this.dataloader()
     }
 
@@ -86,7 +119,6 @@ export class BudgetComponent implements OnInit {
     disabler() {
         this.budgetForm.disable()
     }
-
     generalInfoPatchValue(response){
         let totalCapex = 0;
         let totalOpex=0;
@@ -117,11 +149,37 @@ export class BudgetComponent implements OnInit {
             this.showAddNewButton = true;
         }
     }
+    forecastPatchGeneralForm(response){
+        this.budgetForecastForm.patchValue({
+            reference: "",
+            period: response.getProjectBudgetByIDResult.ForecastPeriod,
+            lastSubmitted: response.getProjectBudgetByIDResult.LastSubmitted,
+            submittedBy: response.getProjectBudgetByIDResult.SubmittedBy,
+            tfpPercentage: response.getProjectBudgetByIDResult.TotalForecastPerformance,
+            tfpValue: response.getProjectBudgetByIDResult.TotalForecastPerformanceValue,
+            afpPercentage: response.getProjectBudgetByIDResult.AnnualForecastPerformance,
+            afpValue: response.getProjectBudgetByIDResult.AnnualForecastPerformanceValue,
+            afpCodeId: response.getProjectBudgetByIDResult.AFPDeviationCodeID,
+            ytdpPercentage: response.getProjectBudgetByIDResult.YearToDatePerformance,
+            ytdpValue: response.getProjectBudgetByIDResult.YearToDatePerformanceValue,
+            mtdpPercentage:response.getProjectBudgetByIDResult.MonthToDatePerformance,
+            mtdpValue:response.getProjectBudgetByIDResult.MonthToDatePerformanceValue,
+            mtdpCodeId: response.getProjectBudgetByIDResult.MTDPeviationCodeID,
+            headerLabel: "",
+        })
+    }
+
 
     getLookUpName(id: string): string {
         return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
     }
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria?.portfolioOwner?.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0]?.portfolioOwner || null;
+    }
+    getAfdDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
+    }
+    getMtdpDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
     }
 }

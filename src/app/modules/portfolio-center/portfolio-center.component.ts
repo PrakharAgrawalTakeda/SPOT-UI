@@ -1416,39 +1416,38 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   generateReports() {
-    const toggleArray = [];
+    const toggleObject = {};
 
     // Iterate through each toggle
-  Object.keys(this.toggles).forEach((toggleName) => {
-    const toggle = this.toggles[toggleName];
-    const toggleValues = toggle.states;
-    const problemIdsWithTrueToggle = [];
+    Object.keys(this.toggles).forEach((toggleName) => {
+      const toggle = this.toggles[toggleName];
+      const toggleValues = toggle.states;
+      const problemIdsWithTrueToggle = [];
+  
+      // Iterate through each problem unique Id to check if the toggle is true
+      this.bulkreportdata.forEach((item, index) => {
+        if (toggleValues[index]) {
+          problemIdsWithTrueToggle.push(item.projectUid.toString()); // Convert problem unique ID to string
+        }
+      });
+  
+      // Store the problem unique IDs in the toggleObject
+      toggleObject[toggleName.toLowerCase()] = problemIdsWithTrueToggle;
+    });
+    console.log('Toggle Object:', toggleObject);
 
-    // Iterate through each problemId to check if the toggle is true
-    this.bulkreportdata.forEach((item, index) => {
-      if (toggleValues[index]) {
-        problemIdsWithTrueToggle.push(item.problemId);
-      }
+    // Pass toggleObject 
+    this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+      console.log('Toggle Object:', toggleObject);
+      // Close the drawer
+      this.filterDrawer.close();
+  
+      // Reset toggle states to initial values
+      Object.keys(this.toggles).forEach((toggleName) => {
+        this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+      });
     });
 
-    // Create an object for the current toggle
-    const toggleObj = {
-      toggleName: toggleName,
-      problemIds: problemIdsWithTrueToggle
-    };
-
-    toggleArray.push(toggleObj);
-  });
-
-  // Close the drawer
-  this.filterDrawer.close();
-
-  // Reset toggle states to initial values
-  Object.keys(this.toggles).forEach((toggleName) => {
-    this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-  });
-
-  console.log('Toggle Array:', toggleArray);
   }
 
   clearForm() {
