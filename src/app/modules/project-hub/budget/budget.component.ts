@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProjectHubService} from "../project-hub.service";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../../core/auth/auth.service";
 import {ProjectApiService} from "../common/project-api.service";
@@ -26,6 +26,10 @@ export class BudgetComponent implements OnInit {
     forecastData: any;
     forecastY1Data: any;
     forecastGeneralData :any;
+    tfpColor: string;
+    afpColor: string;
+    ydtpColor: string;
+    mdtpColor: string;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -118,6 +122,7 @@ export class BudgetComponent implements OnInit {
 
     disabler() {
         this.budgetForm.disable()
+        this.budgetForecastForm.disable()
     }
     generalInfoPatchValue(response){
         let totalCapex = 0;
@@ -167,6 +172,7 @@ export class BudgetComponent implements OnInit {
             mtdpCodeId: response.getProjectBudgetByIDResult.MTDPeviationCodeID,
             headerLabel: "",
         })
+        this.setTextColors();
     }
 
 
@@ -182,4 +188,31 @@ export class BudgetComponent implements OnInit {
     getMtdpDeviationCodes(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
     }
+    setTextColors(): void {
+        const tfpPercentage = parseFloat(this.budgetForecastForm.controls.tfpPercentage.value);
+        const afpPercentage = parseFloat(this.budgetForecastForm.controls.afpPercentage.value);
+        const ydtpPercentage = parseFloat(this.budgetForecastForm.controls.ytdpPercentage.value);
+        const mdtpPercentage = parseFloat(this.budgetForecastForm.controls.mtdpPercentage.value);
+        if(tfpPercentage >= 5){
+            this.tfpColor = 'green'
+        }else{
+            this.tfpColor = 'red'
+        }
+        if(afpPercentage >= 10 || afpPercentage <= -10){
+            this.afpColor = 'red'
+        }else {
+            this.afpColor = 'green'
+        }
+        if(ydtpPercentage >= 10 || afpPercentage <= -10){
+            this.ydtpColor = 'red'
+        }else{
+            this.ydtpColor = 'green'
+        }
+        if(mdtpPercentage >=5 || mdtpPercentage <= -5){
+            this.mdtpColor = 'red'
+        }else{
+            this.mdtpColor = 'green'
+        }
+    }
+
 }
