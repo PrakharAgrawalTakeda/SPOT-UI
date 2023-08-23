@@ -1200,7 +1200,7 @@
                                 <ngx-datatable-column name="TotalCAPEX" prop="cumulativeTotal" [width]="120" [sortable]="false"
                                     [resizeable]="false">
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Period Submitted By" prop="pm" [width]="120" [sortable]="false" [resizeable]="false">
+                                <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="120" [sortable]="false" [resizeable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
@@ -1210,7 +1210,7 @@
                                         <p>{{value| date:'dd-MMM-yyyy'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Period Submitted Reference" prop="lastSubmitted" [width]="140" [sortable]="false"
+                                <ngx-datatable-column name="Period Submitted Reference" prop="submittedForPeriod" [width]="140" [sortable]="false"
                                     [resizeable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value| date:'dd-MMM-yyyy'}}</p>
