@@ -15,6 +15,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { LocalAttributeSingleEditComponent } from 'app/modules/project-hub/local-attributes/local-attribute-single-edit/local-attribute-single-edit.component';
 import moment from 'moment';
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
   selector: 'app-create-project',
@@ -88,16 +89,21 @@ export class CreateProjectComponent implements OnInit {
   })
   newmainnav: any = []
   envPortfolio:any
-
+  SIP:boolean = false
   capturedValues = ['', '']
   LAData:any = []
   // fuseAlert: any;
 
-  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService, private msalService: MsalService) {
+  constructor(private apiService: PortfolioApiService, private router: Router, private titleService: Title, private authService: MsalService, private apiService2: ProjectApiService, public auth: AuthService, public fuseAlert: FuseConfirmationService, public createApiService: CreateNewApiService, public _fuseNavigationService: FuseNavigationService, public projectHubService: ProjectHubService, private msalService: MsalService, public role: RoleService) {
   }
 
   
   ngOnInit(): void {
+    const url = this.router.url;
+    var Urlval = url.substring(url.lastIndexOf('/') + 1);
+    if (Urlval == "create-strategic-initiative-project") {
+      this.checkPermission()
+    }
     const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
     this.activeaccount = this.msalService.instance.getActiveAccount();
     this.newmainnav = [
@@ -116,7 +122,7 @@ export class CreateProjectComponent implements OnInit {
           {
             title: 'Create a Strategic Initiative/Program',
             type: 'basic',
-            link: '*'
+            link: '/create-project/create-strategic-initiative-project'
           },
           {
             title: 'Create a Standard/Simple Project/Program',
@@ -167,6 +173,9 @@ export class CreateProjectComponent implements OnInit {
     mainNavComponent.refresh()
     this.projectHubService.projectidInjector("")
     console.log("Inside init")
+    if (Urlval == "create-strategic-initiative-project"){
+      this.SIP = true
+    }
     this.auth.lookupMaster().then(res => {
       this.apiService.getLocalCurrency().then(currency => {
         this.localCurrency = currency
@@ -638,6 +647,39 @@ export class CreateProjectComponent implements OnInit {
         this.showLocalAttributes = true
         this.stepper.selectedIndex = index._selectedIndex;
       }
+    }
+  }
+
+
+  checkPermission() {
+    if (this.role.roleMaster.securityGroupId != "C9F323D4-EF97-4C2A-B748-11DB5B8589D0") {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Only Portfolio Manager security level users can create a Strategic Initiative record. Once created, users with edit permissions can manage/edit the record!",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
+      alert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          this.router.navigate([`./portfolio-center`]);
+        }
+      })
     }
   }
 

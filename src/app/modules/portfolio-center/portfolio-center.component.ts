@@ -263,7 +263,7 @@ export class PortfolioCenterComponent implements OnInit {
             {
               title: 'Create a Strategic Initiative/Program',
               type: 'basic',
-              link: '*'
+              link: '/create-project/create-strategic-initiative-project',
             },
             {
               title: 'Create a Standard/Simple Project/Program',
@@ -665,6 +665,7 @@ export class PortfolioCenterComponent implements OnInit {
           console.log("Filter Data : " + this.groupData)
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
+            this.showContent= true
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
@@ -847,9 +848,11 @@ export class PortfolioCenterComponent implements OnInit {
             res.projectDetails.sort((a, b) => {
               return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
             })
-            res.conditionalFormattingLabels.sort((a, b) => {
-              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-            })
+            if (res.conditionalFormattingLabels != null){
+              res.conditionalFormattingLabels.sort((a, b) => {
+                return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+              })
+            }
             res.trendingIndicators.sort((a, b) => {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
             })
@@ -873,7 +876,6 @@ export class PortfolioCenterComponent implements OnInit {
                 }
               }
             };
-
             this.showContent = true
             // var fieldNameElement = document.getElementById('page-count');
             // fieldNameElement.innerHTML = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
@@ -881,7 +883,7 @@ export class PortfolioCenterComponent implements OnInit {
         })
       })
     })
-    this.showContent = false;
+    // this.showContent = false;
   }
   
   scrollHandler(event) {
@@ -1853,9 +1855,9 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
-        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined
-        this.projectOverview[i].completed = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed
-        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate
+        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
+        this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
+        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
       }
       this.size = 100;
       this.totalElements = this.totalproject;
@@ -1863,6 +1865,7 @@ export class PortfolioCenterComponent implements OnInit {
       this.pageNumber = 0
     }
     else {
+      if (offset.offset != 0){
       this.projectOverview = []
       this.projects.data = [];
       this.apiService.FiltersByPage(this.groupData, (offset.offset) * 100, 100).then((res: any) => {
@@ -1875,9 +1878,11 @@ export class PortfolioCenterComponent implements OnInit {
         res.trendingIndicators.sort((a, b) => {
           return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
         })
-        res.conditionalFormattingLabels.sort((a, b) => {
-          return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-        })
+        if (res.conditionalFormattingLabels != null) {
+          res.conditionalFormattingLabels.sort((a, b) => {
+            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+          })
+        }
         this.projectOverview = res.portfolioDetails
         this.projects.data = res.portfolioDetails;
         for (var i = 0; i < this.projectOverview.length; i++) {
@@ -1926,9 +1931,9 @@ export class PortfolioCenterComponent implements OnInit {
           this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
           this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
           this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
-          this.projectOverview[i].notBaselined = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined
-          this.projectOverview[i].completed = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed
-          this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate
+          this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
+          this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
+          this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
         }
         if (this.sorting.name != "") {
           this.projectOverview.sort
@@ -1949,6 +1954,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.pageNumber = offset.offset - 1
       })
     }
+  }
   }
 
   changePhase(phaseId) {
