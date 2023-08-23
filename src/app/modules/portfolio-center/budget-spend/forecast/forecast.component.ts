@@ -34,6 +34,8 @@ export class ForecastComponent {
   currencyList: any = []
   localCAPEX: any = []
   localOPEX: any = []
+  projectCAPEXdata:any = []
+  projectOPEXdata: any = []
   forecastType = []
   temporaryHide = false
   showCurrency = false
@@ -51,9 +53,11 @@ export class ForecastComponent {
         this.showContent = false;
         if (res.lookUpName == "CapEx Forecast") {
           this.fundingRequests = this.CAPEXdata
+          this.projectFunding = this.projectCAPEXdata
         }
         else {
           this.fundingRequests = this.OPEXdata
+          this.projectFunding = this.projectOPEXdata
         }
         this.showContent = true
       }
@@ -111,9 +115,6 @@ export class ForecastComponent {
               ForecastType: this.forecastType.filter(x => x.lookUpId == 'ec313be6-353d-413b-9805-b7519f2ede18')[0]
             })
           }
-          // this.ForecastForm.patchValue({
-          //   PM: null
-          // })
           this.currencyList = []
           forecastData.currencies.forEach(response => {
             this.currencyList.push({ name: response })
@@ -144,7 +145,14 @@ export class ForecastComponent {
           this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
           this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
           this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
-          this.projectFunding = forecastData.forecastProjectItems.CapExForecast
+          if (forecastData.forecastProjectItems.CapExForecast != undefined){
+            this.projectCAPEXdata = forecastData.forecastProjectItems.CapExForecast
+            this.projectFunding = forecastData.forecastProjectItems.CapExForecast
+          }
+          if (forecastData.forecastProjectItems.OpExForecast != undefined) {
+            this.projectOPEXdata = forecastData.forecastProjectItems.OpExForecast
+          }
+          
           this.projectFunding.sort((a, b) => {
             return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
           })

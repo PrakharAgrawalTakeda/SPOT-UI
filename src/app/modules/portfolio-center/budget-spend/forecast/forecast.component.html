@@ -45,9 +45,16 @@
                             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true"
                                 [scrollbarV]="false" columnMode="force"
                                 class="font-medium text-sm text-default whitespace-nowrap datatable-CX-80"
-                                [rows]="fundingRequests" style="height: 30vh;">
-                                <ngx-datatable-column name="" prop="active" [width]="100" [sortable]="false"
+                                [rows]="fundingRequests">
+                                <ngx-datatable-column name="Reference" prop="active" [width]="100" [sortable]="false"
                                     [resizeable]="false" [frozenLeft]="true">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span style="top: 37px;position: fixed;left: 9px;">{{column.name}}</span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="margin-left: 9px;">{{value}}</p>
                                     </ng-template>
@@ -81,17 +88,6 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Historical" prop="historical" [width]="120"
                                     [sortable]="false" [resizeable]="false">
-                                    <ng-template let-column="column" ngx-datatable-header-template>
-                                        <ng-container>
-                                            <span class="datatable-header-cell-wrapper">
-                                                <!-- <div class="align-center"> -->
-                                                <span class="blueBg headBgHeight">
-                                                </span>
-                                                <span>{{column.name}}</span>
-                                                <!-- </div> -->
-                                            </span>
-                                        </ng-container>
-                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value | number:'1.0-4'}}</p>
                                     </ng-template>
@@ -626,7 +622,7 @@
                             #ForecastTable>
                             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarH]="true" [scrollbarV]="false"
                                 columnMode="force" class="font-medium text-sm text-default whitespace-nowrap datatable-PB-80"
-                                [rows]="projectFunding" style="height: 80vh;">
+                                [rows]="projectFunding">
                                 <ngx-datatable-column name="Budget ID" prop="capitalBudgetID" [width]="130" [sortable]="false" [resizeable]="false"
                                     [frozenLeft]="true">
                                     <ng-template let-column="column" ngx-datatable-header-template>
@@ -693,17 +689,6 @@
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Historical" prop="historical" [width]="120" [sortable]="false" [resizeable]="false">
-                                    <ng-template let-column="column" ngx-datatable-header-template>
-                                        <ng-container>
-                                            <span class="datatable-header-cell-wrapper">
-                                                <!-- <div class="align-center"> -->
-                                                <span class="blueBg headBgHeight">
-                                                </span>
-                                                <span>{{column.name}}</span>
-                                                <!-- </div> -->
-                                            </span>
-                                        </ng-container>
-                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value | number:'1.0-4'}}</p>
                                     </ng-template>
@@ -1200,7 +1185,7 @@
                                 <ngx-datatable-column name="TotalCAPEX" prop="cumulativeTotal" [width]="120" [sortable]="false"
                                     [resizeable]="false">
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Period Submitted By" prop="pm" [width]="120" [sortable]="false" [resizeable]="false">
+                                <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="120" [sortable]="false" [resizeable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
@@ -1210,10 +1195,11 @@
                                         <p>{{value| date:'dd-MMM-yyyy'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Period Submitted Reference" prop="lastSubmitted" [width]="140" [sortable]="false"
+                                <ngx-datatable-column name="Period Submitted Reference" prop="active" [width]="140" [sortable]="false"
                                     [resizeable]="false">
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p>{{value| date:'dd-MMM-yyyy'}}</p>
+                                        <p *ngIf="row.submittedByName">{{value}}</p>
+                                        <p *ngIf="!row.submittedByName">&nbsp;</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                             </ngx-datatable>

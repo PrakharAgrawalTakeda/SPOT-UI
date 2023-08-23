@@ -14,17 +14,26 @@
         overflow-y: scroll !important;
     }
 }
-// :host{
-//     ::ng-deep .datatable-body {
-//     height: 30vh !important;
-// }
-// }
+:host{
+    ::ng-deep .datatable-PB-80{
+        ::ng-deep .datatable-body {
+    height: 60vh !important;
+        }
+}
+}
+:host {
+    ::ng-deep .datatable-CX-80 {
+        ::ng-deep .datatable-body {
+            height: 30vh !important;
+        }
+    }
+}
 .custom {
     width: 80% !important;
 }
 
 .customIcon {
-    top: 31px;
+    top: 42px;
     position: relative;
     right: -25px;
     height: 40px;
