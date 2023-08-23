@@ -11,7 +11,7 @@
         <div [ngClass]="{'overflow-x-hidden  pr-3 overflow-y-scroll h-[86.5vh] pt-3': viewType == 'SidePanel'}">
             <div [ngClass]="{'customPrimary': viewType == 'Form'}">
             <spot-singleselect-autocomplete *ngIf="viewElementChecker('primaryKPI')" formControlName="primaryKPI"
-                class="w-full" name="primaryKPI" [label]="'Primary KPI'" [placeholder]="'Primary KPI'"
+                class="w-full" name="primaryKPI" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
                 [valuePointer]="'kpiname'" [dropDownArray]="kpiMasters">
             </spot-singleselect-autocomplete>
             </div>

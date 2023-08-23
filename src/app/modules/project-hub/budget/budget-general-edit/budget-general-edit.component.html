@@ -35,12 +35,12 @@
                                             [dropDownArray]="getPredifinedInvestment()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'" >
             </spot-singleselect-autocomplete>
             <spot-select  class="w-full" formControlName="where" [label]="'Where'"  [Required]="required"
-                          [placeholder]="'Where'" [showNoneOption]="true" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                          [placeholder]="'Where'"  [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
                           [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                           [dropDownArray]="getWhereLookup()">
             </spot-select>
             <spot-select  class="w-full" formControlName="why" [label]="'Why'"  [Required]="required"
-                          [placeholder]="'Why'" [showNoneOption]="true" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
+                          [placeholder]="'Why'" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
                           [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                           [dropDownArray]="getWhyLookup()">
             </spot-select>

@@ -18,6 +18,7 @@ import { PortfolioCenterService } from '../../portfolio-center.service';
 })
 export class ForecastComponent {
   fundingRequests: any = []
+  projectFunding:any = []
   id: string = ''
   ForecastForm = new FormGroup({
     ForecastType: new FormControl(null),
@@ -33,6 +34,8 @@ export class ForecastComponent {
   currencyList: any = []
   localCAPEX: any = []
   localOPEX: any = []
+  projectCAPEXdata:any = []
+  projectOPEXdata: any = []
   forecastType = []
   temporaryHide = false
   showCurrency = false
@@ -41,15 +44,20 @@ export class ForecastComponent {
   @ViewChild('FxRateDrawer') FxRateDrawer: MatSidenav
   constructor(private portfoliService: PortfolioApiService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     , public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService, public PortfolioCenterService: PortfolioCenterService) {
+    this.ForecastForm.controls.PM.valueChanges.subscribe(res => {
+      this.PortfolioCenterService.isFormChanged = true
+    })
     this.ForecastForm.controls.ForecastType.valueChanges.subscribe((res: any) => {
       if (this.showContent) {
         console.log(res)
         this.showContent = false;
         if (res.lookUpName == "CapEx Forecast") {
           this.fundingRequests = this.CAPEXdata
+          this.projectFunding = this.projectCAPEXdata
         }
         else {
           this.fundingRequests = this.OPEXdata
+          this.projectFunding = this.projectOPEXdata
         }
         this.showContent = true
       }
@@ -96,8 +104,6 @@ export class ForecastComponent {
   }
 
   dataloader() {
-    debugger;
-    // this.filterdata = JSON.parse(localStorage.getItem('filterObject'))
     console.log(this.filterdata)
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.auth.lookupMaster().then((lookup: any) => {
@@ -109,6 +115,7 @@ export class ForecastComponent {
               ForecastType: this.forecastType.filter(x => x.lookUpId == 'ec313be6-353d-413b-9805-b7519f2ede18')[0]
             })
           }
+          this.currencyList = []
           forecastData.currencies.forEach(response => {
             this.currencyList.push({ name: response })
           })
@@ -138,6 +145,17 @@ export class ForecastComponent {
           this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
           this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
           this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
+          if (forecastData.forecastProjectItems.CapExForecast != undefined){
+            this.projectCAPEXdata = forecastData.forecastProjectItems.CapExForecast
+            this.projectFunding = forecastData.forecastProjectItems.CapExForecast
+          }
+          if (forecastData.forecastProjectItems.OpExForecast != undefined) {
+            this.projectOPEXdata = forecastData.forecastProjectItems.OpExForecast
+          }
+          
+          this.projectFunding.sort((a, b) => {
+            return (a.problemID < b.problemID ? -1 : a.problemID == b.problemID ? 0 : 1);
+          })
           this.yearLabel.currentYear = forecastData.yearLabels.FY
           this.yearLabel.NextYear = forecastData.yearLabels["FY+1"]
           this.yearLabel.Y1 = forecastData.yearLabels["FY+2"]
@@ -158,11 +176,19 @@ export class ForecastComponent {
     return ' blue';
   }
   ApplyFilter(){
+    var index = 0
+    var append = false
     if (this.ForecastForm.controls.PM.value){
     if (this.ForecastForm.controls.PM.value.length == 0) {
-      this.filterdata = this.PortfolioCenterService.node;
+      this.filterdata = this.PortfolioCenterService.all;
     }
     else {
+      for (var z = 0; z < this.filterdata.filterGroups.length;z++){
+        if (this.filterdata.filterGroups[z].filterItems[0].filterAttribute == "ProjectTeamMember"){
+          index = z
+          append = true
+        }
+      }
       var filterItems = []
       var filterGroups = []
       for (var i = 0; i < this.ForecastForm.controls.PM.value.length;i++){
@@ -173,19 +199,47 @@ export class ForecastComponent {
           "filterValue": this.ForecastForm.controls.PM.value[i].userAdid,
           "unionOperator": 2
         }
-        filterItems.push(filterItems1)
+        if(append == true){
+          this.filterdata.filterGroups[index].filterItems.push(filterItems1)
+        }
+        else{
+          filterItems.push(filterItems1)
+        }
       }
-      filterGroups.push({
-        filterItems,
-        "groupCondition": 0
-      })
-      this.filterdata.filterGroups.push(filterGroups[0])
+      if (append == false) {
+        filterGroups.push({
+          filterItems,
+          "groupCondition": 0
+        })
+        this.filterdata.filterGroups.push(filterGroups[0])
+      }
       console.log(this.filterdata)
     }
   }
   else{
-      this.filterdata = this.PortfolioCenterService.node;
+      this.filterdata = this.PortfolioCenterService.all;
   }
   this.dataloader()
+  }
+  OpenProject(projectName) {
+    this.projectFunding.forEach((item) => {
+      if (item.projectName == projectName) {
+        window.open('/project-hub/' + item.projectID + '/budget', "_blank")
+      }
+    })
+  }
+
+  MailTo(){
+    var mailID = ""
+    for(var i=0;i<this.ForecastForm.controls.PM.value.length;i++){
+      var name = this.ForecastForm.controls.PM.value[i].userDisplayName.split(',')
+      if(mailID == ""){
+        mailID=name[1]+'.'+name[0]+'@takeda.com'
+      }
+      else{
+        mailID = mailID + ',' + name[1] + '.' + name[0] + '@takeda.com'
+      }
+    }
+    window.location.href = "mailto:" + mailID +"?Subject=SPOT Project Management – Forecast / Budget Updates";
   }
 }

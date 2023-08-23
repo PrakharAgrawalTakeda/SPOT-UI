@@ -11,6 +11,7 @@ import { MsalService } from '@azure/msal-angular';
 import { CreateNewApiService } from '../create-new-api.service';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 import moment from 'moment';
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
   selector: 'app-copy-project',
@@ -44,7 +45,7 @@ export class CopyProjectComponent implements OnInit {
   newmainnav: any = []
 
   constructor(public auth: AuthService, private router: Router, private apiService: PortfolioApiService,
-    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService, public fuseAlert: FuseConfirmationService) { }
+    private _fuseNavigationService: FuseNavigationService, private titleService: Title, private authService: MsalService, public createApiservice: CreateNewApiService, public fuseAlert: FuseConfirmationService, public role: RoleService) { }
 
   ngOnInit(): void {
     const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
@@ -65,7 +66,7 @@ export class CopyProjectComponent implements OnInit {
           {
             title: 'Create a Strategic Initiative/Program',
             type: 'basic',
-            link: '*'
+            link: '/create-project/create-strategic-initiative-project'
           },
           {
             title: 'Create a Standard/Simple Project/Program',
