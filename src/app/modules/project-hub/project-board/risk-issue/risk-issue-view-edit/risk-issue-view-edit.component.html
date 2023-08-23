@@ -10,7 +10,7 @@
     <div class=" form-ask-need h-[87vh] overflow-y-scroll">
         <div class="flex items-start justify-between">
             <div class="w-25" *ngIf="viewElementChecker('type')">
-                <spot-select formControlName="type"  [placeholder]="'Type'"  [label]="'Type'"
+                <spot-select formControlName="type"  [placeholder]="'Type'"  [label]="'Type'" [showNoneOption]="false"
                              [dropDownArrayType]="'object'" [dropDownArray]="getissuetype()" [idPointer]="'lookUpId'"
                              [valuePointer]="'lookUpName'">
                 </spot-select>
