@@ -167,6 +167,7 @@ export class PortfolioCenterComponent implements OnInit {
   hide: boolean = true
   showcontent: boolean = false
   showLA: boolean = false
+  callPagination: boolean = false
   changePO = false
   changeES = false
   filterList = []
@@ -665,7 +666,7 @@ export class PortfolioCenterComponent implements OnInit {
           console.log("Filter Data : " + this.groupData)
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
-            this.showContent= true
+            // this.showContent= true
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
@@ -857,7 +858,7 @@ export class PortfolioCenterComponent implements OnInit {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
             })
             this.projectNames = res.projectDetails;
-            this.setPage(res, 0)
+            this.setPage(res, 0, "firstHit")
 
             this.projects.sort = this.recentTransactionsTableMatSort;
             for (var name of this.projectNames) {
@@ -1800,7 +1801,7 @@ export class PortfolioCenterComponent implements OnInit {
     return this.lookup.filter(x => x.lookUpParentId == key)
   }
 
-  setPage(res: any, offset) {
+  setPage(res: any, offset, val) {
     console.log(res)
     if (res != '') {
       this.projectOverview = res.portfolioDetails
@@ -1865,7 +1866,8 @@ export class PortfolioCenterComponent implements OnInit {
       this.pageNumber = 0
     }
     else {
-      if (offset.offset != 0){
+      if (offset.offset != 0 || this.callPagination == true){
+      this.callPagination = true
       this.projectOverview = []
       this.projects.data = [];
       this.apiService.FiltersByPage(this.groupData, (offset.offset) * 100, 100).then((res: any) => {
@@ -1918,7 +1920,7 @@ export class PortfolioCenterComponent implements OnInit {
           this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
 
           this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-          this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+          this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
           this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
           this.projectOverview[i].problemId = res.projectDetails[i].problemId;
           this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;

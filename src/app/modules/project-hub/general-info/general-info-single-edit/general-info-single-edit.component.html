@@ -36,9 +36,9 @@
                 name="SubmittedBy" [showLabel]="true" [placeholder]="'Last Name, First Name'">
             </spot-singleselect-user-autocomplete>
             <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-                *ngIf="viewElementChecker('problemTitle') && callLocation == 'CreateNew'" class="w-full"
-                formControlName="problemTitle" name="problemTitle" [label]="'Project Name'"
-                [placeholder]="'Project Name'" [Required]="callLocation == 'CreateNew'">
+                *ngIf="viewElementChecker('problemTitle') && (callLocation == 'CreateNew' || callLocation == 'CreateNewSIP')" class="w-full"
+                formControlName="problemTitle" name="problemTitle" [label]="callLocation == 'CreateNewSIP'?'Strategic Initiative Name': 'Project Name'"
+                [placeholder]="'Project Name'" [Required]="callLocation == 'CreateNew' || callLocation == 'CreateNewSIP'">
             </spot-input>
             <spot-singleselect-autocomplete class="w-full" formControlName="projectReviewedYN" name="projectReviewedYN"
                 [label]="'Project Reviewed'" [placeholder]="'Project Reviewed'" [valuePointer]="'lookUpName'"

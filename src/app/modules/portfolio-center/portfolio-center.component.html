@@ -211,7 +211,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
             <div class="mt-6 pl-3 pt-3 pr-3 h-[80.5vh] w-full" #target id="scheduleTableDiv" *ngIf="showContent && !showFilter">
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
-                    [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false"
+                    [limit]="size" (page)="setPage('',$event,'')" (sort)="sort($event)" [virtualization]="false"
                     [sorts]="[{ prop: 'problemTitle', dir: 'asc' }]"
                     class="datatable-PO-60 font-medium text-sm text-default whitespace-nowrap" [rows]="bulkreportdata"
                     #projectOverviewTable>
