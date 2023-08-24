@@ -212,7 +212,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
                     columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
                     [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false" [footerHeight]="50"
-                    [sorts]="[{ prop: 'problemTitle', dir: 'asc' }]"
+                    [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]"
                     class="datatable-PO-60 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview"
                     #projectOverviewTable>
 
