@@ -857,7 +857,7 @@ export class PortfolioCenterComponent implements OnInit {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
             })
             this.projectNames = res.projectDetails;
-            this.setPage(res, 0, "firstHit")
+            this.setPage(res, 0)
 
             this.projects.sort = this.recentTransactionsTableMatSort;
             for (var name of this.projectNames) {
@@ -1938,7 +1938,7 @@ export class PortfolioCenterComponent implements OnInit {
     return this.lookup.filter(x => x.lookUpParentId == key)
   }
 
-  setPage(res: any, offset, val) {
+  setPage(res: any, offset) {
     console.log(res)
     if (res != '') {
       this.projectOverview = res.portfolioDetails
