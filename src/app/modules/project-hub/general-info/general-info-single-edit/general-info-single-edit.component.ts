@@ -20,7 +20,7 @@ import { pairwise } from 'rxjs';
 })
 export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' | 'CreateNewSIP' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
   @Input() viewElements: any = ["isConfidential","isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription"]
   @Input() createform: any
