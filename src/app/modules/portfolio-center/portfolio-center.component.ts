@@ -139,12 +139,12 @@ export class PortfolioCenterComponent implements OnInit {
 
   bulkreportdata: any;
   bulkreportTableEditStack: any = []
-   bulkreportForm = new FormGroup({
+  bulkreportForm = new FormGroup({
     projectProposal: new FormControl()
-   })
-   toggleStates: boolean[] = [];
-   initialToggleStates: { [key: string]: boolean[] } = {};
-   toggles: { [key: string]: { states: boolean[], selectAllFn: (checked: boolean) => void, toggleFn: (rowIndex: number) => void, allToggledFn: () => boolean } } = {};
+  })
+  toggleStates: boolean[] = [];
+  initialToggleStates: { [key: string]: boolean[] } = {};
+  toggles: { [key: string]: { states: boolean[], selectAllFn: (checked: boolean) => void, toggleFn: (rowIndex: number) => void, allToggledFn: () => boolean } } = {};
 
   filteredPhaseArray = []
   oePhaseArray = []
@@ -215,7 +215,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
- 
+
     var executionScope = ""
     var portfolioOwners = ""
     this.activeaccount = this.msal.instance.getActiveAccount();
@@ -665,6 +665,7 @@ export class PortfolioCenterComponent implements OnInit {
 
           console.log("Filter Data : " + this.groupData)
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
+
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             // this.showContent= true
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
@@ -675,9 +676,7 @@ export class PortfolioCenterComponent implements OnInit {
             var budgetData;
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
-            this.bulkreportForm.patchValue({
-              projectProposal: false
-            })
+
             console.log(this.bulkreportdata)
             // Initialize the toggleStates array with all toggles turned off by default
             this.initializeToggle('Project Proposal');
@@ -886,7 +885,7 @@ export class PortfolioCenterComponent implements OnInit {
     })
     // this.showContent = false;
   }
-  
+
   scrollHandler(event) {
     // if (!this.scroll) {
     this.scroll = true
@@ -1351,7 +1350,7 @@ export class PortfolioCenterComponent implements OnInit {
       }
     };
     // Set initial toggle states
-  this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
+    this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
   }
 
   Close() {
@@ -1360,12 +1359,12 @@ export class PortfolioCenterComponent implements OnInit {
     Object.keys(this.toggles).forEach((toggleName) => {
       const currentToggleStates = this.toggles[toggleName].states;
       const initialToggleStates = this.initialToggleStates[toggleName];
-  
+
       if (!changesDetected) {
         changesDetected = !this.areArraysEqual(currentToggleStates, initialToggleStates);
       }
     });
-  
+
     if (changesDetected) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure you want to exit?",
@@ -1407,13 +1406,13 @@ export class PortfolioCenterComponent implements OnInit {
     if (array1.length !== array2.length) {
       return false;
     }
-  
+
     for (let i = 0; i < array1.length; i++) {
       if (array1[i] !== array2[i]) {
         return false;
       }
     }
-  
+
     return true;
   }
 
@@ -1426,33 +1425,171 @@ export class PortfolioCenterComponent implements OnInit {
       const toggle = this.toggles[toggleName];
       const toggleValues = toggle.states;
       const problemIdsWithTrueToggle = [];
-  
+
       // Iterate through each problem unique Id to check if the toggle is true
       this.bulkreportdata.forEach((item, index) => {
         if (toggleValues[index]) {
           problemIdsWithTrueToggle.push(item.projectUid.toString()); // Convert problem unique ID to string
         }
       });
-  
+
       // Store the problem unique IDs in the toggleObject
       toggleObject[toggleName.toLowerCase()] = problemIdsWithTrueToggle;
     });
     console.log('Toggle Object:', toggleObject);
 
-    // Pass toggleObject 
-    this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
-      console.log('Toggle Object:', toggleObject);
-      // Close the drawer
-      this.filterDrawer.close();
-  
+    // Check if more than 100 toggles are turned on for a specific report
+    const reportWithTooManyToggles = Object.keys(toggleObject).find((toggleName) => {
+      return toggleObject[toggleName].length > 100;
+    });
+
+    // Check if more than 500 toggles are turned on for a specific report
+    const reportWith500Toggles = Object.keys(toggleObject).find((toggleName) => {
+      return toggleObject[toggleName].length > 500;
+    });
+
+    if (reportWith500Toggles) {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Your selection exceeds the maximum number of reports you can generate (500). Please reduce the number of reports within your selection!",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+          }
+        },
+        "dismissible": true
+      }
+      this.fuseAlert.open(comfirmConfig)
       // Reset toggle states to initial values
       Object.keys(this.toggles).forEach((toggleName) => {
         this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
       });
+    }
+
+
+    // Pass toggleObject 
+    this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+      console.log('Toggle Object:', toggleObject);
+
+      // Check if any toggle was turned on
+      const anyToggleOn = Object.values(this.toggles).some((toggle) => toggle.states.includes(true));
+      if (!anyToggleOn) {
+        this.showWarningMessage()
+      }
+      else if (reportWithTooManyToggles) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "Are you Sure?",
+          "message": "You have selected more than 100 reports to be created. The distribution may be delayed due to the large amount of data to be generated. Are you sure you want to continue?",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Yes",
+              "color": "warn"
+            },
+            "cancel": {
+              "show": true,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const createProjectAlert = this.fuseAlert.open(comfirmConfig)
+        createProjectAlert.afterClosed().subscribe(close => {
+          if (close == 'confirmed') {
+            // Close the drawer
+            this.filterDrawer.close();
+
+            // Reset toggle states to initial values
+            Object.keys(this.toggles).forEach((toggleName) => {
+              this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+            });
+            this.showConfirmationMessage()
+          }
+        })
+      }
+      else {
+        // Close the drawer
+        this.filterDrawer.close();
+
+        // Reset toggle states to initial values
+        Object.keys(this.toggles).forEach((toggleName) => {
+          this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+        });
+        this.showConfirmationMessage()
+
+      }
+
     });
 
   }
+  showWarningMessage(): void {
+    let titleText;
+    titleText = "Please select at least one project for distribution!"
 
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": titleText,
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:exclamation",
+        "color": "warning"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+        }
+      },
+      "dismissible": true
+    }
+    this.fuseAlert.open(comfirmConfig)
+  }
+  showConfirmationMessage(): void {
+    let titleText;
+    titleText = "The selected reports will be processed and distributed by email (one email per report type). Delivery time is dependent on the number of projects and reports selected. Please be patient while checking your inbox."
+
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": titleText,
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    this.fuseAlert.open(comfirmConfig)
+  }
   clearForm() {
     this.showContent = false
     var user = [{
