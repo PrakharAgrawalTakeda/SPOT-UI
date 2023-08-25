@@ -145,6 +145,9 @@ export class PortfolioCenterComponent implements OnInit {
   toggleStates: boolean[] = [];
   initialToggleStates: { [key: string]: boolean[] } = {};
   toggles: { [key: string]: { states: boolean[], selectAllFn: (checked: boolean) => void, toggleFn: (rowIndex: number) => void, allToggledFn: () => boolean } } = {};
+  //pageToggleStates: { [page: number]: boolean[] } = {};
+  pageToggleStates: { [page: number]: { [toggleName: string]: boolean[] } } = {};
+
 
   filteredPhaseArray = []
   oePhaseArray = []
@@ -665,7 +668,6 @@ export class PortfolioCenterComponent implements OnInit {
 
           console.log("Filter Data : " + this.groupData)
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
-
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
@@ -676,14 +678,8 @@ export class PortfolioCenterComponent implements OnInit {
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
 
-            console.log(this.bulkreportdata)
-            // Initialize the toggleStates array with all toggles turned off by default
-            this.initializeToggle('Project Proposal');
-            this.initializeToggle('Project Charter');
-            this.initializeToggle('Performance Dashboard');
-            this.initializeToggle('Budget Dashboard');
-            this.initializeToggle('Project Closeout');
-            this.initializeToggle('GMSGQ Product Team');
+           
+            
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
             }
@@ -1334,22 +1330,44 @@ export class PortfolioCenterComponent implements OnInit {
     return this.bulkreportdata.length;
   }
   // Function to initialize a toggle and its associated functions
-  initializeToggle(toggleName: string) {
+  initializeToggle(toggleName: string, pageNumber: number) {
+    if (!this.pageToggleStates[pageNumber]) {
+      this.pageToggleStates[pageNumber] = {}; // Initialize page object if it doesn't exist
+    }
+  
     this.toggles[toggleName] = {
       states: Array(this.numberOfToggles()).fill(false),
       selectAllFn: (checked: boolean) => {
         this.toggles[toggleName].states = this.toggles[toggleName].states.map(() => checked);
+        this.pageToggleStates[pageNumber][toggleName] = [...this.toggles[toggleName].states];
       },
       toggleFn: (rowIndex: number) => {
         this.toggles[toggleName].states[rowIndex] = !this.toggles[toggleName].states[rowIndex];
+        
+        // Initialize the pageToggleStates entry if it doesn't exist
+        if (!this.pageToggleStates[pageNumber]) {
+          this.pageToggleStates[pageNumber] = {};
+        }
+        
+        // Initialize the toggleName entry if it doesn't exist
+        if (!this.pageToggleStates[pageNumber][toggleName]) {
+          this.pageToggleStates[pageNumber][toggleName] = [];
+        }
+        
+        // Set the toggle state in pageToggleStates
+        this.pageToggleStates[pageNumber][toggleName][rowIndex] = this.toggles[toggleName].states[rowIndex];
       },
       allToggledFn: () => {
         return this.toggles[toggleName].states.every((state) => state === true);
       }
     };
+  
     // Set initial toggle states
     this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
   }
+  
+  
+  
 
   Close() {
     let changesDetected = false;
@@ -1417,23 +1435,26 @@ export class PortfolioCenterComponent implements OnInit {
 
   generateReports() {
     const toggleObject = {};
+console.log(this.pageToggleStates)
+for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+  if (this.pageToggleStates[pageNumber]) {
+    const pageToggleStates = this.pageToggleStates[pageNumber];
 
-    // Iterate through each toggle
-    Object.keys(this.toggles).forEach((toggleName) => {
-      const toggle = this.toggles[toggleName];
-      const toggleValues = toggle.states;
+    Object.keys(pageToggleStates).forEach((toggleName) => {
+      const toggleValues = pageToggleStates[toggleName];
+
       const problemIdsWithTrueToggle = [];
 
-      // Iterate through each problem unique Id to check if the toggle is true
-      this.bulkreportdata.forEach((item, index) => {
+      this.projectOverview.forEach((item, index) => {
         if (toggleValues[index]) {
-          problemIdsWithTrueToggle.push(item.projectUid.toString()); // Convert problem unique ID to string
+          problemIdsWithTrueToggle.push(item.projectUid.toString());
         }
       });
 
-      // Store the problem unique IDs in the toggleObject
       toggleObject[toggleName.toLowerCase()] = problemIdsWithTrueToggle;
     });
+  }
+}
     console.log('Toggle Object:', toggleObject);
 
     // Check if more than 100 toggles are turned on for a specific report
@@ -1940,6 +1961,7 @@ export class PortfolioCenterComponent implements OnInit {
     console.log(res)
     if (res != '') {
       this.projectOverview = res.portfolioDetails
+      this.bulkreportdata = res.portfolioDetails
       for (var i = 0; i < this.projectOverview.length; i++) {
         this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
           ' - ' +
@@ -1995,6 +2017,13 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
         this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
       }
+      // Initialize toggles for the current page
+    this.initializeToggle('Project Proposal', this.pageNumber);
+    this.initializeToggle('Project Charter', this.pageNumber);
+    this.initializeToggle('Performance Dashboard', this.pageNumber);
+    this.initializeToggle('Budget Dashboard', this.pageNumber);
+    this.initializeToggle('Project Closeout', this.pageNumber);
+    this.initializeToggle('GMSGQ Product Team', this.pageNumber);
       this.size = 100;
       this.totalElements = this.totalproject;
       this.totalPages = this.totalproject / 100;
@@ -2021,6 +2050,7 @@ export class PortfolioCenterComponent implements OnInit {
           })
         }
         this.projectOverview = res.portfolioDetails
+        this.bulkreportdata = res.portfolioDetails
         this.projects.data = res.portfolioDetails;
         for (var i = 0; i < this.projectOverview.length; i++) {
           this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
@@ -2085,6 +2115,13 @@ export class PortfolioCenterComponent implements OnInit {
             })
           }
         }
+              // Initialize toggles for the current page
+    this.initializeToggle('Project Proposal', this.pageNumber);
+    this.initializeToggle('Project Charter', this.pageNumber);
+    this.initializeToggle('Performance Dashboard', this.pageNumber);
+    this.initializeToggle('Budget Dashboard', this.pageNumber);
+    this.initializeToggle('Project Closeout', this.pageNumber);
+    this.initializeToggle('GMSGQ Product Team', this.pageNumber);
         this.size = 100;
         this.totalElements = this.totalproject;
         this.totalPages = this.totalproject / 100;
