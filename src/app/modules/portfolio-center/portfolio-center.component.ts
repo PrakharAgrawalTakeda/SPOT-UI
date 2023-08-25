@@ -143,7 +143,7 @@ export class PortfolioCenterComponent implements OnInit {
     projectProposal: new FormControl()
   })
   toggleStates: boolean[] = [];
-  initialToggleStates: { [key: string]: boolean[][] } = {};
+  initialToggleStates: { [key: string]: boolean[] } = {};
   toggles: { [key: string]: { states: boolean[], selectAllFn: (checked: boolean) => void, toggleFn: (rowIndex: number) => void, allToggledFn: () => boolean } } = {};
 
   filteredPhaseArray = []
@@ -166,8 +166,8 @@ export class PortfolioCenterComponent implements OnInit {
   opened: boolean = false
   hide: boolean = true
   showcontent: boolean = false
-  showLA: boolean = false
   callPagination: boolean = false
+  showLA: boolean = false
   changePO = false
   changeES = false
   filterList = []
@@ -185,7 +185,6 @@ export class PortfolioCenterComponent implements OnInit {
   showFilter = false
 
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
-  togglesPageNumber: any;
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
@@ -265,7 +264,7 @@ export class PortfolioCenterComponent implements OnInit {
             {
               title: 'Create a Strategic Initiative/Program',
               type: 'basic',
-              link: '/create-project/create-strategic-initiative-project',
+              link: '*'
             },
             {
               title: 'Create a Standard/Simple Project/Program',
@@ -668,7 +667,6 @@ export class PortfolioCenterComponent implements OnInit {
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
 
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
-            // this.showContent= true
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
@@ -678,7 +676,14 @@ export class PortfolioCenterComponent implements OnInit {
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
 
-
+            console.log(this.bulkreportdata)
+            // Initialize the toggleStates array with all toggles turned off by default
+            this.initializeToggle('Project Proposal');
+            this.initializeToggle('Project Charter');
+            this.initializeToggle('Performance Dashboard');
+            this.initializeToggle('Budget Dashboard');
+            this.initializeToggle('Project Closeout');
+            this.initializeToggle('GMSGQ Product Team');
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
             }
@@ -842,28 +847,14 @@ export class PortfolioCenterComponent implements OnInit {
             res.projectDetails.sort((a, b) => {
               return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
             })
-            if (res.conditionalFormattingLabels != null) {
-              res.conditionalFormattingLabels.sort((a, b) => {
-                return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-              })
-            }
+            res.conditionalFormattingLabels.sort((a, b) => {
+              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+            })
             res.trendingIndicators.sort((a, b) => {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
             })
             this.projectNames = res.projectDetails;
             this.setPage(res, 0)
-
-            console.log(this.bulkreportdata)
-            console.log('Total Pages:', this.totalPages);
-            console.log('Number of Toggles:', this.numberOfToggles());
-            console.log('Page Number:', this.pageNumber);
-            // Initialize the toggleStates array with all toggles turned off by default
-            this.initializeToggle('Project Proposal');
-            this.initializeToggle('Project Charter');
-            this.initializeToggle('Performance Dashboard');
-            this.initializeToggle('Budget Dashboard');
-            this.initializeToggle('Project Closeout');
-            this.initializeToggle('GMSGQ Product Team');
 
             this.projects.sort = this.recentTransactionsTableMatSort;
             for (var name of this.projectNames) {
@@ -882,6 +873,7 @@ export class PortfolioCenterComponent implements OnInit {
                 }
               }
             };
+
             this.showContent = true
             // var fieldNameElement = document.getElementById('page-count');
             // fieldNameElement.innerHTML = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
@@ -889,7 +881,7 @@ export class PortfolioCenterComponent implements OnInit {
         })
       })
     })
-    // this.showContent = false;
+    this.showContent = false;
   }
 
   scrollHandler(event) {
@@ -1339,34 +1331,25 @@ export class PortfolioCenterComponent implements OnInit {
   }
   // Function to get the number of toggles
   numberOfToggles(): number {
-    return this.projectOverview.length;
+    return this.bulkreportdata.length;
   }
   // Function to initialize a toggle and its associated functions
   initializeToggle(toggleName: string) {
-    this.initialToggleStates[toggleName] = Array.from({ length: this.totalPages }, () => Array(this.numberOfToggles()).fill(false));
     this.toggles[toggleName] = {
-      states: this.initialToggleStates[toggleName][this.pageNumber],
+      states: Array(this.numberOfToggles()).fill(false),
       selectAllFn: (checked: boolean) => {
-        const currentPageStates = this.initialToggleStates[toggleName][this.pageNumber];
-        for (let i = 0; i < currentPageStates.length; i++) {
-          currentPageStates[i] = checked;
-        }
+        this.toggles[toggleName].states = this.toggles[toggleName].states.map(() => checked);
       },
       toggleFn: (rowIndex: number) => {
-        const currentPageStates = this.initialToggleStates[toggleName][this.pageNumber];
-        currentPageStates[rowIndex] = !currentPageStates[rowIndex];
+        this.toggles[toggleName].states[rowIndex] = !this.toggles[toggleName].states[rowIndex];
       },
       allToggledFn: () => {
-        const currentPageStates = this.initialToggleStates[toggleName][this.pageNumber];
-        return currentPageStates.every((state) => state === true);
+        return this.toggles[toggleName].states.every((state) => state === true);
       }
     };
-    // Initialize toggle states for the current page
-    this.toggles[toggleName].states = this.initialToggleStates[toggleName][this.pageNumber];
+    // Set initial toggle states
+    this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
   }
-
-
-
 
   Close() {
     let changesDetected = false;
@@ -1406,22 +1389,14 @@ export class PortfolioCenterComponent implements OnInit {
       alert.afterClosed().subscribe(close => {
         if (close == 'confirmed') {
           this.filterDrawer.close()
-          // Object.keys(this.toggles).forEach((toggleName) => {
-          //   // Assuming the index 0 is the page number for the toggle states array
-          //   const pageIndex = this.togglesPageNumber; // Use the appropriate index here
-          //   this.toggles[toggleName].states = [...this.initialToggleStates[toggleName][pageIndex]];
-          // });
-
           Object.keys(this.toggles).forEach((toggleName) => {
-            this.toggles[toggleName].states = this.initialToggleStates[toggleName][this.pageNumber];
+            this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
           });
-          this.pageNumber = 0
         }
       })
     }
     else {
       this.filterDrawer.close()
-      this.pageNumber = 0
     }
   }
 
@@ -1495,7 +1470,7 @@ export class PortfolioCenterComponent implements OnInit {
       this.fuseAlert.open(comfirmConfig)
       // Reset toggle states to initial values
       Object.keys(this.toggles).forEach((toggleName) => {
-        this.toggles[toggleName].states = this.initialToggleStates[toggleName][this.pageNumber];
+        this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
       });
     }
 
@@ -1539,7 +1514,7 @@ export class PortfolioCenterComponent implements OnInit {
 
             // Reset toggle states to initial values
             Object.keys(this.toggles).forEach((toggleName) => {
-              this.toggles[toggleName].states = this.initialToggleStates[toggleName][this.pageNumber];
+              this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
             });
             this.showConfirmationMessage()
           }
@@ -1551,7 +1526,7 @@ export class PortfolioCenterComponent implements OnInit {
 
         // Reset toggle states to initial values
         Object.keys(this.toggles).forEach((toggleName) => {
-          this.toggles[toggleName].states = this.initialToggleStates[toggleName][this.pageNumber];
+          this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
         });
         this.showConfirmationMessage()
 
@@ -1963,7 +1938,6 @@ export class PortfolioCenterComponent implements OnInit {
 
   setPage(res: any, offset) {
     console.log(res)
-    console.log(offset)
     if (res != '') {
       this.projectOverview = res.portfolioDetails
       for (var i = 0; i < this.projectOverview.length; i++) {
@@ -2021,113 +1995,103 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
         this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
       }
-      // Create a separate variable for toggles' page number
-      this.togglesPageNumber = offset.offset;
-
-      // Update toggle states to match the current page for toggles
-      Object.keys(this.toggles).forEach((toggleName) => {
-        this.toggles[toggleName].states = this.initialToggleStates[toggleName][this.pageNumber];
-      });
       this.size = 100;
       this.totalElements = this.totalproject;
       this.totalPages = this.totalproject / 100;
       this.pageNumber = 0
     }
     else {
-      if (offset.offset != 0 || this.callPagination == true) {
-        this.callPagination = true
-        this.projectOverview = []
-        this.projects.data = [];
-        this.apiService.FiltersByPage(this.groupData, (offset.offset) * 100, 100).then((res: any) => {
-          res.portfolioDetails.sort((a, b) => {
-            return (a.projectUid < b.projectUid ? -1 : a.projectUid == b.projectUid ? 0 : 1);
-          })
-          res.projectDetails.sort((a, b) => {
-            return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
-          })
-          res.trendingIndicators.sort((a, b) => {
+      if (offset.offset != 0 || this.callPagination == true){
+      this.callPagination = true
+      this.projectOverview = []
+      this.projects.data = [];
+      this.apiService.FiltersByPage(this.groupData, (offset.offset) * 100, 100).then((res: any) => {
+        res.portfolioDetails.sort((a, b) => {
+          return (a.projectUid < b.projectUid ? -1 : a.projectUid == b.projectUid ? 0 : 1);
+        })
+        res.projectDetails.sort((a, b) => {
+          return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
+        })
+        res.trendingIndicators.sort((a, b) => {
+          return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+        })
+        if (res.conditionalFormattingLabels != null) {
+          res.conditionalFormattingLabels.sort((a, b) => {
             return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
           })
-          if (res.conditionalFormattingLabels != null) {
-            res.conditionalFormattingLabels.sort((a, b) => {
-              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+        }
+        this.projectOverview = res.portfolioDetails
+        this.projects.data = res.portfolioDetails;
+        for (var i = 0; i < this.projectOverview.length; i++) {
+          this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
+            ' - ' +
+            (this.projects.data[i].capitalPhaseAbbreviation
+              ? this.projects.data[i].capitalPhaseAbbreviation
+              : 'NA') +
+            ' - ' +
+            (this.projects.data[i].oePhaseAbbreviation
+              ? this.projects.data[i].oePhaseAbbreviation
+              : 'NA');
+          this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
+          this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
+          this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
+          this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
+          this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
+          this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
+          var preffix = ""
+          if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
+            preffix = "[ARCHIVED]"
+          }
+          else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived) {
+            preffix = "[CONF]"
+          }
+          else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
+            preffix = "[ARCHIVED CONF]"
+          }
+          res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
+          // this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+          this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
+          this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
+          this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+
+          this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
+          this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+          this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
+          this.projectOverview[i].problemId = res.projectDetails[i].problemId;
+          this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
+          this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
+          this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
+          this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
+          this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
+          this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
+          this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
+          this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
+          this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
+          this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+          this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
+          this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
+          this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
+        }
+        if (this.sorting.name != "") {
+          this.projectOverview.sort
+          if (this.sorting.dir == "asc") {
+            this.projectOverview.sort((a, b) => {
+              return (a.this.sorting.name < b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
             })
           }
-          this.projectOverview = res.portfolioDetails
-          this.projects.data = res.portfolioDetails;
-          for (var i = 0; i < this.projectOverview.length; i++) {
-            this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
-              ' - ' +
-              (this.projects.data[i].capitalPhaseAbbreviation
-                ? this.projects.data[i].capitalPhaseAbbreviation
-                : 'NA') +
-              ' - ' +
-              (this.projects.data[i].oePhaseAbbreviation
-                ? this.projects.data[i].oePhaseAbbreviation
-                : 'NA');
-            this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
-            this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
-            this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
-            this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
-            this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
-            this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
-            var preffix = ""
-            if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
-              preffix = "[ARCHIVED]"
-            }
-            else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived) {
-              preffix = "[CONF]"
-            }
-            else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
-              preffix = "[ARCHIVED CONF]"
-            }
-            res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-            // this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
-            this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
-            this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
-            this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
-
-            this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
-            this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
-            this.projectOverview[i].problemId = res.projectDetails[i].problemId;
-            this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
-            this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
-            this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
-            this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
-            this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
-            this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
-            this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
-            this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
-            this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
-            this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
-            this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
-            this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
-            this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
+          else {
+            this.projectOverview.sort((a, b) => {
+              return (a.this.sorting.name > b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
+            })
           }
-          if (this.sorting.name != "") {
-            this.projectOverview.sort
-            if (this.sorting.dir == "asc") {
-              this.projectOverview.sort((a, b) => {
-                return (a.this.sorting.name < b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
-              })
-            }
-            else {
-              this.projectOverview.sort((a, b) => {
-                return (a.this.sorting.name > b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
-              })
-            }
-          }
-          Object.keys(this.toggles).forEach((toggleName) => {
-            this.toggles[toggleName].states = this.initialToggleStates[toggleName][this.pageNumber];
-          });
-          this.size = 100;
-          this.totalElements = this.totalproject;
-          this.totalPages = this.totalproject / 100;
-          this.pageNumber = offset.offset - 1
-        })
-      }
+        }
+        this.size = 100;
+        this.totalElements = this.totalproject;
+        this.totalPages = this.totalproject / 100;
+        this.pageNumber = offset.offset
+      })
     }
+  }
   }
 
   changePhase(phaseId) {
