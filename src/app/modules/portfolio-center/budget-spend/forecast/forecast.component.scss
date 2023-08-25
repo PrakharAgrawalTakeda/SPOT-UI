@@ -6,17 +6,34 @@
     overflow-y: scroll !important;
     }
 }
-:host{
-    ::ng-deep .datatable-body {
-    height: 30vh !important;
+:host {
+    ::ng-deep .ngx-datatable .datatable-PB-80 .datatable-body .datatable-scroll {
+        height: 40vh !important;
+        width: 100vw !important;
+        overflow-x: scroll !important;
+        overflow-y: scroll !important;
+    }
 }
+:host{
+    ::ng-deep .datatable-PB-80{
+        ::ng-deep .datatable-body {
+    height: 60vh !important;
+        }
+}
+}
+:host {
+    ::ng-deep .datatable-CX-80 {
+        ::ng-deep .datatable-body {
+            height: 30vh !important;
+        }
+    }
 }
 .custom {
     width: 80% !important;
 }
 
 .customIcon {
-    top: 31px;
+    top: 42px;
     position: relative;
     right: -25px;
     height: 40px;
@@ -65,4 +82,15 @@
     display: block !important;
     height: 28px !important;
     margin: -.5em -.6em .4em -.6em !important;
+}
+.projectNames {
+    cursor: pointer !important;
+    margin-left: 15px !important;
+    color: rgb(81, 174, 245);
+
+}
+
+.projectNames:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
 }

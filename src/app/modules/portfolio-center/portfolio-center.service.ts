@@ -92,7 +92,7 @@ export class PortfolioCenterService {
       alertopener.afterClosed().subscribe(res => {
         if (res == 'confirmed') {
           this.item = {}
-          this.itemtype = ""
+          this.itemtype = itemtype
           this.itemid = ""
           this.all = []
           this.projectid = ""
@@ -143,12 +143,12 @@ export class PortfolioCenterService {
     this.isFormChanged = false
     alertopener.afterClosed().subscribe(res => {
       if (res != 'confirmed') {
-        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid)
+        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid, true)
         this.isFormChanged = true
       }
       else {
         this.item = {}
-        this.itemtype = ""
+        this.itemtype = this.itemtype
         this.itemid = ""
         this.all = []
         this.projectid = ""

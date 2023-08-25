@@ -122,7 +122,7 @@ export class ProjectHubComponent implements OnInit {
                         {
                             title: 'Create a Strategic Initiative/Program',
                             type: 'basic',
-                            link: '*'
+                            link: '/create-project/create-strategic-initiative-project'
                         },
                         {
                             title: 'Create a Standard/Simple Project/Program',

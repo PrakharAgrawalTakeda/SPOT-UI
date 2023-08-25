@@ -44,10 +44,15 @@ import { NotificationsModule } from 'app/layout/common/notifications/notificatio
 import { MessagesModule } from 'app/layout/common/messages/messages.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-
+// Portfolio Manager C9F323D4 - EF97 - 4C2A - B748 - 11DB5B8589D0
 
 export const projectRoutes: Routes = [
   { path: '', component: CreateNewComponent },
+  {
+    path: 'create-strategic-initiative-project',
+    component: CreateProjectComponent,
+    pathMatch: 'full'
+  },
   {
     path: 'create-new-project',
     component: CreateProjectComponent,
@@ -64,7 +69,7 @@ export const projectRoutes: Routes = [
   declarations: [
     CreateProjectComponent,
     CreateNewComponent,
-    CopyProjectComponent,
+    CopyProjectComponent
 
   ],
   imports: [

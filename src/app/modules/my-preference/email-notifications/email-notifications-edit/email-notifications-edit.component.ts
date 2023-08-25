@@ -75,6 +75,7 @@ export class EmailNotificationsEditComponent {
     individualProjectsRequired: boolean = false;
     productsRequired: boolean = false;
     newVariable: any[];
+    eventsUserData: any;
 
 
     constructor(public projecthubservice: ProjectHubService,
@@ -248,6 +249,7 @@ export class EmailNotificationsEditComponent {
                     this.reportsData = res.reportOptions
                     this.emailDb = this.emailNoti
                     this.eventsData = res.eventsMasterData
+                    this.eventsUserData = res.eventsUserData
                     res.eventsMasterData.sort((a, b) => a.priority - b.priority)
                     console.log("DB", res)
                     console.log("ROWS", this.rows)
@@ -524,12 +526,25 @@ export class EmailNotificationsEditComponent {
                     }
                 }
                 if (this.emailNotiForm.get('recieveEmailNotification').value == true) {
-                    this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
-                        this.preferenceservice.isFormChanged = false
-                        this.preferenceservice.submitbutton.next(true)
-                        this.preferenceservice.toggleDrawerOpen('', '', [], '')
-                        this.showConfirmationMessage()
-                    })
+                    const noneTrue = this.eventsUserData.every(item => item.onOff === false);
+                    if(noneTrue )
+                    {
+                        this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
+                            this.preferenceservice.isFormChanged = false
+                            this.preferenceservice.submitbutton.next(true)
+                            this.preferenceservice.toggleDrawerOpen('', '', [], '')
+                            this.showConfirmationMessage2()
+                        })
+                    }
+                    else{
+                        this.apiService.editEmailSettings(mainObj, this.msalService.instance.getActiveAccount().localAccountId).then(Res => {
+                            this.preferenceservice.isFormChanged = false
+                            this.preferenceservice.submitbutton.next(true)
+                            this.preferenceservice.toggleDrawerOpen('', '', [], '')
+                            this.showConfirmationMessage()
+                        })
+                    }
+
                 } else {
                     var deactivateConfig: FuseConfirmationConfig = {
                         "message": "Are you sure you want to de-activate the e-mail notifications?",
@@ -625,6 +640,41 @@ export class EmailNotificationsEditComponent {
                     "label": "Okay",
                     "color": "primary"
                 },
+                "cancel": {
+                    "show": false,
+                    "label": "Cancel"
+                }
+            },
+            "dismissible": true
+        }
+        this.fuseAlert.open(comfirmConfig)
+    }
+
+    showConfirmationMessage2(): void {
+        let titleText;
+        if (this.emailNotiForm.get('reportFrequencyId').value.lookUpName == "Weekly") {
+            titleText = "You have successfully activated the e-mail notification feature. Please define what information to include in the notification report below in the Report Content section. Once this is completed, the report will be distributed by e-mail every Sunday. Please note that only active projects are considered for e-mail notification."
+        } else {
+            titleText = "You have successfully activated the e-mail notification feature. Please define what information to include in the notification report below in the Report Content section. Once this is completed, the report will be distributed by e-mail every first Sunday of a month. Please note that only active projects are considered for e-mail notification."
+        }
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": titleText,
+            "message": "",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:check",
+                "color": "success"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "Okay",
+                    "color": "primary"
+                },
+                "cancel": {
+                    "show": false,
+                    "label": "Cancel"
+                }
             },
             "dismissible": true
         }
