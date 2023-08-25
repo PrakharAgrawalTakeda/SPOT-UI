@@ -190,9 +190,6 @@ export class RiskIssueViewEditComponent implements OnInit {
     })
   }
   getissuetype(): any {
-      console.log("aaaaaaaaaaaaaa", this.lookupdata.filter(x => x.lookUpParentId == '6b4487a4-097d-43ee-890d-172c601cd09b').sort((a, b) => {
-          return a.lookUpOrder - b.lookUpOrder;
-      }))
     return this.lookupdata.filter(x => x.lookUpParentId == '6b4487a4-097d-43ee-890d-172c601cd09b').sort((a, b) => {
       return a.lookUpOrder - b.lookUpOrder;
     })
