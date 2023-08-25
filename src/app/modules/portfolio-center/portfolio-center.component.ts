@@ -166,6 +166,7 @@ export class PortfolioCenterComponent implements OnInit {
   opened: boolean = false
   hide: boolean = true
   showcontent: boolean = false
+  callPagination: boolean = false
   showLA: boolean = false
   changePO = false
   changeES = false
@@ -263,7 +264,7 @@ export class PortfolioCenterComponent implements OnInit {
             {
               title: 'Create a Strategic Initiative/Program',
               type: 'basic',
-              link: '/create-project/create-strategic-initiative-project',
+              link: '*'
             },
             {
               title: 'Create a Standard/Simple Project/Program',
@@ -666,7 +667,6 @@ export class PortfolioCenterComponent implements OnInit {
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
 
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
-            this.showContent= true
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
@@ -847,11 +847,9 @@ export class PortfolioCenterComponent implements OnInit {
             res.projectDetails.sort((a, b) => {
               return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
             })
-            if (res.conditionalFormattingLabels != null){
-              res.conditionalFormattingLabels.sort((a, b) => {
-                return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-              })
-            }
+            res.conditionalFormattingLabels.sort((a, b) => {
+              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+            })
             res.trendingIndicators.sort((a, b) => {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
             })
@@ -875,6 +873,7 @@ export class PortfolioCenterComponent implements OnInit {
                 }
               }
             };
+
             this.showContent = true
             // var fieldNameElement = document.getElementById('page-count');
             // fieldNameElement.innerHTML = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
@@ -882,7 +881,7 @@ export class PortfolioCenterComponent implements OnInit {
         })
       })
     })
-    // this.showContent = false;
+    this.showContent = false;
   }
 
   scrollHandler(event) {
@@ -2002,7 +2001,8 @@ export class PortfolioCenterComponent implements OnInit {
       this.pageNumber = 0
     }
     else {
-      if (offset.offset != 0){
+      if (offset.offset != 0 || this.callPagination == true){
+      this.callPagination = true
       this.projectOverview = []
       this.projects.data = [];
       this.apiService.FiltersByPage(this.groupData, (offset.offset) * 100, 100).then((res: any) => {
@@ -2055,7 +2055,7 @@ export class PortfolioCenterComponent implements OnInit {
           this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
 
           this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-          this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+          this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
           this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
           this.projectOverview[i].problemId = res.projectDetails[i].problemId;
           this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
@@ -2088,7 +2088,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.size = 100;
         this.totalElements = this.totalproject;
         this.totalPages = this.totalproject / 100;
-        this.pageNumber = offset.offset - 1
+        this.pageNumber = offset.offset
       })
     }
   }

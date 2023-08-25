@@ -11,7 +11,7 @@ import {FuseConfirmationService} from "../../../../../@fuse/services/confirmatio
 })
 export class BudgetCapexOpexTableComponent {
     @Input() mode: 'Capex' | 'Opex' = 'Capex'
-    fundingRequests: any = []
+    @Input() data: any[];
     id: string = ''
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService, private router: Router) {
