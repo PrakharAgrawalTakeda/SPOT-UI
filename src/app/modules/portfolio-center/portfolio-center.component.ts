@@ -186,8 +186,11 @@ export class PortfolioCenterComponent implements OnInit {
   pageNumber = 0
   groupData: any;
   showFilter = false
-
+ toggleObject = {};
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
+  initial: any;
+  changedToggleStates: Record<string, boolean[]> = {};
+
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
   constructor(private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
@@ -677,9 +680,10 @@ export class PortfolioCenterComponent implements OnInit {
             var budgetData;
             this.projects.data = res.portfolioDetails;
             this.bulkreportdata = res.portfolioDetails
+            this.initial = res
 
-           
-            
+
+
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
             }
@@ -1325,49 +1329,6 @@ export class PortfolioCenterComponent implements OnInit {
       this.filterDrawer.close()
     }
   }
-  // Function to get the number of toggles
-  numberOfToggles(): number {
-    return this.bulkreportdata.length;
-  }
-  // Function to initialize a toggle and its associated functions
-  initializeToggle(toggleName: string, pageNumber: number) {
-    if (!this.pageToggleStates[pageNumber]) {
-      this.pageToggleStates[pageNumber] = {}; // Initialize page object if it doesn't exist
-    }
-  
-    this.toggles[toggleName] = {
-      states: Array(this.numberOfToggles()).fill(false),
-      selectAllFn: (checked: boolean) => {
-        this.toggles[toggleName].states = this.toggles[toggleName].states.map(() => checked);
-        this.pageToggleStates[pageNumber][toggleName] = [...this.toggles[toggleName].states];
-      },
-      toggleFn: (rowIndex: number) => {
-        this.toggles[toggleName].states[rowIndex] = !this.toggles[toggleName].states[rowIndex];
-        
-        // Initialize the pageToggleStates entry if it doesn't exist
-        if (!this.pageToggleStates[pageNumber]) {
-          this.pageToggleStates[pageNumber] = {};
-        }
-        
-        // Initialize the toggleName entry if it doesn't exist
-        if (!this.pageToggleStates[pageNumber][toggleName]) {
-          this.pageToggleStates[pageNumber][toggleName] = [];
-        }
-        
-        // Set the toggle state in pageToggleStates
-        this.pageToggleStates[pageNumber][toggleName][rowIndex] = this.toggles[toggleName].states[rowIndex];
-      },
-      allToggledFn: () => {
-        return this.toggles[toggleName].states.every((state) => state === true);
-      }
-    };
-  
-    // Set initial toggle states
-    this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
-  }
-  
-  
-  
 
   Close() {
     let changesDetected = false;
@@ -1407,14 +1368,21 @@ export class PortfolioCenterComponent implements OnInit {
       alert.afterClosed().subscribe(close => {
         if (close == 'confirmed') {
           this.filterDrawer.close()
-          Object.keys(this.toggles).forEach((toggleName) => {
-            this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-          });
+          // Reset toggle states to false on all pages and all toggles
+          for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+            if (this.pageToggleStates[pageNumber]) {
+              Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
+                this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
+              });
+            }
+          }
+          this.resetpage()
         }
       })
     }
     else {
       this.filterDrawer.close()
+      this.resetpage()
     }
   }
 
@@ -1433,9 +1401,54 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
 
+  // Function to get the number of toggles
+  numberOfToggles(): number {
+    return this.bulkreportdata.length;
+  }
+  // Function to initialize a toggle and its associated functions
+  initializeToggle(toggleName: string, pageNumber: number) {
+    if (!this.pageToggleStates[pageNumber]) {
+      this.pageToggleStates[pageNumber] = {}; // Initialize page object if it doesn't exist
+    }
+
+    this.toggles[toggleName] = {
+      states: Array(this.numberOfToggles()).fill(false),
+      selectAllFn: (checked: boolean) => {
+        this.toggles[toggleName].states = this.toggles[toggleName].states.map(() => checked);
+        this.pageToggleStates[pageNumber][toggleName] = [...this.toggles[toggleName].states];
+      },
+      toggleFn: (rowIndex: number) => {
+        this.toggles[toggleName].states[rowIndex] = !this.toggles[toggleName].states[rowIndex];
+
+        // Initialize the pageToggleStates entry if it doesn't exist
+        if (!this.pageToggleStates[pageNumber]) {
+          this.pageToggleStates[pageNumber] = {};
+        }
+
+        // Initialize the toggleName entry if it doesn't exist
+        if (!this.pageToggleStates[pageNumber][toggleName]) {
+          this.pageToggleStates[pageNumber][toggleName] = [];
+        }
+
+        // Set the toggle state in pageToggleStates
+        this.pageToggleStates[pageNumber][toggleName][rowIndex] = this.toggles[toggleName].states[rowIndex];
+      },
+      allToggledFn: () => {
+        return this.toggles[toggleName].states.every((state) => state === true);
+      }
+    };
+
+    // Set initial toggle states
+    this.initialToggleStates[toggleName] = [...this.toggles[toggleName].states];
+  }
+
+
+
   generateReports() {
-    const toggleObject = {};
-console.log(this.pageToggleStates)
+    this.toggleObject = {}
+    // Initialize counters for each report type
+    const reportTypeCounters = {};
+    // Step 1: Iterate through each page
 for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
   if (this.pageToggleStates[pageNumber]) {
     const pageToggleStates = this.pageToggleStates[pageNumber];
@@ -1443,33 +1456,52 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
     Object.keys(pageToggleStates).forEach((toggleName) => {
       const toggleValues = pageToggleStates[toggleName];
 
-      const problemIdsWithTrueToggle = [];
-
-      this.projectOverview.forEach((item, index) => {
-        if (toggleValues[index]) {
-          problemIdsWithTrueToggle.push(item.projectUid.toString());
+      if (toggleValues.some((value) => value === true)) {
+        // Only add project UUIDs to toggleObject if the toggle is true
+        if (!this.toggleObject[toggleName]) {
+          this.toggleObject[toggleName] = [];
         }
-      });
 
-      toggleObject[toggleName.toLowerCase()] = problemIdsWithTrueToggle;
+        const existingProjectUUIDs = this.toggleObject[toggleName]; // Get existing UUIDs for the toggle
+
+        // Find the project UUIDs for which the toggle is true
+        const trueProjectUUIDs = toggleValues
+          .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
+          .filter(Boolean);
+
+        // Add the project UUIDs to toggleObject only if they don't exist already
+        for (const uuid of trueProjectUUIDs) {
+          if (!existingProjectUUIDs.includes(uuid)) {
+            this.toggleObject[toggleName].push(uuid);
+          }
+        }
+
+        // Update the counter for each report type
+        reportTypeCounters[toggleName] += trueProjectUUIDs.length;
+      }
     });
   }
 }
-    console.log('Toggle Object:', toggleObject);
 
-    // Check if more than 100 toggles are turned on for a specific report
-    const reportWithTooManyToggles = Object.keys(toggleObject).find((toggleName) => {
-      return toggleObject[toggleName].length > 100;
-    });
+    console.log('Toggle Object:', this.toggleObject);
 
-    // Check if more than 500 toggles are turned on for a specific report
-    const reportWith500Toggles = Object.keys(toggleObject).find((toggleName) => {
-      return toggleObject[toggleName].length > 500;
-    });
+    // Step 2: Check if more than 500 toggles are turned on
+    const totalTurnedOnToggles = Object.values(this.toggleObject).reduce(
+      (total: number, toggleValues: unknown) =>
+        total + (Array.isArray(toggleValues) ? toggleValues.length : 0),
+      0
+    );
+    console.log(totalTurnedOnToggles)
+        // Step 3: Check if no toggles are turned on
+        const noTogglesTurnedOn = !Object.values(this.toggles).some((toggle) =>
+        toggle.states.includes(true)
+      );
 
-    if (reportWith500Toggles) {
+    console.log(totalTurnedOnToggles)
+    if (typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles > 500) {
+      console.log("HI")
       var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Your selection exceeds the maximum number of reports you can generate (500). Please reduce the number of reports within your selection!",
+        "title": "Your selection exceeds the maximum number of reports you can generate (500). Please select less than 500 projects!",
         "message": "",
         "icon": {
           "show": true,
@@ -1487,25 +1519,23 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
           }
         },
         "dismissible": true
-      }
-      this.fuseAlert.open(comfirmConfig)
-      // Reset toggle states to initial values
-      Object.keys(this.toggles).forEach((toggleName) => {
-        this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-      });
+      };
+this.fuseAlert.open(comfirmConfig);
+
+this.updateToggleObjectFromChanges();
+
     }
 
 
-    // Pass toggleObject 
-    this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
-      console.log('Toggle Object:', toggleObject);
 
-      // Check if any toggle was turned on
-      const anyToggleOn = Object.values(this.toggles).some((toggle) => toggle.states.includes(true));
-      if (!anyToggleOn) {
-        this.showWarningMessage()
-      }
-      else if (reportWithTooManyToggles) {
+    else if (noTogglesTurnedOn) {
+      this.showWarningMessage();
+    }
+
+    // Step 4: Check if more than 100 toggles are turned on
+    else {
+      for (const toggleName in reportTypeCounters) {
+      if (reportTypeCounters[toggleName] > 100 && typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles <= 500) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you Sure?",
           "message": "You have selected more than 100 reports to be created. The distribution may be delayed due to the large amount of data to be generated. Are you sure you want to continue?",
@@ -1526,36 +1556,80 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
             }
           },
           "dismissible": true
-        }
-        const createProjectAlert = this.fuseAlert.open(comfirmConfig)
-        createProjectAlert.afterClosed().subscribe(close => {
-          if (close == 'confirmed') {
+        };
+
+        const createProjectAlert = this.fuseAlert.open(comfirmConfig);
+        createProjectAlert.afterClosed().subscribe((close) => {
+          if (close === 'confirmed') {
+            this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
             // Close the drawer
             this.filterDrawer.close();
+            // Reset toggle states to false on all pages and all toggles
+            for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+              if (this.pageToggleStates[pageNumber]) {
+                Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
+                  this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
+                });
+              }
+            }
 
-            // Reset toggle states to initial values
-            Object.keys(this.toggles).forEach((toggleName) => {
-              this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-            });
-            this.showConfirmationMessage()
-          }
-        })
+            this.showConfirmationMessage();
+          })
+        }
+        });
       }
       else {
+        this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
         // Close the drawer
         this.filterDrawer.close();
+        // Reset toggle states to false on all pages and all toggles
+        for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+          if (this.pageToggleStates[pageNumber]) {
+            Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
+              this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
+            });
+          }
+        }
 
-        // Reset toggle states to initial values
-        Object.keys(this.toggles).forEach((toggleName) => {
-          this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
-        });
-        this.showConfirmationMessage()
 
-      }
-
-    });
-
+        this.showConfirmationMessage();
+    })
+    }
   }
+}
+  }
+
+  updateToggleObjectFromChanges() {
+    // Loop through each page's toggle states
+    for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+      if (this.pageToggleStates[pageNumber]) {
+        const pageToggleStates = this.pageToggleStates[pageNumber];
+  
+        // Loop through each toggle name on the page
+        Object.keys(pageToggleStates).forEach((toggleName) => {
+          const toggleValues = pageToggleStates[toggleName];
+          const existingProjectUUIDs = this.toggleObject[toggleName] || [];
+  
+          // Find the project UUIDs for which the toggle is now true
+          const trueProjectUUIDs = toggleValues
+            .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
+            .filter(Boolean);
+  
+          // Remove project UUIDs that are no longer selected
+          const updatedUUIDs = existingProjectUUIDs.filter(uuid => trueProjectUUIDs.includes(uuid));
+  
+          // Update the toggleObject with the updated UUIDs for this toggle
+          this.toggleObject[toggleName] = updatedUUIDs;
+        });
+      }
+    }
+  
+    console.log('Updated Toggle Object:', this.toggleObject);
+  }
+  
+
+
+  
   showWarningMessage(): void {
     let titleText;
     titleText = "Please select at least one project for distribution!"
@@ -1608,7 +1682,328 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       "dismissible": true
     }
     this.fuseAlert.open(comfirmConfig)
+    this.resetpage()
   }
+
+
+  //   generateReports() {
+  //     const toggleObject = {};
+  // console.log(this.pageToggleStates)
+  // for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+  //   if (this.pageToggleStates[pageNumber]) {
+  //     const pageToggleStates = this.pageToggleStates[pageNumber];
+
+  //     Object.keys(pageToggleStates).forEach((toggleName) => {
+  //       const toggleValues = pageToggleStates[toggleName];
+
+  //       const problemIdsWithTrueToggle = [];
+
+  //       this.projectOverview.forEach((item, index) => {
+  //         if (toggleValues[index]) {
+  //           problemIdsWithTrueToggle.push(item.projectUid.toString());
+  //         }
+  //       });
+
+  //       toggleObject[toggleName.toLowerCase()] = problemIdsWithTrueToggle;
+  //     });
+  //   }
+  // }
+  //     console.log('Toggle Object:', toggleObject);
+
+  //     // Check if more than 100 toggles are turned on for a specific report
+  //     const reportWithTooManyToggles = Object.keys(toggleObject).find((toggleName) => {
+  //       return toggleObject[toggleName].length > 100;
+  //     });
+
+  //     // Check if more than 500 toggles are turned on for a specific report
+  //     const reportWith500Toggles = Object.keys(toggleObject).find((toggleName) => {
+  //       return toggleObject[toggleName].length > 500;
+  //     });
+
+  //     if (reportWith500Toggles) {
+  //       var comfirmConfig: FuseConfirmationConfig = {
+  //         "title": "Your selection exceeds the maximum number of reports you can generate (500). Please reduce the number of reports within your selection!",
+  //         "message": "",
+  //         "icon": {
+  //           "show": true,
+  //           "name": "heroicons_outline:exclamation",
+  //           "color": "warning"
+  //         },
+  //         "actions": {
+  //           "confirm": {
+  //             "show": true,
+  //             "label": "Okay",
+  //             "color": "primary"
+  //           },
+  //           "cancel": {
+  //             "show": false,
+  //           }
+  //         },
+  //         "dismissible": true
+  //       }
+  //       this.fuseAlert.open(comfirmConfig)
+  //       // Reset toggle states to initial values
+  //       Object.keys(this.toggles).forEach((toggleName) => {
+  //         this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+  //       });
+  //     }
+
+
+  //     // Pass toggleObject 
+  //     this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+  //       console.log('Toggle Object:', toggleObject);
+
+  //       // Check if any toggle was turned on
+  //       const anyToggleOn = Object.values(this.toggles).some((toggle) => toggle.states.includes(true));
+  //       if (!anyToggleOn) {
+  //         this.showWarningMessage()
+  //       }
+  //       else if (reportWithTooManyToggles) {
+  //         var comfirmConfig: FuseConfirmationConfig = {
+  //           "title": "Are you Sure?",
+  //           "message": "You have selected more than 100 reports to be created. The distribution may be delayed due to the large amount of data to be generated. Are you sure you want to continue?",
+  //           "icon": {
+  //             "show": true,
+  //             "name": "heroicons_outline:exclamation",
+  //             "color": "warn"
+  //           },
+  //           "actions": {
+  //             "confirm": {
+  //               "show": true,
+  //               "label": "Yes",
+  //               "color": "warn"
+  //             },
+  //             "cancel": {
+  //               "show": true,
+  //               "label": "Cancel"
+  //             }
+  //           },
+  //           "dismissible": true
+  //         }
+  //         const createProjectAlert = this.fuseAlert.open(comfirmConfig)
+  //         createProjectAlert.afterClosed().subscribe(close => {
+  //           if (close == 'confirmed') {
+  //             // Close the drawer
+  //             this.filterDrawer.close();
+
+  //             // Reset toggle states to initial values
+  //             Object.keys(this.toggles).forEach((toggleName) => {
+  //               this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+  //             });
+  //             this.showConfirmationMessage()
+  //           }
+  //         })
+  //       }
+  //       else {
+  //         // Close the drawer
+  //         this.filterDrawer.close();
+
+  //         // Reset toggle states to initial values
+  //         Object.keys(this.toggles).forEach((toggleName) => {
+  //           this.toggles[toggleName].states = [...this.initialToggleStates[toggleName]];
+  //         });
+  //         this.showConfirmationMessage()
+
+  //       }
+
+  //     });
+
+  //   }
+
+  setPage(res: any, offset) {
+    console.log(res)
+    if (res != '') {
+      this.projectOverview = res.portfolioDetails
+      this.bulkreportdata = res.portfolioDetails
+      for (var i = 0; i < this.projectOverview.length; i++) {
+        this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
+          ' - ' +
+          (this.projects.data[i].capitalPhaseAbbreviation
+            ? this.projects.data[i].capitalPhaseAbbreviation
+            : 'NA') +
+          ' - ' +
+          (this.projects.data[i].oephaseAbbreviation
+            ? this.projects.data[i].oephaseAbbreviation
+            : 'NA');
+        this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
+        this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
+        this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
+        this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
+        this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
+        this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
+
+        var preffix = ""
+        if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
+          preffix = "[ARCHIVED]"
+        }
+        else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived) {
+          preffix = "[CONF]"
+        }
+        else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
+          preffix = "[ARCHIVED CONF]"
+        }
+        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+          this.budgetCurrency = "OY"
+        }
+        else {
+          this.budgetCurrency = this.projects.data[i].localCurrencyAbbreviation
+        }
+        res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
+        this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
+        this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
+        this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+        this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
+        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
+        this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
+        this.projectOverview[i].problemId = this.projectNames[i].problemId;
+        this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
+        this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
+        this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
+        this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
+        this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
+        this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
+        this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
+        this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
+        this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
+        this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
+        this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
+        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
+      }
+      this.size = 100;
+      this.totalElements = this.totalproject;
+      this.totalPages = this.totalproject / 100;
+      this.pageNumber = 0
+      // Initialize toggles for the current page
+      this.initializeToggle('Project Proposal', this.pageNumber);
+      this.initializeToggle('Project Charter', this.pageNumber);
+      this.initializeToggle('Performance Dashboard', this.pageNumber);
+      this.initializeToggle('Budget Dashboard', this.pageNumber);
+      this.initializeToggle('Project Closeout', this.pageNumber);
+      this.initializeToggle('GMSGQ Product Team', this.pageNumber);
+
+      // Restore toggle states based on stored values
+      if (this.pageToggleStates[this.pageNumber]) {
+        Object.keys(this.toggles).forEach((toggleName) => {
+          if (this.pageToggleStates[this.pageNumber][toggleName]) {
+            this.toggles[toggleName].states = [...this.pageToggleStates[this.pageNumber][toggleName]];
+          }
+        });
+      }
+    }
+    else {
+      if (offset.offset != 0 || this.callPagination == true) {
+        this.callPagination = true
+        this.projectOverview = []
+        this.projects.data = [];
+        this.apiService.FiltersByPage(this.groupData, (offset.offset) * 100, 100).then((res: any) => {
+          res.portfolioDetails.sort((a, b) => {
+            return (a.projectUid < b.projectUid ? -1 : a.projectUid == b.projectUid ? 0 : 1);
+          })
+          res.projectDetails.sort((a, b) => {
+            return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
+          })
+          res.trendingIndicators.sort((a, b) => {
+            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+          })
+          if (res.conditionalFormattingLabels != null) {
+            res.conditionalFormattingLabels.sort((a, b) => {
+              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+            })
+          }
+          this.projectOverview = res.portfolioDetails
+          this.bulkreportdata = res.portfolioDetails
+          this.projects.data = res.portfolioDetails;
+          for (var i = 0; i < this.projectOverview.length; i++) {
+            this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
+              ' - ' +
+              (this.projects.data[i].capitalPhaseAbbreviation
+                ? this.projects.data[i].capitalPhaseAbbreviation
+                : 'NA') +
+              ' - ' +
+              (this.projects.data[i].oePhaseAbbreviation
+                ? this.projects.data[i].oePhaseAbbreviation
+                : 'NA');
+            this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
+            this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
+            this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
+            this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
+            this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
+            this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
+            var preffix = ""
+            if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
+              preffix = "[ARCHIVED]"
+            }
+            else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived) {
+              preffix = "[CONF]"
+            }
+            else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
+              preffix = "[ARCHIVED CONF]"
+            }
+            res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
+            // this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
+            this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
+            this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
+            this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
+
+            this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
+            this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
+            this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
+            this.projectOverview[i].problemId = res.projectDetails[i].problemId;
+            this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
+            this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
+            this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
+            this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
+            this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
+            this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
+            this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
+            this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
+            this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
+            this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+            this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
+            this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
+            this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
+          }
+          if (this.sorting.name != "") {
+            this.projectOverview.sort
+            if (this.sorting.dir == "asc") {
+              this.projectOverview.sort((a, b) => {
+                return (a.this.sorting.name < b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
+              })
+            }
+            else {
+              this.projectOverview.sort((a, b) => {
+                return (a.this.sorting.name > b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
+              })
+            }
+          }
+          this.size = 100;
+          this.totalElements = this.totalproject;
+          this.totalPages = this.totalproject / 100;
+          this.pageNumber = offset.offset
+          // Initialize toggles for the current page
+          this.initializeToggle('Project Proposal', this.pageNumber);
+          this.initializeToggle('Project Charter', this.pageNumber);
+          this.initializeToggle('Performance Dashboard', this.pageNumber);
+          this.initializeToggle('Budget Dashboard', this.pageNumber);
+          this.initializeToggle('Project Closeout', this.pageNumber);
+          this.initializeToggle('GMSGQ Product Team', this.pageNumber);
+
+          // Restore toggle states based on stored values
+          if (this.pageToggleStates[this.pageNumber]) {
+            Object.keys(this.toggles).forEach((toggleName) => {
+              if (this.pageToggleStates[this.pageNumber][toggleName]) {
+                this.toggles[toggleName].states = [...this.pageToggleStates[this.pageNumber][toggleName]];
+              }
+            });
+          }
+        })
+      }
+    }
+  }
+
+
+
   clearForm() {
     this.showContent = false
     var user = [{
@@ -1957,179 +2352,6 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
     return this.lookup.filter(x => x.lookUpParentId == key)
   }
 
-  setPage(res: any, offset) {
-    console.log(res)
-    if (res != '') {
-      this.projectOverview = res.portfolioDetails
-      this.bulkreportdata = res.portfolioDetails
-      for (var i = 0; i < this.projectOverview.length; i++) {
-        this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
-          ' - ' +
-          (this.projects.data[i].capitalPhaseAbbreviation
-            ? this.projects.data[i].capitalPhaseAbbreviation
-            : 'NA') +
-          ' - ' +
-          (this.projects.data[i].oephaseAbbreviation
-            ? this.projects.data[i].oephaseAbbreviation
-            : 'NA');
-        this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
-        this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
-        this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
-        this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
-        this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
-        this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
-
-        var preffix = ""
-        if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
-          preffix = "[ARCHIVED]"
-        }
-        else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived) {
-          preffix = "[CONF]"
-        }
-        else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
-          preffix = "[ARCHIVED CONF]"
-        }
-        if (res.budgetTile.localCurrencyAbbreviation == "OY") {
-          this.budgetCurrency = "OY"
-        }
-        else {
-          this.budgetCurrency = this.projects.data[i].localCurrencyAbbreviation
-        }
-        res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-        this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
-        this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
-        this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
-        this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-        this.projectOverview[i].calculatedEmissionsImpact = this.projectNames[i].calculatedEmissionsImpact ? this.projectNames[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].calculatedEmissionsImpact;
-        this.projectOverview[i].waterImpactUnits = this.projectNames[i].waterImpactUnits ? this.projectNames[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projectNames[i].waterImpactUnits;
-        this.projectOverview[i].problemId = this.projectNames[i].problemId;
-        this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
-        this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
-        this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
-        this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
-        this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
-        this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
-        this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
-        this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
-        this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
-        this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
-        this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
-        this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
-        this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
-      }
-      // Initialize toggles for the current page
-    this.initializeToggle('Project Proposal', this.pageNumber);
-    this.initializeToggle('Project Charter', this.pageNumber);
-    this.initializeToggle('Performance Dashboard', this.pageNumber);
-    this.initializeToggle('Budget Dashboard', this.pageNumber);
-    this.initializeToggle('Project Closeout', this.pageNumber);
-    this.initializeToggle('GMSGQ Product Team', this.pageNumber);
-      this.size = 100;
-      this.totalElements = this.totalproject;
-      this.totalPages = this.totalproject / 100;
-      this.pageNumber = 0
-    }
-    else {
-      if (offset.offset != 0 || this.callPagination == true){
-      this.callPagination = true
-      this.projectOverview = []
-      this.projects.data = [];
-      this.apiService.FiltersByPage(this.groupData, (offset.offset) * 100, 100).then((res: any) => {
-        res.portfolioDetails.sort((a, b) => {
-          return (a.projectUid < b.projectUid ? -1 : a.projectUid == b.projectUid ? 0 : 1);
-        })
-        res.projectDetails.sort((a, b) => {
-          return (a.problemUniqueId < b.problemUniqueId ? -1 : a.problemUniqueId == b.problemUniqueId ? 0 : 1);
-        })
-        res.trendingIndicators.sort((a, b) => {
-          return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-        })
-        if (res.conditionalFormattingLabels != null) {
-          res.conditionalFormattingLabels.sort((a, b) => {
-            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
-          })
-        }
-        this.projectOverview = res.portfolioDetails
-        this.bulkreportdata = res.portfolioDetails
-        this.projects.data = res.portfolioDetails;
-        for (var i = 0; i < this.projectOverview.length; i++) {
-          this.projectOverview[i].projectCapitalOe = this.projects.data[i].phase +
-            ' - ' +
-            (this.projects.data[i].capitalPhaseAbbreviation
-              ? this.projects.data[i].capitalPhaseAbbreviation
-              : 'NA') +
-            ' - ' +
-            (this.projects.data[i].oePhaseAbbreviation
-              ? this.projects.data[i].oePhaseAbbreviation
-              : 'NA');
-          this.projectOverview[i].overallStatus == "YellowStop" ? this.projectOverview[i].overallStatus = "RedStop" : this.projectOverview[i].overallStatus == "RedStop" ? this.projectOverview[i].overallStatus = "YellowStop" : this.projectOverview[i].overallStatus
-          this.projectOverview[i].scheduleIndicator == "YellowStop" ? this.projectOverview[i].scheduleIndicator = "RedStop" : this.projectOverview[i].scheduleIndicator == "RedStop" ? this.projectOverview[i].scheduleIndicator = "YellowStop" : this.projectOverview[i].scheduleIndicator
-          this.projectOverview[i].riskIndicator == "YellowStop" ? this.projectOverview[i].riskIndicator = "RedStop" : this.projectOverview[i].riskIndicator == "RedStop" ? this.projectOverview[i].riskIndicator = "YellowStop" : this.projectOverview[i].riskIndicator
-          this.projectOverview[i].askNeedIndicator == "YellowStop" ? this.projectOverview[i].askNeedIndicator = "RedStop" : this.projectOverview[i].askNeedIndicator == "RedStop" ? this.projectOverview[i].askNeedIndicator = "YellowStop" : this.projectOverview[i].askNeedIndicator
-          this.projectOverview[i].budgetIndicator == "YellowStop" ? this.projectOverview[i].budgetIndicator = "RedStop" : this.projectOverview[i].budgetIndicator == "RedStop" ? this.projectOverview[i].budgetIndicator = "YellowStop" : this.projectOverview[i].budgetIndicator
-          this.projectOverview[i].budgetSpendIndicator == "YellowStop" ? this.projectOverview[i].budgetSpendIndicator = "RedStop" : this.projectOverview[i].budgetSpendIndicator == "RedStop" ? this.projectOverview[i].budgetSpendIndicator = "YellowStop" : this.projectOverview[i].budgetSpendIndicator
-          var preffix = ""
-          if (res.projectDetails[i].isArchived && !res.projectDetails[i].isConfidential) {
-            preffix = "[ARCHIVED]"
-          }
-          else if (res.projectDetails[i].isConfidential && !res.projectDetails[i].isArchived) {
-            preffix = "[CONF]"
-          }
-          else if (res.projectDetails[i].isConfidential && res.projectDetails[i].isArchived) {
-            preffix = "[ARCHIVED CONF]"
-          }
-          res.projectDetails[i].problemTitle = preffix + " " + res.projectDetails[i].problemTitle
-          // this.projectOverview[i].CAPEX = this.projectOverview[i].localCurrentYrCapExPlan
-          this.projectOverview[i].CAPEX = this.projectOverview[i].localTotalApprovedCapex
-          this.projectOverview[i].FORECAST = this.projectOverview[i].localForecastLbecapEx
-          this.projectOverview[i].currencyAbb = this.projects.data[i].localCurrencyAbbreviation
-
-          this.projectOverview[i].projectDataQualityString = (~~this.projectOverview[i].projectDataQuality).toString() + "%"
-          this.projectOverview[i].calculatedEmissionsImpact = res.projectDetails[i].calculatedEmissionsImpact ? res.projectDetails[i].calculatedEmissionsImpact.toFixed(1).toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].calculatedEmissionsImpact;
-          this.projectOverview[i].waterImpactUnits = res.projectDetails[i].waterImpactUnits ? res.projectDetails[i].waterImpactUnits.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : res.projectDetails[i].waterImpactUnits;
-          this.projectOverview[i].problemId = res.projectDetails[i].problemId;
-          this.projectOverview[i].problemTitle = res.projectDetails[i].problemTitle;
-          this.projectOverview[i].nextMilestoneFinishDate = this.projects.data[i].nextMilestoneFinishDate ? new Date(this.projects.data[i].nextMilestoneFinishDate) : this.projects.data[i].nextMilestoneFinishDate;
-          this.projectOverview[i].executionCompleteDate = this.projects.data[i].executionCompleteDate ? new Date(this.projects.data[i].executionCompleteDate) : this.projects.data[i].executionCompleteDate;
-          this.projectOverview[i].executionDuration = this.projects.data[i].executionDuration ? this.projects.data[i].executionDuration.toString().replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') : this.projects.data[i].executionDuration;
-          this.projectOverview[i].overallStatusIndicator = res.trendingIndicators[i].overallStatusIndicator
-          this.projectOverview[i].scheduleIndicator = res.trendingIndicators[i].scheduleIndicator
-          this.projectOverview[i].riskIssueIndicator = res.trendingIndicators[i].riskIssueIndicator
-          this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
-          this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
-          this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
-          this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
-          this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
-          this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
-        }
-        if (this.sorting.name != "") {
-          this.projectOverview.sort
-          if (this.sorting.dir == "asc") {
-            this.projectOverview.sort((a, b) => {
-              return (a.this.sorting.name < b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
-            })
-          }
-          else {
-            this.projectOverview.sort((a, b) => {
-              return (a.this.sorting.name > b.this.sorting.name ? -1 : a.this.sorting.name == b.this.sorting.name ? 0 : 1);
-            })
-          }
-        }
-              // Initialize toggles for the current page
-    this.initializeToggle('Project Proposal', this.pageNumber);
-    this.initializeToggle('Project Charter', this.pageNumber);
-    this.initializeToggle('Performance Dashboard', this.pageNumber);
-    this.initializeToggle('Budget Dashboard', this.pageNumber);
-    this.initializeToggle('Project Closeout', this.pageNumber);
-    this.initializeToggle('GMSGQ Product Team', this.pageNumber);
-        this.size = 100;
-        this.totalElements = this.totalproject;
-        this.totalPages = this.totalproject / 100;
-        this.pageNumber = offset.offset
-      })
-    }
-  }
-  }
 
   changePhase(phaseId) {
     var result = []
