@@ -1,0 +1,38 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Metric repository View</div>
+    <div style="padding-top: 2px"><a (click)="this.myPreferenceService.toggleDrawerOpen('', '',[],'')"
+                                     href="javascript:void(0)" title="Close">
+        <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+    </a>
+    </div>
+</div>
+<form class="w-full overflow-hidden" [formGroup]="metricRepositoryForm" (ngSubmit)="submitriskissue()">
+    <div class=" form-ask-need h-[87vh] overflow-y-scroll">
+        <spot-input class="w-full" formControlName="globalLocal" [label]="'Parent Program'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="managingPortfolio" [label]="'Managing Portfolio'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="category" [label]="'Category'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="metricName" [label]="'Metric Name'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="Unit" [label]="'Unit'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="metricFormat" [label]="'Metric Format'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="metricDesscriptioFn" [label]="'Metric Description'">
+        </spot-input>
+        <spot-input class="w-full" formControlName="metricUsage" [label]="'Metric Usage'">
+        </spot-input>
+
+    </div>
+    <div class="flex items-start justify-between  form-ask-need">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="this.myPreferenceService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
+            Submit
+        </button>
+    </div>
+</form>
