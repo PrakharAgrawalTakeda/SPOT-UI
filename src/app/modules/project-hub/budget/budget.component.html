@@ -140,14 +140,26 @@
                                     <div><strong>Submited By</strong></div>
                                     <div></div>
                                 </div>
-                                <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full mb-8">
-                                    <spot-input class="w-full" formControlName="reference"  showLabel="false" >
+                                <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full">
+                                    <spot-input class="w-full" formControlName="referenceCurrent"  showLabel="false" >
                                     </spot-input>
-                                    <spot-input class="w-full" formControlName="period" showLabel="false">
+                                    <spot-input class="w-full" formControlName="periodCurrent" showLabel="false">
                                     </spot-input>
-                                    <spot-input class="w-full" formControlName="lastSubmitted" showLabel="false" >
+                                    <spot-input-date class="w-full" formControlName="lastSubmittedCurrent" showLabel="false" >
+                                    </spot-input-date>
+                                    <spot-input class="w-full" formControlName="submittedByCurrent" showLabel="false" p>
                                     </spot-input>
-                                    <spot-input class="w-full" formControlName="submittedBy" showLabel="false" p>
+                                </div>
+                                <div *ngIf="!preliminaryExists" class="mb-8">
+                                </div>
+                                <div *ngIf="preliminaryExists" class="grid grid-cols-4 gap-x-6 gap-y-0 w-full mb-8">
+                                    <spot-input class="w-full" formControlName="referencePreliminary"  showLabel="false" >
+                                    </spot-input>
+                                    <spot-input class="w-full" formControlName="periodPreliminary" showLabel="false">
+                                    </spot-input>
+                                    <spot-input-date class="w-full" formControlName="lastSubmittedPreliminary" showLabel="false" >
+                                    </spot-input-date>
+                                    <spot-input class="w-full" formControlName="submittedByPreliminary" showLabel="false" p>
                                     </spot-input>
                                 </div>
                             </div>
@@ -155,7 +167,7 @@
 
                         <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full mb-8">
                             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">CAPEX</div>
-                            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-secondary">Current 2023LBE06 versus Plan 2023LBE02
+                            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-secondary">{{headerLabel}}
                             </div>
                             <div  class="flex justify-end" >
                                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
