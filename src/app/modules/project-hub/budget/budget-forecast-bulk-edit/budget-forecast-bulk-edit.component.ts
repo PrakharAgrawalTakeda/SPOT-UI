@@ -4,7 +4,7 @@ import {ProjectHubService} from "../../project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
 import {RoleService} from "../../../../core/auth/role.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
@@ -14,7 +14,7 @@ import {FormArray, FormControl, FormGroup} from "@angular/forms";
 })
 export class BudgetForecastBulkEditComponent {
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService,
-                public fuseAlert: FuseConfirmationService, private router: Router) {
+                public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute,) {
         this.forecastsForm.valueChanges.subscribe(res => {
                 this.formValue()
                 if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
@@ -26,7 +26,7 @@ export class BudgetForecastBulkEditComponent {
         })
     }
 
-
+    id: string = "";
     forecasts = []
     forecastsDb = []
     forecastsSubmit = []
@@ -34,14 +34,15 @@ export class BudgetForecastBulkEditComponent {
     lookupdata: any[]
     fTableEditStack = []
     forecastsForm = new FormArray([])
+    mainObj: any = {};
 
     ngOnInit(): void {
         this.forecasts = this.projecthubservice.all
-        console.log("Aaaaaaaa", this.forecasts);
         this.dataloader()
     }
 
     dataloader() {
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
             if (this.forecasts.length > 0) {
                 this.forecastsDb = this.forecasts.map(x => {
                     return {
@@ -144,10 +145,13 @@ export class BudgetForecastBulkEditComponent {
     submitForecasts() {
         if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
             this.projecthubservice.isFormChanged = false
-            this.apiService.bulkEditKeyAssumptionsForOption(this.forecastsSubmit, this.projecthubservice.projectid).then(res => {
-                this.projecthubservice.submitbutton.next(true)
-                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            this.mainObj.budgetForecasts = this.forecastsSubmit
+            console.log("aaaaaaaaaa", this.mainObj)
+            this.apiService.updateBudgetPageInfo(this.id,  this.mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.successSave.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
         } else {
             this.projecthubservice.submitbutton.next(true)
@@ -157,36 +161,36 @@ export class BudgetForecastBulkEditComponent {
     }
     isCellEditable(month: string): boolean {
         const currentDate = new Date();
-        const currentMonth = currentDate.getMonth();
+        const currentMonth = currentDate.getMonth()-3;
         const monthNumber = this.getMonthNumber(month);
         return currentMonth <= monthNumber;
     }
     getMonthNumber(month: string):  number {
         switch (month) {
             case 'jan':
-                return 0;
-            case 'feb':
-                return 1;
-            case 'mar':
-                return 2;
-            case 'apr':
-                return 3;
-            case 'may':
-                return 4;
-            case 'jun':
-                return 5;
-            case 'jul':
-                return 6;
-            case 'aug':
-                return 7;
-            case 'sep':
-                return 8;
-            case 'oct':
                 return 9;
-            case 'nov':
+            case 'feb':
                 return 10;
-            case 'dec':
+            case 'mar':
                 return 11;
+            case 'apr':
+                return 0;
+            case 'may':
+                return 1;
+            case 'jun':
+                return 2;
+            case 'jul':
+                return 3;
+            case 'aug':
+                return 4;
+            case 'sep':
+                return 5;
+            case 'oct':
+                return 6;
+            case 'nov':
+                return 7;
+            case 'dec':
+                return 8;
             default:
                 return 12;
         }
