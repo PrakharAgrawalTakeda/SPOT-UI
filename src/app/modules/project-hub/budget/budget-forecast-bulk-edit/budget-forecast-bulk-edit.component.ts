@@ -17,27 +17,28 @@ export class BudgetForecastBulkEditComponent {
                 public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute,) {
         this.forecastsForm.valueChanges.subscribe(res => {
                 this.formValue()
-                if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
-                    this.projecthubservice.isFormChanged = true
-                } else {
-                    this.projecthubservice.isFormChanged = false
-                }
-
+                this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
         })
     }
 
     id: string = "";
     forecasts = []
+    opexEntries = [];
     forecastsDb = []
     forecastsSubmit = []
     viewContent: boolean = false
     lookupdata: any[]
     fTableEditStack = []
     forecastsForm = new FormArray([])
-    mainObj: any = {};
 
     ngOnInit(): void {
-        this.forecasts = this.projecthubservice.all
+        for (const obj of this.projecthubservice.all.budgetForecasts) {
+            if (obj.budgetData === "CapEx Forecast") {
+                this.forecasts.push(obj);
+            } else if (obj.budgetData === "OpEx Forecast") {
+                this.opexEntries.push(obj);
+            }
+        }
         this.dataloader()
     }
 
@@ -68,6 +69,26 @@ export class BudgetForecastBulkEditComponent {
                         "y4": x.y4,
                         "y5": x.y5,
                         "cumulativeTotal": x.cumulativeTotal,
+                        "isOpen": x.isopen,
+                        "activeID": x.activeID,
+                        "activeOrder": x.activeOrder,
+                        "actualMonths": x.actualMonths,
+                        "afpDeviationCodeID": x.afpDeviationCodeID,
+                        "budgetData": x.budgetData,
+                        "budgetDataID": x.budgetDataID,
+                        "budgetDataTypeID": x.budgetDataTypeID,
+                        'budgetGlobalID': x.budgetGlobalID,
+                        "committedSpend": x.committedSpend,
+                        "dateMasterID": x.dateMasterID,
+                        "financialMonthStartDate": x.financialMonthStartDate,
+                        "label": x.label,
+                        "labelID": x.labelID,
+                        "lastSubmitted": x.lastSubmitted,
+                        "mtdpDeviationCodeID": x.mtdpDeviationCodeID,
+                        "periodName": x.periodName,
+                        "projectID": x.projectID,
+                        "submittedByID": x.submittedByID,
+                        "userName": x.userName,
                     }
                 })
                 for (var i of this.forecasts) {
@@ -94,8 +115,29 @@ export class BudgetForecastBulkEditComponent {
                         y4: new FormControl(i.y4),
                         y5: new FormControl(i.y5),
                         cumulativeTotal: new FormControl(i.cumulativeTotal),
+                        isopen: new FormControl(i.isopen),
+                        activeID: new FormControl(i.activeID),
+                        activeOrder:  new FormControl(i.activeOrder),
+                        actualMonths: new FormControl(i.actualMonths),
+                        afpDeviationCodeID:  new FormControl(i.afpDeviationCodeID),
+                        budgetData: new FormControl(i.budgetData),
+                        budgetDataID: new FormControl(i.budgetDataID),
+                        budgetDataTypeID: new FormControl(i.budgetDataTypeID),
+                        budgetGlobalID: new FormControl(i.budgetGlobalID),
+                        committedSpend: new FormControl(i.committedSpend),
+                        dateMasterID: new FormControl(i.dateMasterID),
+                        financialMonthStartDate: new FormControl(i.financialMonthStartDate),
+                        label: new FormControl(i.label),
+                        labelID: new FormControl(i.labelID),
+                        lastSubmitted: new FormControl(i.lastSubmitted),
+                        mtdpDeviationCodeID: new FormControl(i.mtdpDeviationCodeID),
+                        periodNam: new FormControl(i.periodNam),
+                        projectID: new FormControl(i.projectID),
+                        submittedByID: new FormControl(i.submittedByID),
+                        userNae: new FormControl(i.userNam),
                     }))
                 }
+
             }
     }
 
@@ -127,6 +169,27 @@ export class BudgetForecastBulkEditComponent {
                     "y4": i.y4,
                     "y5": i.y5,
                     "cumulativeTotal": i.cumulativeTotal,
+                    "isopen": i.isopen,
+                    "activeID": i.activeID,
+                    "activeOrder": i.activeOrder,
+                    "actualMonths": i.actualMonths,
+                    "afpDeviationCodeID": i.afpDeviationCodeID,
+                    "budgetData": i.budgetData,
+                    "budgetDataID": i.budgetDataID,
+                    "budgetDataTypeID": i.budgetDataTypeID,
+                    'budgetGlobalID': i.budgetGlobalID,
+                    "committedSpend": i.committedSpend,
+                    "dateMasterID": i.dateMasterID,
+                    "financialMonthStartDate": i.financialMonthStartDate,
+                    "label": i.label,
+                    "labelID": i.labelID,
+                    "lastSubmitted": i.lastSubmitted,
+                    "mtdpDeviationCodeID": i.mtdpDeviationCodeID,
+                    "periodName": i.periodName,
+                    "projectID": i.projectID,
+                    "submittedByID": i.submittedByID,
+                    "userName": i.userName,
+
                 })
             }
         } else {
@@ -145,9 +208,12 @@ export class BudgetForecastBulkEditComponent {
     submitForecasts() {
         if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
             this.projecthubservice.isFormChanged = false
-            this.mainObj.budgetForecasts = this.forecastsSubmit
-            console.log("aaaaaaaaaa", this.mainObj)
-            this.apiService.updateBudgetPageInfo(this.id,  this.mainObj).then(res => {
+            const mainObj = this.projecthubservice.all;
+            mainObj.budgetForecasts = this.forecastsSubmit;
+            this.opexEntries.forEach(x => {
+                mainObj.budgetForecasts.push(x);
+            });
+            this.apiService.updateBudgetPageInfo(this.id,  mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.successSave.next(true)
@@ -197,6 +263,23 @@ export class BudgetForecastBulkEditComponent {
     }
     getNgxDatatableNumberHeader(): any {
         return ' ngx-number-header';
+    }
+    recalculateAnnualTotal() {
+        const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value === true);
+        const newAnnualTotal = isOpenEntry.value.apr + isOpenEntry.value.may + isOpenEntry.value.jun + isOpenEntry.value.jul + isOpenEntry.value.aug + isOpenEntry.value.sep + isOpenEntry.value.oct + isOpenEntry.value.nov + isOpenEntry.value.dec + isOpenEntry.value.jan + isOpenEntry.value.feb + isOpenEntry.value.mar;
+        isOpenEntry.patchValue({
+            annualTotal: newAnnualTotal
+        });
+        this.forecasts.find(value => value.isopen === true).annualTotal = newAnnualTotal;
+        this.recalculateTotalCapex()
+    }
+    recalculateTotalCapex() {
+        const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value === true);
+        const newTotal = isOpenEntry.value.annualTotal +  isOpenEntry.value.y1 + isOpenEntry.value.y2 + isOpenEntry.value.y3 + isOpenEntry.value.y4 + isOpenEntry.value.y5;
+        isOpenEntry.patchValue({
+            cumulativeTotal: newTotal
+        });
+        this.forecasts.find(value => value.isopen === true).cumulativeTotal = newTotal;
     }
 
 }

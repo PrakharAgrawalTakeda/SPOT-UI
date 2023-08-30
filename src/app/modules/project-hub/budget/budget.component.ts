@@ -27,7 +27,7 @@ export class BudgetComponent implements OnInit {
     afpColor: string;
     ydtpColor: string;
     mdtpColor: string;
-    capexTableData: any[];
+    budgetForecasts: any;
     headerLabel: string = ""
     preliminaryExists: boolean = false;
 
@@ -105,8 +105,8 @@ export class BudgetComponent implements OnInit {
                 this.opexField = !! response[3].budget.opExRequired;
                 this.capexField = !!response[3].budget.capExRequired;
                 this.generalInfoPatchValue(response[3])
-                this.capexTableData = response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
-                this.forecastPatchGeneralForm(this.capexTableData, response[3].budget);
+                this.budgetForecasts = response[3];
+                this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), response[3].budget);
                 this.viewContent = true
             })
             .catch((error) => {

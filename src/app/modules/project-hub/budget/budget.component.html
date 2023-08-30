@@ -181,7 +181,7 @@
                                 <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': tfpColor}">
-                                        {{ budgetForecastForm.controls.tfpPercentage.value }}
+                                        {{ budgetForecastForm.controls.tfpPercentage.value }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': tfpColor}">
                                         <div class="mr-4">
@@ -194,7 +194,7 @@
                                 <mat-label class="flex"><strong>Annual Forecast Performance AFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': afpColor}">
-                                        {{ budgetForecastForm.controls.afpPercentage.value }}
+                                        {{ budgetForecastForm.controls.afpPercentage.value }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': afpColor}">
                                         <div class="mr-4">
@@ -213,7 +213,7 @@
                                 <mat-label class="flex"><strong>Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': ydtpColor}">
-                                        {{ budgetForecastForm.controls.ytdpPercentage.value }}
+                                        {{ budgetForecastForm.controls.ytdpPercentage.value }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': ydtpColor}">
                                         <div class="mr-4">
@@ -226,7 +226,7 @@
                                 <mat-label class="flex"><strong>Month To Date Performance MTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': mdtpColor}">
-                                        {{ budgetForecastForm.controls.mtdpPercentage.value }}
+                                        {{ budgetForecastForm.controls.mtdpPercentage.value }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': mdtpColor}">
                                         <div class="mr-4">
@@ -242,7 +242,7 @@
                                 </div>
                             </mat-form-field>
                         </div>
-                        <app-budget-capex-opex-table [mode]="'Capex'" [data]="capexTableData"></app-budget-capex-opex-table>
+                        <app-budget-capex-opex-table [mode]="'Capex'" [inputData]="budgetForecasts"></app-budget-capex-opex-table>
                     </div>
                 </ng-template>
                 <ng-template #capexFalseBlock>
