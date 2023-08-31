@@ -35,7 +35,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   lookupdata: any = [];
   localCurrencyList: any = [];
   local: any = [];
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", "Strategic Initiative / Program"]
+  isStrategicInitiative: boolean = false
   owningOrganizationValues = []
   changeExecutionScope: boolean = false
   generalInfoForm = new FormGroup({
@@ -194,6 +195,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
       api.then((res: any) => {
         this.generalInfo = res
         this.filterCriteria = this.projectHubService.all
+        this.isStrategicInitiative = res.projectData.problemType == "Strategic Initiative / Program"
         this.generalInfoForm.patchValue({
           problemTitle: res.projectData.problemTitle,
           problemType: res.projectData.problemType,
