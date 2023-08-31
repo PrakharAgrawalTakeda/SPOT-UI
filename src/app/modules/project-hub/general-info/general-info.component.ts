@@ -25,9 +25,10 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   @Input() callLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' | 'CloseOut' | 'BusinessCase' = 'ProjectHub'
   @Input() viewElements: any = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "enviornmentalPortfolio", "isCapsProject", "projectManager", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "isTechTransfer", "isOeproject", "isQualityRef", "StrategicDrivers", "primaryKPI", "isAgile", "isPobos", "isGmsgqltannualMustWin", "isSiteAssessment", "isGoodPractise"]
   generalInfoType: 'GeneralInfoSingleEdit' | 'GeneralInfoSingleEditCloseOut' | 'GeneralInfoSingleEditProjectCharter' | 'GeneralInfoSingleEditProjectProposal' | 'GeneralInfoSingleEditBusinessCase' | 'GeneralInfoSingleEditStrategicInitiative' = 'GeneralInfoSingleEdit'
-  strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' | 'StrategicDriversSingleEditStrategicInitiative' | 'StrategicDriversSingleEditProjectProposalStrategicInitiative' = 'StrategicDriversSingleEdit'
+  strategicDriversType: 'StrategicDriversSingleEdit' | 'StrategicDriversSingleEditCloseOut' | 'StrategicDriversSingleEditProjectCharter' | 'StrategicDriversSingleEditProjectProposal' | 'StrategicDriversSingleEditStrategicInitiative' | 'StrategicDriversSingleEditProjectProposalStrategicInitiative' | 'StrategicDriversSingleEditCloseOutStrategicInitiative' = 'StrategicDriversSingleEdit'
   viewContent: boolean = false
   isWizzard: boolean = false
+  projectNameLabel:string = "Project Name"
   lookUpData: any = []
   kpiData: any = []
   id: string = ""
@@ -234,6 +235,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   generalInfoPatchValue(response) {
     this.isStrategicInitiative = response.projectData.problemType == "Strategic Initiative / Program"
     if (this.isStrategicInitiative) {
+      this.projectNameLabel = "Initiaitive Name"
       if (this.callLocation == "ProjectHub") {
         this.viewElements = ["isConfidential", "isArchived", "problemTitle", "parentProject", "portfolioOwner", "excecutionScope", "owningOrganization", "sponsor", "topsGroup", "primaryProduct", "otherImpactedProducts", "problemType", "projectDescription", "StrategicDrivers", "primaryKPI", "isAgile"]
         this.strategicDriversType = "StrategicDriversSingleEditStrategicInitiative"
@@ -241,7 +243,21 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       }
       if(this.callLocation == "ProjectProposal"){
         this.viewElements = this.removeDuplicates(this.viewElements, ["isPobos", "isGmsgqltannualMustWin", "isSiteAssessment"])
+        this.viewElements.push("problemType")
         this.strategicDriversType = "StrategicDriversSingleEditProjectProposalStrategicInitiative"
+      }
+      if(this.callLocation == "BusinessCase"){
+        this.viewElements.push("problemType")
+        this.projectNameLabel = "Initiative Title/ Project Name"
+      }
+      if(this.callLocation == "ProjectCharter"){
+        this.viewElements.push("problemType")
+        this.projectNameLabel = "Initiative Title/ Project Name"
+      }
+      if(this.callLocation == "CloseOut"){
+        this.viewElements.push(...["problemType", "isAgile"])
+        this.strategicDriversType = "StrategicDriversSingleEditCloseOutStrategicInitiative"
+        this.projectNameLabel = "Initiative Title/ Project Name"
       }
     }
 

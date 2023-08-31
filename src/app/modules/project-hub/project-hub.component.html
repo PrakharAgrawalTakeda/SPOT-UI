@@ -129,16 +129,19 @@
         <app-strategic-drivers
             *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEdit'"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditStrategicInitiative'"
-            [viewElements]="['primaryKPI', 'isAgile']"></app-strategic-drivers>
+            [viewElements]="['primaryKPI', 'isAgile', 'agilePrimaryWorkstream', 'agileSecondaryWorkstream', 'agileWave']"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOut'"
             [subCallLocation]="'CloseOut'" [viewElements]="['isGoodPractise']"></app-strategic-drivers>
+        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditCloseOutStrategicInitiative'"
+            [subCallLocation]="'CloseOut'" [viewElements]="['isGoodPractise','isAgile', 'agilePrimaryWorkstream', 'agileSecondaryWorkstream', 'agileWave']"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectCharter'"
             [subCallLocation]="'ProjectCharter'"
             [viewElements]="['primaryKPI','isAgile','agilePrimaryWorkstream','agileSecondaryWorkstream','agileWave']"></app-strategic-drivers>
         <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposal'"
             [subCallLocation]="'ProjectProposal'"
             [viewElements]='["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory"]'></app-strategic-drivers>
-        <app-strategic-drivers *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposalStrategicInitiative'"
+        <app-strategic-drivers
+            *ngIf="projecthubservice.itemtype == 'StrategicDriversSingleEditProjectProposalStrategicInitiative'"
             [subCallLocation]="'ProjectProposal'"
             [viewElements]='["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave"]'></app-strategic-drivers>
         <app-phase-state *ngIf="projecthubservice.itemtype == 'PhaseState'"></app-phase-state>
