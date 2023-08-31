@@ -64,7 +64,6 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     approvedDate: new FormControl(''),
     opU: new FormControl(''),
     projectId: new FormControl(''),
-    localCurrencyAbbreviation: new FormControl(''),
     //
     projectProposalApprovedDate: new FormControl(''),
     functionGroupID:  new FormControl(''),
@@ -262,7 +261,6 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
           proposalStatement: response.projectData.proposalStatement,
           projectReviewedYN: this.lookUpData.find(x => x.lookUpId == response.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
           projectProposalApprovedDate: response.projectData.projectProposalApprovedDate,
-          localCurrencyAbbreviation: response.localCurrencyAbbreviation,
           //Stategic Drivers
           primaryKPI: response.projectData.primaryKpi ? this.kpiData.find(x => x.kpiid == response.projectData.primaryKpi).kpiname : '',
           isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream,
