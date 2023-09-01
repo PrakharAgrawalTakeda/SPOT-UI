@@ -6,8 +6,8 @@
             <div class="flex items-start justify-between">
                 <div >
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                            (click)="projecthubservice.toggleDrawerOpen('', '', '', id, true)">
-                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                            (click)="projecthubservice.toggleDrawerOpen('BudgetForecastBulkEdit', '', inputData, id, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
                 </div>
             </div>
@@ -15,7 +15,7 @@
     </div>
     <div class="overflow-x-auto">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                       class="font-medium text-sm text-default whitespace-nowrap" [rows]="data">
+                       class="whitespace-nowrap twelve-px-font-table" [rows]="data">
             <ngx-datatable-column name="Reference" prop="active" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
@@ -26,7 +26,7 @@
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Historical" prop="historical" [flexGrow]="2.5"  [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="Historical" prop="historical" [flexGrow]="2"  [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
@@ -116,7 +116,7 @@
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="FY2028+" prop="y5" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="FY2028+" prop="y5" [flexGrow]="2" [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>

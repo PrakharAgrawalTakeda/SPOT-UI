@@ -11,7 +11,8 @@ import {FuseConfirmationService} from "../../../../../@fuse/services/confirmatio
 })
 export class BudgetCapexOpexTableComponent {
     @Input() mode: 'Capex' | 'Opex' = 'Capex'
-    @Input() data: any[];
+    @Input() inputData: any;
+    data: any[];
     id: string = ''
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService, private router: Router) {
@@ -22,6 +23,7 @@ export class BudgetCapexOpexTableComponent {
         })
     }
     ngOnInit(): void {
+        this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
         this.dataloader()
     }
 

@@ -23,14 +23,13 @@ export class BudgetComponent implements OnInit {
     budgetPageInfo:any = "";
     fundingInformations: any = [];
     showAddNewButton: boolean = false;
-    forecastData: any;
-    forecastY1Data: any;
-    forecastGeneralData :any;
     tfpColor: string;
     afpColor: string;
     ydtpColor: string;
     mdtpColor: string;
-    capexTableData: any[];
+    budgetForecasts: any;
+    headerLabel: string = ""
+    preliminaryExists: boolean = false;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -63,11 +62,14 @@ export class BudgetComponent implements OnInit {
         budgetCommentary: new FormControl(''),
     })
     budgetForecastForm = new FormGroup({
-        reference: new FormControl(''),
-        period: new FormControl(''),
-        lastSubmitted: new FormControl(''),
-        submittedBy: new FormControl(''),
-        headerLabel: new FormControl(''),
+        referenceCurrent: new FormControl(''),
+        periodCurrent: new FormControl(''),
+        lastSubmittedCurrent: new FormControl(''),
+        submittedByCurrent: new FormControl(''),
+        referencePreliminary: new FormControl(''),
+        periodPreliminary: new FormControl(''),
+        lastSubmittedPreliminary: new FormControl(''),
+        submittedByPreliminary: new FormControl(''),
         tfpPercentage: new FormControl(0),
         tfpValue: new FormControl(0),
         afpPercentage: new FormControl(0),
@@ -103,8 +105,8 @@ export class BudgetComponent implements OnInit {
                 this.opexField = !! response[3].budget.opExRequired;
                 this.capexField = !!response[3].budget.capExRequired;
                 this.generalInfoPatchValue(response[3])
-                this.capexTableData = response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
-                this.forecastPatchGeneralForm(this.capexTableData, response[3].budget);
+                this.budgetForecasts = response[3];
+                this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), response[3].budget);
                 this.viewContent = true
             })
             .catch((error) => {
@@ -150,23 +152,32 @@ export class BudgetComponent implements OnInit {
     forecastPatchGeneralForm(forecast:any, budget:any){
         const planMtdpDate = new Date(forecast.find(x => x.active == 'Plan').financialMonthStartDate)
         const currentMtdpDate = new Date(forecast.find(x => x.active == 'Current').financialMonthStartDate)
+        if(forecast.find(x => x.active == 'Preliminary')){
+            this.preliminaryExists = true;
+            this.budgetForecastForm.patchValue({
+                referencePreliminary: forecast.find(x => x.active == 'Preliminary')?.active ? forecast.find(x => x.active == 'Preliminary').active : "",
+                periodPreliminary: forecast.find(x => x.active == 'Preliminary')?.periodName ? forecast.find(x => x.active == 'Preliminary').periodName : "" ,
+                lastSubmittedPreliminary: forecast.find(x => x.active == 'Preliminary')?.lastSubmitted ? forecast.find(x => x.active == 'Preliminary').lastSubmitted: "",
+                submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
+            })
+        }
         this.budgetForecastForm.patchValue({
-            // reference: "",
-            // period: response.getProjectBudgetByIDResult.ForecastPeriod,
-            // lastSubmitted: response.getProjectBudgetByIDResult.LastSubmitted,
-            // submittedBy: response.getProjectBudgetByIDResult.SubmittedBy,
-            tfpPercentage: forecast.find(x => x.active == 'Plan').cumulativeTotal/(budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 1),
+            referenceCurrent: forecast.find(x => x.active == 'Current').active,
+            periodCurrent: forecast.find(x => x.active == 'Current').periodName,
+            lastSubmittedCurrent: forecast.find(x => x.active == 'Current').lastSubmitted,
+            submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
+            tfpPercentage:  Number((forecast.find(x => x.active == 'Plan').cumulativeTotal / (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 1)).toFixed(2)),
             tfpValue: forecast.find(x => x.active == 'Plan').cumulativeTotal - (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0),
-            afpPercentage: forecast.find(x => x.active == 'Current').annualTotal/forecast.find(x => x.active == 'Plan').annualTotal,
+            afpPercentage: Number((forecast.find(x => x.active == 'Current').annualTotal/forecast.find(x => x.active == 'Plan').annualTotal).toFixed(2)),
             afpValue: forecast.find(x => x.active == 'Current').annualTotal - forecast.find(x => x.active == 'Plan').annualTotal,
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
-            ytdpPercentage: forecast.find(x => x.active == 'Current').historical / forecast.find(x => x.active == 'Plan').annualTotal,
-            ytdpValue: forecast.find(x => x.active == 'Current').historical - forecast.find(x => x.active == 'Plan').annualTotal,
-            mtdpPercentage: forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] /  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())],
+            ytdpPercentage: Number((forecast.find(x => x.active == 'Current').historical / forecast.find(x => x.active == 'Plan').historical).toFixed(2)),
+            ytdpValue: forecast.find(x => x.active == 'Current').historical - forecast.find(x => x.active == 'Plan').historical,
+            mtdpPercentage: Number((forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] /  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())]).toFixed(2)),
             mtdpValue: forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] -  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').mtdpDeviationCodeID),
-            headerLabel: "",
         })
+        this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
         this.setTextColors();
     }
     getMonthText(month: number): string {
