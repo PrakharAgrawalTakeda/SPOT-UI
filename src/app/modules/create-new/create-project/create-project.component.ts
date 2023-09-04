@@ -52,7 +52,7 @@ export class CreateProjectComponent implements OnInit {
     problemTitle: new FormControl(),
     projectsingle: new FormControl(),
     projectsingleid: new FormControl(),
-    problemType: new FormControl('Standard Project / Program'),
+    problemType: new FormControl(),
     projectDescription: new FormControl(),
     primaryProduct: new FormControl(null),
     otherImpactedProducts: new FormControl([]),
@@ -86,6 +86,7 @@ export class CreateProjectComponent implements OnInit {
     localCurrency: new FormControl(),
     isArchived: new FormControl(),
     isConfidential: new FormControl(),
+    valueCaptureStart: new FormControl('')
   })
   newmainnav: any = []
   envPortfolio:any
@@ -219,10 +220,12 @@ export class CreateProjectComponent implements OnInit {
       })
     }
     else if (index == 0) {
-      this.envPortfolio = event.enviornmentalPortfolio,
+      if(!this.SIP){
+      this.envPortfolio = event.enviornmentalPortfolio
+      }
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
-        problemType: event.problemType,
+        problemType: this.SIP ? "Strategic Initiative/Program" : event.problemType,
         localCurrency: event.localCurrency,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
@@ -237,16 +240,26 @@ export class CreateProjectComponent implements OnInit {
         owningOrganization: event.owningOrganization,
         SubmittedBy: event.SubmittedBy,
         targetGoalSituation: event.targetGoalSituation,
+        valueCaptureStart: event.valueCaptureStart
       })
     }
     else if (index == 1) {
-      this.createProjectForm.patchValue({
-        isConfidential: event.isConfidential,
+      if(this.SIP){
+        this.createProjectForm.patchValue({
+          isConfidential: event.isConfidential,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
-        projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
-        enviornmentalPortfolio: event.enviornmentalPortfolio,
-        isCapsProject: event.isCapsProject
-      })
+          projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
+        })
+      }
+      else{
+        this.createProjectForm.patchValue({
+          isConfidential: event.isConfidential,
+          projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
+          projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
+          enviornmentalPortfolio: event.enviornmentalPortfolio,
+          isCapsProject: event.isCapsProject
+        })
+      }
     }
     else if (index == 2) {
       this.createProjectForm.patchValue({

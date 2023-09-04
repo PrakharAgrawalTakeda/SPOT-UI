@@ -84,7 +84,7 @@
             </spot-select>
             <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
                 *ngIf="viewElementChecker('portfolioOwner')" formControlName="portfolioOwner" class="w-full"
-                name="portfolioOwner" [label]="'Portfolio Owner'" [Required]="callLocation == 'CreateNew'"
+                name="portfolioOwner" [label]="'Portfolio Owner'" [Required]="callLocation == 'CreateNew' || callLocation == 'CreateNewSIP'"
                 [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                 [dropDownArray]="getPortfolioOwner()" [showHint]="true" [sortByType]="'custom'"
                 [customSortPointer]="'pfid'"
@@ -92,14 +92,14 @@
             </spot-singleselect-autocomplete>
             <spot-multiselect-autocomplete *ngIf="viewElementChecker('excecutionScope')"
                 formControlName="excecutionScope" class="w-full" name="excecutionScope" [label]="'Execution Scope'"
-                [Required]="callLocation == 'CreateNew'" [placeholder]="'Execution Scope'"
+                [Required]="callLocation == 'CreateNew' || callLocation == 'CreateNewSIP'" [placeholder]="'Execution Scope'"
                 [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                 [dropDownArray]="getExcecutionScope()" [showHint]="true" [sortByType]="'custom'"
                 [customSortPointer]="'pfid'"
                 [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
             </spot-multiselect-autocomplete>
             <spot-select (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-                [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('owningOrganization')" class="w-full"
+                [Required]="callLocation == 'CreateNew' || callLocation == 'CreateNewSIP'" *ngIf="viewElementChecker('owningOrganization')" class="w-full"
                 formControlName="owningOrganization" name="owningOrganization" [label]="'Owning Organization'"
                 [placeholder]="'Owning Organization'" [showNoneOption]="true" [dropDownArrayType]="'string'"
                 [dropDownArray]="owningOrganizationValues" [showHint]="true"
@@ -131,17 +131,21 @@
                 </spot-toggle>
             </div>
             <spot-singleselect-user-autocomplete formControlName="sponsor" *ngIf="viewElementChecker('sponsor')"
-                [label]="'Sponsor'" name="sponsor" [showLabel]="true">
+                [label]="callLocation == 'CreateNewSIP'?'Strategic Initiative Owner/Sponsor': 'Sponsor'" [Required]="callLocation == 'CreateNewSIP'" name="sponsor" [showLabel]="true" [placeholder]="'Last Name, First Name'">
             </spot-singleselect-user-autocomplete>
+            <spot-input-date class="w-full read-only" *ngIf="viewElementChecker('valueCaptureStart')"
+                formControlName="valueCaptureStart" name="valueCaptureStart" [label]="'Value Capture Start'"
+                [placeholder]="'Value Capture Start'" [Required]="callLocation == 'CreateNewSIP'">
+            </spot-input-date>
             <spot-singleselect-user-autocomplete formControlName="BCAuthor" *ngIf="viewElementChecker('BCAuthor')"
-                [label]="'Business Case Author'" name="BCAuthor" [showLabel]="true">
+                [label]="'Business Case Author'" name="BCAuthor" [showLabel]="true" [placeholder]="'Last Name, First Name'">
             </spot-singleselect-user-autocomplete>
             <spot-multiselect-user-autocomplete formControlName="AdditionalAuthor"
                 *ngIf="viewElementChecker('AdditionalAuthor')" [placeholder]="'Additional Authors / Contributors'"
                 [label]="'Additional Authors / Contributors'" name="AdditionalAuthor" [showLabel]="true">
             </spot-multiselect-user-autocomplete>
             <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-                [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('primaryProduct')" class="w-full"
+                [Required]="callLocation == 'CreateNew' || callLocation == 'CreateNewSIP'" *ngIf="viewElementChecker('primaryProduct')" class="w-full"
                 formControlName="primaryProduct" name="primaryProduct" [label]="'Primary Product'"
                 [placeholder]="'Primary Product'" [valuePointer]="'fullProductName'"
                 [dropDownArray]="getActiveProducts()" [showHint]="true"
@@ -160,7 +164,7 @@
                 [dropDownArray]="getFunctionGroupID()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
             </spot-singleselect-autocomplete>
             <spot-textarea (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
-                [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('projectDescription')"
+                [Required]="callLocation == 'CreateNew' || callLocation == 'CreateNewSIP'" *ngIf="viewElementChecker('projectDescription')"
                 formControlName="projectDescription" name="projectDescription"
                 [label]="'Problem Description / Present Situation / Submission Description'"
                 [placeholder]="'Problem Description / Present Situation / Submission Description'" [showHint]="true"
