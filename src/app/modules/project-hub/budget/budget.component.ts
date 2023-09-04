@@ -32,6 +32,7 @@ export class BudgetComponent implements OnInit {
     budgetForecastsY1Opex:any;
     headerLabel: string = ""
     preliminaryExists: boolean = false;
+    retryCount = 0;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -90,6 +91,7 @@ export class BudgetComponent implements OnInit {
     }
 
     dataloader(): void {
+
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         const promises = [
             this.portApiService.getfilterlist(),
@@ -115,7 +117,13 @@ export class BudgetComponent implements OnInit {
                 this.viewContent = true
             })
             .catch((error) => {
-                console.error('Error fetching data:', error);
+                if (this.retryCount < 1) {
+                    console.error('Error fetching data, retrying once:', error);
+                    this.retryCount++;
+                    this.dataloader();
+                } else {
+                    console.error('Error fetching data:', error);
+                }
             });
         this.disabler()
     }

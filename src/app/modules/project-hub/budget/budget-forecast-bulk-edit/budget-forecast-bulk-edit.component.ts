@@ -218,7 +218,6 @@ export class BudgetForecastBulkEditComponent {
                 this.csForm.push(new FormGroup({
                     committedSpend: new FormControl(this.forecastsForm.controls.find(control => control.get('isopen').value === true).value.committedSpend),
                 }))
-                console.log("111111",this.csForm)
             }
     }
 
