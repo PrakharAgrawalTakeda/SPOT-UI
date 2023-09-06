@@ -35,7 +35,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   lookupdata: any = [];
   localCurrencyList: any = [];
   local: any = [];
-  projectTypeDropDrownValues = ["Strategic Initiative/Program","Standard Project / Program", "Simple Project", "Strategic Initiative / Program"]
+  projectTypeDropDrownValues1 = ["Strategic Initiative/Program"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   isStrategicInitiative: boolean = false
   projectNameLabel:string = "Project Name"
   owningOrganizationValues = []

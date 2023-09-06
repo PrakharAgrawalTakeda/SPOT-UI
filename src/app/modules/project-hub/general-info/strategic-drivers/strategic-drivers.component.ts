@@ -51,7 +51,7 @@ export class StrategicDriversComponent implements OnInit {
         if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
           this.projectHubService.isFormChanged = true
         }
-        else if (this.callLocation == 'CreateNew') {
+        else if (this.callLocation == 'CreateNew' || 'CreateNewSIP') {
           this.formValueStrategic.emit(this.strategicDriversForm.getRawValue())
         }
       else if (history.state.callLocation == 'CopyProject') {
@@ -365,7 +365,7 @@ export class StrategicDriversComponent implements OnInit {
     return this.viewElements.some(x => x == element)
   }
   getAgileWorkstream(): any {
-    if (this.callLocation == 'CreateNew') {
+    if (this.callLocation == 'CreateNew' || this.callLocation == 'CreateNewSIP') {
       this.agileWorkStream = this.lookupdata.filter(x => x.lookUpParentId == 'f4486388-4c52-48fc-8c05-836878da2247');
       this.agileWorkStream.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
@@ -377,7 +377,7 @@ export class StrategicDriversComponent implements OnInit {
     }
   }
   getAgileWave(): any {
-    if (this.callLocation == 'CreateNew') {
+    if (this.callLocation == 'CreateNew' || this.callLocation == 'CreateNewSIP') {
       this.agileWave = this.lookupdata.filter(x => x.lookUpParentId == '4bdbcbca-90f2-4c7b-b2a5-c337446d60b1');
       this.agileWave.sort((a, b) => {
         return a.lookUpOrder - b.lookUpOrder;
