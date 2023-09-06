@@ -3,10 +3,14 @@
              [ngClass]="{'fuse-drawer-large':myPreferenceService.fuseDrawerLarge}">
     <div>
         <app-milestone-set-view-edit *ngIf="myPreferenceService.itemtype == 'MilestoneSetsAddNew'"></app-milestone-set-view-edit>
-        <app-email-notifications-edit 
+        <app-email-notifications-edit
             *ngIf="myPreferenceService.itemtype == 'EmailNotiEdit'"></app-email-notifications-edit>
-            <app-email-notifications-table-edit
+        <app-email-notifications-table-edit
             *ngIf="myPreferenceService.itemtype == 'EmailNotiTableEdit'"></app-email-notifications-table-edit>
+        <app-metric-repository-add-edit-view
+            *ngIf="myPreferenceService.itemtype == 'MetricRepositoryAddNew'"></app-metric-repository-add-edit-view>
+        <app-metric-repository-add-edit-view
+            *ngIf="myPreferenceService.itemtype == 'MetricRepositoryEdit'"></app-metric-repository-add-edit-view>
     </div>
 </fuse-drawer>
 

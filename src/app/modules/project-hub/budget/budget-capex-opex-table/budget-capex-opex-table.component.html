@@ -1,13 +1,13 @@
 <div class="pb-6 ">
-    <div class="pb-3 pt-0 flex items-center justify-between">
+    <div *ngIf="mode!='Y1'" class="pb-3 pt-0 flex items-center justify-between">
         <div *ngIf="mode=='Capex'" ></div>
         <div *ngIf="mode=='Opex'" class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Non-FTE OPEX</div>
-        <div class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
+        <div  class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
             <div class="flex items-start justify-between">
                 <div >
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                            (click)="projecthubservice.toggleDrawerOpen('', '', '', id, true)">
-                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                            (click)="projecthubservice.toggleDrawerOpen('BudgetForecastBulkEdit', '', inputData, id, true)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                     </button>
                 </div>
             </div>
@@ -15,113 +15,118 @@
     </div>
     <div class="overflow-x-auto">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                       class="font-medium text-sm text-default whitespace-nowrap" [rows]="fundingRequests">
-            <ngx-datatable-column name="Reference" prop="reference" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
+                       class="whitespace-nowrap twelve-px-font-table" [rows]="data">
+            <ngx-datatable-column name="Reference" prop="active" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Currency" prop="reference" [flexGrow]="2.5"  [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="Currency" prop="localCurrencyAbbreviation" [flexGrow]="2.5"  [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Historical" prop="reference" [flexGrow]="2.5"  [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="Historical" prop="historical" [flexGrow]="2"  [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'" >
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Apr" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="Apr" prop="apr" [flexGrow]="1" [sortable]="false" [resizeable]="false" >
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="May" prop="may" [flexGrow]="1.25" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Jun" prop="jun" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Jul" prop="jul" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Aug" prop="aug" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Sep" prop="sep" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Oct" prop="oct" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nov" prop="nov" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Dec" prop="dec" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Jan" prop="jan" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Feb" prop="feb" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Mar" prop="mar" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value ?  value : 0}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="FY2023" prop="annualTotal" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="May" prop="reference" [flexGrow]="1.25" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="FY2024" prop="y1" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Jun" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="FY2025" prop="y2" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Jul" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="FY2026" prop="y3" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Aug" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="FY2027" prop="y4" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Sep" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="FY2028+" prop="y5" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Oct" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column  *ngIf="mode=='Capex'" name="TotalCapex" prop="cumulativeTotal" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Nov" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Dec" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Jan" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Feb" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Mar" prop="reference" [flexGrow]="1" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="FY2023" prop="reference" [flexGrow]="2" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="FY2024" prop="reference" [flexGrow]="2" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="FY2025" prop="reference" [flexGrow]="2" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="FY2026" prop="reference" [flexGrow]="2" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="FY2027" prop="reference" [flexGrow]="2" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="FY2028+" prop="reference" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="TotalOpex" prop="reference" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column  *ngIf="mode=='Opex'" name="TotalOpex" prop="cumulativeTotal" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>

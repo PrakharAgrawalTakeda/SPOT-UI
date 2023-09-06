@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProjectHubService} from "../project-hub.service";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../../core/auth/auth.service";
 import {ProjectApiService} from "../common/project-api.service";
@@ -23,9 +23,16 @@ export class BudgetComponent implements OnInit {
     budgetPageInfo:any = "";
     fundingInformations: any = [];
     showAddNewButton: boolean = false;
-    forecastData: any;
-    forecastY1Data: any;
-    forecastGeneralData :any;
+    tfpColor: string;
+    afpColor: string;
+    ydtpColor: string;
+    mdtpColor: string;
+    budgetForecasts: any;
+    budgetForecastsY1Capex:any;
+    budgetForecastsY1Opex:any;
+    headerLabel: string = ""
+    preliminaryExists: boolean = false;
+    retryCount = 0;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -58,38 +65,33 @@ export class BudgetComponent implements OnInit {
         budgetCommentary: new FormControl(''),
     })
     budgetForecastForm = new FormGroup({
-        reference: new FormControl(''),
-        period: new FormControl(''),
-        lastSubmitted: new FormControl(''),
-        submittedBy: new FormControl(''),
-        headerLabel: new FormControl(''),
-        tfpPercentage: new FormControl(''),
-        tfpValue: new FormControl(''),
-        afpPercentage: new FormControl(''),
-        afpValue: new FormControl(''),
+        referenceCurrent: new FormControl(''),
+        periodCurrent: new FormControl(''),
+        lastSubmittedCurrent: new FormControl(''),
+        submittedByCurrent: new FormControl(''),
+        referencePreliminary: new FormControl(''),
+        periodPreliminary: new FormControl(''),
+        lastSubmittedPreliminary: new FormControl(''),
+        submittedByPreliminary: new FormControl(''),
+        tfpPercentage: new FormControl(0),
+        tfpValue: new FormControl(0),
+        afpPercentage: new FormControl(0),
+        afpValue: new FormControl(0),
         afpCodeId: new FormControl(''),
-        ytdpPercentage: new FormControl(''),
-        ytdpValue: new FormControl(''),
-        mtdpPercentage:new FormControl(''),
-        mtdpValue:new FormControl(''),
+        ytdpPercentage: new FormControl(0),
+        ytdpValue: new FormControl(0),
+        mtdpPercentage:new FormControl(0),
+        mtdpValue:new FormControl(0),
         mtdpCodeId: new FormControl(''),
+        committedSpend:  new FormControl(''),
     })
 
     ngOnInit(): void {
-        this.http.get('assets/budget-data.json').subscribe(data => {
-            this.forecastData = data;
-        });
-        this.http.get('assets/budget-data2.json').subscribe(data => {
-            this.forecastY1Data = data;
-        });
-        this.http.get('assets/budget-data3.json').subscribe(data => {
-            this.forecastGeneralData = data;
-            this.forecastPatchGeneralForm(data);
-        });
         this.dataloader()
     }
 
     dataloader(): void {
+
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         const promises = [
             this.portApiService.getfilterlist(),
@@ -108,16 +110,27 @@ export class BudgetComponent implements OnInit {
                 this.opexField = !! response[3].budget.opExRequired;
                 this.capexField = !!response[3].budget.capExRequired;
                 this.generalInfoPatchValue(response[3])
+                this.budgetForecasts = response[3];
+                this.budgetForecastsY1Capex = response[3].budgetForecastsY1.filter(x => x.budgetData == "CapEx Forecast");
+                this.budgetForecastsY1Opex = response[3].budgetForecastsY1.filter(x => x.budgetData == "OpEx Forecast");
+                this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), response[3].budget);
                 this.viewContent = true
             })
             .catch((error) => {
-                console.error('Error fetching data:', error);
+                if (this.retryCount < 1) {
+                    console.error('Error fetching data, retrying once:', error);
+                    this.retryCount++;
+                    this.dataloader();
+                } else {
+                    console.error('Error fetching data:', error);
+                }
             });
         this.disabler()
     }
 
     disabler() {
         this.budgetForm.disable()
+        this.budgetForecastForm.disable()
     }
     generalInfoPatchValue(response){
         let totalCapex = 0;
@@ -149,26 +162,68 @@ export class BudgetComponent implements OnInit {
             this.showAddNewButton = true;
         }
     }
-    forecastPatchGeneralForm(response){
+    forecastPatchGeneralForm(forecast:any, budget:any){
+        const planMtdpDate = new Date(forecast.find(x => x.active == 'Plan').financialMonthStartDate)
+        const currentMtdpDate = new Date(forecast.find(x => x.active == 'Current').financialMonthStartDate)
+        if(forecast.find(x => x.active == 'Preliminary')){
+            this.preliminaryExists = true;
+            this.budgetForecastForm.patchValue({
+                referencePreliminary: forecast.find(x => x.active == 'Preliminary')?.active ? forecast.find(x => x.active == 'Preliminary').active : "",
+                periodPreliminary: forecast.find(x => x.active == 'Preliminary')?.periodName ? forecast.find(x => x.active == 'Preliminary').periodName : "" ,
+                lastSubmittedPreliminary: forecast.find(x => x.active == 'Preliminary')?.lastSubmitted ? forecast.find(x => x.active == 'Preliminary').lastSubmitted: "",
+                submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
+            })
+        }
         this.budgetForecastForm.patchValue({
-            reference: "",
-            period: response.getProjectBudgetByIDResult.ForecastPeriod,
-            lastSubmitted: response.getProjectBudgetByIDResult.LastSubmitted,
-            submittedBy: response.getProjectBudgetByIDResult.SubmittedBy,
-            tfpPercentage: response.getProjectBudgetByIDResult.TotalForecastPerformance,
-            tfpValue: response.getProjectBudgetByIDResult.TotalForecastPerformanceValue,
-            afpPercentage: response.getProjectBudgetByIDResult.AnnualForecastPerformance,
-            afpValue: response.getProjectBudgetByIDResult.AnnualForecastPerformanceValue,
-            afpCodeId: response.getProjectBudgetByIDResult.AFPDeviationCodeID,
-            ytdpPercentage: response.getProjectBudgetByIDResult.YearToDatePerformance,
-            ytdpValue: response.getProjectBudgetByIDResult.YearToDatePerformanceValue,
-            mtdpPercentage:response.getProjectBudgetByIDResult.MonthToDatePerformance,
-            mtdpValue:response.getProjectBudgetByIDResult.MonthToDatePerformanceValue,
-            mtdpCodeId: response.getProjectBudgetByIDResult.MTDPeviationCodeID,
-            headerLabel: "",
+            referenceCurrent: forecast.find(x => x.active == 'Current').active,
+            periodCurrent: forecast.find(x => x.active == 'Current').periodName,
+            lastSubmittedCurrent: forecast.find(x => x.active == 'Current').lastSubmitted,
+            submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
+            tfpPercentage:  Number((forecast.find(x => x.active == 'Plan').cumulativeTotal / (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 1)).toFixed(2)),
+            tfpValue: forecast.find(x => x.active == 'Plan').cumulativeTotal - (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0),
+            afpPercentage: Number((forecast.find(x => x.active == 'Current').annualTotal/forecast.find(x => x.active == 'Plan').annualTotal).toFixed(2)),
+            afpValue: forecast.find(x => x.active == 'Current').annualTotal - forecast.find(x => x.active == 'Plan').annualTotal,
+            afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
+            ytdpPercentage: Number((forecast.find(x => x.active == 'Current').historical / (forecast.find(x => x.active == 'Plan').historical) ? (forecast.find(x => x.active == 'Plan').historical) : 1 ).toFixed(2)),
+            ytdpValue: forecast.find(x => x.active == 'Current').historical - forecast.find(x => x.active == 'Plan').historical,
+            mtdpPercentage: Number((forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] /  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())]).toFixed(2)),
+            mtdpValue: forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] -  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())],
+            mtdpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').mtdpDeviationCodeID),
+            committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
         })
+        this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
+        this.setTextColors();
     }
-
+    getMonthText(month: number): string {
+        switch (month) {
+            case 1:
+                return 'jan';
+            case 2:
+                return 'feb';
+            case 3:
+                return 'mar';
+            case 4:
+                return 'apr';
+            case 5:
+                return 'may';
+            case 6:
+                return 'jun';
+            case 7:
+                return 'jul';
+            case 8:
+                return 'aug';
+            case 9:
+                return 'sep';
+            case 10:
+                return 'oct';
+            case 11:
+                return 'nov';
+            case 0:
+                return 'dec';
+            default:
+                return '';
+        }
+    }
 
     getLookUpName(id: string): string {
         return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
@@ -182,4 +237,31 @@ export class BudgetComponent implements OnInit {
     getMtdpDeviationCodes(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
     }
+    setTextColors(): void {
+        const tfpPercentage =this.budgetForecastForm.controls.tfpPercentage.value;
+        const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
+        const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
+        const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
+        if(tfpPercentage >= 5){
+            this.tfpColor = 'green'
+        }else{
+            this.tfpColor = 'red'
+        }
+        if(afpPercentage >= 10 || afpPercentage <= -10){
+            this.afpColor = 'red'
+        }else {
+            this.afpColor = 'green'
+        }
+        if(ydtpPercentage >= 10 || afpPercentage <= -10){
+            this.ydtpColor = 'red'
+        }else{
+            this.ydtpColor = 'green'
+        }
+        if(mdtpPercentage >=5 || mdtpPercentage <= -5){
+            this.mdtpColor = 'red'
+        }else{
+            this.mdtpColor = 'green'
+        }
+    }
+
 }

@@ -27,8 +27,8 @@
             <spot-input (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
                 *ngIf="viewElementChecker('problemTitle') && callLocation == 'ProjectHub'" class="w-full"
                 formControlName="problemTitle" name="problemTitle"
-                [label]="subCallLocation == 'BusinessCase'?'Initiative Title':'Project Name'"
-                [placeholder]="'Project Name'">
+                [label]="projectNameLabel"
+                [placeholder]="projectNameLabel">
             </spot-input>
             <spot-singleselect-user-autocomplete
                 (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)" [Required]="'true'"
@@ -111,7 +111,7 @@
                 [placeholder]="'Local Currency'" [showNoneOption]="false" [dropDownArrayType]="'string'"
                 [dropDownArray]="local">
             </spot-select>
-            <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType')"
+            <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType') || isStrategicInitiative"
                 class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
                 [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
                 [dropDownArray]="projectTypeDropDrownValues">
