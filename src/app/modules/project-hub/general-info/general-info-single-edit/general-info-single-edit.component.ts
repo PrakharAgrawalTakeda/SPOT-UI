@@ -144,6 +144,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
+        if(res != 'Strategic Initiative/Program'){
         if (res == 'Standard Project / Program') {
           if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
             this.generalInfoForm.controls.portfolioOwner.disable()
@@ -152,6 +153,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         else {
           this.generalInfoForm.controls.portfolioOwner.enable()
         }
+      }
       }
     })
 

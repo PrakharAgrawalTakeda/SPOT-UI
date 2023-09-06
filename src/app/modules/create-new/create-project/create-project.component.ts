@@ -249,6 +249,7 @@ export class CreateProjectComponent implements OnInit {
           isConfidential: event.isConfidential,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
           projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
+          isCapsProject: event.isCapsProject
         })
       }
       else{

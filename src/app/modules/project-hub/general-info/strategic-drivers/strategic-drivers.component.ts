@@ -39,7 +39,7 @@ export class StrategicDriversComponent implements OnInit {
   strategicYear: any = [];
   annualMustWin: any = [];
   @Input() viewType: 'SidePanel' | 'Form' = 'SidePanel'
-  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' = 'ProjectHub'
+  @Input() callLocation: 'ProjectHub' | 'CreateNew' | 'CopyProject' | 'CreateNewSIP' = 'ProjectHub'
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory", "isGoodPractise"]
   @Output() formValueStrategic = new EventEmitter();
