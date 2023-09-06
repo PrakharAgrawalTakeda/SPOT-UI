@@ -28,8 +28,11 @@ export class BudgetComponent implements OnInit {
     ydtpColor: string;
     mdtpColor: string;
     budgetForecasts: any;
+    budgetForecastsY1Capex:any;
+    budgetForecastsY1Opex:any;
     headerLabel: string = ""
     preliminaryExists: boolean = false;
+    retryCount = 0;
 
     constructor(public projectHubService: ProjectHubService,
                 private _Activatedroute: ActivatedRoute,
@@ -80,6 +83,7 @@ export class BudgetComponent implements OnInit {
         mtdpPercentage:new FormControl(0),
         mtdpValue:new FormControl(0),
         mtdpCodeId: new FormControl(''),
+        committedSpend:  new FormControl(''),
     })
 
     ngOnInit(): void {
@@ -87,6 +91,7 @@ export class BudgetComponent implements OnInit {
     }
 
     dataloader(): void {
+
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         const promises = [
             this.portApiService.getfilterlist(),
@@ -106,11 +111,19 @@ export class BudgetComponent implements OnInit {
                 this.capexField = !!response[3].budget.capExRequired;
                 this.generalInfoPatchValue(response[3])
                 this.budgetForecasts = response[3];
+                this.budgetForecastsY1Capex = response[3].budgetForecastsY1.filter(x => x.budgetData == "CapEx Forecast");
+                this.budgetForecastsY1Opex = response[3].budgetForecastsY1.filter(x => x.budgetData == "OpEx Forecast");
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), response[3].budget);
                 this.viewContent = true
             })
             .catch((error) => {
-                console.error('Error fetching data:', error);
+                if (this.retryCount < 1) {
+                    console.error('Error fetching data, retrying once:', error);
+                    this.retryCount++;
+                    this.dataloader();
+                } else {
+                    console.error('Error fetching data:', error);
+                }
             });
         this.disabler()
     }
@@ -171,11 +184,12 @@ export class BudgetComponent implements OnInit {
             afpPercentage: Number((forecast.find(x => x.active == 'Current').annualTotal/forecast.find(x => x.active == 'Plan').annualTotal).toFixed(2)),
             afpValue: forecast.find(x => x.active == 'Current').annualTotal - forecast.find(x => x.active == 'Plan').annualTotal,
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
-            ytdpPercentage: Number((forecast.find(x => x.active == 'Current').historical / forecast.find(x => x.active == 'Plan').historical).toFixed(2)),
+            ytdpPercentage: Number((forecast.find(x => x.active == 'Current').historical / (forecast.find(x => x.active == 'Plan').historical) ? (forecast.find(x => x.active == 'Plan').historical) : 1 ).toFixed(2)),
             ytdpValue: forecast.find(x => x.active == 'Current').historical - forecast.find(x => x.active == 'Plan').historical,
             mtdpPercentage: Number((forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] /  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())]).toFixed(2)),
             mtdpValue: forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] -  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').mtdpDeviationCodeID),
+            committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
         })
         this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
         this.setTextColors();

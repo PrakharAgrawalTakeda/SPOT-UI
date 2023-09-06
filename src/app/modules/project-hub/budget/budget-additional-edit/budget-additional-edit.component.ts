@@ -89,6 +89,10 @@ export class BudgetAdditionalEditComponent {
             case 'Budget-Commentary':
                 mainObj.budget.budgetComment = formValue.budgetCommentary;
                 break;
+            case 'Deviation':
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").afpDeviationCodeID = formValue.afpDeviationCode.lookUpId;
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").mtdpDeviationCodeID =  formValue.mtdpDeviationCode.lookUpId;
+                break;
         }
         return mainObj;
     }

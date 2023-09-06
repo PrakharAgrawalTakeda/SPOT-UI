@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ProjectHubService} from "../../project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
 import {RoleService} from "../../../../core/auth/role.service";
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import {ActivatedRoute, Router} from "@angular/router";
+import {FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {ActivatedRoute} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
@@ -14,7 +14,7 @@ import {FormArray, FormControl, FormGroup} from "@angular/forms";
 })
 export class BudgetForecastBulkEditComponent {
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService,
-                public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute,) {
+                public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute,private cdRef: ChangeDetectorRef) {
         this.forecastsForm.valueChanges.subscribe(res => {
                 this.formValue()
                 this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
@@ -23,13 +23,23 @@ export class BudgetForecastBulkEditComponent {
 
     id: string = "";
     forecasts = []
+    forecastsY1 = []
     opexEntries = [];
+    opexEntriesY1 = [];
     forecastsDb = []
+    forecastsY1Db = []
     forecastsSubmit = []
+    forecastsY1Submit = []
     viewContent: boolean = false
     lookupdata: any[]
     fTableEditStack = []
+    fy1TableEditStack = []
+    csTableEditStack = []
     forecastsForm = new FormArray([])
+    forecastsY1Form = new FormArray([])
+    csForm = new FormArray([])
+    committedSpend: number = 0;
+    csTable = []
 
     ngOnInit(): void {
         for (const obj of this.projecthubservice.all.budgetForecasts) {
@@ -37,6 +47,14 @@ export class BudgetForecastBulkEditComponent {
                 this.forecasts.push(obj);
             } else if (obj.budgetData === "OpEx Forecast") {
                 this.opexEntries.push(obj);
+            }
+        }
+        this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen=== true))
+        for (const obj of this.projecthubservice.all.budgetForecastsY1) {
+            if (obj.budgetData === "CapEx Forecast") {
+                this.forecastsY1.push(obj);
+            } else if (obj.budgetData === "OpEx Forecast") {
+                this.opexEntriesY1.push(obj);
             }
         }
         this.dataloader()
@@ -91,6 +109,37 @@ export class BudgetForecastBulkEditComponent {
                         "userName": x.userName,
                     }
                 })
+                if (this.forecastsY1.length > 0) {
+                    this.forecastsY1Db = this.forecastsY1.map(x => {
+                        return {
+                            'budgetGlobalID': x.budgetGlobalID,
+                            "dateMasterID": x.dateMasterID,
+                            "localCurrencyAbbreviation": x.localCurrencyAbbreviation,
+                            "financialMonthStartDate": x.financialMonthStartDate,
+                            "label": x.label,
+                            "labelID": x.labelID,
+                            "active": x.active,
+                            "activeID": x.activeID,
+                            "isOpen": x.isopen,
+                            "budgetData": x.budgetData,
+                            "budgetDataID": x.budgetDataID,
+                            "budgetDataTypeID": x.budgetDataTypeID,
+                            "projectID": x.projectID,
+                            "apr": x.apr,
+                            "may": x.may,
+                            "jun": x.jun,
+                            "jul": x.jul,
+                            "aug": x.aug,
+                            "sep": x.jun,
+                            "oct": x.oct,
+                            "nov": x.nov,
+                            "dec": x.dec,
+                            "jan": x.jan,
+                            "feb": x.feb,
+                            "mar": x.mar,
+                        }
+                    })
+                }
                 for (var i of this.forecasts) {
                     this.forecastsForm.push(new FormGroup({
                         active: new FormControl(i.active),
@@ -137,7 +186,38 @@ export class BudgetForecastBulkEditComponent {
                         userNae: new FormControl(i.userNam),
                     }))
                 }
-
+                for (var i of this.forecastsY1) {
+                    this.forecastsY1Form.push(new FormGroup({
+                        active: new FormControl(i.active),
+                        localCurrencyAbbreviation: new FormControl(i.localCurrencyAbbreviation),
+                        apr: new FormControl(i.apr),
+                        may: new FormControl(i.may),
+                        jun: new FormControl(i.jun),
+                        jul: new FormControl(i.jul),
+                        aug: new FormControl(i.aug),
+                        sep: new FormControl(i.sep),
+                        oct: new FormControl(i.oct),
+                        nov: new FormControl(i.nov),
+                        dec: new FormControl(i.dec),
+                        jan: new FormControl(i.jan),
+                        feb: new FormControl(i.feb),
+                        mar: new FormControl(i.mar),
+                        budgetGlobalID: new FormControl(i.budgetGlobalID),
+                        dateMasterID: new FormControl(i.dateMasterID),
+                        financialMonthStartDate: new FormControl(i.financialMonthStartDate),
+                        label: new FormControl(i.label),
+                        labelID: new FormControl(i.labelID),
+                        activeID: new FormControl(i.activeID),
+                        isOpen: new FormControl(i.isOpen),
+                        budgetData: new FormControl(i.budgetData),
+                        budgetDataID: new FormControl(i.budgetDataID),
+                        budgetDataTypeID: new FormControl(i.budgetDataTypeID),
+                        projectID: new FormControl(i.projectID),
+                    }))
+                }
+                this.csForm.push(new FormGroup({
+                    committedSpend: new FormControl(this.forecastsForm.controls.find(control => control.get('isopen').value === true).value.committedSpend),
+                }))
             }
     }
 
@@ -195,6 +275,41 @@ export class BudgetForecastBulkEditComponent {
         } else {
             this.forecastsSubmit = []
         }
+        var formY1 = this.forecastsY1Form.getRawValue()
+        if (formY1.length > 0) {
+            this.forecastsY1Submit = []
+            for (var i of formY1) {
+                this.forecastsY1Submit.push({
+                    'budgetGlobalID': i.budgetGlobalID,
+                    "dateMasterID": i.dateMasterID,
+                    "localCurrencyAbbreviation": i.localCurrencyAbbreviation,
+                    "financialMonthStartDate": i.financialMonthStartDate,
+                    "label": i.label,
+                    "labelID": i.labelID,
+                    "active": i.active,
+                    "activeID": i.activeID,
+                    "isOpen": i.isopen,
+                    "budgetData": i.budgetData,
+                    "budgetDataID": i.budgetDataID,
+                    "budgetDataTypeID": i.budgetDataTypeID,
+                    "projectID": i.projectID,
+                    "apr": i.apr,
+                    "may": i.may,
+                    "jun": i.jun,
+                    "jul": i.jul,
+                    "aug": i.aug,
+                    "sep": i.jun,
+                    "oct": i.oct,
+                    "nov": i.nov,
+                    "dec": i.dec,
+                    "jan": i.jan,
+                    "feb": i.feb,
+                    "mar": i.mar,
+                })
+            }
+        } else {
+            this.forecastsY1Submit = []
+        }
     }
 
     fTableEditRow(rowIndex) {
@@ -204,14 +319,31 @@ export class BudgetForecastBulkEditComponent {
             }
         }
     }
+    csTableEditRow(rowIndex) {
+        if (!this.csTableEditStack.includes(rowIndex)) {
+            this.csTableEditStack.push(rowIndex)
+        }
+    }
+    fy1TableEditRow(rowIndex) {
+        if (!this.fy1TableEditStack.includes(rowIndex)) {
+            if(this.forecastsY1[rowIndex].isopen){
+                this.fy1TableEditStack.push(rowIndex)
+            }
+        }
+    }
 
     submitForecasts() {
         if (JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit)) {
             this.projecthubservice.isFormChanged = false
             const mainObj = this.projecthubservice.all;
             mainObj.budgetForecasts = this.forecastsSubmit;
+            mainObj.budgetForecastsY1 = this.forecastsY1Submit;
+            mainObj.budgetForecasts.find(x => x.isopen === true).committedSpend = this.csForm.value[0].committedSpend;
             this.opexEntries.forEach(x => {
                 mainObj.budgetForecasts.push(x);
+            });
+            this.opexEntriesY1.forEach(x => {
+                mainObj.budgetForecastsY1.push(x);
             });
             this.apiService.updateBudgetPageInfo(this.id,  mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
@@ -273,13 +405,41 @@ export class BudgetForecastBulkEditComponent {
         this.forecasts.find(value => value.isopen === true).annualTotal = newAnnualTotal;
         this.recalculateTotalCapex()
     }
+    recalculateY1() {
+        const isOpenEntry = this.forecastsY1Form.controls[0]
+        const newAnnualTotal = isOpenEntry.value.apr + isOpenEntry.value.may + isOpenEntry.value.jun + isOpenEntry.value.jul + isOpenEntry.value.aug + isOpenEntry.value.sep + isOpenEntry.value.oct + isOpenEntry.value.nov + isOpenEntry.value.dec + isOpenEntry.value.jan + isOpenEntry.value.feb + isOpenEntry.value.mar;
+        // Create a copy of this.forecasts with the updated y1 value
+        this.forecasts = this.forecasts.map(forecast => {
+            if (forecast.isopen === true) {
+                return {...forecast, y1: newAnnualTotal};
+            } else {
+                return forecast;
+            }
+        });
+        this.forecastsForm.controls.find(control => control.get('isopen').value === true).patchValue({
+            y1: newAnnualTotal
+        });
+        this.cdRef.detectChanges();
+        this.recalculateTotalCapex();
+    }
     recalculateTotalCapex() {
         const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value === true);
-        const newTotal = isOpenEntry.value.annualTotal +  isOpenEntry.value.y1 + isOpenEntry.value.y2 + isOpenEntry.value.y3 + isOpenEntry.value.y4 + isOpenEntry.value.y5;
+        const newTotal = isOpenEntry.value.annualTotal + isOpenEntry.value.y1 + isOpenEntry.value.y2 + isOpenEntry.value.y3 + isOpenEntry.value.y4 + isOpenEntry.value.y5;
         isOpenEntry.patchValue({
             cumulativeTotal: newTotal
         });
-        this.forecasts.find(value => value.isopen === true).cumulativeTotal = newTotal;
+        const isOpenForecast = this.forecasts.find(value => value.isopen === true);
+        if (isOpenForecast) {
+            isOpenForecast.cumulativeTotal = newTotal;
+            this.forecasts = this.forecasts.map(forecast => {
+                if (forecast.isopen === true) {
+                    return isOpenForecast;
+                } else {
+                    return forecast;
+                }
+            });
+            this.cdRef.detectChanges();
+        }
     }
 
 }
