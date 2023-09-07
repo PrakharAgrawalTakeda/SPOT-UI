@@ -596,6 +596,7 @@ export class CreateProjectComponent implements OnInit {
     else{
       this.createApiService.createProjectStrategic(mainObjCreate[0]).then((res: any) => {
         this.createApiService.updatePortfolioCenterData(res.problemUniqueId).then(response => {
+          this.projectid = res.problemUniqueId
           if (this.localAttribute != undefined){
             this.localAttribute.submitLA(res.problemUniqueId)
           }
