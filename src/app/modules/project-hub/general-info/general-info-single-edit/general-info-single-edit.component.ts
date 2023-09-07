@@ -35,7 +35,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   lookupdata: any = [];
   localCurrencyList: any = [];
   local: any = [];
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", "Strategic Initiative / Program"]
+  projectTypeDropDrownValues1 = ["Strategic Initiative/Program"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
   isStrategicInitiative: boolean = false
   projectNameLabel:string = "Project Name"
   owningOrganizationValues = []
@@ -71,7 +72,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     BCAuthor: new FormControl(null),
     RiskImpact: new FormControl(''),
     AdditionalAuthor: new FormControl([]),
-    businessCaseApprovedDate: new FormControl('')
+    businessCaseApprovedDate: new FormControl(''),
+    valueCaptureStart: new FormControl('')
   })
   @Output() formValue = new EventEmitter<any>();
 
@@ -80,7 +82,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService,
     public apiService2: PortfolioApiService, private authService: MsalService, public role: RoleService, private Router: Router) {
-
+    
     this.generalInfoForm.valueChanges.subscribe(res => {
       if (this.viewContent) {
         if (this.callLocation == 'ProjectHub' && history.state.callLocation == undefined) {
@@ -100,6 +102,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         }
         }
+        else if (this.callLocation == 'CreateNewSIP'){
+          this.formValue.emit(this.generalInfoForm.getRawValue())
+          this.generalInfoForm.controls.problemType.disable()
+        }
         else if (history.state.callLocation == 'CopyProject') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
           if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
@@ -111,6 +117,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
       }
     })
+
     const url = this.Router.url;
     if (url.substring(url.lastIndexOf('/') + 1) == 'create-new-project') {
       if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
@@ -121,6 +128,9 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         this.generalInfoForm.controls.owningOrganization.enable()
         this.generalInfoForm.controls.localCurrency.disable()
       }
+    }
+    else if (url.substring(url.lastIndexOf('/') + 1) == 'create-strategic-initiative-project') {
+      this.generalInfoForm.controls.problemType.disable()
     }
     else {
       if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
@@ -137,6 +147,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
+        if(res != 'Strategic Initiative/Program'){
         if (res == 'Standard Project / Program') {
           if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
             this.generalInfoForm.controls.portfolioOwner.disable()
@@ -146,11 +157,13 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           this.generalInfoForm.controls.portfolioOwner.enable()
         }
       }
+      }
     })
 
     this.generalInfoForm.controls.portfolioOwner.valueChanges.subscribe(res => {
       if (this.viewContent) {
         var portfolio = []
+        if(res != null){
         portfolio.push(res)
         var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
         this.generalInfoForm.patchValue({
@@ -159,6 +172,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           owningOrganization: res.defaultOwningOrganization,
           localCurrency: currency[0].localCurrencyAbbreviation
         })
+      }
       }
     })
 
@@ -302,9 +316,17 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
             this.viewContent = true
           }
           else {
+            if(this.callLocation == "CreateNewSIP"){
+              this.generalInfoForm.patchValue({
+                SubmittedBy: user,
+                problemType: "Strategic Initiative/Program"
+              })
+            }
+            else{
             this.generalInfoForm.patchValue({
               SubmittedBy: user
             })
+          }
             this.formValue.emit(this.generalInfoForm.getRawValue())
             this.viewContent = true
           }

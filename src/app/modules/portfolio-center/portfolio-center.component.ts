@@ -270,7 +270,7 @@ export class PortfolioCenterComponent implements OnInit {
             {
               title: 'Create a Strategic Initiative/Program',
               type: 'basic',
-              link: '*'
+              link: '/create-project/create-strategic-initiative-project'
             },
             {
               title: 'Create a Standard/Simple Project/Program',
@@ -885,14 +885,15 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   scrollHandler(event) {
-    // if (!this.scroll) {
+    const url = this.router.url;
+    if (url.substring(url.lastIndexOf('/') + 1) == 'portfolio-center') {
     this.scroll = true
     this.showContent = false
     var fieldNameElement: any;
     fieldNameElement = document.getElementsByClassName('page-count');
     fieldNameElement[0].innerText = "Total Projects based on the applied filter criteria: " + this.totalproject + " Project(s)";
     this.showContent = true
-    // }
+    }
   }
 
   routeProject(projectid): void {
