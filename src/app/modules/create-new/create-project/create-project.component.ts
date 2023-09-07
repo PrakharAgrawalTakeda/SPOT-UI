@@ -387,16 +387,16 @@ export class CreateProjectComponent implements OnInit {
         defaultOwningOrganizationId:null,
         problemOwnerId:null,
         problemOwnerName:null,
-        // ParentProgramID:null,
+        parentProgramId:null,
         primaryProductId:null,
         projectDescription:null,
         executionScope:null,
         otherImpactedProducts:null,
         isAgile:false,
-        // AgilePrimaryWorkstream:null,
-        // AgileSecondaryWorkstream:null,
-        // agileWave:null,
-        // IsCapsProject:false,
+        agilePrimaryWorkstream:null,
+        agileSecondaryWorkstream:null,
+        agileWave:null,
+        isCapsProject:false,
         primaryValueDriver:null,
         financialRealizationStartDate: null,
         strategicInitiativeOwner: null
@@ -452,17 +452,17 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].problemOwnerName = formValue.SubmittedBy != "" ? formValue.SubmittedBy.userDisplayName : ''
       mainObjCreate[0].primaryProductId = Object.keys(formValue.primaryProduct).length > 0 ? formValue.primaryProduct.productId : ''
       mainObjCreate[0].otherImpactedProducts = formValue.otherImpactedProducts.length > 0 ? formValue.otherImpactedProducts.map(x => x.productId).join() : ''
-      // mainObjCreate[0].ParentProgramID = formValue.projectsingleid
+      mainObjCreate[0].parentProgramId = formValue.projectsingleid
       mainObjCreate[0].projectDescription = formValue.projectDescription
       mainObjCreate[0].defaultOwningOrganizationId = formValue.owningOrganization
       mainObjCreate[0].primaryValueDriver = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.kpiid : ''
       mainObjCreate[0].isAgile = formValue.isAgile == "" ? false : formValue.isAgile
-      // if (mainObjCreate[0].IsAgile) {
-      //     mainObjCreate[0].AgilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null? formValue.agilePrimaryWorkstream.lookUpId : ''
-      //     mainObjCreate[0].AgileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
-      //     mainObjCreate[0].agileWave = formValue.agileWave != "" && formValue.agileWave != undefined && formValue.agileWave != null ? formValue.agileWave.lookUpId : ''
-      // }
-      // mainObjCreate[0].IsCapsProject = false
+      if (mainObjCreate[0].isAgile) {
+          mainObjCreate[0].agilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null? formValue.agilePrimaryWorkstream.lookUpId : ''
+          mainObjCreate[0].agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
+          mainObjCreate[0].agileWave = formValue.agileWave != "" && formValue.agileWave != undefined && formValue.agileWave != null ? formValue.agileWave.lookUpId : ''
+      }
+      mainObjCreate[0].isCapsProject = false
       mainObjCreate[0].strategicInitiativeOwner = formValue.sponsor != "" ? formValue.sponsor.userAdid : ''
       mainObjCreate[0].financialRealizationStartDate = formValue.valueCaptureStart ? moment(formValue.valueCaptureStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : formValue.valueCaptureStart
     }
