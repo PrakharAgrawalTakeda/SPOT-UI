@@ -24,6 +24,13 @@ export class CreateNewApiService {
     const response = await lastValueFrom(abc$)
     return response
   }
+  
+  async createProjectStrategic(body) {
+    var userid = GlobalVariables.apiurl + "StrategicInitiative/CreateProgram"
+    const abc$ = this.http.post(userid, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
 
   async copyProject(body, projectid) {
     var userid = GlobalVariables.apiurl + "Projects/" + projectid
