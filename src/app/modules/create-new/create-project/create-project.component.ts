@@ -401,6 +401,7 @@ export class CreateProjectComponent implements OnInit {
       AnnualMustWinID:null
       }];
     var formValue = this.createProjectForm.getRawValue()
+    console.log(formValue)
     LocalCurrencyID = Object.keys(formValue.localCurrency).length > 0 ? this.localCurrency.filter(x => x.localCurrencyAbbreviation == formValue.localCurrency)[0].localCurrencyId : ''
       mainObjCreate[0].ProblemUniqueID = ""
       mainObjCreate[0].ProblemTitle = formValue.problemTitle
@@ -438,7 +439,7 @@ export class CreateProjectComponent implements OnInit {
     }
       mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
       mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-    mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.kpiid : ''
+    mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.lookUpId : ''
       mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
       if (mainObjCreate[0].IsPOBOS) {
         mainObjCreate[0].POBOSCategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : ''

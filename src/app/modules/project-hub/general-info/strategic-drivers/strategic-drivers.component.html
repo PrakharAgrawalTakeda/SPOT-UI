@@ -12,7 +12,7 @@
             <div [ngClass]="{'customPrimary': viewType == 'Form'}">
             <spot-singleselect-autocomplete *ngIf="viewElementChecker('primaryKPI')" formControlName="primaryKPI"
                 class="w-full" name="primaryKPI" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
-                [valuePointer]="'kpiname'" [dropDownArray]="kpiMasters">
+                [valuePointer]="'lookUpName'" [dropDownArray]="kpiMasters">
             </spot-singleselect-autocomplete>
             </div>
             <!--AGILE START-->

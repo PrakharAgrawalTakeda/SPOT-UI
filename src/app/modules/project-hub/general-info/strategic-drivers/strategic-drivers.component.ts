@@ -43,6 +43,8 @@ export class StrategicDriversComponent implements OnInit {
   @Input() subCallLocation: 'ProjectHub' | 'ProjectProposal' | 'ProjectCharter' |'CloseOut' = 'ProjectHub'
   @Input() viewElements: any = ["primaryKPI", "isAgile", "agilePrimaryWorkstream", "agileSecondaryWorkstream", "agileWave", "isPobos", "pobosCategory", "isGmsgqltannualMustWin", "strategicYear", "annualMustWinID", "isSiteAssessment", "siteAssessmentCategory", "isGoodPractise"]
   @Output() formValueStrategic = new EventEmitter();
+  lookUpData: any;
+  kpiData: any;
   constructor(private apiService: ProjectApiService,
     public projectHubService: ProjectHubService,
     public fuseAlert: FuseConfirmationService, public auth: AuthService) {
@@ -221,12 +223,33 @@ export class StrategicDriversComponent implements OnInit {
   ngOnInit(): void {
     if (this.callLocation == 'ProjectHub') {
       this.apiService.getGeneralInfoData(this.projectHubService.projectid).then((res: any) => {
+        this.auth.lookupMaster().then((lookup: any) => {
         this.generalInfo = res
+        this.lookUpData = lookup
+        console.log(res.projectData.primaryKpi)
         this.filterCriteria = this.projectHubService.all
-        this.kpiMasters = this.projectHubService.kpiMasters
+        this.kpiMasters = this.lookUpData.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
+        this.kpiData = this.projectHubService.kpiMasters
         this.lookUpMaster = this.projectHubService.lookUpMaster
         this.strategicDriversForm.patchValue({
-          primaryKPI: res.projectData.primaryKpi ? this.kpiMasters.find(x => x.kpiid == res.projectData.primaryKpi) : {},
+          //primaryKPI: res.projectData.primaryKpi && this.kpiMasters.find(x => x.lookUpId == res.projectData.primaryKpi) ? this.kpiMasters.find(x => x.lookUpId == res.projectData.primaryKpi).lookUpName : {},
+          primaryKPI: (() => {
+            if (res.projectData.primaryKpi) {
+                const lookUpResult = this.lookUpData.find(x => x.lookUpId == res.projectData.primaryKpi);
+                if (lookUpResult) {
+                    return lookUpResult;
+                } else {
+                    const kpiResult = this.kpiData.find(x => x.kpiid == res.projectData.primaryKpi);
+                    if (kpiResult) {
+                        return kpiResult;
+                    }
+                }
+            }
+            else{
+              return '';
+            }
+            
+        })(),
           isAgile: (res.agilePrimaryWorkstream || res.agileWave || res.agileSecondaryWorkstream) ? true : false,
           agilePrimaryWorkstream: res.agilePrimaryWorkstream ? res.agilePrimaryWorkstream : {},
           agileSecondaryWorkstream: res.agileSecondaryWorkstream ? res.agileSecondaryWorkstream : [],
@@ -241,6 +264,7 @@ export class StrategicDriversComponent implements OnInit {
           isGoodPractise: res.projectData.isGoodPractise
         })
         this.viewContent = true
+      })
       })
     }
     else{
@@ -440,8 +464,9 @@ export class StrategicDriversComponent implements OnInit {
   submitSD() {
     this.projectHubService.isFormChanged = false
     var formValue = this.strategicDriversForm.getRawValue()
+    console.log(formValue)
     var mainObj = this.generalInfo.projectData
-    mainObj.primaryKpi = Object.keys(formValue.primaryKPI).length > 0 ? formValue.primaryKPI.kpiid : ''
+    mainObj.primaryKpi = Object.keys(formValue.primaryKPI).length > 0 ? formValue.primaryKPI.lookUpId : ''
     mainObj.agilePrimaryWorkstream = Object.keys(formValue.agilePrimaryWorkstream).length > 0 ? formValue.agilePrimaryWorkstream.lookUpId : ''
     mainObj.agileSecondaryWorkstream = formValue.agileSecondaryWorkstream.length > 0 ? formValue.agileSecondaryWorkstream.map(x => x.lookUpId).join() : ''
     mainObj.agileWave = Object.keys(formValue.agileWave).length > 0 ? formValue.agileWave.lookUpId : ''
