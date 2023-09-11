@@ -633,7 +633,46 @@ export class CreateProjectComponent implements OnInit {
   
   CheckMandatory(index: number){
     this.stepper.selectedIndex = index;
-    if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0 || this.createProjectForm.value.sponsor == null || Object.keys(this.createProjectForm.value.sponsor).length == 0 || this.createProjectForm.value.valueCaptureStart == "" || this.createProjectForm.value.valueCaptureStart == null) {
+    if(this.SIP){
+      if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0 || this.createProjectForm.value.sponsor == null || Object.keys(this.createProjectForm.value.sponsor).length == 0 || this.createProjectForm.value.valueCaptureStart == "" || this.createProjectForm.value.valueCaptureStart == null) {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "You must complete all mandatory fields.",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+        this.stepper.selectedIndex = index-1;
+      }
+      else {
+        this.showLocalAttributes = false
+        this.portfolioOwners = ""
+        this.executionScope = ""
+        this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
+        for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
+          this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
+        }
+        this.showLocalAttributes = true
+        this.stepper.selectedIndex = index;
+      }
+    }
+    else{
+    if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "You must complete all mandatory fields.",
         "message": "",
@@ -670,6 +709,8 @@ export class CreateProjectComponent implements OnInit {
       this.stepper.selectedIndex = index;
     }
   }
+    
+  }
 
   captureValueLA(index, event){
     this.LAData = event.data
@@ -688,7 +729,46 @@ export class CreateProjectComponent implements OnInit {
   selectionChange(index){
     console.log(index)
     if (index._selectedIndex == 1 || index._selectedIndex == 2){
-      if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0 || this.createProjectForm.value.sponsor == null || Object.keys(this.createProjectForm.value.sponsor).length == 0 || this.createProjectForm.value.valueCaptureStart == "" || this.createProjectForm.value.valueCaptureStart == null) {
+      if(this.SIP){
+        if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0 || this.createProjectForm.value.sponsor == null || Object.keys(this.createProjectForm.value.sponsor).length == 0 || this.createProjectForm.value.valueCaptureStart == "" || this.createProjectForm.value.valueCaptureStart == null) {
+          var comfirmConfig: FuseConfirmationConfig = {
+            "title": "You must complete all mandatory fields.",
+            "message": "",
+            "icon": {
+              "show": true,
+              "name": "heroicons_outline:exclamation",
+              "color": "warning"
+            },
+            "actions": {
+              "confirm": {
+                "show": true,
+                "label": "Okay",
+                "color": "primary"
+              },
+              "cancel": {
+                "show": false,
+                "label": "Cancel"
+              }
+            },
+            "dismissible": true
+          }
+          const alert = this.fuseAlert.open(comfirmConfig)
+          this.stepper.selectedIndex = "0"
+        }
+        else {
+          this.showLocalAttributes = false
+          this.portfolioOwners = ""
+          this.executionScope = ""
+          this.portfolioOwners += this.createProjectForm.controls.portfolioOwner.value.portfolioOwnerId
+          for (var z = 0; z < this.createProjectForm.controls.excecutionScope.value.length; z++) {
+            this.executionScope += this.createProjectForm.controls.excecutionScope.value[z].portfolioOwnerId + ','
+          }
+          this.showLocalAttributes = true
+          this.stepper.selectedIndex = index._selectedIndex;
+        }
+      }
+      else{
+        if (this.createProjectForm.value.problemTitle == "" || this.createProjectForm.value.owningOrganization == "" || this.createProjectForm.value.owningOrganization == null || Object.keys(this.createProjectForm.value.portfolioOwner).length == 0 || Object.keys(this.createProjectForm.value.SubmittedBy).length == 0 || this.createProjectForm.value.localCurrency == "" || Object.keys(this.createProjectForm.value.primaryProduct).length == 0 || this.createProjectForm.value.projectDescription == "" || this.createProjectForm.value.excecutionScope.length == 0) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "You must complete all mandatory fields.",
           "message": "",
@@ -724,6 +804,8 @@ export class CreateProjectComponent implements OnInit {
         this.showLocalAttributes = true
         this.stepper.selectedIndex = index._selectedIndex;
       }
+    }
+      
     }
   }
 
