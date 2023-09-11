@@ -77,7 +77,7 @@
             </div>
 
             <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType1')"
-                class="w-full" formControlName="problemType" name="problemType" [label]="'Project Type'"
+                class="w-full" [ngClass]="{'read-only': callLocation == 'CreateNewSIP'}" formControlName="problemType" name="problemType" [label]="'Project Type'"
                 [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
                 [dropDownArray]="callLocation=='CreateNewSIP'?projectTypeDropDrownValues1:projectTypeDropDrownValues" [showHint]="true"
                 [hint]="'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
