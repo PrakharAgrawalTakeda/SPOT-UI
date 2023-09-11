@@ -45,7 +45,7 @@
             </div>
             <!--AGILE END-->
             <!--POBOS START-->
-            <div [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div *ngIf="callLocation != 'CreateNewSIP'" [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
             <div class="w-full mt-4 mb-2">
                 <spot-toggle class="w-full" *ngIf="viewElementChecker('isPobos')" formControlName="isPobos"
                     [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'POBOS'">
@@ -60,7 +60,7 @@
             </div>
             <!--POBOS END-->
             <!--Strategy Deployment Annual Initiative START-->
-            <div [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div *ngIf="callLocation != 'CreateNewSIP'" [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
             <div class="w-full mt-4 mb-6">
                 <spot-toggle class="w-full" *ngIf="viewElementChecker('isGmsgqltannualMustWin')"
                     formControlName="isGmsgqltannualMustWin" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
@@ -84,7 +84,7 @@
             </div>
             <!--Strategy Deployment Annual Initiative END-->
             <!--Site Assessment START-->
-            <div [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
+            <div *ngIf="callLocation != 'CreateNewSIP'" [ngClass]="{'flex-col flex-auto bg-card shadow rounded-2xl custom': viewType == 'Form'}">
             <div class="w-full mt-4 mb-2">
                 <spot-toggle class="w-full" *ngIf="viewElementChecker('isSiteAssessment')"
                     formControlName="isSiteAssessment" [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'"
