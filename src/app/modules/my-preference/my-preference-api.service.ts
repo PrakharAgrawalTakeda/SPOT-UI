@@ -45,7 +45,18 @@ export class MyPreferenceApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
-
+    async getMetricRepository() {
+        var link = GlobalVariables.apiurl + "StrategicMetricRepository"
+        const abc$ = this.http.get(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async addMetricRepository(body, id:string){
+        var link = GlobalVariables.apiurl+"StrategicMetricRepository/"+ id
+        const abc$ = this.http.post(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
     async checkAccess(userId: string) {
         var userid = GlobalVariables.apiurl + "StandardMilestoneSet/CheckAccess/" + userId
         const abc$ = this.http.get(userid)
