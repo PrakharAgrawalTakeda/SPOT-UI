@@ -97,6 +97,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", "Strategic Initiative / Program"]
   isStrategicInitiative: boolean = false
   formFieldHelpers: any
+  lookUpPVD: any;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
@@ -140,13 +141,14 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       this.authService.lookupMaster().then((lookup: any) => {
         this.authService.KPIMaster().then((kpi: any) => {
           console.log('LookUp Data', lookup)
-          this.lookUpData = lookup.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
+          this.lookUpData = lookup
+          this.lookUpPVD = lookup.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
           this.projectHubService.lookUpMaster = lookup
           console.log('Filter Criteria:', filterres)
           this.filterCriteria = filterres
           this.kpiData = kpi
           console.log(this.kpiData)
-          console.log(this.lookUpData.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474"))
+          console.log(this.lookUpPVD.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474"))
           this.projectHubService.kpiMasters = kpi
           if (this.callLocation == 'CloseOut') {
             this.apiService.getGeneralInfoDataWizzard(this.id, 'ProjectCloseOut').then((res: any) => {
@@ -307,7 +309,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       //primaryKPI: response.projectData.primaryKpi && this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi) ? this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi).lookUpName : '',
       primaryKPI: (() => {
         if (response.projectData.primaryKpi) {
-            const lookUpResult = this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi);
+            const lookUpResult = this.lookUpPVD.find(x => x.lookUpId == response.projectData.primaryKpi);
             if (lookUpResult) {
                 return lookUpResult.lookUpName;
             } else {
