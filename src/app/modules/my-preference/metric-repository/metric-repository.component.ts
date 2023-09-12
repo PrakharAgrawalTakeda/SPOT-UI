@@ -72,5 +72,25 @@ export class MetricRepositoryComponent {
             }
         })
     }
+    getLookUpName(id: any): any {
+        if(id=="1ae98e15-2f9d-435a-bd8b-656b18c28af9"){
+            return "Decimal (1 decimal)"
+        }
+        return id && id.lookUpId != '' ? this.myPreferenceService.lookUpMaster.find(x => x.lookUpId == id).lookUpName : ''
+    }
+    getPortfolioOwnerNameById(id: string): any {
+        if(id=="2eb536f8-bb88-4bd7-b4d5-4d1fb287059a"){
+            return "Global"
+        }
+        return this.filterCriteria.portfolioOwner.filter(x => x.portfolioOwnerId==id)[0]?.portfolioOwner;
+    }
+    getGlobalLocal(id: string): any {
+        if(id=="2eb536f8-bb88-4bd7-b4d5-4d1fb287059a"){
+            return "Global"
+        }else{
+            return "Local"
+        }
+
+    }
 
 }

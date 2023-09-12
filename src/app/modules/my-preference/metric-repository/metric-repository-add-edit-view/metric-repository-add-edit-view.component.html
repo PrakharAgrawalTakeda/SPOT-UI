@@ -1,5 +1,5 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Metric repository View</div>
+    <div class="text-on-primary" style="padding-top: 6px">Metric Repository View</div>
     <div style="padding-top: 2px"><a (click)="this.myPreferenceService.toggleDrawerOpen('', '',[],'')"
                                      href="javascript:void(0)" title="Close">
         <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -11,36 +11,30 @@
         <spot-input class="w-full" formControlName="globalLocal" [label]="'Global/Local'">
         </spot-input>
         <spot-singleselect-autocomplete
-            formControlName="managingPortfolio" class="w-full"
+            formControlName="managingPortfolio" class="w-full" Required
             [label]="'Managing Portfolio'"
             [placeholder]="'Managing Portfolio'" [valuePointer]="'portfolioOwner'"
             [dropDownArray]="portfolioOwnerList" [sortByType]="'custom'"
             [customSortPointer]="'portfolioOwner'">
         </spot-singleselect-autocomplete>
         <div>
-            <spot-select formControlName="category" [label]="'Category'" [placeholder]="'Category'"
+            <spot-select formControlName="category" [label]="'Category'" [placeholder]="'Category'" Required
                          [dropDownArrayType]="'object'" [dropDownArray]="getCategory()" [idPointer]="'lookUpId'"
                          [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
             </spot-select>
         </div>
-        <spot-input class="w-full" formControlName="metricName" [label]="'Metric Name'">
+        <spot-input class="w-full" formControlName="metricName" [label]="'Metric Name'" Required>
         </spot-input>
-        <spot-input class="w-full" formControlName="unit" [label]="'Unit'">
+        <spot-input class="w-full" formControlName="unit" [label]="'Unit'" Required>
         </spot-input>
         <div>
-            <spot-select formControlName="metricFormat" [label]="'Metric Format'" [placeholder]="'Metric Format'"
+            <spot-select formControlName="metricFormat" [label]="'Metric Format'" [placeholder]="'Metric Format'" Required
                          [dropDownArrayType]="'object'" [dropDownArray]="getMetricFormat()" [idPointer]="'lookUpId'"
                          [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
             </spot-select>
         </div>
         <spot-input class="w-full" formControlName="metricDescription" [label]="'Metric Description'">
         </spot-input>
-
-<!--        <mat-form-field class="w-full" [floatLabel]="'always'">-->
-<!--            <mat-label>Metric Usage</mat-label>-->
-<!--            <input matInput formControlName="metricUsage" type="number" max="100" min="0" placeholder="0"-->
-<!--                   pattern="\d*" />-->
-<!--        </mat-form-field>-->
     </div>
     <div class="flex items-start justify-between  form-ask-need">
         <a class="min-w-26" mat-flat-button [color]="'primary'"

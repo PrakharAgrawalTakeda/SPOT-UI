@@ -22,17 +22,20 @@
                                class="ml-3 datatable-sms material font-medium text-sm text-default whitespace-nowrap cursor-default" [rows]="metricRepositoryData">
                     <ngx-datatable-column name="Global/Local" prop="globalLocal" [flexGrow]="1">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p>{{value}}</p>
+                            <p>{{getGlobalLocal(value)}}</p>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Managing Portofolio" prop="managingPortofolio" [flexGrow]="1">
+                    <ngx-datatable-column name="Managing Portofolio" prop="metricPortfolioID" [flexGrow]="1">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <!-- <p [ngClass]="{'closed': row.completionDate != null}">{{value}}</p> -->
-                            <strong><p *ngIf="value == 'Execution Start - ' || value == 'Execution End - '" class = "nostartName">{{value}} Insert Milestone Name</p></strong>
-                            <p *ngIf="value != 'Execution Start - ' && value != 'Execution End - '">{{value}}</p>
+                            <p>{{getPortfolioOwnerNameById(value)}}</p>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Category" prop="category" [flexGrow]="1">
+                    <ngx-datatable-column name="Category" prop="metricCategoryID" [flexGrow]="1">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <p>{{getLookUpName(value)}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <p>{{value}}</p>
                         </ng-template>
@@ -42,19 +45,14 @@
                             <p>{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+                    <ngx-datatable-column name="Unit" prop="metricUnit" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <p>{{value}}</p>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Unit" prop="unit" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+                    <ngx-datatable-column name="Metric Format" prop="metricFormatID" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p>{{value}}</p>
-                        </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="Metric Format" prop="metricFormat" [flexGrow]="1" [resizeable]="false" [draggable]="false">
-                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p>{{value}}</p>
+                            <p>{{getLookUpName(value)}}</p>
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Metric Description" prop="metricDescription" [flexGrow]="1" [resizeable]="false" [draggable]="false">

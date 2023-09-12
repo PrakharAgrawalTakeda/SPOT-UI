@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {MyPreferenceService} from "../../my-preference.service";
 import {MyPreferenceApiService} from "../../my-preference-api.service";
 import {MsalService} from "@azure/msal-angular";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 
 @Component({
   selector: 'app-metric-repository-add-edit-view',
@@ -14,7 +15,8 @@ export class MetricRepositoryAddEditViewComponent {
     constructor(
         public myPreferenceApiService: MyPreferenceApiService,
         public myPreferenceService: MyPreferenceService,
-        private msalService: MsalService
+        private msalService: MsalService,
+        public fuseAlert: FuseConfirmationService,
     ){}
 
     metricRepositoryForm = new FormGroup({
@@ -35,27 +37,68 @@ export class MetricRepositoryAddEditViewComponent {
         })
     }
     submitMetricRepository() {
-        this.myPreferenceService.isFormChanged = false
-        var metricRepository = this.metricRepositoryForm.getRawValue();
-        var mainObj = {
-            metricID: "",
-            metricPortfolioID: "",
-            portfolioOwner: metricRepository.managingPortfolio.portfolioOwnerID,
-            metricTypeID: "",
-            metricCategoryID: metricRepository.category,
-            metricName: metricRepository.metricName,
-            metricUnit: metricRepository.unit,
-            metricFormatID: metricRepository.metricFormat,
-            metricDescription: metricRepository.metricDescription,
-            helpText: "",
-            metricUsage: 0,
-            isMandatory: true
+        var fieldsMissing = 0;
+        if(this.metricRepositoryForm.get('managingPortfolio').value==null){
+            fieldsMissing ++;
         }
-        var id = this.msalService.instance.getActiveAccount().localAccountId
-        this.myPreferenceApiService.addMetricRepository(mainObj).then(res => {
-            this.myPreferenceService.submitbutton.next(true)
-            this.myPreferenceService.toggleDrawerOpen('', '', [], '')
-        })
+        if(this.metricRepositoryForm.get('category').value==null){
+            fieldsMissing ++;
+        }
+        if(this.metricRepositoryForm.get('metricName').value==null || this.metricRepositoryForm.get('metricName').value==""){
+            fieldsMissing ++;
+        }
+        if(this.metricRepositoryForm.get('unit').value==null || this.metricRepositoryForm.get('unit').value==""){
+            fieldsMissing ++;
+        }
+        if(this.metricRepositoryForm.get('metricFormat').value==null || this.metricRepositoryForm.get('metricFormat').value==null){
+            fieldsMissing ++;
+        }
+        if (fieldsMissing>0) {
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "Required fields missing",
+                "message": "Please fill all the required fields.",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warning"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "Okay",
+                        "color": "primary"
+                    },
+                    "cancel": {
+                        "show": false,
+                    },
+                },
+                "dismissible": true
+            }
+            const alert = this.fuseAlert.open(comfirmConfig)
+        }else{
+            this.myPreferenceService.isFormChanged = false
+            var metricRepository = this.metricRepositoryForm.getRawValue();
+            var mainObj = {
+                metricID: "",
+                metricPortfolioID:  metricRepository.managingPortfolio.portfolioOwnerID,
+                portfolioOwner: "",
+                metricTypeID: "",
+                metricCategoryID: metricRepository.category,
+                metricName: metricRepository.metricName,
+                metricUnit: metricRepository.unit,
+                metricFormatID: metricRepository.metricFormat,
+                metricDescription: metricRepository.metricDescription,
+                helpText: "",
+                metricUsage: 0,
+                isMandatory: true
+            }
+            var id = this.msalService.instance.getActiveAccount().localAccountId
+            this.myPreferenceApiService.addMetricRepository(mainObj).then(res => {
+                this.myPreferenceService.submitbutton.next(true)
+                this.myPreferenceService.toggleDrawerOpen('', '', [], '')
+            })
+        }
+
     }
 
     getCategory(): any {
