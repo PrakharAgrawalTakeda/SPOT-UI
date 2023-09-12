@@ -10,35 +10,37 @@ import {MsalService} from "@azure/msal-angular";
   styleUrls: ['./metric-repository-add-edit-view.component.scss']
 })
 export class MetricRepositoryAddEditViewComponent {
+    portfolioOwnerList =[];
     constructor(
         public myPreferenceApiService: MyPreferenceApiService,
         public myPreferenceService: MyPreferenceService,
         private msalService: MsalService
-    ){
-
-    }
+    ){}
 
     metricRepositoryForm = new FormGroup({
         globalLocal: new FormControl("Local"),
-        managingPortfolio: new FormControl(''),
-        category: new FormControl(''),
+        managingPortfolio: new FormControl(null),
+        category: new FormControl(null),
         metricName: new FormControl(''),
         unit: new FormControl(''),
-        metricFormat: new FormControl(''),
+        metricFormat: new FormControl(null),
         metricDescription: new FormControl(''),
-        metricUsage: new FormControl(''),
+        metricUsage: new FormControl(0),
 
     })
     ngOnInit() {
         this.metricRepositoryForm.controls.globalLocal.disable()
+        this.myPreferenceApiService.GetPortfolioOwnerForPreferences(this.msalService.instance.getActiveAccount().localAccountId).then((portfolioRes: any) => {
+            this.portfolioOwnerList = portfolioRes;
+        })
     }
     submitMetricRepository() {
         this.myPreferenceService.isFormChanged = false
         var metricRepository = this.metricRepositoryForm.getRawValue();
         var mainObj = {
             metricID: "",
-            metricPortfolioID: metricRepository.managingPortfolio,
-            portfolioOwner: "",
+            metricPortfolioID: "",
+            portfolioOwner: metricRepository.managingPortfolio.portfolioOwnerID,
             metricTypeID: "",
             metricCategoryID: metricRepository.category,
             metricName: metricRepository.metricName,
@@ -46,11 +48,11 @@ export class MetricRepositoryAddEditViewComponent {
             metricFormatID: metricRepository.metricFormat,
             metricDescription: metricRepository.metricDescription,
             helpText: "",
-            metricUsage: metricRepository.metricUsage,
+            metricUsage: 0,
             isMandatory: true
         }
         var id = this.msalService.instance.getActiveAccount().localAccountId
-        this.myPreferenceApiService.addMetricRepository(mainObj, id).then(res => {
+        this.myPreferenceApiService.addMetricRepository(mainObj).then(res => {
             this.myPreferenceService.submitbutton.next(true)
             this.myPreferenceService.toggleDrawerOpen('', '', [], '')
         })

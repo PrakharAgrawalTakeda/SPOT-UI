@@ -6,12 +6,17 @@
     </a>
     </div>
 </div>
-<form class="w-full overflow-hidden" [formGroup]="metricRepositoryForm" (ngSubmit)="submitMetricRepository()">
+<form class="w-full overflow-hidden" [formGroup]="metricRepositoryForm">
     <div class=" form-ask-need h-[87vh] overflow-y-scroll">
         <spot-input class="w-full" formControlName="globalLocal" [label]="'Global/Local'">
         </spot-input>
-        <spot-input class="w-full" formControlName="managingPortfolio" [label]="'Managing Portfolio'">
-        </spot-input>
+        <spot-singleselect-autocomplete
+            formControlName="managingPortfolio" class="w-full"
+            [label]="'Managing Portfolio'"
+            [placeholder]="'Managing Portfolio'" [valuePointer]="'portfolioOwner'"
+            [dropDownArray]="portfolioOwnerList" [sortByType]="'custom'"
+            [customSortPointer]="'portfolioOwner'">
+        </spot-singleselect-autocomplete>
         <div>
             <spot-select formControlName="category" [label]="'Category'" [placeholder]="'Category'"
                          [dropDownArrayType]="'object'" [dropDownArray]="getCategory()" [idPointer]="'lookUpId'"
@@ -31,11 +36,11 @@
         <spot-input class="w-full" formControlName="metricDescription" [label]="'Metric Description'">
         </spot-input>
 
-        <mat-form-field class="w-full" [floatLabel]="'always'">
-            <mat-label>Metric Usage</mat-label>
-            <input matInput formControlName="metricUsage" type="number" max="100" min="0" placeholder="0"
-                   pattern="\d*" />
-        </mat-form-field>
+<!--        <mat-form-field class="w-full" [floatLabel]="'always'">-->
+<!--            <mat-label>Metric Usage</mat-label>-->
+<!--            <input matInput formControlName="metricUsage" type="number" max="100" min="0" placeholder="0"-->
+<!--                   pattern="\d*" />-->
+<!--        </mat-form-field>-->
     </div>
     <div class="flex items-start justify-between  form-ask-need">
         <a class="min-w-26" mat-flat-button [color]="'primary'"

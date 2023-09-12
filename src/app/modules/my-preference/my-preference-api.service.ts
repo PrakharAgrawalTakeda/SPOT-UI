@@ -51,8 +51,8 @@ export class MyPreferenceApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
-    async addMetricRepository(body, id:string){
-        var link = GlobalVariables.apiurl+"StrategicMetricRepository/"+ id
+    async addMetricRepository(body){
+        var link = GlobalVariables.apiurl+"StrategicMetricRepository"
         const abc$ = this.http.post(link,body)
         const response = await lastValueFrom(abc$)
         return response
