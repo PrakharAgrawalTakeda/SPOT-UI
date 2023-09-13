@@ -175,7 +175,8 @@
                                         </div>
                                         <div class="test">
                                             <div class="parent">
-                                                <label><label style="color:red">*</label>Problem Description/Present Situation/Submission Description</label>
+                                                <label *ngIf="SIP"><label style="color:red">*</label>Strategic Initiative Description</label>
+                                                <label *ngIf="!SIP"><label style="color:red">*</label>Problem Description/Present Situation/Submission Description</label>
                                             </div>
                                             <div class="child">
                                                 <label style="white-space: pre-wrap;" class="reviewText">{{createProjectForm.value.projectDescription}}</label>
