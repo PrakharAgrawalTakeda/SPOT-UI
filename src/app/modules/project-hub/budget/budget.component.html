@@ -22,7 +22,7 @@
                     </spot-input>
                     <spot-input class="w-full" formControlName="localCurrency" [label]="'Local Currency'" [showHint]="true" [hint]="'Currency Info'">
                     </spot-input>
-                    <spot-input-date class="w-full read-only" formControlName="apisdate" [label]="'Asset Placed In Service (Estimate)'">
+                    <spot-input-date class="w-full read-only" formControlName="apisdate" [label]="'Asset Placed In Service (Estimate)'" [Required]="true">
                     </spot-input-date>
                 </div>
             </div>
@@ -147,7 +147,7 @@
                                     </spot-input>
                                     <spot-input-date class="w-full" formControlName="lastSubmittedCurrent" showLabel="false" >
                                     </spot-input-date>
-                                    <spot-input class="w-full" formControlName="submittedByCurrent" showLabel="false" p>
+                                    <spot-input class="w-full" formControlName="submittedByCurrent" showLabel="false">
                                     </spot-input>
                                 </div>
                                 <div *ngIf="!preliminaryExists" class="mb-8">
@@ -159,7 +159,7 @@
                                     </spot-input>
                                     <spot-input-date class="w-full" formControlName="lastSubmittedPreliminary" showLabel="false" >
                                     </spot-input-date>
-                                    <spot-input class="w-full" formControlName="submittedByPreliminary" showLabel="false" p>
+                                    <spot-input class="w-full" formControlName="submittedByPreliminary" showLabel="false" >
                                     </spot-input>
                                 </div>
                             </div>

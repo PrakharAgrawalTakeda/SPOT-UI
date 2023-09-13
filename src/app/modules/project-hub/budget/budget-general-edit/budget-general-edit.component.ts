@@ -154,7 +154,7 @@ export class BudgetGeneralEditComponent {
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
-        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+        this.isBudgetAdmin = true;
     }
 
     getPredifinedInvestment(): any {
