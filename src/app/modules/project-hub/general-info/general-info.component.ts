@@ -97,6 +97,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", "Strategic Initiative / Program"]
   isStrategicInitiative: boolean = false
   formFieldHelpers: any
+  lookUpPVD: any;
   constructor(private apiService: ProjectApiService,
     private _Activatedroute: ActivatedRoute,
     private portApiService: PortfolioApiService,
@@ -141,10 +142,13 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
         this.authService.KPIMaster().then((kpi: any) => {
           console.log('LookUp Data', lookup)
           this.lookUpData = lookup
+          this.lookUpPVD = lookup.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
           this.projectHubService.lookUpMaster = lookup
           console.log('Filter Criteria:', filterres)
           this.filterCriteria = filterres
           this.kpiData = kpi
+          console.log(this.kpiData)
+          console.log(this.lookUpPVD.filter(x => x.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474"))
           this.projectHubService.kpiMasters = kpi
           if (this.callLocation == 'CloseOut') {
             this.apiService.getGeneralInfoDataWizzard(this.id, 'ProjectCloseOut').then((res: any) => {
@@ -263,6 +267,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
 
     var oeprojectypelist = response.projectData.oeprojectType && response.projectData.oeprojectType != '' ? response.projectData.oeprojectType.split(',') : []
     console.log(response)
+    console.log(response.projectData.primaryKpi)
     this.generalInfoForm.patchValue({
       problemTitle: response.projectData.problemTitle,
       problemType: response.projectData.problemType,
@@ -301,7 +306,24 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       projectReviewedYN: this.lookUpData.find(x => x.lookUpId == response.projectData.projectReviewedYN?.toLowerCase())?.lookUpName,
       projectProposalApprovedDate: response.projectData.projectProposalApprovedDate,
       //Stategic Drivers
-      primaryKPI: response.projectData.primaryKpi ? this.kpiData.find(x => x.kpiid == response.projectData.primaryKpi).kpiname : '',
+      //primaryKPI: response.projectData.primaryKpi && this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi) ? this.lookUpData.find(x => x.lookUpId == response.projectData.primaryKpi).lookUpName : '',
+      primaryKPI: (() => {
+        if (response.projectData.primaryKpi) {
+            const lookUpResult = this.lookUpPVD.find(x => x.lookUpId == response.projectData.primaryKpi);
+            if (lookUpResult) {
+                return lookUpResult.lookUpName;
+            } else {
+                const kpiResult = this.kpiData.find(x => x.kpiid == response.projectData.primaryKpi);
+                if (kpiResult) {
+                    return kpiResult.kpiname;
+                }
+            }
+        }
+        else{
+          return '';
+        }
+        
+    })(),
       isAgile: response.agilePrimaryWorkstream || response.agileWave || response.agileSecondaryWorkstream,
       agilePrimaryWorkstream: response.agilePrimaryWorkstream ? response.agilePrimaryWorkstream.lookUpName : '',
       agileSecondaryWorkstream: response.agileSecondaryWorkstream ? response.agileSecondaryWorkstream : [],
