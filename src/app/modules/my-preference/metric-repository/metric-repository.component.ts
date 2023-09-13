@@ -18,6 +18,11 @@ export class MetricRepositoryComponent {
                 public fuseAlert: FuseConfirmationService,
                 private authService: AuthService,
                 private portApiService: PortfolioApiService) {
+        this.myPreferenceService.submitbutton.subscribe(res => {
+            if (res == true) {
+                this.dataloader()
+            }
+        })
     }
 
     ngOnInit(): void {
@@ -41,10 +46,10 @@ export class MetricRepositoryComponent {
             });
     }
 
-    deleteMetricRepository(id: string) {
+    deleteMetricRepository(id: any) {
         var comfirmConfig: FuseConfirmationConfig = {
             "title": "Remove Metric Repository?",
-            "message": "Are you sure you want to delete this record?",
+            "message": "You intend to delete this metric from the metric repository. This action will remove the local metric information from all the projects where this local metric is assigned. Are you sure you want to proceed and implement the change?”",
             "icon": {
                 "show": true,
                 "name": "heroicons_outline:exclamation",
@@ -66,16 +71,13 @@ export class MetricRepositoryComponent {
         const alert = this.fuseAlert.open(comfirmConfig)
         alert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                // this.apiService.deleteMilestone(id).then(res => {
-                //     this.myPreferenceService.submitbutton.next(true)
-                // })
+                this.apiService.deleteMetricRepository(id).then(res => {
+                    this.myPreferenceService.submitbutton.next(true)
+                })
             }
         })
     }
     getLookUpName(id: any): any {
-        if(id=="1ae98e15-2f9d-435a-bd8b-656b18c28af9"){
-            return "Decimal (1 decimal)"
-        }
         return id && id.lookUpId != '' ? this.myPreferenceService.lookUpMaster.find(x => x.lookUpId == id).lookUpName : ''
     }
     getPortfolioOwnerNameById(id: string): any {
@@ -85,12 +87,13 @@ export class MetricRepositoryComponent {
         return this.filterCriteria.portfolioOwner.filter(x => x.portfolioOwnerId==id)[0]?.portfolioOwner;
     }
     getGlobalLocal(id: string): any {
-        if(id=="2eb536f8-bb88-4bd7-b4d5-4d1fb287059a"){
+        if(id=="e7a9e055-1319-4a4f-b929-cd7777599e39"){
             return "Global"
         }else{
             return "Local"
         }
-
     }
-
+    isEditable(row: any): boolean {
+        return row.metricTypeID != "e7a9e055-1319-4a4f-b929-cd7777599e39";
+    }
 }

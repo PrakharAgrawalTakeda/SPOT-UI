@@ -19,17 +19,17 @@
         </spot-singleselect-autocomplete>
         <div>
             <spot-select formControlName="category" [label]="'Category'" [placeholder]="'Category'" Required
-                         [dropDownArrayType]="'object'" [dropDownArray]="getCategory()" [idPointer]="'lookUpId'"
+                         [dropDownArrayType]="'object'" [dropDownArray]="getCategory()" [idPointer]="'lookUpId'" [showNoneOption]="false"
                          [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
             </spot-select>
         </div>
         <spot-input class="w-full" formControlName="metricName" [label]="'Metric Name'" Required>
         </spot-input>
-        <spot-input class="w-full" formControlName="unit" [label]="'Unit'" Required>
-        </spot-input>
+        <spot-textarea [rows]="1" formControlName="unit" [showLabel]="true" [label]="'Unit'" [maxLength]="20" Required>
+        </spot-textarea>
         <div>
             <spot-select formControlName="metricFormat" [label]="'Metric Format'" [placeholder]="'Metric Format'" Required
-                         [dropDownArrayType]="'object'" [dropDownArray]="getMetricFormat()" [idPointer]="'lookUpId'"
+                         [dropDownArrayType]="'object'" [dropDownArray]="getMetricFormat()" [idPointer]="'lookUpId'" [showNoneOption]="false"
                          [valuePointer]="'lookUpName'"  [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
             </spot-select>
         </div>
