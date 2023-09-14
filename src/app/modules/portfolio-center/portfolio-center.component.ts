@@ -687,6 +687,9 @@ export class PortfolioCenterComponent implements OnInit {
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
             }
+            else{
+              this.budgetCurrency = ""
+            }
             if (res.budgetTile.isPreliminaryPeriod) {
               budgetData = [
                 {

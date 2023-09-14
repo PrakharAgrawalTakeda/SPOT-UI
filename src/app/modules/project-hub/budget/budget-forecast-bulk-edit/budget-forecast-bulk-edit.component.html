@@ -356,12 +356,12 @@
             <ngx-datatable-column [sortable]="false" name="Apr" prop="apr"  [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('apr')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('apr')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -372,12 +372,12 @@
             <ngx-datatable-column [sortable]="false" name="May" prop="may" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('may')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('may')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -388,12 +388,12 @@
             <ngx-datatable-column [sortable]="false" name="Jun" prop="jun" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('jun')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('jun')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -404,12 +404,12 @@
             <ngx-datatable-column [sortable]="false" name="Jul" prop="jul" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('jul')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('jul')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -420,12 +420,12 @@
             <ngx-datatable-column [sortable]="false" name="Aug" prop="aug" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('aug')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('aug')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -436,12 +436,12 @@
             <ngx-datatable-column [sortable]="false" name="Sep" prop="sep" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('sep')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('sep')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -452,12 +452,12 @@
             <ngx-datatable-column [sortable]="false" name="Oct" prop="oct" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('oct')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('oct')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -468,12 +468,12 @@
             <ngx-datatable-column [sortable]="false" name="Nov" prop="nov" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('nov')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('nov')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -484,12 +484,12 @@
             <ngx-datatable-column [sortable]="false" name="Dec" prop="dec" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('dec')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('dec')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -500,12 +500,12 @@
             <ngx-datatable-column [sortable]="false" name="Jan" prop="jan" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('jan')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('jan')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -516,12 +516,12 @@
             <ngx-datatable-column [sortable]="false" name="Feb" prop="feb" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('feb')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('feb')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
@@ -532,12 +532,12 @@
             <ngx-datatable-column [sortable]="false" name="Mar" prop="mar" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                    <a *ngIf="!fy1TableEditStack.includes(rowIndex) || !isCellEditable('mar')" (click)="fy1TableEditRow(rowIndex)">
+                    <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value ?  value : 0}}</p>
                     </a>
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
-                          *ngIf="fy1TableEditStack.includes(rowIndex) && isCellEditable('mar')">
+                          *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
                             <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateY1()"
                                    placeholder="0" pattern="\d*" />
