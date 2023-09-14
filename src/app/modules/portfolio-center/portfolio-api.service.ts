@@ -89,5 +89,18 @@ export class PortfolioApiService {
     const response = lastValueFrom(abc$)
     return response
   }
+  getForecastData(body) {
+    var userid = GlobalVariables.apiurl + "PortfolioCenter/GetForecastBulkEditData"
+    const abc$ = this.http.post(userid, body)
+    const response = lastValueFrom(abc$)
+    return response
+  }
+
+  async bulkGenerateReports(body, userid) {
+    var link = GlobalVariables.apiurl + "Report/BulkGenerateReports/" + userid
+    const abc$ = this.http.put(link, body)
+    const response = await lastValueFrom(abc$)
+    return response
+}
 
 }

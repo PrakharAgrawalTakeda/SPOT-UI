@@ -16,6 +16,7 @@ export class MyPreferenceService {
     isFormChanged: boolean = false
     fuseDrawerLarge: boolean = false
     projectid: string = ""
+    lookUpMaster: any = []
     successSave = new BehaviorSubject<boolean>(false)
     alert: FuseConfirmationConfig = {
         "title": "Are you sure you want to exit?",
@@ -63,7 +64,7 @@ export class MyPreferenceService {
     }
     toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, fuseDrawerLarge: boolean = false): void {
         console.log(itemtype)
-        
+
         if (this.drawerOpenedright == true && this.isFormChanged == true) {
             const alertopener = this.fusealert.open(this.alert)
             alertopener.afterClosed().subscribe(res => {
@@ -88,7 +89,7 @@ export class MyPreferenceService {
         this.fuseDrawerLarge = fuseDrawerLarge
     }
     alertopener() {
-        
+
         const alertopener = this.fusealert.open(this.alert)
         this.isFormChanged = false
         alertopener.afterClosed().subscribe(res => {
@@ -103,7 +104,7 @@ export class MyPreferenceService {
                 this.all = []
                 this.projectid = ""
                 this.isFormChanged = false
-                
+
             }
         })
     }

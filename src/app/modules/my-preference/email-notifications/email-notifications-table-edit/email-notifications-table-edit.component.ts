@@ -171,6 +171,7 @@ export class EmailNotificationsTableEditComponent {
             this.preferenceservice.isFormChanged = false
       this.projecthubservice.isFormChanged = false
       this.preferenceservice.submitbutton.next(true)
+      this.preferenceservice.successSave.next(true)
       this.preferenceservice.toggleDrawerOpen('', '', [], '')
 
 

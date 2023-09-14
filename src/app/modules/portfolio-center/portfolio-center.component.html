@@ -1,69 +1,91 @@
+<!-- Budget/Spend -->
+<fuse-drawer *ngIf="PortfolioCenterService.itemtype == 'BudgetSpendOpen' || PortfolioCenterService.itemtype == 'FXRateOpen'" [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpenedright"
+    (openedChanged)="PortfolioCenterService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
+    [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerLarge}">
+    <div>
+        <app-budget-spend></app-budget-spend>
+    </div>
+    <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpened"
+        (openedChanged)="PortfolioCenterService.drawerOpenedChangedSmall($event)" [mode]="'over'" [position]="'right'"
+        [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerSmall}">
+        <div>
+            <app-fx-rate *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"></app-fx-rate>
+        </div>
+    </fuse-drawer>
+</fuse-drawer>
+<!-- Budget/Spend -->
 <div class="flex flex-col min-w-0 overflow-hidden pt-12">
-
     <mat-drawer-container class="flex-auto h-full"
         [ngStyle]="{ 'position' : filterDrawer.opened ? 'fixed' : 'relative'}">
         <!-- Drawer -->
-        <mat-drawer class="absolute inset-0 w-2qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
-            #filterDrawer>
-            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent"
-                style="overflow-y: scroll; height: 95vh;">
-                <div class=" form-ask-need h-[106.5vh]  overflow-y-scroll">
+        <mat-drawer
+            [ngClass]="{'w-full': showContent && !showFilter, 'w-2qua': showContent && showFilter, 'dark:bg-gray-900': true, 'overflow-hidden': true}"
+            [autoFocus]="false" [mode]="'over'" [position]="'end'" #filterDrawer>
+            <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent && showFilter"
+                style="overflow-y: scroll; height: 85vh;">
+                <div class=" form-ask-need h-[77.5vh]  overflow-y-scroll">
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
                         [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                         [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
-                        [customSortPointer]="'pfid'" [showHint]="true" [hint]="'The group which is responsible for the oversight and process adherence of the record'">
+                        [customSortPointer]="'pfid'" [showHint]="true"
+                        [hint]="'The group which is responsible for the oversight and process adherence of the record'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
-                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
-                        [showLabel]="true">
-                    </spot-multiselect-user-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="ExecutionScope" class="w-full"
-                        name="ExecutionScope" [label]="'Execution Scope'" [placeholder]="'Execution Scope'"
-                        [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
-                        [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'" [customSortPointer]="'pfid'" [showHint]="true" [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
+                    <spot-multiselect-autocomplete formControlName="ExecutionScope" class="w-full" name="ExecutionScope"
+                        [label]="'Execution Scope'" [placeholder]="'Execution Scope'" [valuePointer]="'portfolioOwner'"
+                        [idPointer]="'portfolioOwnerId'" [dropDownArray]="getExcecutionScope()" [sortByType]="'custom'"
+                        [customSortPointer]="'pfid'" [showHint]="true"
+                        [hint]="'Any impacted groups which will need to provide resources (People, facilities, etc) throughout the life of the project'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="OwningOrganization" class="w-full"
                         name="OwningOrganization" [label]="'Owning Organization'" [placeholder]="'Owning Organization'"
-                        [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'" [showHint]="true" [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+                        [dropDownArray]="owningOrg" [idPointer]="'name'" [valuePointer]="'name'" [showHint]="true"
+                        [hint]="'Owning Organization is the TET-level organization sponsoring or accountable for the project outcomes (Only Portfolio Managers can edit after project creation).'">
+                    </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="ProjectType" class="w-full" name="ProjectType"
+                        [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
+                        [idPointer]="'name'" [dropDownArray]="projectType">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ProjectState" class="w-full" name="ProjectState"
                         [label]="'Project State'" [placeholder]="'Project State'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.state" [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'" [showHint]="true" [hint]="'Status of the project (Active-Hold-Cancelled-Completed)'">
+                        [customSortPointer]="'lookUpOrder'" [showHint]="true"
+                        [hint]="'Status of the project (Active-Hold-Cancelled-Completed)'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="ProjectPhase" class="w-full" name="ProjectPhase"
                         [label]="'Project Phase'" [placeholder]="'Project Phase'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="filterlist.phase" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-
-                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="CapitalPhase" class="w-full" name="CapitalPhase"
-                        [label]="'Capital Phase'" [placeholder]="'Capital Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
-                        [dropDownArray]="filteredPhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0"
+                        formControlName="CapitalPhase" class="w-full" name="CapitalPhase" [label]="'Capital Phase'"
+                        [placeholder]="'Capital Phase'" [valuePointer]="'capitalPhaseName'"
+                        [idPointer]="'capitalPhaseID'" [dropDownArray]="filteredPhaseArray" [sortByType]="'custom'"
+                        [customSortPointer]="'capitalPhaseOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0" formControlName="OEPhase" class="w-full" name="OEPhase"
-                        [label]="'OE Phase'" [placeholder]="'OE Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
-                        [dropDownArray]="oePhaseArray" [sortByType]="'custom'" [customSortPointer]="'capitalPhaseOrder'">
-                    </spot-multiselect-autocomplete>
-
-                    <spot-multiselect-autocomplete formControlName="ProjectType" class="w-full" name="ProjectType"
-                        [label]="'Project Type'" [placeholder]="'Project Type'" [valuePointer]="'name'"
-                        [idPointer]="'name'" [dropDownArray]="projectType">
-                    </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
-                        [label]="'Product (s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
-                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true" [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
+                    <spot-multiselect-autocomplete *ngIf="PortfolioFilterForm.controls.ProjectPhase.value.length != 0"
+                        formControlName="OEPhase" class="w-full" name="OEPhase" [label]="'OE Phase'"
+                        [placeholder]="'OE Phase'" [valuePointer]="'capitalPhaseName'" [idPointer]="'capitalPhaseID'"
+                        [dropDownArray]="oePhaseArray" [sortByType]="'custom'"
+                        [customSortPointer]="'capitalPhaseOrder'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="TotalCAPEX" class="w-full" name="TotalCAPEX"
                         [label]="'Total CAPEX'" [placeholder]="'Total CAPEX'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="totalCAPEX" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
+                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true"
+                        [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
+                    </spot-multiselect-autocomplete>
+                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
+                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
+                        [showLabel]="true">
+                    </spot-multiselect-user-autocomplete>
                     <spot-multiselect-autocomplete formControlName="GMSBudgetOwner" class="w-full" name="GMSBudgetOwner"
                         [label]="'GMS Budget Owner'" [placeholder]="'GMS Budget Owner'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
-                        [dropDownArray]="getGMSBudgetOwner()" [sortByType]="'custom'"
-                        [customSortPointer]="'lookUpOrder'">
+                        [dropDownArray]="getGMSBudgetOwner()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="AGILEWorkstream" class="w-full"
                         name="AGILEWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
@@ -73,33 +95,39 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
-                    <!-- <spot-multiselect-autocomplete formControlName="AnnualInitiatives" class="w-full" name="AnnualInitiatives"
-                        [label]="'Annual Initiatives'" [placeholder]="'Annual Initiatives'" [valuePointer]="'name'" [idPointer]="'name'"
-                        [dropDownArray]="projectType">
-                    </spot-multiselect-autocomplete> -->
-                    <spot-toggle class="w-full" formControlName="CAPSProject" [mode]="'dropDown'"
-                        [label]="'CAPS Project '" [showHint]="true" [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
+                    <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject"
+                        [label]="'CAPS Project'" [placeholder]="'CAPS Project'" [showNoneOption]="true"
+                        [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues" [showHint]="true"
+                        [hint]="'CAPS Project (YES) — Projects initiated and executed with the primary focus of directly reducing scope 1 or 2 carbon emissions, water withdrawal, or waste to landfill (e.g. LED lighting upgrade
 CAPS Project (NO) — All other projects, even those that have an indirect impact on emissions, water, and waste (e.g. capacity expansion or asset replacement). Environmental impacts must be captured in the SPOT record for these projects.'">
-                    </spot-toggle>
-                    <app-spot-multiselect-project-autocomplete formControlName="projectName" [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
-                        [label]="'Project Name'" name="projectName" [showLabel]="true">
-                    </app-spot-multiselect-project-autocomplete>
+                    </spot-select>
+
                     <spot-multiselect-autocomplete formControlName="OverallStatus" class="w-full" name="OverallStatus"
                         [label]="'Overall Status'" [placeholder]="'Overall Status'" [valuePointer]="'lookUpName'"
-                        [idPointer]="'lookUpId'" [dropDownArray]="overallStatus">
+                        [idPointer]="'lookUpId'" [dropDownArray]="overallStatus" [sortByType]="'custom'"
+                        [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;" (click)="OpenLA()">+ Add Local Attribute</mat-label>
-                    <mat-label *ngIf="showLA" id="localAttribute" style="color: #a0cbf1;" (click)="CloseLA()">+ Hide Local
-                        Attribute</mat-label>
+                    <app-spot-multiselect-project-autocomplete formControlName="projectName"
+                        [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
+                        [label]="'Project/Program'" name="projectName" [showLabel]="true">
+                    </app-spot-multiselect-project-autocomplete>
+
+                    <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;"
+                        (click)="OpenLA()">+ Show Local Attributes</mat-label>
+                    <mat-label *ngIf="showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;"
+                        (click)="CloseLA()">+ Hide Local
+                        Attributes</mat-label>
 
 
 
                     <form class="pl-3 w-full overflow-hidden" [formGroup]="localAttributeForm" *ngIf="showLA">
-                        <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[80.5vh] pt-3 pr-3': viewType == 'SidePanel'}" *ngIf="showLA">
+                        <div [ngClass]="{'overflow-y-scroll overflow-x-hidden h-[80.5vh] pt-3 pr-3': viewType == 'SidePanel'}"
+                            *ngIf="showLA">
                             <div *ngFor="let item of dataLA">
                                 <div [ngSwitch]="item.dataType">
                                     <div *ngSwitchCase="'1'" class="w-full mt-4 mb-6" #checkbox>
-                                        <spot-toggle class="w-full" formControlName={{item.uniqueId}} [mode]="'toggle'" [label]=item.name>
+                                        <spot-toggle class="w-full" formControlName={{item.uniqueId}} [mode]="'toggle'"
+                                            [label]=item.name>
                                         </spot-toggle>
                                     </div>
                                     <div *ngIf="!item.isMulti" #input>
@@ -108,20 +136,22 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                         </spot-input>
                                     </div>
                                     <div *ngIf="item.isMulti" #textarea>
-                                        <spot-textarea *ngSwitchCase="'6'" formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                            [label]=item.name [rows]="item.linesCount">
+                                        <spot-textarea *ngSwitchCase="'6'" formControlName={{item.uniqueId}}
+                                            name={{item.uniqueId}} [label]=item.name [rows]="item.linesCount">
                                         </spot-textarea>
                                     </div>
                                     <div *ngIf="!item.isMulti" #Lookup>
-                                        <spot-singleselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
-                                            name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
+                                        <spot-singleselect-autocomplete *ngSwitchCase="'3'"
+                                            formControlName={{item.uniqueId}} class="w-full" name={{item.uniqueId}}
+                                            [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
                                             [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'"
                                             [customSortPointer]="'lookUpOrder'">
                                         </spot-singleselect-autocomplete>
                                     </div>
                                     <div *ngIf="item.isMulti" #multiLookup>
-                                        <spot-multiselect-autocomplete *ngSwitchCase="'3'" formControlName={{item.uniqueId}} class="w-full"
-                                            name={{item.uniqueId}} [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
+                                        <spot-multiselect-autocomplete *ngSwitchCase="'3'"
+                                            formControlName={{item.uniqueId}} class="w-full" name={{item.uniqueId}}
+                                            [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
                                             [idPointer]="'lookUpId'" [dropDownArray]="getLookup(item.lookupParentId)"
                                             [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                                         </spot-multiselect-autocomplete>
@@ -129,34 +159,36 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                     <div style="display: flex;">
                                         <spot-input style="display: flex;" *ngSwitchCase="'4'" class="w-full"
                                             formControlName={{item.name}} name={{item.name}} [label]=item.name
-                                            [decimalCount]=item.linesCount [inputType]="'Number'" [callLocation]="'LocalAttribute'"
-                                            [placeholder]=item.name>
+                                            [decimalCount]=item.linesCount [inputType]="'Number'"
+                                            [callLocation]="'LocalAttribute'" [placeholder]=item.name>
                                         </spot-input>
-                                        <spot-input style="display: flex; left: 10px; position: relative;" *ngSwitchCase="'4'"
-                                            class="w-full" formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                            [decimalCount]=item.linesCount [inputType]="'Number'" [callLocation]="'LocalAttribute'"
-                                            [placeholder]=item.name>
+                                        <spot-input style="display: flex; left: 10px; position: relative;"
+                                            *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}}
+                                            name={{item.uniqueId}} [decimalCount]=item.linesCount [inputType]="'Number'"
+                                            [callLocation]="'LocalAttribute'" [placeholder]=item.name>
                                         </spot-input>
                                     </div>
                                     <div style="display: flex;">
-                                        <spot-input-date style="display: flex;" *ngSwitchCase="'2'" class="w-full read-only"
-                                            formControlName={{item.name}} name={{item.name}} [label]=item.name [placeholder]=item.name>
+                                        <spot-input-date style="display: flex;" *ngSwitchCase="'2'"
+                                            class="w-full read-only" formControlName={{item.name}} name={{item.name}}
+                                            [label]=item.name [placeholder]=item.name>
                                         </spot-input-date>
-                                        <spot-input-date style="display: flex; left: 10px; position: relative;" *ngSwitchCase="'2'"
-                                            class="w-full read-only" formControlName={{item.uniqueId}} name={{item.uniqueId}}
+                                        <spot-input-date style="display: flex; left: 10px; position: relative;"
+                                            *ngSwitchCase="'2'" class="w-full read-only"
+                                            formControlName={{item.uniqueId}} name={{item.uniqueId}}
                                             [placeholder]=item.name>
                                         </spot-input-date>
                                     </div>
                                     <div *ngIf="!item.isMulti" #people>
-                                        <spot-singleselect-user-autocomplete *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
-                                            [label]=item.name name={{item.uniqueId}} [showLabel]="true"
-                                            [placeholder]="'Last Name, First Name'">
+                                        <spot-singleselect-user-autocomplete *ngSwitchCase="'5'"
+                                            formControlName={{item.uniqueId}} [label]=item.name name={{item.uniqueId}}
+                                            [showLabel]="true" [placeholder]="'Last Name, First Name'">
                                         </spot-singleselect-user-autocomplete>
                                     </div>
                                     <div *ngIf="item.isMulti" #multiPeople>
-                                        <spot-multiselect-user-autocomplete *ngSwitchCase="'5'" formControlName={{item.uniqueId}}
-                                            [label]=item.name name={{item.uniqueId}} [showLabel]="true"
-                                            [placeholder]="'Last Name, First Name'">
+                                        <spot-multiselect-user-autocomplete *ngSwitchCase="'5'"
+                                            formControlName={{item.uniqueId}} [label]=item.name name={{item.uniqueId}}
+                                            [showLabel]="true" [placeholder]="'Last Name, First Name'">
                                         </spot-multiselect-user-autocomplete>
                                     </div>
                                 </div>
@@ -164,35 +196,189 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         </div>
                     </form>
 
-
-                    <div style="width: 15%;">
+                </div>
+                <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px;">
+                    <button class="apply-button" mat-flat-button [color]="'primary'" (click)="Closefilter()">
+                        Cancel
+                    </button>
                     <button class="apply-button" mat-flat-button [color]="'primary'" (click)="applyfilters()">
                         Apply Filters
                     </button>
-                    </div>
+
                 </div>
             </form>
-        </mat-drawer>
-        
-        <mat-drawer class="w-3qua dark:bg-gray-900 overflow-hidden" [autoFocus]="false" [mode]="'over'"
-            [position]="'end'" #matDrawerRight>
-            <div class="p-4">
-                Hello I am new
+            <!-- GENERATE REPORT -->
+            <div class="mt-6 pl-3 pt-3 pr-3 h-[80.5vh] w-full" #target id="scheduleTableDiv" *ngIf="showContent && !showFilter">
+                <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="true" [scrollbarH]="false"
+                    columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
+                    [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [virtualization]="false" [footerHeight]="50"
+                    [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]"
+                    class="datatable-PO-60 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview"
+                    #projectOverviewTable>
+
+                    <!-- Define columns -->
+                    <ngx-datatable-column name="Project ID" prop="problemId" [resizeable]="false" [sortable]="false"
+                    [width]="25">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Budget ID" prop="budgetId" [resizeable]="false" [sortable]="false"
+                    [width]="40">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Project Name" prop="problemTitle" [resizeable]="false"
+                        [sortable]="false" [width]="200">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            <p (click)="OpenProject(value)" class="projectName">{{ value }}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="PM" prop="pm" [resizeable]="false" [sortable]="false" [width]="50">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Sponsor" prop="sponsor" [resizeable]="false" [sortable]="false"
+                    [width]="50">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                            ngx-datatable-cell-template>
+                            {{ value }}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <!-- Toggle column -->
+                    <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
+                          let-selectFn="selectFnToggleName">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Proposal'].allToggledFn()"
+                            (change)="toggles['Project Proposal'].selectAllFn(!toggles['Project Proposal'].allToggledFn())"></mat-slide-toggle>
+                          Project Proposal
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                          let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Proposal'].states[rowIndex]"
+                            (change)="toggles['Project Proposal'].toggleFn(rowIndex)"></mat-slide-toggle>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
+                          let-selectFn="selectFnToggleName">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Charter'].allToggledFn()"
+                            (change)="toggles['Project Charter'].selectAllFn(!toggles['Project Charter'].allToggledFn())"></mat-slide-toggle>
+                          Project Charter
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                          let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Charter'].states[rowIndex]"
+                            (change)="toggles['Project Charter'].toggleFn(rowIndex)"></mat-slide-toggle>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
+                          let-selectFn="selectFnToggleName">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Performance Dashboard'].allToggledFn()"
+                            (change)="toggles['Performance Dashboard'].selectAllFn(!toggles['Performance Dashboard'].allToggledFn())"></mat-slide-toggle>
+                          Performance Dashboard
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                          let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Performance Dashboard'].states[rowIndex]"
+                            (change)="toggles['Performance Dashboard'].toggleFn(rowIndex)"></mat-slide-toggle>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
+                          let-selectFn="selectFnToggleName">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Budget Dashboard'].allToggledFn()"
+                            (change)="toggles['Budget Dashboard'].selectAllFn(!toggles['Budget Dashboard'].allToggledFn())"></mat-slide-toggle>
+                          Budget Dashboard
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                          let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Budget Dashboard'].states[rowIndex]"
+                            (change)="toggles['Budget Dashboard'].toggleFn(rowIndex)"></mat-slide-toggle>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
+                          let-selectFn="selectFnToggleName">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Closeout'].allToggledFn()"
+                            (change)="toggles['Project Closeout'].selectAllFn(!toggles['Project Closeout'].allToggledFn())"></mat-slide-toggle>
+                          Project Closeout
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                          let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['Project Closeout'].states[rowIndex]"
+                            (change)="toggles['Project Closeout'].toggleFn(rowIndex)"></mat-slide-toggle>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column [width]="50" [sortable]="false" [resizeable]="false">
+                        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelectedToggleName"
+                          let-selectFn="selectFnToggleName">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['GMSGQ Product Team'].allToggledFn()"
+                            (change)="toggles['GMSGQ Product Team'].selectAllFn(!toggles['GMSGQ Product Team'].allToggledFn())"></mat-slide-toggle>
+                          GMSGQ Product Team
+                        </ng-template>
+                        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelectedToggleName"
+                          let-onCheckboxChangeFn="onCheckboxChangeFnToggleName" let-row="row" let-rowIndex="rowIndex">
+                          <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="toggles['GMSGQ Product Team'].states[rowIndex]"
+                            (change)="toggles['GMSGQ Product Team'].toggleFn(rowIndex)"></mat-slide-toggle>
+                        </ng-template>
+                      </ngx-datatable-column>
+
+                </ngx-datatable>
+                <div class="flex justify-between gap-8">
+                    <button class="min-w-26 submit-button" mat-flat-button [color]="'primary'" (click)="Close()">
+                        Cancel
+                    </button>
+                    <button class="min-w-26 submit-button" mat-flat-button [color]="'primary'" (click)="generateReports()">
+                        Submit
+                    </button>
+
+                </div>
+
             </div>
         </mat-drawer>
+
         <!-- Drawer content -->
         <mat-drawer-content class="flex flex-col" style="width: 100vw;">
 
             <!-- Header -->
             <div [hidden]='!showContent' class="flex-auto border-t -mt-px pt-4 sm:pt-6 flex-auto p-6 sm:p-10">
-                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="filterDrawer.toggle()">
-                    Filters
-                </button>
-                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
-                    Reset Filters (only dev)
-                </button>
+                <div class="flex justify-between gap-8 mt-2" style="margin-bottom: -20px;">
+                    <h1 class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary" style="margin-left: 10px;">
+                        Portfolio Center</h1>
+                    <div class=" flex items-center">
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('Filter')">
+                            Filters
+                        </button>
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
+                            Reset Filters (only dev)
+                        </button>
+                    </div>
+                </div>
+                <div style="top: 25px; display: inline;position: relative;left: 10px;">
+                    <span *ngFor="let item of filterList; last as isLast">
+                        <span *ngIf="item.count == 1" class="text-primary text-base">
+                            {{item.name}} : {{item.value}} {{isLast?'':', '}}
+                        </span>
+                        <span *ngIf="item.count > 1" class="text-primary text-base">
+                            {{item.name}}( {{item.count}} ) {{isLast?'':', '}}
+                        </span>
+                    </span>
+                </div>
                 <div *ngIf='showContent'
-                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 mt-8 " @slideInRight>
+                    class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full min-w-0 mt-8 " @slideInRight>
                     <!-- <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
                         @slideInRight>
                         <div class="flex flex-col flex-auto  overflow-hidden p-6">
@@ -215,10 +401,10 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </button>
                         </div>
                     </div> -->
-                    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
+                    <div class="flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
                         @slideInLeft>
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col flex-auto p-6 overflow-hidden">
-                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-8">
+                            <div class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-0">
                                 Phase Distribution
                             </div>
                             <div class="flex flex-col flex-auto h-60">
@@ -232,47 +418,53 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </div>
                         </div>
                     </div>
-                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="tile-title font-medium tracking-tight text-primary leading-6 truncate mb-8">
-                                Milestones</div>
+                            <div class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-2">
+                                Milestone Performance</div>
 
                             <ng-container *ngFor="let dataset of data.milstoneTile">
-                                <div class="grid grid-cols-2 py-3">
-                                    <div class="flex items-center">
-                                        <div class="ml-3">{{dataset.title}}</div>
+                                <div class="flex py-1">
+                                    <div class="flex items-center text-secondary w-14 font-extrabold text-lg"
+                                        style="justify-content: right; margin-right: 15px;">{{dataset.value}}%</div>
+                                    <div class="flex items-right text-lg">
+                                        <div>{{dataset.title}}</div>
                                     </div>
-                                    <div class="text-right text-secondary">{{dataset.value}}%</div>
                                 </div>
                             </ng-container>
                         </div>
                     </div>
                     <!-- Milestones -->
-                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="tile-title font-medium tracking-tight leading-6 text-primary truncate mb-2">
+                            <div class="text-2xl lg:text-3xl font-medium tracking-tight leading-6 text-primary truncate mb-0">
                                 Budget</div>
 
                             <div class="flex flex-col mt-2">
-                                <div class="grid grid-cols-3 py-3">
-                                    <div class="flex items-center"></div>
-                                    <div class="text-right font-medium">CAPEX</div>
-                                    <div class="text-right font-medium">OPEX</div>
+                                <div class="grid grid-cols-3 py-1">
+                                    <div class="flex items-center font-extrabold text-lg">Reference</div>
+                                    <div class="text-right font-extrabold text-lg"
+                                        style="right: 10px; position: relative;">CAPEX ({{budgetCurrency}})</div>
+                                    <div class="text-right font-extrabold text-lg"
+                                        style="right: 10px; position: relative;">OPEX ({{budgetCurrency}})</div>
                                 </div>
                                 <ng-container *ngFor="let dataset of data.budgetTile">
-                                    <div class="grid grid-cols-3 py-3">
-                                        <div class="flex items-center">
-                                            <div class="ml-3">{{dataset.title}}</div>
+                                    <div class="grid grid-cols-3 py-1" style="right: 10px; position: relative;">
+                                        <div class="flex items-left">
+                                            <div class="ml-3 text-lg">{{dataset.title}}</div>
                                         </div>
-                                        <div class="text-right text-secondary">{{dataset.value}}</div>
-                                        <div class="text-right text-secondary">{{dataset.value2}}</div>
+                                        <div class="text-right text-secondary font-extrabold text-lg">{{dataset.value}}
+                                        </div>
+                                        <div class="text-right text-secondary font-extrabold text-lg">{{dataset.value2}}
+                                        </div>
                                     </div>
                                 </ng-container>
                             </div>
 
                         </div>
+                        
                         <div class="p-4 text-right">
-                            <label >Forecast Bulk Edit Page</label>
+                            <button class="forecast" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast Bulk Edit Page</button>
                         </div>
                     </div>
                     <!-- Ask Needs -->
@@ -320,50 +512,59 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </div> -->
 
                 </div>
-                <div class="p-6">
-                    <div class="mr-4 tile-title font-medium tracking-tight text-primary leading-6 truncate">Project Overview</div>
-                </div>
-                <div style="height: auto;">
+                <div class="flex justify-between gap-8 mt-2 p-6" style="margin-bottom: -30px;">
+                    <h1 class="text-3xl tracking-tight leading-7 sm:leading-10 text-primary"
+                        style="margin-left: -15px;">Project Overview</h1>
+                    <div class=" flex items-center">
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenBiReport()">
                             Portfolio Report
                         </button>
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="OpenSPOTReport()">
                             SPOT Data (Power BI)
                         </button>
-                        <button class="ml-4" mat-flat-button [color]="'primary'">
+                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('BulkReport')">
                             Generate Reports
                         </button>
+                    </div>
                 </div>
-                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden" *ngIf="showContent">
-                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force" [externalPaging]="true"
-        [count]="totalElements"
-        [offset]="pageNumber"
-        [limit]="size"
-        (page)="setPage('',$event)"
-        [footerHeight]="50" [virtualization]="false" [sorts]="[{ prop: 'OverAllStatusSort', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]" class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap" [rows]="projectOverview" #projectOverviewTable>
-                
-                        <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30" [sortable]="true" [frozenLeft]="true">
+                <div class="mxflex flex-col flex-auto bg-card mt-6 shadow rounded-2xl overflow-hidden"
+                    *ngIf="showContent">
+                    <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
+                        columnMode="force" [externalPaging]="true" [count]="totalElements" [offset]="pageNumber"
+                        [limit]="size" (page)="setPage('',$event)" (sort)="sort($event)" [footerHeight]="50"
+                        [virtualization]="false"
+                        [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]"
+                        class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap"
+                        [rows]="projectOverview" #projectOverviewTable>
+
+                        <ngx-datatable-column name="Overall status" prop="overallStatus"
+                            [headerClass]="getFrozenHeaderClassID" [width]="70" [sortable]="true" [frozenLeft]="true"
+                            [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon style ="margin-bottom: 30px;" svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon style="margin-left: 12px;"
+                                    svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Project ID / Budget ID" prop="problemId" [width]="95" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
-                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                                <p style="margin-bottom: 30px;">{{ value }} <br> {{ row.budgetId }}</p>
+                        <ngx-datatable-column name="Project ID/ Budget ID" prop="problemId" [width]="95"
+                            [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID" [resizeable]="false">
+                            <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value"
+                                ngx-datatable-cell-template>
+                                <p>{{ value }} <br> {{row.budgetId}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                       <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="210" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
+                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="300"
+                            [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="margin-bottom: 34px;" (click)="OpenProject(value)">{{ value }}</p>
+                                <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Phase (Project/Capital/OE)" prop="projectCapitalOe" [width]="200" [resizeable]="false">
+                        <ngx-datatable-column name="Phase (Project/Capital/OE)" prop="projectCapitalOe" [width]="200"
+                            [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
@@ -381,86 +582,95 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Schedule" prop="scheduleIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30">
+                        <ngx-datatable-column name="Schedule" prop="scheduleIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon
+                                    svgIcon="{{(indicator.getIndicators(row.scheduleIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.scheduleIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Risk/Issues" prop="riskIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30">
+                        <ngx-datatable-column name="Risk/Issue" prop="riskIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon
+                                    svgIcon="{{(indicator.getIndicators(row.riskIssueIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.riskIssueIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Ask/Needs" prop="askNeedIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30">
+                        <ngx-datatable-column name="Ask/Need" prop="askNeedIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon
+                                    svgIcon="{{(indicator.getIndicators(row.askNeedIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.askNeedIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30">
+                        <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon
+                                    svgIcon="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
-                            [width]="30">
+                        <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass"
+                            [resizeable]="false" [width]="30">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                    class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                                <mat-icon
+                                    svgIcon="{{(indicator.getIndicators(row.spendIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.spendIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="DQ%" prop="projectDataQuality" [width]="70">
+                        <ngx-datatable-column name="DQ%" prop="projectDataQualityString" [width]="70">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value}}</p>
+                                <p style="text-align: right;margin-right: 10px;"
+                                    [ngStyle]="{color:getColor(row.projectDataQuality)}">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Total CAPEX Approved/Forecast" prop="totalApprovedCapex" [width]="180">
+                        <ngx-datatable-column name="Total CAPEX Approved/Forecast" prop="totalApprovedCapex"
+                            [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <!-- <p>{{value}}</p> -->
-                                <div class="grid grid-cols-1 text-right">
+                                <div class="grid grid-cols-1 text-right" style="margin-right: 10px;">
                                     {{
                                     row.CAPEX ? row.CAPEX.toLocaleString() : 0
                                     }} &nbsp; {{row.currencyAbb}}
                                 </div>
                                 <br />
-                                <div class="text-right">
+                                <div class="text-right" style="margin-right: 12px;">
                                     {{ row.FORECAST ? row.FORECAST.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
                                 </div>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Carbon Impact (Tons CO2)" prop="calculatedEmissionsImpact" [width]="130">
+                        <ngx-datatable-column name="Carbon Impact (Tons CO2)" prop="calculatedEmissionsImpact"
+                            [width]="130">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Water Impact (m3)" prop="waterImpactUnits" [width]="110">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
                         <ngx-datatable-column name="Milestone / Progression" prop="progression" [resizeable]="false"
-                            [headerClass]="alignHeaderMiddleClass" [cellClass]="getGraphCellClass" [width]="200" [sortable]="false">
+                            [headerClass]="alignHeaderMiddleClass" [cellClass]="getGraphCellClass" [width]="200"
+                            [sortable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <apx-chart [chart]="{
                                                             type: 'bar',
@@ -513,36 +723,42 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [width]="250" [resizeable]="false">
+                        <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [width]="250"
+                            [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 {{ value }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate" [resizeable]="false"
-                            [width]="180">
+                        <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate"
+                            [resizeable]="false" [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                {{ value | date:'dd-MMM-yyyy' }}
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate" [resizeable]="false"
-                            [width]="150">
+                        <ngx-datatable-column name="Execution Complete Date" prop="executionCompleteDate"
+                            [resizeable]="false" [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                <p [ngClass]="{'red': row.redExecutionCompleteDate}">{{ value | date:'dd-MMM-yyyy'}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration" [resizeable]="false" [width]="150"
-                            >
+                        <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration"
+                            [resizeable]="false" [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                {{ value }}
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p> <br
+                                    *ngIf="row.completed">
+                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.completed">Completed</p> <br
+                                    *ngIf="row.notBaselined">
+                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.notBaselined">Not Baselined
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
-                
+
                     </ngx-datatable>
                 </div>
-                
+
 
             </div>
 

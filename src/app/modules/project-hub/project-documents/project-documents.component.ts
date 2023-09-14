@@ -16,6 +16,8 @@ export class ProjectDocumentsComponent implements OnInit {
   sharepointLink: any = null
   viewContent: boolean = false
   isCreate: boolean = true
+  createButtonText = "Create Library"
+  generating: boolean = false
   constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private sanitizer: DomSanitizer) {
 
   }
@@ -40,5 +42,13 @@ export class ProjectDocumentsComponent implements OnInit {
   }
   newtab(){
     window.open(this.projectData.projectSiteUrl + '/Shared%20Documents/Forms/AllItems.aspx', '_blank');
+  }
+
+  createNewLibrary(){
+    this.generating = true
+    this.createButtonText = "Generating..."
+    this.apiService.addProjectDocumentLibrary(null,this.id).then(res=>{
+      this.dataloader()
+    })
   }
 }

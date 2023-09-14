@@ -39,6 +39,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { EmailNotificationsComponent } from './email-notifications/email-notifications.component';
 import { EmailNotificationsEditComponent } from './email-notifications/email-notifications-edit/email-notifications-edit.component';
 import { EmailNotificationsTableEditComponent } from './email-notifications/email-notifications-table-edit/email-notifications-table-edit.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MetricRepositoryComponent } from './metric-repository/metric-repository.component';
+import { MetricRepositoryAddEditViewComponent } from './metric-repository/metric-repository-add-edit-view/metric-repository-add-edit-view.component';
 export const projectRoutes: Route[] = [
   {
     path: '',
@@ -48,6 +51,10 @@ export const projectRoutes: Route[] = [
   {
     path: 'settings',
     component: ProjectSettingsComponent,
+  },
+  {
+      path: 'metric-repository',
+      component: MetricRepositoryComponent,
   },
   {
       path: 'milestone-sets',
@@ -69,7 +76,9 @@ export const projectRoutes: Route[] = [
         MilestoneSetViewEditComponent,
         EmailNotificationsComponent,
         EmailNotificationsEditComponent,
-        EmailNotificationsTableEditComponent
+        EmailNotificationsTableEditComponent,
+        MetricRepositoryComponent,
+        MetricRepositoryAddEditViewComponent
     ],
     exports: [
         MilestoneSetViewEditComponent
@@ -107,7 +116,9 @@ export const projectRoutes: Route[] = [
         MatTooltipModule,
         FuseAlertModule,
         SpotFormsModule,
-        DragDropModule
+        DragDropModule,
+
+    MatSnackBarModule
     ]
 })
 export class MyPreferenceModule { }

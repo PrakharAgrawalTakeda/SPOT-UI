@@ -239,31 +239,31 @@ environmentalSourceId: new FormControl(''),
 
   submitWarehousing() {
     this.submitPrep()
-    if (this.warehousingFormValue.filter(x => x.shipmentWeight == "").length > 0) {
-      var comfirmConfig: FuseConfirmationConfig = {
-        "title": "Please select a value in Shipment Weight.",
-        "message": "",
-        "icon": {
-          "show": true,
-          "name": "heroicons_outline:exclamation",
-          "color": "warning"
-        },
-        "actions": {
-          "confirm": {
-            "show": true,
-            "label": "Okay",
-            "color": "primary"
-          },
-          "cancel": {
-            "show": false,
-            "label": "Cancel"
-          }
-        },
-        "dismissible": true
-      }
-      const alert = this.fuseAlert.open(comfirmConfig)
-    }
-    else {
+    // if (this.warehousingFormValue.filter(x => x.shipmentWeight == "").length > 0) {
+    //   var comfirmConfig: FuseConfirmationConfig = {
+    //     "title": "Please select a value in Shipment Weight.",
+    //     "message": "",
+    //     "icon": {
+    //       "show": true,
+    //       "name": "heroicons_outline:exclamation",
+    //       "color": "warning"
+    //     },
+    //     "actions": {
+    //       "confirm": {
+    //         "show": true,
+    //         "label": "Okay",
+    //         "color": "primary"
+    //       },
+    //       "cancel": {
+    //         "show": false,
+    //         "label": "Cancel"
+    //       }
+    //     },
+    //     "dismissible": true
+    //   }
+    //   const alert = this.fuseAlert.open(comfirmConfig)
+    // }
+   // else {
       console.log(this.warehousingDb)
       this.projecthubservice.isFormChanged = false
       this.environmentalSourceTypeId == 'af83f434-2e3d-42fc-b506-f93ce2f74503'
@@ -279,7 +279,7 @@ environmentalSourceId: new FormControl(''),
           this.projecthubservice.toggleDrawerOpen('', '', [], '')
 
       })
-    }
+    //}
   }
 
 

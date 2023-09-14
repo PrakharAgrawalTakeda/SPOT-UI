@@ -92,6 +92,7 @@ export class WarehousingTableComponent {
       if (close == 'confirmed') {
         this.apiService.deleteDistribution(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
         })
       }
     })

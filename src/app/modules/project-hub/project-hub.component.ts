@@ -13,6 +13,7 @@ import { Constants } from 'app/shared/constants';
 import { IAppSetting } from 'app/shared/global-app-settings';
 import { MsalService } from '@azure/msal-angular';
 import { RoleService } from 'app/core/auth/role.service';
+import moment from 'moment';
 @Component({
     selector: 'app-project-hub',
     templateUrl: './project-hub.component.html',
@@ -35,56 +36,9 @@ export class ProjectHubComponent implements OnInit {
     targetPercentage = Constants.QUALITY_TARGET_PERCENTAGE;
     lowerTargetPercentage = Constants.QUALITY_LOWER_TARGET_PERCENTAGE;
     phaseStatePermission: boolean = false;
-    activeaccount:any
-    newmainnav: any = [
-        {
-            id: 'portfolio-center',
-            title: 'Portfolio Center',
-            type: 'basic',
-            link: '/portfolio-center'
-        },
-        {
-            // id: 'create-project',
-            title: 'Create Project',
-            type: 'collapsable',
-            link: '/create-project',
-            children: [
-                {
-                    title: 'Create Project',
-                    type: 'basic',
-                    link: '/create-project/create-new-project'
-                },
-                {
-                    title: 'Copy Project',
-                    type: 'basic',
-                    link: '/create-project/copy-project'
-                }
-            ],
-        },
-        {
-            id: 'project-hub',
-            title: 'Project Hub',
-            type: 'basic',
-            link: '/project-hub'
-        },
-        {
-            id: 'spot-documents',
-            title: 'SPOT Resources',
-            type: 'basic',
-            externalLink: true,
-            link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-            target: '_blank'
-        },
-        {
-            id: 'report-navigator',
-            title: 'Report Navigator',
-            type: 'basic',
-            link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-            externalLink: true,
-            target: "_blank"
-
-        }
-    ]
+    activeaccount: any
+    newmainnav: any
+    projectHubNavigation: any
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
         private apiService: ProjectApiService,
@@ -114,36 +68,109 @@ export class ProjectHubComponent implements OnInit {
     ngOnInit(): void {
         console.log("Project Hub Started")
         this.id = this._Activatedroute.snapshot.paramMap.get("id");
+        this.activeaccount = this.msal.instance.getActiveAccount()
         this.projecthubservice.projectidInjector(this.id)
         this.phaseStatePermission = this.projecthubservice.roleControllerControl.projectHub.projectBoard.phaseState;
-            if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
-                this.newmainnav = [
-                    {
-                        id: 'portfolio-center',
-                        title: 'Portfolio Center',
-                        type: 'basic',
-                        link: '/portfolio-center'
-                    },
-                    {
-                        id: 'spot-documents',
-                        title: 'SPOT Resources',
-                        type: 'basic',
-                        externalLink: true,
-                        link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
-                        target: '_blank'
-                    },
-                    {
-                        id: 'report-navigator',
-                        title: 'Report Navigator',
-                        type: 'basic',
-                        link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
-                        externalLink: true,
-                        target: "_blank"
+        if (this.role.roleMaster.securityGroupId == "F3A5B3D6-E83F-4BD4-8C30-6FC457D3404F") {
+            this.newmainnav = [
+                {
+                    id: 'portfolio-center',
+                    title: 'Portfolio Center',
+                    type: 'basic',
+                    link: '/portfolio-center'
+                },
+                {
+                    id: 'spot-documents',
+                    title: 'SPOT Supporting Documents',
+                    type: 'basic',
+                    externalLink: true,
+                    link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+                    target: '_blank'
+                },
+                {
+                    id: 'report-navigator',
+                    title: 'Report Navigator',
+                    type: 'basic',
+                    link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+                    externalLink: true,
+                    target: "_blank"
 
-                    }
-                ]
-            }
+                },
+                {
+                    id: 'spot-support',
+                    title: 'Need Help or Propose a Change',
+                    type: 'basic',
+                    link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+                    externalLink: true,
+                    target: "_blank"
+                }
+            ]
+        }
+        else {
+            this.newmainnav = [
+                {
+                    id: 'portfolio-center',
+                    title: 'Portfolio Center',
+                    type: 'basic',
+                    link: '/portfolio-center'
+                },
+                {
+                    // id: 'create-project',
+                    title: 'Create Project',
+                    type: 'collapsable',
+                    link: '/create-project',
+                    children: [
+                        {
+                            title: 'Create a Strategic Initiative/Program',
+                            type: 'basic',
+                            link: '/create-project/create-strategic-initiative-project'
+                        },
+                        {
+                            title: 'Create a Standard/Simple Project/Program',
+                            type: 'basic',
+                            link: '/create-project/create-new-project'
+                        },
+                        {
+                            title: 'Copy an existing Project',
+                            type: 'basic',
+                            link: '/create-project/copy-project'
+                        }
+                    ],
+                },
+                {
+                    id: 'project-hub',
+                    title: 'Project Hub',
+                    type: 'basic',
+                    link: '/project-hub'
+                },
+                {
+                    id: 'spot-documents',
+                    title: 'SPOT Supporting Documents',
+                    type: 'basic',
+                    externalLink: true,
+                    link: 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',
+                    target: '_blank'
+                },
+                {
+                    id: 'report-navigator',
+                    title: 'Report Navigator',
+                    type: 'basic',
+                    link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+                    externalLink: true,
+                    target: "_blank"
 
+                },
+                {
+                    id: 'spot-support',
+                    title: 'Need Help or Propose a Change',
+                    type: 'basic',
+                    link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+                    externalLink: true,
+                    target: "_blank"
+
+                }
+            ]
+        }
         console.log(this.projecthubservice.roleControllerControl)
         var appSetting = JSON.parse(localStorage.getItem('app-setting'))
         console.log("App Setting", appSetting)
@@ -156,11 +183,18 @@ export class ProjectHubComponent implements OnInit {
     getdata(): void {
         this.apiService.getProjectHubData(this.id).then((res: any) => {
             this.projectDetails = res.projectData
-            if(this.projectDetails.isConfidential){
-               if(!this.role.roleMaster.confidentialProjects?.some(x=>x==this.projectDetails.problemUniqueId))
-                {
-                    this.routes.navigate(['portfolio-center'])
-                }
+            if (this.projectDetails.isConfidential) {
+                this.role.getCurrentRole(this.activeaccount.localAccountId).then((res: any) => {
+                    if (!res.confidentialProjects?.some(x => x == this.projectDetails.problemUniqueId)) {
+                        this.routes.navigate(['portfolio-center'])
+                    }
+                })
+            }
+            if (this.projectDetails.problemType == "Strategic Initiative / Program") {
+                this.projectHubNavigation = this.projecthubservice.menuDataStrat
+            }
+            else {
+                this.projectHubNavigation = this.projecthubservice.menuData
             }
             this.projecthubservice.hasChildren = res.hasChildren
             this.portfolioDetails = res.portfolioCeterData
@@ -173,16 +207,28 @@ export class ProjectHubComponent implements OnInit {
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()
             this.apiService.getHubSettings(this.id).then((response: any) => {
-                //Budget
-                this.projecthubservice.menuData[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
-                //Documents
-                this.projecthubservice.menuData[0].children[7].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
-                //Teams
-                this.projecthubservice.menuData[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
-                if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
-                    this.projecthubservice.menuData[0].children[12].disabled = true
+                if (this.projectDetails.problemType == "Strategic Initiative / Program") {
+                   //Budget
+                   this.projectHubNavigation[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                   //Documents
+                   this.projectHubNavigation[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                   //Teams
+                   this.projectHubNavigation[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                   if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
+                       this.projectHubNavigation[0].children[11].disabled = true
+                   } 
                 }
-
+                else {
+                    //Budget
+                    this.projectHubNavigation[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                    //Documents
+                    this.projectHubNavigation[0].children[7].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                    //Teams
+                    this.projectHubNavigation[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                    if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
+                        this.projectHubNavigation[0].children[12].disabled = true
+                    }
+                }
                 //nav refresh
                 const navComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('projecthub-navigation');
                 navComponent.refresh();
@@ -213,14 +259,14 @@ export class ProjectHubComponent implements OnInit {
         this.navigationAppearance = (this.navigationAppearance === 'default' ? 'dense' : 'default');
         if (this.navigationAppearance == 'default') {
             var appSetting: IAppSetting = JSON.parse(localStorage.getItem('app-setting'))
-            appSetting ? appSetting.projectHubPanel = 'Locked': appSetting = {
+            appSetting ? appSetting.projectHubPanel = 'Locked' : appSetting = {
                 projectHubPanel: 'Locked'
             }
             localStorage.setItem('app-setting', JSON.stringify(appSetting))
         }
         else {
             var appSetting: IAppSetting = JSON.parse(localStorage.getItem('app-setting'))
-            appSetting ? appSetting.projectHubPanel = 'Unlocked': appSetting = {
+            appSetting ? appSetting.projectHubPanel = 'Unlocked' : appSetting = {
                 projectHubPanel: 'Unlocked'
             }
             localStorage.setItem('app-setting', JSON.stringify(appSetting))

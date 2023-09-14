@@ -27,9 +27,9 @@ export class AssociatedProjectsComponent implements OnInit {
         private msalService: MsalService,
         private portApiService: PortfolioApiService
     ) {
-        this.projecthubservice.submitbutton.subscribe(res => {
-            this.dataloader()
-        })
+        // this.projecthubservice.submitbutton.subscribe(res => {
+        //     this.dataloader()
+        // })
     }
     id: string = '';
     rows = [];
@@ -75,7 +75,7 @@ export class AssociatedProjectsComponent implements OnInit {
             this.projecthubservice.removedIds = ids;
             this.projecthubservice.projectChildren = children;
             this.projecthubservice.projects = projects;
-            this.rows = this.projecthubservice.projects;
+            this.rows = this.projecthubservice.projects.filter(row => row.problemUniqueId !== row.parentId);
         });
 
         this.viewContent = true;
@@ -125,7 +125,7 @@ export class AssociatedProjectsComponent implements OnInit {
     }
     exportToExcel(): any {
         //To be changed once the power BI report is done
-        const url = 'https://app.powerbi.com/groups/b852fec1-9c8e-4224-a4cc-a2f0587c7f2c/reports/2971aba4-a0e6-49ca-97ca-37f5e94bf8f5/ReportSectiond4669b229488cd3d4112';
+        const url = 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/2971aba4-a0e6-49ca-97ca-37f5e94bf8f5/ReportSection082c84f8d370d4760d9b?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae';
         window.open(url, '_blank');
     }
     onProgramReport(): any {
