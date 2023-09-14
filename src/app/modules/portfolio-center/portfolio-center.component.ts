@@ -1449,6 +1449,10 @@ export class PortfolioCenterComponent implements OnInit {
     this.toggleObject = {}
     // Initialize counters for each report type
     const reportTypeCounters = {};
+    Object.keys(this.pageToggleStates[0] || {}).forEach(toggleName => {
+      reportTypeCounters[toggleName] = 0;
+    });
+
     // Step 1: Iterate through each page
 for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
   if (this.pageToggleStates[pageNumber]) {
@@ -1499,6 +1503,15 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       );
 
     console.log(totalTurnedOnToggles)
+                // Flag to determine if we've found a report type with more than 100 counts
+let showConfirmation = false;
+
+for (const toggleName in reportTypeCounters) {
+    if (reportTypeCounters[toggleName] > 100) {
+        showConfirmation = true;
+        break; // exit the loop once a report type exceeds 100
+    }
+}
     if (typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles > 500) {
       console.log("HI")
       var comfirmConfig: FuseConfirmationConfig = {
@@ -1534,9 +1547,8 @@ this.updateToggleObjectFromChanges();
     }
 
     // Step 4: Check if more than 100 toggles are turned on
-    else {
-      for (const toggleName in reportTypeCounters) {
-      if (reportTypeCounters[toggleName] > 100 && typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles <= 500) {
+    else if (showConfirmation) {
+      if (typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles <= 500) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you Sure?",
           "message": "You have selected more than 100 reports to be created. The distribution may be delayed due to the large amount of data to be generated. Are you sure you want to continue?",
@@ -1579,24 +1591,24 @@ this.updateToggleObjectFromChanges();
         }
         });
       }
-      else {
-        this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
-        // Close the drawer
-        this.filterDrawer.close();
-        // Reset toggle states to false on all pages and all toggles
-        for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
-          if (this.pageToggleStates[pageNumber]) {
-            Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
-              this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
-            });
-          }
-        }
-
-
-        this.showConfirmationMessage();
-    })
+  
+}
+else {
+  this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+  // Close the drawer
+  this.filterDrawer.close();
+  // Reset toggle states to false on all pages and all toggles
+  for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+    if (this.pageToggleStates[pageNumber]) {
+      Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
+        this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
+      });
     }
   }
+
+
+  this.showConfirmationMessage();
+})
 }
   }
 
