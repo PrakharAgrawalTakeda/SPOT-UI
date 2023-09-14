@@ -47,9 +47,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('apr')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -63,9 +63,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('may')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -79,9 +79,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('jun')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -95,9 +95,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('jul')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -111,9 +111,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('aug')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -127,9 +127,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('sep')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -143,9 +143,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('oct')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full  px-1" [floatLabel]="'always'">
                             <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -159,9 +159,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('nov')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full  px-1" [floatLabel]="'always'">
                             <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -175,9 +175,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('dec')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -191,9 +191,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('jan')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -207,9 +207,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('feb')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -223,9 +223,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex) && isCellEditable('mar')">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateAnnualTotal()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -252,14 +252,14 @@
             </ngx-datatable-column>
             <ngx-datatable-column [sortable]="false" name="FY2025" prop="y2" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
                                   [draggable]="false">
-                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template >
                     <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex)">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="y2" type="number"  min="0"  (input)="recalculateTotalCapex()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -273,9 +273,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex)">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="y3" type="number"  min="0" (input)="recalculateTotalCapex()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -289,9 +289,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex)">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                             <input matInput formControlName="y4" type="number"  min="0" (input)="recalculateTotalCapex()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
@@ -305,9 +305,9 @@
                         <p *ngIf="!value && value!=0">&nbsp;</p>
                         <p style="text-align:right">{{value}}</p>
                     </a>
-                    <form [formGroup]="forecastsForm.controls[rowIndex]"
+                    <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                           *ngIf="fTableEditStack.includes(rowIndex)">
-                        <mat-form-field class="w-full" [floatLabel]="'always'">
+                        <mat-form-field class="w-full  px-1" [floatLabel]="'always'">
                             <input matInput formControlName="y5" type="number"  min="0" (input)="recalculateTotalCapex()"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
