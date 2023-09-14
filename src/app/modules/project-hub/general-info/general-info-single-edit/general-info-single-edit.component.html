@@ -166,7 +166,7 @@
             <spot-textarea (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
                 [Required]="callLocation == 'CreateNew' || callLocation == 'CreateNewSIP'" *ngIf="viewElementChecker('projectDescription')"
                 formControlName="projectDescription" name="projectDescription"
-                [label]="'Problem Description / Present Situation / Submission Description'"
+                [label]="callLocation == 'CreateNewSIP'? ' Strategic Intiative Description' : 'Problem Description / Present Situation / Submission Description'"
                 [placeholder]="'Problem Description / Present Situation / Submission Description'" [showHint]="true"
                 [hint]="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
             </spot-textarea>

@@ -4,7 +4,7 @@
         <input  matInput formControlName="control"
         [placeholder]="placeholder"
         [matDatepicker]="picker3" [max]="getMax()"
-        (dateChange)="addEvent($event.value)" [required]=true
+        (dateChange)="addEvent($event.value)" [required]=Required
         >
         <mat-datepicker-toggle *ngIf="!form.controls.control.disabled" matSuffix [for]="picker3"></mat-datepicker-toggle>
         <mat-datepicker #picker3></mat-datepicker>

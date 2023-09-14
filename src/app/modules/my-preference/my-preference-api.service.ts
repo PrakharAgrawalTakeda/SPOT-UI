@@ -45,7 +45,24 @@ export class MyPreferenceApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
-
+    async getMetricRepository() {
+        var link = GlobalVariables.apiurl + "StrategicMetricRepository"
+        const abc$ = this.http.get(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async addMetricRepository(body){
+        var link = GlobalVariables.apiurl+"StrategicMetricRepository"
+        const abc$ = this.http.post(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async editMetricRepository(projectId: string,body){
+        var link = GlobalVariables.apiurl+"StrategicMetricRepository/"+projectId+"/"
+        var abc$ = this.http.put(link,body)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
     async checkAccess(userId: string) {
         var userid = GlobalVariables.apiurl + "StandardMilestoneSet/CheckAccess/" + userId
         const abc$ = this.http.get(userid)
@@ -80,9 +97,21 @@ export class MyPreferenceApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
+    async metricRepositorySingle(itemid: string){
+        var userid = GlobalVariables.apiurl+"StrategicMetricRepository/"+itemid
+        const abc$ = this.http.get(userid)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
 
     async deleteMilestone(id) {
         var link = GlobalVariables.apiurl + "StandardMilestoneSet/" + id
+        const abc$ = this.http.delete(link)
+        const response = await lastValueFrom(abc$)
+        return response
+    }
+    async deleteMetricRepository(id) {
+        var link = GlobalVariables.apiurl + "StrategicMetricRepository/" + id
         const abc$ = this.http.delete(link)
         const response = await lastValueFrom(abc$)
         return response

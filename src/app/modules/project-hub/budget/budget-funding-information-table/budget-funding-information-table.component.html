@@ -35,12 +35,12 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="CAPEX Amount" prop="localCarapprovedCapex" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
+                    <p>{{value | number : fractionSize}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="OPEX Amount" prop="localCarapprovedOpex" [flexGrow]="2">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
+                    <p>{{value | number : fractionSize}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Amended CAR" prop="ammendedCar" [flexGrow]="2">
