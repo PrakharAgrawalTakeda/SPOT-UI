@@ -64,7 +64,7 @@
                         <a *ngIf="!checkRow(row, rowIndex)"
                            (click)="frTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p>{{value | number : fractionSize}}</p>
                         </a>
                         <form class="mt-6" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
@@ -80,7 +80,7 @@
                         <a *ngIf="!checkRow(row, rowIndex)"
                            (click)="frTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
-                            <p>{{value}}</p>
+                            <p>{{value | number : fractionSize}}</p>
                         </a>
                         <form class="mt-6" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
