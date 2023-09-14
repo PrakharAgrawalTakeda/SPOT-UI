@@ -378,7 +378,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                     </span>
                 </div>
                 <div *ngIf='showContent'
-                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-6 w-full min-w-0 mt-8 " @slideInRight>
+                    class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full min-w-0 mt-8 " @slideInRight>
                     <!-- <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
                         @slideInRight>
                         <div class="flex flex-col flex-auto  overflow-hidden p-6">
@@ -401,10 +401,10 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </button>
                         </div>
                     </div> -->
-                    <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
+                    <div class="flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
                         @slideInLeft>
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col flex-auto p-6 overflow-hidden">
-                            <div class="text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-0">
+                            <div class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-0">
                                 Phase Distribution
                             </div>
                             <div class="flex flex-col flex-auto h-60">
@@ -418,9 +418,9 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </div>
                         </div>
                     </div>
-                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-2">
+                            <div class="text-2xl lg:text-3xl font-medium tracking-tight text-primary leading-6 truncate mb-2">
                                 Milestone Performance</div>
 
                             <ng-container *ngFor="let dataset of data.milstoneTile">
@@ -435,9 +435,9 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         </div>
                     </div>
                     <!-- Milestones -->
-                    <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                         <div class="sm:col-span-3 lg:col-span-2 flex flex-col p-6 flex-auto overflow-hidden">
-                            <div class="text-3xl font-medium tracking-tight leading-6 text-primary truncate mb-0">
+                            <div class="text-2xl lg:text-3xl font-medium tracking-tight leading-6 text-primary truncate mb-0">
                                 Budget</div>
 
                             <div class="flex flex-col mt-2">
