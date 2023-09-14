@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
 import { ActivatedRoute } from '@angular/router';
@@ -44,6 +44,7 @@ export class TransportationTableComponent {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+      console.log(this.Editable)
       //this.apiService.getCAPSbyProjectID(this.id).then((res: any) => {
         if (this.Editable == false) {
           this.Transportationngx = null
@@ -93,6 +94,8 @@ export class TransportationTableComponent {
       if (close == 'confirmed') {
         this.apiService.deleteDistribution(id).then(res => {
           this.projecthubservice.submitbutton.next(true)
+          this.projecthubservice.successSave.next(true)
+          //location.reload()
         })
       }
     })

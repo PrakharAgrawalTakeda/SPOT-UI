@@ -17,7 +17,7 @@
                         <mat-label class="items-center">{{fr.value.fieldDisplayName}}</mat-label>
                     </div>
                     <mat-slide-toggle
-                        formControlName="isSelected"></mat-slide-toggle>
+                        formControlName="isSelected" (change)="onSlideToggleChange()"></mat-slide-toggle>
                 </div>
             </div>
             <spot-textarea class="pt-2" [label]="'Budget Commentary'" formControlName="budgetCommentary">

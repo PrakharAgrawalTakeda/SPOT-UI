@@ -49,7 +49,7 @@
                             <p *ngIf="!value">&nbsp;</p>
                         </a>
                         <form [formGroup]="riskIssueForm.controls[rowIndex]" *ngIf="riTableEditStack.includes(rowIndex)">
-                            <spot-select formControlName="riskIssueTypeId" name="type" [placeholder]="'Type'"
+                            <spot-select formControlName="riskIssueTypeId" name="type" [placeholder]="'Type'" [showNoneOption]="false"
                                          [dropDownArrayType]="'object'" [dropDownArray]="getissuetype()" [idPointer]="'lookUpId'"
                                          [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                             </spot-select>

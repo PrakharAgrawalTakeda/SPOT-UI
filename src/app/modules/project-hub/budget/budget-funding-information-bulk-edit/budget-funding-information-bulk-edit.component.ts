@@ -34,6 +34,7 @@ export class BudgetFundingInformationBulkEditComponent {
         })
     }
 
+    budgetInfo: any;
     fundingRequests = []
     fundingRequestsDb = []
     fundingRequestsSubmit = []
@@ -42,16 +43,22 @@ export class BudgetFundingInformationBulkEditComponent {
     frTableEditStack = []
     fundingRequestForm = new FormArray([])
     localCurrency:any = [];
+    showAddNewButton: boolean = false;
 
     ngOnInit(): void {
         this.dataloader()
     }
 
     dataloader() {
-        this.fundingRequests = this.projecthubservice.all;
+        this.budgetInfo = this.projecthubservice.all
+        this.fundingRequests = this.projecthubservice.all.budgetIOs;
         this.portfoliService.getLocalCurrency().then(currency => {
             this.localCurrency = currency
+            this.viewContent = true;
         })
+        if(this.budgetInfo.budget.budgetOwner=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC" || this.budgetInfo.budget.budgetOwner==null){
+            this.showAddNewButton = true;
+        }
         if (this.fundingRequests.length > 0) {
                     this.fundingRequestsDb = this.fundingRequests.map(x => {
                         return {
@@ -86,7 +93,6 @@ export class BudgetFundingInformationBulkEditComponent {
                         }))
                     }
                 }
-        this.viewContent = true;
     }
     formValue() {
         var form = this.fundingRequestForm.getRawValue()
@@ -100,8 +106,8 @@ export class BudgetFundingInformationBulkEditComponent {
                     "carapprovedCapex": i.carapprovedCapex,
                     "carapprovedOpex": i.carapprovedOpex,
                     "ammendedCar": i.ammendedCar,
-                    "localCarapprovedCapex": i.localCarapprovedCapex,
-                    "localCarapprovedOpex": i.localCarapprovedOpex,
+                    "localCarapprovedCapex": i.localCarapprovedCapex =="" ? null : i.localCarapprovedCapex,
+                    "localCarapprovedOpex": i.localCarapprovedOpex=="" ? null : i.localCarapprovedOpex,
                     "localCurrencyId": i.localCurrencyId,
                     "approvalStatus": i.approvalStatus,
                     "approvalCurrency": i.approvalCurrency,
@@ -131,8 +137,8 @@ export class BudgetFundingInformationBulkEditComponent {
             keep: true,
         }]
         this.fundingRequestForm.push(new FormGroup({
-            budgetIoid: new FormControl(''),
-            projectId: new FormControl(''),
+            budgetIoid: new FormControl(null),
+            projectId: new FormControl(this.projecthubservice.projectid),
             budgetIo1: new FormControl(''),
             carapprovedCapex: new FormControl(null),
             carapprovedOpex: new FormControl(null),
@@ -220,21 +226,21 @@ export class BudgetFundingInformationBulkEditComponent {
     checkDuplicateIds(objects: any[]): string {
         const ids = new Set<string>();
         for (const obj of objects) {
-            if (ids.has(obj.budgetIoid)) {
-                return obj.budgetIoid;
+            if (ids.has(obj.budgetIo1)) {
+                return obj.budgetIo1;
             }
-            ids.add(obj.budgetIoid);
+            ids.add(obj.budgetIo1);
         }
         return '';
     }
      checkEmptyIds(myList: any[]): boolean {
         const idMap: { [id: string]: boolean } = {};
         for (const object of myList) {
-            const id = object.budgetIoid;
+            const id = object.budgetIo1;
             if (!id || id.trim() === '') {
                 return true;
             }
-            if (!object.approvalCurrency || object.approvalCurrency.trim() === '') {
+            if (!object.localCurrencyId || object.localCurrencyId.trim() === '') {
                 return true;
             }
             idMap[id] = true;
@@ -245,7 +251,7 @@ export class BudgetFundingInformationBulkEditComponent {
         if (JSON.stringify(this.fundingRequestsDb) != JSON.stringify(this.fundingRequestsSubmit)) {
             if(this.checkEmptyIds(this.fundingRequestsSubmit)){
                 var comfirmConfig: FuseConfirmationConfig = {
-                    "title": "To save your changes it is required to populate all mandatory fields highlighted in yellow!",
+                    "title": "To save your changes it is required to populate all 'Funding Request ID' and 'Approval Currency' fields !",
                     "message": "",
                     "icon": {
                         "show": true,
@@ -270,7 +276,7 @@ export class BudgetFundingInformationBulkEditComponent {
                 let duplicate = this.checkDuplicateIds(this.fundingRequestsSubmit)
                 if(duplicate!="") {
                     var comfirmConfig: FuseConfirmationConfig = {
-                        "title": "The Approval ID (" + duplicate + ") you have entered does already exist and cannot be added a second time. Please change or remove it",
+                        "title": "The Funding Request ID (" + duplicate + ") you have entered does already exist and cannot be added a second time. Please change or remove it",
                         "message": "",
                         "icon": {
                             "show": true,
@@ -294,7 +300,8 @@ export class BudgetFundingInformationBulkEditComponent {
                 }else{
                     this.projecthubservice.isFormChanged = false
                     this.formValue()
-                    this.apiService.bulkEditFundingRequests(this.fundingRequestsSubmit, this.projecthubservice.projectid).then(res => {
+                    this.budgetInfo.budgetIOs  = this.fundingRequestsSubmit.filter((item) => item.keep);
+                    this.apiService.updateBudgetPageInfo(this.projecthubservice.projectid,this.budgetInfo).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
                         this.projecthubservice.isNavChanged.next(true)

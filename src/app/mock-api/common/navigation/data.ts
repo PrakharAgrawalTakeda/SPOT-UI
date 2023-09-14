@@ -16,12 +16,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create Project',
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
             },
             {
-                title: 'Copy Project',
+                title: 'Copy an existing Project',
                 type: 'basic',
                 link: '/create-project/copy-project'
             }
@@ -29,7 +34,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     },
     {
         id   : 'spot-documents',
-        title: 'SPOT Documents',
+        title: 'SPOT Supporting Documents',
         type : 'basic',
         icon : 'heroicons_outline:document-text',
         link : '/spot-documents'
@@ -50,12 +55,17 @@ export const compactNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create Project',
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
             },
             {
-                title: 'Copy Project',
+                title: 'Copy an existing Project',
                 type: 'basic',
                 link: '/create-project/copy-project'
             }
@@ -84,12 +94,17 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create Project',
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
             },
             {
-                title: 'Copy Project',
+                title: 'Copy an existing Project',
                 type: 'basic',
                 link: '/create-project/copy-project'
             }
@@ -117,12 +132,17 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create Project',
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
+            },
+            {
+                title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
             },
             {
-                title: 'Copy Project',
+                title: 'Copy an existing Project',
                 type: 'basic',
                 link: '/create-project/copy-project'
             }
@@ -130,7 +150,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
     },
     {
         id   : 'spot-documents',
-        title: 'SPOT Resources',
+        title: 'SPOT Supporting Documents',
         type : 'basic',
         externalLink : true,
         link : 'https://mytakeda.sharepoint.com/sites/PMT-SPOT/SitePages/home.aspx',

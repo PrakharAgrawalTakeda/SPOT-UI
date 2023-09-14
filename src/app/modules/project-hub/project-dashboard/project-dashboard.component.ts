@@ -3,6 +3,8 @@ import { ProjectHubService } from '../project-hub.service';
 import { ProjectApiService } from '../common/project-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -10,7 +12,8 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
   styleUrls: ['./project-dashboard.component.scss']
 })
 export class ProjectDashboardComponent {
-  constructor(private projectHubService: ProjectHubService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, private router: Router) { 
+  projectid: string[] = [];
+  constructor(private projectHubService: ProjectHubService,private msalService: MsalService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router) { 
     this.projectHubService.submitbutton.subscribe(res=>{
       if(res == true){
         this.dataloader()
@@ -32,6 +35,7 @@ export class ProjectDashboardComponent {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    this.projectid.push(this.id)
     this.apiService.getProjectDashboard(this.id).then(res => {
       console.log("Report Info", res)
       this.reportInfoData = res
@@ -42,4 +46,115 @@ export class ProjectDashboardComponent {
   isNavActive(link: string): boolean {
     return this.router.url.includes(link)
   }
+
+  generateBD() {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "The selected report will be processed and distributed by e-Mail and may take a few minutes. Please check your inbox.",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const generateAlert = this.fuseAlert.open(comfirmConfig)
+
+    generateAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Dashboard').then(res => {
+
+          console.log("WORKS")
+
+          this.projectHubService.submitbutton.next(true)
+
+        })
+      }
+    })
+  } 
+
+  generatePD() {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "The selected report will be processed and distributed by e-Mail and may take a few minutes. Please check your inbox.",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const generateAlert = this.fuseAlert.open(comfirmConfig)
+
+    generateAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Dashboard Performance').then(res => {
+
+          console.log("WORKS")
+
+          this.projectHubService.submitbutton.next(true)
+
+        })
+      }
+    })
+  } 
+
+  generatePTD() {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "The selected report will be processed and distributed by e-Mail and may take a few minutes. Please check your inbox.",
+      "message": "",
+      "icon": {
+        "show": true,
+        "name": "heroicons_outline:check",
+        "color": "success"
+      },
+      "actions": {
+        "confirm": {
+          "show": true,
+          "label": "Okay",
+          "color": "primary"
+        },
+        "cancel": {
+          "show": false,
+          "label": "Cancel"
+        }
+      },
+      "dismissible": true
+    }
+    const generateAlert = this.fuseAlert.open(comfirmConfig)
+
+    generateAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'GMSPT Program Dashboard').then(res => {
+
+          console.log("WORKS")
+
+          this.projectHubService.submitbutton.next(true)
+
+        })
+      }
+    })
+  } 
 }

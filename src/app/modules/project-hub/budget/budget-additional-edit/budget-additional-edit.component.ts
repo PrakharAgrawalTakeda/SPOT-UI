@@ -7,6 +7,7 @@ import { FuseConfirmationService} from "../../../../../@fuse/services/confirmati
 import {ProjectApiService} from "../../common/project-api.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import * as moment from "moment";
+import {NoopAnimationPlayer, ɵAnimationGroupPlayer} from "@angular/animations";
 
 @Component({
   selector: 'app-budget-additional-edit',
@@ -14,7 +15,7 @@ import * as moment from "moment";
   styleUrls: ['./budget-additional-edit.component.scss']
 })
 export class BudgetAdditionalEditComponent {
-    @Input() mode: 'Asset-In-Service' | 'OPEX'  = 'OPEX'
+    @Input() mode: 'Asset-In-Service' | 'OPEX' | 'Budget-Commentary' | 'Deviation' = 'OPEX'
     constructor(public projectHubService: ProjectHubService,
                 private portApiService: PortfolioApiService,
                 public auth: AuthService,
@@ -37,32 +38,61 @@ export class BudgetAdditionalEditComponent {
     budgetInfoForm = new FormGroup({
         apisdate: new FormControl(''),
         opexRequired: new FormControl(false),
+        budgetCommentary: new FormControl(''),
+        afpDeviationCode: new FormControl(null),
+        mtdpDeviationCode: new FormControl(null),
     })
 
     ngOnInit(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.budgetInfo = this.projectHubService.all;
-        if(this.mode=='Asset-In-Service'){
-            this.budgetInfoForm.patchValue({
-                apisdate: this.budgetInfo.budget.apisdate,
-            })
-            this.viewContent = true
-        }
-        else{
-            this.budgetInfoForm.patchValue({
-                opexRequired: this.budgetInfo.budget.opExRequired,
-            })
-            this.viewContent = true
+        switch (this.mode) {
+            case 'Asset-In-Service':
+                this.budgetInfoForm.patchValue({
+                    apisdate: this.budgetInfo.budget.apisdate,
+                })
+                this.viewContent = true;
+                break;
+            case 'OPEX':
+                this.budgetInfoForm.patchValue({
+                    opexRequired: this.budgetInfo.budget.opExRequired,
+                })
+                this.viewContent = true
+                break;
+            case 'Budget-Commentary':
+                this.budgetInfoForm.patchValue({
+                    budgetCommentary: this.budgetInfo.budget.budgetComment,
+                })
+                this.viewContent = true
+                break;
+            case 'Deviation':
+                this.budgetInfoForm.patchValue({
+                    afpDeviationCode: null,
+                    mtdpDeviationCode: null
+                })
+                this.viewContent = true
+                break;
+
         }
         this.projectHubService.isFormChanged = false
 
     }
     prepareDataforSubmit(formValue): any {
         const mainObj = this.budgetInfo;
-        if(this.mode=='Asset-In-Service'){
-            mainObj.budget.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
-        }else{
-            mainObj.budget.opexRequired = formValue.opexRequired;
+        switch (this.mode) {
+            case 'Asset-In-Service':
+                mainObj.budget.apisdate = formValue.apisdate ? moment(formValue.apisdate).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
+                break;
+            case 'OPEX':
+                mainObj.budget.opexRequired = formValue.opexRequired;
+                break;
+            case 'Budget-Commentary':
+                mainObj.budget.budgetComment = formValue.budgetCommentary;
+                break;
+            case 'Deviation':
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").afpDeviationCodeID = formValue.afpDeviationCode.lookUpId;
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").mtdpDeviationCodeID =  formValue.mtdpDeviationCode.lookUpId;
+                break;
         }
         return mainObj;
     }
@@ -78,4 +108,11 @@ export class BudgetAdditionalEditComponent {
             this.projectHubService.toggleDrawerOpen('', '', [], '')
         })
     }
+    getAfdDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
+    }
+    getMtdpDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
+    }
+
 }

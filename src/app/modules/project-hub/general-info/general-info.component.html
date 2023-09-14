@@ -15,9 +15,6 @@
           </div>
         </div>
         <div class="grid grid-cols-2 gap-x-6 items-center">
-          <spot-input formControlName="localCurrencyAbbreviation" name="localCurrencyAbbreviation"
-            [label]="'Local Currency'">
-          </spot-input>
           <div
             *ngIf="projectHubService.roleControllerControl.generalInfo.confidentialEdit && viewElementChecker('isConfidential')"
             class="flex justify-start w-full gap-3 items-center font-medium">
@@ -30,7 +27,8 @@
           </div>
           <div
             *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
-            class="flex justify-start w-full gap-3 items-center font-medium"  [ngClass]="{'pt-2 pb-6': projectHubService.roleControllerControl.generalInfo.confidentialEdit}">
+            class="flex justify-start w-full gap-3 items-center font-medium"
+            [ngClass]="{'pt-2 pb-6': projectHubService.roleControllerControl.generalInfo.confidentialEdit}">
             Is Archived?
             <mat-icon svgIcon="heroicons_outline:x-circle"
               *ngIf="!generalInfoForm.controls.isArchived.value"></mat-icon>
@@ -43,7 +41,7 @@
         <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
           <spot-input class="w-full read-only text-default" formControlName="problemTitle" name="problemTitle"
             *ngIf="viewElementChecker('problemTitle')"
-            [label]="callLocation == 'BusinessCase'?'Initiative Title':'Project Name'">
+            [label]="projectNameLabel">
           </spot-input>
           <div class="w-full" *ngIf="callLocation == 'BusinessCase'"></div>
           <spot-input class="w-full read-only" [ngClass]="{'read-only': callLocation != 'ProjectCharter'}"
@@ -141,7 +139,8 @@
         <div class="w-full " *ngIf="viewElementChecker('projectDescription')">
           <spot-textarea class="w-full read-only" formControlName="projectDescription" name="projectDescription"
             [label]="'Problem Description / Present Situation / Submission Description'"
-            [showHint]="callLocation == 'BusinessCase'" [hint]="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
+            [showHint]="callLocation == 'BusinessCase'"
+            [hint]="'A description of the problem statement that needs to be addressed/ solved. Include potential risks if not implemented and success criteria'">
           </spot-textarea>
         </div>
         <div class="w-full " *ngIf="viewElementChecker('StrategicRationale')">
@@ -292,7 +291,7 @@
             </div>
             <div class="flex justify-between items-center gap-6" *ngIf="viewElementChecker('primaryKPI')">
               <spot-input class="w-full read-only" formControlName="primaryKPI" name="primaryKPI"
-                [label]="'Primary KPI'">
+                [label]="'Primary Value Driver'">
               </spot-input>
               <!-- <spot-singleselect-autocomplete name="primaryKpi" [label]="'Primary KPI'"
             [placeholder]="'Primary KPI'" class="w-full">-->

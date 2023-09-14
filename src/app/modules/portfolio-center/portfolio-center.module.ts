@@ -23,16 +23,30 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { ForecastComponent } from './budget-spend/forecast/forecast.component';
+import { BudgetSpendComponent } from './budget-spend/budget-spend.component';
+import { ProjectHubModule } from '../project-hub/project-hub.module';
+import { PortfolioPerformanceComponent } from './budget-spend/portfolio-performance/portfolio-performance.component';
+import { ProjectPerformanceComponent } from './budget-spend/project-performance/project-performance.component';
+import { ProjectHub } from 'app/shared/role-controller';
+import { FxRateComponent } from './budget-spend/fx-rate/fx-rate.component';
 
 export const projectRoutes: Route[] = [
   {
     path: '',
-    component: PortfolioCenterComponent,
-  }
-];
+    component: PortfolioCenterComponent
+  }];
+
+
 @NgModule({
   declarations: [
-    PortfolioCenterComponent
+    PortfolioCenterComponent,
+    ForecastComponent,
+    BudgetSpendComponent,
+    PortfolioPerformanceComponent,
+    ProjectPerformanceComponent,
+    FxRateComponent
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
@@ -58,6 +72,8 @@ export const projectRoutes: Route[] = [
     SpotFormsModule,
     NgScrollbarModule,
     NgxDatatableModule,
-  ]
+    MatSlideToggleModule
+  ],
+  exports: [RouterModule]
 })
 export class PortfolioCenterModule { }

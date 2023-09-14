@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MyPreferenceService} from "./my-preference.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {Title} from '@angular/platform-browser';
 import {MyPreferenceApiService} from "./my-preference-api.service";
 import {MsalService} from "@azure/msal-angular";
@@ -20,7 +20,15 @@ export class MyPreferenceComponent implements OnInit {
                 public myPreferenceService: MyPreferenceService,
                 public myPreferenceApiService: MyPreferenceApiService,
                 private msalService: MsalService,
-                private titleService: Title,) {
+                private titleService: Title, private snack: MatSnackBar) {
+                    // this.myPreferenceService.successSave.subscribe(res => {
+                    //     if (res == true) {
+                    //         this.snack.open("The information has been saved successfully", "", {
+                    //             duration: 2000,
+                    //             panelClass: ["bg-primary", "text-on-primary"]
+                    //         })
+                    //     }
+                    // })
         // this.myPreferenceService.successSave.subscribe(res => {
         //     if (res == true) {
         //         this.snack.open("The information has been saved successfully", "", {
@@ -29,6 +37,14 @@ export class MyPreferenceComponent implements OnInit {
         //         })
         //     }
         // })
+        this.myPreferenceService.successSave.subscribe(res => {
+            if (res == true) {
+                this.snack.open("The information has been saved successfully", "", {
+                    duration: 2000,
+                    panelClass: ["bg-primary", "text-on-primary"]
+                })
+            }
+        })
         this.router.events.subscribe(res => {
 
             if (this.viewContent) {
@@ -47,7 +63,7 @@ export class MyPreferenceComponent implements OnInit {
     }
 
     dataloader() {
-        this.titleService.setTitle("Standard Milestones Edit")
+        this.titleService.setTitle("My Preferences")
         this.checkMilestoneSetsAccess();
         this.viewContent = true
         if(this.checkAccessError==false){
@@ -81,7 +97,7 @@ export class MyPreferenceComponent implements OnInit {
                     link: 'my-preference/settings'
                 },
                 {
-                    title: 'Email Notifications',
+                    title: 'e-mail Notifications',
                     link: 'my-preference/email-notifications'
                 }
             ]
@@ -90,6 +106,10 @@ export class MyPreferenceComponent implements OnInit {
             this.navItem.children.push({
                 title: 'Milestone Sets',
                 link: 'my-preference/milestone-sets'
+            })
+            this.navItem.children.push({
+                title: 'Metric Repository',
+                link: 'my-preference/metric-repository'
             })
         }
 

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CloseOutApiService } from 'app/modules/project-hub/close-out/close-out.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
-import { values } from 'lodash';
 
 @Component({
   selector: 'app-project-charter-scope-single-edit',
@@ -48,7 +46,7 @@ export class ProjectCharterScopeSingleEditComponent implements OnInit {
     })
     this.viewContent = true
   })
-      
+
   })
 
   }

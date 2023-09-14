@@ -1,8 +1,4 @@
 @import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
-.example-chip-list {
-    width: 100%;
-}
-
 .w-half {
     width: 50vw;
 }
@@ -17,24 +13,23 @@
 .w-2qua {
     width: 55vw;
 }
-.dashboard-chip-list {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    padding-right: 20px !important;
-    padding-left: 20px !important;
-    margin-left: 10px !important;
-    border-radius: 20px !important;
-}
 .apply-button{
-    margin: 20px 0px 175px 0px !important;
-    width: 100%;
+    margin: 20px 15px 175px 15px !important;
+    // width: 100%;
+    width: 20%;
+}
+
+.submit-button{
+    margin: 20px 15px 15px 15px !important;
+    // width: 100%;
+    min-width: 26px;
 }
 
 .tile-title{
     font-size: 20px;
 }
 
-::ng-deep .ngx-datatable .datatable-PO-80 .datatable-body .datatable-scroll {
+.ngx-datatable .datatable-PO-80 .datatable-body .datatable-scroll {
     height: 80vh !important;
     width: 100vw !important;
     overflow-x: scroll !important;
@@ -42,11 +37,13 @@
 }
 
 .frozen-header-class {
-    top: 89px !important;
+    top: 33px !important;
+    left: 200px !important;
 }
 
 .frozen-header-classID {
-    top: 68px !important;
+    top: 55px !important;
+    margin-left: 6px !important;
 }
 .datatable-body{
     height: 72vh !important;
@@ -54,20 +51,44 @@
 
 .datatable-row-left{
     background: white !important;
+    height: 102px !important;
+}
+.datatable-row-center {
+    height: 102px !important;
 }
 
-.datatable-body-cell{
-    cursor: pointer;
+.projectNames {
+    cursor: pointer !important;
+    margin-left: 15px !important;
+    color: rgb(81, 174, 245);
+
+}
+.projectNames:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
 }
 
+.projectName {
+    cursor: pointer !important;
+    //margin-right: 50px !important;
+    color: rgb(81, 174, 245);
+}
+.projectName:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
+}
+.forecast{
+    cursor: pointer !important;
+    color: rgb(81, 174, 245);
+}
+.forecast:hover {
+    text-decoration: underline;
+    cursor: pointer !important;
+}
 .datatable-header{
     top: 10px;
-    // position: relative;
 }
 
-// .datatable-scroll{
-//     background: white !important;
-// }
 
 .columnFilter{
     top: 12px !important;
@@ -100,23 +121,70 @@ li{
 }
 
 .pager li{
-    padding-right: 15px !important;
+    padding-right: 10px !important;
     margin-right: 2px !important;
+    border-radius: 10px;
+    padding-left: 10px !important;
 }
 
 .pager{
-    font-size: large !important;
+    font-size: small !important;
     width: 300px !important;
 }
 
 .pages.active{
     background: #ffffff !important;
     border: 2px solid green;
+    color: black;
 }
 
 .pages{
     cursor: pointer;
     padding: 5px 12px;
-    background: aquamarine;
+    background: lightgrey;
     margin: 0px 5px;
+    color: black;
+}
+.page-count{
+    font-size: small !important;
+    margin-left: 6px !important;
+}
+
+.vertical-header-class {
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);
+    left: -1px;
+}
+.red{
+    color: red !important;
+}
+
+
+// ::ng-deep .ngx-datatable .datatable-PO-60 .datatable-body .datatable-scroll {
+//     height: 80vh !important;
+//     width: 100vw !important;
+//     overflow-x: scroll !important;
+//     overflow-y: scroll !important;
+// }
+.datatable-body{
+    height: 63vh !important;
+}
+
+
+.fuse-drawer-large {
+    min-width: 95vw !important;
+    max-width: 95vw !important;
+    min-height: 144vh !important;
+    max-height: 144vh !important;
+}
+fuse-drawer {
+    min-width: 50vw;
+    max-width: 50vw;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+}
+
+fuse-drawer .fuse-drawer-content {
+    display: block !important;
+    overflow: hidden !important;
 }

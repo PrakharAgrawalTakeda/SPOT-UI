@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {ProjectHubService} from "../../project-hub.service";
 import {ActivatedRoute} from "@angular/router";
@@ -15,6 +15,8 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
     financialRequirements: any = []
     finalRequirements: any = []
     id: string = ''
+    budgetPerformanceDetailCapexOpex = []
+    budgetPerformanceDetailEvents = []
     budgetPerformnceForm = new FormGroup({
         projectId: new FormControl(''),
         budgetCommentary: new FormControl(''),
@@ -48,9 +50,13 @@ export class CloseOutBudgetPerformanceComponent implements OnInit {
             this.budgetPerformnceForm.patchValue({
                 budgetCommentary: res.budgetCommentary,});
             this.financialRequirements = res.finalRequirementsValue;
+            this.budgetPerformanceDetailCapexOpex = res.budgetPerformanceDetails.budgetPerformanceDetailCapexOpex
+            this.budgetPerformanceDetailEvents = res.budgetPerformanceDetails.budgetPerformanceDetailEvents
             this.viewContent = true;
         })
-
+    }
+    getHeaderClass(): any {
+        return ' right-aligned-header-class';
     }
 
 }
