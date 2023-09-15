@@ -547,7 +547,7 @@
             </ngx-datatable-column>
         </ngx-datatable>
     </div>
-    <div class="pl-3">
+    <div class="pl-3" *ngIf="mode=='Capex'">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                        columnMode="force"
                        class="material w-64 font-medium text-sm whitespace-nowrap cursor-pointer"
