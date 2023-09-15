@@ -93,7 +93,7 @@ export class BudgetFundingAddViewComponent {
                 this.fuseAlert.open(comfirmConfig)
             }else{
                 var mainObj = {
-                    budgetIoid:null,
+                    budgetIoid:"",
                     projectId: this.id,
                     budgetIo1: fundingRequest.fundingRequestId,
                     carapprovedCapex: null,
@@ -107,6 +107,8 @@ export class BudgetFundingAddViewComponent {
                     keep: true,
                 }
                 this.budgetInfo.budgetIOs  = this.budgetInfo.budgetIOs.filter((item) => item.keep);
+                this.budgetInfo.budgetForecasts = []
+                this.budgetInfo.budgetForecastsY1 = []
                 this.budgetInfo.budgetIOs.push(mainObj);
                 this.apiService.updateBudgetPageInfo(this.id,this.budgetInfo).then(res => {
                     this.projecthubservice.submitbutton.next(true)
