@@ -114,18 +114,18 @@ export class PortfolioCenterService {
     console.log(itemtype)
 
     if (this.drawerOpened == true && this.isFormChanged == true) {
-      const alertopener = this.fusealert.open(this.alert)
-      alertopener.afterClosed().subscribe(res => {
-        if (res == 'confirmed') {
+      // const alertopener = this.fusealert.open(this.alert)
+      // alertopener.afterClosed().subscribe(res => {
+        // if (res == 'confirmed') {
           this.item = {}
-          this.itemtype = ""
+          this.itemtype = itemtype
           this.itemid = ""
           this.all = []
           this.projectid = ""
           this.isFormChanged = false
           this.drawerOpened = !this.drawerOpened
-        }
-      })
+      //   }
+      // })
     }
     else {
       this.itemid = itemid

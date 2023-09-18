@@ -76,6 +76,7 @@ export class PortfolioCenterComponent implements OnInit {
   AgileWorkstream = []
   AgileWave = []
   overallStatus = []
+  primaryKPI = []
   sorting: any = { name: "", dir: "" }
   viewBaseline = false
   projectOverview: any = []
@@ -96,7 +97,8 @@ export class PortfolioCenterComponent implements OnInit {
     "AGILEWave": [],
     "CAPSProject": [],
     "Project/Program": [],
-    "OverallStatus": []
+    "OverallStatus": [],
+    "primaryKPI":[]
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -115,7 +117,8 @@ export class PortfolioCenterComponent implements OnInit {
     "AGILEWave": [],
     "CAPSProject": [],
     "Project/Program": [],
-    "OverallStatus": []
+    "OverallStatus": [],
+    "primaryKPI": []
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
@@ -134,7 +137,8 @@ export class PortfolioCenterComponent implements OnInit {
     AGILEWave: new FormControl(),
     CAPSProject: new FormControl(),
     OverallStatus: new FormControl(),
-    projectName: new FormControl()
+    projectName: new FormControl(),
+    primaryKPI: new FormControl()
   })
 
   bulkreportdata: any;
@@ -333,6 +337,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.AgileWorkstream = this.lookup.filter(result => result.lookUpParentId == "f4486388-4c52-48fc-8c05-836878da2247")
         this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
         this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
+        this.primaryKPI = this.lookup.filter(result => result.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
         this.AgileWorkstream.push(AGILEall)
 
         this.apiService.getCapitalPhase().then((res: any) => {
@@ -392,6 +397,7 @@ export class PortfolioCenterComponent implements OnInit {
               CAPSProject: this.filtersnew.CAPSProject,
               projectName: this.filtersnew.projectName,
               OverallStatus: this.filtersnew.OverallStatus,
+              primaryKPI: this.filtersnew.primaryKPI,
             })
             if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
               if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
@@ -540,6 +546,10 @@ export class PortfolioCenterComponent implements OnInit {
                   var name = "Overall Status"
                   var order = 16
                 }
+                else if(attribute == "primaryKPI"){
+                  var name = "Primary Value Driver"
+                  var order = 17
+                }
                 var filterdata = {
                   "name": name,
                   "value": this.filtersnew[attribute][0].lookUpName,
@@ -684,7 +694,7 @@ export class PortfolioCenterComponent implements OnInit {
 
 
 
-            if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+            if (res.budgetTile.localCurrencyAbbreviation == "OY" || res.budgetTile.localCurrencyAbbreviation == "JPY") {
               this.budgetCurrency = "OY"
             }
             else{
