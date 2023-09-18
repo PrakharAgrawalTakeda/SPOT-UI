@@ -1,9 +1,8 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, SimpleChanges} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectHubService} from "../../project-hub.service";
 import {FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
-import { isNullOrUndefined } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-budget-capex-opex-table',
@@ -23,16 +22,23 @@ export class BudgetCapexOpexTableComponent {
             }
         })
     }
+    ngOnChanges(changes: SimpleChanges): void {
+        this.dataloader()
+    }
     ngOnInit(): void {
-        if(this.mode=="Y1"){
-            this.data = this.inputData;
-        }else{
-            this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
-        }
         this.dataloader()
     }
 
     dataloader() {
+        if(this.mode=="Y1"){
+            this.data = this.inputData;
+        }
+        if(this.mode=="Opex"){
+            this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "OpEx Forecast")
+        }
+        if(this.mode=="Capex"){
+            this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
+        }
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     }
 

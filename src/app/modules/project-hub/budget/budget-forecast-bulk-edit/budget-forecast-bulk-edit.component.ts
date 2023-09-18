@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, Input} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ProjectHubService} from "../../project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
@@ -13,6 +13,7 @@ import {FormArray, FormControl, FormGroup} from "@angular/forms";
     styleUrls: ['./budget-forecast-bulk-edit.component.scss']
 })
 export class BudgetForecastBulkEditComponent {
+    @Input() mode: 'Capex' | 'Opex' = 'Capex';
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService,
                 public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute,private cdRef: ChangeDetectorRef) {
         this.forecastsForm.valueChanges.subscribe(res => {
@@ -24,8 +25,8 @@ export class BudgetForecastBulkEditComponent {
     id: string = "";
     forecasts = []
     forecastsY1 = []
-    opexEntries = [];
-    opexEntriesY1 = [];
+    extraEntries = [];
+    extraEntriesY1 = [];
     forecastsDb = []
     forecastsY1Db = []
     forecastsSubmit = []
@@ -42,19 +43,37 @@ export class BudgetForecastBulkEditComponent {
     csTable = []
 
     ngOnInit(): void {
-        for (const obj of this.projecthubservice.all.budgetForecasts) {
-            if (obj.budgetData === "CapEx Forecast") {
-                this.forecasts.push(obj);
-            } else if (obj.budgetData === "OpEx Forecast") {
-                this.opexEntries.push(obj);
+        if(this.mode=="Capex"){
+            for (const obj of this.projecthubservice.all.budgetForecasts) {
+                if (obj.budgetData === "CapEx Forecast") {
+                    this.forecasts.push(obj);
+                } else if (obj.budgetData === "OpEx Forecast") {
+                    this.extraEntries.push(obj);
+                }
             }
-        }
-        this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen=== true))
-        for (const obj of this.projecthubservice.all.budgetForecastsY1) {
-            if (obj.budgetData === "CapEx Forecast") {
-                this.forecastsY1.push(obj);
-            } else if (obj.budgetData === "OpEx Forecast") {
-                this.opexEntriesY1.push(obj);
+            this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen=== true))
+            for (const obj of this.projecthubservice.all.budgetForecastsY1) {
+                if (obj.budgetData === "CapEx Forecast") {
+                    this.forecastsY1.push(obj);
+                } else if (obj.budgetData === "OpEx Forecast") {
+                    this.extraEntriesY1.push(obj);
+                }
+            }
+        }else{
+            for (const obj of this.projecthubservice.all.budgetForecasts) {
+                if (obj.budgetData === "OpEx Forecast") {
+                    this.forecasts.push(obj);
+                } else if (obj.budgetData === "CapEx Forecast") {
+                    this.extraEntries.push(obj);
+                }
+            }
+            this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen=== true))
+            for (const obj of this.projecthubservice.all.budgetForecastsY1) {
+                if (obj.budgetData === "OpEx Forecast") {
+                    this.forecastsY1.push(obj);
+                } else if (obj.budgetData === "CapEx Forecast") {
+                    this.extraEntriesY1.push(obj);
+                }
             }
         }
         this.dataloader()
@@ -339,10 +358,10 @@ export class BudgetForecastBulkEditComponent {
             mainObj.budgetForecasts = this.forecastsSubmit;
             mainObj.budgetForecastsY1 = this.forecastsY1Submit;
             mainObj.budgetForecasts.find(x => x.isopen === true).committedSpend = this.csForm.value[0].committedSpend;
-            this.opexEntries.forEach(x => {
+            this.extraEntries.forEach(x => {
                 mainObj.budgetForecasts.push(x);
             });
-            this.opexEntriesY1.forEach(x => {
+            this.extraEntriesY1.forEach(x => {
                 mainObj.budgetForecastsY1.push(x);
             });
             this.apiService.updateBudgetPageInfo(this.id,  mainObj).then(res => {
@@ -351,6 +370,7 @@ export class BudgetForecastBulkEditComponent {
                 this.projecthubservice.successSave.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
+
         } else {
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
@@ -359,9 +379,13 @@ export class BudgetForecastBulkEditComponent {
     }
     isCellEditable(month: string): boolean {
         const currentDate = new Date();
-        const currentMonth = currentDate.getMonth()-3;
+        const startingMonth = this.getStartingMonth()-3;
         const monthNumber = this.getMonthNumber(month);
-        return currentMonth <= monthNumber;
+        return startingMonth <= monthNumber;
+    }
+    getStartingMonth():  number {
+        let monthPart  = this.forecasts.find(x => x.active === 'Current').periodName.slice(-2);
+        return parseInt(monthPart, 10);
     }
     getMonthNumber(month: string):  number {
         switch (month) {

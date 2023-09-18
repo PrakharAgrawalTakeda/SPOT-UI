@@ -22,35 +22,8 @@
                     </spot-input>
                     <spot-input class="w-full" formControlName="localCurrency" [label]="'Local Currency'" [showHint]="true" [hint]="'Currency Info'">
                     </spot-input>
-                    <spot-input-date class="w-full read-only" formControlName="apisdate" [label]="'Asset Placed In Service (Estimate)'" [Required]="true">
+                    <spot-input-date class="w-full read-only" formControlName="apisdate" [label]="'Asset Placed In Service (Estimate)'" >
                     </spot-input-date>
-                </div>
-            </div>
-            <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                <div class=" pb-3 pt-0 flex items-center justify-between">
-                    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">OPEX</div>
-                    <div class="flex items-start justify-between">
-                        <div style="padding-right: 5px;">
-                            <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                    *ngIf ="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
-                                    (click)="projectHubService.toggleDrawerOpen('BudgetOPEXEdit', '', budgetPageInfo ,'' )">
-                                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-                    <div
-                        class="flex justify-start w-full gap-3 items-center font-medium">
-                        OPEX Required
-                        <mat-icon svgIcon="heroicons_outline:x-circle"
-                                  *ngIf="!budgetForm.controls.opexRequired.value"></mat-icon>
-                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
-                                  *ngIf="budgetForm.controls.opexRequired.value">
-                        </mat-icon>
-                    </div>
-                    <div></div>
-                    <div></div>
                 </div>
             </div>
             <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
@@ -92,6 +65,33 @@
                     </spot-input>
                     <spot-input-date class="w-full read-only" formControlName="fundingApprovalNeedDate" [label]="'Funding Approval Need Date'">
                     </spot-input-date>
+                </div>
+            </div>
+            <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+                <div class=" pb-3 pt-0 flex items-center justify-between">
+                    <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">OPEX</div>
+                    <div class="flex items-start justify-between">
+                        <div style="padding-right: 5px;">
+                            <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                    *ngIf ="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
+                                    (click)="projectHubService.toggleDrawerOpen('BudgetOPEXEdit', '', budgetPageInfo ,'' )">
+                                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+                    <div
+                        class="flex justify-start w-full gap-3 items-center font-medium">
+                        OPEX Required
+                        <mat-icon svgIcon="heroicons_outline:x-circle"
+                                  *ngIf="!budgetForm.controls.opexRequired.value"></mat-icon>
+                        <mat-icon class="text-green-500" svgIcon="heroicons_outline:check-circle"
+                                  *ngIf="budgetForm.controls.opexRequired.value">
+                        </mat-icon>
+                    </div>
+                    <div></div>
+                    <div></div>
                 </div>
             </div>
             <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
@@ -170,6 +170,10 @@
                             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-secondary">{{headerLabel}}
                             </div>
                             <div  class="flex justify-end" >
+                                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                        (click)="lbePeriodCalendar()">
+                                    <mat-icon svgIcon="heroicons_solid:information-circle"></mat-icon>&nbsp; LBE Period Calendar
+                                </button>
                                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
                                         (click)="projectHubService.toggleDrawerOpen('BudgetDeviationCodeEdit', '', budgetPageInfo , id)">
                                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
@@ -270,7 +274,8 @@
                 <h1 *ngIf="opexField; then opexTrueBlock else opexFalseBlock"></h1>
                 <ng-template #opexTrueBlock>
                     <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                        <app-budget-capex-opex-table [mode]="'Opex'" ></app-budget-capex-opex-table>
+                        <app-budget-capex-opex-table [mode]="'Opex'"  [inputData]="budgetForecasts"></app-budget-capex-opex-table>
+                        <app-budget-capex-opex-table [mode]="'Y1'" [inputData]="budgetForecastsY1Opex"></app-budget-capex-opex-table>
                     </div>
                 </ng-template>
                 <ng-template #opexFalseBlock>

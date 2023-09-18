@@ -91,7 +91,6 @@ export class BudgetComponent implements OnInit {
     }
 
     dataloader(): void {
-
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         const promises = [
             this.portApiService.getfilterlist(),
@@ -174,19 +173,30 @@ export class BudgetComponent implements OnInit {
                 submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
             })
         }
+        const currentHistorical = forecast.find(x => x.active === 'Current')?.historical || 0;
+        const planHistorical = forecast.find(x => x.active === 'Plan')?.historical || 1;
+        const currentActive = forecast.find(x => x.active === 'Current');
+        const planActive = forecast.find(x => x.active === 'Plan');
+        const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
+        const planMonthText = this.getMonthText(planMtdpDate.getMonth());
+        const currentMonthValue = currentActive && currentActive[currentMonthText] || 0;
+        const planMonthValue = planActive && planActive[planMonthText] || 1;
+        const totalApprovedCapEx = budget.totalApprovedCapEx || 1;
+        const currentAnnualTotal = currentActive?.annualTotal || 0;
+        const planAnnualTotal = planActive?.annualTotal || 1;
         this.budgetForecastForm.patchValue({
             referenceCurrent: forecast.find(x => x.active == 'Current').active,
             periodCurrent: forecast.find(x => x.active == 'Current').periodName,
             lastSubmittedCurrent: forecast.find(x => x.active == 'Current').lastSubmitted,
             submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
-            tfpPercentage:  Number((forecast.find(x => x.active == 'Plan').cumulativeTotal / (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 1)).toFixed(2)),
+            tfpPercentage:  Number((planActive.cumulativeTotal / totalApprovedCapEx).toFixed(2)),
             tfpValue: forecast.find(x => x.active == 'Plan').cumulativeTotal - (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0),
-            afpPercentage: Number((forecast.find(x => x.active == 'Current').annualTotal/forecast.find(x => x.active == 'Plan').annualTotal).toFixed(2)),
+            afpPercentage: Number((currentAnnualTotal / planAnnualTotal).toFixed(2)),
             afpValue: forecast.find(x => x.active == 'Current').annualTotal - forecast.find(x => x.active == 'Plan').annualTotal,
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
-            ytdpPercentage: Number((forecast.find(x => x.active == 'Current').historical / (forecast.find(x => x.active == 'Plan').historical) ? (forecast.find(x => x.active == 'Plan').historical) : 1 ).toFixed(2)),
+            ytdpPercentage: Number((currentHistorical / planHistorical).toFixed(2)),
             ytdpValue: forecast.find(x => x.active == 'Current').historical - forecast.find(x => x.active == 'Plan').historical,
-            mtdpPercentage: Number((forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] /  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())]).toFixed(2)),
+            mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
             mtdpValue: forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] -  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').mtdpDeviationCodeID),
             committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
@@ -262,6 +272,10 @@ export class BudgetComponent implements OnInit {
         }else{
             this.mdtpColor = 'green'
         }
+    }
+    lbePeriodCalendar(){
+        const url = 'https://app.powerbi.com/groups/me/apps/aa1c834f-34df-4d86-8e69-246dea19b28a/reports/3d0acf48-54a4-4520-92d4-4fbf3914eec5/ReportSectionbd22354a21346769a025';
+        window.open(url, '_blank');
     }
 
 }
