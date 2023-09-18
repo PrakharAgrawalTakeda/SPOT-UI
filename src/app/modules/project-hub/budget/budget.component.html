@@ -22,7 +22,7 @@
                     </spot-input>
                     <spot-input class="w-full" formControlName="localCurrency" [label]="'Local Currency'" [showHint]="true" [hint]="'Currency Info'">
                     </spot-input>
-                    <spot-input-date class="w-full read-only" formControlName="apisdate" [label]="'Asset Placed In Service (Estimate)'" [Required]="true">
+                    <spot-input-date class="w-full read-only" formControlName="apisdate" [label]="'Asset Placed In Service (Estimate)'" >
                     </spot-input-date>
                 </div>
             </div>
@@ -172,7 +172,7 @@
                             <div  class="flex justify-end" >
                                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                                         (click)="lbePeriodCalendar()">
-                                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; LBE Period Calendar
+                                    <mat-icon svgIcon="heroicons_solid:information-circle"></mat-icon>&nbsp; LBE Period Calendar
                                 </button>
                                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
                                         (click)="projectHubService.toggleDrawerOpen('BudgetDeviationCodeEdit', '', budgetPageInfo , id)">
@@ -274,7 +274,8 @@
                 <h1 *ngIf="opexField; then opexTrueBlock else opexFalseBlock"></h1>
                 <ng-template #opexTrueBlock>
                     <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                        <app-budget-capex-opex-table [mode]="'Opex'" ></app-budget-capex-opex-table>
+                        <app-budget-capex-opex-table [mode]="'Opex'"  [inputData]="budgetForecasts"></app-budget-capex-opex-table>
+                        <app-budget-capex-opex-table [mode]="'Y1'" [inputData]="budgetForecastsY1Opex"></app-budget-capex-opex-table>
                     </div>
                 </ng-template>
                 <ng-template #opexFalseBlock>

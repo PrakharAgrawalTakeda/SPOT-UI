@@ -237,7 +237,9 @@
             *ngIf="projecthubservice.itemtype == 'BudgetFundingAddNew'"></app-budget-funding-add-view>
         <app-budget-fxrate *ngIf="projecthubservice.itemtype == 'BudgetFxRates'"></app-budget-fxrate>
         <app-budget-forecast-bulk-edit
-            *ngIf="projecthubservice.itemtype == 'BudgetForecastBulkEdit'"></app-budget-forecast-bulk-edit>
+            *ngIf="projecthubservice.itemtype == 'BudgetForecastCapexBulkEdit'" [mode]="'Capex'"></app-budget-forecast-bulk-edit>
+        <app-budget-forecast-bulk-edit
+            *ngIf="projecthubservice.itemtype == 'BudgetForecastOpexBulkEdit'" [mode]="'Opex'"></app-budget-forecast-bulk-edit>
     </div>
 </fuse-drawer>
 <fuse-vertical-navigation [appearance]="navigationAppearance" [navigation]="projectHubNavigation" [mode]="'side'"
