@@ -9,7 +9,7 @@
 <form class="w-full p-[20px]" [formGroup]="primaryKPIForm" (ngSubmit)="submitpkpi()">
     <div class=" h-[84vh] overflow-hidden">
     <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
-        [label]="'Primary KPI'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
+        [label]="'Primary Value Driver'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
         [dropDownArray]="projecthubservice.kpiMasters">
     </spot-singleselect-autocomplete>
 </div>
