@@ -70,7 +70,7 @@ export class PortfolioCenterService {
         this.drawerOpened = event
         if (this.isFormChanged == true) {
           console.log(this.isFormChanged)
-          this.alertopener()
+          this.alertopenerSmall()
         }
         else {
           this.item = {}
@@ -114,18 +114,18 @@ export class PortfolioCenterService {
     console.log(itemtype)
 
     if (this.drawerOpened == true && this.isFormChanged == true) {
-      const alertopener = this.fusealert.open(this.alert)
-      alertopener.afterClosed().subscribe(res => {
-        if (res == 'confirmed') {
+      // const alertopener = this.fusealert.open(this.alert)
+      // alertopener.afterClosed().subscribe(res => {
+        // if (res == 'confirmed') {
           this.item = {}
-          this.itemtype = ""
+          this.itemtype = itemtype
           this.itemid = ""
           this.all = []
           this.projectid = ""
           this.isFormChanged = false
           this.drawerOpened = !this.drawerOpened
-        }
-      })
+      //   }
+      // })
     }
     else {
       this.itemid = itemid
@@ -138,6 +138,26 @@ export class PortfolioCenterService {
     this.fuseDrawerSmall = fuseDrawerSmall
   }
   alertopener() {
+
+    const alertopener = this.fusealert.open(this.alert)
+    this.isFormChanged = false
+    alertopener.afterClosed().subscribe(res => {
+      if (res != 'confirmed') {
+        this.toggleDrawerOpen(this.itemtype, this.itemid, this.all, this.projectid, true)
+        this.isFormChanged = true
+      }
+      else {
+        this.item = {}
+        this.itemtype = ""
+        this.itemid = ""
+        this.all = []
+        this.projectid = ""
+        this.isFormChanged = false
+
+      }
+    })
+  }
+  alertopenerSmall() {
 
     const alertopener = this.fusealert.open(this.alert)
     this.isFormChanged = false

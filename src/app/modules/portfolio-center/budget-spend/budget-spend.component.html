@@ -1,6 +1,6 @@
    <div class="flex items-start justify-between bg-primary sidepanel-header">
             <div class="text-on-primary" style="padding-top: 6px">Budget/Spend</div>
-            <div style="padding-top: 2px"><a (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '',[],'',true)"
+            <div style="padding-top: 2px"><a (click)="PortfolioCenterService.toggleDrawerOpen('', '',[],'',true)"
                     href="javascript:void(0)" title="Close">
                     <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
                 </a>
@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
-            [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
+            [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}" *ngIf="showForecast">
             <app-forecast></app-forecast>
         </div>
         
