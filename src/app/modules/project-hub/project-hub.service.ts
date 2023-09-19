@@ -20,6 +20,7 @@ export class ProjectHubService {
   projectid: string = ""
   localCurrency: any = [];
   hasChildren: boolean = false
+  projectState: string = "";
   submitbutton = new BehaviorSubject<boolean>(false)
   isNavChanged = new BehaviorSubject<boolean>(false)
   isFormChanged: boolean = false

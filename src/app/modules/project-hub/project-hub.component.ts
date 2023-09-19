@@ -198,6 +198,7 @@ export class ProjectHubComponent implements OnInit {
             }
             this.projecthubservice.hasChildren = res.hasChildren
             this.portfolioDetails = res.portfolioCeterData
+            this.projecthubservice.projectState = this.portfolioDetails.projStatus;
             console.log(res.indicator)
             this.spotLightIndicator = res.indicators
             this.projectType = this.projectDetails.problemType;
@@ -216,7 +217,7 @@ export class ProjectHubComponent implements OnInit {
                    this.projectHubNavigation[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
                    if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
                        this.projectHubNavigation[0].children[11].disabled = true
-                   } 
+                   }
                 }
                 else {
                     //Budget
