@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
-            [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
+            [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}" *ngIf="showForecast">
             <app-forecast></app-forecast>
         </div>
         

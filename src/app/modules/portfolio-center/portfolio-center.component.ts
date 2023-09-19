@@ -98,7 +98,7 @@ export class PortfolioCenterComponent implements OnInit {
     "CAPSProject": [],
     "Project/Program": [],
     "OverallStatus": [],
-    "primaryKPI":[]
+    "PrimaryValueDriver":[]
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -118,7 +118,7 @@ export class PortfolioCenterComponent implements OnInit {
     "CAPSProject": [],
     "Project/Program": [],
     "OverallStatus": [],
-    "primaryKPI": []
+    "PrimaryValueDriver": []
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
@@ -138,7 +138,7 @@ export class PortfolioCenterComponent implements OnInit {
     CAPSProject: new FormControl(),
     OverallStatus: new FormControl(),
     projectName: new FormControl(),
-    primaryKPI: new FormControl()
+    PrimaryValueDriver: new FormControl()
   })
 
   bulkreportdata: any;
@@ -397,7 +397,7 @@ export class PortfolioCenterComponent implements OnInit {
               CAPSProject: this.filtersnew.CAPSProject,
               projectName: this.filtersnew.projectName,
               OverallStatus: this.filtersnew.OverallStatus,
-              primaryKPI: this.filtersnew.primaryKPI,
+              PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
             })
             if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
               if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
@@ -546,7 +546,7 @@ export class PortfolioCenterComponent implements OnInit {
                   var name = "Overall Status"
                   var order = 16
                 }
-                else if(attribute == "primaryKPI"){
+                else if(attribute == "PrimaryValueDriver"){
                   var name = "Primary Value Driver"
                   var order = 17
                 }
