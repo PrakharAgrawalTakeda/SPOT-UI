@@ -76,6 +76,7 @@ export class PortfolioCenterComponent implements OnInit {
   AgileWorkstream = []
   AgileWave = []
   overallStatus = []
+  primaryKPI = []
   sorting: any = { name: "", dir: "" }
   viewBaseline = false
   projectOverview: any = []
@@ -96,7 +97,8 @@ export class PortfolioCenterComponent implements OnInit {
     "AGILEWave": [],
     "CAPSProject": [],
     "Project/Program": [],
-    "OverallStatus": []
+    "OverallStatus": [],
+    "PrimaryValueDriver":[]
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -115,7 +117,8 @@ export class PortfolioCenterComponent implements OnInit {
     "AGILEWave": [],
     "CAPSProject": [],
     "Project/Program": [],
-    "OverallStatus": []
+    "OverallStatus": [],
+    "PrimaryValueDriver": []
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
@@ -134,7 +137,8 @@ export class PortfolioCenterComponent implements OnInit {
     AGILEWave: new FormControl(),
     CAPSProject: new FormControl(),
     OverallStatus: new FormControl(),
-    projectName: new FormControl()
+    projectName: new FormControl(),
+    PrimaryValueDriver: new FormControl()
   })
 
   bulkreportdata: any;
@@ -333,6 +337,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.AgileWorkstream = this.lookup.filter(result => result.lookUpParentId == "f4486388-4c52-48fc-8c05-836878da2247")
         this.AgileWave = this.lookup.filter(result => result.lookUpParentId == "4bdbcbca-90f2-4c7b-b2a5-c337446d60b1")
         this.overallStatus = this.lookup.filter(result => result.lookUpParentId == "81ab7402-ab5d-4b2c-bf70-702aedb308f0")
+        this.primaryKPI = this.lookup.filter(result => result.lookUpParentId == "999572a6-5aa8-4760-8082-c06774a17474")
         this.AgileWorkstream.push(AGILEall)
 
         this.apiService.getCapitalPhase().then((res: any) => {
@@ -392,6 +397,7 @@ export class PortfolioCenterComponent implements OnInit {
               CAPSProject: this.filtersnew.CAPSProject,
               projectName: this.filtersnew.projectName,
               OverallStatus: this.filtersnew.OverallStatus,
+              PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
             })
             if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
               if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
@@ -540,6 +546,10 @@ export class PortfolioCenterComponent implements OnInit {
                   var name = "Overall Status"
                   var order = 16
                 }
+                else if(attribute == "PrimaryValueDriver"){
+                  var name = "Primary Value Driver"
+                  var order = 17
+                }
                 var filterdata = {
                   "name": name,
                   "value": this.filtersnew[attribute][0].lookUpName,
@@ -684,7 +694,7 @@ export class PortfolioCenterComponent implements OnInit {
 
 
 
-            if (res.budgetTile.localCurrencyAbbreviation == "OY") {
+            if (res.budgetTile.localCurrencyAbbreviation == "OY" || res.budgetTile.localCurrencyAbbreviation == "JPY") {
               this.budgetCurrency = "OY"
             }
             else{
@@ -1081,10 +1091,6 @@ export class PortfolioCenterComponent implements OnInit {
       "uniqueId": "",
       "value": ""
     }
-    if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)) {
-      dataToSend = []
-    }
-    else {
       Object.keys(this.localAttributeForm.controls).forEach((name) => {
         const currentControl = this.localAttributeForm.controls[name];
         var i = mainObj.findIndex(x => x.uniqueId === name);
@@ -1139,7 +1145,7 @@ export class PortfolioCenterComponent implements OnInit {
           }
           else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
             if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-              mainObj[i].data[0].value = null
+              mainObj[i].data[0].value = ""
               dataToSend.push(mainObj[i])
             }
             else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
@@ -1247,8 +1253,10 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
       })
-    }
     console.log(dataToSend)
+    if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)) {
+        dataToSend = []
+      }
     if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
       var c = 0;
       var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
@@ -1452,6 +1460,10 @@ export class PortfolioCenterComponent implements OnInit {
     this.toggleObject = {}
     // Initialize counters for each report type
     const reportTypeCounters = {};
+    Object.keys(this.pageToggleStates[0] || {}).forEach(toggleName => {
+      reportTypeCounters[toggleName] = 0;
+    });
+
     // Step 1: Iterate through each page
 for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
   if (this.pageToggleStates[pageNumber]) {
@@ -1502,6 +1514,15 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       );
 
     console.log(totalTurnedOnToggles)
+                // Flag to determine if we've found a report type with more than 100 counts
+let showConfirmation = false;
+
+for (const toggleName in reportTypeCounters) {
+    if (reportTypeCounters[toggleName] > 100) {
+        showConfirmation = true;
+        break; // exit the loop once a report type exceeds 100
+    }
+}
     if (typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles > 500) {
       console.log("HI")
       var comfirmConfig: FuseConfirmationConfig = {
@@ -1537,9 +1558,8 @@ this.updateToggleObjectFromChanges();
     }
 
     // Step 4: Check if more than 100 toggles are turned on
-    else {
-      for (const toggleName in reportTypeCounters) {
-      if (reportTypeCounters[toggleName] > 100 && typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles <= 500) {
+    else if (showConfirmation) {
+      if (typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles <= 500) {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "Are you Sure?",
           "message": "You have selected more than 100 reports to be created. The distribution may be delayed due to the large amount of data to be generated. Are you sure you want to continue?",
@@ -1582,24 +1602,24 @@ this.updateToggleObjectFromChanges();
         }
         });
       }
-      else {
-        this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
-        // Close the drawer
-        this.filterDrawer.close();
-        // Reset toggle states to false on all pages and all toggles
-        for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
-          if (this.pageToggleStates[pageNumber]) {
-            Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
-              this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
-            });
-          }
-        }
-
-
-        this.showConfirmationMessage();
-    })
+  
+}
+else {
+  this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+  // Close the drawer
+  this.filterDrawer.close();
+  // Reset toggle states to false on all pages and all toggles
+  for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+    if (this.pageToggleStates[pageNumber]) {
+      Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
+        this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
+      });
     }
   }
+
+
+  this.showConfirmationMessage();
+})
 }
   }
 

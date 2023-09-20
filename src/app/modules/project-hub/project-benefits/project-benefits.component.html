@@ -1,27 +1,39 @@
 <div class="flex flex-col flex-auto w-full px-8" *ngIf="viewContent">
-    <div class="flex bg-card rounded-2xl p-3 pb-0 justify-between items-center">
-        <div class="w-full">
-            <div class="text-xl font-medium tracking-tight pl-6 truncate text-primary">Primary KPI</div>
-            <form class="w-full p-6 pb-3 pt-0" [formGroup]="primaryKPIForm">
-                <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full read-only" name="primaryKpi"
-                    [showlabel]="false" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
-                    [dropDownArray]="kpiMasters" style="color:#4C9BCF">
-                </spot-singleselect-autocomplete>
-            </form>
+    <form [formGroup]="primaryKPIForm"  class="space-y-6" [hidden]="viewHisOpPerformance">
+
+    <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+        <div class=" pb-3 pt-0 flex items-center justify-between">
+            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Value Capture Fields</div>
+            <div class="flex items-start justify-between">
+                <div style="padding-right: 5px;" >
+                    <button
+                    class="min-w-26 text-primary bg-gray-200" mat-flat-button *ngIf="editable" [color]="'primary-200'" (click)="projecthubservice.toggleDrawerOpen(bulkEditType, 'new', [], id, true)">
+                Historical Operational Performance Metrics
+            </button>
+
+                    <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projecthubservice.roleControllerControl.projectBenefits"
+                    (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.projectViewDetails.projectData.primaryKpi , [], id)">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="w-10">
-            <a href="javascript:void(0)" *ngIf="projecthubservice.roleControllerControl.projectBenefits" title="Edit Single"
-                (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.projectViewDetails.projectData.primaryKpi , [], id)">
-                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
-            </a>
+        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
+            <spot-input-date class="w-full read-only" formControlName="startDate" [label]="'Value Capture Start Date'" [showHint]="true" [hint]="'Value Capture Start defines the first fiscal year in which value will be captured.'">
+            </spot-input-date>
+            <spot-input class="w-full read-only" formControlName="primaryKpi" [label]="'Primary Value Driver'">
+            </spot-input>
+            <spot-input class="w-full read-only" formControlName="commentary" [label]="'Value Commentary'">
+            </spot-input>
         </div>
     </div>
-    <div class="xl:col-span-6 flex flex-col mt-6 p-3 bg-card shadow rounded-2xl overflow-hidden">
+</form>
+    <!-- <div class="xl:col-span-6 flex flex-col mt-6 p-3 bg-card shadow rounded-2xl overflow-hidden" [hidden]="!viewHisOpPerformance">
         <app-operational-performance-table [kpi]="kpiMasters" [lookup]="lookupMasters"
             [projectViewDetails]="projectViewDetails" [projectid]="id"
             [editable]="projecthubservice.roleControllerControl.projectBenefits">
         </app-operational-performance-table>
-    </div>
+    </div> -->
 
 
 </div>

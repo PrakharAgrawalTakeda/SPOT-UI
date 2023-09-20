@@ -12,8 +12,8 @@ export class BudgetFxrateComponent {
     constructor(private portfoliService: PortfolioApiService, public projectHubService: ProjectHubService) {
     }
     ngOnInit(): void {
-        this.portfoliService.getLocalCurrency().then(currency => {
-            this.localCurrency = currency
+        this.portfoliService.getLocalCurrency().then((currency: any[]) => {
+            this.localCurrency = currency.sort((a, b) => a.displayOrder - b.displayOrder);
         })
     }
 }

@@ -100,7 +100,7 @@ export class BudgetFundingInformationBulkEditComponent {
             this.fundingRequestsSubmit = []
             for (var i of form) {
                 this.fundingRequestsSubmit.push({
-                    "budgetIoid": i.budgetIoid,
+                    "budgetIoid": i.budgetIoid ? i.budgetIoid : "",
                     "projectId": this.projecthubservice.projectid,
                     "budgetIo1": i.budgetIo1,
                     "carapprovedCapex": i.carapprovedCapex,
@@ -112,7 +112,6 @@ export class BudgetFundingInformationBulkEditComponent {
                     "approvalStatus": i.approvalStatus,
                     "approvalCurrency": i.approvalCurrency,
                     "keep": i.keep,
-
                 })
             }
         } else {
@@ -301,6 +300,8 @@ export class BudgetFundingInformationBulkEditComponent {
                     this.projecthubservice.isFormChanged = false
                     this.formValue()
                     this.budgetInfo.budgetIOs  = this.fundingRequestsSubmit.filter((item) => item.keep);
+                    this.budgetInfo.budgetForecasts = []
+                    this.budgetInfo.budgetForecastsY1 = []
                     this.apiService.updateBudgetPageInfo(this.projecthubservice.projectid,this.budgetInfo).then(res => {
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.toggleDrawerOpen('', '', [], '')
