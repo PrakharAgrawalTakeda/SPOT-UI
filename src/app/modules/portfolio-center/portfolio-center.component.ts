@@ -1091,10 +1091,6 @@ export class PortfolioCenterComponent implements OnInit {
       "uniqueId": "",
       "value": ""
     }
-    if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)) {
-      dataToSend = []
-    }
-    else {
       Object.keys(this.localAttributeForm.controls).forEach((name) => {
         const currentControl = this.localAttributeForm.controls[name];
         var i = mainObj.findIndex(x => x.uniqueId === name);
@@ -1149,7 +1145,7 @@ export class PortfolioCenterComponent implements OnInit {
           }
           else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
             if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-              mainObj[i].data[0].value = null
+              mainObj[i].data[0].value = ""
               dataToSend.push(mainObj[i])
             }
             else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
@@ -1257,8 +1253,10 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
       })
-    }
     console.log(dataToSend)
+    if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)) {
+        dataToSend = []
+      }
     if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
       var c = 0;
       var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
