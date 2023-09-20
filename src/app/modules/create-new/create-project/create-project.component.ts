@@ -831,7 +831,7 @@ export class CreateProjectComponent implements OnInit {
             "label": "Cancel"
           }
         },
-        "dismissible": true
+        "dismissible": false
       }
       const alert = this.fuseAlert.open(comfirmConfig)
       alert.afterClosed().subscribe(close => {
