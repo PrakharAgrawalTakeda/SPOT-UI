@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, Input} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ProjectHubService} from "../../project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
@@ -6,6 +6,7 @@ import {RoleService} from "../../../../core/auth/role.service";
 import {FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {ActivatedRoute} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
+import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 
 @Component({
     selector: 'app-budget-forecast-bulk-edit',
@@ -16,13 +17,27 @@ export class BudgetForecastBulkEditComponent {
     @Input() mode: 'Capex' | 'Opex' = 'Capex';
 
     constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService,
-                public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private cdRef: ChangeDetectorRef) {
+                public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private cdRef: ChangeDetectorRef,private portApiService: PortfolioApiService,) {
         this.forecastsForm.valueChanges.subscribe(res => {
             this.formValue()
             this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
         })
     }
-
+    budgetForecastForm = new FormGroup({
+        tfpPercentage: new FormControl(0),
+        tfpValue: new FormControl(0),
+        afpPercentage: new FormControl(0),
+        afpValue: new FormControl(0),
+        afpCodeId: new FormControl(''),
+        ytdpPercentage: new FormControl(0),
+        ytdpValue: new FormControl(0),
+        mtdpPercentage:new FormControl(0),
+        mtdpValue:new FormControl(0),
+        mtdpCodeId: new FormControl(''),
+        afpDeviationCode: new FormControl(null),
+        mtdpDeviationCode: new FormControl(null),
+    })
+    localCurrency:any = [];
     id: string = "";
     forecasts = []
     forecastsY1 = []
@@ -42,9 +57,29 @@ export class BudgetForecastBulkEditComponent {
     csForm = new FormArray([])
     committedSpend: number = 0;
     csTable = []
+    aprEditable: boolean = true;
+    mayEditable: boolean = true;
+    junEditable: boolean = true;
+    julEditable: boolean = true;
+    augEditable: boolean = true;
+    sepEditable: boolean = true;
+    octEditable: boolean = true;
+    novEditable: boolean = true;
+    decEditable: boolean = true;
+    janEditable: boolean = true;
+    febEditable: boolean = true;
+    marEditable: boolean = true;
+    tfpColor: string;
+    afpColor: string;
+    ydtpColor: string;
+    mdtpColor: string;
 
     ngOnInit(): void {
+        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         if (this.mode == "Capex") {
+            this.portApiService.getOnlyLocalCurrency(this.id).then(res => {
+                this.localCurrency = res;
+            })
             for (const obj of this.projecthubservice.all.budgetForecasts) {
                 if (obj.budgetData === "CapEx Forecast") {
                     this.forecasts.push(obj);
@@ -77,11 +112,24 @@ export class BudgetForecastBulkEditComponent {
                 }
             }
         }
+        this.aprEditable = this.isCellEditable('apr')
+        this.mayEditable = this.isCellEditable('may')
+        this.junEditable = this.isCellEditable('jun')
+        this.julEditable = this.isCellEditable('jul')
+        this.augEditable = this.isCellEditable('aug')
+        this.sepEditable = this.isCellEditable('sep')
+        this.octEditable = this.isCellEditable('oct')
+        this.novEditable = this.isCellEditable('nov')
+        this.decEditable = this.isCellEditable('dec')
+        this.janEditable = this.isCellEditable('jan')
+        this.febEditable = this.isCellEditable('feb')
+        this.marEditable = this.isCellEditable('mar')
+        this.setTextColors();
         this.dataloader()
     }
 
     dataloader() {
-        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        this.forecastPatchGeneralForm(this.projecthubservice.all.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), this.projecthubservice.all.budget);
         if (this.forecasts.length > 0) {
             this.forecastsDb = this.forecasts.map(x => {
                 return {
@@ -238,6 +286,7 @@ export class BudgetForecastBulkEditComponent {
             this.csForm.push(new FormGroup({
                 committedSpend: new FormControl(this.forecastsForm.controls.find(control => control.get('isopen').value === true).value.committedSpend),
             }),{ emitEvent: false })
+
         }
     }
 
@@ -255,7 +304,7 @@ export class BudgetForecastBulkEditComponent {
                     "jun": i.jun,
                     "jul": i.jul,
                     "aug": i.aug,
-                    "sep": i.jun,
+                    "sep": i.sep,
                     "oct": i.oct,
                     "nov": i.nov,
                     "dec": i.dec,
@@ -367,13 +416,17 @@ export class BudgetForecastBulkEditComponent {
             this.extraEntriesY1.forEach(x => {
                 mainObj.budgetForecastsY1.push(x);
             });
+            const formValue = this.budgetForecastForm.getRawValue();
+            // if(this.mode=='Capex'){
+            //     mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").afpDeviationCodeID = formValue.afpDeviationCode.lookUpId;
+            //     mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").mtdpDeviationCodeID =  formValue.mtdpDeviationCode.lookUpId;
+            // }
             this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
                 this.projecthubservice.submitbutton.next(true)
                 this.projecthubservice.successSave.next(true)
                 this.projecthubservice.toggleDrawerOpen('', '', [], '')
             })
-
         } else {
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
@@ -382,7 +435,6 @@ export class BudgetForecastBulkEditComponent {
     }
 
     isCellEditable(month: string): boolean {
-        const currentDate = new Date();
         const startingMonth = this.getStartingMonth() - 3;
         const monthNumber = this.getMonthNumber(month);
         return startingMonth <= monthNumber;
@@ -475,5 +527,142 @@ export class BudgetForecastBulkEditComponent {
             this.cdRef.detectChanges();
         }
     }
+    onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
+        event.preventDefault();
+        const clipboardData = event.clipboardData || window['clipboardData'];
+        const pastedData = clipboardData.getData('text').split('\t');
+        for (let i = 0; i < pastedData.length; i++) {
+            this.forecastsForm.controls[rowIndex].value[field] = Number(pastedData[i]);
+            this.forecastsForm.controls[rowIndex].patchValue({
+                [field]: Number(pastedData[i])
+            });
+            field = this.getNextField(field);
+        }
+        this.recalculateAnnualTotal()
+        this.formValue()
 
+    }
+    getNextField(field: string): string {
+        switch (field) {
+            case 'apr':
+                return 'may';
+            case 'may':
+                return 'jun';
+            case 'jun':
+                return 'jul';
+            case 'jul':
+                return 'aug';
+            case 'aug':
+                return 'sep';
+            case 'sep':
+                return 'oct';
+            case 'oct':
+                return 'nov';
+            case 'nov':
+                return 'dec';
+            case 'dec':
+                return 'jan';
+            case 'jan':
+                return 'feb';
+            case 'feb':
+                return 'mar';
+            case 'mar':
+                return '';
+            default:
+                return '';
+        }
+    }
+    setTextColors(): void {
+        const tfpPercentage =this.budgetForecastForm.controls.tfpPercentage.value;
+        const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
+        const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
+        const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
+        if(tfpPercentage >= 5){
+            this.tfpColor = 'green'
+        }else{
+            this.tfpColor = 'red'
+        }
+        if(afpPercentage >= 10 || afpPercentage <= -10){
+            this.afpColor = 'red'
+        }else {
+            this.afpColor = 'green'
+        }
+        if(ydtpPercentage >= 10 || afpPercentage <= -10){
+            this.ydtpColor = 'red'
+        }else{
+            this.ydtpColor = 'green'
+        }
+        if(mdtpPercentage >=5 || mdtpPercentage <= -5){
+            this.mdtpColor = 'red'
+        }else{
+            this.mdtpColor = 'green'
+        }
+    }
+    getAfdDeviationCodes(): any {
+        return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
+    }
+    getMtdpDeviationCodes(): any {
+        return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
+    }
+    forecastPatchGeneralForm(forecast:any, budget:any){
+        const planMtdpDate = new Date(forecast.find(x => x.active == 'Plan').financialMonthStartDate)
+        const currentMtdpDate = new Date(forecast.find(x => x.active == 'Current').financialMonthStartDate)
+        const currentHistorical = forecast.find(x => x.active === 'Current')?.historical || 0;
+        const planHistorical = forecast.find(x => x.active === 'Plan')?.historical || 1;
+        const currentActive = forecast.find(x => x.active === 'Current');
+        const planActive = forecast.find(x => x.active === 'Plan');
+        const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
+        const planMonthText = this.getMonthText(planMtdpDate.getMonth());
+        const currentMonthValue = currentActive && currentActive[currentMonthText] || 0;
+        const planMonthValue = planActive && planActive[planMonthText] || 1;
+        const totalApprovedCapEx = budget.totalApprovedCapEx || 1;
+        const currentAnnualTotal = currentActive?.annualTotal || 0;
+        const planAnnualTotal = planActive?.annualTotal || 1;
+        this.budgetForecastForm.patchValue({
+            tfpPercentage:  Number((planActive.cumulativeTotal / totalApprovedCapEx).toFixed(2)),
+            tfpValue: forecast.find(x => x.active == 'Plan').cumulativeTotal - (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0),
+            afpPercentage: Number((currentAnnualTotal / planAnnualTotal).toFixed(2)),
+            afpValue: forecast.find(x => x.active == 'Current').annualTotal - forecast.find(x => x.active == 'Plan').annualTotal,
+            afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
+            ytdpPercentage: Number((currentHistorical / planHistorical).toFixed(2)),
+            ytdpValue: forecast.find(x => x.active == 'Current').historical - forecast.find(x => x.active == 'Plan').historical,
+            mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
+            mtdpValue: forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] -  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())],
+            mtdpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').mtdpDeviationCodeID),
+        })
+        this.setTextColors();
+    }
+    getMonthText(month: number): string {
+        switch (month) {
+            case 1:
+                return 'jan';
+            case 2:
+                return 'feb';
+            case 3:
+                return 'mar';
+            case 4:
+                return 'apr';
+            case 5:
+                return 'may';
+            case 6:
+                return 'jun';
+            case 7:
+                return 'jul';
+            case 8:
+                return 'aug';
+            case 9:
+                return 'sep';
+            case 10:
+                return 'oct';
+            case 11:
+                return 'nov';
+            case 0:
+                return 'dec';
+            default:
+                return '';
+        }
+    }
+    getLookUpName(id: string): string {
+        return id && id != '' ?  this.projecthubservice.lookUpMaster.find(x => x.lookUpId == id)?.lookUpName : ''
+    }
 }

@@ -241,12 +241,7 @@ export class BudgetComponent implements OnInit {
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria?.portfolioOwner?.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0]?.portfolioOwner || null;
     }
-    getAfdDeviationCodes(): any {
-        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
-    }
-    getMtdpDeviationCodes(): any {
-        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
-    }
+
     setTextColors(): void {
         const tfpPercentage =this.budgetForecastForm.controls.tfpPercentage.value;
         const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;

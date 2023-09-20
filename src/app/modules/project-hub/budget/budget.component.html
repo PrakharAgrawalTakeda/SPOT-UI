@@ -174,6 +174,10 @@
                                         (click)="lbePeriodCalendar()">
                                     <mat-icon svgIcon="heroicons_solid:information-circle"></mat-icon>&nbsp; LBE Period Calendar
                                 </button>
+                                <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                                        (click)="projectHubService.toggleDrawerOpen('BudgetForecastCapexBulkEdit', '', budgetForecasts, id, true)">
+                                    <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
+                                </button>
                                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
                                         (click)="projectHubService.toggleDrawerOpen('BudgetDeviationCodeEdit', '', budgetPageInfo , id)">
                                     <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
