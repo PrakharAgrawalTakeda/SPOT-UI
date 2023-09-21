@@ -8,10 +8,18 @@
 </div>
 <form class="w-full p-[20px]" [formGroup]="primaryKPIForm" (ngSubmit)="submitpkpi()">
     <div class=" h-[84vh] overflow-hidden">
+        <spot-input-date class="w-full read-only" formControlName="vcdate"
+                             [label]="'Value Capture Start Date'" [placeholder]="'Value Capture Start Date'"
+                             [showHint]="true" [hint]="'Value Capture Start defines the first fiscal year in which value will be captured.'">
+            </spot-input-date>
     <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full" name="primaryKpi"
         [label]="'Primary Value Driver'" [placeholder]="'Primary KPI'" [valuePointer]="'kpiname'"
         [dropDownArray]="projecthubservice.kpiMasters">
     </spot-singleselect-autocomplete>
+    <spot-textarea formControlName="valueCommentary"
+                           [label]="'Value Commentary'"
+                           [placeholder]="'Value Commentary'">
+            </spot-textarea>
 </div>
     <div class="flex items-start justify-between mt-6">
         <a class="min-w-26" mat-flat-button [color]="'primary'"
