@@ -45,7 +45,9 @@ export class ForecastComponent {
   constructor(private portfoliService: PortfolioApiService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
     , public fuseAlert: FuseConfirmationService, private router: Router, private titleService: Title, private auth: AuthService, public PortfolioCenterService: PortfolioCenterService) {
     this.ForecastForm.valueChanges.subscribe(res => {
+      if (this.showContent) {
       this.PortfolioCenterService.isFormChanged = true
+      }
     })
     this.ForecastForm.controls.ForecastType.valueChanges.subscribe((res: any) => {
       if (this.showContent) {
@@ -219,7 +221,6 @@ export class ForecastComponent {
     }
   }
   else{
-      // this.filterdata = filter;
       this.ngOnInit()
   }
   this.dataloader()

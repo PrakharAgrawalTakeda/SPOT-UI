@@ -20,13 +20,14 @@ export class ProjectBenefitsComponent implements OnInit {
   kpiMasters = []
   primaryKPIForm = new FormGroup({
     primaryKpi: new FormControl(null),
-    startDate: new FormControl(null),
-    commentary: new FormControl(null)
+    vcdate: new FormControl(null),
+    valueCommentary: new FormControl(null)
   })
   @Input() projectid: any;
   editable: boolean = false
   viewHisOpPerformance: boolean = false;
   bulkEditType: string = 'OperationalPerformanceBulkEdit';
+  valueCreation: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
@@ -46,30 +47,39 @@ export class ProjectBenefitsComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    this.apiService.getvalueCreation(this.id).then((vc: any) => {
     this.apiService.getprojectviewdata(this.id).then((res: any) => {
       this.auth.KPIMaster().then((kpis: any) => {
         this.auth.lookupMaster().then((lookup: any) => {
+          this.valueCreation = vc
+          console.log(this.valueCreation)
           this.projectViewDetails = res
           this.lookupMasters = lookup
           this.kpiMasters = kpis
           console.log("OVERALL DATA", this.projectViewDetails)
+          console.log(this.projectViewDetails.projectData.primaryKpi)
           this.projecthubservice.lookUpMaster = lookup
           this.projecthubservice.kpiMasters = kpis
           this.editable = this.projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit
-          this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? kpis.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
+          this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? lookup.find(x => x.lookUpId == this.projectViewDetails.projectData.primaryKpi) : {})
+          //this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? kpis.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
+          this.primaryKPIForm.controls.vcdate.patchValue(vc.valueCaptureStartDate)
+          this.primaryKPIForm.controls.valueCommentary.patchValue(vc.valueCommentary)          
           this.primaryKPIForm.controls.primaryKpi.disable()
           if (!this.projecthubservice.roleControllerControl.projectBenefits) {
             this.primaryKPIForm.controls.primaryKpi.disable()
           }
-          for (var i of this.projectViewDetails.overallPerformace) {
-            i.kpiname = kpis.find(x => x.kpiid == i.kpiid) ? kpis.find(x => x.kpiid == i.kpiid).kpiname : ''
-          }
+          console.log(this.projectViewDetails)
+          //for (var i of this.projectViewDetails.projectData) {
+            this.projectViewDetails.projectData.primaryKpi = lookup.find(x => x.lookUpId == this.projectViewDetails.projectData.primaryKpi) ? lookup.find(x => x.lookUpId == this.projectViewDetails.projectData.primaryKpi).lookUpName : ''
+          //}
           //View Content
           this.viewContent = true
           this.primaryKPIForm.disable()
         })
       })
     })
+  })
   }
 
   openOperationalPerformance(){

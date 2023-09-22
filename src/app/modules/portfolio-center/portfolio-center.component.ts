@@ -694,7 +694,7 @@ export class PortfolioCenterComponent implements OnInit {
 
 
 
-            if (res.budgetTile.localCurrencyAbbreviation == "OY" || res.budgetTile.localCurrencyAbbreviation == "JPY") {
+            if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
             }
             else{
@@ -1464,6 +1464,8 @@ export class PortfolioCenterComponent implements OnInit {
       reportTypeCounters[toggleName] = 0;
     });
 
+    let noTogglesTurnedOn = true
+
     // Step 1: Iterate through each page
 for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
   if (this.pageToggleStates[pageNumber]) {
@@ -1473,6 +1475,7 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       const toggleValues = pageToggleStates[toggleName];
 
       if (toggleValues.some((value) => value === true)) {
+        noTogglesTurnedOn = false
         // Only add project UUIDs to toggleObject if the toggle is true
         if (!this.toggleObject[toggleName]) {
           this.toggleObject[toggleName] = [];
@@ -1508,12 +1511,12 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       0
     );
     console.log(totalTurnedOnToggles)
-        // Step 3: Check if no toggles are turned on
-        const noTogglesTurnedOn = !Object.values(this.toggles).some((toggle) =>
-        toggle.states.includes(true)
-      );
+    //     // Step 3: Check if no toggles are turned on
+    //     noTogglesTurnedOn = !Object.values(this.toggles).some((toggle) =>
+    //     toggle.states.includes(true)
+    //   );
 
-    console.log(totalTurnedOnToggles)
+    // console.log(totalTurnedOnToggles)
                 // Flag to determine if we've found a report type with more than 100 counts
 let showConfirmation = false;
 

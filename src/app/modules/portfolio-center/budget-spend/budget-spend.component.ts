@@ -24,7 +24,7 @@ export class BudgetSpendComponent {
     this.dataloader()
   }
   dataloader(){
-    if (this.role.roleMaster.securityGroupId == "C9F323D4-EF97-4C2A-B748-11DB5B8589D0" || this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
+    if (this.role.roleMaster.securityGroupId == "500ee862-3878-43d9-9378-53feb1832cef" || this.role.roleMaster.securityGroupId == "C9F323D4-EF97-4C2A-B748-11DB5B8589D0" || this.role.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
       this.showForecast = true
     }
     else{
