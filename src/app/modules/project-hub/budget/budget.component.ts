@@ -241,12 +241,7 @@ export class BudgetComponent implements OnInit {
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria?.portfolioOwner?.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0]?.portfolioOwner || null;
     }
-    getAfdDeviationCodes(): any {
-        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
-    }
-    getMtdpDeviationCodes(): any {
-        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
-    }
+
     setTextColors(): void {
         const tfpPercentage =this.budgetForecastForm.controls.tfpPercentage.value;
         const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
@@ -255,22 +250,41 @@ export class BudgetComponent implements OnInit {
         if(tfpPercentage >= 5){
             this.tfpColor = 'green'
         }else{
+            if(afpPercentage == 0){
+                this.afpColor = 'gray'
+            }else{
+                this.tfpColor = 'red'
+            }
             this.tfpColor = 'red'
         }
         if(afpPercentage >= 10 || afpPercentage <= -10){
             this.afpColor = 'red'
         }else {
-            this.afpColor = 'green'
+            if(afpPercentage == 0){
+                this.afpColor = 'gray'
+            }else{
+                this.afpColor = 'green'
+            }
+
         }
         if(ydtpPercentage >= 10 || afpPercentage <= -10){
             this.ydtpColor = 'red'
         }else{
-            this.ydtpColor = 'green'
+            if(ydtpPercentage == 0){
+                this.ydtpColor = 'gray'
+            }else{
+                this.ydtpColor = 'green'
+            }
+
         }
         if(mdtpPercentage >=5 || mdtpPercentage <= -5){
             this.mdtpColor = 'red'
         }else{
-            this.mdtpColor = 'green'
+            if(mdtpPercentage == 0){
+                this.mdtpColor = 'gray'
+            }else{
+                this.mdtpColor = 'green'
+            }
         }
     }
     lbePeriodCalendar(){
