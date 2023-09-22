@@ -19,11 +19,15 @@
             </div>
         </div>
         <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-            <spot-input-date class="w-full read-only" formControlName="startDate" [label]="'Value Capture Start Date'" [showHint]="true" [hint]="'Value Capture Start defines the first fiscal year in which value will be captured.'">
+            <spot-input-date class="w-full read-only" formControlName="vcdate" [label]="'Value Capture Start Date'" [showHint]="true" [hint]="'Value Capture Start defines the first fiscal year in which value will be captured.'">
             </spot-input-date>
-            <spot-input class="w-full read-only" formControlName="primaryKpi" [label]="'Primary Value Driver'">
-            </spot-input>
-            <spot-input class="w-full read-only" formControlName="commentary" [label]="'Value Commentary'">
+            <!-- <spot-input class="w-full read-only" formControlName="primaryKpi" [label]="'Primary Value Driver'">
+            </spot-input> -->
+            <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full read-only" [label]="'Primary Value Driver'"
+                     [placeholder]="'Primary Value Driver'" [valuePointer]="'lookUpName'"
+                    [dropDownArray]="lookupMasters">
+                </spot-singleselect-autocomplete>
+            <spot-input class="w-full read-only" formControlName="valueCommentary" [label]="'Value Commentary'">
             </spot-input>
         </div>
     </div>
