@@ -1,1 +1,69 @@
-<p>project-proposal-value-creation works!</p>
+<div class="w-full min-w-0 p-8 pt-0" #container >
+    <div class="flex justify-between items-start gap-6 w-full" >
+        <div class="flex flex-col w-full flex-auto bg-card p-6 shadow rounded-2xl overflow-hidden" #container *ngIf="viewContent">
+            <div class="mr-4 text-xl font-medium tracking-tight leading-10 truncate text-primary">Value Capture Fields
+            </div>
+            <form class="grid grid-cols-3 gap-x-6 gap-y-0 w-full" [formGroup]="ValueCaptureForm">
+                <spot-input class="w-full read-only" formControlName="valueCaptureStart" name="valueCaptureStart"
+                    [label]="'Value Capture Start'" [showHint]="true" [hint]="'
+                    ‘Value Capture Start’ Defines the first fiscal year in which value will be captured.'" >
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="primaryValueDriver" name="primaryValueDriver"
+                    [label]="'Primary Value Driver'">
+                </spot-input>
+                <spot-input class="w-full read-only" formControlName="valueCommentary" name="valueCommentary"
+                    [label]="'Value Commentary'">
+                </spot-input>
+            </form>
+        </div>
+    </div>
+    <div class="flex justify-between items-start gap-6 w-full" >
+        <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container *ngIf="viewContent">
+            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+        class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
+        <ngx-datatable-column name="Status" prop="status" [resizeable]="false" [flexGrow]="1.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwner" [flexGrow]="2.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Category" prop="category" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Units" prop="units" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Value Capture Level" prop="valueCaptureLevel" [flexGrow]="5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="FY 2023" prop="FY" [flexGrow]="2" *ngIf="callLocation == 'Business-Case'">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Total" prop="total" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{value}}
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+        </div>
+    </div>
+</div>

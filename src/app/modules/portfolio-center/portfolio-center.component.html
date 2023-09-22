@@ -1,9 +1,9 @@
 <!-- Budget/Spend -->
-<fuse-drawer *ngIf="PortfolioCenterService.itemtype == 'BudgetSpendOpen' || PortfolioCenterService.itemtype == 'FXRateOpen'" [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpenedright"
+<fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpenedright"
     (openedChanged)="PortfolioCenterService.drawerOpenedChanged($event)" [mode]="'over'" [position]="'right'"
     [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerLarge}">
     <div>
-        <app-budget-spend></app-budget-spend>
+        <app-budget-spend *ngIf="PortfolioCenterService.itemtype == 'BudgetSpendOpen' || PortfolioCenterService.itemtype == 'FXRateOpen'"></app-budget-spend>
     </div>
     <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpened"
         (openedChanged)="PortfolioCenterService.drawerOpenedChangedSmall($event)" [mode]="'over'" [position]="'right'"
@@ -111,6 +111,11 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
                         [label]="'Project/Program'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="PrimaryValueDriver"
+                class="w-full" name="PrimaryValueDriver" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
+                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [dropDownArray]="primaryKPI" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-multiselect-autocomplete>
 
                     <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;"
                         (click)="OpenLA()">+ Show Local Attributes</mat-label>
@@ -464,7 +469,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         </div>
                         
                         <div class="p-4 text-right">
-                            <button class="forecast" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast Bulk Edit Page</button>
+                            <button class="forecast" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast Bulk View</button>
                         </div>
                     </div>
                     <!-- Ask Needs -->

@@ -2,15 +2,6 @@
             <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;height: 125vh;">
                 <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
                     <div>
-                        <!-- <mat-drawer-container class="flex-auto h-full" [ngStyle]="{ 'position' : FxRateDrawer.opened ? 'fixed' : 'relative'}">
-                            
-                            <mat-drawer [ngClass]="{'w-2qua': true, 'dark:bg-gray-900': true, 'overflow-hidden': true}" [autoFocus]="false"
-                                [mode]="'push'" [position]="'end'" #FxRateDrawer>
-                                <div>
-                                    <app-fx-rate></app-fx-rate>
-                                </div>
-                            </mat-drawer>
-                        <mat-drawer-content style="background-color: white;"> -->
                         <div class="pb-3 pt-0 flex items-center justify-between">
                             <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
                                 <spot-singleselect-autocomplete class="w-full custom" formControlName="ForecastType"
@@ -29,12 +20,14 @@
                                 <a class="customIcon" *ngIf="ForecastForm.controls.PM.value != null && !showEmail"
                                     (click)="MailTo()"><mat-icon
                                         [svgIcon]="'heroicons_solid:mail'"></mat-icon></a>
+                                <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" class="text-primary bg-gray-200 customButton" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Filters
+                                </button>
                             </form>
                             <div class="flex items-center justify-center">
-                                <button style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Changes
-                                </button>
+                                <!-- <button style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Changes
+                                </button> -->
                                 <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                    (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , '' , '1')">
+                                    (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , 'this.filterdata' , '1')">
                                     <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
                                 </button>
                             </div>
@@ -97,11 +90,9 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <!-- <div class="align-center"> -->
                                                 <span class="blueBg headBgHeight">
                                                 </span>
                                                 <span>{{column.name}}</span>
-                                                <!-- </div> -->
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -308,9 +299,6 @@
                                                 </div>
                                             </span>
                                         </ng-container>
-                                        <!-- <div style="background-color: #89B4E0 !important;">
-                                            <p style="top: 16px; position: relative;">{{column.name}}</p>
-                                        </div> -->
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <div style="background-color: #89B4E0 !important; height: 60px;"><p style="top: 16px; position: relative;">{{value| number:'1.0-4'}}</p></div>   
@@ -697,11 +685,9 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <!-- <div class="align-center"> -->
                                                 <span class="blueBg headBgHeight">
                                                 </span>
                                                 <span>{{column.name}}</span>
-                                                <!-- </div> -->
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -897,9 +883,6 @@
                                                 </div>
                                             </span>
                                         </ng-container>
-                                        <!-- <div style="background-color: #89B4E0 !important;">
-                                                                    <p style="top: 16px; position: relative;">{{column.name}}</p>
-                                                                </div> -->
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <div style="background-color: #89B4E0 !important; height: 60px;">
@@ -1204,9 +1187,6 @@
                                 </ngx-datatable-column>
                             </ngx-datatable>
                         </div>
-                    <!-- </mat-drawer-content>
-                    </mat-drawer-container> -->
                 </div>
             </div>
         </div>
-    <!-- </div> -->
