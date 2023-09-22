@@ -10,7 +10,9 @@ import { ProjectHubService } from '../../project-hub.service';
 })
 export class PrimaryKpiSingleEditComponent implements OnInit {
   primaryKPIForm = new FormGroup({
-    primaryKpi: new FormControl(null)
+    vcdate: new FormControl(null),
+    primaryKpi: new FormControl(null),
+    valueCommentary: new FormControl('')
   })
   viewContent: boolean = false
   constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService) {

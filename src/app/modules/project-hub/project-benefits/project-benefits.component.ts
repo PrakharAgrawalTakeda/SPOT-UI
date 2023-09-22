@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -19,9 +19,14 @@ export class ProjectBenefitsComponent implements OnInit {
   lookupMasters = []
   kpiMasters = []
   primaryKPIForm = new FormGroup({
-    primaryKpi: new FormControl(null)
+    primaryKpi: new FormControl(null),
+    startDate: new FormControl(null),
+    commentary: new FormControl(null)
   })
+  @Input() projectid: any;
   editable: boolean = false
+  viewHisOpPerformance: boolean = false;
+  bulkEditType: string = 'OperationalPerformanceBulkEdit';
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
@@ -37,6 +42,7 @@ export class ProjectBenefitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataloader()
+    
   }
   dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -60,9 +66,15 @@ export class ProjectBenefitsComponent implements OnInit {
           }
           //View Content
           this.viewContent = true
+          this.primaryKPIForm.disable()
         })
       })
     })
+  }
+
+  openOperationalPerformance(){
+    this.viewHisOpPerformance = true
+    this.viewContent = true
   }
 
 }
