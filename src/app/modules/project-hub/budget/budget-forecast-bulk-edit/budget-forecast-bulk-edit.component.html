@@ -425,7 +425,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateY1()"
+                            <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'apr')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -441,7 +441,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'may')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -457,7 +457,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jun')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -473,7 +473,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jul')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -489,7 +489,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'aug')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -505,7 +505,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'sep')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -521,7 +521,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'oct')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -537,7 +537,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'nov')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -553,7 +553,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'dec')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -569,7 +569,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateY1()"
+                            <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jan')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -585,7 +585,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex) ">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateY1()"
+                            <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'feb')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>
@@ -601,7 +601,7 @@
                     <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                           *ngIf="fy1TableEditStack.includes(rowIndex)">
                         <mat-form-field class="w-full" [floatLabel]="'always'">
-                            <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateY1()"
+                            <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'mar')"
                                    placeholder="0" pattern="\d*" />
                         </mat-form-field>
                     </form>

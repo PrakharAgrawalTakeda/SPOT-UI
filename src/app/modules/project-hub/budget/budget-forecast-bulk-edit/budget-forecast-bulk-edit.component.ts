@@ -73,6 +73,12 @@ export class BudgetForecastBulkEditComponent {
     afpColor: string;
     ydtpColor: string;
     mdtpColor: string;
+    y1Label: string = '';
+    y2Label: string = '';
+    y3Label: string = '';
+    y4Label: string = '';
+    y5Label: string = '';
+    y6Label: string = '';
 
     ngOnInit(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -112,6 +118,18 @@ export class BudgetForecastBulkEditComponent {
                 }
             }
         }
+        let year = new Date(this.forecasts.find(x => x.active == 'Current').financialMonthStartDate).getFullYear();
+        let year2 = year+1;
+        let year3 = year+2;
+        let year4 = year+3;
+        let year5 = year+4;
+        let year6 = year+5;
+        this.y1Label= 'FY' + year;
+        this.y2Label= 'FY' + year2;
+        this.y3Label= 'FY' + year3;
+        this.y4Label= 'FY' + year4;
+        this.y5Label= 'FY' + year5;
+        this.y6Label= 'FY' + year6 + '+';
         this.aprEditable = this.isCellEditable('apr')
         this.mayEditable = this.isCellEditable('may')
         this.junEditable = this.isCellEditable('jun')
@@ -540,7 +558,20 @@ export class BudgetForecastBulkEditComponent {
         }
         this.recalculateAnnualTotal()
         this.formValue()
-
+    }
+    onPasteY1(event: ClipboardEvent, rowIndex: number, field: string): void {
+        event.preventDefault();
+        const clipboardData = event.clipboardData || window['clipboardData'];
+        const pastedData = clipboardData.getData('text').split('\t');
+        for (let i = 0; i < pastedData.length; i++) {
+            this.forecastsY1Form.controls[rowIndex].value[field] = Number(pastedData[i]);
+            this.forecastsY1Form.controls[rowIndex].patchValue({
+                [field]: Number(pastedData[i])
+            });
+            field = this.getNextField(field);
+        }
+        this.recalculateY1()
+        this.formValue()
     }
     getNextField(field: string): string {
         switch (field) {
@@ -580,22 +611,41 @@ export class BudgetForecastBulkEditComponent {
         if(tfpPercentage >= 5){
             this.tfpColor = 'green'
         }else{
+            if(afpPercentage == 0){
+                this.afpColor = 'gray'
+            }else{
+                this.tfpColor = 'red'
+            }
             this.tfpColor = 'red'
         }
         if(afpPercentage >= 10 || afpPercentage <= -10){
             this.afpColor = 'red'
         }else {
-            this.afpColor = 'green'
+            if(afpPercentage == 0){
+                this.afpColor = 'gray'
+            }else{
+                this.afpColor = 'green'
+            }
+
         }
         if(ydtpPercentage >= 10 || afpPercentage <= -10){
             this.ydtpColor = 'red'
         }else{
-            this.ydtpColor = 'green'
+            if(ydtpPercentage == 0){
+                this.ydtpColor = 'gray'
+            }else{
+                this.ydtpColor = 'green'
+            }
+
         }
         if(mdtpPercentage >=5 || mdtpPercentage <= -5){
             this.mdtpColor = 'red'
         }else{
-            this.mdtpColor = 'green'
+            if(mdtpPercentage == 0){
+                this.mdtpColor = 'gray'
+            }else{
+                this.mdtpColor = 'green'
+            }
         }
     }
     getAfdDeviationCodes(): any {

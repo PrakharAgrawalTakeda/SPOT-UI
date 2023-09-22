@@ -250,22 +250,41 @@ export class BudgetComponent implements OnInit {
         if(tfpPercentage >= 5){
             this.tfpColor = 'green'
         }else{
+            if(afpPercentage == 0){
+                this.afpColor = 'gray'
+            }else{
+                this.tfpColor = 'red'
+            }
             this.tfpColor = 'red'
         }
         if(afpPercentage >= 10 || afpPercentage <= -10){
             this.afpColor = 'red'
         }else {
-            this.afpColor = 'green'
+            if(afpPercentage == 0){
+                this.afpColor = 'gray'
+            }else{
+                this.afpColor = 'green'
+            }
+
         }
         if(ydtpPercentage >= 10 || afpPercentage <= -10){
             this.ydtpColor = 'red'
         }else{
-            this.ydtpColor = 'green'
+            if(ydtpPercentage == 0){
+                this.ydtpColor = 'gray'
+            }else{
+                this.ydtpColor = 'green'
+            }
+
         }
         if(mdtpPercentage >=5 || mdtpPercentage <= -5){
             this.mdtpColor = 'red'
         }else{
-            this.mdtpColor = 'green'
+            if(mdtpPercentage == 0){
+                this.mdtpColor = 'gray'
+            }else{
+                this.mdtpColor = 'green'
+            }
         }
     }
     lbePeriodCalendar(){
