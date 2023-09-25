@@ -87,6 +87,13 @@
                 <ngx-datatable-column name="Apr" prop="apr" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !aprEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': aprEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -104,6 +111,13 @@
                 <ngx-datatable-column name="May" prop="may" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !mayEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': mayEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -118,9 +132,15 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Jun" prop="jun" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
+                <ngx-datatable-column name="Jun" prop="jun" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !junEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': junEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -136,8 +156,14 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Jul" prop="jul" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !julEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': julEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -152,9 +178,15 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Aug" prop="aug" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
+                <ngx-datatable-column name="Aug" prop="aug" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader" [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !augEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': augEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -170,8 +202,14 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Sep" prop="sep" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !sepEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': sepEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -187,8 +225,14 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Oct" prop="oct" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !octEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': octEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -204,16 +248,22 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Nov" prop="nov" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !novEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': novEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{value}}</p>
+                            <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && novEditable">
-                            <mat-form-field class="w-full  px-1" [floatLabel]="'always'">
+                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'nov')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
@@ -221,8 +271,14 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Dec" prop="dec" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !decEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': decEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -238,8 +294,14 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Jan" prop="jan" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !janEditable" (click)="fTableEditRow(rowIndex)"  [ngClass]="{'closed': janEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -255,8 +317,14 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Feb" prop="feb" [width]="150" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !febEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': febEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -272,8 +340,14 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Mar" prop="mar" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex) || !marEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': marEditable == false || row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -282,15 +356,21 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && marEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'mar')" class="no-spinners"
+                                <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateAnnualTotal()"  class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="FY2023" prop="annualTotal" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                                      [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{y0Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a  (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -301,7 +381,9 @@
 
             </ngx-datatable>
         </div>
-    <!--    Delimiter-->
+
+    <!--    Y1 starts here-->
+
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Y1</div>
@@ -318,6 +400,13 @@
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Apr" prop="apr" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -326,13 +415,20 @@
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'apr')"
+                                <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'apr')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="May" prop="may" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -340,14 +436,21 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'may')"
+                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
+                                <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'may')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Jun" prop="jun" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -356,13 +459,20 @@
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jun')"
+                                <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jun')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Jul" prop="jul" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -371,13 +481,20 @@
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jul')"
+                                <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jul')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Aug" prop="aug" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -385,14 +502,21 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'aug')"
+                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
+                                <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'aug')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Sep" prop="sep" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -401,13 +525,20 @@
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'sep')"
+                                <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'sep')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Oct" prop="oct" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -415,14 +546,21 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'oct')"
+                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
+                                <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'oct')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Nov" prop="nov" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -430,14 +568,21 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'nov')"
+                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
+                                <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'nov')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Dec" prop="dec" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -446,13 +591,20 @@
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
                             <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'dec')"
+                                <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'dec')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Jan" prop="jan" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -460,14 +612,21 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jan')"
+                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
+                                <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jan')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Feb" prop="feb" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex) " (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -476,13 +635,20 @@
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
                             <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'feb')"
+                                <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'feb')" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Mar" prop="mar" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{column.name}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fy1TableEditStack.includes(rowIndex)" (click)="fy1TableEditRow(rowIndex)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -490,11 +656,26 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'mar')"
+                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
+                                <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateY1()" class="no-spinners"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column  [flexGrow]="0.75" prop="annualTotal" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{y1Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template >
+                        <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
+                            <p *ngIf="!value && value!=0">&nbsp;</p>
+                            <p style="text-align:right">{{value | number : fractionSize}}</p>
+                        </a>
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
@@ -506,7 +687,15 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="forecasts">
-                <ngx-datatable-column name="Historical" prop="historical" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column name="Reference" prop="active" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false">
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a (click)="fTableEditRow(rowIndex)">
+                            <p *ngIf="!value">&nbsp;</p>
+                            <p>{{value}}</p>
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Historical" prop="historical" [flexGrow]="0.75" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template >
@@ -516,9 +705,16 @@
                         </a>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="FY2024" prop="y1"  [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
-                                      [resizeable]="false"
-                                      [sortable]="false" [draggable]="false">
+                <ngx-datatable-column  prop="annualTotal"  [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                                       [resizeable]="false"
+                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="blueBg headBgHeight"></span>
+                                <span>{{y0Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -526,9 +722,33 @@
                         </a>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="FY2025" prop="y2" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column  prop="y1"  [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="greenBg headBgHeight"></span>
+                                <span>{{y1Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
+                            <p *ngIf="!value && value!=0">&nbsp;</p>
+                            <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column prop="y2" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="pinkBg headBgHeight"></span>
+                                <span>{{y2Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template >
                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -537,15 +757,22 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="y2" type="number"  min="0"  (input)="recalculateTotalCapex()" class="no-spinners"
+                                <input matInput formControlName="y2" type="number"  min="0"  (input)="recalculateTotalCapex()" class="no-spinners" (paste)="onPaste($event, rowIndex,'y2')"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="FY2026" prop="y3" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column prop="y3" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="pinkBg headBgHeight"></span>
+                                <span>{{y3Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -554,15 +781,22 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="y3" type="number"  min="0" (input)="recalculateTotalCapex()" class="no-spinners"
+                                <input matInput formControlName="y3" type="number"  min="0" (input)="recalculateTotalCapex()" class="no-spinners" (paste)="onPaste($event, rowIndex,'y3')"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="FY2027" prop="y4" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column prop="y4" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="pinkBg headBgHeight"></span>
+                                <span>{{y4Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -571,15 +805,22 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="y4" type="number"  min="0" (input)="recalculateTotalCapex()" class="no-spinners"
+                                <input matInput formControlName="y4" type="number"  min="0" (input)="recalculateTotalCapex()" class="no-spinners" (paste)="onPaste($event, rowIndex,'y4')"
                                        placeholder="0" pattern="\d*" />
                             </mat-form-field>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="FY2028+" prop="y5" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column prop="y5" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="pinkBg headBgHeight"></span>
+                                <span>{{y5Label}}</span></span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': row.isopen==false}">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -606,7 +847,7 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="pl-3" >
+        <div class="pl-3 mt-6" >
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                            columnMode="force"
                            class="material w-64 font-medium text-sm whitespace-nowrap cursor-pointer"
