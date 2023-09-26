@@ -64,13 +64,13 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
     mainObj.valueCommentary = this.primaryKPIForm.get('valueCommentary').value;
     mainObj.primaryValueDriverLookupId = selectedPrimaryKpiObject.lookUpId;
     console.log(mainObj)
-    this.apiService.editValueCreation(mainObj, this.projecthubservice.projectid).then(res => {
+    //this.apiService.editValueCreation(mainObj, this.projecthubservice.projectid).then(res => {
     this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
       this.projecthubservice.submitbutton.next(true);
       this.projecthubservice.isNavChanged.next(true);
       this.projecthubservice.toggleDrawerOpen('', '', [], '');
     })
-    });
+   // });
   }
 
 }

@@ -874,18 +874,18 @@ async updateBusinessCaseFunding(body, projectId, optionid){
   }
 
   async getvalueCreation(projectid) {
-    var url = GlobalVariables.apiurl + "ValueCreation/" + projectid
+    var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid
     const abc$ = this.http.get(url)
     const response = await lastValueFrom(abc$)
     return response
   }
 
-  async editValueCreation(body,projectid){
-    var link = GlobalVariables.apiurl+"ValueCreation/ValueCaptureFields/" + projectid
-    const abc$ = this.http.put(link,body)
-    const response = await lastValueFrom(abc$)
-    return response
-  }
+  // async editValueCreation(body,projectid){
+  //   var link = GlobalVariables.apiurl+"ValueCreation/ValueCaptureFields/" + projectid
+  //   const abc$ = this.http.put(link,body)
+  //   const response = await lastValueFrom(abc$)
+  //   return response
+  // }
 
   }
 
