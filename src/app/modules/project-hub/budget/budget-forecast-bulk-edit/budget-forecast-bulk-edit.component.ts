@@ -231,6 +231,7 @@ export class BudgetForecastBulkEditComponent {
                         "jan": x.jan,
                         "feb": x.feb,
                         "mar": x.mar,
+                        "annualTotal": x.annualTotal,
                     }
                 })
             }
@@ -277,7 +278,7 @@ export class BudgetForecastBulkEditComponent {
                     periodNam: new FormControl(i.periodNam),
                     projectID: new FormControl(i.projectID),
                     submittedByID: new FormControl(i.submittedByID),
-                    userNae: new FormControl(i.userNam),
+                    userName: new FormControl(i.userName),
                 }), { emitEvent: false })
             }
             for (var i of this.forecastsY1) {
@@ -314,6 +315,7 @@ export class BudgetForecastBulkEditComponent {
             }),{ emitEvent: false })
 
         }
+        this.formValue();
     }
 
     formValue() {
@@ -529,6 +531,7 @@ export class BudgetForecastBulkEditComponent {
         this.forecastsForm.controls.find(control => control.get('isopen').value === true).patchValue({
             y1: newAnnualTotal
         });
+        this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
         this.year2Value = newAnnualTotal;
         this.cdRef.detectChanges();
         this.recalculateTotalCapex();
