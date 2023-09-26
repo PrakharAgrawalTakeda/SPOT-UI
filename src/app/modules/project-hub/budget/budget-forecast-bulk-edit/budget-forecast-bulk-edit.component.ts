@@ -73,12 +73,13 @@ export class BudgetForecastBulkEditComponent {
     afpColor: string;
     ydtpColor: string;
     mdtpColor: string;
+    y0Label: string = '';
     y1Label: string = '';
     y2Label: string = '';
     y3Label: string = '';
     y4Label: string = '';
     y5Label: string = '';
-    y6Label: string = '';
+    year2Value = 0;
 
     ngOnInit(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -96,7 +97,14 @@ export class BudgetForecastBulkEditComponent {
             this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true))
             for (const obj of this.projecthubservice.all.budgetForecastsY1) {
                 if (obj.budgetData === "CapEx Forecast") {
+                    if(obj.active=='Current'){
+                        obj.annualTotal = this.forecasts.find(x => x.active == 'Current').y1;
+                    }
+                    if(obj.active=='Preliminary'){
+                        obj.annualTotal = this.forecasts.find(x => x.active == 'Preliminary').y1;
+                    }
                     this.forecastsY1.push(obj);
+
                 } else if (obj.budgetData === "OpEx Forecast") {
                     this.extraEntriesY1.push(obj);
                 }
@@ -124,12 +132,12 @@ export class BudgetForecastBulkEditComponent {
         let year4 = year+3;
         let year5 = year+4;
         let year6 = year+5;
-        this.y1Label= 'FY' + year;
-        this.y2Label= 'FY' + year2;
-        this.y3Label= 'FY' + year3;
-        this.y4Label= 'FY' + year4;
-        this.y5Label= 'FY' + year5;
-        this.y6Label= 'FY' + year6 + '+';
+        this.y0Label= 'FY' + year;
+        this.y1Label= 'FY' + year2;
+        this.y2Label= 'FY' + year3;
+        this.y3Label= 'FY' + year4;
+        this.y4Label= 'FY' + year5;
+        this.y5Label= 'FY' + year6 + '+';
         this.aprEditable = this.isCellEditable('apr')
         this.mayEditable = this.isCellEditable('may')
         this.junEditable = this.isCellEditable('jun')
@@ -511,7 +519,6 @@ export class BudgetForecastBulkEditComponent {
     recalculateY1() {
         const isOpenEntry = this.forecastsY1Form.controls[0]
         const newAnnualTotal = isOpenEntry.value.apr + isOpenEntry.value.may + isOpenEntry.value.jun + isOpenEntry.value.jul + isOpenEntry.value.aug + isOpenEntry.value.sep + isOpenEntry.value.oct + isOpenEntry.value.nov + isOpenEntry.value.dec + isOpenEntry.value.jan + isOpenEntry.value.feb + isOpenEntry.value.mar;
-        // Create a copy of this.forecasts with the updated y1 value
         this.forecasts = this.forecasts.map(forecast => {
             if (forecast.isopen === true) {
                 return {...forecast, y1: newAnnualTotal};
@@ -522,6 +529,7 @@ export class BudgetForecastBulkEditComponent {
         this.forecastsForm.controls.find(control => control.get('isopen').value === true).patchValue({
             y1: newAnnualTotal
         });
+        this.year2Value = newAnnualTotal;
         this.cdRef.detectChanges();
         this.recalculateTotalCapex();
     }
@@ -597,6 +605,12 @@ export class BudgetForecastBulkEditComponent {
                 return 'feb';
             case 'feb':
                 return 'mar';
+            case 'y2':
+                return 'y3';
+            case 'y3':
+                return 'y4';
+            case 'y4':
+                return 'y5';
             case 'mar':
                 return '';
             default:

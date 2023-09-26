@@ -195,7 +195,7 @@
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': tfpColor}">
                                         <div class="mr-4">
-                                            {{budgetForecastForm.controls.tfpValue.value}}
+                                            {{budgetForecastForm.controls.tfpValue.value | number : fractionSize}}
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +208,7 @@
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': afpColor}">
                                         <div class="mr-4">
-                                            {{ budgetForecastForm.controls.afpValue.value }}
+                                            {{ budgetForecastForm.controls.afpValue.value | number : fractionSize  }}
                                         </div>
                                     </div>
                                 </div>
@@ -227,7 +227,7 @@
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': ydtpColor}">
                                         <div class="mr-4">
-                                            {{ budgetForecastForm.controls.ytdpValue.value }}
+                                            {{ budgetForecastForm.controls.ytdpValue.value | number : fractionSize}}
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': mdtpColor}">
                                         <div class="mr-4">
-                                            {{ budgetForecastForm.controls.mtdpValue.value }}
+                                            {{ budgetForecastForm.controls.mtdpValue.value | number : fractionSize}}
                                         </div>
                                     </div>
                                 </div>

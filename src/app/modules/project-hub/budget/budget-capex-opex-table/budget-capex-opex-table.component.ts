@@ -19,7 +19,7 @@ export class BudgetCapexOpexTableComponent {
     y3Label: string = '';
     y4Label: string = '';
     y5Label: string = '';
-    y6Label: string = '';
+    y0Label: string = '';
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService, private router: Router) {
         this.projecthubservice.submitbutton.subscribe(res => {
@@ -52,12 +52,12 @@ export class BudgetCapexOpexTableComponent {
         let year4 = year+3;
         let year5 = year+4;
         let year6 = year+5;
-        this.y1Label= 'FY' + year;
-        this.y2Label= 'FY' + year2;
-        this.y3Label= 'FY' + year3;
-        this.y4Label= 'FY' + year4;
-        this.y5Label= 'FY' + year5;
-        this.y6Label= 'FY' + year6 + '+';
+        this.y0Label= 'FY' + year;
+        this.y1Label= 'FY' + year2;
+        this.y2Label= 'FY' + year3;
+        this.y3Label= 'FY' + year4;
+        this.y4Label= 'FY' + year5;
+        this.y5Label= 'FY' + year6 + '+';
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     }
 
