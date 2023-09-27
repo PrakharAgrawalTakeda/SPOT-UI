@@ -454,7 +454,7 @@ export class ProjectHubService {
           title: 'Budget Performance',
           type: 'basic',
           icon: 'heroicons_outline:currency-dollar',
-          link: 'budget'
+          link: 'budget-performance'
         },
         {
           title: 'Initiative Team',
