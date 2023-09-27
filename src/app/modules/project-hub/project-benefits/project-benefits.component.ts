@@ -23,6 +23,7 @@ export class ProjectBenefitsComponent implements OnInit {
     vcdate: new FormControl(null),
     valueCommentary: new FormControl(null)
   })
+  valuecreationngxdata: any = []
   @Input() projectid: any;
   editable: boolean = false
   viewHisOpPerformance: boolean = false;
@@ -52,7 +53,7 @@ export class ProjectBenefitsComponent implements OnInit {
       this.auth.KPIMaster().then((kpis: any) => {
         this.auth.lookupMaster().then((lookup: any) => {
           this.valueCreation = vc
-          console.log(this.valueCreation)
+          console.log("Value Creation Data",vc)
           this.projectViewDetails = res
           this.lookupMasters = lookup
           this.kpiMasters = kpis
@@ -60,18 +61,19 @@ export class ProjectBenefitsComponent implements OnInit {
           console.log(this.projectViewDetails.projectData.primaryKpi)
           this.projecthubservice.lookUpMaster = lookup
           this.projecthubservice.kpiMasters = kpis
+          console.log(vc.problemCapture.financialRealizationStartDate)
           this.editable = this.projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit
-          this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? lookup.find(x => x.lookUpId == this.projectViewDetails.projectData.primaryKpi) : {})
+          this.primaryKPIForm.controls.primaryKpi.patchValue(vc.problemCapture.primaryKpi ? lookup.find(x => x.lookUpId == vc.problemCapture.primaryKpi) : {})
           //this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? kpis.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
-          this.primaryKPIForm.controls.vcdate.patchValue(vc.valueCaptureStartDate)
-          this.primaryKPIForm.controls.valueCommentary.patchValue(vc.valueCommentary)          
+          this.primaryKPIForm.controls.vcdate.patchValue(vc.problemCapture.financialRealizationStartDate)
+          this.primaryKPIForm.controls.valueCommentary.patchValue(vc.problemCapture.valueCommentary)          
           this.primaryKPIForm.controls.primaryKpi.disable()
           if (!this.projecthubservice.roleControllerControl.projectBenefits) {
             this.primaryKPIForm.controls.primaryKpi.disable()
           }
           console.log(this.projectViewDetails)
           //for (var i of this.projectViewDetails.projectData) {
-            this.projectViewDetails.projectData.primaryKpi = lookup.find(x => x.lookUpId == this.projectViewDetails.projectData.primaryKpi) ? lookup.find(x => x.lookUpId == this.projectViewDetails.projectData.primaryKpi).lookUpName : ''
+            this.projectViewDetails.projectData.primaryKpi = lookup.find(x => x.lookUpId == vc.problemCapture.primaryKpi) ? lookup.find(x => x.lookUpId == vc.problemCapture.primaryKpi).lookUpName : ''
           //}
           //View Content
           this.viewContent = true
