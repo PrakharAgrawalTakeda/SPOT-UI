@@ -4,6 +4,7 @@ import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
 import { ActivatedRoute } from '@angular/router';
 import moment from 'moment';
+import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
   selector: 'app-primary-kpi-single-edit',
@@ -20,7 +21,9 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
   primaryKPI: any;
   id: string;
   vc: any;
-  constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute) {
+  lookupMasters = []
+
+  constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
     this.primaryKPIForm.controls.primaryKpi.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.projecthubservice.isFormChanged = true
@@ -32,18 +35,22 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
   ngOnInit(): void {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getvalueCreation(this.id).then((vc: any) => {
+      this.auth.lookupMaster().then((lookup: any) => {
       this.vc = vc
+      this.lookupMasters = lookup
       console.log(this.vc)
-      if (this.projecthubservice.itemid && this.projecthubservice.itemid != "") {
+      //if (this.projecthubservice.itemid && this.projecthubservice.itemid != "") {
         console.log(this.projecthubservice.itemid)
-        this.primaryKPI = this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474')
+        this.primaryKPI = lookup.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474')
+        console.log(this.primaryKPI)
         //this.primaryKPIForm.controls.primaryKpi.patchValue(this.projecthubservice.kpiMasters.find(x => x.kpiid == this.projecthubservice.itemid))
-        this.primaryKPIForm.controls.primaryKpi.patchValue(this.primaryKPI.find(x => x.lookUpName == this.projecthubservice.itemid))
-        this.primaryKPIForm.controls.vcdate.patchValue(vc.valueCaptureStartDate)
-        this.primaryKPIForm.controls.valueCommentary.patchValue(vc.valueCommentary)
-      }
+        this.primaryKPIForm.controls.primaryKpi.patchValue(this.primaryKPI.find(x => x.lookUpId == this.vc.problemCapture.primaryKpi))
+        this.primaryKPIForm.controls.vcdate.patchValue(vc.problemCapture.financialRealizationStartDate)
+        this.primaryKPIForm.controls.valueCommentary.patchValue(vc.problemCapture.valueCommentary)
+     // }
       this.viewContent = true
     })
+  })
   }
   submitpkpi() {
     this.projecthubservice.isFormChanged = false;
