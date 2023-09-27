@@ -79,7 +79,7 @@ export class BudgetForecastBulkEditComponent {
     y3Label: string = '';
     y4Label: string = '';
     y5Label: string = '';
-    year2Value = 0;
+    year1Value = 0;
 
     ngOnInit(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -120,6 +120,7 @@ export class BudgetForecastBulkEditComponent {
             this.csTable.push(this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true))
             for (const obj of this.projecthubservice.all.budgetForecastsY1) {
                 if (obj.budgetData === "OpEx Forecast") {
+                    obj.annualTotal = this.forecasts.find(x => x.active === 'Current').y1;
                     this.forecastsY1.push(obj);
                 } else if (obj.budgetData === "CapEx Forecast") {
                     this.extraEntriesY1.push(obj);
@@ -231,6 +232,7 @@ export class BudgetForecastBulkEditComponent {
                         "jan": x.jan,
                         "feb": x.feb,
                         "mar": x.mar,
+                        "annualTotal": x.annualTotal,
                     }
                 })
             }
@@ -277,7 +279,7 @@ export class BudgetForecastBulkEditComponent {
                     periodNam: new FormControl(i.periodNam),
                     projectID: new FormControl(i.projectID),
                     submittedByID: new FormControl(i.submittedByID),
-                    userNae: new FormControl(i.userNam),
+                    userName: new FormControl(i.userName),
                 }), { emitEvent: false })
             }
             for (var i of this.forecastsY1) {
@@ -312,8 +314,8 @@ export class BudgetForecastBulkEditComponent {
             this.csForm.push(new FormGroup({
                 committedSpend: new FormControl(this.forecastsForm.controls.find(control => control.get('isopen').value === true).value.committedSpend),
             }),{ emitEvent: false })
-
         }
+        this.formValue();
     }
 
     formValue() {
@@ -529,7 +531,8 @@ export class BudgetForecastBulkEditComponent {
         this.forecastsForm.controls.find(control => control.get('isopen').value === true).patchValue({
             y1: newAnnualTotal
         });
-        this.year2Value = newAnnualTotal;
+        this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
+        this.year1Value = newAnnualTotal;
         this.cdRef.detectChanges();
         this.recalculateTotalCapex();
     }

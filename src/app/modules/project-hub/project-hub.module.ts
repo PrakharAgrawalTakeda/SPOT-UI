@@ -183,6 +183,7 @@ import { CloseOutValueCreationComponent } from './close-out/close-out-value-crea
 import { BusinessCaseValueCreationComponent } from './business-case/business-case-value-creation/business-case-value-creation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BudgetForecastBulkEditComponent } from './budget/budget-forecast-bulk-edit/budget-forecast-bulk-edit.component';
+import { BudgetPerformanceComponent } from './budget-performance/budget-performance.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -212,6 +213,11 @@ export const projectRoutes: Route[] = [
       path: 'budget',
       component: BudgetComponent,
       pathMatch: 'full'
+    },
+    {
+        path: 'budget-performance',
+        component: BudgetPerformanceComponent,
+        pathMatch: 'full'
     },
     {
       path: 'project-documents',
@@ -596,7 +602,8 @@ export const projectRoutes: Route[] = [
     ProjectCharterValueCreationComponent,
     CloseOutValueCreationComponent,
     BusinessCaseValueCreationComponent,
-    BudgetForecastBulkEditComponent
+    BudgetForecastBulkEditComponent,
+    BudgetPerformanceComponent
   ],
     imports: [
     HttpClientModule,
