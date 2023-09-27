@@ -35,8 +35,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   lookupdata: any = [];
   localCurrencyList: any = [];
   local: any = [];
-  projectTypeDropDrownValues1 = ["Strategic Initiative/Program"]
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project"]
+  projectTypeDropDrownValues1 = ["Strategic Initiative / Program"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", 'Strategic Initiative / Program']
   isStrategicInitiative: boolean = false
   projectNameLabel:string = "Project Name"
   owningOrganizationValues = []
@@ -147,7 +147,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     }
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
-        if(res != 'Strategic Initiative/Program'){
+        if(res != 'Strategic Initiative / Program'){
         if (res == 'Standard Project / Program') {
           if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
             this.generalInfoForm.controls.portfolioOwner.disable()
@@ -211,12 +211,6 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         this.generalInfo = res
         this.filterCriteria = this.projectHubService.all
         this.isStrategicInitiative = res.projectData.problemType == "Strategic Initiative / Program"
-        if(this.isStrategicInitiative){
-          this.projectNameLabel = "Initiaitive Name"
-          if(['ProjectCharter' , 'CloseOut' , 'BusinessCase'].includes(this.subCallLocation)){
-            this.projectNameLabel = "Initiative Title/ Project Name"
-          }
-        }
         this.generalInfoForm.patchValue({
           problemTitle: res.projectData.problemTitle,
           problemType: res.projectData.problemType,
@@ -256,6 +250,13 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
         this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
+        if(this.isStrategicInitiative){
+          this.projectNameLabel = "Initiaitive Name"
+          if(['ProjectCharter' , 'CloseOut' , 'BusinessCase'].includes(this.subCallLocation)){
+            this.projectNameLabel = "Initiative Title/ Project Name"
+          }
+          this.generalInfoForm.controls.problemType.disable()
+        }
         this.viewContent = true
       })
     }
@@ -319,7 +320,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
             if(this.callLocation == "CreateNewSIP"){
               this.generalInfoForm.patchValue({
                 SubmittedBy: user,
-                problemType: "Strategic Initiative/Program"
+                problemType: "Strategic Initiative / Program"
               })
             }
             else{
