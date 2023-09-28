@@ -122,7 +122,7 @@ export class CreateProjectComponent implements OnInit {
         link: '/create-project',
         children: [
           {
-            title: 'Create a Strategic Initiative/Program',
+            title: 'Create a Strategic Initiative / Program',
             type: 'basic',
             link: '/create-project/create-strategic-initiative-project'
           },
@@ -226,7 +226,7 @@ export class CreateProjectComponent implements OnInit {
       }
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
-        problemType: this.SIP ? "Strategic Initiative/Program" : event.problemType,
+        problemType: this.SIP ? "Strategic Initiative / Program" : event.problemType,
         localCurrency: event.localCurrency,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
@@ -249,6 +249,7 @@ export class CreateProjectComponent implements OnInit {
       if(this.SIP){
         this.createProjectForm.patchValue({
           isConfidential: event.isConfidential,
+          problemType: this.SIP ? "Strategic Initiative / Program" : event.problemType,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
           projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
           isCapsProject: event.isCapsProject
