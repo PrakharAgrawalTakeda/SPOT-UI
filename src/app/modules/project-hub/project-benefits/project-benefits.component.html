@@ -50,11 +50,11 @@
                             (click)="projecthubservice.toggleDrawerOpen(valueCreationViewEditType, 'new', valuecreationngxdata, projectid)">
                             Baseline Plans
                         </button>
-                        <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                        <!-- <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                             (click)="projecthubservice.toggleDrawerOpen(valueCreationBulkEditType, 'new', [], projectid, true)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
-                        </button>
+                        </button> -->
                         <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable" mat-flat-button
                             [color]="'primary-200'"
                             (click)="projecthubservice.toggleDrawerOpen(valueCreationViewEditType, 'new', valuecreationngxdata, projectid)">
@@ -72,47 +72,64 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata"
                 #valuecreationTable [rowClass]="getRowClass">
-                <ngx-datatable-column name="Status" prop="status" [resizeable]="false" [flexGrow]="1.5">
+                <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwner" [flexGrow]="2.5">
+                <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwnerId" [flexGrow]="2">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Category" prop="category" [flexGrow]="1.5">
+                <ngx-datatable-column name="Category" prop="metricCategoryID" [flexGrow]="2">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="5">
+                <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="4">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Units" prop="units" [flexGrow]="2">
+                <ngx-datatable-column name="Units" prop="metricUnit" [flexGrow]="1.5">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Value Capture Level" prop="valueCaptureLevel" [flexGrow]="5">
+                <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [flexGrow]="3">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="FY 2023" prop="FY" [flexGrow]="2">
+                <ngx-datatable-column name="" prop="level" [flexGrow]="2">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
+                        <div *ngFor="let item of value">{{ item }}</div>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Total" prop="total" [flexGrow]="2">
+                <ngx-datatable-column name="FY 2023" prop="FY" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
+                        <div *ngFor="let item of value">{{ item }}</div>
                     </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Total" prop="total" [flexGrow]="1">
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div *ngFor="let item of value">{{ item }}</div>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [flexGrow]="1">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+        
+                        <div class="flex items-center justify-start gap-6" >
+                            <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
+                                (click)="projecthubservice.toggleDrawerOpen('ValueCreation', row.projectId, valueCreation)">
+                                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+        
+                            </a>
+                            </div>
+                            </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>

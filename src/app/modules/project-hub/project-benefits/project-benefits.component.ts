@@ -23,7 +23,22 @@ export class ProjectBenefitsComponent implements OnInit {
     vcdate: new FormControl(null),
     valueCommentary: new FormControl(null)
   })
-  valuecreationngxdata: any = []
+  //valuecreationngxdata: any = []
+  valuecreationngxdata = [
+    {
+      statusId: "Status 1",
+      portfolioOwnerId: "Owner 1",
+      metricCategoryID: "Category 1",
+      metricName: "Metric Name 1",
+      metricUnit: "Units 1",
+      metricLevelId: "Value Capture Level 1",
+      level: ["Baseline Plan", "Current Plan", "Actual"],
+      //level: ['Baseline Plan'  + ' (' + this.localcurrency.localCurrencyAbbreviation + ')', "Current Plan", "Actual"],
+      FY: ["FY1", "FY2", "FY3"],
+      total: ["Total 1", "Total 2", "Total 3"],
+    },
+    // ... other rows
+  ];
   @Input() projectid: any;
   editable: boolean = false
   viewHisOpPerformance: boolean = false;

@@ -1,1 +1,16 @@
 @import '../../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
+/* Component.css or Component.scss */
+.ngx-datatable .datatable-body-cell {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ngx-datatable .datatable-body-cell div {
+    border-bottom: 1px solid #eaeaea;
+    padding: 5px 0;
+  }
+  
+  /* removing the border from the last div */
+  .ngx-datatable .datatable-body-cell div:last-child {
+    border-bottom: none;
+  }
