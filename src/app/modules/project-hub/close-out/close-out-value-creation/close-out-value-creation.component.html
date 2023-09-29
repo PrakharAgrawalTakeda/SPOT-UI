@@ -23,54 +23,55 @@
         class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
         <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [flexGrow]="1.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{getLookup(value)}}
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{getOwner(value, row.metricTypeID)}}
+                <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
             </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Category" prop="metricCategoryId" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{getLookup(value)}}
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="4">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Units" prop="metricUnit" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{getLookup(value)}}
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column  prop="metricLevelId" [flexGrow]="3">
+        <ngx-datatable-column name="Type" prop="FianncialType1" [flexGrow]="3">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{getLookup(value)}}
+                <p>{{ value }} <br> {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="FY 2023" prop="strategicTarget" [flexGrow]="2">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
-            </ng-template>
+        <ngx-datatable-column *ngFor="let col of columnYear; let i = index"   [name]=col.year [prop]=col.year [flexGrow]="2">
+            <!-- <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{value}}</p>
+            </ng-template> -->
         </ngx-datatable-column>
         <ngx-datatable-column name="Total" prop="strategicTarget" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p>{{ value }} <br> {{row.strategicBaseline}} <br> {{row.strategicCurrent}} <br> {{row.strategicActual}}</p>
             </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
         </div>
     </div>
+    
 </div>
 
 <!-- dynamic column -->

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +21,8 @@ export class CloseOutValueCreationComponent implements OnInit {
   lookupData = []
   filterData:any = []
   kpi= []
-
+  columnYear = []
+  @ViewChild('valuecreationTable') table: any;
   constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService){
 
   }
@@ -41,6 +42,10 @@ export class CloseOutValueCreationComponent implements OnInit {
                 element.metricPortfolioID = null
                 element.metricUnit = ""
                 element.metricTypeID = null
+                element.FianncialType1 = "Target"
+                element.FianncialType2 = "Baseline Plan"
+                element.FianncialType3 = "Current Plan"
+                element.FianncialType4 = "Actuaal"
             res.allMetrics.forEach((el)=>{
               if(element.metricId == el.metricID){
                 element.metricCategoryId = el.metricCategoryID
@@ -57,7 +62,55 @@ export class CloseOutValueCreationComponent implements OnInit {
             primaryValueDriver: this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname,
             valueCommentary: res.problemCapture.valueCommentary
           })
+          var year = []
+          var baselineYear=[]
+          var TargetYear= []
+          var ActualYear = []
+          var CurrentYear = []
+          for(var i=0;i<res.projectsMetricsData.length;i++){
+            if(res.projectsMetricsData[i].strategicActualList){
+              ActualYear = res.projectsMetricsData[i].strategicActualList.split(' ')
+              break;
+            }
+            else if(res.projectsMetricsData[i].strategicBaselineList){
+              baselineYear = res.projectsMetricsData[i].strategicBaselineList.split(' ')
+              break;
+            }
+            else if(res.projectsMetricsData[i].strategicCurrentList){
+              CurrentYear = res.projectsMetricsData[i].strategicTargetList.split(' ')
+              break;
+            }
+            else if(res.projectsMetricsData[i].strategicTargetList){
+              TargetYear = res.projectsMetricsData[i].strategicTargetList.split(' ')
+              break;
+            }
+            if(ActualYear.length != 0 || baselineYear.length != 0 || CurrentYear.length != 0 || TargetYear.length != 0 ){
+              break;
+            }
+          }
+            if(ActualYear.length >= baselineYear.length && ActualYear.length >= CurrentYear.length && ActualYear.length >= TargetYear.length){
+              for(var i=1;i<ActualYear.length;i+2){
+                this.columnYear.push({year: ActualYear[i], target: "", actual: "", current: "", baseline: ""})
+              }
+            }
+            else if (baselineYear.length >= ActualYear.length && baselineYear.length >= CurrentYear.length && baselineYear.length >= TargetYear.length){
+              for(var i=1;i<baselineYear.length;i+=2){
+                this.columnYear.push({year: baselineYear[i], target: "", actual: "", current: "", baseline: ""})
+              }
+            }
+            else if(CurrentYear.length >= ActualYear.length && CurrentYear.length >= baselineYear.length && CurrentYear.length >= TargetYear.length){
+              for(var i=1;i<CurrentYear.length;i+2){
+                this.columnYear.push({year: CurrentYear[i], target: "", actual: "", current: "", baseline: ""})
+              }
+            }
+            else if(TargetYear.length >= ActualYear.length && TargetYear.length >= baselineYear.length && TargetYear.length >= CurrentYear.length){
+              for(var i=1;i<TargetYear.length;i+2){
+                this.columnYear.push({year: TargetYear[i], target: "", actual: "", current: "", baseline: ""})
+              }
+            }
+          
           this.valuecreationngxdata = res.projectsMetricsData
+          // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true
       })
