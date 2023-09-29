@@ -122,7 +122,7 @@ export class CreateProjectComponent implements OnInit {
         link: '/create-project',
         children: [
           {
-            title: 'Create a Strategic Initiative/Program',
+            title: 'Create a Strategic Initiative / Program',
             type: 'basic',
             link: '/create-project/create-strategic-initiative-project'
           },
@@ -226,7 +226,7 @@ export class CreateProjectComponent implements OnInit {
       }
       this.createProjectForm.patchValue({
         problemTitle: event.problemTitle,
-        problemType: this.SIP ? "Strategic Initiative/Program" : event.problemType,
+        problemType: this.SIP ? "Strategic Initiative / Program" : event.problemType,
         localCurrency: event.localCurrency,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
         projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
@@ -455,7 +455,7 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].parentProgramId = formValue.projectsingleid
       mainObjCreate[0].projectDescription = formValue.projectDescription
       mainObjCreate[0].defaultOwningOrganizationId = formValue.owningOrganization
-      mainObjCreate[0].primaryValueDriver = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.kpiid : ''
+      mainObjCreate[0].primaryValueDriver = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.lookUpId : ''
       mainObjCreate[0].isAgile = formValue.isAgile == "" ? false : formValue.isAgile
       if (mainObjCreate[0].isAgile) {
           mainObjCreate[0].agilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null? formValue.agilePrimaryWorkstream.lookUpId : ''

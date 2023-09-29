@@ -272,7 +272,7 @@ export class PortfolioCenterComponent implements OnInit {
           link: '/create-project',
           children: [
             {
-              title: 'Create a Strategic Initiative/Program',
+              title: 'Create a Strategic Initiative / Program',
               type: 'basic',
               link: '/create-project/create-strategic-initiative-project'
             },
