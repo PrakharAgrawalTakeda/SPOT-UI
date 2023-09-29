@@ -250,8 +250,8 @@ export class BudgetComponent implements OnInit {
         if(tfpPercentage >= 5){
             this.tfpColor = 'green'
         }else{
-            if(afpPercentage == 0){
-                this.afpColor = 'gray'
+            if(tfpPercentage == 0){
+                this.tfpColor = 'gray'
             }else{
                 this.tfpColor = 'red'
             }
@@ -267,7 +267,7 @@ export class BudgetComponent implements OnInit {
             }
 
         }
-        if(ydtpPercentage >= 10 || afpPercentage <= -10){
+        if(ydtpPercentage >= 10 || ydtpPercentage <= -10){
             this.ydtpColor = 'red'
         }else{
             if(ydtpPercentage == 0){
@@ -275,7 +275,6 @@ export class BudgetComponent implements OnInit {
             }else{
                 this.ydtpColor = 'green'
             }
-
         }
         if(mdtpPercentage >=5 || mdtpPercentage <= -5){
             this.mdtpColor = 'red'

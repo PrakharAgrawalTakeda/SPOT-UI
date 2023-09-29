@@ -54,7 +54,7 @@
                 [placeholder]="'Date Approved'">
             </spot-input-date>
             <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')" class="w-full"
-                [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true" [confidentialProjects]="generalInfoForm.controls.isConfidential.value ? 'Only': 'None'" [hideRelations] = "callLocation == 'ProjectHub'" [isStrategicInitiative] = "isStrategicInitiative"
+                [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true" [confidentialProjects]="generalInfoForm.controls.isConfidential.value ? 'Only': 'None'" [hideRelations] = "callLocation == 'ProjectHub'" [isStrategicInitiative] = "generalInfoForm.controls.problemType.value == 'Strategic Initiative / Program'"
                 [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
             </app-project-single-dropdown>
             <div *ngIf="viewElementChecker('approvedDate')">
@@ -79,7 +79,7 @@
             <spot-select [Required]="callLocation == 'CreateNew'" *ngIf="viewElementChecker('problemType1')"
                 class="w-full" [ngClass]="{'read-only': callLocation == 'CreateNewSIP'}" formControlName="problemType" name="problemType" [label]="'Project Type'"
                 [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
-                [dropDownArray]="callLocation=='CreateNewSIP'?projectTypeDropDrownValues1:projectTypeDropDrownValues" [showHint]="true"
+                [dropDownArray]="callLocation=='CreateNewSIP'?projectTypeDropDrownValues:projectTypeDropDrownValues1" [showHint]="true"
                 [hint]="'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
             </spot-select>
             <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
