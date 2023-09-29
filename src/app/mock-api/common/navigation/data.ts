@@ -55,7 +55,7 @@ export const compactNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
+                title: 'Create a Strategic Initiative / Program',
                 type: 'basic',
                 link: '/create-project/create-strategic-initiative-project'
             },
@@ -94,7 +94,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
+                title: 'Create a Strategic Initiative / Program',
                 type: 'basic',
                 link: '/create-project/create-strategic-initiative-project'
             },
@@ -132,7 +132,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
+                title: 'Create a Strategic Initiative / Program',
                 type: 'basic',
                 link: '/create-project/create-strategic-initiative-project'
             },

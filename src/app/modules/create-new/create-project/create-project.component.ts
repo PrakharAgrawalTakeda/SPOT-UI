@@ -456,7 +456,7 @@ export class CreateProjectComponent implements OnInit {
       mainObjCreate[0].parentProgramId = formValue.projectsingleid
       mainObjCreate[0].projectDescription = formValue.projectDescription
       mainObjCreate[0].defaultOwningOrganizationId = formValue.owningOrganization
-      mainObjCreate[0].primaryValueDriver = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.kpiid : ''
+      mainObjCreate[0].primaryValueDriver = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.lookUpId : ''
       mainObjCreate[0].isAgile = formValue.isAgile == "" ? false : formValue.isAgile
       if (mainObjCreate[0].isAgile) {
           mainObjCreate[0].agilePrimaryWorkstream = formValue.agilePrimaryWorkstream != "" && formValue.agilePrimaryWorkstream != undefined && formValue.agilePrimaryWorkstream != null? formValue.agilePrimaryWorkstream.lookUpId : ''
@@ -502,7 +502,7 @@ export class CreateProjectComponent implements OnInit {
       }
         mainObjCreate[0].IsCapsProject = formValue.isCapsProject == "" || formValue.isCapsProject == "No" ? false : true
         mainObjCreate[0].EmissionPortfolioID = Object.keys(formValue.enviornmentalPortfolio).length > 0 ? formValue.enviornmentalPortfolio.portfolioOwnerId : ''
-      mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.kpiid : ''
+      mainObjCreate[0].PrimaryKPI = formValue.primaryKPI != "" && formValue.primaryKPI != null && formValue.primaryKPI != undefined ? formValue.primaryKPI.lookUpId : ''
         mainObjCreate[0].IsPOBOS = formValue.isPobos == "" ? false : formValue.isPobos
         if (mainObjCreate[0].IsPOBOS) {
           mainObjCreate[0].POBOSCategory = formValue.pobosCategory.length > 0 ? formValue.pobosCategory.map(x => x.lookUpId).join() : ''
