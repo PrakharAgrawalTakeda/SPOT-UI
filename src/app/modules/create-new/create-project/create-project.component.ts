@@ -249,6 +249,7 @@ export class CreateProjectComponent implements OnInit {
       if(this.SIP){
         this.createProjectForm.patchValue({
           isConfidential: event.isConfidential,
+          problemType: this.SIP ? "Strategic Initiative / Program" : event.problemType,
         projectsingle: event.projectsingle == "" ? event.projectsingle.problemTitle : event.projectsingle,
           projectsingleid: event.projectsingleid == "" ? event.projectsingle.problemUniqueId : event.projectsingleid,
           isCapsProject: event.isCapsProject
