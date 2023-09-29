@@ -19,6 +19,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
   @Input() showHint: boolean = false
   @Input() hint: string = ''
   @Input() hideRelations: boolean = false
+  @Input() isStrategicInitiative: boolean = false
   @Input() confidentialProjects: 'None' | 'User' | 'Only' = 'User'
 
   options: string[] = ['One', 'Two', 'Three'];
@@ -89,14 +90,14 @@ export class ProjectSingleDropdownComponent implements OnInit {
               }
             }
           })
-
-
         }
-        // Store the result sets
+        // Store the result setscc
+        console.log(this.confidentialProjects)
         if (this.confidentialProjects != 'Only') {
           this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
         }
         else {
+          console.log("ELSE")
           this.resultSets = [];
         }
         if (this.confidentialProjects != 'None') {
@@ -110,8 +111,11 @@ export class ProjectSingleDropdownComponent implements OnInit {
             }
           });
         }
+        if(this.isStrategicInitiative){
+          this.resultSets = this.resultSets.filter(x=> x.problemType == "Strategic Initiative / Program")
+        }
         this.budget = resultSets.budget;
-        console.log(this.resultSets)
+        console.log(resultSets)
         console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
         // Execute the event
         //this.search.next(resultSets);

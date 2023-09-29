@@ -463,14 +463,23 @@ export class BudgetForecastBulkEditComponent {
     }
 
     isCellEditable(month: string): boolean {
-        const startingMonth = this.getStartingMonth() - 3;
+        let startingMonth = this.getStartingMonth();
+        if(startingMonth == -1){
+            startingMonth = 11;
+        }
+        if(startingMonth == -2){
+            startingMonth = 10;
+        }
+        if(startingMonth == -3){
+            startingMonth = 9;
+        }
         const monthNumber = this.getMonthNumber(month);
         return startingMonth <= monthNumber;
     }
 
     getStartingMonth(): number {
         let monthPart = this.forecasts.find(x => x.active === 'Current').periodName.slice(-2);
-        return parseInt(monthPart, 10);
+        return parseInt(monthPart, 10)-4;
     }
 
     getMonthNumber(month: string): number {

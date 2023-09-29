@@ -4,10 +4,10 @@
             <div class="mr-4 text-xl font-medium tracking-tight leading-10 truncate text-primary">Value Capture Fields
             </div>
             <form class="grid grid-cols-3 gap-x-6 gap-y-0 w-full" [formGroup]="ValueCaptureForm">
-                <spot-input class="w-full read-only" formControlName="valueCaptureStart" name="valueCaptureStart"
+                <spot-input-date class="w-full read-only" formControlName="valueCaptureStart" name="valueCaptureStart"
                     [label]="'Value Capture Start'" [showHint]="true" [hint]="'
                     ‘Value Capture Start’ Defines the first fiscal year in which value will be captured.'" >
-                </spot-input>
+                </spot-input-date>
                 <spot-input class="w-full read-only" formControlName="primaryValueDriver" name="primaryValueDriver"
                     [label]="'Primary Value Driver'">
                 </spot-input>
@@ -21,49 +21,58 @@
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container *ngIf="viewContent">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
         class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
-        <ngx-datatable-column name="Status" prop="status" [resizeable]="false" [flexGrow]="1.5">
+        <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [flexGrow]="1.5">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwner" [flexGrow]="2.5">
+        <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Category" prop="category" [flexGrow]="1">
+        <ngx-datatable-column name="Category" prop="metricCategoryId" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="5">
+        <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="4">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Units" prop="units" [flexGrow]="2">
+        <ngx-datatable-column name="Units" prop="metricUnit" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Value Capture Level" prop="valueCaptureLevel" [flexGrow]="5">
+        <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="FY 2023" prop="FY" [flexGrow]="2" *ngIf="callLocation == 'Business-Case'">
+        <ngx-datatable-column name="Type" prop="FianncialType1" [flexGrow]="3">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p>{{ value }} <br> {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Total" prop="total" [flexGrow]="2">
+        <ngx-datatable-column *ngFor="let col of columnYear; let i = index"   [name]=col.year [prop]=col.year [flexGrow]="2">
+            <!-- <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{value}}</p>
+            </ng-template> -->
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Total" prop="strategicTarget" [flexGrow]="2">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                {{value}}
+                <p>{{ value }} <br> {{row.strategicBaseline}} <br> {{row.strategicCurrent}} <br> {{row.strategicActual}}</p>
             </ng-template>
         </ngx-datatable-column>
     </ngx-datatable>
         </div>
     </div>
+    
 </div>
+
+<!-- dynamic column -->
+<!-- <ngx-datatable-column *ngFor="let col of columns" [name]="col.name" [prop]="col.prop"></ngx-datatable-column> -->
