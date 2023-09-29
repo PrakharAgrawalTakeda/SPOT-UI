@@ -13,8 +13,10 @@ export class BudgetPerformanceComponent {
     id: string = "";
     viewContent = false;
     tfpColor: string;
+    ydtpColor: string;
     ytdValue: string;
     localCurrency : string  = "";
+    rows : any[];
     budgetPerformanceForm = new FormGroup({
         totalApprovedCapex: new FormControl(''),
         currentCapex: new FormControl(''),
@@ -28,7 +30,6 @@ export class BudgetPerformanceComponent {
         preliminaryFiscal: new FormControl(''),
         ytdPercentage: new FormControl(''),
         ytdValue: new FormControl(''),
-
     })
 
     constructor(public projectHubService: ProjectHubService,
@@ -54,6 +55,7 @@ export class BudgetPerformanceComponent {
         this.disabler()
     }
     disabler() {
+        this.budgetPerformanceForm.disable();
     }
     budgetPerformancePatchValue(response) {
         this.budgetPerformanceForm.patchValue({
@@ -70,6 +72,30 @@ export class BudgetPerformanceComponent {
             ytdPercentage:  response.total.yearToDatePerformance,
             ytdValue: response.total.yearToDatePerformanceValue,
         })
-        this.localCurrency = response.localCurrency
+        this.localCurrency = response.localCurrencyAbbreviation
+        this.rows= response.projectPerformances;
+        this.setTextColors();
+    }
+    setTextColors(): void {
+        const tfpPercentage = parseFloat(this.budgetPerformanceForm.controls.tfpPercentage.value.replace("%", "").replace(",", "."));
+        const ydtpPercentage = parseFloat(this.budgetPerformanceForm.controls.ytdPercentage.value.replace("%", "").replace(",", "."));
+        if(tfpPercentage >= 5){
+            this.tfpColor = 'green'
+        }else{
+            if(tfpPercentage == 0){
+                this.tfpColor = 'gray'
+            }else{
+                this.tfpColor = 'red'
+            }
+        }
+        if(ydtpPercentage >= 10 || ydtpPercentage <= -10){
+            this.ydtpColor = 'red'
+        }else{
+            if(ydtpPercentage == 0){
+                this.ydtpColor = 'gray'
+            }else{
+                this.ydtpColor = 'green'
+            }
+        }
     }
 }
