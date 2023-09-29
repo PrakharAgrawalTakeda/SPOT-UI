@@ -14,7 +14,7 @@
                         <spot-input class="w-full read-only"
                                     formControlName="currentCapex" [label]="'Current'" >
                         </spot-input>
-                        <spot-input class="w-full read-only"
+                        <spot-input class="w-full read-only" *ngIf="isPreliminaryPeriod"
                                     formControlName="preliminary" [label]="'Preliminary'" >
                         </spot-input>
                         <spot-input class="w-full read-only"
@@ -45,7 +45,7 @@
                                     formControlName="currentYtdCapex" [label]="'Current'" >
                         </spot-input>
 
-                        <spot-input class="w-full read-only"
+                        <spot-input class="w-full read-only"  *ngIf="isPreliminaryPeriod"
                                     formControlName="preliminaryFiscal" [label]="'Preliminary'" >
                         </spot-input>
 

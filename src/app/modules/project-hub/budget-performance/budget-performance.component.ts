@@ -17,6 +17,7 @@ export class BudgetPerformanceComponent {
     ytdValue: string;
     localCurrency : string  = "";
     rows : any[];
+    isPreliminaryPeriod: boolean = false;
     budgetPerformanceForm = new FormGroup({
         totalApprovedCapex: new FormControl(''),
         currentCapex: new FormControl(''),
@@ -47,6 +48,7 @@ export class BudgetPerformanceComponent {
         Promise.all(promises)
             .then((response: any[]) => {
                 this.budgetPerformancePatchValue(response[0])
+                this.isPreliminaryPeriod= response[0].isPreliminaryPeriod
                 this.viewContent = true
             })
             .catch((error) => {
