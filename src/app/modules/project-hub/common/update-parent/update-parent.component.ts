@@ -33,7 +33,7 @@ export class UpdateParentComponent implements OnInit {
     removedIds: any[];
     rows = [];
     isConfidential: boolean = false;
-
+    isStrategicInitiative: boolean = false;
     constructor(
         public fuseAlert: FuseConfirmationService,
         public projecthubservice: ProjectHubService,
@@ -70,9 +70,9 @@ export class UpdateParentComponent implements OnInit {
     onFocus(event: FocusEvent): void {
         const value = this.searchControl.value;
         if (value && value.length >= this.minLength) {
-          this.refreshData(value);
+            this.refreshData(value);
         }
-      }
+    }
     private refreshData(value: string) {
         const params = new HttpParams().set('query', value);
         if (this.selectedValueExists.value == true && this.searchControl.value != "") {
@@ -100,6 +100,9 @@ export class UpdateParentComponent implements OnInit {
                             }
                         });
                     }
+                    if (this.isStrategicInitiative) {
+                        this.resultSets = this.resultSets.filter(x => x.problemType == "Strategic Initiative / Program")
+                    }
                     this.budget = resultSets.budget
                     this.search.next(resultSets);
                 });
@@ -113,11 +116,12 @@ export class UpdateParentComponent implements OnInit {
             this.rows.push(parrentProj);
         }
         //Add current project if there are no connections so it will be excluded from search
-        if(this.rows.length==0){
-            this.projecthubservice.removedIds.push( this.id)
+        if (this.rows.length == 0) {
+            this.projecthubservice.removedIds.push(this.id)
         }
         this.apiService.getproject(this.projecthubservice.projectid).then((res: any) => {
             this.isConfidential = res.isConfidential
+            this.isStrategicInitiative = res.problemType == "Strategic Initiative / Program"
             this.viewContent = true;
         })
     }
