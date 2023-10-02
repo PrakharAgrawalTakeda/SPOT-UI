@@ -1,5 +1,5 @@
 <div class="flex flex-col flex-auto w-full px-8" *ngIf="viewContent">
-    <form [formGroup]="primaryKPIForm" class="space-y-6 pb-4" [hidden]="viewHisOpPerformance">
+    <form [formGroup]="ValueCaptureForm" class="space-y-6 pb-4" [hidden]="viewHisOpPerformance">
 
         <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
             <div class=" pb-3 pt-0 flex items-center justify-between">
@@ -15,23 +15,22 @@
 
                         <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             *ngIf="projecthubservice.roleControllerControl.projectBenefits"
-                            (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.projectViewDetails.projectData.primaryKpi , [], id)">
+                            (click)="projecthubservice.toggleDrawerOpen('PrimaryKPISingleEdit',this.valueCreation , [], id)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                         </button>
                     </div>
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-                <spot-input-date class="w-full read-only" formControlName="vcdate" [label]="'Value Capture Start Date'"
+                <spot-input-date class="w-full read-only" formControlName="valueCaptureStart" [label]="'Value Capture Start Date'"
                     [showHint]="true"
                     [hint]="'‘Value Capture Start’ defines the first fiscal year in which value will be captured.'">
                 </spot-input-date>
                 <!-- <spot-input class="w-full read-only" formControlName="primaryKpi" [label]="'Primary Value Driver'">
             </spot-input> -->
-                <spot-singleselect-autocomplete formControlName="primaryKpi" class="w-full read-only"
-                    [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
-                    [valuePointer]="'lookUpName'" [dropDownArray]="lookupMasters">
-                </spot-singleselect-autocomplete>
+            <spot-input class="w-full read-only" formControlName="valueCaptureStart" name="primaryValueDriver"
+            [label]="'Primary Value Driver'">
+        </spot-input>
                 <spot-input class="w-full read-only" formControlName="valueCommentary" [label]="'Value Commentary'">
                 </spot-input>
             </div>
@@ -70,55 +69,54 @@
                 </div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata"
-                #valuecreationTable [rowClass]="getRowClass">
-                <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
-                    </ng-template>
-                </ngx-datatable-column>
+        class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
+        <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [flexGrow]="1.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+            </ng-template>
+        </ngx-datatable-column>
 
-                <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwnerId" [flexGrow]="2">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
-                    </ng-template>
-                </ngx-datatable-column>
+        <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
+            </ng-template>
+        </ngx-datatable-column>
 
-                <ngx-datatable-column name="Category" prop="metricCategoryID" [flexGrow]="2">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="4">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Units" prop="metricUnit" [flexGrow]="1.5">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [flexGrow]="3">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        {{value}}
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="" prop="level" [flexGrow]="2">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div *ngFor="let item of value">{{ item }}</div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="FY 2023" prop="FY" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div *ngFor="let item of value">{{ item }}</div>
-                    </ng-template>
-                </ngx-datatable-column>
-                <ngx-datatable-column name="Total" prop="total" [flexGrow]="1">
-                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <div *ngFor="let item of value">{{ item }}</div>
-                    </ng-template>
-                </ngx-datatable-column>
+        <ngx-datatable-column name="Category" prop="metricCategoryId" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="4">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{value}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Units" prop="metricUnit" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{value}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Type" prop="FianncialType1" [flexGrow]="3">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{ value }} <br> {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column *ngFor="let col of columnYear; let i = index"   [name]=col.year [prop]=col.year [flexGrow]="2">
+            <!-- <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p style="margin-bottom: 68px;">{{value}}</p>
+            </ng-template> -->
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Total" prop="strategicTarget" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <p>{{ value }} <br> {{row.strategicBaseline}} <br> {{row.strategicCurrent}} <br> {{row.strategicActual}}</p>
+            </ng-template>
+        </ngx-datatable-column>
                 <ngx-datatable-column [flexGrow]="1">
                     <ng-template let-row="row" ngx-datatable-cell-template>
         
