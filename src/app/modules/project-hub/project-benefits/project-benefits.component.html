@@ -7,8 +7,7 @@
                     Fields</div>
                 <div class="flex items-start justify-between">
                     <div style="padding-right: 5px;">
-                        <button class="min-w-26 text-primary bg-gray-200" mat-flat-button *ngIf="editable"
-                            [color]="'primary-200'"
+                        <button class="min-w-26 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             (click)="projecthubservice.toggleDrawerOpen(bulkEditType, 'new', [], id, true)">
                             Historical Operational Performance Metrics
                         </button>
@@ -22,15 +21,15 @@
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-                <spot-input-date class="w-full read-only" formControlName="valueCaptureStart" [label]="'Value Capture Start Date'"
-                    [showHint]="true"
+                <spot-input-date class="w-full read-only" formControlName="valueCaptureStart"
+                    [label]="'Value Capture Start Date'" [showHint]="true"
                     [hint]="'‘Value Capture Start’ defines the first fiscal year in which value will be captured.'">
                 </spot-input-date>
                 <!-- <spot-input class="w-full read-only" formControlName="primaryKpi" [label]="'Primary Value Driver'">
             </spot-input> -->
-            <spot-input class="w-full read-only" formControlName="valueCaptureStart" name="primaryValueDriver"
-            [label]="'Primary Value Driver'">
-        </spot-input>
+                <spot-input class="w-full read-only" formControlName="valueCaptureStart" name="primaryValueDriver"
+                    [label]="'Primary Value Driver'">
+                </spot-input>
                 <spot-input class="w-full read-only" formControlName="valueCommentary" [label]="'Value Commentary'">
                 </spot-input>
             </div>
@@ -42,94 +41,107 @@
         <div class="pb-3 pt-0 flex items-center justify-between">
             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary"></div>
 
-                <div class="flex items-start justify-between text-primary">
-                    <div style="padding-right: 5px;">
-                        <button class="min-w-26 ml-4 text-primary bg-gray-200 " *ngIf="editable" mat-flat-button
-                            [color]="'primary-200'"
-                            (click)="projecthubservice.toggleDrawerOpen(valueCreationViewEditType, 'new', valuecreationngxdata, projectid)">
-                            Baseline Plans
-                        </button>
-                        <!-- <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+            <div class="flex items-start justify-between">
+                <div style="padding-right: 5px;">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen(valueCreationViewEditType, 'new', valuecreationngxdata, projectid)">
+                        Baseline Plans
+                    </button>
+                    <!-- <button class="min-w-26 ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             *ngIf="projecthubservice.roleControllerControl.projectHub.projectBoard.askNeedEdit"
                             (click)="projecthubservice.toggleDrawerOpen(valueCreationBulkEditType, 'new', [], projectid, true)">
                             <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Bulk Edit
                         </button> -->
-                        <button class="mx-4 text-primary bg-gray-200 " *ngIf="editable" mat-flat-button
-                            [color]="'primary-200'"
-                            (click)="projecthubservice.toggleDrawerOpen(valueCreationViewEditType, 'new', valuecreationngxdata, projectid)">
-                            <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
-                        </button>
-                    </div>
-                    <!-- <div>
+                    <button class="mx-4 text-primary bg-gray-200 " mat-flat-button [color]="'primary-200'"
+                        (click)="projecthubservice.toggleDrawerOpen(valueCreationViewEditType, 'new', valuecreationngxdata, projectid)">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
+                    </button>
+                </div>
+                <!-- <div>
         <form [formGroup]="localIncludedItems">
             <mat-slide-toggle class="primary slider-adjust" formControlName="toggle" (checked)="projecthubservice.includeClosedItems.riskIssue.value"  (change)="toggleBaselinePlans($event)" >
                 Baseline Plans</mat-slide-toggle>
         </form>
     </div> -->
-                </div>
             </div>
-            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-        class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
-        <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [flexGrow]="1.5">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
-            </ng-template>
-        </ngx-datatable-column>
+        </div>
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
+            class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata"
+            #valuecreationTable [rowClass]="getRowClass">
+            <!-- <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [flexGrow]="1.5">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+                </ng-template>
+            </ngx-datatable-column> -->
+            <ngx-datatable-column name='Status' prop="indicator" [flexGrow]="1" [resizeable]="false" [sortable]="false"
+                [draggable]="false">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                        class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+                    </mat-icon>
+                    &nbsp;
+                    &nbsp;
+                    <p style="margin-bottom: 68px;">{{getLookup(row.statusId)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
 
-        <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [flexGrow]="2">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
-            </ng-template>
-        </ngx-datatable-column>
+            <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
 
-        <ngx-datatable-column name="Category" prop="metricCategoryId" [flexGrow]="2">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
-            </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="4">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;">{{value}}</p>
-            </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Units" prop="metricUnit" [flexGrow]="2">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;">{{value}}</p>
-            </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [flexGrow]="2">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
-            </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Type" prop="FianncialType1" [flexGrow]="3">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{ value }} <br> {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
-            </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column *ngFor="let col of columnYear; let i = index"   [name]=col.year [prop]=col.year [flexGrow]="2">
-            <!-- <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <ngx-datatable-column name="Category" prop="metricCategoryId" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Metric Name" prop="metricName" [flexGrow]="4">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Units" prop="metricUnit" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Type" prop="FianncialType1" [flexGrow]="3">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{ value }} <br> {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}
+                    </p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column *ngFor="let col of columnYear; let i = index" [name]=col.year [prop]=col.year
+                [flexGrow]="2">
+                <!-- <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{value}}</p>
             </ng-template> -->
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Total" prop="strategicTarget" [flexGrow]="2">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{ value }} <br> {{row.strategicBaseline}} <br> {{row.strategicCurrent}} <br> {{row.strategicActual}}</p>
-            </ng-template>
-        </ngx-datatable-column>
-                <ngx-datatable-column [flexGrow]="1">
-                    <ng-template let-row="row" ngx-datatable-cell-template>
-        
-                        <div class="flex items-center justify-start gap-6" >
-                            <a href="javascript:void(0)" *ngIf="editable" title="Edit Single"
-                                (click)="projecthubservice.toggleDrawerOpen('ValueCreation', row.projectId, valueCreation)">
-                                <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
-        
-                            </a>
-                            </div>
-                            </ng-template>
-                </ngx-datatable-column>
-            </ngx-datatable>
-        </div>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Total" prop="strategicTarget" [flexGrow]="2">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{ value }} <br> {{row.strategicBaseline}} <br> {{row.strategicCurrent}} <br>
+                        {{row.strategicActual}}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+
+                    <div class="flex items-center justify-start gap-6">
+                        <a href="javascript:void(0)" title="Edit Single"
+                            (click)="projecthubservice.toggleDrawerOpen('ValueCreation', row.projectId, valueCreation)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+
+                        </a>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
 
 </div>
