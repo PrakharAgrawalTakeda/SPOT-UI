@@ -52,8 +52,9 @@ export class ProjectBenefitsComponent implements OnInit {
       this.auth.lookupMaster().then((resp: any) => {
         this.apiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
-            this.valueCreation = res
             this.kpi = kpi
+            console.log(this.kpi)
+            console.log(res.problemCapture.primaryKpi)
           this.lookupData = resp
           this.filterData = filterres
           res.projectsMetricsData.forEach((element)=>{
@@ -63,74 +64,61 @@ export class ProjectBenefitsComponent implements OnInit {
                 element.metricPortfolioID = null
                 element.metricUnit = ""
                 element.metricTypeID = null
+                element.metricFormat = ""
                 element.FianncialType1 = "Target"
                 element.FianncialType2 = "Baseline Plan"
                 element.FianncialType3 = "Current Plan"
                 element.FianncialType4 = "Actual"
             res.allMetrics.forEach((el)=>{
               if(element.metricId == el.metricID){
+                var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
                 element.metricCategoryId = el.metricCategoryID
                 element.metricName = el.metricName
                 element.helpText = el.helpText
                 element.metricPortfolioID = el.metricPortfolioID
                 element.metricUnit = el.metricUnit
                 element.metricTypeID = el.metricTypeID
+                element.metricFormat = format
+                element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
+                element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
+                element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
+                element.strategicActual =element.strategicActual ? element.strategicActual : '0'
               }
             })
           })
           this.ValueCaptureForm.patchValue({
-            valueCaptureStart: res.problemCapture.financialRealizationStartDate ? res.problemCapture.financialRealizationStartDate : '',
-            primaryValueDriver: res.problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname : '',
-            valueCommentary: res.problemCapture.valueCommentary ? res.problemCapture.valueCommentary : ''
+            valueCaptureStart: res.problemCapture.financialRealizationStartDate,
+            primaryValueDriver: res.problemCapture.primaryKpi ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : {},
+            valueCommentary: res.problemCapture.valueCommentary
           })
+          console.log(this.ValueCaptureForm.getRawValue())
           var year = []
-          var baselineYear=[]
-          var TargetYear= []
-          var ActualYear = []
-          var CurrentYear = []
-          for(var i=0;i<res.projectsMetricsData.length;i++){
-            if(res.projectsMetricsData[i].strategicActualList){
-              ActualYear = res.projectsMetricsData[i].strategicActualList.split(' ')
-              break;
-            }
-            else if(res.projectsMetricsData[i].strategicBaselineList){
-              baselineYear = res.projectsMetricsData[i].strategicBaselineList.split(' ')
-              break;
-            }
-            else if(res.projectsMetricsData[i].strategicCurrentList){
-              CurrentYear = res.projectsMetricsData[i].strategicTargetList.split(' ')
-              break;
-            }
-            else if(res.projectsMetricsData[i].strategicTargetList){
-              TargetYear = res.projectsMetricsData[i].strategicTargetList.split(' ')
-              break;
-            }
-            if(ActualYear.length != 0 || baselineYear.length != 0 || CurrentYear.length != 0 || TargetYear.length != 0 ){
-              break;
-            }
-          }
-            if(ActualYear.length >= baselineYear.length && ActualYear.length >= CurrentYear.length && ActualYear.length >= TargetYear.length){
-              for(var i=1;i<ActualYear.length;i+2){
-                this.columnYear.push({year: ActualYear[i], target: "", actual: "", current: "", baseline: ""})
-              }
-            }
-            else if (baselineYear.length >= ActualYear.length && baselineYear.length >= CurrentYear.length && baselineYear.length >= TargetYear.length){
-              for(var i=1;i<baselineYear.length;i+=2){
-                this.columnYear.push({year: baselineYear[i], target: "", actual: "", current: "", baseline: ""})
-              }
-            }
-            else if(CurrentYear.length >= ActualYear.length && CurrentYear.length >= baselineYear.length && CurrentYear.length >= TargetYear.length){
-              for(var i=1;i<CurrentYear.length;i+2){
-                this.columnYear.push({year: CurrentYear[i], target: "", actual: "", current: "", baseline: ""})
-              }
-            }
-            else if(TargetYear.length >= ActualYear.length && TargetYear.length >= baselineYear.length && TargetYear.length >= CurrentYear.length){
-              for(var i=1;i<TargetYear.length;i+2){
-                this.columnYear.push({year: TargetYear[i], target: "", actual: "", current: "", baseline: ""})
-              }
-            }
+          var yearList=[]
           
+          year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
+          for(var i=0;i<year.length;i++){
+            var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
+            this.columnYear.push({year: yearName})
+            yearList.push(yearName)
+          }
+          yearList.sort()
+          for(var i=0;i<res.projectsMetricsData.length;i++){
+            for(var j=0;j<yearList.length;j++){
+              res.projectsMetricsData[i][yearList[j]] = [{'target':"0",'baseline':"0",'actual':"0",'current':"0"}]
+              if(res.projectsMetricsData[i].strategicBaselineList){
+                var data = res.projectsMetricsData[i].strategicBaselineList.split(',')
+                for(var z=0;z<data.length;z++){
+                  var list = data[z].split(' ')
+                  if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                    res.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
+                  }
+                }
+              }
+            }
+          };
+          this.compare(this.columnYear)
           this.valuecreationngxdata = res.projectsMetricsData
+          // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true
       })
@@ -140,7 +128,18 @@ export class ProjectBenefitsComponent implements OnInit {
   }
 
   getLookup(id: any){
-    return id ? this.lookupData.find(x => x.lookUpId == id).lookUpName : ''
+    return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id).lookUpName : ''
+  }
+  compare( array: any ): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if ( a.year < b.year ){
+        return -1;
+      }
+      if ( a.year > b.year ){
+        return 1;
+      }
+      return 0;
+    }) : array
   }
   getOwner(id:any, type:any){
     if(type && type.lookupId != '' && id && id.lookUpId != ''){
