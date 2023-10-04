@@ -26,6 +26,7 @@ export class ProjectBenefitsComponent implements OnInit {
   kpi= []
   columnYear = []
   viewHisOpPerformance: boolean = false;
+  bulkEditType: string = 'OperationalPerformanceBulkEdit';
     @ViewChild('valuecreationTable') table: any;
   valueCreation: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService) {
