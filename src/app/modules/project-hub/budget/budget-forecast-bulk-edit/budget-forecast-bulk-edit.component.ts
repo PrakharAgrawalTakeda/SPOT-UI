@@ -445,10 +445,10 @@ export class BudgetForecastBulkEditComponent {
                 mainObj.budgetForecastsY1.push(x);
             });
             const formValue = this.budgetForecastForm.getRawValue();
-            // if(this.mode=='Capex'){
-            //     mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").afpDeviationCodeID = formValue.afpDeviationCode.lookUpId;
-            //     mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").mtdpDeviationCodeID =  formValue.mtdpDeviationCode.lookUpId;
-            // }
+            if(this.mode=='Capex'){
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").afpDeviationCodeID = formValue.afpDeviationCode ? formValue.afpDeviationCode.lookUpId : "";
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").mtdpDeviationCodeID =  formValue.mtdpDeviationCode ? formValue.mtdpDeviationCode.lookUpId : "";
+            }
             this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
                 this.projecthubservice.submitbutton.next(true)
@@ -473,13 +473,23 @@ export class BudgetForecastBulkEditComponent {
         if(startingMonth == -3){
             startingMonth = 9;
         }
+        if(startingMonth == 0){
+            startingMonth = 12;
+        }
+
         const monthNumber = this.getMonthNumber(month);
         return startingMonth <= monthNumber;
     }
 
     getStartingMonth(): number {
-        let monthPart = this.forecasts.find(x => x.active === 'Current').periodName.slice(-2);
-        return parseInt(monthPart, 10)-4;
+        let project = this.forecasts.find(x => x.isopen === true);
+        let monthPart = project.periodName.slice(-2);
+        if(project.active == 'Current'){
+            return parseInt(monthPart, 10)-3;
+        }
+        if(project.active == 'Preliminary'){
+            return parseInt(monthPart, 10)-4;
+        }
     }
 
     getMonthNumber(month: string): number {

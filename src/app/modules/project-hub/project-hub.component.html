@@ -275,6 +275,9 @@
                 <!-- Title -->
                 <div class="flex justify-between gap-8 mt-2">
                     <h2 class="text-3xl font-extrabold tracking-tight leading-7 sm:leading-10">
+
+                        <span
+                            *ngIf="projectDetails.problemType == 'Strategic Initiative / Program'">Strategic Initiative -&nbsp;</span>
                         <span
                             *ngIf="projectDetails.isArchived && !projectDetails.isConfidential">[ARCHIVED]&nbsp;</span>
                         <span *ngIf="projectDetails.isConfidential && !projectDetails.isArchived">[CONF]&nbsp;</span>

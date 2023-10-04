@@ -34,12 +34,12 @@
                                             [label]="'Global/Regional Predefined Investment '" [placeholder]="'Global/Regional Predefined Investment '" [valuePointer]="'lookUpName'"  [Required]="required"
                                             [dropDownArray]="getPredifinedInvestment()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'" >
             </spot-singleselect-autocomplete>
-            <spot-select  class="w-full" formControlName="where" [label]="'Where'"  [Required]="required"
+            <spot-select  class="w-full" formControlName="where" [label]="'Where'"  [Required]="required" [showNoneOption]="false"
                           [placeholder]="'Where'"  [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
                           [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                           [dropDownArray]="getWhereLookup()">
             </spot-select>
-            <spot-select  class="w-full" formControlName="why" [label]="'Why'"  [Required]="required"
+            <spot-select  class="w-full" formControlName="why" [label]="'Why'"  [Required]="required" [showNoneOption]="false"
                           [placeholder]="'Why'" [dropDownArrayType]="'object'" [idPointer]="'lookUpId'"
                           [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
                           [dropDownArray]="getWhyLookup()">
