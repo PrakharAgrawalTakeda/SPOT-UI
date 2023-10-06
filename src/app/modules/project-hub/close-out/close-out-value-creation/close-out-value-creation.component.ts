@@ -4,6 +4,7 @@ import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
+import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 
 @Component({
   selector: 'app-close-out-value-creation',
@@ -28,7 +29,7 @@ export class CloseOutValueCreationComponent implements OnInit {
   columnYear = []
   yearData = []
   @ViewChild('valuecreationTable') table: any;
-  constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,
+  constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,public indicator: SpotlightIndicatorsService,
     private portApiService: PortfolioApiService){
 
   }

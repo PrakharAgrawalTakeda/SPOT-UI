@@ -67,12 +67,15 @@
         </div>
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
         class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
-        <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="30" [frozenLeft]="true">
+        <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="10" [frozenLeft]="true">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <span *ngIf="row.statusId == '' || row.statusId == null" style="background-color: rgb(175, 175, 175) !important; height: 110px; display: flex;"></span>
-                <span *ngIf="getLookup(row.statusId) == 'Will Not Meet'" style="background-color: red !important; height: 110px; display: flex;"></span>
-                <span *ngIf="getLookup(row.statusId) == 'At Risk'" style="background-color: #FFCC00 !important; height: 110px; display: flex;"></span>
-                <span *ngIf="getLookup(row.statusId) == 'On Track'" style="background-color: green !important; height: 110px; display: flex;"></span>
+                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                    class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}">
+                </mat-icon>
+                <!-- <span *ngIf="row.statusId == '' || row.statusId == null" style="background-color: rgb(175, 175, 175) !important; height: 110px;width: 20px; display: flex;"></span>
+                <span *ngIf="getLookup(row.statusId) == 'Will Not Meet'" style="background-color: red !important; height: 110px; width: 20px;display: flex;"></span>
+                <span *ngIf="getLookup(row.statusId) == 'At Risk'" style="background-color: #FFCC00 !important; height: 110px;width: 20px; display: flex;"></span>
+                <span *ngIf="getLookup(row.statusId) == 'On Track'" style="background-color: green !important; height: 110px; width: 20px;display: flex;"></span> -->
             </ng-template>  
         </ngx-datatable-column>
         <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [width]="100" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
