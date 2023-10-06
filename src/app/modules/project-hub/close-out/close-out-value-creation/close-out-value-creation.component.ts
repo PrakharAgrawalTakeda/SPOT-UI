@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
 
 @Component({
   selector: 'app-close-out-value-creation',
@@ -16,6 +17,7 @@ export class CloseOutValueCreationComponent implements OnInit {
     primaryValueDriver: new FormControl(''),
     valueCommentary: new FormControl('')
   })
+  localCurrency: string = ""
   valuecreationngxdata: any = []
   viewContent:boolean = false
   id:string = ""
@@ -25,7 +27,8 @@ export class CloseOutValueCreationComponent implements OnInit {
   columnYear = []
   yearData = []
   @ViewChild('valuecreationTable') table: any;
-  constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService){
+  constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,
+    private portApiService: PortfolioApiService){
 
   }
   ngOnInit():void{
@@ -34,9 +37,11 @@ export class CloseOutValueCreationComponent implements OnInit {
       this.auth.lookupMaster().then((resp: any) => {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
+            this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
             this.kpi = kpi
           this.lookupData = resp
           this.filterData = filterres
+          this.localCurrency = currency.localCurrencyAbbreviation
           res.projectsMetricsData.forEach((element)=>{
                 element.metricCategoryId = null
                 element.metricName = ""
@@ -97,6 +102,7 @@ export class CloseOutValueCreationComponent implements OnInit {
           };
           this.compare(this.columnYear)
           this.valuecreationngxdata = res.projectsMetricsData
+          this.valuecreationngxdata.shift()
           // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true
@@ -104,6 +110,7 @@ export class CloseOutValueCreationComponent implements OnInit {
     })
     })
   })
+})
   }
 
   getLookup(id: any){
@@ -132,6 +139,21 @@ export class CloseOutValueCreationComponent implements OnInit {
     else{
       return ''
     }
+  }
+  getFrozenHeaderClassID(): any {
+    return ' frozen-header-classID';
+  }
+  getFrozenHeaderClass(): any {
+    return ' frozen-header-class';
+  }
+  getFrozenClass(): any {
+    return ' frozen-header';
+  }
+  columnstyle(): any{
+    return ' column-style';
+  }
+  getFrozenID(): any{
+    return ' frozen-header-ID'
   }
 }
 
