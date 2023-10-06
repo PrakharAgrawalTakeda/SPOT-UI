@@ -43,7 +43,7 @@ export class BudgetSpendComponent {
               toggled: false
             },
             {
-              title: 'Forecast Bulk Edit',
+              title: 'Forecast Bulk View',
               toggled: true
             },
             
