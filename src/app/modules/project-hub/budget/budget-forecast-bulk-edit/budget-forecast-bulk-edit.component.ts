@@ -469,7 +469,7 @@ export class BudgetForecastBulkEditComponent {
     }
 
     isCellEditable(month: string): boolean {
-        let startingMonth = this.getStartingMonth();
+        let startingMonth = this.startingMonth;
         if(startingMonth == -1){
             startingMonth = 11;
         }

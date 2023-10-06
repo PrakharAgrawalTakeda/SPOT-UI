@@ -202,12 +202,7 @@ export class BudgetComponent implements OnInit {
             mtdpCodeId: this.getLookUpName(currentEntry.mtdpDeviationCodeID),
             committedSpend: forecast.find(x => x.isopen).committedSpend,
         })
-        if(forecast.find(x => x.isopen).active== 'Current'){
-            this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
-        }
-        if(forecast.find(x => x.isopen).active== 'Preliminary'){
-            this.headerLabel = "Preliminary " +  forecast.find(x => x.active == 'Preliminary').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
-        }
+        this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
         this.setTextColors();
     }
     getMonthText(month: number): string {
