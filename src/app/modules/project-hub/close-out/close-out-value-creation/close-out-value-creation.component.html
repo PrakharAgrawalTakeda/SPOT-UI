@@ -19,51 +19,53 @@
     </div>
     <div class="flex justify-between items-start gap-6 w-full" >
         <div class="flex flex-col w-full flex-auto bg-card p-6 mt-6 shadow rounded-2xl overflow-hidden" #container *ngIf="viewContent">
-            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
+        <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
         class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
-        <ngx-datatable-column [resizeable]="false" [width]="30">
+        <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="30" [frozenLeft]="true">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span *ngIf="row.statusId == '' || row.statusId == null" style="background-color: rgb(175, 175, 175) !important; height: 110px; display: flex;"></span>
                 <span *ngIf="getLookup(row.statusId) == 'Will Not Meet'" style="background-color: red !important; height: 110px; display: flex;"></span>
                 <span *ngIf="getLookup(row.statusId) == 'At Risk'" style="background-color: #FFCC00 !important; height: 110px; display: flex;"></span>
                 <span *ngIf="getLookup(row.statusId) == 'On Track'" style="background-color: green !important; height: 110px; display: flex;"></span>
             </ng-template>  
         </ngx-datatable-column>
-        <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [width]="100">
+        <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [width]="100" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [width]="120">
+        <ngx-datatable-column name="Portfolio Owner" prop="metricPortfolioID" [width]="130" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getOwner(value, row.metricTypeID)}}</p>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Category" prop="metricCategoryId" [width]="120">
+        <ngx-datatable-column name="Category" prop="metricCategoryId" [width]="120" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Metric Name" prop="metricName" [width]="160">
+        <ngx-datatable-column name="Metric Name" prop="metricName" [width]="160" [frozenLeft]="true" [headerClass]="getFrozenClass">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 68px;"><mat-icon *ngIf="value!= ''" class="pe" style="font-size: 17px;"
+                <p style="margin-bottom: 44px;"><mat-icon *ngIf="value!= ''" class="pe" style="font-size: 17px;"
                     [matTooltip]=row.helpText>help</mat-icon>{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Units" prop="metricUnit" [width]="100">
+        <ngx-datatable-column name="Units" prop="metricUnit" [width]="100" [frozenLeft]="true" [headerClass]="columnstyle">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [width]="100">
+        <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [width]="100" [frozenLeft]="true" [headerClass]="getFrozenID">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="160">
+        <ngx-datatable-column [width]="160" [frozenLeft]="true">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p>{{ row.FianncialType1 }} <br> {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
+                <p *ngIf="row.metricFormat != 'Currency (local)'">{{ row.FianncialType1 }} <br> {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
+                <p *ngIf="row.metricFormat == 'Currency (local)'">{{ row.FianncialType1 }} ({{localCurrency}}) <br> {{row.FianncialType2}} ({{localCurrency}}) <br> {{row.FianncialType3}} ({{localCurrency}}) <br> {{row.FianncialType4}} ({{localCurrency}})</p>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column *ngFor="let col of columnYear; let i = index"   [name]=col.year [prop]=col.year [width]="190">
