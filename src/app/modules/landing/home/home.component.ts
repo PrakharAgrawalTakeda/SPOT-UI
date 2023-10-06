@@ -49,6 +49,7 @@ export class LandingHomeComponent implements OnInit {
         })
     }
     handlePostLoginActions(): void {
+        console.log("Login succesful")
         if (!localStorage.getItem('app-setting')) {
             const appSetting: IAppSetting = {
                 projectHubPanel: 'Unlocked'
