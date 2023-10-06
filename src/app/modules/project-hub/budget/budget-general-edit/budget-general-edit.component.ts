@@ -228,7 +228,7 @@ export class BudgetGeneralEditComponent {
                     fieldsMissing ++;
                     missingFields.push("Budget ID")
                 }
-                if(!this.predefinedInvestmentId.value || this.predefinedInvestmentId.value.lookUpName == "NA" || Object.keys(this.predefinedInvestmentId.value).length==0 ){
+                if(!this.predefinedInvestmentId.value || Object.keys(this.predefinedInvestmentId.value).length==0 ){
                     fieldsMissing ++;
                     missingFields.push("Global/Regional Predefined Investment")
                 }

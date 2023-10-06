@@ -120,7 +120,35 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
       if (this.viewContent) {
         if (res != this.generalInfo.projectData.problemType) {
-
+          if(res == "Strategic Initiative / Program"){
+            if(this.generalInfo.hasCAPEX || this.generalInfo.hasCAPS || this.generalInfo.hasTOPS){
+              console.log("CONDITIONS NOT MET")
+              var comfirmConfig: FuseConfirmationConfig = {
+                "title": "The project type cannot be changed to Strategic Initiative as it contains Caps/Tops/Capex data.",
+                "message": "",
+                "icon": {
+                  "show": true,
+                  "name": "heroicons_outline:exclamation",
+                  "color": "warn"
+                },
+                "actions": {
+                  "confirm": {
+                    "show": true,
+                    "label": "Okay",
+                    "color": "warn"
+                  },
+                },
+                "dismissible": true
+              }
+              const alert = this.fuseAlert.open(comfirmConfig)
+              this.generalInfoForm.controls.problemType.patchValue(this.generalInfo.projectData.problemType)
+            }
+            else{
+                this.generalInfoForm.controls.projectsingleid.patchValue("")
+                this.generalInfoForm.controls.projectsingle.patchValue("")
+                this.isStrategicInitiative = true
+            }
+          }
 
           //IF CONDITIONS NOT MET ALERT
           //SwITCH BACK TO OG PROJECT TYPE
@@ -130,7 +158,6 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
 
           
         }
-        this.isStrategicInitiative = res == "Strategic Initiative / Program"
       }
     })
     const url = this.Router.url;
@@ -185,7 +212,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
             excecutionScope: res.isExecutionScope ? portfolio : [],
             enviornmentalPortfolio: res.isEmissionPortfolio ? res : '',
             owningOrganization: res.defaultOwningOrganization,
-            localCurrency: currency[0].localCurrencyAbbreviation
+            localCurrency: currency[0]?.localCurrencyAbbreviation
           })
         }
       }

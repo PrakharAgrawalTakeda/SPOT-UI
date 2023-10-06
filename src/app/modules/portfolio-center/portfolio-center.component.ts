@@ -1605,7 +1605,7 @@ this.updateToggleObjectFromChanges();
         }
         });
       }
-  
+
 }
 else {
   this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
@@ -1631,32 +1631,32 @@ else {
     for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
       if (this.pageToggleStates[pageNumber]) {
         const pageToggleStates = this.pageToggleStates[pageNumber];
-  
+
         // Loop through each toggle name on the page
         Object.keys(pageToggleStates).forEach((toggleName) => {
           const toggleValues = pageToggleStates[toggleName];
           const existingProjectUUIDs = this.toggleObject[toggleName] || [];
-  
+
           // Find the project UUIDs for which the toggle is now true
           const trueProjectUUIDs = toggleValues
             .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
             .filter(Boolean);
-  
+
           // Remove project UUIDs that are no longer selected
           const updatedUUIDs = existingProjectUUIDs.filter(uuid => trueProjectUUIDs.includes(uuid));
-  
+
           // Update the toggleObject with the updated UUIDs for this toggle
           this.toggleObject[toggleName] = updatedUUIDs;
         });
       }
     }
-  
+
     console.log('Updated Toggle Object:', this.toggleObject);
   }
-  
 
 
-  
+
+
   showWarningMessage(): void {
     let titleText;
     titleText = "Please select at least one project for distribution!"
@@ -1776,7 +1776,7 @@ else {
   //     }
 
 
-  //     // Pass toggleObject 
+  //     // Pass toggleObject
   //     this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
   //       console.log('Toggle Object:', toggleObject);
 
@@ -1838,7 +1838,6 @@ else {
   //   }
 
   setPage(res: any, offset) {
-    console.log(res)
     if (res != '') {
       this.projectOverview = res.portfolioDetails
       this.bulkreportdata = res.portfolioDetails

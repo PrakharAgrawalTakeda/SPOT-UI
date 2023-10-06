@@ -20,6 +20,7 @@ export class BudgetCapexOpexTableComponent {
     y4Label: string = '';
     y5Label: string = '';
     y0Label: string = '';
+    startingMonth: number;
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService, private router: Router) {
         this.projecthubservice.submitbutton.subscribe(res => {
@@ -30,10 +31,19 @@ export class BudgetCapexOpexTableComponent {
     }
     ngOnChanges(changes: SimpleChanges): void {
         this.dataloader()
+        this.startingMonth=this.getStartingMonth()
     }
-    // ngOnInit(): void {
-    //     this.dataloader()
-    // }
+    getStartingMonth(): number {
+        let project = this.data.find(x => x.isopen === true);
+        let monthPart = project.periodName.slice(-2);
+        if(project.active == 'Current'){
+            return parseInt(monthPart, 10)-3;
+        }
+        if(project.active == 'Preliminary'){
+            return parseInt(monthPart, 10)-4;
+        }
+    }
+
 
     dataloader() {
         if(this.mode=="Y1"){
@@ -59,6 +69,58 @@ export class BudgetCapexOpexTableComponent {
         this.y4Label= 'FY' + year5;
         this.y5Label= 'FY' + year6 + '+';
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+    }
+    getRowStyle(month:string, row:any){
+        if(!this.isCellEditable(month) || !row.isopen){
+            return 'closed'
+        }
+    }
+    isCellEditable(month: string): boolean {
+        let startingMonth = this.startingMonth;
+        if(startingMonth == -1){
+            startingMonth = 11;
+        }
+        if(startingMonth == -2){
+            startingMonth = 10;
+        }
+        if(startingMonth == -3){
+            startingMonth = 9;
+        }
+        if(startingMonth == 0){
+            startingMonth = 12;
+        }
+        const monthNumber = this.getMonthNumber(month);
+        return startingMonth <= monthNumber;
+    }
+    getMonthNumber(month: string): number {
+        switch (month) {
+            case 'jan':
+                return 9;
+            case 'feb':
+                return 10;
+            case 'mar':
+                return 11;
+            case 'apr':
+                return 0;
+            case 'may':
+                return 1;
+            case 'jun':
+                return 2;
+            case 'jul':
+                return 3;
+            case 'aug':
+                return 4;
+            case 'sep':
+                return 5;
+            case 'oct':
+                return 6;
+            case 'nov':
+                return 7;
+            case 'dec':
+                return 8;
+            default:
+                return 12;
+        }
     }
 
 }

@@ -173,33 +173,34 @@ export class BudgetComponent implements OnInit {
                 submittedByPreliminary: forecast.find(x => x.active == 'Preliminary')?.userName ? forecast.find(x => x.active == 'Preliminary').userName : "",
             })
         }
-        const currentHistorical = forecast.find(x => x.active === 'Current')?.historical || 0;
-        const planHistorical = forecast.find(x => x.active === 'Plan')?.historical || 1;
-        const currentActive = forecast.find(x => x.active === 'Current');
+        const currentEntry = forecast.find(x => x.active === 'Current');
         const planActive = forecast.find(x => x.active === 'Plan');
+        const totalCapexForecast = currentEntry?.cumulativeTotal || 0;
+        const totalApprovedCapEx = budget.totalApprovedCapEx || 0;
+        const currentAnnualTotal = currentEntry?.annualTotal || 0;
+        const planAnnualTotal = planActive?.annualTotal || 0;
+        const currentHistorical = currentEntry?.historical || 0;
+        const planHistorical = forecast.find(x => x.active === 'Plan')?.historical || 0;
         const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
         const planMonthText = this.getMonthText(planMtdpDate.getMonth());
-        const currentMonthValue = currentActive && currentActive[currentMonthText] || 0;
+        const currentMonthValue = currentEntry && currentEntry[currentMonthText] || 0;
         const planMonthValue = planActive && planActive[planMonthText] || 1;
-        const totalApprovedCapEx = budget.totalApprovedCapEx || 1;
-        const currentAnnualTotal = currentActive?.annualTotal || 0;
-        const planAnnualTotal = planActive?.annualTotal || 1;
         this.budgetForecastForm.patchValue({
             referenceCurrent: forecast.find(x => x.active == 'Current').active,
             periodCurrent: forecast.find(x => x.active == 'Current').periodName,
             lastSubmittedCurrent: forecast.find(x => x.active == 'Current').lastSubmitted,
             submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
-            tfpPercentage:  Number((planActive.cumulativeTotal / totalApprovedCapEx).toFixed(2)),
-            tfpValue: forecast.find(x => x.active == 'Plan').cumulativeTotal - (budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0),
-            afpPercentage: Number((currentAnnualTotal / planAnnualTotal).toFixed(2)),
-            afpValue: forecast.find(x => x.active == 'Current').annualTotal - forecast.find(x => x.active == 'Plan').annualTotal,
+            tfpPercentage:  Number((totalCapexForecast / (totalApprovedCapEx != 0 ? totalApprovedCapEx : 1)).toFixed(2)),
+            tfpValue: totalCapexForecast - totalApprovedCapEx,
+            afpPercentage: Number((currentAnnualTotal / (planAnnualTotal != 0 ? planAnnualTotal : 1)).toFixed(2)),
+            afpValue: currentAnnualTotal - planAnnualTotal,
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
-            ytdpPercentage: Number((currentHistorical / planHistorical).toFixed(2)),
-            ytdpValue: forecast.find(x => x.active == 'Current').historical - forecast.find(x => x.active == 'Plan').historical,
+            ytdpPercentage: Number((currentHistorical / (planHistorical != 0 ? planHistorical : 1)).toFixed(2)),
+            ytdpValue: currentHistorical - planHistorical,
             mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
-            mtdpValue: forecast.find(x => x.active == 'Current')[this.getMonthText(currentMtdpDate.getMonth())] -  forecast.find(x => x.active == 'Plan')[this.getMonthText(planMtdpDate.getMonth())],
-            mtdpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').mtdpDeviationCodeID),
-            committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
+            mtdpValue: currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(planMtdpDate.getMonth())],
+            mtdpCodeId: this.getLookUpName(currentEntry.mtdpDeviationCodeID),
+            committedSpend: forecast.find(x => x.isopen).committedSpend,
         })
         this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
         this.setTextColors();
