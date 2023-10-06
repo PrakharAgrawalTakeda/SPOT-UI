@@ -1,16 +1,39 @@
 @import '../../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
-/* Component.css or Component.scss */
-.ngx-datatable .datatable-body-cell {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .ngx-datatable .datatable-body-cell div {
-    border-bottom: 1px solid #eaeaea;
-    padding: 5px 0;
-  }
-  
-  /* removing the border from the last div */
-  .ngx-datatable .datatable-body-cell div:last-child {
-    border-bottom: none;
-  }
+.ngx-datatable .datatable-VC-80 .datatable-body .datatable-scroll {
+  height: 80vh !important;
+  width: 100vw !important;
+  overflow-x: scroll !important;
+  overflow-y: scroll !important;
+}
+
+.datatable-row-left{
+  background: white !important;
+  height: 142px !important;
+}
+
+.frozen-header-classID {
+  top: 120px !important;
+  margin-left: 12px !important;
+}
+
+.frozen-header-class {
+  top: 120px !important;
+  margin-left: 2px !important;
+}
+
+.column-style {
+  top: 120px !important;
+  margin-left: -11px !important;
+}
+
+.frozen-header {
+  top: 120px !important;
+  margin-left: 8px !important;
+}
+.frozen-header-ID {
+  top: 99px !important;
+  margin-left: 6px !important;
+}
+.datatable-body{
+  height: 80vh !important;
+}

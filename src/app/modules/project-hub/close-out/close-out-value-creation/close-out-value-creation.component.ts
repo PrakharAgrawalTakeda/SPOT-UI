@@ -46,7 +46,7 @@ export class CloseOutValueCreationComponent implements OnInit {
             this.kpi = kpi
           this.lookupData = resp
           this.filterData = filterres
-          console.log(currency)
+          console.log(res.projectsMetricsData)
           this.localCurrency = currency.localCurrencyAbbreviation
           res.projectsMetricsData.forEach((element)=>{
                 element.metricCategoryId = null
@@ -108,7 +108,7 @@ export class CloseOutValueCreationComponent implements OnInit {
           };
           this.compare(this.columnYear)
           this.valuecreationngxdata = res.projectsMetricsData
-          this.valuecreationngxdata.shift()
+          //this.valuecreationngxdata.shift()
           // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true

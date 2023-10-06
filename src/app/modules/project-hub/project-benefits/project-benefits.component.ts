@@ -6,6 +6,8 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
+
 
 @Component({
   selector: 'app-project-benefits',
@@ -28,8 +30,10 @@ export class ProjectBenefitsComponent implements OnInit {
   viewHisOpPerformance: boolean = false;
   bulkEditType: string = 'OperationalPerformanceBulkEdit';
     @ViewChild('valuecreationTable') table: any;
+    localCurrency: string = ""
   valueCreation: any;
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService) {
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
+    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
         this.dataloader()
@@ -52,9 +56,10 @@ export class ProjectBenefitsComponent implements OnInit {
       this.auth.lookupMaster().then((resp: any) => {
         this.apiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
+            this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
             this.kpi = kpi
             console.log(this.kpi)
-            console.log(res.problemCapture.primaryKpi)
+            console.log(res.projectsMetricsData)
           this.lookupData = resp
           this.filterData = filterres
           res.projectsMetricsData.forEach((element)=>{
@@ -125,6 +130,7 @@ export class ProjectBenefitsComponent implements OnInit {
     })
     })
   })
+})
   }
 
   getLookup(id: any){
@@ -153,6 +159,21 @@ export class ProjectBenefitsComponent implements OnInit {
     else{
       return ''
     }
+  }
+  getFrozenHeaderClassID(): any {
+    return ' frozen-header-classID';
+  }
+  getFrozenHeaderClass(): any {
+    return ' frozen-header-class';
+  }
+  getFrozenClass(): any {
+    return ' frozen-header';
+  }
+  columnstyle(): any{
+    return ' column-style';
+  }
+  getFrozenID(): any{
+    return ' frozen-header-ID'
   }
 
   openOperationalPerformance(){
