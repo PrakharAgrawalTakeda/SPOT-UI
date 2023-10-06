@@ -200,7 +200,7 @@ export class BudgetComponent implements OnInit {
             mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
             mtdpValue: currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(planMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(currentEntry.mtdpDeviationCodeID),
-            committedSpend: currentEntry.committedSpend,
+            committedSpend: forecast.find(x => x.isopen).committedSpend,
         })
         if(forecast.find(x => x.isopen).active== 'Current'){
             this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
