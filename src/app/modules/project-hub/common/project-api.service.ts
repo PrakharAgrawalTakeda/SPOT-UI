@@ -596,7 +596,7 @@ async addBCFunding(body,optionId,projectId){
       return response
   }
   async programReport(body){
-     var link = GlobalVariables.apiurl+"ProjectHubData/InsertReports"
+     var link = GlobalVariables.apiurl+"Report/GeneratePortfolioReport"
      const abc$ = this.http.post(link,body)
      const response = await lastValueFrom(abc$)
      return response

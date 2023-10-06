@@ -1,13 +1,12 @@
-
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
-import { ProjectApiService } from '../common/project-api.service';
-import { ProjectHubService } from '../project-hub.service';
-import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
-import { MsalService } from '@azure/msal-angular';
-import {GlobalBusinessCaseOptions} from "../../../shared/global-business-case-options";
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SpotlightIndicatorsService} from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import {ProjectApiService} from '../common/project-api.service';
+import {ProjectHubService} from '../project-hub.service';
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
+import {MsalService} from '@azure/msal-angular';
 import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
+
 @Component({
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
@@ -153,15 +152,11 @@ export class AssociatedProjectsComponent implements OnInit {
 
         reportAlert.afterClosed().subscribe(close => {
             if (close == 'confirmed') {
-                let body = {ReportsData:[]};
-                var newReport ={ProjectID:"", UserADID:"", ReportName:""};
-                newReport.ProjectID = this.projecthubservice.projects.map(x=>{
-                    return x.problemId.toString()
-                }).join(',');
-                newReport.ReportName = "Portfolio Report";
-                newReport.UserADID = this.msalService.instance.getActiveAccount().localAccountId;
-                body.ReportsData.push(newReport);
-                this.apiService.programReport(body).then((res: any) => {
+                let problemIds: string[] = [];
+                this.projecthubservice.projects.map(x => {
+                    problemIds.push(x.problemId.toString())
+                });
+                this.apiService.programReport(problemIds).then((res: any) => {
                 });
             }
         })
