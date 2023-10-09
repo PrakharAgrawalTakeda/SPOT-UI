@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
+import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 
 @Component({
   selector: 'app-close-out-value-creation',
@@ -17,6 +18,7 @@ export class CloseOutValueCreationComponent implements OnInit {
     primaryValueDriver: new FormControl(''),
     valueCommentary: new FormControl('')
   })
+  @Input() optionType: 'recommended-option'
   localCurrency: string = ""
   valuecreationngxdata: any = []
   viewContent:boolean = false
@@ -27,12 +29,16 @@ export class CloseOutValueCreationComponent implements OnInit {
   columnYear = []
   yearData = []
   @ViewChild('valuecreationTable') table: any;
-  constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,
+  constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,public indicator: SpotlightIndicatorsService,
     private portApiService: PortfolioApiService){
 
   }
   ngOnInit():void{
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    if(this.optionType == 'recommended-option')
+    {
+      this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
+    }
     this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
       this.auth.lookupMaster().then((resp: any) => {
         this.projectApiService.getfilterlist().then(filterres => {
@@ -41,6 +47,7 @@ export class CloseOutValueCreationComponent implements OnInit {
             this.kpi = kpi
           this.lookupData = resp
           this.filterData = filterres
+          console.log(res.projectsMetricsData)
           this.localCurrency = currency.localCurrencyAbbreviation
           res.projectsMetricsData.forEach((element)=>{
                 element.metricCategoryId = null
@@ -73,7 +80,7 @@ export class CloseOutValueCreationComponent implements OnInit {
           })
           this.ValueCaptureForm.patchValue({
             valueCaptureStart: res.problemCapture.financialRealizationStartDate,
-            primaryValueDriver: this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname,
+            primaryValueDriver: res.problemCapture.primaryKpi ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : '',
             valueCommentary: res.problemCapture.valueCommentary
           })
           var year = []
@@ -102,7 +109,7 @@ export class CloseOutValueCreationComponent implements OnInit {
           };
           this.compare(this.columnYear)
           this.valuecreationngxdata = res.projectsMetricsData
-          this.valuecreationngxdata.shift()
+          //this.valuecreationngxdata.shift()
           // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true

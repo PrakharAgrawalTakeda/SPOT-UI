@@ -8,7 +8,10 @@
 </div>
 <div class="space-y-4" >
     <div class="h-[85vh] overflow-auto">
-        <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-3 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
+        <div class="grid justify-items-stretch m-2">
+            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-secondary justify-self-center">{{headerLabel}}</div>
+        </div>
+        <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-2 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
             <div >
                 <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
@@ -35,10 +38,6 @@
                     </div>
                 </div>
             </div>
-            <spot-singleselect-autocomplete class="w-full" formControlName="afpDeviationCode"
-                                            [label]="'AFP Deviation Code'" [placeholder]="'AFP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
-                                            [dropDownArray]="getAfdDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-            </spot-singleselect-autocomplete>
             <div>
                 <mat-label class="flex"><strong>Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
@@ -65,10 +64,6 @@
                     </div>
                 </div>
             </div>
-            <spot-singleselect-autocomplete class="w-full" formControlName="mtdpDeviationCode"
-                                            [label]="'MTDP Deviation Code'" [placeholder]="'MTP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
-                                            [dropDownArray]="getMtdpDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
-            </spot-singleselect-autocomplete>
         </form>
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
@@ -95,7 +90,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !aprEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': aprEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !aprEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('apr', aprEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value | number : fractionSize}}</p>
                         </a>
@@ -103,7 +98,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && aprEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateAnnualTotal()" (paste)="onPaste($event, rowIndex,'apr')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'apr' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -119,7 +114,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !mayEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': mayEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !mayEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('may', mayEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -127,7 +122,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && mayEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'may')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'may' && row.active=='Preliminary'}" />
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -142,7 +137,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !junEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': junEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !junEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jun', junEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -150,7 +145,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && junEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'jun')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'jun' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -165,7 +160,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !julEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': julEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !julEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jul', julEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -173,7 +168,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && julEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'jul')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*"  [ngClass]="{'blue-text': firstPreliminary === 'aug' && row.active === 'Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -188,7 +183,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !augEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': augEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !augEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('aug', augEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -196,7 +191,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && augEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateAnnualTotal()" (paste)="onPaste($event, rowIndex,'aug')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="firstPreliminary === 'aug' ? 'blue' : ''"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -211,7 +206,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !sepEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': sepEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !sepEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('sep', sepEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -219,7 +214,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && sepEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'sep')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'sep' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -234,7 +229,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !octEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': octEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !octEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('oct', octEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -242,7 +237,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && octEditable">
                             <mat-form-field class="w-full  px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'oct')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'oct' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -257,7 +252,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !novEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': novEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !novEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('nov', novEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -265,7 +260,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && novEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'nov')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'nov' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -280,7 +275,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !decEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': decEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !decEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('dec', decEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -288,7 +283,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && decEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'dec')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'dec' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -303,7 +298,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !janEditable" (click)="fTableEditRow(rowIndex)"  [ngClass]="{'closed': janEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !janEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jan', janEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -311,7 +306,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && janEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'jan')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'jan' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -326,7 +321,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !febEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': febEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !febEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('feb', febEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -334,7 +329,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && febEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'feb')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'feb' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -349,7 +344,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !marEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="{'closed': marEditable == false || row.isopen==false}">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !marEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('mar', marEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -357,7 +352,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && marEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateAnnualTotal()"  class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'mar' && row.active=='Preliminary'}"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -372,7 +367,7 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a  (click)="fTableEditRow(rowIndex)">
+                        <a  (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
@@ -700,8 +695,8 @@
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template >
                         <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{value | number : fractionSize}}</p>
+                            <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>
+                            <p *ngIf="row.active == 'Current' || row.active=='Preliminary'" style="text-align:right"> {{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                     </ng-template>
                 </ngx-datatable-column>
@@ -834,41 +829,32 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="TotalCapex" prop="cumulativeTotal" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column name="Total Capex" prop="cumulativeTotal" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
+                            <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>
+                            <p *ngIf="row.active == 'Current' || row.active=='Preliminary'" style="text-align:right"> {{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="pl-3 mt-6" >
-            <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
-                           columnMode="force"
-                           class="material w-64 font-medium text-sm whitespace-nowrap cursor-pointer"
-                           [rows]="csTable" >
-                <ngx-datatable-column [sortable]="false" name="Commited Spend" prop="committedSpend" [width]="150" [resizeable]="false" [headerClass]="getNgxDatatableNumberHeader"
-                                      [draggable]="false">
-                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!csTableEditStack.includes(rowIndex)" (click)="csTableEditRow(rowIndex)">
-                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                            <p style="text-align:right">{{value ?  value : 0}}</p>
-                        </a>
-                        <form [formGroup]="csForm.controls[rowIndex]"
-                              *ngIf="csTableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="committedSpend" type="number"  min="0"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
-                        </form>
-                    </ng-template>
-                </ngx-datatable-column>
-            </ngx-datatable>
-        </div>
+        <form [formGroup]="budgetForecastForm" *ngIf="mode=='Capex'">
+            <div class="grid m-2 grid-cols-3 gap-x-6 gap-y-0 w-19/20" >
+                    <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'">
+                    </spot-input>
+                    <spot-singleselect-autocomplete class="w-full" formControlName="afpDeviationCode"
+                                                    [label]="'AFP Deviation Code'" [placeholder]="'AFP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
+                                                    [dropDownArray]="getAfdDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                    </spot-singleselect-autocomplete>
+                    <spot-singleselect-autocomplete class="w-full" formControlName="mtdpDeviationCode"
+                                                    [label]="'MTDP Deviation Code'" [placeholder]="'MTP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
+                                                    [dropDownArray]="getMtdpDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                    </spot-singleselect-autocomplete>
+            </div>
+        </form>
     </div>
     <div class="absolute bottom-2 w-full px-3">
         <div class="pr-3 flex items-start justify-between mt-6">
@@ -882,26 +868,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

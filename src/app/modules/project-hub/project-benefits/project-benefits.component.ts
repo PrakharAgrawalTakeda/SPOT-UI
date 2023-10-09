@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -6,6 +6,8 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from '../common/project-api.service';
 import { ProjectHubService } from '../project-hub.service';
+import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.service';
+
 
 @Component({
   selector: 'app-project-benefits',
@@ -13,23 +15,25 @@ import { ProjectHubService } from '../project-hub.service';
   styleUrls: ['./project-benefits.component.scss']
 })
 export class ProjectBenefitsComponent implements OnInit {
-  id: string = ''
-  projectViewDetails: any = {}
-  viewContent: boolean = false
-  lookupMasters = []
-  kpiMasters = []
-  primaryKPIForm = new FormGroup({
-    primaryKpi: new FormControl(null),
-    vcdate: new FormControl(null),
-    valueCommentary: new FormControl(null)
+   ValueCaptureForm = new FormGroup({
+    valueCaptureStart: new FormControl(''),
+    primaryValueDriver: new FormControl(''),
+    valueCommentary: new FormControl('')
   })
   valuecreationngxdata: any = []
-  @Input() projectid: any;
-  editable: boolean = false
+  viewContent:boolean = false
+  id:string = ""
+  lookupData = []
+  filterData:any = []
+  kpi= []
+  columnYear = []
   viewHisOpPerformance: boolean = false;
   bulkEditType: string = 'OperationalPerformanceBulkEdit';
+    @ViewChild('valuecreationTable') table: any;
+    localCurrency: string = ""
   valueCreation: any;
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, public indicator: SpotlightIndicatorsService) {
+  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
+    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
         this.dataloader()
@@ -47,41 +51,129 @@ export class ProjectBenefitsComponent implements OnInit {
     
   }
   dataloader() {
-    this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
-    this.apiService.getvalueCreation(this.id).then((vc: any) => {
-    this.apiService.getprojectviewdata(this.id).then((res: any) => {
-      this.auth.KPIMaster().then((kpis: any) => {
-        this.auth.lookupMaster().then((lookup: any) => {
-          this.valueCreation = vc
-          console.log("Value Creation Data",vc)
-          this.projectViewDetails = res
-          this.lookupMasters = lookup
-          this.kpiMasters = kpis
-          console.log("OVERALL DATA", this.projectViewDetails)
-          console.log(this.projectViewDetails.projectData.primaryKpi)
-          this.projecthubservice.lookUpMaster = lookup
-          this.projecthubservice.kpiMasters = kpis
-          console.log(vc.problemCapture.financialRealizationStartDate)
-          this.editable = this.projecthubservice.roleControllerControl.projectHub.projectBoard.overallStatusEdit
-          this.primaryKPIForm.controls.primaryKpi.patchValue(vc.problemCapture.primaryKpi ? lookup.find(x => x.lookUpId == vc.problemCapture.primaryKpi) : {})
-          //this.primaryKPIForm.controls.primaryKpi.patchValue(this.projectViewDetails.projectData.primaryKpi ? kpis.find(x => x.kpiid == this.projectViewDetails.projectData.primaryKpi) : {})
-          this.primaryKPIForm.controls.vcdate.patchValue(vc.problemCapture.financialRealizationStartDate)
-          this.primaryKPIForm.controls.valueCommentary.patchValue(vc.problemCapture.valueCommentary)          
-          this.primaryKPIForm.controls.primaryKpi.disable()
-          if (!this.projecthubservice.roleControllerControl.projectBenefits) {
-            this.primaryKPIForm.controls.primaryKpi.disable()
+    this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+    this.apiService.getMetricProjectData(this.id).then((res: any) => {
+      this.auth.lookupMaster().then((resp: any) => {
+        this.apiService.getfilterlist().then(filterres => {
+          this.auth.KPIMaster().then((kpi: any) => {
+            this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
+            this.kpi = kpi
+            console.log(this.kpi)
+            console.log(res.projectsMetricsData)
+          this.lookupData = resp
+          this.filterData = filterres
+          res.projectsMetricsData.forEach((element)=>{
+                element.metricCategoryId = null
+                element.metricName = ""
+                element.helpText = ""
+                element.metricPortfolioID = null
+                element.metricUnit = ""
+                element.metricTypeID = null
+                element.metricFormat = ""
+                element.FianncialType1 = "Target"
+                element.FianncialType2 = "Baseline Plan"
+                element.FianncialType3 = "Current Plan"
+                element.FianncialType4 = "Actual"
+            res.allMetrics.forEach((el)=>{
+              if(element.metricId == el.metricID){
+                var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
+                element.metricCategoryId = el.metricCategoryID
+                element.metricName = el.metricName
+                element.helpText = el.helpText
+                element.metricPortfolioID = el.metricPortfolioID
+                element.metricUnit = el.metricUnit
+                element.metricTypeID = el.metricTypeID
+                element.metricFormat = format
+                element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
+                element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
+                element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
+                element.strategicActual =element.strategicActual ? element.strategicActual : '0'
+              }
+            })
+          })
+          this.ValueCaptureForm.patchValue({
+            valueCaptureStart: res.problemCapture.financialRealizationStartDate,
+            primaryValueDriver: res.problemCapture.primaryKpi ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : '',
+            valueCommentary: res.problemCapture.valueCommentary
+          })
+          console.log(this.ValueCaptureForm.getRawValue())
+          var year = []
+          var yearList=[]
+          
+          year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
+          for(var i=0;i<year.length;i++){
+            var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
+            this.columnYear.push({year: yearName})
+            yearList.push(yearName)
           }
-          console.log(this.projectViewDetails)
-          //for (var i of this.projectViewDetails.projectData) {
-            this.projectViewDetails.projectData.primaryKpi = lookup.find(x => x.lookUpId == vc.problemCapture.primaryKpi) ? lookup.find(x => x.lookUpId == vc.problemCapture.primaryKpi).lookUpName : ''
-          //}
-          //View Content
+          yearList.sort()
+          for(var i=0;i<res.projectsMetricsData.length;i++){
+            for(var j=0;j<yearList.length;j++){
+              res.projectsMetricsData[i][yearList[j]] = [{'target':"0",'baseline':"0",'actual':"0",'current':"0"}]
+              if(res.projectsMetricsData[i].strategicBaselineList){
+                var data = res.projectsMetricsData[i].strategicBaselineList.split(',')
+                for(var z=0;z<data.length;z++){
+                  var list = data[z].split(' ')
+                  if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                    res.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
+                  }
+                }
+              }
+            }
+          };
+          this.compare(this.columnYear)
+          this.valuecreationngxdata = res.projectsMetricsData
+          // this.valuecreationngxdata = res.projectsMetricsDataYearly
+          this.ValueCaptureForm.disable()
           this.viewContent = true
-          this.primaryKPIForm.disable()
-        })
       })
     })
+    })
   })
+})
+  }
+
+  getLookup(id: any){
+    return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id).lookUpName : ''
+  }
+  compare( array: any ): any {
+    return array.length > 1 ? array.sort((a, b) => {
+      if ( a.year < b.year ){
+        return -1;
+      }
+      if ( a.year > b.year ){
+        return 1;
+      }
+      return 0;
+    }) : array
+  }
+  getOwner(id:any, type:any){
+    if(type && type.lookupId != '' && id && id.lookUpId != ''){
+      if(type == 'e7a9e055-1319-4a4f-b929-cd7777599e39'){
+        return 'Global'
+      }
+      else{
+        return this.filterData.portfolioOwner.find(x => x.portfolioOwnerId == id).portfolioOwner
+      }
+    }
+    else{
+      return ''
+    }
+  }
+  getFrozenHeaderClassID(): any {
+    return ' frozen-header-classID';
+  }
+  getFrozenHeaderClass(): any {
+    return ' frozen-header-class';
+  }
+  getFrozenClass(): any {
+    return ' frozen-header';
+  }
+  columnstyle(): any{
+    return ' column-style';
+  }
+  getFrozenID(): any{
+    return ' frozen-header-ID'
   }
 
   openOperationalPerformance(){
