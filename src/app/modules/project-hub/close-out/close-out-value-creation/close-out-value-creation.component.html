@@ -5,14 +5,14 @@
             </div>
             <form class="grid grid-cols-3 gap-x-6 gap-y-0 w-full" [formGroup]="ValueCaptureForm">
                 <spot-input-date class="w-full read-only" formControlName="valueCaptureStart" name="valueCaptureStart"
-                    [label]="'Value Capture Start'" [showHint]="true" [hint]="'
+                    [label]="'Value Capture Start'" [placeholder]="'Value Capture Start'" [showHint]="true" [hint]="'
                     ‘Value Capture Start’ Defines the first fiscal year in which value will be captured.'" >
                 </spot-input-date>
                 <spot-input class="w-full read-only" formControlName="primaryValueDriver" name="primaryValueDriver"
-                    [label]="'Primary Value Driver'">
+                    [label]="'Primary Value Driver'" [placeholder]="'Primary Value Drivery'">
                 </spot-input>
                 <spot-input class="w-full read-only" formControlName="valueCommentary" name="valueCommentary"
-                    [label]="'Value Commentary'">
+                    [label]="'Value Commentary'" [placeholder]="'Value Capture Commentary'">
                 </spot-input>
             </form>
         </div>
