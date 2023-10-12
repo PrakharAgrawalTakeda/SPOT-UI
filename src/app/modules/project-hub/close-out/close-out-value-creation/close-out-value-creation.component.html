@@ -5,14 +5,14 @@
             </div>
             <form class="grid grid-cols-3 gap-x-6 gap-y-0 w-full" [formGroup]="ValueCaptureForm">
                 <spot-input-date class="w-full read-only" formControlName="valueCaptureStart" name="valueCaptureStart"
-                    [label]="'Value Capture Start'" [showHint]="true" [hint]="'
+                    [label]="'Value Capture Start'" [placeholder]="'Value Capture Start'" [showHint]="true" [hint]="'
                     ‘Value Capture Start’ Defines the first fiscal year in which value will be captured.'" >
                 </spot-input-date>
                 <spot-input class="w-full read-only" formControlName="primaryValueDriver" name="primaryValueDriver"
-                    [label]="'Primary Value Driver'">
+                    [label]="'Primary Value Driver'" [placeholder]="'Primary Value Drivery'">
                 </spot-input>
                 <spot-input class="w-full read-only" formControlName="valueCommentary" name="valueCommentary"
-                    [label]="'Value Commentary'">
+                    [label]="'Value Commentary'" [placeholder]="'Value Capture Commentary'">
                 </spot-input>
             </form>
         </div>
@@ -23,13 +23,10 @@
         class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
         <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="30" [frozenLeft]="true">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
-                    class="{{(indicator.getIndicators(value, 'circle')).iconcolor}}" style="height: 110px !important;">
-                </mat-icon>
-                <!-- <span *ngIf="row.statusId == '' || row.statusId == null" style="background-color: rgb(175, 175, 175) !important; height: 110px;width: 20px; display: flex;"></span>
-                <span *ngIf="getLookup(row.statusId) == 'Will Not Meet'" style="background-color: red !important; height: 110px;width: 20px; display: flex;"></span>
-                <span *ngIf="getLookup(row.statusId) == 'At Risk'" style="background-color: #FFCC00 !important; height: 110px;width: 20px; display: flex;"></span>
-                <span *ngIf="getLookup(row.statusId) == 'On Track'" style="background-color: green !important; height: 110px;width: 20px; display: flex;"></span> -->
+                <div *ngIf="row.statusId == '' || row.statusId == null" style="height: 93px;"><mat-icon style="color: rgb(175, 175, 175) !important;" svgIcon="mat_solid:circle"></mat-icon></div>
+                <div *ngIf="getLookup(row.statusId) == 'Will Not Meet'" style="height: 93px;"><mat-icon style="color: red !important;" svgIcon="mat_solid:circle"></mat-icon></div>
+                <div *ngIf="getLookup(row.statusId) == 'At Risk'" style="height: 93px;"><mat-icon style="color: #FFCC00 !important;" svgIcon="mat_solid:circle"></mat-icon></div>
+                <div *ngIf="getLookup(row.statusId) == 'On Track'" style="height: 93px;"><mat-icon style="color: green !important;" svgIcon="mat_solid:circle"></mat-icon></div>
             </ng-template>  
         </ngx-datatable-column>
         <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [width]="100" [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
@@ -44,14 +41,14 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Category" prop="metricCategoryId" [width]="120" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
+        <ngx-datatable-column name="Category" prop="metricCategoryId" [width]="220" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Metric Name" prop="metricName" [width]="160" [frozenLeft]="true" [headerClass]="getFrozenClass">
+        <ngx-datatable-column name="Metric Name" prop="metricName" [width]="220" [frozenLeft]="true" [headerClass]="getFrozenClass">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <p style="margin-bottom: 44px;"><mat-icon *ngIf="value!= ''" class="pe" style="font-size: 17px;"
+                <p style="margin-bottom: 72px;"><mat-icon *ngIf="value!= ''" class="pe" style="font-size: 17px;"
                     [matTooltip]=row.helpText>help</mat-icon>{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
@@ -60,7 +57,7 @@
                 <p style="margin-bottom: 68px;">{{value}}</p>
             </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [width]="100" [frozenLeft]="true" [headerClass]="getFrozenID">
+        <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [width]="160" [frozenLeft]="true" [headerClass]="getFrozenID">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>

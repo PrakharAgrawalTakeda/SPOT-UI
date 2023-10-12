@@ -80,7 +80,8 @@ export class CloseOutValueCreationComponent implements OnInit {
           })
           this.ValueCaptureForm.patchValue({
             valueCaptureStart: res.problemCapture.financialRealizationStartDate,
-            primaryValueDriver: res.problemCapture.primaryKpi ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : '',
+            primaryValueDriver: res.problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : 
+            this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname,
             valueCommentary: res.problemCapture.valueCommentary
           })
           var year = []
@@ -163,11 +164,3 @@ export class CloseOutValueCreationComponent implements OnInit {
     return ' frozen-header-ID'
   }
 }
-
-
-// Status Id = 2A4E375B-B9F8-4647-B4CB-71268B52A938
-// Category Id = 999572a6-5aa8-4760-8082-c06774a17474
-// value capture = 243a9492-720d-42df-823e-ae7eb4d3ae45
-// value capture = metric level id
-// empty column = d3926d90-9fa9-4e3c-a7fb-667737739c43
-// empty column = financialTypeId
