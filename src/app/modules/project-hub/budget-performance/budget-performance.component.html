@@ -70,32 +70,32 @@
                 <div class="w-[100%] mt-4">
                     <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                                    class=" font-medium text-sm text-default whitespace-nowrap" [rows]="rows">
-                        <ngx-datatable-column name="Record Name" prop="projectName" [flexGrow]="3">
+                        <ngx-datatable-column name="Record Name" prop="projectName" [flexGrow]="3" [resizeable]="false" [draggable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Total Approved CAPEX( {{localCurrency}})" prop="annualForecast" [flexGrow]="2">
+                        <ngx-datatable-column name="Total Approved CAPEX( {{localCurrency}})" prop="annualForecast" [flexGrow]="2" [resizeable]="false" [draggable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value | number: '1.4-4' }}</p>
+                                <p>{{ value | number: numberFormat }}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="TFP (%)" prop="yearToDatePerformance" [flexGrow]="1">
+                        <ngx-datatable-column name="TFP (%)" prop="yearToDatePerformance" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value | number: '1.2-2' }} %</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="TFP ({{localCurrency}})" prop="yearToDatePerformanceValue" [flexGrow]="1">
+                        <ngx-datatable-column name="TFP ({{localCurrency}})" prop="yearToDatePerformanceValue" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value | number: '1.2-2' }}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="YTDP (%)" prop="totalForecastPerformance" [flexGrow]="1">
+                        <ngx-datatable-column name="YTDP (%)" prop="totalForecastPerformance" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value | number: '1.2-2' }} %</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="YTDP ({{localCurrency}})" prop="totalForecastPerformanceValue" [flexGrow]="1">
+                        <ngx-datatable-column name="YTDP ({{localCurrency}})" prop="totalForecastPerformanceValue" [flexGrow]="1" [resizeable]="false" [draggable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p>{{value | number: '1.2-2' }}</p>
                             </ng-template>

@@ -82,7 +82,7 @@
                             {{ value }} <br> {{ row.sponsor }}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Overall status" prop="overallStatus" [headerClass]="getHeaderClass" [resizeable]="false"
+                    <ngx-datatable-column name="Overall status" prop="overallStatusArrow" [headerClass]="getHeaderClass" [resizeable]="false"
                         [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -90,7 +90,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Schedule" prop="scheduleIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                    <ngx-datatable-column name="Schedule" prop="scheduleIndicatorArrow" [headerClass]="getHeaderClass" [resizeable]="false"
                         [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -98,7 +98,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Risk/Issues" prop="riskIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                    <ngx-datatable-column name="Risk/Issues" prop="riskIndicatorArrow" [headerClass]="getHeaderClass" [resizeable]="false"
                         [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -106,7 +106,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Ask/Needs" prop="askNeedIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                    <ngx-datatable-column name="Ask/Needs" prop="askNeedIndicatorArrow" [headerClass]="getHeaderClass" [resizeable]="false"
                         [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -114,7 +114,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Budget" prop="budgetIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                    <ngx-datatable-column name="Budget" prop="budgetIndicatorArrow" [headerClass]="getHeaderClass" [resizeable]="false"
                         [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -122,7 +122,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Spend" prop="budgetSpendIndicator" [headerClass]="getHeaderClass" [resizeable]="false"
+                    <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorArrow" [headerClass]="getHeaderClass" [resizeable]="false"
                         [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
