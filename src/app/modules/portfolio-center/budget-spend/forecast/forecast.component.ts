@@ -143,6 +143,11 @@ export class ForecastComponent {
             this.localCAPEX = forecastData.forecastTableItems[val]
             this.localOPEX = forecastData.forecastTableItems[val1]
           }
+          else{
+            this.ForecastForm.patchValue({
+              Currency: this.currencyList[0]
+            })
+          }
           this.CAPEXdata = forecastData.forecastTableItems["CapExForecast|OY"]
           this.OPEXdata = forecastData.forecastTableItems["OpExForecast|OY"]
           this.fundingRequests = forecastData.forecastTableItems["CapExForecast|OY"]
@@ -173,9 +178,7 @@ export class ForecastComponent {
     this.showDrawer = true
     this.FxRateDrawer.toggle()
   }
-  getBlue(): any {
-    return ' blue';
-  }
+  
   ApplyFilter(){
     this.PortfolioCenterService.isFormChanged = false
     const originalData = JSON.parse(JSON.stringify(this.filterdata))

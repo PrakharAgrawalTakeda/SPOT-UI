@@ -243,12 +243,8 @@
                         <app-budget-capex-opex-table [mode]="'Capex'" [inputData]="budgetForecasts"></app-budget-capex-opex-table>
 <!--                        <app-budget-capex-opex-table [mode]="'Y1'" [inputData]="budgetForecastsY1Capex"></app-budget-capex-opex-table>-->
                         <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-                            <mat-form-field  class="flex w-full" [floatLabel]="'always'">
-                                <mat-label class="flex"><strong>Committed Spend</strong></mat-label>
-                                <div class="grid grid-cols-2 divide-x-2 w-full">
-                                    <div><input  matInput formControlName="committedSpend"></div>
-                                </div>
-                            </mat-form-field>
+                            <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'View'">
+                            </spot-input>
                             <mat-form-field  class="flex w-full" [floatLabel]="'always'">
                                 <mat-label class="flex"><strong>AFP Deviation Code</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full">

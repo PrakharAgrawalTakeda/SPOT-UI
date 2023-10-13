@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SpotlightIndicatorsService} from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import {ProjectApiService} from '../common/project-api.service';
@@ -11,7 +11,7 @@ import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service"
     selector: 'app-associated-projects',
     templateUrl: './associated-projects.component.html',
     styleUrls: ['./associated-projects.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
 export class AssociatedProjectsComponent implements OnInit {
     single: any[];
