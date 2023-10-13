@@ -843,7 +843,7 @@
         </div>
         <form [formGroup]="budgetForecastForm" *ngIf="mode=='Capex'">
             <div class="grid m-2 grid-cols-3 gap-x-6 gap-y-0 w-19/20" >
-                    <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'">
+                    <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
                     </spot-input>
                     <spot-singleselect-autocomplete class="w-full" formControlName="afpDeviationCode"
                                                     [label]="'AFP Deviation Code'" [placeholder]="'AFP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"

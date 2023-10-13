@@ -13,12 +13,12 @@
                 required fields are missing. Please review and correct your data below</p>
                 <div *ngIf="projectHubService.roleControllerControl.generalInfo.confidentialEdit && viewElementChecker('isConfidential')" class="w-full" [ngClass]="{'mt-4 mb-6': callLocation == 'ProjectHub'}">
                     <spot-toggle class="w-full" formControlName="isConfidential"
-                        [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'Is Confidential'">
+                        [mode]="callLocation == 'ProjectHub'?'toggle':'dropDown'" [label]="'Confidential'">
                     </spot-toggle>
                 </div>
             <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
                 class="flex justify-between items-center mt-3 mb-6">
-                <div class="flex justify-start gap-1 items-center font-medium">Is Archived?
+                <div class="flex justify-start gap-1 items-center font-medium">Archived?
                 </div>
                 <div>
                     <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
@@ -80,7 +80,7 @@
                 class="w-full" [ngClass]="{'read-only': callLocation == 'CreateNewSIP'}" formControlName="problemType" name="problemType" [label]="'Project Type'"
                 [placeholder]="'Project Type'" [showNoneOption]="false" [dropDownArrayType]="'string'"
                 [dropDownArray]="callLocation=='CreateNewSIP'?projectTypeDropDrownValues:projectTypeDropDrownValues1" [showHint]="true"
-                [hint]="'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
+                [hint]="callLocation == 'CreateNewSIP' ? 'A record to document and drive Strategic Objectives. Ability to develop standardized metrics which any linked projects automatically adopt.Important: Strategic Initiatives CAN NOT submit or spend CAPEX' : 'A standard project or program requires more than 300 effort hours and three or more functions, or more than 1.0 Oku Yen (approximately $1 Million USD) in Capex.'">
             </spot-select>
             <spot-singleselect-autocomplete (focusout)="clickEvent($event.target.value, $event.currentTarget.innerText)"
                 *ngIf="viewElementChecker('portfolioOwner')" formControlName="portfolioOwner" class="w-full"

@@ -235,7 +235,7 @@ export const projectRoutes: Route[] = [
       pathMatch: 'full'
     },
     {
-      path: 'project-benefits',
+      path: 'value-creation',
       component: ProjectBenefitsComponent,
       pathMatch: 'full'
     },

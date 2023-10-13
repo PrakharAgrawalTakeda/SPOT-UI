@@ -88,7 +88,7 @@ export class ProjectHubService {
           title: 'Value Creation',
           type: 'basic',
           icon: 'feather:target',
-          link: 'project-benefits'
+          link: 'value-creation'
         },
         {
           title: 'Budget',
@@ -448,7 +448,7 @@ export class ProjectHubService {
           title: 'Value Creation',
           type: 'basic',
           icon: 'feather:target',
-          link: 'project-benefits'
+          link: 'value-creation'
         },
         {
           title: 'Budget Performance',
