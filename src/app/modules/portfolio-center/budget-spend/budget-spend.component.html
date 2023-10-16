@@ -13,8 +13,11 @@
                 </button>
             </div>
         </div>
-        <div class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
-            [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}" *ngIf="showForecast">
-            <app-forecast></app-forecast>
+        <div *ngFor="let item of  navItem.children" class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
+            [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
+            <app-forecast *ngIf="item.title == 'Forecast Bulk View' && item.toggled == true"></app-forecast>
+            <app-project-performance *ngIf="item.title == 'Project Performance' && item.toggled == true"></app-project-performance>
+            <app-forecast-excel-update *ngIf="item.title == 'Forecast Excel Update' && item.toggled == true"></app-forecast-excel-update>
+            <app-portfolio-performance *ngIf="item.title == 'Portfolio Performance' && item.toggled == true"></app-portfolio-performance>
         </div>
         
