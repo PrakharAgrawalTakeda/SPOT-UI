@@ -103,7 +103,7 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
   }
   onFocusout(event) {
     setTimeout(() => {
-      if (this.selectedOption[this.valuePointer] === undefined) {
+      if (this.selectedOption[this.valuePointer] === undefined && event != "") {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "The entered name does not exist. Please review your selection!",
           "message": "",

@@ -46,6 +46,10 @@ export class BudgetSpendComponent {
               title: 'Forecast Bulk View',
               toggled: true
             },
+            {
+              title: 'Forecast Excel Update',
+              toggled: false
+            },
             
           ]
         }
