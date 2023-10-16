@@ -97,7 +97,7 @@ export class ProjectBenefitsComponent implements OnInit {
           this.ValueCaptureForm.patchValue({
             valueCaptureStart: res.problemCapture.financialRealizationStartDate,
             primaryValueDriver: res.problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : 
-            this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname,
+            res.problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname : '',
             valueCommentary: res.problemCapture.valueCommentary
           })
           console.log(this.ValueCaptureForm.getRawValue())

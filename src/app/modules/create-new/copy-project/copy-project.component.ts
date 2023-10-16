@@ -81,12 +81,6 @@ export class CopyProjectComponent implements OnInit {
         ],
       },
       {
-        id: 'project-hub',
-        title: 'Project Hub',
-        type: 'basic',
-        link: '/project-hub'
-      },
-      {
         id: 'spot-documents',
         title: 'SPOT Supporting Documents',
         type: 'basic',

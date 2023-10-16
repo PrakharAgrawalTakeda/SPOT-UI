@@ -53,13 +53,13 @@ export class SpotlightIndicatorsService {
     }
     else if(type == "circle") {
       temp.icontype = 'mat_solid:circle'
-      if(indicator == 'Green'){
+      if(indicator == 'Green' || indicator == 'On Track'){
         temp.iconcolor = 'text-[#008000]'
       }
-      else if( indicator == 'Yellow'){
+      else if( indicator == 'Yellow' || indicator == 'At Risk'){
         temp.iconcolor = 'text-[#FFCC00]'
       }
-      else if( indicator == 'Red'){
+      else if( indicator == 'Red' || indicator == 'Will Not Meet'){
         temp.iconcolor = 'text-[#ff0000]'
       }
       else if( indicator == 'Purple'){
