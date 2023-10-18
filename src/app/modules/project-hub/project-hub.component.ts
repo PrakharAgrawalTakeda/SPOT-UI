@@ -192,9 +192,11 @@ export class ProjectHubComponent implements OnInit {
             }
             if (this.projectDetails.problemType == "Strategic Initiative / Program") {
                 this.projectHubNavigation = this.projecthubservice.menuDataStrat
+                this.projecthubservice.isStrategicIniative = true
             }
             else {
                 this.projectHubNavigation = this.projecthubservice.menuData
+                this.projecthubservice.isStrategicIniative = false
             }
             this.projecthubservice.hasChildren = res.hasChildren
             this.portfolioDetails = res.portfolioCeterData
@@ -209,15 +211,15 @@ export class ProjectHubComponent implements OnInit {
             mainNavComponent.refresh()
             this.apiService.getHubSettings(this.id).then((response: any) => {
                 if (this.projectDetails.problemType == "Strategic Initiative / Program") {
-                   //Budget
-                   this.projectHubNavigation[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
-                   //Documents
-                   this.projectHubNavigation[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
-                   //Teams
-                   this.projectHubNavigation[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
-                   if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
-                       this.projectHubNavigation[0].children[11].disabled = true
-                   }
+                    //Budget
+                    this.projectHubNavigation[0].children[4].disabled = response.some(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3') ? !response.find(x => x.lookUpId == '24f44e4b-60cc-4af8-9c42-21c83ca8a1e3').hubValue : false
+                    //Documents
+                    this.projectHubNavigation[0].children[6].disabled = response.some(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644') ? !response.find(x => x.lookUpId == '9500d3fa-3eff-4179-a5d3-94100e92b644').hubValue : false
+                    //Teams
+                    this.projectHubNavigation[0].children[5].disabled = response.some(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1') ? !response.find(x => x.lookUpId == '6937fd4c-db74-4412-8749-108b0d356ed1').hubValue : false
+                    if (this.projecthubservice.roleControllerControl.projectHub.hubSettings == false) {
+                        this.projectHubNavigation[0].children[11].disabled = true
+                    }
                 }
                 else {
                     //Budget
