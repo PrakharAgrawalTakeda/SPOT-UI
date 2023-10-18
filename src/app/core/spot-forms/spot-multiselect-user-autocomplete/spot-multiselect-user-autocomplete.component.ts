@@ -102,8 +102,34 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
     this.input.nativeElement.value = ''
   }
   onFocusout(event) {
+    var count = 0;
     setTimeout(() => {
-      if (this.selectedOption[this.valuePointer] === undefined && event != "") {
+      for(var i=0;i<this.selectedOption.length;i++){
+        if(this.selectedOption[i][this.valuePointer] === undefined){
+          count++;
+        }
+      }
+      if(this.selectedOption.length == 0 && this.selectedOption[this.valuePointer] === undefined && event != ""){
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "The entered name does not exist. Please review your selection!",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+      else if (count > 0 && event != "") {
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "The entered name does not exist. Please review your selection!",
           "message": "",

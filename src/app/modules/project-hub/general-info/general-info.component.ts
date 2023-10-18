@@ -273,7 +273,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
       problemType: response.projectData.problemType,
       topsGroup: response.topsData ? response.topsData.topsgroup : '',
       recordCreationDate: response.projectData.createdDate,
-      parentProgram: response.parentProject ? response.parentProject.problemTitle : '',
+      parentProgram: response.parentProject ? response.projectData.problemId + ' - ' + response.parentProject.problemTitle : '',
       submittedBy: response.projectData.problemOwnerName,
       projectManager: response.portfolioCenterData.pm,
       sponsor: response.sponsor?.teamMemberName,
