@@ -17,14 +17,14 @@
 :host{
     ::ng-deep .datatable-PB-80{
         ::ng-deep .datatable-body {
-    height: 60vh !important;
+    height: 90vh !important;
         }
 }
 }
 :host {
     ::ng-deep .datatable-CX-80 {
         ::ng-deep .datatable-body {
-            height: 30vh !important;
+            height: 20vh !important;
         }
     }
 }
@@ -81,7 +81,7 @@
 .headBgHeight {
     display: block !important;
     height: 28px !important;
-    margin: -.5em -.6em .4em -.6em !important;
+    margin: 0em -.0em .4em -.0em !important;
 }
 .projectNames {
     cursor: pointer !important;
@@ -93,4 +93,8 @@
 .projectNames:hover {
     text-decoration: underline;
     cursor: pointer !important;
+}
+
+.datatable{
+    margin-top: -1.5rem !important;
 }

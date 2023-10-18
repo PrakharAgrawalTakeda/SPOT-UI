@@ -21,6 +21,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
   @Input() hideRelations: boolean = false
   @Input() isStrategicInitiative: boolean = false
   @Input() confidentialProjects: 'None' | 'User' | 'Only' = 'User'
+  @Input() idRequired: boolean = false
 
   options: string[] = ['One', 'Two', 'Three'];
   resultSets: any[];
@@ -134,9 +135,17 @@ export class ProjectSingleDropdownComponent implements OnInit {
   }
   onProjectSelectenter(option: any) {
     console.log(option.option.value)
-    this.formgroup.patchValue({
-      projectsingle: option.option.value.problemTitle,
-      projectsingleid: option.option.value.problemUniqueId
-    })
+    if(this.idRequired){
+      this.formgroup.patchValue({
+        projectsingle: option.option.value.problemId + ' - ' + option.option.value.problemTitle,
+        projectsingleid: option.option.value.problemUniqueId
+      })
+    }
+    else{
+      this.formgroup.patchValue({
+        projectsingle: option.option.value.problemTitle,
+        projectsingleid: option.option.value.problemUniqueId
+      })
+    }
   }
 }
