@@ -72,8 +72,8 @@
                             </div>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Record Type" prop="problemType" [flexGrow]="3"
-                        [resizeable]="false" [sortable]="false" *ngIf="projecthubservice.isStrategicIniative">
+                    <ngx-datatable-column name="Record Type" prop="problemType" [flexGrow]="3" [resizeable]="false"
+                        [sortable]="false" *ngIf="projecthubservice.isStrategicIniative">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
@@ -190,6 +190,12 @@
                                         horizontal: true
                                         }
                                         }"></apx-chart>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwnerId" [flexGrow]="3" [resizeable]="false"
+                        [sortable]="false" *ngIf="projecthubservice.isStrategicIniative">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column [cellClass]="alignRight" [headerClass]="getTotalCapexHeaderClass"
