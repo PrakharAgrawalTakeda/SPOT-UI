@@ -39,6 +39,7 @@ export class ProjectHubComponent implements OnInit {
     activeaccount: any
     newmainnav: any
     projectHubNavigation: any
+    viewContent: boolean = false
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(private _fuseMediaWatcherService: FuseMediaWatcherService,
         private apiService: ProjectApiService,
@@ -237,6 +238,7 @@ export class ProjectHubComponent implements OnInit {
                 navComponent.refresh();
             })
             //
+            this.viewContent = true
         })
         this.apiService.getDataCompletenessPercent(this.id).then((res: any) => {
             this.dataQualityPercentage = res * 100;
