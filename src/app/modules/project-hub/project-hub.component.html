@@ -324,8 +324,7 @@
                             </mat-icon>
                         </div>
                         <div class="flex items-center gap-4">
-                            <p *ngIf="!projecthubservice.isStrategicIniative"> Risk/Issues</p>
-                            <p *ngIf="projecthubservice.isStrategicIniative"> Risk, Issues & Safety</p>
+                            <p> Risk/Issues</p>
                             <mat-icon
                                 svgIcon="{{(indicator.getIndicators(spotLightIndicator.riskIndicator, 'overall')).icontype}}"
                                 class="{{(indicator.getIndicators(spotLightIndicator.riskIndicator, 'overall')).iconcolor}} icon-size-12">
