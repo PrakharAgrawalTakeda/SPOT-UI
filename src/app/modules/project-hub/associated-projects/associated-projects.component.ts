@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {SpotlightIndicatorsService} from 'app/core/spotlight-indicators/spotlight-indicators.service';
-import {ProjectApiService} from '../common/project-api.service';
-import {ProjectHubService} from '../project-hub.service';
-import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
-import {MsalService} from '@azure/msal-angular';
-import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
+import { ProjectApiService } from '../common/project-api.service';
+import { ProjectHubService } from '../project-hub.service';
+import { FuseConfirmationConfig, FuseConfirmationService } from "../../../../@fuse/services/confirmation";
+import { MsalService } from '@azure/msal-angular';
+import { PortfolioApiService } from "../../portfolio-center/portfolio-api.service";
 
 @Component({
     selector: 'app-associated-projects',
@@ -15,7 +15,8 @@ import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service"
 })
 export class AssociatedProjectsComponent implements OnInit {
     single: any[];
-    localCurrency:any = [];
+    localCurrency: any = [];
+    filterCriteria: any = {};
     constructor(
         private apiService: ProjectApiService,
         private _Activatedroute: ActivatedRoute,
@@ -48,33 +49,37 @@ export class AssociatedProjectsComponent implements OnInit {
             this.localCurrency = currency
         });
         this.apiService.getProjectTree(this.id).then((res: any) => {
-            res.values.forEach(project => {
-                ids.push(project.problemUniqueId);
-                if (project.parentId == this.id) {
-                    children.push(project)
-                }
+            this.apiService.getfilterlist().then((filterCriteria: any) => {
+                this.filterCriteria = filterCriteria
+                res.values.forEach(project => {
+                    ids.push(project.problemUniqueId);
+                    if (project.parentId == this.id) {
+                        children.push(project)
+                    }
 
-                project.projectName =
-                    project.problemId + ' - ' + project.problemTitle;
-                project.projectCapitalOe =
-                    project.phase +
-                    ' - ' +
-                    (project.capitalPhaseAbbreviation
-                        ? project.capitalPhaseAbbreviation
-                        : 'NA') +
-                    ' - ' +
-                    (project.oePhaseAbbreviation
-                        ? project.oePhaseAbbreviation
-                        : 'NA');
-                project.nextMilestoneFinishDate = formatDate(new Date(project.nextMilestoneFinishDate));
-                project.projectPlannedFinishDate = formatDate(new Date(project.projectPlannedFinishDate));
-                project.treeStatus = "expanded";
-                projects.push(project);
+                    project.projectName =
+                        project.problemId + ' - ' + project.problemTitle;
+                    project.projectCapitalOe =
+                        project.phase +
+                        ' - ' +
+                        (project.capitalPhaseAbbreviation
+                            ? project.capitalPhaseAbbreviation
+                            : 'NA') +
+                        ' - ' +
+                        (project.oePhaseAbbreviation
+                            ? project.oePhaseAbbreviation
+                            : 'NA');
+                    project.nextMilestoneFinishDate = formatDate(new Date(project.nextMilestoneFinishDate));
+                    project.projectPlannedFinishDate = formatDate(new Date(project.projectPlannedFinishDate));
+                    project.portfolioOwnerId = this.getPortfolioName(project.portfolioOwnerId)
+                    project.treeStatus = "expanded";
+                    projects.push(project);
+                })
+                this.projecthubservice.removedIds = ids;
+                this.projecthubservice.projectChildren = children;
+                this.projecthubservice.projects = projects;
+                this.rows = this.projecthubservice.projects.filter(row => row.problemUniqueId !== row.parentId);
             })
-            this.projecthubservice.removedIds = ids;
-            this.projecthubservice.projectChildren = children;
-            this.projecthubservice.projects = projects;
-            this.rows = this.projecthubservice.projects.filter(row => row.problemUniqueId !== row.parentId);
         });
 
         this.viewContent = true;
@@ -106,7 +111,9 @@ export class AssociatedProjectsComponent implements OnInit {
     yAxisTickFormatting(value) {
         return percentTickFormatting(value);
     }
-
+    getPortfolioName(id:string){
+        return this.filterCriteria?.portfolioOwner?.find(x=>x.portfolioOwnerId == id).portfolioOwner
+    }
     getCellClass(): any {
         return 'first-column-datatable';
     }

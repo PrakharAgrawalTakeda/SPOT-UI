@@ -90,35 +90,17 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         }
         else if (this.callLocation == 'CreateNew') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
-          if (this.generalInfoForm.value.portfolioOwner == null) {
-            this.generalInfoForm.controls.localCurrency.enable()
-          }
-          else {
-            if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
-              this.generalInfoForm.controls.localCurrency.enable()
-            }
-            else {
-              this.generalInfoForm.controls.localCurrency.disable()
-            }
-          }
         }
         else if (this.callLocation == 'CreateNewSIP') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
-          this.generalInfoForm.controls.problemType.disable()
         }
         else if (history.state.callLocation == 'CopyProject') {
           this.formValue.emit(this.generalInfoForm.getRawValue())
-          if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
-            this.generalInfoForm.controls.localCurrency.enable()
-          }
-          else {
-            this.generalInfoForm.controls.localCurrency.disable()
-          }
         }
       }
     })
     this.generalInfoForm.controls.problemType.valueChanges.subscribe(res => {
-      if (this.viewContent) {
+      if (this.viewContent && this.callLocation == 'ProjectHub') {
         if (res != this.generalInfo.projectData.problemType) {
           if(res == "Strategic Initiative / Program"){
             if(this.generalInfo.hasCAPEX || this.generalInfo.hasCAPS || this.generalInfo.hasTOPS){
@@ -207,6 +189,14 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         var portfolio = []
         if (res != null) {
           portfolio.push(res)
+          if(this.callLocation == 'CreateNew' || this.callLocation == 'CopyProject'){
+            if (res.portfolioGroup == "Center Function") {
+              this.generalInfoForm.controls.localCurrency.enable()
+            }
+            else {
+              this.generalInfoForm.controls.localCurrency.disable()
+            }
+          }
           var currency = this.localCurrencyList.filter(x => x.localCurrencyId == res.localCurrencyId)
           this.generalInfoForm.patchValue({
             excecutionScope: res.isExecutionScope ? portfolio : [],
@@ -214,6 +204,9 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
             owningOrganization: res.defaultOwningOrganization,
             localCurrency: currency[0]?.localCurrencyAbbreviation
           })
+        }
+        else{
+          this.generalInfoForm.controls.localCurrency.enable()
         }
       }
     })
@@ -241,6 +234,20 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    if(this.callLocation == 'CreateNew'){
+      this.generalInfoForm.controls.localCurrency.enable()
+    }
+    else if(this.callLocation=='CopyProject'){
+      if (this.generalInfoForm.value.portfolioOwner.portfolioGroup == "Center Function") {
+        this.generalInfoForm.controls.localCurrency.enable()
+      }
+      else {
+        this.generalInfoForm.controls.localCurrency.disable()
+      }
+    }
+    else if(this.callLocation=='CreateNewSIP'){
+      this.generalInfoForm.controls.problemType.disable()
+    }
     if (this.callLocation == 'ProjectHub') {
       var api;
       if (this.subCallLocation == 'BusinessCase') {
@@ -256,7 +263,7 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         this.generalInfoForm.patchValue({
           problemTitle: res.projectData.problemTitle,
           problemType: res.projectData.problemType,
-          projectsingle: res.parentProject ? res.parentProject.problemTitle : '',
+          projectsingle: res.parentProject ? res.parentProject.problemId + ' - ' + res.parentProject.problemTitle : '',
           projectsingleid: res.parentProject ? res.parentProject.problemUniqueId : '',
           projectDescription: res.projectData.projectDescription,
           primaryProduct: res.primaryProduct ? res.primaryProduct : {},
