@@ -15,7 +15,7 @@ export const primaryRoles: Role[] = [
     {
         roleName: 'Project Manager',
         roleId: '9E695295-DC5F-44A8-95F1-A329CD475203'
-    }
+    },
     {
         roleName: 'Business Administrator',
         roleId: '0E83F6BE-79BE-426A-A316-F523FFAECC4F'
