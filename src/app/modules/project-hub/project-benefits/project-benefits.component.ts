@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
@@ -12,7 +12,8 @@ import { PortfolioApiService } from 'app/modules/portfolio-center/portfolio-api.
 @Component({
   selector: 'app-project-benefits',
   templateUrl: './project-benefits.component.html',
-  styleUrls: ['./project-benefits.component.scss']
+  styleUrls: ['./project-benefits.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ProjectBenefitsComponent implements OnInit {
    ValueCaptureForm = new FormGroup({
