@@ -277,7 +277,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
                         if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
 
-                            if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
+                            if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0","0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.roleMaster.securityGroupId) && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
                                 this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
                             }
                         }
@@ -492,7 +492,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                     }
                                                 }
                                                 if (!this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineproject) {
-                                                    if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0' && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
+                                                    if (["C9F323D4-EF97-4C2A-B748-11DB5B8589D0","0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.roleMaster.securityGroupId) && this.scheduleData.projectData.problemType == 'Standard Project / Program') {
                                                         this.projecthubservice.roleControllerControl.projectHub.projectBoard.baselineedit = true
                                                     }
                                                 }
