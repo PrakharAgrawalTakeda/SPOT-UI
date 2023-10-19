@@ -90,6 +90,10 @@ export class UserComponent implements OnInit, OnDestroy
         window.open('my-preference/settings', "_blank")
         
     }
+    routeAdmin():void{
+        window.open('admin', "_blank")
+        
+    }
 
     /**
      * Sign out
