@@ -3,6 +3,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormBuilder, FormGroup, FormCo
 import { debounceTime, filter, map, Observable, startWith, Subject, takeUntil, timeout } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { GlobalVariables } from 'app/shared/global-variables';
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'spot-multiselect-user-autocomplete',
   templateUrl: './spot-multiselect-user-autocomplete.component.html',
@@ -50,7 +51,8 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
   filteredOptions: any
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-  constructor(private fb: FormBuilder, private _httpClient: HttpClient) {
+  constructor(private fb: FormBuilder, private _httpClient: HttpClient,
+    public fuseAlert: FuseConfirmationService) {
     this.form.controls.control.valueChanges.subscribe((res: any) => {
       if (this.form.controls.control.value == "") {
         //this.onChange({})
@@ -98,6 +100,56 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
   changeInput() {
     this.form.controls.control.patchValue('')
     this.input.nativeElement.value = ''
+  }
+  onFocusout(event) {
+    var count = 0;
+    setTimeout(() => {
+      for(var i=0;i<this.selectedOption.length;i++){
+        if(this.selectedOption[i][this.valuePointer] === undefined){
+          count++;
+        }
+      }
+      if(this.selectedOption.length == 0 && this.selectedOption[this.valuePointer] === undefined && event != ""){
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "The entered name does not exist. Please review your selection!",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+      else if (count > 0 && event != "") {
+        var comfirmConfig: FuseConfirmationConfig = {
+          "title": "The entered name does not exist. Please review your selection!",
+          "message": "",
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warn"
+          },
+          "actions": {
+            "confirm": {
+              "show": true,
+              "label": "Okay",
+              "color": "warn"
+            },
+          },
+          "dismissible": true
+        }
+        const alert = this.fuseAlert.open(comfirmConfig)
+      }
+    }, 3000);
   }
   ngOnInit() {
   }

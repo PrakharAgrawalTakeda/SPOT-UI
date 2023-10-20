@@ -69,9 +69,11 @@
         class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass">
         <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="30" [frozenLeft]="true">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <mat-icon svgIcon="{{(indicator.getIndicators(getLookup(row.statusId), 'circle')).icontype}}"
-                    class="{{(indicator.getIndicators(getLookup(row.statusId), 'circle')).iconcolor}}" style="height: 110px !important;">
-                </mat-icon>
+                <div style="height: 92px !important;">
+                    <mat-icon svgIcon="{{(indicator.getIndicators(getLookup(row.statusId), 'circle')).icontype}}"
+                        class="{{(indicator.getIndicators(getLookup(row.statusId), 'circle')).iconcolor}}">
+                    </mat-icon>
+                </div>
                 <!-- <mat-icon *ngIf="row.statusId == '' || row.statusId == null" svgIcon="{{(indicator.getIndicators('', 'circle')).icontype}}"
                     class="{{(indicator.getIndicators('', 'circle')).iconcolor}}" style="height: 110px !important;">
                 </mat-icon> -->

@@ -18,7 +18,7 @@
                 </div>
             <div *ngIf="projectHubService.roleControllerControl.generalInfo.porfolioOwner && viewElementChecker('isArchived')"
                 class="flex justify-between items-center mt-3 mb-6">
-                <div class="flex justify-start gap-1 items-center font-medium">Archived?
+                <div class="flex justify-start gap-1 items-center font-medium">Archived
                 </div>
                 <div>
                     <mat-slide-toggle formControlName="isArchived"></mat-slide-toggle>
@@ -54,7 +54,7 @@
                 [placeholder]="'Date Approved'">
             </spot-input-date>
             <app-project-single-dropdown *ngIf="viewElementChecker('parentProject')" class="w-full"
-                [formgroup]="generalInfoForm" [label]="'Parent Program'" [showHint]="true" [confidentialProjects]="generalInfoForm.controls.isConfidential.value ? 'Only': 'None'" [hideRelations] = "callLocation == 'ProjectHub'" [isStrategicInitiative] = "generalInfoForm.controls.problemType.value == 'Strategic Initiative / Program'"
+                [formgroup]="generalInfoForm" [idRequired]="true" [label]="'Parent Program'" [showHint]="true" [confidentialProjects]="generalInfoForm.controls.isConfidential.value ? 'Only': 'None'" [hideRelations] = "callLocation == 'ProjectHub'" [isStrategicInitiative] = "generalInfoForm.controls.problemType.value == 'Strategic Initiative / Program'"
                 [hint]="'Select a Parent Program if this project is associated or part of an overall program (Program Record must exist within SPOT already, a project can only have 1 parent but can have multiple children)'">
             </app-project-single-dropdown>
             <div *ngIf="viewElementChecker('approvedDate')">
