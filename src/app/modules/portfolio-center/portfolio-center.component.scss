@@ -174,17 +174,16 @@ li{
 .fuse-drawer-large {
     min-width: 95vw !important;
     max-width: 95vw !important;
-    min-height: 144vh !important;
-    max-height: 144vh !important;
+    // min-height: 120vh !important;
+    // max-height: 120vh !important;
 }
 fuse-drawer {
     min-width: 50vw;
     max-width: 50vw;
-    min-height: 100vh !important;
-    max-height: 100vh !important;
+    // min-height: 120vh !important;
+    // max-height: 120vh !important;
 }
 
 fuse-drawer .fuse-drawer-content {
     display: block !important;
-    overflow: hidden !important;
 }
