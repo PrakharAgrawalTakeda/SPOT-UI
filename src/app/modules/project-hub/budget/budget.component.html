@@ -7,7 +7,7 @@
                     <div class="flex items-start justify-between">
                         <div style="padding-right: 5px;" >
                                 <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                        (click)="projectHubService.toggleDrawerOpen('BudgetFxRates', '', budgetPageInfo, id)">
+                                        (click)="projectHubService.toggleDrawerOpen('BudgetFxRates', '', budgetPageInfo, id, false, true)">
                                     <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
                                 </button>
                             <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"

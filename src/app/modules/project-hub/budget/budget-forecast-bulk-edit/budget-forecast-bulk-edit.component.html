@@ -673,6 +673,13 @@
                 <ngx-datatable-column name="Historical" prop="historical" [flexGrow]="0.75" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">Historical</div></span>
+                            </span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template >
                         <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
                             <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>
@@ -732,8 +739,8 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="y2" type="number"  min="0"  (input)="recalculateTotalCapex()" class="no-spinners" (paste)="onPaste($event, rowIndex,'y2')"
-                                       placeholder="0" pattern="\d*" />
+                                <app-spot-input-forecast formControlName="y3" [decimalCount]="0" [autoAddDecimal]="false"
+                                                         (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y2')"></app-spot-input-forecast>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -755,8 +762,8 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="y3" type="number"  min="0" (input)="recalculateTotalCapex()" class="no-spinners" (paste)="onPaste($event, rowIndex,'y3')"
-                                       placeholder="0" pattern="\d*" />
+                                <app-spot-input-forecast formControlName="y3" [decimalCount]="0" [autoAddDecimal]="false"
+                                                         (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y3')"></app-spot-input-forecast>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -779,8 +786,8 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="y4" type="number"  min="0" (input)="recalculateTotalCapex()" class="no-spinners" (paste)="onPaste($event, rowIndex,'y4')"
-                                       placeholder="0" pattern="\d*" />
+                                <app-spot-input-forecast formControlName="y4" [decimalCount]="0" [autoAddDecimal]="false"
+                                                         (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y4')"></app-spot-input-forecast>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -802,16 +809,21 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full  px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="y5" type="number"  min="0" (input)="recalculateTotalCapex()" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                                <app-spot-input-forecast formControlName="y5" [decimalCount]="0" [autoAddDecimal]="false"
+                                                         (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y5')"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Total Capex" prop="cumulativeTotal" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">Total Capex</div></span>
+                            </span>
+                        </ng-container>
+                    </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
                             <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>
