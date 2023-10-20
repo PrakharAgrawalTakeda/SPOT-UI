@@ -7,9 +7,9 @@
     </div>
 </div>
 <div class="space-y-4" >
-    <div class="h-[85vh] overflow-auto">
+    <div class="h-[85vh] overflow-auto space-y-3">
         <div class="grid justify-items-stretch m-2">
-            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-secondary justify-self-center">{{headerLabel}}</div>
+            <div class=" text-xl font-medium tracking-tight leading-6 truncate text-secondary justify-self-left">{{headerLabel}}</div>
         </div>
         <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-2 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
             <div >
@@ -65,7 +65,10 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-hidden w-[94vw] h-auto pl-3">
+        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
+            <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">{{y0Label}} (Current Fiscal Year)</div>
+            </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="forecasts">
@@ -96,10 +99,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && aprEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateAnnualTotal()" (paste)="onPaste($event, rowIndex,'apr')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'apr' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="apr" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'apr')"
+                                                     [isBlue]="firstPreliminary == 'apr' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -122,7 +124,7 @@
                               *ngIf="fTableEditStack.includes(rowIndex) && mayEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'may')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'may' && row.active=='Preliminary'}" />
+                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'may' && row.active=='Preliminary'}" [ngClass]="'text-right'"/>
                             </mat-form-field>
                         </form>
                     </ng-template>
@@ -143,10 +145,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && junEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'jun')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'jun' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="jun" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'jun')"
+                                                     [isBlue]="firstPreliminary == 'jun' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -166,10 +167,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && julEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'jul')" class="no-spinners"
-                                       placeholder="0" pattern="\d*"  [ngClass]="{'blue-text': firstPreliminary === 'aug' && row.active === 'Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="jul" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'jul')"
+                                                     [isBlue]="firstPreliminary == 'jul' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -189,10 +189,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && augEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateAnnualTotal()" (paste)="onPaste($event, rowIndex,'aug')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="firstPreliminary === 'aug' ? 'blue' : ''"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="aug" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'aug')"
+                                                     [isBlue]="firstPreliminary == 'aug' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -210,12 +209,11 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
-                        <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4"
+                        <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4 px-1"
                               *ngIf="fTableEditStack.includes(rowIndex) && sepEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'sep')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'sep' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                                <app-spot-input-forecast formControlName="sep" [decimalCount]="0" [autoAddDecimal]="false"
+                                                         (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'sep')"
+                                                         [isBlue]="firstPreliminary == 'sep' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -235,10 +233,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && octEditable">
-                            <mat-form-field class="w-full  px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'oct')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'oct' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="oct" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'oct')"
+                                                     [isBlue]="firstPreliminary == 'oct' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -258,10 +255,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && novEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'nov')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'nov' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="nov" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'nov')"
+                                                     [isBlue]="firstPreliminary == 'nov' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -281,10 +277,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && decEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'dec')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'dec' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'dec')"
+                                                     [isBlue]="firstPreliminary == 'dec' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -304,10 +299,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && janEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'jan')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'jan' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'jan')"
+                                                     [isBlue]="firstPreliminary == 'jan' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -327,10 +321,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && febEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'feb')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'feb' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="feb" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'feb')"
+                                                     [isBlue]="firstPreliminary == 'feb' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -350,10 +343,9 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && marEditable">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateAnnualTotal()"  class="no-spinners"
-                                       placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'mar' && row.active=='Preliminary'}"/>
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="mar" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'mar')"
+                                                     [isBlue]="firstPreliminary == 'mar' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -381,7 +373,7 @@
 
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Y1</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">{{y1Label}} (Next Fiscal Year)</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -409,10 +401,9 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="apr" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'apr')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="apr" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'apr')"
+                                                     [isBlue]="firstPreliminary == 'apr' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -431,10 +422,9 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'may')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="may" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'may')"
+                                                     [isBlue]="firstPreliminary == 'may' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -453,10 +443,9 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="jun" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jun')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="jun" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'jun')"
+                                                     [isBlue]="firstPreliminary == 'jun' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -475,10 +464,9 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="jul" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jul')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="jul" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'jul')"
+                                                     [isBlue]="firstPreliminary == 'jul' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -497,10 +485,9 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="aug" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'aug')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="aug" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'aug')"
+                                                     [isBlue]="firstPreliminary == 'aug' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -519,10 +506,9 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="sep" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'sep')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="sep" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'sep')"
+                                                     [isBlue]="firstPreliminary == 'sep' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -541,14 +527,13 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="oct" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'oct')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="oct" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'oct')"
+                                                     [isBlue]="firstPreliminary == 'oct' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Nov" prop="nov" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                <ngx-datatable-column name="Nov" prop="nov" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
@@ -563,14 +548,13 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="nov" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'nov')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="nov" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'nov')"
+                                                     [isBlue]="firstPreliminary == 'nov' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Dec" prop="dec" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                <ngx-datatable-column name="Dec" prop="dec" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
@@ -585,14 +569,13 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="dec" type="number"  min="0"  (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'dec')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'dec')"
+                                                     [isBlue]="firstPreliminary == 'dec' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Jan" prop="jan" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                <ngx-datatable-column name="Jan" prop="jan" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
@@ -607,14 +590,13 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="jan" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'jan')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'jan')"
+                                                     [isBlue]="firstPreliminary == 'jan' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Feb" prop="feb" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                <ngx-datatable-column name="Feb" prop="feb" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
@@ -629,14 +611,13 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
-                            <mat-form-field class="w-full" [floatLabel]="'always'">
-                                <input matInput formControlName="feb" type="number"  min="0" (input)="recalculateY1()" (paste)="onPasteY1($event, rowIndex,'feb')" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="feb" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'feb')"
+                                                     [isBlue]="firstPreliminary == 'feb' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Mar" prop="mar" [flexGrow]="0.75" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
+                <ngx-datatable-column name="Mar" prop="mar" [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
@@ -651,10 +632,9 @@
                         </a>
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <input matInput formControlName="mar" type="number"  min="0"  (input)="recalculateY1()" class="no-spinners"
-                                       placeholder="0" pattern="\d*" />
-                            </mat-form-field>
+                            <app-spot-input-forecast formControlName="mar" [decimalCount]="0" [autoAddDecimal]="false"
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'mar')"
+                                                     [isBlue]="firstPreliminary == 'mar' && row.active=='Preliminary'"></app-spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -677,7 +657,7 @@
         </div>
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4" >
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Yearly</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Yearly Totals</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
