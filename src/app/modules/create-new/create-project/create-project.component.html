@@ -34,7 +34,7 @@
                                     <ng-template matStepLabel>Details</ng-template>
                                     <h2 style="color: rgba(76,155,207);font-size: 20px;"><b>Project Details</b></h2>
                                     <app-general-info-single-edit *ngIf="SIP" [callLocation]="'CreateNewSIP'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
-                                        [viewElements]="['parentProject']"></app-general-info-single-edit>
+                                        [viewElements]="['isConfidential','parentProject']"></app-general-info-single-edit>
                                     <app-general-info-single-edit *ngIf="!SIP" [callLocation]="'CreateNew'" [viewType]="'Form'" (formValue)="captureValue(1,$event)"
                                         [viewElements]="['isConfidential','enviornmentalPortfolio', 'isCapsProject', 'parentProject']"
                                         [portfolio]="envPortfolio"></app-general-info-single-edit>

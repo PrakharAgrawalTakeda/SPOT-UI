@@ -13,7 +13,7 @@
                 </button>
             </div>
         </div>
-        <div *ngFor="let item of  navItem.children" class="flex flex-col flex-auto w-full min-w-0 scroll-fixed"
+        <div *ngFor="let item of  navItem.children" class="flex flex-col flex-auto w-full min-w-0"
             [ngStyle]="{ 'position' : PortfolioCenterService.drawerOpenedright ? 'fixed' : 'relative'}">
             <app-forecast *ngIf="item.title == 'Forecast Bulk View' && item.toggled == true"></app-forecast>
             <app-project-performance *ngIf="item.title == 'Project Performance' && item.toggled == true"></app-project-performance>

@@ -8,7 +8,7 @@
 }
 :host {
     ::ng-deep .ngx-datatable .datatable-PB-80 .datatable-body .datatable-scroll {
-        height: 40vh !important;
+        height: 30vh !important;
         width: 100vw !important;
         overflow-x: scroll !important;
         overflow-y: scroll !important;
@@ -17,7 +17,7 @@
 :host{
     ::ng-deep .datatable-PB-80{
         ::ng-deep .datatable-body {
-    height: 90vh !important;
+    height: 40vh !important;
         }
 }
 }
@@ -55,14 +55,14 @@
 :host{
     ::ng-deep .datatable-row-left {
     background: white !important;
-    height: 59px !important;
+    height: 39px !important;
 }
 }
 
 
 :host{
     ::ng-deep .datatable-row-center {
-    height: 60px !important;
+    height: 37px !important;
 }
 }
 

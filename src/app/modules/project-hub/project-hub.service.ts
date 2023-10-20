@@ -428,7 +428,7 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
-          title: 'Strategic initiative Board',
+          title: 'Strategic Initiative Board',
           type: 'basic',
           icon: 'heroicons_outline:clipboard-list',
           link: 'project-board'
