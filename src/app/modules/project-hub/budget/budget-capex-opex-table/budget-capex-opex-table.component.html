@@ -1,4 +1,4 @@
-<div class="pb-6 ">
+<div >
     <div *ngIf="mode!='Y1'" class="pb-3 pt-0 flex items-center justify-between">
         <div *ngIf="mode=='Capex'" ></div>
         <div *ngIf="mode=='Opex'" class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Non-FTE OPEX</div>
@@ -21,11 +21,6 @@
                     <p>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Currency" prop="localCurrencyAbbreviation" [flexGrow]="2.5"  [sortable]="false" [resizeable]="false">
-                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p>{{value}}</p>
-                </ng-template>
-            </ngx-datatable-column>
             <ngx-datatable-column name="Historical" prop="historical" [flexGrow]="2"  [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'" >
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>
@@ -37,7 +32,7 @@
                     <p [ngClass]="getRowStyle('apr',row)">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="May" prop="may" [flexGrow]="1.25" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="May" prop="may" [flexGrow]="1" [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p [ngClass]="getRowStyle('may',row)">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                 </ng-template>
@@ -92,7 +87,7 @@
                     <p [ngClass]="getRowStyle('mar',row)">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column  prop="annualTotal" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
+            <ngx-datatable-column  prop="annualTotal" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p  [ngClass]="'closed'">{{value | number : fractionSize}}</p>
                 </ng-template>
@@ -100,7 +95,7 @@
                     {{ y0Label }}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column  prop="y1" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
+            <ngx-datatable-column  prop="y1" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p  [ngClass]="{'closed': row.isopen==false}">{{value | number : fractionSize}}</p>
                 </ng-template>
@@ -108,7 +103,7 @@
                     {{ y1Label }}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column  prop="y2" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
+            <ngx-datatable-column  prop="y2" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p  [ngClass]="{'closed': row.isopen==false}">{{value | number : fractionSize}}</p>
                 </ng-template>
@@ -116,7 +111,7 @@
                     {{ y2Label }}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="y3" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
+            <ngx-datatable-column prop="y3" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p [ngClass]="{'closed': row.isopen==false}">{{value | number : fractionSize}}</p>
                 </ng-template>
@@ -124,7 +119,7 @@
                     {{ y3Label }}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="y4" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
+            <ngx-datatable-column prop="y4" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p [ngClass]="{'closed': row.isopen==false}">{{value | number : fractionSize}}</p>
                 </ng-template>
@@ -132,7 +127,7 @@
                     {{ y4Label }}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column prop="y5" [flexGrow]="2" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
+            <ngx-datatable-column prop="y5" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p [ngClass]="{'closed': row.isopen==false}">{{value | number : fractionSize}}</p>
                 </ng-template>

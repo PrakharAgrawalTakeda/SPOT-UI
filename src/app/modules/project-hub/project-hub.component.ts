@@ -354,7 +354,7 @@ export class ProjectHubComponent implements OnInit {
     }
     openPhaseStateDrawer() {
         if (this.phaseStatePermission) {
-            this.projecthubservice.toggleDrawerOpen('PhaseState', '', [], '', false, true);
+            this.projecthubservice.toggleDrawerOpen('PhaseState', '', [], '', true, false);
         }
     }
     isCursorPointer() {

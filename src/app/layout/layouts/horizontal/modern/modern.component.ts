@@ -7,6 +7,7 @@ import { Navigation } from 'app/core/navigation/navigation.types';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
 import { MyPreferenceService } from 'app/modules/my-preference/my-preference.service';
+import { AdminService } from 'app/modules/admin/admin.service';
 
 @Component({
     selector     : 'modern-layout',
@@ -29,7 +30,8 @@ export class ModernLayoutComponent implements OnInit, OnDestroy
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
         public projecthubservice: ProjectHubService,
-        public myPreferenceService: MyPreferenceService
+        public myPreferenceService: MyPreferenceService,
+        public adminService: AdminService
     )
     {
     }

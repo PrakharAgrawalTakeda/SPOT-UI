@@ -1,8 +1,8 @@
-<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0">
-            <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;height: 125vh;">
+<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 w-full min-w-0 overflow-hidden">
+            <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl" style="margin-right: 10px; margin-left: 10px;">
                 <div class="flex flex-col flex-auto  overflow-hidden p-6 w-full">
                     <div>
-                        <div class="pb-3 pt-0 flex items-center justify-between">
+                        <div class="pb-3 pt-0 flex items-center justify-between overflow-hidden">
                             <form class="w-full grid-cols-4 grid" [formGroup]="ForecastForm">
                                 <spot-singleselect-autocomplete class="w-full custom" formControlName="ForecastType"
                                     name="ForecastType" [label]="'Forecast Type'" [placeholder]="'Forecast Type'"
@@ -44,7 +44,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 37px;position: fixed;left: 9px;">{{column.name}}</span>
+                                                <span style="top: 10px;position: fixed;left: 9px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -57,7 +57,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 37px;position: fixed;left: 103px;">{{column.name}}</span>
+                                                <span style="top: 10px;position: fixed;left: 103px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -71,7 +71,7 @@
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
                                                 <span
-                                                    style="top: 37px;position: fixed;left: 193px;">{{column.name}}</span>
+                                                    style="top: 10px;position: fixed;left: 193px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -81,6 +81,14 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Historical" prop="historical" [width]="120"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span
+                                                    style="top: 10px;position: fixed;left: 36px;">{{column.name}}</span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
                                         <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
@@ -91,7 +99,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -105,7 +113,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -119,7 +127,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -133,7 +141,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -147,7 +155,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -161,7 +169,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -175,7 +183,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -189,7 +197,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -203,7 +211,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -217,7 +225,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -231,7 +239,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -245,7 +253,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -259,7 +267,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -273,7 +281,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -287,7 +295,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -301,7 +309,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -315,7 +323,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -329,7 +337,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -343,7 +351,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -357,7 +365,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -371,7 +379,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -385,7 +393,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -399,7 +407,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -413,7 +421,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -427,7 +435,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -441,7 +449,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -459,7 +467,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -473,7 +481,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -487,7 +495,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -501,7 +509,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -512,6 +520,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Total CAPEX" prop="cumulativeTotal" [width]="120"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 10px;">{{column.name}}</div></span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <div style="background-color: #AE8ED9 !important; height: 60px;">
                                             <p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-4'}}</p>
@@ -531,7 +546,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 37px;position: fixed;left: 8px;">{{column.name}}</span>
+                                                <span style="top: 10px;position: fixed;left: 8px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -544,7 +559,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 37px;position: fixed;left: 132px;">{{column.name}}</span>
+                                                <span style="top: 10px;position: fixed;left: 132px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -557,7 +572,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 37px;position: fixed;left: 257px;">{{column.name}}</span>
+                                                <span style="top: 10px;position: fixed;left: 257px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -565,12 +580,12 @@
                                         <p (click)="OpenProject(value)" class="projectNames">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="PM" prop="pm" [width]="160" [sortable]="false" [resizeable]="false"
+                                <ngx-datatable-column name="PM" prop="pm" [width]="200" [sortable]="false" [resizeable]="false"
                                     [frozenLeft]="true">
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 37px;position: fixed;left: 515px;">{{column.name}}</span>
+                                                <span style="top: 10px;position: fixed;left: 515px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -583,7 +598,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 37px;position: fixed;left: 673px;">{{column.name}}</span>
+                                                <span style="top: 10px;position: fixed;left: 673px;">{{column.name}}</span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -592,6 +607,14 @@
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Historical" prop="historical" [width]="120" [sortable]="false" [resizeable]="false">
+                                <ng-template let-column="column" ngx-datatable-header-template>
+                                    <ng-container>
+                                        <span class="datatable-header-cell-wrapper">
+                                            <span
+                                                style="top: 10px;position: fixed;left: 36px;">{{column.name}}</span>
+                                        </span>
+                                    </ng-container>
+                                </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
                                         <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
@@ -601,7 +624,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -614,7 +637,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -627,7 +650,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -640,7 +663,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -653,7 +676,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -666,7 +689,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -679,7 +702,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -692,7 +715,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -705,7 +728,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -718,7 +741,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -731,7 +754,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -744,7 +767,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -758,7 +781,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -775,7 +798,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -788,7 +811,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -801,7 +824,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -814,7 +837,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -827,7 +850,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -840,7 +863,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -853,7 +876,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -866,7 +889,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -879,7 +902,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -892,7 +915,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -905,7 +928,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -918,7 +941,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -932,7 +955,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -949,7 +972,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -962,7 +985,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -975,7 +998,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -988,7 +1011,7 @@
                                     <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
                                             <span class="datatable-header-cell-wrapper">
-                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{column.name}}</div></span>
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 33px;">{{column.name}}</div></span>
                                             </span>
                                         </ng-container>
                                     </ng-template>
@@ -999,22 +1022,53 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Total CAPEX" prop="cumulativeTotal" [width]="120" [sortable]="false"
                                     [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1" style="position: relative; left: 10px;">{{column.name}}</div></span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value | number:'1.0-4'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="120" [sortable]="false" [resizeable]="false">
+                                <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="200" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span
+                                                    style="top: 8px;position: fixed;left: 3903px;">{{column.name}}</span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Period Submitted Date/Time" prop="lastSubmitted" [width]="140" [sortable]="false" [resizeable]="false">
+                                <ngx-datatable-column name="Period Submitted Date/Time" prop="lastSubmitted" [width]="250" [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span
+                                                    style="top: 8px;position: fixed;left: 4076px;">{{column.name}}</span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value| date:'dd-MMM-yyyy'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
-                                <ngx-datatable-column name="Period Submitted Reference" prop="active" [width]="140" [sortable]="false"
+                                <ngx-datatable-column name="Period Submitted Reference" prop="active" [width]="250" [sortable]="false"
                                     [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <span class="datatable-header-cell-wrapper">
+                                                <span
+                                                    style="top: 8px;position: fixed;left: 4315px;">{{column.name}}</span>
+                                            </span>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p *ngIf="row.submittedByName">{{value}}</p>
                                         <p *ngIf="!row.submittedByName">&nbsp;</p>
@@ -1024,4 +1078,5 @@
                         </div>
                 </div>
             </div>
+        </div>
         </div>

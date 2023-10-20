@@ -31,7 +31,7 @@ export class ProjectHubService {
   }
   successSave = new BehaviorSubject<boolean>(false)
   isBulkEdit: boolean = false
-  fuseDrawerLarge: boolean = false
+  fuseDrawerSmall: boolean = false
   roleControllerControl: RoleController = new RoleController;
   removedIds: any[];
   projectChildren: any[];
@@ -428,7 +428,7 @@ export class ProjectHubService {
       type: 'group',
       children: [
         {
-          title: 'Strategic initiative Board',
+          title: 'Strategic Initiative Board',
           type: 'basic',
           icon: 'heroicons_outline:clipboard-list',
           link: 'project-board'
@@ -775,7 +775,7 @@ export class ProjectHubService {
   getroles() {
     this.roleControllerControl = this.roleController.getRolesbyProjectData(this.projectid)
   }
-  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false, fuseDrawerLarge: boolean = false): void {
+  toggleDrawerOpen(itemtype: string, itemid: string, all: any, pid: string, isBulkEdit: boolean = false, fuseDrawerSmall: boolean = false): void {
     console.log(itemtype)
     if (this.drawerOpenedright == true && this.isFormChanged == true) {
       const alertopener = this.fusealert.open(this.alert)
@@ -799,7 +799,7 @@ export class ProjectHubService {
       this.drawerOpenedright = !this.drawerOpenedright
     }
     this.isBulkEdit = isBulkEdit
-    this.fuseDrawerLarge = fuseDrawerLarge
+    this.fuseDrawerSmall = fuseDrawerSmall
   }
   drawerOpenedChanged(event: any): void {
 

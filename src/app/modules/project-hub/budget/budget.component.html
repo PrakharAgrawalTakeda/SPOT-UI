@@ -2,12 +2,12 @@
     <div class="space-y-6">
         <form [formGroup]="budgetForm"  class="space-y-6">
             <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                <div class=" pb-3 pt-0 flex items-center justify-between">
+                <div class=" pb-4 pt-0 flex items-center justify-between">
                     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget</div>
                     <div class="flex items-start justify-between">
                         <div style="padding-right: 5px;" >
                                 <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                        (click)="projectHubService.toggleDrawerOpen('BudgetFxRates', '', budgetPageInfo, id)">
+                                        (click)="projectHubService.toggleDrawerOpen('BudgetFxRates', '', budgetPageInfo, id, false, true)">
                                     <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
                                 </button>
                             <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                <div class="pb-3 pt-0 flex items-center justify-between">
+                <div class="pb-4 pt-0 flex items-center justify-between">
                     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Required for CAPEX Project</div>
                     <div class="flex items-start justify-between">
                         <div style="padding-right: 5px;" *ngIf ="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit">
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-                <div class=" pb-3 pt-0 flex items-center justify-between">
+                <div class=" pb-4 pt-0 flex items-center justify-between">
                     <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">OPEX</div>
                     <div class="flex items-start justify-between">
                         <div style="padding-right: 5px;">
@@ -100,7 +100,7 @@
                     <spot-input class="w-full" formControlName="projectFundingStatus" [label]="'Project Funding Status'">
                     </spot-input>
                     <spot-input class="w-full" formControlName="totalApprovedCapex" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
-                                [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'" [showHint]="true"
+                                [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'"
                                 [hint]="'Enter the total amount or CAPEX approved at the time of Definitive Funding approval. If only Developmental Funding was approved, then enter the total CAPEX estimate endorsed at the time Developmental Funding was approved (adjust later to match total Definitive Funding approved)'">
                     </spot-input>
                     <spot-input class="w-full"  [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" formControlName="totalApprovedOpex" [label]="'Total Approved OPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'">
@@ -109,7 +109,7 @@
                 <app-budget-funding-information-table [editable]="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit" [budgetInfo]="budgetPageInfo" [addButtonShow]="showAddNewButton"></app-budget-funding-information-table>
             </div>
             <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
-            <div class=" pb-3 pt-0 flex items-center justify-between">
+            <div class=" pb-4 pt-0 flex items-center justify-between">
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Budget Commentary</div>
                 <div class="flex items-start justify-between">
                     <div style="padding-right: 5px;">
@@ -130,9 +130,9 @@
             <div [formGroup]="budgetForecastForm" >
                 <h1 *ngIf="capexField; then capexTrueBlock else capexFalseBlock"></h1>
                 <ng-template #capexTrueBlock>
-                    <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden">
+                    <div class="flex flex-col flex-auto bg-card p-6 pt-4 shadow rounded-2xl overflow-hidden space-y-4">
                         <div class="grid grid-cols-5 gap-x-6 gap-y-0 w-full">
-                            <div  class="col-span-5">
+                            <div class="col-span-5">
                                 <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full">
                                     <div><strong>Reference</strong></div>
                                     <div><strong>Period</strong></div>
@@ -140,7 +140,7 @@
                                     <div><strong>Submited By</strong></div>
                                     <div></div>
                                 </div>
-                                <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full">
+                                <div class="grid grid-cols-4 gap-x-6 gap-y-0 w-full -mt-4">
                                     <spot-input class="w-full" formControlName="referenceCurrent"  showLabel="false" >
                                     </spot-input>
                                     <spot-input class="w-full" formControlName="periodCurrent" showLabel="false">
@@ -150,9 +150,7 @@
                                     <spot-input class="w-full" formControlName="submittedByCurrent" showLabel="false">
                                     </spot-input>
                                 </div>
-                                <div *ngIf="!preliminaryExists" class="mb-8">
-                                </div>
-                                <div *ngIf="preliminaryExists" class="grid grid-cols-4 gap-x-6 gap-y-0 w-full mb-8">
+                                <div *ngIf="preliminaryExists" class="grid grid-cols-4 gap-x-6 gap-y-0 w-full -mt-4">
                                     <spot-input class="w-full" formControlName="referencePreliminary"  showLabel="false" >
                                     </spot-input>
                                     <spot-input class="w-full" formControlName="periodPreliminary" showLabel="false">
@@ -164,11 +162,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full mb-8">
+                        <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
                             <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">CAPEX</div>
-                            <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-secondary">{{headerLabel}}
-                            </div>
                             <div  class="flex justify-end" >
                                 <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                                         (click)="lbePeriodCalendar()">
@@ -186,12 +181,13 @@
 <!--                                </button>-->
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-x-6 gap-y-0 w-full">
+                        <div class="text-l font-medium tracking-tight leading-6 truncate text-secondary">{{headerLabel}}</div>
+                        <div class="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
                             <div >
                                 <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': tfpColor}">
-                                        {{ budgetForecastForm.controls.tfpPercentage.value }}  %
+                                        {{ budgetForecastForm.controls.tfpPercentage.value | number : fractionSize  }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': tfpColor}">
                                         <div class="mr-4">
@@ -204,7 +200,7 @@
                                 <mat-label class="flex"><strong>Annual Forecast Performance AFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': afpColor}">
-                                        {{ budgetForecastForm.controls.afpPercentage.value }}  %
+                                        {{ budgetForecastForm.controls.afpPercentage.value | number : fractionSize  }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': afpColor}">
                                         <div class="mr-4">
@@ -217,7 +213,7 @@
                                 <mat-label class="flex"><strong>Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': ydtpColor}">
-                                        {{ budgetForecastForm.controls.ytdpPercentage.value }}  %
+                                        {{ budgetForecastForm.controls.ytdpPercentage.value | number : fractionSize }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': ydtpColor}">
                                         <div class="mr-4">
@@ -230,7 +226,7 @@
                                 <mat-label class="flex"><strong>Month To Date Performance MTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': mdtpColor}">
-                                        {{ budgetForecastForm.controls.mtdpPercentage.value }}  %
+                                        {{ budgetForecastForm.controls.mtdpPercentage.value | number : fractionSize }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': mdtpColor}">
                                         <div class="mr-4">
@@ -241,10 +237,15 @@
                             </div>
                         </div>
                         <app-budget-capex-opex-table [mode]="'Capex'" [inputData]="budgetForecasts"></app-budget-capex-opex-table>
-<!--                        <app-budget-capex-opex-table [mode]="'Y1'" [inputData]="budgetForecastsY1Capex"></app-budget-capex-opex-table>-->
                         <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
-                            <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [callLocation]="'View'">
-                            </spot-input>
+                            <div>
+                                <div class="grid justify-items-stretch ">
+                                    <label class="justify-self-end"><strong>Committed Spend</strong></label>
+                                </div>
+                                <mat-form-field class=" grid w-full">
+                                    <input matInput formControlName="committedSpend" [ngClass]="'text-right'">
+                                </mat-form-field>
+                            </div>
                             <mat-form-field  class="flex w-full" [floatLabel]="'always'">
                                 <mat-label class="flex"><strong>AFP Deviation Code</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full">

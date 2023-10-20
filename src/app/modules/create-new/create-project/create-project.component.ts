@@ -806,7 +806,7 @@ export class CreateProjectComponent implements OnInit {
 
 
   checkPermission() {
-    if (this.role.roleMaster.securityGroupId != "C9F323D4-EF97-4C2A-B748-11DB5B8589D0") {
+    if (!["C9F323D4-EF97-4C2A-B748-11DB5B8589D0","0E83F6BE-79BE-426A-A316-F523FFAECC4F"].includes(this.role.roleMaster.securityGroupId)) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Only Portfolio Manager security level users can create a Strategic Initiative record. Once created, users with edit permissions can manage/edit the record!",
         "message": "",
