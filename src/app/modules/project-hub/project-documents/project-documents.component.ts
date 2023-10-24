@@ -36,6 +36,17 @@ export class ProjectDocumentsComponent implements OnInit {
           this.sharepointLink = this.sanitizer.bypassSecurityTrustResourceUrl(this.projectData.projectSiteUrl);
           this.isCreate = false
         }
+        else{
+          this.generating = false
+          this.createButtonText = "Create Library"
+        }
+      }
+      else{
+        if(this.generating){
+          //INSERT ALERT CODE HERE
+        }
+        this.generating = false
+        this.createButtonText = "Create Library"
       }
       this.viewContent = true
     })
