@@ -27,7 +27,7 @@
                                 <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Filters
                                 </button>
                                 <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                    (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , 'this.filterdata' , '1')">
+                                    (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , 'this.filterdata' , '1', true)">
                                     <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
                                 </button>
                             </div>
@@ -273,7 +273,7 @@
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'" style="background-color: #89B4E0 !important; height: 60px;"><p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-4'}}</p></div>
-                                        <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #89B4E0 !important; height: 60px;"><p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p></div>   
+                                        <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #89B4E0 !important; height: 60px;"><p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p></div>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Apr" prop="aprY1" [width]="120" [sortable]="false"

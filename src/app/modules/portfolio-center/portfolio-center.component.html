@@ -7,7 +7,7 @@
     </div>
     <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpened"
         (openedChanged)="PortfolioCenterService.drawerOpenedChangedSmall($event)" [mode]="'over'" [position]="'right'"
-        [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerSmall}">
+        [ngClass]="{'fuse-drawer-small':PortfolioCenterService.fuseDrawerSmall}">
         <div>
             <app-fx-rate *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"></app-fx-rate>
         </div>
@@ -467,7 +467,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </div>
 
                         </div>
-                        
+
                         <div class="p-4 text-right">
                             <button class="forecast" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast Bulk View</button>
                         </div>

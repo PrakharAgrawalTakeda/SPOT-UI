@@ -10,23 +10,23 @@
         </div>
     </div>
     <div class="pl-3 w-full overflow-hidden">
-        <div class="overflow-y-hidden datatable-bl-83 h-auto" id="fundingRequestsTableDiv">
+        <div class="overflow-y-hidden datatable-bl-83 h-auto w-[35vw]" id="fundingRequestsTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                 [rows]="localCurrency">
-                <ngx-datatable-column name="Currency Code" prop="localCurrencyAbbreviation" [flexGrow]="2.5">
+                <ngx-datatable-column name="Currency Code" prop="localCurrencyAbbreviation" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Currency Name" prop="localCurrencyName" [flexGrow]="2.5">
+                <ngx-datatable-column name="Currency Name" prop="localCurrencyName" [flexGrow]="1">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                         <p>{{value}}</p>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Exchange Rate to JPY" prop="fixRate" [flexGrow]="2.5">
+                <ngx-datatable-column name="Exchange Rate to JPY" prop="fixRate" [flexGrow]="2" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p>{{value.toFixed(5)}}</p>
+                        <p style="text-align: right; margin-right: 35px;">{{value.toFixed(5)}}</p>
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
