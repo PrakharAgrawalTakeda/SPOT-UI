@@ -101,6 +101,34 @@ export class PortfolioApiService {
     const abc$ = this.http.put(link, body)
     const response = await lastValueFrom(abc$)
     return response
-}
+  }
+
+  getLBEData() {
+    var url = GlobalVariables.apiurl + "Budget/GetLBEPeriods"
+    const abc$ = this.http.get(url)
+    const response = lastValueFrom(abc$)
+    return response
+  }
+
+  getBudgetId() {
+    var url = GlobalVariables.apiurl + "Budget/GetBudgetIds"
+    const abc$ = this.http.get(url)
+    const response = lastValueFrom(abc$)
+    return response
+  }
+
+  getForecastExcelData(LBEPeriod, projectId, budgetId) {
+    var url = GlobalVariables.apiurl + "Budget/GetExcelForecastData" + "?LBEPeriodUId=" + LBEPeriod + "&ProjectIds="+ projectId + "&BudgetIds="+ budgetId
+    const abc$ = this.http.get(url)
+    const response = lastValueFrom(abc$)
+    return response
+  }
+  
+  getHistoricalExcelData(budgetId, projectId) {
+    var url = GlobalVariables.apiurl + "Budget/GetExcelUpdateData/Historical" + "?ProjectIds="+ projectId + "&BudgetIds="+ budgetId
+    const abc$ = this.http.get(url)
+    const response = lastValueFrom(abc$)
+    return response
+  } 
 
 }
