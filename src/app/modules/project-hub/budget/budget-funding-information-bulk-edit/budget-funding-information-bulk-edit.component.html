@@ -12,7 +12,8 @@
             <div></div>
             <div class="flex justify-between items-center gap-3">
                 <div class="pr-3">
-                    <button *ngIf="showAddNewButton" class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                    <button *ngIf="showAddNewButton" class="min-w-26 ml-4 text-primary bg-gray-200" type="button"
+                            mat-flat-button
                             [color]="'primary-200'"
                             (click)="addFR()">
                         <mat-icon svgIcon="heroicons_outline:plus-circle"></mat-icon>&nbsp; Add New
@@ -22,8 +23,8 @@
         </div>
         <div class="overflow-y-hidden h-auto w-screen pl-3" id="fundingRequestsTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                           class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
-                           [rows]="fundingRequests">
+                           class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
+                           [rows]="fundingRequests" [ngStyle]="{ 'height': calculateHeight(), 'overflow-y': 'visible' }">
                 <ngx-datatable-column name="Funding Request ID" prop="budgetIo1" [flexGrow]="1"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
@@ -51,8 +52,10 @@
                         <form class="w-full px-1" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
                             <spot-select class="w-full" formControlName="localCurrencyId"
-                                         [placeholder]="'Approval Currency'" [showNoneOption]="false" [dropDownArrayType]="'object'" [idPointer]="'localCurrencyId'"
-                                         [dropDownArray]="localCurrency" [valuePointer]="'localCurrencyAbbreviation'" [customSortPointer]="'displayOrder'">
+                                         [placeholder]="'Approval Currency'" [showNoneOption]="false"
+                                         [dropDownArrayType]="'object'" [idPointer]="'localCurrencyId'"
+                                         [dropDownArray]="localCurrency" [valuePointer]="'localCurrencyAbbreviation'"
+                                         [customSortPointer]="'displayOrder'">
                             </spot-select>
                         </form>
                     </ng-template>
@@ -69,7 +72,7 @@
                         <form class="mt-6" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
                             <spot-input class="w-full" formControlName="localCarapprovedCapex" [showLabel]="false"
-                                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
+                                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"></spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -85,7 +88,7 @@
                         <form class="mt-6" [formGroup]="fundingRequestForm.controls[rowIndex]"
                               *ngIf="checkRow(row, rowIndex)">
                             <spot-input class="w-full" formControlName="localCarapprovedOpex" [showLabel]="false"
-                                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"> </spot-input>
+                                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"></spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -104,7 +107,7 @@
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a
-                           (click)="frTableEditRow(rowIndex)">
+                            (click)="frTableEditRow(rowIndex)">
                             <p *ngIf="!value">&nbsp;</p>
                             <p>{{value}}</p>
                         </a>
@@ -123,16 +126,14 @@
             </ngx-datatable>
         </div>
     </div>
-    <div class="absolute bottom-1 w-full">
-        <div class="flex bottom-0 justify-between mt-6 px-3">
-            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
-               (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
-                Cancel
-            </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitFundingRequests()"
-                    type="button">
-                Submit
-            </button>
-        </div>
+    <div class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+           (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitFundingRequests()"
+                type="button">
+            Submit
+        </button>
     </div>
 </div>

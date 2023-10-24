@@ -2,7 +2,7 @@ import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angul
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
-    selector: 'app-spot-input-forecast',
+    selector: 'spot-input-forecast',
     templateUrl: './spot-input-forecast.component.html',
     styleUrls: ['./spot-input-forecast.component.scss'],
     providers: [

@@ -6,7 +6,7 @@
         </a>
     </div>
 </div>
-<form class="w-full overflow-hidden" [formGroup]="riskIssueForm" (ngSubmit)="submitriskissue()">
+<form class="overflow-auto m-2" style="height: calc(100vh - 120px)" [formGroup]="riskIssueForm" >
     <div class=" form-ask-need h-[87vh] overflow-y-scroll">
         <div class="flex items-start justify-between">
             <div class="w-25" *ngIf="viewElementChecker('type')">
@@ -149,3 +149,12 @@
         </button>
     </div>
 </form>
+<div class="w-full px-3 pr-3 flex items-start justify-between">
+    <a class="min-w-26" mat-flat-button [color]="'primary'"
+       (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+        Cancel
+    </a>
+    <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitriskissue()">
+        Submit
+    </button>
+</div>

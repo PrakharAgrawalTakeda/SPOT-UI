@@ -184,7 +184,7 @@ import { BusinessCaseValueCreationComponent } from './business-case/business-cas
 import { HttpClientModule } from '@angular/common/http';
 import { BudgetForecastBulkEditComponent } from './budget/budget-forecast-bulk-edit/budget-forecast-bulk-edit.component';
 import { BudgetPerformanceComponent } from './budget-performance/budget-performance.component';
-import { SpotInputForecastComponent } from './budget/budget-forecast-bulk-edit/spot-input-forecast/spot-input-forecast.component';
+import { SpotInputForecastComponent } from 'app/core/spot-forms/spot-input-forecast/spot-input-forecast.component';
 
 export const projectRoutes: Route[] = [
   {
