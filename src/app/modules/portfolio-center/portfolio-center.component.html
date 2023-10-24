@@ -7,7 +7,7 @@
     </div>
     <fuse-drawer [name]="'rightDrawer'" [opened]="PortfolioCenterService.drawerOpened"
         (openedChanged)="PortfolioCenterService.drawerOpenedChangedSmall($event)" [mode]="'over'" [position]="'right'"
-        [ngClass]="{'fuse-drawer-large':PortfolioCenterService.fuseDrawerSmall}">
+        [ngClass]="{'fuse-drawer-small':PortfolioCenterService.fuseDrawerSmall}">
         <div>
             <app-fx-rate *ngIf="PortfolioCenterService.itemtype == 'FXRateOpen'"></app-fx-rate>
         </div>
@@ -24,6 +24,13 @@
             <form class="w-full overflow-hidden" [formGroup]="PortfolioFilterForm" *ngIf="showContent && showFilter"
                 style="overflow-y: scroll; height: 85vh;">
                 <div class=" form-ask-need h-[77.5vh]  overflow-y-scroll">
+                    <button (click)= "resetfilters()" style="margin: 20px 15px 15px 765px !important" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'">
+                        <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Clear all filters
+                    </button>
+                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
+                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
+                        [showLabel]="true">
+                    </spot-multiselect-user-autocomplete>
                     <spot-multiselect-autocomplete formControlName="PortfolioOwner" class="w-full" name="PortfolioOwner"
                         [label]="'Portfolio Owner'" [placeholder]="'Portfolio Owner'" [valuePointer]="'portfolioOwner'"
                         [idPointer]="'portfolioOwnerId'" [dropDownArray]="getPortfolioOwner()" [sortByType]="'custom'"
@@ -78,10 +85,6 @@
                         [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true"
                         [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-user-autocomplete formControlName="ProjectTeamMember"
-                        [placeholder]="'Last Name, First Name'" [label]="'Project Team Member'" name="ProjectTeamMember"
-                        [showLabel]="true">
-                    </spot-multiselect-user-autocomplete>
                     <spot-multiselect-autocomplete formControlName="GMSBudgetOwner" class="w-full" name="GMSBudgetOwner"
                         [label]="'GMS Budget Owner'" [placeholder]="'GMS Budget Owner'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
@@ -95,6 +98,11 @@
                         [label]="'AGILE Wave'" [placeholder]="'AGILE Wave'" [valuePointer]="'lookUpName'"
                         [idPointer]="'lookUpId'" [dropDownArray]="AgileWave">
                     </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="PrimaryValueDriver"
+                class="w-full" name="PrimaryValueDriver" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
+                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [dropDownArray]="primaryKPI" [sortByType]="'custom'"
+                [customSortPointer]="'lookUpOrder'">
+            </spot-multiselect-autocomplete>
                     <spot-select class="w-full" formControlName="CAPSProject" name="CAPSProject"
                         [label]="'CAPS Project'" [placeholder]="'CAPS Project'" [showNoneOption]="true"
                         [dropDownArrayType]="'string'" [dropDownArray]="CAPSDropDrownValues" [showHint]="true"
@@ -111,11 +119,6 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         [placeholder]="'Search for a Project by Project ID / Title / Budget ID'"
                         [label]="'Project/Program'" name="projectName" [showLabel]="true">
                     </app-spot-multiselect-project-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="PrimaryValueDriver"
-                class="w-full" name="PrimaryValueDriver" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
-                [valuePointer]="'lookUpName'" [idPointer]="'lookUpId'" [dropDownArray]="primaryKPI" [sortByType]="'custom'"
-                [customSortPointer]="'lookUpOrder'">
-            </spot-multiselect-autocomplete>
 
                     <mat-label *ngIf="!showLA" id="localAttribute" style="color: #a0cbf1;cursor: pointer;"
                         (click)="OpenLA()">+ Show Local Attributes</mat-label>
@@ -367,9 +370,9 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="openDrawer('Filter')">
                             Filters
                         </button>
-                        <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
+                        <!-- <button class="ml-4" mat-flat-button [color]="'primary'" (click)="resetfilters()">
                             Reset Filters (only dev)
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div style="top: 25px; display: inline;position: relative;left: 10px;">
@@ -467,7 +470,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </div>
 
                         </div>
-                        
+
                         <div class="p-4 text-right">
                             <button class="forecast" (click)="PortfolioCenterService.toggleDrawerOpen('BudgetSpendOpen', '' , groupData , '1', true)">Forecast Bulk View</button>
                         </div>
@@ -648,15 +651,15 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <!-- <p>{{value}}</p> -->
-                                <div class="grid grid-cols-1 text-right" style="margin-right: 10px;">
+                                <p class="grid grid-cols-1 text-right" style="margin-right: 10px;">
                                     {{
                                     row.CAPEX ? row.CAPEX.toLocaleString() : 0
                                     }} &nbsp; {{row.currencyAbb}}
-                                </div>
-                                <br />
-                                <div class="text-right" style="margin-right: 12px;">
+                                </p>
+                                <!-- <br /> -->
+                                <p class="text-right" style="margin-right: 12px;">
                                     {{ row.FORECAST ? row.FORECAST.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
-                                </div>
+                                </p>
                             </ng-template>
                         </ngx-datatable-column>
 
@@ -752,10 +755,8 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Execution Duration (Days)" prop="executionDuration"
                             [resizeable]="false" [width]="150">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p> <br
-                                    *ngIf="row.completed">
-                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.completed">Completed</p> <br
-                                    *ngIf="row.notBaselined">
+                                <p style="text-align: right;margin-right: 15px;">{{value}}</p> 
+                                <p style="text-align: right;margin-right: 15px;" *ngIf="row.completed">Completed</p> 
                                 <p style="text-align: right;margin-right: 15px;" *ngIf="row.notBaselined">Not Baselined
                                 </p>
                             </ng-template>

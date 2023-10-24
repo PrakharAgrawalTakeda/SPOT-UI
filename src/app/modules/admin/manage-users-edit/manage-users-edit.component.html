@@ -1,26 +1,38 @@
-
 <div *ngIf="viewContent">
     <div class="flex items-start justify-between bg-primary sidepanel-header">
         <div class="text-on-primary" style="padding-top: 6px">Role Assignment</div>
-        <div style="padding-top: 2px"><a (click)="adminService.toggleDrawerOpen('', '',[],'')"
-                href="javascript:void(0)" title="Close">
+        <div style="padding-top: 2px"><a (click)="adminService.toggleDrawerOpen('', '',[],'')" href="javascript:void(0)"
+                title="Close">
                 <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
             </a>
         </div>
     </div>
     <div class="overflow-hidden  w-full">
-        <p>manage-users-edit works!</p>
+        <form class="w-full p-[20px]" [formGroup]="managerUserRolesForm">
+            <spot-singleselect-user-autocomplete formControlName="user" name="user" [label]="'Member'"
+                [placeholder]="'Last Name, First Name'">
+            </spot-singleselect-user-autocomplete>
+            <div *ngIf="isUserSelected">
+                <spot-select formControlName="userPrimaryRole" [label]="'Primary Role'" [placeholder]="'Primary Role'"
+                    [dropDownArrayType]="'object'" [dropDownArray]="primaryRoles" [idPointer]="'roleId'"
+                    [showNoneOption]="false" [valuePointer]="'roleName'">
+                </spot-select>
+                <spot-multiselect-autocomplete formControlName="userSecondaryRoles" [label]="'Primary Role'"
+                    [placeholder]="'Primary Role'" [dropDownArrayType]="'object'" [dropDownArray]="primaryRoles"
+                    [idPointer]="'roleId'" [showNoneOption]="false" [valuePointer]="'roleName'">
+                </spot-multiselect-autocomplete>
+            </div>
+        </form>
     </div>
-<div class="absolute bottom-2 w-full px-3">
-    <div class="pr-3 flex items-start justify-between mt-6">
-        <a class="min-w-26" mat-flat-button [color]="'primary'"
-           (click)="adminService.toggleDrawerOpen('', '',[],'')">
-            Cancel
-        </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitnotifications()">
-            Submit
-        </button>
+    <div class="absolute bottom-2 w-full px-3">
+        <div class="pr-3 flex items-start justify-between mt-6">
+            <a class="min-w-26" mat-flat-button [color]="'primary'"
+                (click)="adminService.toggleDrawerOpen('', '',[],'')">
+                Cancel
+            </a>
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitnotifications()">
+                Submit
+            </button>
+        </div>
     </div>
 </div>
-</div>
-

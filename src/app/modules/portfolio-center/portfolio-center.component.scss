@@ -45,8 +45,9 @@
     top: 55px !important;
     margin-left: 6px !important;
 }
+
 .datatable-body{
-    height: 72vh !important;
+    height: 65vh !important;
 }
 
 .datatable-row-left{
@@ -166,9 +167,6 @@ li{
 //     overflow-x: scroll !important;
 //     overflow-y: scroll !important;
 // }
-.datatable-body{
-    height: 63vh !important;
-}
 
 
 .fuse-drawer-large {
@@ -176,6 +174,12 @@ li{
     max-width: 95vw !important;
     // min-height: 120vh !important;
     // max-height: 120vh !important;
+}
+.fuse-drawer-small{
+    min-width: 35vw !important;
+    max-width: 35vw !important;
+     min-height: 100vh !important;
+     max-height: 100vh !important;
 }
 fuse-drawer {
     min-width: 50vw;

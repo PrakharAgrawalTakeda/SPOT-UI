@@ -9,16 +9,16 @@
                     <div class="grid grid-cols-1 gap-y-0 w-full">
                         <div class="text-primary text-m mb-4 justify-self-center">Total All Projects ({{localCurrency}})</div>
                         <spot-input class="w-full read-only"
-                                    formControlName="totalApprovedCapex" [label]="'Total Approved'" >
+                                    formControlName="totalApprovedCapex" [label]="'Total Approved'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
                         <spot-input class="w-full read-only"
-                                    formControlName="currentCapex" [label]="'Current'" >
+                                    formControlName="currentCapex" [label]="'Current'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
                         <spot-input class="w-full read-only" *ngIf="isPreliminaryPeriod"
-                                    formControlName="preliminary" [label]="'Preliminary'" >
+                                    formControlName="preliminary" [label]="'Preliminary'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
                         <spot-input class="w-full read-only"
-                                    formControlName="currentLtdCapex" [label]="'Current(LTD)'" >
+                                    formControlName="currentLtdCapex" [label]="'Current(LTD)'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
                         <div >
                             <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency}})</strong></mat-label>
@@ -38,19 +38,19 @@
 
                         <div class="text-primary text-m mb-4 justify-self-center">Fiscal Year All Projects ({{localCurrency}})</div>
                         <spot-input class="w-full read-only"
-                                    formControlName="planCapex" [label]="'Plan'" >
+                                    formControlName="planCapex" [label]="'Plan'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
 
                         <spot-input class="w-full read-only"
-                                    formControlName="currentYtdCapex" [label]="'Current'" >
+                                    formControlName="currentYtdCapex" [label]="'Current'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
 
                         <spot-input class="w-full read-only"  *ngIf="isPreliminaryPeriod"
-                                    formControlName="preliminaryFiscal" [label]="'Preliminary'" >
+                                    formControlName="preliminaryFiscal" [label]="'Preliminary'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
 
                         <spot-input class="w-full read-only"
-                                    formControlName="currentYtdCapex" [label]="'Current(YTD)'" >
+                                    formControlName="currentYtdCapex" [label]="'Current(YTD)'" [inputType]="'Number'" [callLocation]="'Edit'">
                         </spot-input>
                         <div>
                             <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency}})</strong></mat-label>
@@ -77,27 +77,27 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Total Approved CAPEX( {{localCurrency}})" prop="annualForecast" [flexGrow]="2" [resizeable]="false" [draggable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{ value | number: numberFormat }}</p>
+                                <p style="text-align:right">{{ value | number: numberFormat }}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="TFP (%)" prop="yearToDatePerformance" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+                        <ngx-datatable-column name="TFP (%)" prop="yearToDatePerformance" [flexGrow]="1" [resizeable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value | number: '1.2-2' }} %</p>
+                                <p style="text-align:right">{{value | number: '1.2-2' }} %</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="TFP ({{localCurrency}})" prop="yearToDatePerformanceValue" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+                        <ngx-datatable-column name="TFP ({{localCurrency}})" prop="yearToDatePerformanceValue" [flexGrow]="1" [resizeable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value | number: '1.2-2' }}</p>
+                                <p style="text-align:right">{{value | number: '1.2-2' }}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="YTDP (%)" prop="totalForecastPerformance" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+                        <ngx-datatable-column name="YTDP (%)" prop="totalForecastPerformance" [flexGrow]="1" [resizeable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value | number: '1.2-2' }} %</p>
+                                <p style="text-align:right">{{value | number: '1.2-2' }} %</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="YTDP ({{localCurrency}})" prop="totalForecastPerformanceValue" [flexGrow]="1" [resizeable]="false" [draggable]="false">
+                        <ngx-datatable-column name="YTDP ({{localCurrency}})" prop="totalForecastPerformanceValue" [flexGrow]="1" [resizeable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p>{{value | number: '1.2-2' }}</p>
+                                <p style="text-align:right">{{value | number: '1.2-2' }}</p>
                             </ng-template>
                         </ngx-datatable-column>
                     </ngx-datatable>

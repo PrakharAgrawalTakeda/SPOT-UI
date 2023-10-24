@@ -103,4 +103,7 @@ export class BudgetPerformanceComponent {
     get numberFormat(): string {
         return this.localCurrency === 'JPY' ? '1.4-4' : '1.2-2';
     }
+    getNgxDatatableNumberHeader(): any {
+        return ' ngx-number-header';
+    }
 }
