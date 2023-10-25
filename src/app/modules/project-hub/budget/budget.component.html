@@ -187,7 +187,7 @@
                                 <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': tfpColor}">
-                                        {{ budgetForecastForm.controls.tfpPercentage.value | number : fractionSize  }}  %
+                                        {{ budgetForecastForm.controls.tfpPercentage.value | number: fractionSize | number: '1.2-2' }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': tfpColor}">
                                         <div class="mr-4">
@@ -200,11 +200,11 @@
                                 <mat-label class="flex"><strong>Annual Forecast Performance AFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': afpColor}">
-                                        {{ budgetForecastForm.controls.afpPercentage.value | number : fractionSize  }}  %
+                                        {{ budgetForecastForm.controls.afpPercentage.value | number: fractionSize | number: '1.2-2' }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': afpColor}">
                                         <div class="mr-4">
-                                            {{ budgetForecastForm.controls.afpValue.value | number : fractionSize  }}
+                                            {{ budgetForecastForm.controls.afpValue.value | number : fractionSize }}
                                         </div>
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@
                                 <mat-label class="flex"><strong>Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': ydtpColor}">
-                                        {{ budgetForecastForm.controls.ytdpPercentage.value | number : fractionSize }}  %
+                                        {{ budgetForecastForm.controls.ytdpPercentage.value | number: fractionSize | number: '1.2-2' }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': ydtpColor}">
                                         <div class="mr-4">
@@ -226,7 +226,7 @@
                                 <mat-label class="flex"><strong>Month To Date Performance MTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                                     <div class="pl-4" [ngStyle]="{'color': mdtpColor}">
-                                        {{ budgetForecastForm.controls.mtdpPercentage.value | number : fractionSize }}  %
+                                        {{ budgetForecastForm.controls.mtdpPercentage.value | number: fractionSize | number: '1.2-2' }}  %
                                     </div>
                                     <div class="flex justify-end" [ngStyle]="{'color': mdtpColor}">
                                         <div class="mr-4">
@@ -239,25 +239,16 @@
                         <app-budget-capex-opex-table [mode]="'Capex'" [inputData]="budgetForecasts"></app-budget-capex-opex-table>
                         <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full">
                             <div>
-                                <div class="grid justify-items-stretch ">
-                                    <label class="justify-self-end"><strong>Committed Spend</strong></label>
-                                </div>
-                                <mat-form-field class=" grid w-full">
-                                    <input matInput formControlName="committedSpend" [ngClass]="'text-right'">
-                                </mat-form-field>
+                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'Committed Spend'" [callLocation]="'Edit'"
+                                            formControlName="committedSpend" [disabled]="true"
+                                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" ></spot-input>
                             </div>
-                            <mat-form-field  class="flex w-full" [floatLabel]="'always'">
-                                <mat-label class="flex"><strong>AFP Deviation Code</strong></mat-label>
-                                <div class="grid grid-cols-2 divide-x-2 w-full">
-                                    <div><input  matInput formControlName="afpCodeId"></div>
-                                </div>
-                            </mat-form-field>
-                            <mat-form-field  class="flex w-full" [floatLabel]="'always'">
-                                <mat-label class="flex"><strong>MTDP Deviation Code</strong></mat-label>
-                                <div class="grid grid-cols-2 divide-x-2 w-full">
-                                    <div><input  matInput formControlName="mtdpCodeId"></div>
-                                </div>
-                            </mat-form-field>
+                            <div>
+                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'AFP Deviation Code'" formControlName="afpCodeId"> </spot-input>
+                            </div>
+                            <div>
+                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'MTDP Deviation Code'" formControlName="mtdpCodeId"> </spot-input>
+                            </div>
                         </div>
                     </div>
                 </ng-template>

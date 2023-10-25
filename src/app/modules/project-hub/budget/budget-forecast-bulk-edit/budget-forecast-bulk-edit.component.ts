@@ -536,7 +536,7 @@ export class BudgetForecastBulkEditComponent {
     }
 
     getNgxDatatableNumberHeader(): any {
-        return ' ngx-number-header';
+        return ' ngx-number-header-center';
     }
 
     recalculateAnnualTotal() {
