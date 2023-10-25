@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { MsalService } from '@azure/msal-angular';
+import { RoleService } from 'app/core/auth/role.service';
 
 @Component({
     selector       : 'user',
@@ -22,6 +23,7 @@ export class UserComponent implements OnInit, OnDestroy
     @Input() showAvatar: boolean = true;
     user :any
     isMenuOpen: boolean = false
+    isAdmin: boolean = false
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -31,7 +33,8 @@ export class UserComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _userService: UserService,
-        private authService: MsalService
+        private authService: MsalService,
+        private roleService: RoleService
     )
     {
     }
@@ -46,6 +49,7 @@ export class UserComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
           this.user = this.authService.instance.getActiveAccount()
+          this.isAdmin = this.roleService.roleMaster.securityGroupId == "0E83F6BE-79BE-426A-A316-F523FFAECC4F"
     }
     /**
      * On destroy
