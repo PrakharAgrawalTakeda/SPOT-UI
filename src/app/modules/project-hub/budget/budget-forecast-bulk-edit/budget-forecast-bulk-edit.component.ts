@@ -656,9 +656,10 @@ export class BudgetForecastBulkEditComponent {
         const clipboardData = event.clipboardData || window['clipboardData'];
         const pastedData = clipboardData.getData('text').split('\t');
         for (let i = 0; i < pastedData.length; i++) {
-            this.forecastsForm.controls[rowIndex].value[field] = Number(pastedData[i]);
+            const roundedNumber = Math.round(Number(pastedData[i]));
+            this.forecastsForm.controls[rowIndex].value[field] = roundedNumber;
             this.forecastsForm.controls[rowIndex].patchValue({
-                [field]: Number(pastedData[i])
+                [field]: roundedNumber
             });
             field = this.getNextField(field);
         }
@@ -670,9 +671,10 @@ export class BudgetForecastBulkEditComponent {
         const clipboardData = event.clipboardData || window['clipboardData'];
         const pastedData = clipboardData.getData('text').split('\t');
         for (let i = 0; i < pastedData.length; i++) {
-            this.forecastsY1Form.controls[rowIndex].value[field] = Number(pastedData[i]);
+            const roundedNumber = Math.round(Number(pastedData[i]));
+            this.forecastsY1Form.controls[rowIndex].value[field] = roundedNumber;
             this.forecastsY1Form.controls[rowIndex].patchValue({
-                [field]: Number(pastedData[i])
+                [field]: roundedNumber
             });
             field = this.getNextField(field);
         }
