@@ -16,4 +16,7 @@ export class FxRateComponent {
       this.localCurrency = currency.sort((a, b) => a.displayOrder - b.displayOrder);
     })
   }
+  getNgxDatatableNumberHeader(): any {
+      return ' ngx-number-header';
+  }
 }

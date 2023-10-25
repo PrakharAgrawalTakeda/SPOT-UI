@@ -9,7 +9,6 @@ import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/
   selector: 'app-ask-need-bulk-edit',
   templateUrl: './ask-need-bulk-edit.component.html',
   styleUrls: ['./ask-need-bulk-edit.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class AskNeedBulkEditComponent implements OnInit {
 

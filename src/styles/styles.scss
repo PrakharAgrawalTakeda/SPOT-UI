@@ -71,8 +71,12 @@ $square-size: 10px;
     }
 }
 .ngx-number-header{
+    text-align: right;
+}
+.ngx-number-header-center{
     text-align: center;
 }
+
 
 .ngx-icon-header {
     text-align: center;

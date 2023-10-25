@@ -193,6 +193,8 @@ export class PortfolioCenterComponent implements OnInit {
  toggleObject = {};
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   initial: any;
+  user={}
+  state={}
   changedToggleStates: Record<string, boolean[]> = {};
 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
@@ -357,20 +359,20 @@ export class PortfolioCenterComponent implements OnInit {
             }
           }
 
-          var user = [{
+          this.user = [{
             "userAdid": this.activeaccount.localAccountId,
             "userDisplayName": this.activeaccount.name,
             "userIsActive": true
           }]
 
-          var state = this.filterlist.state.filter(x => x.lookUpName == "Active")
+          this.state = this.filterlist.state.filter(x => x.lookUpName == "Active")
           if (localStorage.getItem('spot-filtersNew') == null) {
             this.filtersnew = this.defaultfilter
-            this.filtersnew.ProjectState = state
-            this.filtersnew.ProjectTeamMember = user
+            this.filtersnew.ProjectState = this.state
+            this.filtersnew.ProjectTeamMember = this.user
             this.PortfolioFilterForm.patchValue({
-              ProjectTeamMember: user,
-              ProjectState: state,
+              ProjectTeamMember: this.user,
+              ProjectState: this.state,
               ProjectPhase: []
             })
           }
@@ -399,20 +401,20 @@ export class PortfolioCenterComponent implements OnInit {
               OverallStatus: this.filtersnew.OverallStatus,
               PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
             })
-            if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
-              if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
-                this.filtersnew.ProjectTeamMember = user
-                this.PortfolioFilterForm.patchValue({
-                  ProjectTeamMember: user
-                })
-              }
-              if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
-                this.filtersnew.ProjectState = state
-                this.PortfolioFilterForm.patchValue({
-                  ProjectState: state
-                })
-              }
-            }
+            // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
+            //   if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
+            //     this.filtersnew.ProjectTeamMember = this.user
+            //     this.PortfolioFilterForm.patchValue({
+            //       ProjectTeamMember: this.user
+            //     })
+            //   }
+            //   if (this.filtersnew.ProjectState == null || this.filtersnew.ProjectState.length == 0) {
+            //     this.filtersnew.ProjectState = this.state
+            //     this.PortfolioFilterForm.patchValue({
+            //       ProjectState: this.state
+            //     })
+            //   }
+            // }
 
           }
           var localattribute
@@ -664,7 +666,9 @@ export class PortfolioCenterComponent implements OnInit {
           this.filterList.sort((a, b) => {
             return (a.order < b.order ? -1 : a.order == b.order ? 0 : 1);
           })
+          if(filterGroups.length > 0){
           filterGroups[filterGroups.length - 1].groupCondition = 0
+          }
           this.groupData
           if (localattribute == null) {
             this.groupData = {
@@ -887,9 +891,7 @@ export class PortfolioCenterComponent implements OnInit {
               }
             };
 
-            this.showContent = true
-            // var fieldNameElement = document.getElementById('page-count');
-            // fieldNameElement.innerHTML = "Total Projects based on the applied filter criteria: " + this.totalproject + "Projects";
+            this.showContent = true;
           })
         })
       })
@@ -1281,9 +1283,37 @@ export class PortfolioCenterComponent implements OnInit {
     this.ngOnInit()
   }
   resetfilters() {
+    this.showContent = false
+    this.PortfolioFilterForm.patchValue({
+      PortfolioOwner: [],
+    ExecutionScope: [],
+    OwningOrganization: [],
+    ProjectType: [],
+    ProjectState: this.state,
+    ProjectPhase: [],
+    CapitalPhase: [],
+    OEPhase: [],
+    TotalCAPEX: [],
+    Product: [],
+    ProjectTeamMember: this.user,
+    GMSBudgetOwner: [],
+    AGILEWorkstream: [],
+    AGILEWave: [],
+    CAPSProject: [],
+    OverallStatus: [],
+    projectName: [],
+    PrimaryValueDriver: [],
+    })
+    this.showContent = true
+    this.defaultfilter.ProjectTeamMember = this.user
+    this.defaultfilter.ProjectState= this.state
+    this.defaultfilter.ProjectPhase= []
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
     localStorage.setItem('spot-localattribute', null)
-    this.resetpage()
+    this.defaultfilter.ProjectTeamMember = []
+    this.defaultfilter.ProjectState= []
+    this.defaultfilter.ProjectPhase= []
+    // this.resetpage()
   }
 
   getPortfolioOwner(): any {

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {ProjectApiService} from "../../common/project-api.service";
 import {ProjectHubService} from "../../project-hub.service";
 import {AuthService} from "../../../../core/auth/auth.service";
@@ -6,7 +6,6 @@ import {RoleService} from "../../../../core/auth/role.service";
 import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
-import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 
 @Component({
@@ -44,6 +43,7 @@ export class BudgetFundingInformationBulkEditComponent {
     fundingRequestForm = new FormArray([])
     localCurrency:any = [];
     showAddNewButton: boolean = false;
+    additionalNgxHeight:any;
 
     ngOnInit(): void {
         this.dataloader()
@@ -314,6 +314,13 @@ export class BudgetFundingInformationBulkEditComponent {
             this.projecthubservice.submitbutton.next(true)
             this.projecthubservice.toggleDrawerOpen('', '', [], '')
             this.projecthubservice.isNavChanged.next(true)
+        }
+    }
+    calculateHeight(): string {
+        if (this.showAddNewButton) {
+            return 'calc(100vh - 160px)';
+        } else {
+            return 'calc(100vh - 120px)';
         }
     }
 }

@@ -25,10 +25,16 @@ export class BudgetForecastBulkEditComponent {
             this.recalculateYtdp();
             this.recalculateAFP();
             this.recalculateMtdp()
+            if(this.projecthubservice.isFormChanged){
+                window.onbeforeunload = this.showConfirmationMessage;
+            }
         })
         this.forecastsY1Form.valueChanges.subscribe(res => {
             this.formValue()
             this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsY1Db) != JSON.stringify(this.forecastsY1Submit);
+            if(this.projecthubservice.isFormChanged){
+                window.onbeforeunload = this.showConfirmationMessage;
+            }
         })
     }
     budgetForecastForm = new FormGroup({
@@ -407,7 +413,7 @@ export class BudgetForecastBulkEditComponent {
                     "jun": i.jun,
                     "jul": i.jul,
                     "aug": i.aug,
-                    "sep": i.jun,
+                    "sep": i.sep,
                     "oct": i.oct,
                     "nov": i.nov,
                     "dec": i.dec,
@@ -530,12 +536,24 @@ export class BudgetForecastBulkEditComponent {
     }
 
     getNgxDatatableNumberHeader(): any {
-        return ' ngx-number-header';
+        return ' ngx-number-header-center';
     }
 
     recalculateAnnualTotal() {
         const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value === true);
-        const newAnnualTotal = isOpenEntry.value.apr + isOpenEntry.value.may + isOpenEntry.value.jun + isOpenEntry.value.jul + isOpenEntry.value.aug + isOpenEntry.value.sep + isOpenEntry.value.oct + isOpenEntry.value.nov + isOpenEntry.value.dec + isOpenEntry.value.jan + isOpenEntry.value.feb + isOpenEntry.value.mar;
+        const newAnnualTotal =
+            (isNaN(isOpenEntry.value.apr) ? 0 : isOpenEntry.value.apr) +
+            (isNaN(isOpenEntry.value.may) ? 0 : isOpenEntry.value.may) +
+            (isNaN(isOpenEntry.value.jun) ? 0 : isOpenEntry.value.jun) +
+            (isNaN(isOpenEntry.value.jul) ? 0 : isOpenEntry.value.jul) +
+            (isNaN(isOpenEntry.value.aug) ? 0 : isOpenEntry.value.aug) +
+            (isNaN(isOpenEntry.value.sep) ? 0 : isOpenEntry.value.sep) +
+            (isNaN(isOpenEntry.value.oct) ? 0 : isOpenEntry.value.oct) +
+            (isNaN(isOpenEntry.value.nov) ? 0 : isOpenEntry.value.nov) +
+            (isNaN(isOpenEntry.value.dec) ? 0 : isOpenEntry.value.dec) +
+            (isNaN(isOpenEntry.value.jan) ? 0 : isOpenEntry.value.jan) +
+            (isNaN(isOpenEntry.value.feb) ? 0 : isOpenEntry.value.feb) +
+            (isNaN(isOpenEntry.value.mar) ? 0 : isOpenEntry.value.mar);
         isOpenEntry.patchValue({
             annualTotal: newAnnualTotal
         });
@@ -545,7 +563,19 @@ export class BudgetForecastBulkEditComponent {
 
     recalculateY1() {
         const isOpenEntry = this.forecastsY1Form.controls[0]
-        const newAnnualTotal = isOpenEntry.value.apr + isOpenEntry.value.may + isOpenEntry.value.jun + isOpenEntry.value.jul + isOpenEntry.value.aug + isOpenEntry.value.sep + isOpenEntry.value.oct + isOpenEntry.value.nov + isOpenEntry.value.dec + isOpenEntry.value.jan + isOpenEntry.value.feb + isOpenEntry.value.mar;
+        const newAnnualTotal =
+            (isNaN(isOpenEntry.value.apr) ? 0 : isOpenEntry.value.apr) +
+            (isNaN(isOpenEntry.value.may) ? 0 : isOpenEntry.value.may) +
+            (isNaN(isOpenEntry.value.jun) ? 0 : isOpenEntry.value.jun) +
+            (isNaN(isOpenEntry.value.jul) ? 0 : isOpenEntry.value.jul) +
+            (isNaN(isOpenEntry.value.aug) ? 0 : isOpenEntry.value.aug) +
+            (isNaN(isOpenEntry.value.sep) ? 0 : isOpenEntry.value.sep) +
+            (isNaN(isOpenEntry.value.oct) ? 0 : isOpenEntry.value.oct) +
+            (isNaN(isOpenEntry.value.nov) ? 0 : isOpenEntry.value.nov) +
+            (isNaN(isOpenEntry.value.dec) ? 0 : isOpenEntry.value.dec) +
+            (isNaN(isOpenEntry.value.jan) ? 0 : isOpenEntry.value.jan) +
+            (isNaN(isOpenEntry.value.feb) ? 0 : isOpenEntry.value.feb) +
+            (isNaN(isOpenEntry.value.mar) ? 0 : isOpenEntry.value.mar);
         this.forecasts = this.forecasts.map(forecast => {
             if (forecast.isopen === true) {
                 return {...forecast, y1: newAnnualTotal};
@@ -564,7 +594,13 @@ export class BudgetForecastBulkEditComponent {
 
     recalculateTotalCapex() {
         const isOpenEntry = this.forecastsForm.controls.find(control => control.get('isopen').value === true);
-        const newTotal = isOpenEntry.value.annualTotal + isOpenEntry.value.y1 + isOpenEntry.value.y2 + isOpenEntry.value.y3 + isOpenEntry.value.y4 + isOpenEntry.value.y5;
+        const newTotal =
+            (isNaN(isOpenEntry.value.annualTotal) ? 0 : isOpenEntry.value.annualTotal) +
+            (isNaN(isOpenEntry.value.y1) ? 0 : isOpenEntry.value.y1) +
+            (isNaN(isOpenEntry.value.y2) ? 0 : isOpenEntry.value.y2) +
+            (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
+            (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
+            (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5);
         isOpenEntry.patchValue({
             cumulativeTotal: newTotal
         });
@@ -620,9 +656,10 @@ export class BudgetForecastBulkEditComponent {
         const clipboardData = event.clipboardData || window['clipboardData'];
         const pastedData = clipboardData.getData('text').split('\t');
         for (let i = 0; i < pastedData.length; i++) {
-            this.forecastsForm.controls[rowIndex].value[field] = Number(pastedData[i]);
+            const roundedNumber = Math.round(Number(pastedData[i]));
+            this.forecastsForm.controls[rowIndex].value[field] = roundedNumber;
             this.forecastsForm.controls[rowIndex].patchValue({
-                [field]: Number(pastedData[i])
+                [field]: roundedNumber
             });
             field = this.getNextField(field);
         }
@@ -634,9 +671,10 @@ export class BudgetForecastBulkEditComponent {
         const clipboardData = event.clipboardData || window['clipboardData'];
         const pastedData = clipboardData.getData('text').split('\t');
         for (let i = 0; i < pastedData.length; i++) {
-            this.forecastsY1Form.controls[rowIndex].value[field] = Number(pastedData[i]);
+            const roundedNumber = Math.round(Number(pastedData[i]));
+            this.forecastsY1Form.controls[rowIndex].value[field] = roundedNumber;
             this.forecastsY1Form.controls[rowIndex].patchValue({
-                [field]: Number(pastedData[i])
+                [field]: roundedNumber
             });
             field = this.getNextField(field);
         }
@@ -795,5 +833,10 @@ export class BudgetForecastBulkEditComponent {
         if(this.firstPreliminary==month){
             return 'blue-text'
         }
+    }
+    showConfirmationMessage(event) {
+        const confirmationMessage = 'Are you sure you want to exit? All unsaved data will be lost.';
+        (event || window.event).returnValue = confirmationMessage;
+        return confirmationMessage;
     }
 }

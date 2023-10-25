@@ -34,6 +34,7 @@ import { SpotFormsModule } from 'app/core/spot-forms/spot-forms.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ManageUsersEditComponent } from './manage-users-edit/manage-users-edit.component';
 import { AdminComponent } from './admin.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const projectRoutes: Routes = [
   { path: '', component: AdminComponent },
@@ -78,6 +79,7 @@ export const projectRoutes: Routes = [
     FuseAlertModule,
     SpotFormsModule,
     DragDropModule,
+    MatSnackBarModule
   ]
 })
 export class AdminModule { }

@@ -27,7 +27,7 @@
                                 <button *ngIf="ForecastForm.controls.PM.value != null && !showEmail" style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="ApplyFilter()"> Apply Filters
                                 </button>
                                 <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                    (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , 'this.filterdata' , '1')">
+                                    (click)="PortfolioCenterService.toggleDrawerOpenSmall('FXRateOpen', '' , 'this.filterdata' , '1', true)">
                                     <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
                                 </button>
                             </div>
@@ -273,7 +273,7 @@
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'" style="background-color: #89B4E0 !important; height: 60px;"><p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-4'}}</p></div>
-                                        <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #89B4E0 !important; height: 60px;"><p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p></div>   
+                                        <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #89B4E0 !important; height: 60px;"><p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p></div>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Apr" prop="aprY1" [width]="120" [sortable]="false"
@@ -616,8 +616,7 @@
                                     </ng-container>
                                 </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Apr" prop="apr" [width]="120" [sortable]="false" [resizeable]="false">
@@ -629,8 +628,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="May" prop="may" [width]="120" [sortable]="false" [resizeable]="false">
@@ -642,8 +640,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jun" prop="jun" [width]="120" [sortable]="false" [resizeable]="false">
@@ -655,8 +652,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jul" prop="jul" [width]="120" [sortable]="false" [resizeable]="false">
@@ -668,8 +664,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Aug" prop="aug" [width]="120" [sortable]="false" [resizeable]="false">
@@ -681,8 +676,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Sep" prop="sep" [width]="120" [sortable]="false" [resizeable]="false">
@@ -694,8 +688,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Oct" prop="oct" [width]="120" [sortable]="false" [resizeable]="false">
@@ -707,8 +700,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Nov" prop="nov" [width]="120" [sortable]="false" [resizeable]="false">
@@ -720,8 +712,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Dec" prop="dec" [width]="120" [sortable]="false" [resizeable]="false">
@@ -733,8 +724,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jan" prop="jan" [width]="120" [sortable]="false" [resizeable]="false">
@@ -746,8 +736,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Feb" prop="feb" [width]="120" [sortable]="false" [resizeable]="false">
@@ -759,8 +748,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Mar" prop="mar" [width]="120" [sortable]="false" [resizeable]="false">
@@ -772,8 +760,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name={{yearLabel.currentYear}} prop="annualTotal" [width]="120" [sortable]="false"
@@ -786,10 +773,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'" style="background-color: #89B4E0 !important; height: 60px;">
-                                            <p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-4'}}</p>
-                                        </div>
-                                        <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #89B4E0 !important; height: 60px;">
+                                        <div style="background-color: #89B4E0 !important; height: 60px;">
                                             <p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p>
                                         </div>
                                     </ng-template>
@@ -803,8 +787,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="May" prop="mayY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -816,8 +799,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jun" prop="junY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -829,8 +811,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jul" prop="julY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -842,8 +823,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Aug" prop="augY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -855,8 +835,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Sep" prop="sepY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -868,8 +847,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Oct" prop="octY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -881,8 +859,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Nov" prop="novY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -894,8 +871,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Dec" prop="decY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -907,8 +883,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jan" prop="janY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -920,8 +895,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Feb" prop="febY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -933,8 +907,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Mar" prop="marY1" [width]="120" [sortable]="false" [resizeable]="false">
@@ -946,8 +919,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name={{yearLabel.NextYear}} prop="annualTotalY1" [width]="120" [sortable]="false"
@@ -960,10 +932,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <div *ngIf="ForecastForm.controls.Currency.value.name == 'OY'" style="background-color: #81FD84 !important; height: 60px;">
-                                            <p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-4'}}</p>
-                                        </div>
-                                        <div *ngIf="ForecastForm.controls.Currency.value.name != 'OY'" style="background-color: #81FD84 !important; height: 60px;">
+                                        <div style="background-color: #81FD84 !important; height: 60px;">
                                             <p style="top: 16px; position: relative;text-align:right">{{value| number:'1.0-0'}}</p>
                                         </div>
                                     </ng-template>
@@ -977,8 +946,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name={{yearLabel.Y2}} prop="y3" [width]="120" [sortable]="false" [resizeable]="false">
@@ -990,8 +958,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name={{yearLabel.Y3}} prop="y4" [width]="120" [sortable]="false" [resizeable]="false">
@@ -1003,8 +970,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name={{yearLabel.Y4}} prop="y5" [width]="120" [sortable]="false" [resizeable]="false">
@@ -1016,8 +982,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name == 'OY'">{{value | number:'1.0-4'}}</p>
-                                        <p style="text-align:right" *ngIf="ForecastForm.controls.Currency.value.name != 'OY'">{{value | number:'1.0-0'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Total CAPEX" prop="cumulativeTotal" [width]="120" [sortable]="false"
@@ -1030,7 +995,7 @@
                                         </ng-container>
                                     </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                        <p style="text-align:right">{{value | number:'1.0-4'}}</p>
+                                        <p style="text-align:right">{{value | number:'1.0-0'}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Period Submitted By" prop="submittedByName" [width]="200" [sortable]="false" [resizeable]="false">
