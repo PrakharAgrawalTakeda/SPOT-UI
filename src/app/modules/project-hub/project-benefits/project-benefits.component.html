@@ -86,8 +86,8 @@
                 <span *ngIf="getLookup(row.statusId) == 'On Track'" style="background-color: green !important; height: 110px; width: 20px;display: flex;"></span> -->
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [sortable]="false" [width]="100" [frozenLeft]="true"
-                [headerClass]="getFrozenHeaderClassID">
+            <ngx-datatable-column name="Status" prop="statusId" [resizeable]="false" [sortable]="false" [width]="100"
+                [frozenLeft]="true" [headerClass]="getFrozenHeaderClassID">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
                 </ng-template>
@@ -156,7 +156,8 @@
                     </ng-template>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total" prop="strategicTarget" [width]="190" [resizeable]="false" [sortable]="false">
+            <ngx-datatable-column name="Total" prop="strategicTarget" [width]="190" [resizeable]="false"
+                [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.metricFormat == 'Time (HH:MM)' || row.metricFormat == ''">{{ value }} <br>
                         {{row.strategicBaseline }} <br> {{row.strategicCurrent }} <br> {{row.strategicActual }}</p>
@@ -170,6 +171,18 @@
                         *ngIf="row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)'">
                         {{ value | number:'1.0-2' }} <br> {{row.strategicBaseline | number:'1.0-2' }} <br>
                         {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+
+                    <div class="flex items-center justify-start gap-6">
+                        <a href="javascript:void(0)" title="Edit Single"
+                            (click)="projecthubservice.toggleDrawerOpen('valueCreation', [], valuecreationngxdata, row.projectid)">
+                            <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
+
+                        </a>
+                    </div>
                 </ng-template>
             </ngx-datatable-column>
         </ngx-datatable>

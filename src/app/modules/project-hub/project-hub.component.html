@@ -101,6 +101,7 @@
         <app-primary-kpi-single-edit
             *ngIf="projecthubservice.itemtype == 'PrimaryKPISingleEdit'"></app-primary-kpi-single-edit>
             <app-new-metrics *ngIf="projecthubservice.itemtype == 'addnewmetrics'"></app-new-metrics>
+            <app-edit-metrics *ngIf="projecthubservice.itemtype == 'valueCreation'"></app-edit-metrics>
         <app-link-project *ngIf="projecthubservice.itemtype == 'LinkProject'"></app-link-project>
         <app-update-parent *ngIf="projecthubservice.itemtype == 'UpdateParent'"></app-update-parent>
         <app-general-info-single-edit
