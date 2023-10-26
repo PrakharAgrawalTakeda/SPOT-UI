@@ -130,6 +130,7 @@ export class ProjectBenefitsComponent implements OnInit {
           };
           this.compare(this.columnYear)
           this.valuecreationngxdata = res.projectsMetricsData
+          console.log(this.valuecreationngxdata)
           // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true
