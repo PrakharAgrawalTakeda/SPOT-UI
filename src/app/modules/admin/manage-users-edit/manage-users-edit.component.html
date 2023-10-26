@@ -17,8 +17,8 @@
                     [dropDownArrayType]="'object'" [dropDownArray]="primaryRoles" [idPointer]="'roleId'"
                     [showNoneOption]="false" [valuePointer]="'roleName'">
                 </spot-select>
-                <spot-multiselect-autocomplete formControlName="userSecondaryRoles" [label]="'Primary Role'"
-                    [placeholder]="'Primary Role'" [dropDownArrayType]="'object'" [dropDownArray]="primaryRoles"
+                <spot-multiselect-autocomplete formControlName="userSecondaryRoles" [label]="'Secondary Roles'"
+                    [placeholder]="'Secondary Roles'" [dropDownArrayType]="'object'" [dropDownArray]="secondaryRoles"
                     [idPointer]="'roleId'" [showNoneOption]="false" [valuePointer]="'roleName'">
                 </spot-multiselect-autocomplete>
             </div>
@@ -30,7 +30,7 @@
                 (click)="adminService.toggleDrawerOpen('', '',[],'')">
                 Cancel
             </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitnotifications()">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitRolesChange()">
                 Submit
             </button>
         </div>

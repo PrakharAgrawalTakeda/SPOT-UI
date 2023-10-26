@@ -122,5 +122,8 @@ export class BudgetCapexOpexTableComponent {
                 return 12;
         }
     }
+    getNgxDatatableNumberHeader(): any {
+        return ' ngx-number-header';
+    }
 
 }

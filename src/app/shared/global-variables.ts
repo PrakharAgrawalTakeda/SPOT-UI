@@ -17,7 +17,7 @@ export class GlobalVariables {
 
         //Mannat
 
-        'https://spotapi-gateway-dev.azurewebsites.net/api/'
+        'https://tospotdev-api-gateway.azurewebsites.net/api/'
 
         //Nick&Toader
 
@@ -33,6 +33,6 @@ export class GlobalVariables {
 
         // 'https://localhost:7288/api/'
 
-        : 'https://spotapi-gateway-dev.azurewebsites.net/api/'
+        : 'https://tospotdev-api-gateway.azurewebsites.net/api/'
 
 }

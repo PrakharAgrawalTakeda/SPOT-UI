@@ -75,7 +75,7 @@
                                 <p>{{value}}</p>
                             </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Total Approved CAPEX( {{localCurrency}})" prop="annualForecast" [flexGrow]="2" [resizeable]="false" [draggable]="false">
+                        <ngx-datatable-column name="Total Approved CAPEX( {{localCurrency}})" prop="annualForecast" [flexGrow]="2" [resizeable]="false" [draggable]="false" [headerClass]="getNgxDatatableNumberHeader">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p style="text-align:right">{{ value | number: numberFormat }}</p>
                             </ng-template>

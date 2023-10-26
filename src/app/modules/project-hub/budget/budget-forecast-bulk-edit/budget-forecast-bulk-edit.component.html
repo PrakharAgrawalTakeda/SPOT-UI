@@ -738,10 +738,8 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <spot-input-forecast formControlName="y3" [decimalCount]="0" [autoAddDecimal]="false"
-                                                         (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y2')"></spot-input-forecast>
-                            </mat-form-field>
+                            <spot-input-forecast formControlName="y2" [decimalCount]="0" [autoAddDecimal]="false"
+                                                 (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y2')"></spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -761,10 +759,8 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <spot-input-forecast formControlName="y3" [decimalCount]="0" [autoAddDecimal]="false"
-                                                         (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y3')"></spot-input-forecast>
-                            </mat-form-field>
+                            <spot-input-forecast formControlName="y3" [decimalCount]="0" [autoAddDecimal]="false"
+                                                 (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y3')"></spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
@@ -785,10 +781,8 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex)">
-                            <mat-form-field class="w-full px-1" [floatLabel]="'always'">
-                                <spot-input-forecast formControlName="y4" [decimalCount]="0" [autoAddDecimal]="false"
-                                                         (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y4')"></spot-input-forecast>
-                            </mat-form-field>
+                            <spot-input-forecast formControlName="y4" [decimalCount]="0" [autoAddDecimal]="false"
+                                                 (valueChanged)="recalculateTotalCapex()"  (pasteEvent)="onPaste($event, rowIndex, 'y4')"></spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
