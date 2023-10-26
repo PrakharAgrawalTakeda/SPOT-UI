@@ -1,3 +1,5 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy Node.js app to Azure Web App - tospotdev
 
@@ -17,23 +19,18 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x' # You can use a more stable LTS version if it suits your project
+          node-version: '18.x'
 
       - name: npm install, build, and test
         run: |
           npm install
           npm run build -- --configuration=dev
 
-      - name: Compress deployment package
-        run: |
-          tar -czvf node-app.tar.gz *
-        working-directory: ./path/to/deployment/package
-
-      - name: Upload compressed artifact for deployment job
-        uses: actions/upload-artifact@v2
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: path/to/deployment/package/node-app.tar.gz
+          path: ./dist
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,7 +41,7 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: node-app
 
@@ -55,4 +52,4 @@ jobs:
           app-name: 'tospotdev'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9BBB33D3CA8147E4AD13018411C4ED39 }}
-          package: ${{ runner.workspace }}/node-app.tar.gz
+          package: .
