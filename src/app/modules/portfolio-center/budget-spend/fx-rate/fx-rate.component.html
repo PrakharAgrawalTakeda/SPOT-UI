@@ -9,7 +9,7 @@
             </a>
         </div>
     </div>
-    <div class="pl-3 w-full overflow-hidden">
+    <div class="pl-2 mt-2 w-full overflow-hidden">
         <div class="overflow-y-hidden datatable-bl-83 h-auto w-[35vw]" id="fundingRequestsTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="material datatable-an-80 font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -26,7 +26,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Exchange Rate to JPY" prop="fixRate" [flexGrow]="2" [headerClass]="getNgxDatatableNumberHeader">
                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                        <p style="text-align: right; margin-right: 50px;">{{value.toFixed(5)}}</p>
+                        <p style="text-align: right; margin-right: 20px;">{{value.toFixed(5)}}</p>
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>

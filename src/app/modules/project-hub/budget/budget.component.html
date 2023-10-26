@@ -241,13 +241,13 @@
                             <div>
                                 <spot-input class="w-full read-only" [showLabel]="true" [label]="'Committed Spend'" [callLocation]="'Edit'"
                                             formControlName="committedSpend" [disabled]="true"
-                                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" ></spot-input>
+                                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [isLabelStrong]="true"></spot-input>
                             </div>
                             <div>
-                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'AFP Deviation Code'" formControlName="afpCodeId"> </spot-input>
+                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'AFP Deviation Code'" formControlName="afpCodeId" [isStrong]="true"> </spot-input>
                             </div>
                             <div>
-                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'MTDP Deviation Code'" formControlName="mtdpCodeId"> </spot-input>
+                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'MTDP Deviation Code'" formControlName="mtdpCodeId" [isStrong]="true"> </spot-input>
                             </div>
                         </div>
                     </div>
