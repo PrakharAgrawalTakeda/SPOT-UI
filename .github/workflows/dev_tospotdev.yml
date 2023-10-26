@@ -25,19 +25,12 @@ jobs:
         run: |
           npm install
           npm run build -- --configuration=dev
-      - name: Zip all files for upload between jobs
-          run: zip angular.zip ./* 
-                  
-      - name: Upload artifact for deployment job
-          uses: actions/upload-artifact@v2
-          with:
-          name: node-app
-          path: angular.zip
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: .
+          path: build/
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,6 +52,4 @@ jobs:
           app-name: 'tospotdev'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9BBB33D3CA8147E4AD13018411C4ED39 }}
-          package: angular.zip
-      - name: Delete zip file
-              run: rm angular.zip
+          package: .
