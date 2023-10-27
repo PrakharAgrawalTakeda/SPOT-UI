@@ -22,10 +22,9 @@
             (Target {{ targetPercentage }}%)
         </div>
     </div>
-    <div class="overflow-hidden w-screen h-[83vh]">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-            [rowClass]="rowClass"
-            class="ml-3 datatable-dq-83 material font-medium text-sm text-default whitespace-nowrap cursor-default"
+            [rowClass]="rowClass" style="height: calc(100vh - 155px); overflow-y:visible"
+            class="ml-3 material font-medium text-sm text-default whitespace-nowrap cursor-default"
             [rows]="rows" #dataQualityTable>
             <ngx-datatable-column name="Phase/State" prop="phase" [flexGrow]="1">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -50,7 +49,6 @@
                 </ng-template>
             </ngx-datatable-column>
         </ngx-datatable>
-    </div>
     <div class="p-6 pb-3 pt-3 flex items-center justify-end w-full">
         <button mat-flat-button [color]="'primary'" type="button" class="min-w-26"
             (click)="this.projecthubservice.toggleDrawerOpen('', '', [], '')">Ok</button>

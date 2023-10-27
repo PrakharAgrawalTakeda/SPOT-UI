@@ -7,8 +7,8 @@
             </a>
         </div>
     </div>
-    <div class="py-3 px-0">
-        <div class="flex justify-between items-center">
+    <div class="relative px-0">
+        <div class="flex justify-between items-center mt-2">
             <div></div>
             <div class="flex justify-between items-center gap-3">
                 <div class="pr-3">
@@ -19,10 +19,10 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-x-auto overflow-hidden h-[80vh] w-screen ml-3 mt-3" id="projectTeamTableDiv">
+        <div class="overflow-hidden w-screen ml-3" id="projectTeamTableDiv">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
-                class="datatable-pt-80 font-medium text-sm text-default whitespace-nowrap" [rows]="teamMembers"
-                #projectTeamsTable>
+                class="font-medium text-sm text-default whitespace-nowrap" [rows]="teamMembers"
+                #projectTeamsTable style="height: calc(100vh - 150px); overflow-y:visible">
                 <ngx-datatable-column [sortable]="false" name="Role" prop="roleName" [flexGrow]="1">
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                         <a *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)">
@@ -145,14 +145,14 @@
                 </ngx-datatable-column>
             </ngx-datatable>
         </div>
-        <div class="flex items-start justify-between mt-6 px-3">
-            <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
-                (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
-                Cancel
-            </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitProjectTeams()" type="button">
-                Submit
-            </button>
-        </div>
+    </div>
+    <div class="w-full pr-4 m-2 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'" type="button"
+           (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitProjectTeams()" type="button">
+            Submit
+        </button>
     </div>
 </div>

@@ -643,12 +643,11 @@ export class BudgetForecastBulkEditComponent {
         });
     }
     recalculateMtdp() {
-        const planMtdpDate = new Date(this.forecasts.find(x => x.active == 'Plan').financialMonthStartDate)
         const currentMtdpDate = new Date(this.forecasts.find(x => x.active == 'Current').financialMonthStartDate)
         const planActive = this.forecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast') || 0;
         this.budgetForecastForm.patchValue({
-            mtdpValue: this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(planMtdpDate.getMonth())],
-            mtdpCodeId: this.getLookUpName(this.currentEntry.mtdpDeviationCodeID),
+            mtdpPercentage:  Number((this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())]/ planActive[this.getMonthText(currentMtdpDate.getMonth())]).toFixed(2)),
+            mtdpValue:this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())]-planActive[this.getMonthText(currentMtdpDate.getMonth())],
         });
     }
     onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
@@ -786,7 +785,8 @@ export class BudgetForecastBulkEditComponent {
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
             ytdpPercentage: Number((currentHistorical / (planHistorical != 0 ? planHistorical : 1)).toFixed(2)),
             ytdpValue: currentHistorical - planHistorical,
-            mtdpValue: this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(planMtdpDate.getMonth())],
+            mtdpPercentage: Number((this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())]/planActive[this.getMonthText(currentMtdpDate.getMonth())]).toFixed(2)),
+            mtdpValue: this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(currentMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(this.currentEntry.mtdpDeviationCodeID),
             committedSpend: this.forecasts.find(x => x.isopen == true).committedSpend
         })

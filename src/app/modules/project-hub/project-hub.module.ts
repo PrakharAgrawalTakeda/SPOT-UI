@@ -184,7 +184,9 @@ import { BusinessCaseValueCreationComponent } from './business-case/business-cas
 import { HttpClientModule } from '@angular/common/http';
 import { BudgetForecastBulkEditComponent } from './budget/budget-forecast-bulk-edit/budget-forecast-bulk-edit.component';
 import { BudgetPerformanceComponent } from './budget-performance/budget-performance.component';
+import { NewMetricsComponent } from './project-benefits/new-metrics/new-metrics.component';
 import { SpotInputForecastComponent } from 'app/core/spot-forms/spot-input-forecast/spot-input-forecast.component';
+import { EditMetricsComponent } from './project-benefits/edit-metrics/edit-metrics.component';
 
 export const projectRoutes: Route[] = [
   {
@@ -605,7 +607,9 @@ export const projectRoutes: Route[] = [
     BusinessCaseValueCreationComponent,
     BudgetForecastBulkEditComponent,
     BudgetPerformanceComponent,
-    SpotInputForecastComponent
+    NewMetricsComponent,
+    SpotInputForecastComponent,
+    EditMetricsComponent
   ],
     imports: [
     HttpClientModule,

@@ -30,11 +30,12 @@ export class ProjectBenefitsComponent implements OnInit {
   columnYear = []
   viewHisOpPerformance: boolean = false;
   bulkEditType: string = 'OperationalPerformanceBulkEdit';
+  baselinePlan: string = 'BaselinePlan';
     @ViewChild('valuecreationTable') table: any;
     localCurrency: string = ""
   valueCreation: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
-    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService) {
+    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
         this.dataloader()
@@ -58,6 +59,7 @@ export class ProjectBenefitsComponent implements OnInit {
         this.apiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
+              console.log(res)
               console.log(currency)
               this.localCurrency = currency.localCurrencyAbbreviation
 
@@ -128,6 +130,7 @@ export class ProjectBenefitsComponent implements OnInit {
           };
           this.compare(this.columnYear)
           this.valuecreationngxdata = res.projectsMetricsData
+          console.log(this.valuecreationngxdata)
           // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true
@@ -185,5 +188,55 @@ export class ProjectBenefitsComponent implements OnInit {
     this.viewHisOpPerformance = true
     this.viewContent = true
   }
+
+  baselinePlans() {
+    var comfirmConfig: FuseConfirmationConfig = {
+      "title": "Are you sure?",
+      "message": "This function will baseline metric(s). Are you sure you want to continue? ",
+      "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warn"
+      },
+      "actions": {
+          "confirm": {
+              "show": true,
+              "label": "OK",
+              "color": "warn"
+          },
+          "cancel": {
+              "show": true,
+              "label": "Cancel"
+          }
+      },
+      "dismissible": true
+  }
+  const baselinePlanAlert = this.fuseAlert.open(comfirmConfig)
+  baselinePlanAlert.afterClosed().subscribe(close => {
+    if (close == 'confirmed') {
+      this.valuecreationngxdata.forEach(metricData => {
+        
+        // Iterate over all keys of the metricData object
+        Object.keys(metricData).forEach(key => {
+          // Check if the key is a fiscal year
+          if (/^FY \d+$/.test(key)) {
+            // This key represents a fiscal year
+            metricData[key].forEach(data => {
+             data.baseline = data.current;
+             console.log(data.baseline)
+            });
+          }
+        });
+      })
+      console.log(this.valuecreationngxdata)
+
+      // this.apiService.updateProjectMetrics(this.id, updatedMetricsData)
+      //   .then(response => {
+      //     console.log('Update successful', response);
+
+      //   })
+      }
+  })
+}
 
 }

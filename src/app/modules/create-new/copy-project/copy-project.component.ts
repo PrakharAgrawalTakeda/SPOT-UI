@@ -64,14 +64,14 @@ export class CopyProjectComponent implements OnInit {
         link: '/create-project',
         children: [
           {
-            title: 'Create a Strategic Initiative / Program',
-            type: 'basic',
-            link: '/create-project/create-strategic-initiative-project'
-          },
-          {
             title: 'Create a Standard/Simple Project/Program',
             type: 'basic',
             link: '/create-project/create-new-project'
+          },
+          {
+            title: 'Create a Strategic Initiative/Program',
+            type: 'basic',
+            link: '/create-project/create-strategic-initiative-project'
           },
           {
             title: 'Copy an existing Project',

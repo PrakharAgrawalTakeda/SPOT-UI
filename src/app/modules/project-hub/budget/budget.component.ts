@@ -182,7 +182,7 @@ export class BudgetComponent implements OnInit {
         const currentHistorical = currentEntry?.historical || 0;
         const planHistorical = forecast.find(x => x.active === 'Plan')?.historical || 0;
         const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
-        const planMonthText = this.getMonthText(planMtdpDate.getMonth());
+        const planMonthText = this.getMonthText(currentMtdpDate.getMonth());
         const currentMonthValue = currentEntry && currentEntry[currentMonthText] || 0;
         const planMonthValue = planActive && planActive[planMonthText] || 1;
         this.budgetForecastForm.patchValue({
@@ -198,7 +198,7 @@ export class BudgetComponent implements OnInit {
             ytdpPercentage: Number((currentHistorical / (planHistorical != 0 ? planHistorical : 1)).toFixed(2)),
             ytdpValue: currentHistorical - planHistorical,
             mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
-            mtdpValue: currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(planMtdpDate.getMonth())],
+            mtdpValue: currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(currentMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(currentEntry.mtdpDeviationCodeID),
             committedSpend: forecast.find(x => x.isopen).committedSpend,
         })

@@ -135,9 +135,11 @@ export class BudgetGeneralEditComponent {
             if(this.budgetInfoForm.controls.capexRequired.value ==true) {
                 this.required = true;
             }
+            if( !this.isBudgetAdmin && this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+                this.budgetId.disable()
+            }
             if(this.capexRequired.value ==true && !this.isBudgetAdmin){
                 this.capexRequired.disable({emitEvent : false})
-                this.budgetId.disable()
                 this.gmsBudgetowner.disable();
             }
             if(!this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue ){

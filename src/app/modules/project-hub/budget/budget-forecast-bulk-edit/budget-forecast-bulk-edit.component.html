@@ -11,7 +11,7 @@
         <div class="grid justify-items-stretch m-2">
             <div class=" text-xl font-medium tracking-tight leading-6 truncate text-secondary justify-self-left">{{headerLabel}}</div>
         </div>
-        <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-2 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
+        <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-4 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
             <div >
                 <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
@@ -65,9 +65,9 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
+        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4 ">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">{{y0Label}} (Current Fiscal Year)</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y0Label}} (Current Fiscal Year)</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -217,6 +217,7 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
+
                 <ngx-datatable-column name="Oct" prop="oct" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false" [sortable]="false" [draggable]="false">
                     <ng-template let-column="column" ngx-datatable-header-template>
@@ -373,7 +374,7 @@
 
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">{{y1Label}} (Next Fiscal Year)</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y1Label}} (Next Fiscal Year)</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -399,7 +400,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="apr" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'apr')"
@@ -420,7 +421,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
                             <spot-input-forecast formControlName="may" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'may')"
@@ -441,7 +442,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="jun" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'jun')"
@@ -462,7 +463,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="jul" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'jul')"
@@ -483,7 +484,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="aug" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'aug')"
@@ -504,7 +505,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="sep" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'sep')"
@@ -525,7 +526,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="oct" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'oct')"
@@ -546,7 +547,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
                             <spot-input-forecast formControlName="nov" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'nov')"
@@ -567,7 +568,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
                             <spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'dec')"
@@ -588,7 +589,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
                             <spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'jan')"
@@ -609,7 +610,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex) ">
                             <spot-input-forecast formControlName="feb" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'feb')"
@@ -630,7 +631,7 @@
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value ?  (value | number : fractionSize) : 0}}</p>
                         </a>
-                        <form [formGroup]="forecastsY1Form.controls[rowIndex]"
+                        <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="mar" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'mar')"
@@ -657,7 +658,7 @@
         </div>
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4" >
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Yearly Totals</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary  mb-2">Yearly Totals</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -676,7 +677,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">Historical</div></span>
+                                <span class="grayBg headBgHeight"><div class="mr-2 pt-1">Historical</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -814,7 +815,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">Total Capex</div></span>
+                                <span class="purpleBg headBgHeight"><div class="mr-2 pt-1">Total Capex</div></span>
                             </span>
                         </ng-container>
                     </ng-template>

@@ -151,7 +151,7 @@ export class BudgetFundingInformationBulkEditComponent {
         }))
         this.fundingRequests = [...this.fundingRequests, ...j]
         this.frTableEditStack.push(this.fundingRequests.length - 1)
-        var div = document.getElementsByClassName('datatable-scroll')[0]
+        var div = document.getElementsByClassName('ngx-datatable')[0]
         setTimeout(() => {
             div.scroll({
                 top: div.scrollHeight,

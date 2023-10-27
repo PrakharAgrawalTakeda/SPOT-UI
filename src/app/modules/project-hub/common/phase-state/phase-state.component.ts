@@ -114,7 +114,7 @@ export class PhaseStateComponent implements OnInit {
         }).catch(err => {
             if(err.status == 400){
                 this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-                this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', body, '', false, true);
+                this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', body, '', true);
             }
         })
     }

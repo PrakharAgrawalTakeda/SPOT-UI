@@ -16,14 +16,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative/Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',
@@ -55,14 +55,14 @@ export const compactNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative / Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',
@@ -94,14 +94,14 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative / Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',
@@ -132,14 +132,14 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         link: '/create-project',
         children: [
             {
-                title: 'Create a Strategic Initiative / Program',
-                type: 'basic',
-                link: '/create-project/create-strategic-initiative-project'
-            },
-            {
                 title: 'Create a Standard/Simple Project/Program',
                 type: 'basic',
                 link: '/create-project/create-new-project'
+            },
+            {
+                title: 'Create a Strategic Initiative/Program',
+                type: 'basic',
+                link: '/create-project/create-strategic-initiative-project'
             },
             {
                 title: 'Copy an existing Project',

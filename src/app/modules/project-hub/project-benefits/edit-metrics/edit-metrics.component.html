@@ -1,0 +1,36 @@
+<div class="flex items-start justify-between bg-primary sidepanel-header">
+    <div class="text-on-primary" style="padding-top: 6px">Edit Metric</div>
+    <div style="padding-top: 2px"><a (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')"
+            href="javascript:void(0)" title="Close">
+            <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
+        </a>
+    </div>
+</div>
+<form class="w-full p-[20px]" [formGroup]="capexAvoidanceForm">
+    <div class=" h-[84vh] overflow-hidden">
+        <spot-input class="w-full read-only" formControlName="metricCategoryId" name="metricCategoryId"
+            [label]="'Metric Category'" [placeholder]="'Metric Category'">
+        </spot-input>
+        <spot-input class="w-full read-only" formControlName="metricName" name="metricName" 
+            [label]="'Metric Name'" [placeholder]="'Metric Name'">
+        </spot-input>
+        <spot-input class="w-full read-only" formControlName="metricUnit" name="metricUnit"
+            [label]="'Metric Unit'" [placeholder]="'Metric Unit'">
+        </spot-input>
+        <spot-input class="w-full read-only" formControlName="metricDescription" name="metricDescription"
+            [label]="'Metric Description'" [placeholder]="'Metric Description'">
+        </spot-input>
+        <spot-input class="w-full read-only" formControlName="metricFormat" name="metricFormat"
+            [label]="'Metric Format'" [placeholder]="'Metric Format'">
+    </spot-input>
+</div>
+    <div class="flex items-start justify-between mt-6">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+            (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitnewmetric()">
+            Submit
+        </button>
+    </div>
+</form>
