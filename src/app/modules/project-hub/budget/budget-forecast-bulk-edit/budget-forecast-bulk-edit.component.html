@@ -11,7 +11,7 @@
         <div class="grid justify-items-stretch m-2">
             <div class=" text-xl font-medium tracking-tight leading-6 truncate text-secondary justify-self-left">{{headerLabel}}</div>
         </div>
-        <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-2 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
+        <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-4 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
             <div >
                 <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
@@ -65,9 +65,9 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
+        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4 ">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">{{y0Label}} (Current Fiscal Year)</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y0Label}} (Current Fiscal Year)</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -373,7 +373,7 @@
 
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">{{y1Label}} (Next Fiscal Year)</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y1Label}} (Next Fiscal Year)</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -657,7 +657,7 @@
         </div>
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4" >
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Yearly Totals</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary  mb-2">Yearly Totals</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
