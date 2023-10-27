@@ -98,7 +98,7 @@ export class PortfolioCenterComponent implements OnInit {
     "CAPSProject": [],
     "Project/Program": [],
     "OverallStatus": [],
-    "PrimaryValueDriver":[]
+    "PrimaryValueDriver": []
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -190,11 +190,11 @@ export class PortfolioCenterComponent implements OnInit {
   pageNumber = 0
   groupData: any;
   showFilter = false
- toggleObject = {};
+  toggleObject = {};
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
   initial: any;
-  user={}
-  state={}
+  user = {}
+  state = {}
   changedToggleStates: Record<string, boolean[]> = {};
 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
@@ -274,14 +274,14 @@ export class PortfolioCenterComponent implements OnInit {
           link: '/create-project',
           children: [
             {
-              title: 'Create a Strategic Initiative / Program',
-              type: 'basic',
-              link: '/create-project/create-strategic-initiative-project'
-            },
-            {
               title: 'Create a Standard/Simple Project/Program',
               type: 'basic',
               link: '/create-project/create-new-project'
+            },
+            {
+              title: 'Create a Strategic Initiative/Program',
+              type: 'basic',
+              link: '/create-project/create-strategic-initiative-project'
             },
             {
               title: 'Copy an existing Project',
@@ -548,7 +548,7 @@ export class PortfolioCenterComponent implements OnInit {
                   var name = "Overall Status"
                   var order = 16
                 }
-                else if(attribute == "PrimaryValueDriver"){
+                else if (attribute == "PrimaryValueDriver") {
                   var name = "Primary Value Driver"
                   var order = 17
                 }
@@ -666,8 +666,8 @@ export class PortfolioCenterComponent implements OnInit {
           this.filterList.sort((a, b) => {
             return (a.order < b.order ? -1 : a.order == b.order ? 0 : 1);
           })
-          if(filterGroups.length > 0){
-          filterGroups[filterGroups.length - 1].groupCondition = 0
+          if (filterGroups.length > 0) {
+            filterGroups[filterGroups.length - 1].groupCondition = 0
           }
           this.groupData
           if (localattribute == null) {
@@ -701,7 +701,7 @@ export class PortfolioCenterComponent implements OnInit {
             if (res.budgetTile.localCurrencyAbbreviation == "OY") {
               this.budgetCurrency = "OY"
             }
-            else{
+            else {
               this.budgetCurrency = ""
             }
             if (res.budgetTile.isPreliminaryPeriod) {
@@ -902,12 +902,12 @@ export class PortfolioCenterComponent implements OnInit {
   scrollHandler(event) {
     const url = this.router.url;
     if (url.substring(url.lastIndexOf('/') + 1) == 'portfolio-center') {
-    this.scroll = true
-    this.showContent = false
-    var fieldNameElement: any;
-    fieldNameElement = document.getElementsByClassName('page-count');
-    fieldNameElement[0].innerText = "Total Projects based on the applied filter criteria: " + this.totalproject + " Project(s)";
-    this.showContent = true
+      this.scroll = true
+      this.showContent = false
+      var fieldNameElement: any;
+      fieldNameElement = document.getElementsByClassName('page-count');
+      fieldNameElement[0].innerText = "Total Projects based on the applied filter criteria: " + this.totalproject + " Project(s)";
+      this.showContent = true
     }
   }
 
@@ -1093,172 +1093,172 @@ export class PortfolioCenterComponent implements OnInit {
       "uniqueId": "",
       "value": ""
     }
-      Object.keys(this.localAttributeForm.controls).forEach((name) => {
-        const currentControl = this.localAttributeForm.controls[name];
-        var i = mainObj.findIndex(x => x.uniqueId === name);
-        if (currentControl.dirty && i >= 0) {
-          if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-            mainObj[i].data = []
+    Object.keys(this.localAttributeForm.controls).forEach((name) => {
+      const currentControl = this.localAttributeForm.controls[name];
+      var i = mainObj.findIndex(x => x.uniqueId === name);
+      if (currentControl.dirty && i >= 0) {
+        if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+          mainObj[i].data = []
+          dataToSend.push(mainObj[i])
+        }
+        else if (mainObj[i].dataType == 2) {
+          if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)) {
+            mainObj[i].data[0].value = null
             dataToSend.push(mainObj[i])
           }
-          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 2 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-            mainObj[i].data = []
-            dataToSend.push(mainObj[i])
-          }
-          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-            mainObj[i].data = []
-            dataToSend.push(mainObj[i])
-          }
-          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
-            mainObj[i].data = []
-            dataToSend.push(mainObj[i])
-          }
-          else if (mainObj[i].data.length == 0 && (mainObj[i].dataType == 6 || mainObj[i].dataType == 4) && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-            mainObj[i].data = []
-            dataToSend.push(mainObj[i])
-          }
-          else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 5 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-            mainObj[i].data = []
-            dataToSend.push(mainObj[i])
-          }
-          else if (mainObj[i].dataType == 2) {
-            if (mainObj[i].data.length != 0 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || this.localAttributeForm.controls[mainObj[i].uniqueId].value == null)) {
-              mainObj[i].data[0].value = null
-              dataToSend.push(mainObj[i])
+          else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+            emptyObject = {
+              "uniqueId": "",
+              "value": moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
             }
-            else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
-              emptyObject = {
-                "uniqueId": "",
-                "value": moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            mainObj[i].data.push(emptyObject)
+            emptyObject = {
+              "uniqueId": "",
+              "value": moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            }
+            mainObj[i].data.push(emptyObject)
+            dataToSend.push(mainObj[i])
+          }
+          else {
+            mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            mainObj[i].data[1].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
+            dataToSend.push(mainObj[i])
+          }
+        }
+        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
+          if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+            mainObj[i].data[0].value = ""
+            dataToSend.push(mainObj[i])
+          }
+          else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
+            emptyObject = {
+              "uniqueId": "",
+              "value": ""
+            }
+            mainObj[i].data.push(emptyObject)
+            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            dataToSend.push(mainObj[i])
+          }
+          else {
+            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+            dataToSend.push(mainObj[i])
+          }
+        }
+        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
+          var data = []
+          if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
+            for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
+              if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
+                mainObj[i].data = []
+                mainObj[i].data[j] = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                }
               }
-              mainObj[i].data.push(emptyObject)
-              emptyObject = {
-                "uniqueId": "",
-                "value": moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-              }
-              mainObj[i].data.push(emptyObject)
-              dataToSend.push(mainObj[i])
-            }
-            else {
-              mainObj[i].data[0].value = moment(this.localAttributeForm.controls[mainObj[i].name].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-              mainObj[i].data[1].value = moment(this.localAttributeForm.controls[mainObj[i].uniqueId].value).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]')
-              dataToSend.push(mainObj[i])
-            }
-          }
-          else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
-            if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-              mainObj[i].data[0].value = ""
-              dataToSend.push(mainObj[i])
-            }
-            else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
-              emptyObject = {
-                "uniqueId": "",
-                "value": ""
-              }
-              mainObj[i].data.push(emptyObject)
-              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-              dataToSend.push(mainObj[i])
-            }
-            else {
-              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-              dataToSend.push(mainObj[i])
-            }
-          }
-          else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
-            var data = []
-            if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
-              for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
-                if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
-                  mainObj[i].data = []
+              else {
+                if (mainObj[i].data[j] == undefined) {
                   mainObj[i].data[j] = {
                     "uniqueId": "",
                     "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
                   }
                 }
                 else {
-                  if (mainObj[i].data[j] == undefined) {
-                    mainObj[i].data[j] = {
-                      "uniqueId": "",
-                      "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
-                    }
-                  }
-                  else {
-                    mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                  mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
 
-                  }
                 }
               }
             }
-            else {
-              mainObj[i].data = []
-            }
-            dataToSend.push(mainObj[i])
           }
           else {
-            if (mainObj[i].data.length == 0) {
-              if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-                emptyObject = {
-                  "uniqueId": "",
-                  "value": ""
-                }
-                mainObj[i].data.push(emptyObject)
-                mainObj[i].data[0].value = null
-                dataToSend.push(mainObj[i])
+            mainObj[i].data = []
+          }
+          dataToSend.push(mainObj[i])
+        }
+        else {
+          if (mainObj[i].data.length == 0) {
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              emptyObject = {
+                "uniqueId": "",
+                "value": ""
               }
-              else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
-                emptyObject = {
-                  "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].name].value
-                }
-                mainObj[i].data.push(emptyObject)
-                emptyObject = {
-                  "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
-                }
-                mainObj[i].data.push(emptyObject)
-                dataToSend.push(mainObj[i])
+              mainObj[i].data.push(emptyObject)
+              mainObj[i].data[0].value = null
+              dataToSend.push(mainObj[i])
+            }
+            else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].name].value
               }
-              else {
-                emptyObject = {
-                  "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
-                }
-                mainObj[i].data.push(emptyObject)
-                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
-                dataToSend.push(mainObj[i])
+              mainObj[i].data.push(emptyObject)
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
               }
+              mainObj[i].data.push(emptyObject)
+              dataToSend.push(mainObj[i])
             }
             else {
-              if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
-                mainObj[i].data[0].value = null
-                dataToSend.push(mainObj[i])
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
               }
-              if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
-                mainObj[i].data = []
-                emptyObject = {
-                  "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].name].value
-                }
-                mainObj[i].data.push(emptyObject)
-                emptyObject = {
-                  "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
-                }
-                mainObj[i].data.push(emptyObject)
-                dataToSend.push(mainObj[i])
+              mainObj[i].data.push(emptyObject)
+              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+              dataToSend.push(mainObj[i])
+            }
+          }
+          else {
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+              mainObj[i].data[0].value = null
+              dataToSend.push(mainObj[i])
+            }
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+              mainObj[i].data = []
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].name].value
               }
-              else {
-                mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
-                dataToSend.push(mainObj[i])
+              mainObj[i].data.push(emptyObject)
+              emptyObject = {
+                "uniqueId": "",
+                "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value
               }
+              mainObj[i].data.push(emptyObject)
+              dataToSend.push(mainObj[i])
+            }
+            else {
+              mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value
+              dataToSend.push(mainObj[i])
             }
           }
         }
-      })
+      }
+    })
     console.log(dataToSend)
     if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)) {
-        dataToSend = []
-      }
+      dataToSend = []
+    }
     if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
       var c = 0;
       var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
@@ -1286,33 +1286,33 @@ export class PortfolioCenterComponent implements OnInit {
     this.showContent = false
     this.PortfolioFilterForm.patchValue({
       PortfolioOwner: [],
-    ExecutionScope: [],
-    OwningOrganization: [],
-    ProjectType: [],
-    ProjectState: this.state,
-    ProjectPhase: [],
-    CapitalPhase: [],
-    OEPhase: [],
-    TotalCAPEX: [],
-    Product: [],
-    ProjectTeamMember: this.user,
-    GMSBudgetOwner: [],
-    AGILEWorkstream: [],
-    AGILEWave: [],
-    CAPSProject: [],
-    OverallStatus: [],
-    projectName: [],
-    PrimaryValueDriver: [],
+      ExecutionScope: [],
+      OwningOrganization: [],
+      ProjectType: [],
+      ProjectState: this.state,
+      ProjectPhase: [],
+      CapitalPhase: [],
+      OEPhase: [],
+      TotalCAPEX: [],
+      Product: [],
+      ProjectTeamMember: this.user,
+      GMSBudgetOwner: [],
+      AGILEWorkstream: [],
+      AGILEWave: [],
+      CAPSProject: [],
+      OverallStatus: [],
+      projectName: [],
+      PrimaryValueDriver: [],
     })
     this.showContent = true
     this.defaultfilter.ProjectTeamMember = this.user
-    this.defaultfilter.ProjectState= this.state
-    this.defaultfilter.ProjectPhase= []
+    this.defaultfilter.ProjectState = this.state
+    this.defaultfilter.ProjectPhase = []
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
     localStorage.setItem('spot-localattribute', null)
     this.defaultfilter.ProjectTeamMember = []
-    this.defaultfilter.ProjectState= []
-    this.defaultfilter.ProjectPhase= []
+    this.defaultfilter.ProjectState = []
+    this.defaultfilter.ProjectPhase = []
     // this.resetpage()
   }
 
@@ -1497,40 +1497,40 @@ export class PortfolioCenterComponent implements OnInit {
     let noTogglesTurnedOn = true
 
     // Step 1: Iterate through each page
-for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
-  if (this.pageToggleStates[pageNumber]) {
-    const pageToggleStates = this.pageToggleStates[pageNumber];
+    for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+      if (this.pageToggleStates[pageNumber]) {
+        const pageToggleStates = this.pageToggleStates[pageNumber];
 
-    Object.keys(pageToggleStates).forEach((toggleName) => {
-      const toggleValues = pageToggleStates[toggleName];
+        Object.keys(pageToggleStates).forEach((toggleName) => {
+          const toggleValues = pageToggleStates[toggleName];
 
-      if (toggleValues.some((value) => value === true)) {
-        noTogglesTurnedOn = false
-        // Only add project UUIDs to toggleObject if the toggle is true
-        if (!this.toggleObject[toggleName]) {
-          this.toggleObject[toggleName] = [];
-        }
+          if (toggleValues.some((value) => value === true)) {
+            noTogglesTurnedOn = false
+            // Only add project UUIDs to toggleObject if the toggle is true
+            if (!this.toggleObject[toggleName]) {
+              this.toggleObject[toggleName] = [];
+            }
 
-        const existingProjectUUIDs = this.toggleObject[toggleName]; // Get existing UUIDs for the toggle
+            const existingProjectUUIDs = this.toggleObject[toggleName]; // Get existing UUIDs for the toggle
 
-        // Find the project UUIDs for which the toggle is true
-        const trueProjectUUIDs = toggleValues
-          .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
-          .filter(Boolean);
+            // Find the project UUIDs for which the toggle is true
+            const trueProjectUUIDs = toggleValues
+              .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
+              .filter(Boolean);
 
-        // Add the project UUIDs to toggleObject only if they don't exist already
-        for (const uuid of trueProjectUUIDs) {
-          if (!existingProjectUUIDs.includes(uuid)) {
-            this.toggleObject[toggleName].push(uuid);
+            // Add the project UUIDs to toggleObject only if they don't exist already
+            for (const uuid of trueProjectUUIDs) {
+              if (!existingProjectUUIDs.includes(uuid)) {
+                this.toggleObject[toggleName].push(uuid);
+              }
+            }
+
+            // Update the counter for each report type
+            reportTypeCounters[toggleName] += trueProjectUUIDs.length;
           }
-        }
-
-        // Update the counter for each report type
-        reportTypeCounters[toggleName] += trueProjectUUIDs.length;
+        });
       }
-    });
-  }
-}
+    }
 
     console.log('Toggle Object:', this.toggleObject);
 
@@ -1547,15 +1547,15 @@ for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
     //   );
 
     // console.log(totalTurnedOnToggles)
-                // Flag to determine if we've found a report type with more than 100 counts
-let showConfirmation = false;
+    // Flag to determine if we've found a report type with more than 100 counts
+    let showConfirmation = false;
 
-for (const toggleName in reportTypeCounters) {
-    if (reportTypeCounters[toggleName] > 100) {
+    for (const toggleName in reportTypeCounters) {
+      if (reportTypeCounters[toggleName] > 100) {
         showConfirmation = true;
         break; // exit the loop once a report type exceeds 100
+      }
     }
-}
     if (typeof totalTurnedOnToggles === 'number' && totalTurnedOnToggles > 500) {
       console.log("HI")
       var comfirmConfig: FuseConfirmationConfig = {
@@ -1578,9 +1578,9 @@ for (const toggleName in reportTypeCounters) {
         },
         "dismissible": true
       };
-this.fuseAlert.open(comfirmConfig);
+      this.fuseAlert.open(comfirmConfig);
 
-this.updateToggleObjectFromChanges();
+      this.updateToggleObjectFromChanges();
 
     }
 
@@ -1619,41 +1619,41 @@ this.updateToggleObjectFromChanges();
         createProjectAlert.afterClosed().subscribe((close) => {
           if (close === 'confirmed') {
             this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
-            // Close the drawer
-            this.filterDrawer.close();
-            // Reset toggle states to false on all pages and all toggles
-            for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
-              if (this.pageToggleStates[pageNumber]) {
-                Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
-                  this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
-                });
+              // Close the drawer
+              this.filterDrawer.close();
+              // Reset toggle states to false on all pages and all toggles
+              for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+                if (this.pageToggleStates[pageNumber]) {
+                  Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
+                    this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
+                  });
+                }
               }
-            }
 
-            this.showConfirmationMessage();
-          })
-        }
+              this.showConfirmationMessage();
+            })
+          }
         });
       }
 
-}
-else {
-  this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
-  // Close the drawer
-  this.filterDrawer.close();
-  // Reset toggle states to false on all pages and all toggles
-  for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
-    if (this.pageToggleStates[pageNumber]) {
-      Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
-        this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
-      });
     }
-  }
+    else {
+      this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+        // Close the drawer
+        this.filterDrawer.close();
+        // Reset toggle states to false on all pages and all toggles
+        for (let pageNumber = 0; pageNumber < this.totalPages; pageNumber++) {
+          if (this.pageToggleStates[pageNumber]) {
+            Object.keys(this.pageToggleStates[pageNumber]).forEach((toggleName) => {
+              this.pageToggleStates[pageNumber][toggleName] = Array(this.numberOfToggles()).fill(false);
+            });
+          }
+        }
 
 
-  this.showConfirmationMessage();
-})
-}
+        this.showConfirmationMessage();
+      })
+    }
   }
 
   updateToggleObjectFromChanges() {
