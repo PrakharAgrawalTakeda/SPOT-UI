@@ -82,6 +82,7 @@ export class ScheduleViewEditComponent implements OnInit {
   dataloader() {
     if (this.projecthubservice.itemid != "new") {
         this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
+          console.log(this.projecthubservice.itemid)
         this.schedule = res
         console.log(this.projecthubservice)
         console.log('res')
