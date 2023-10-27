@@ -15,7 +15,7 @@ export class QualityRefBulkEditComponent implements OnInit {
   formFieldHelpers: any
   viewContent = false
   generalInfoData: any = {}
-  qrTableEditStack: any = []  
+  qrTableEditStack: any = []
   formValue = []
   dbvalue = []
   qualityForm = new FormGroup({
@@ -184,7 +184,7 @@ export class QualityRefBulkEditComponent implements OnInit {
     }]
     this.generalInfoData.qualityReferences = [...this.generalInfoData.qualityReferences, ...j]
     this.qrTableEditStack.push(this.generalInfoData.qualityReferences.length - 1)
-    var div = document.getElementsByClassName('datatable-scroll')[0]
+    var div = document.getElementsByClassName('spot-table')[0]
     setTimeout(() => {
       div.scroll({
         top: div.scrollHeight,

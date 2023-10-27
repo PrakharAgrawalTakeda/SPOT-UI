@@ -7,8 +7,7 @@
             </a>
         </div>
     </div>
-    <form class="pl-3 w-full overflow-hidden" [formGroup]="strategicDriversForm" (ngSubmit)="submitSD()">
-        <div [ngClass]="{'overflow-x-hidden  pr-3 overflow-y-scroll h-[86.5vh] pt-3': viewType == 'SidePanel'}">
+    <form class="px-2 pt-2 overflow-y-scroll overflow-x-hidden" [style]="viewType === 'SidePanel' ? 'height:calc(100vh - 105px)' : null" [formGroup]="strategicDriversForm" >
             <div [ngClass]="{'customPrimary': viewType == 'Form'}">
             <spot-singleselect-autocomplete *ngIf="viewElementChecker('primaryKPI')" formControlName="primaryKPI"
                 class="w-full" name="primaryKPI" [label]="'Primary Value Driver'" [placeholder]="'Primary Value Driver'"
@@ -106,15 +105,14 @@
                     [label]="'Good Practice'">
                 </spot-toggle>
             </div>
-        </div>
-        <div class="pr-3 flex items-start justify-between mt-6" *ngIf="viewType == 'SidePanel'">
-            <a class="min-w-26" mat-flat-button [color]="'primary'"
-                (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
-                Cancel
-            </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
-                Submit
-            </button>
-        </div>
     </form>
+    <div class="w-full px-3 pr-3 flex items-start justify-between" *ngIf="viewType == 'SidePanel'">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitSD()">
+            Submit
+        </button>
+    </div>
 </div>
