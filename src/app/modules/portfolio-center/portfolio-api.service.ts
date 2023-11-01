@@ -117,14 +117,14 @@ export class PortfolioApiService {
     return response
   }
 
-  getForecastExcelData(LBEPeriod, projectId, budgetId) {
-    var url = GlobalVariables.apiurl + "Budget/GetExcelForecastData" + "?LBEPeriodUId=" + LBEPeriod + "&ProjectIds="+ projectId + "&BudgetIds="+ budgetId
+  getForecastExcelData(LBEPeriod: string, projectId, budgetId) {
+    var url = GlobalVariables.apiurl + "Budget/GetExcelUpdateData/Forecast" + "?LBEPeriodUID=" + LBEPeriod + "&ProjectIds="+ projectId + "&BudgetIds="+ budgetId
     const abc$ = this.http.get(url)
     const response = lastValueFrom(abc$)
     return response
   }
   
-  getHistoricalExcelData(budgetId, projectId) {
+  getHistoricalExcelData(projectId, budgetId) {
     var url = GlobalVariables.apiurl + "Budget/GetExcelUpdateData/Historical" + "?ProjectIds="+ projectId + "&BudgetIds="+ budgetId
     const abc$ = this.http.get(url)
     const response = lastValueFrom(abc$)

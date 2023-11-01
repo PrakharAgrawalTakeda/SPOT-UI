@@ -459,6 +459,7 @@ export class CreateProjectComponent implements OnInit {
       }
       mainObjCreate[0].isCapsProject = false
       mainObjCreate[0].strategicInitiativeOwner = formValue.sponsor != "" ? formValue.sponsor.userAdid : ''
+      mainObjCreate[0].IsConfidential = formValue.isConfidential == "" || formValue.isConfidential == "No" ? false : true
       mainObjCreate[0].financialRealizationStartDate = formValue.valueCaptureStart ? moment(formValue.valueCaptureStart).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : formValue.valueCaptureStart
     }
     else {

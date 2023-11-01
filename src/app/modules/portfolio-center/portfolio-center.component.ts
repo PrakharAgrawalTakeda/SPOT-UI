@@ -594,7 +594,7 @@ export class PortfolioCenterComponent implements OnInit {
                     {
                       "filterAttribute": attribute,
                       "filterOperator": "=",
-                      "filterValue": this.filtersnew[attribute][j].gmsbudgetOwnerDefault,
+                      "filterValue": this.filtersnew[attribute][j].portfolioOwnerId,
                       "unionOperator": 2
                     }
                   }

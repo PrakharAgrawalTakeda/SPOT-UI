@@ -168,23 +168,23 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                         <spot-input style="display: flex;" *ngSwitchCase="'4'" class="w-full"
                                             formControlName={{item.name}} name={{item.name}} [label]=item.name
                                             [decimalCount]=item.linesCount [inputType]="'Number'"
-                                            [callLocation]="'LocalAttribute'" [placeholder]=item.name>
+                                            [callLocation]="'LocalAttribute'" [placeholder]="'From'">
                                         </spot-input>
                                         <spot-input style="display: flex; left: 10px; position: relative;"
                                             *ngSwitchCase="'4'" class="w-full" formControlName={{item.uniqueId}}
                                             name={{item.uniqueId}} [decimalCount]=item.linesCount [inputType]="'Number'"
-                                            [callLocation]="'LocalAttribute'" [placeholder]=item.name>
+                                            [callLocation]="'LocalAttribute'" [placeholder]="'To'">
                                         </spot-input>
                                     </div>
                                     <div style="display: flex;">
                                         <spot-input-date style="display: flex;" *ngSwitchCase="'2'"
                                             class="w-full read-only" formControlName={{item.name}} name={{item.name}}
-                                            [label]=item.name [placeholder]=item.name>
+                                            [label]=item.name [placeholder]="'From'">
                                         </spot-input-date>
                                         <spot-input-date style="display: flex; left: 10px; position: relative;"
                                             *ngSwitchCase="'2'" class="w-full read-only"
                                             formControlName={{item.uniqueId}} name={{item.uniqueId}}
-                                            [placeholder]=item.name>
+                                            [placeholder]="'To'">
                                         </spot-input-date>
                                     </div>
                                     <div *ngIf="!item.isMulti" #people>
@@ -381,7 +381,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             {{item.name}} : {{item.value}} {{isLast?'':', '}}
                         </span>
                         <span *ngIf="item.count > 1" class="text-primary text-base">
-                            {{item.name}}( {{item.count}} ) {{isLast?'':', '}}
+                            {{item.name}} ({{item.count}}) {{isLast?'':', '}}
                         </span>
                     </span>
                 </div>
