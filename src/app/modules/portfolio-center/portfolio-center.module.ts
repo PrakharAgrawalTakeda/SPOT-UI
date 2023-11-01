@@ -48,7 +48,7 @@ export const projectRoutes: Route[] = [
     PortfolioPerformanceComponent,
     ProjectPerformanceComponent,
     FxRateComponent,
-    ForecastExcelUpdateComponent
+    ForecastExcelUpdateComponent,
   ],
   imports: [
     RouterModule.forChild(projectRoutes),
