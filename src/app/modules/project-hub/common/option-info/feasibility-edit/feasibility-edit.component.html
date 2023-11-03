@@ -7,8 +7,7 @@
             </a>
         </div>
     </div>
-    <form class="w-full p-[20px]" [formGroup]="optionInfoForm" (ngSubmit)="submitOptionInfo()">
-        <div class="h-[84vh] overflow-hidden">
+    <form class="overflow-auto m-2"  style="height: calc(100vh - 120px)" [formGroup]="optionInfoForm" >
             <!--Enter Element here-->
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                 class="pr-6 material font-medium text-sm text-default whitespace-nowrap" [rows]="feasibilityData"
@@ -36,16 +35,14 @@
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
-        </div>
-        <!-- Submit Actions here-->
-        <div class="flex items-start justify-between mt-6">
-            <a class="min-w-26" mat-flat-button [color]="'primary'"
-                (click)="projectHubService.toggleDrawerOpen('', '',[],'',true)">
-                Cancel
-            </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit">
-                Submit
-            </button>
-        </div>
     </form>
+    <div class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="min-w-26" mat-flat-button [color]="'primary'"
+           (click)="this.projectHubService.toggleDrawerOpen('', '',[],'',true)">
+            Cancel
+        </a>
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="submit" (click)="submitOptionInfo()">
+            Submit
+        </button>
+    </div>
 </div>
