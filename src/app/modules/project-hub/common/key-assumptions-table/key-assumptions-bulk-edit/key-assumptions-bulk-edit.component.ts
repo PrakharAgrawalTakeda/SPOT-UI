@@ -305,7 +305,7 @@ export class KeyAssumptionsBulkEditComponent implements OnInit {
         this.disabler()
         this.keyAssumptions = [...this.keyAssumptions, ...j]
         this.kaTableEditStack.push(this.keyAssumptions.length - 1)
-        var div = document.getElementsByClassName('datatable-scroll')[0]
+        var div = document.getElementsByClassName('ngx-datatable')[0]
         setTimeout(() => {
             div.scroll({
                 top: div.scrollHeight,

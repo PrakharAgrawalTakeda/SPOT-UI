@@ -721,44 +721,47 @@ export class BudgetForecastBulkEditComponent {
         const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
         const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
         const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
-        if(tfpPercentage >= 5){
-            this.tfpColor = 'green'
-        }else{
-            if(afpPercentage == 0){
-                this.afpColor = 'gray'
-            }else{
-                this.tfpColor = 'red'
-            }
-            this.tfpColor = 'red'
+        switch (true) {
+            case tfpPercentage === 0:
+                this.tfpColor = 'gray';
+                break;
+            case tfpPercentage < 5:
+                this.tfpColor = 'green';
+                break;
+            case tfpPercentage >= 5 && tfpPercentage < 10:
+                this.tfpColor = 'orange';
+                break;
+            case tfpPercentage >= 10:
+                this.tfpColor = 'red';
+                break;
+            default:
+                break;
         }
         if(afpPercentage >= 10 || afpPercentage <= -10){
             this.afpColor = 'red'
         }else {
-            if(afpPercentage == 0){
-                this.afpColor = 'gray'
-            }else{
-                this.afpColor = 'green'
-            }
-
+            this.afpColor = 'green'
         }
-        if(ydtpPercentage >= 10 || afpPercentage <= -10){
-            this.ydtpColor = 'red'
-        }else{
-            if(ydtpPercentage == 0){
-                this.ydtpColor = 'gray'
-            }else{
-                this.ydtpColor = 'green'
-            }
-
+        switch (true) {
+            case ydtpPercentage >= 10 || ydtpPercentage <= -10:
+                this.ydtpColor = 'red';
+                break;
+            case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
+                this.ydtpColor = 'orange';
+                break;
+            case ydtpPercentage === 0:
+                this.ydtpColor = 'gray';
+                break;
+            case ydtpPercentage > -5 && ydtpPercentage < 5:
+                this.ydtpColor = 'green';
+                break;
+            default:
+                break;
         }
         if(mdtpPercentage >=5 || mdtpPercentage <= -5){
             this.mdtpColor = 'red'
         }else{
-            if(mdtpPercentage == 0){
-                this.mdtpColor = 'gray'
-            }else{
-                this.mdtpColor = 'green'
-            }
+            this.mdtpColor = 'green'
         }
     }
     getAfdDeviationCodes(): any {

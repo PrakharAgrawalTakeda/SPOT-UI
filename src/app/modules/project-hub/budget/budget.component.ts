@@ -108,11 +108,11 @@ export class BudgetComponent implements OnInit {
                 this.fundingInformations =  response[3];
                 this.opexField = !! response[3].budget.opExRequired;
                 this.capexField = !!response[3].budget.capExRequired;
-                this.generalInfoPatchValue(response[3])
                 this.budgetForecasts = response[3];
                 this.budgetForecastsY1Capex = response[3].budgetForecastsY1.filter(x => x.budgetData == "CapEx Forecast");
                 this.budgetForecastsY1Opex = response[3].budgetForecastsY1.filter(x => x.budgetData == "OpEx Forecast");
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), response[3].budget);
+                this.generalInfoPatchValue(response[3])
                 this.viewContent = true
             })
             .catch((error) => {
@@ -152,7 +152,7 @@ export class BudgetComponent implements OnInit {
             where:  this.getLookUpName(response.budget.whereId),
             why:  this.getLookUpName(response.budget.whyId),
             fundingApprovalNeedDate:  response.budget.fundingApprovalNeedDate,
-            projectFundingStatus:  this.getLookUpName(response.budget.fundingStatusId),
+            projectFundingStatus:  this.getFundingStatus(response.budget.fundingStatusId),
             totalApprovedCapex:  response.budget.totalApprovedCapEx,
             totalApprovedOpex:   response.budget.totalApprovedOpEx,
             budgetCommentary:  response.budget.budgetComment,
@@ -200,7 +200,7 @@ export class BudgetComponent implements OnInit {
             mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
             mtdpValue: currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(currentMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(currentEntry.mtdpDeviationCodeID),
-            committedSpend: forecast.find(x => x.isopen).committedSpend,
+            committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
         })
         this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
         this.setTextColors();
@@ -239,6 +239,22 @@ export class BudgetComponent implements OnInit {
     getLookUpName(id: string): string {
         return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
     }
+    getFundingStatus(id: string): string {
+        if(this.budgetPageInfo.budgetIOs.length == 0){
+            return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
+        }else{
+            let returnText = "Not Initiated Future Spend FY ";
+            const openEntry  = this.budgetPageInfo.budgetForecasts.find(x => x.isopen == true && x.budgetData== "CapEx Forecast");
+            const years = [openEntry.annualTotal, openEntry.y1, openEntry.y2, openEntry.y3, openEntry.y4, openEntry.y5];
+            for (let i = 0; i < years.length; i++) {
+                if (years[i] !== 0) {
+                    returnText += `Y${i}`;
+                    break;
+                }
+            }
+            return returnText;
+        }
+    }
     getPortfolioOwnerNameById(id: string): any {
         return this.filterCriteria?.portfolioOwner?.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0]?.portfolioOwner || null;
     }
@@ -248,40 +264,51 @@ export class BudgetComponent implements OnInit {
         const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
         const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
         const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
-        if(tfpPercentage >= 5){
-            this.tfpColor = 'green'
+        if(this.fundingInformations.budget.totalApprovedCapEx == 0){
+            this.tfpColor = 'gray';
+            this.afpColor = 'gray';
+            this.ydtpColor = 'gray';
+            this.mdtpColor = 'gray';
         }else{
-            if(tfpPercentage == 0){
-                this.tfpColor = 'gray'
-            }else{
-                this.tfpColor = 'red'
+            switch (true) {
+                case tfpPercentage === 0:
+                    this.tfpColor = 'gray';
+                    break;
+                case tfpPercentage < 5:
+                    this.tfpColor = 'green';
+                    break;
+                case tfpPercentage >= 5 && tfpPercentage < 10:
+                    this.tfpColor = 'orange';
+                    break;
+                case tfpPercentage >= 10:
+                    this.tfpColor = 'red';
+                    break;
+                default:
+                    break;
             }
-            this.tfpColor = 'red'
-        }
-        if(afpPercentage >= 10 || afpPercentage <= -10){
-            this.afpColor = 'red'
-        }else {
-            if(afpPercentage == 0){
-                this.afpColor = 'gray'
-            }else{
+            if(afpPercentage >= 10 || afpPercentage <= -10){
+                this.afpColor = 'red'
+            }else {
                 this.afpColor = 'green'
             }
-
-        }
-        if(ydtpPercentage >= 10 || ydtpPercentage <= -10){
-            this.ydtpColor = 'red'
-        }else{
-            if(ydtpPercentage == 0){
-                this.ydtpColor = 'gray'
-            }else{
-                this.ydtpColor = 'green'
+            switch (true) {
+                case ydtpPercentage >= 10 || ydtpPercentage <= -10:
+                    this.ydtpColor = 'red';
+                    break;
+                case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
+                    this.ydtpColor = 'orange';
+                    break;
+                case ydtpPercentage === 0:
+                    this.ydtpColor = 'gray';
+                    break;
+                case ydtpPercentage > -5 && ydtpPercentage < 5:
+                    this.ydtpColor = 'green';
+                    break;
+                default:
+                    break;
             }
-        }
-        if(mdtpPercentage >=5 || mdtpPercentage <= -5){
-            this.mdtpColor = 'red'
-        }else{
-            if(mdtpPercentage == 0){
-                this.mdtpColor = 'gray'
+            if(mdtpPercentage >=5 || mdtpPercentage <= -5){
+                this.mdtpColor = 'red'
             }else{
                 this.mdtpColor = 'green'
             }

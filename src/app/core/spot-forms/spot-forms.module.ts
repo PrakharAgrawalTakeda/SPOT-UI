@@ -22,6 +22,7 @@ import { SpotToggleComponent } from './spot-toggle/spot-toggle.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SpotMultiselectUserAutocompleteComponent } from './spot-multiselect-user-autocomplete/spot-multiselect-user-autocomplete.component';
 import { SpotMultiselectProjectAutocompleteComponent } from './spot-multiselect-project-autocomplete/spot-multiselect-project-autocomplete.component';
+import { SpotInputForecastComponent } from './spot-input-forecast/spot-input-forecast.component';
 
 
 
@@ -36,7 +37,8 @@ import { SpotMultiselectProjectAutocompleteComponent } from './spot-multiselect-
     SpotSingleselectUserAutocompleteComponent,
     SpotToggleComponent,
     SpotMultiselectUserAutocompleteComponent,
-    SpotMultiselectProjectAutocompleteComponent
+    SpotMultiselectProjectAutocompleteComponent,
+    SpotInputForecastComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { SpotMultiselectProjectAutocompleteComponent } from './spot-multiselect-
     SpotSingleselectUserAutocompleteComponent,
     SpotToggleComponent,
     SpotMultiselectUserAutocompleteComponent,
-    SpotMultiselectProjectAutocompleteComponent
+    SpotMultiselectProjectAutocompleteComponent,
+    SpotInputForecastComponent
   ]
 })
 export class SpotFormsModule { }
