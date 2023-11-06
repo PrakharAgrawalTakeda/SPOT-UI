@@ -1275,8 +1275,7 @@ export class PortfolioCenterComponent implements OnInit {
     localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     this.filterDrawer.close()
     this.resetpage()
-
-
+    this.showFilter = false
   }
 
   resetpage() {
