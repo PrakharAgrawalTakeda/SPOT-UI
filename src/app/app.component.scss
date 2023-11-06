@@ -138,7 +138,7 @@
 }
 
 ::ng-deep .ngx-datatable.datatable-ri-73 .datatable-body .datatable-scroll {
-    height: 73vh !important;
+    height: calc(100vh - 220px) !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
@@ -162,8 +162,7 @@
 }
 
 ::ng-deep .ngx-datatable.datatable-ll-80 .datatable-body .datatable-scroll {
-    height: 68vh !important;
-    // width: 100vw !important;
+    height: calc(100vh - 220px) !important;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
 }
