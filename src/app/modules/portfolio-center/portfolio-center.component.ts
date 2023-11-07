@@ -188,7 +188,7 @@ export class PortfolioCenterComponent implements OnInit {
   totalPages = 0
   // The current page number
   pageNumber = 0
-  groupData: any;
+  groupData: any = [];
   showFilter = false
   toggleObject = {};
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
@@ -196,6 +196,7 @@ export class PortfolioCenterComponent implements OnInit {
   user = {}
   state = {}
   changedToggleStates: Record<string, boolean[]> = {};
+  showdefault:boolean = false
 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
@@ -684,6 +685,7 @@ export class PortfolioCenterComponent implements OnInit {
           }
 
           console.log("Filter Data : " + this.groupData)
+          this.groupData.filterGroups.length == 0 ? this.showdefault = true : this.showdefault = false
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
@@ -890,7 +892,7 @@ export class PortfolioCenterComponent implements OnInit {
                 }
               }
             };
-
+            this.showdefault = false
             this.showContent = true;
           })
         })
@@ -1922,6 +1924,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+        this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
         this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
         this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
         this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
@@ -2016,6 +2019,7 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+            this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
             this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
             this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
             this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
@@ -2509,5 +2513,14 @@ export class PortfolioCenterComponent implements OnInit {
       this.showFilter = false
     }
     this.filterDrawer.toggle();
+  }
+  DefaultFilter(){
+    this.PortfolioFilterForm.patchValue({
+      ProjectTeamMember: this.user,
+      ProjectState: this.state,
+      ProjectPhase: []
+    })
+    localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
+    this.ngOnInit()
   }
 }
