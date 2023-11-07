@@ -65,7 +65,7 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4 ">
+        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-2 ">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y0Label}} (Current Fiscal Year)</div>
             </div>
@@ -829,9 +829,8 @@
             </ngx-datatable>
         </div>
         <form [formGroup]="budgetForecastForm" *ngIf="mode=='Capex'">
-            <div class="grid m-2 grid-cols-3 gap-x-6 gap-y-0 w-19/20" >
-                    <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
-                    </spot-input>
+            <div class="grid m-2 grid-cols-4 gap-x-6 gap-y-0 w-19/20" >
+
                     <spot-singleselect-autocomplete class="w-full" formControlName="afpDeviationCode"
                                                     [label]="'AFP Deviation Code'" [placeholder]="'AFP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
                                                     [dropDownArray]="getAfdDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -840,6 +839,11 @@
                                                     [label]="'MTDP Deviation Code'" [placeholder]="'MTP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
                                                     [dropDownArray]="getMtdpDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-singleselect-autocomplete>
+                    <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                    </spot-input>
+                    <spot-input class="w-full" formControlName="totalApprovedCapex" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                                [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'"  *ngIf="mode === 'Capex'">
+                    </spot-input>
             </div>
         </form>
     </div>

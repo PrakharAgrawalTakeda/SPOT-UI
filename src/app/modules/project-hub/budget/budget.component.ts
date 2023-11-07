@@ -175,7 +175,7 @@ export class BudgetComponent implements OnInit {
         }
         const currentEntry = forecast.find(x => x.active === 'Current');
         const planActive = forecast.find(x => x.active === 'Plan');
-        const totalCapexForecast = currentEntry?.cumulativeTotal || 0;
+        const totalCapexForecast =  currentEntry?.cumulativeTotal || 0;
         const totalApprovedCapEx = budget.totalApprovedCapEx || 0;
         const currentAnnualTotal = currentEntry?.annualTotal || 0;
         const planAnnualTotal = planActive?.annualTotal || 0;
@@ -185,19 +185,59 @@ export class BudgetComponent implements OnInit {
         const planMonthText = this.getMonthText(currentMtdpDate.getMonth());
         const currentMonthValue = currentEntry && currentEntry[currentMonthText] || 0;
         const planMonthValue = planActive && planActive[planMonthText] || 1;
+        let tfpDev: number;
+        let ytdDev: number;
+        let mtdDev: number;
+        let afpDev: number;
+        if (totalCapexForecast === 0 && totalApprovedCapEx === 0) {
+            tfpDev = 0;
+        } else if (totalCapexForecast > 0 && totalApprovedCapEx === 0) {
+            tfpDev = 100;
+        } else if (totalCapexForecast < 0 && totalApprovedCapEx === 0) {
+            tfpDev = -100;
+        } else {
+            tfpDev =  totalCapexForecast / Math.abs(totalApprovedCapEx);
+        }
+        if (currentHistorical === 0 && planHistorical === 0) {
+            ytdDev = 0;
+        } else if (currentHistorical > 0 && planHistorical === 0) {
+            ytdDev = 100;
+        } else if (currentHistorical < 0 && planHistorical === 0) {
+            ytdDev = -100;
+        } else {
+            ytdDev =  currentHistorical /  Math.abs(planHistorical);
+        }
+        if (currentMonthValue === 0 && planMonthValue === 0) {
+            mtdDev = 0;
+        } else if (currentMonthValue > 0 && planMonthValue === 0) {
+            mtdDev = 100;
+        } else if (currentMonthValue < 0 && planMonthValue === 0) {
+            mtdDev = -100;
+        } else {
+            mtdDev =  currentMonthValue / Math.abs(planMonthValue);
+        }
+        if (currentAnnualTotal === 0 && planAnnualTotal === 0) {
+            afpDev = 0;
+        } else if (currentAnnualTotal > 0 && planAnnualTotal === 0) {
+            afpDev = 100;
+        } else if (currentAnnualTotal < 0 && planAnnualTotal === 0) {
+            afpDev = -100;
+        } else {
+            afpDev = (planAnnualTotal - currentAnnualTotal) / Math.abs(planAnnualTotal);
+        }
         this.budgetForecastForm.patchValue({
             referenceCurrent: forecast.find(x => x.active == 'Current').active,
             periodCurrent: forecast.find(x => x.active == 'Current').periodName,
             lastSubmittedCurrent: forecast.find(x => x.active == 'Current').lastSubmitted,
             submittedByCurrent: forecast.find(x => x.active == 'Current').userName,
-            tfpPercentage:  Number((totalCapexForecast / (totalApprovedCapEx != 0 ? totalApprovedCapEx : 1)).toFixed(2)),
+            tfpPercentage: tfpDev,
             tfpValue: totalCapexForecast - totalApprovedCapEx,
-            afpPercentage: Number((currentAnnualTotal / (planAnnualTotal != 0 ? planAnnualTotal : 1)).toFixed(2)),
+            afpPercentage: afpDev,
             afpValue: currentAnnualTotal - planAnnualTotal,
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
-            ytdpPercentage: Number((currentHistorical / (planHistorical != 0 ? planHistorical : 1)).toFixed(2)),
+            ytdpPercentage: ytdDev,
             ytdpValue: currentHistorical - planHistorical,
-            mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
+            mtdpPercentage: mtdDev,
             mtdpValue: currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(currentMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(currentEntry.mtdpDeviationCodeID),
             committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
@@ -240,7 +280,7 @@ export class BudgetComponent implements OnInit {
         return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
     }
     getFundingStatus(id: string): string {
-        if(this.budgetPageInfo.budgetIOs.length == 0){
+        if(this.budgetPageInfo.budgetIOs.length != 0){
             return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
         }else{
             let returnText = "Not Initiated Future Spend FY ";
@@ -264,7 +304,7 @@ export class BudgetComponent implements OnInit {
         const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
         const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
         const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
-        if(this.fundingInformations.budget.totalApprovedCapEx == 0){
+        if(this.fundingInformations.budget.totalApprovedCapEx == 0 || this.fundingInformations.budget.totalApprovedCapEx == null){
             this.tfpColor = 'gray';
             this.afpColor = 'gray';
             this.ydtpColor = 'gray';
