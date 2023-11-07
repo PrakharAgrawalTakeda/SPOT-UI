@@ -149,7 +149,7 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
         }
         const alert = this.fuseAlert.open(comfirmConfig)
       }
-    }, 3000);
+    }, 700);
   }
   ngOnInit() {
   }
