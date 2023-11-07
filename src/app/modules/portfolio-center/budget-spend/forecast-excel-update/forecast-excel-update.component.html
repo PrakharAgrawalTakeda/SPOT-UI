@@ -13,9 +13,13 @@
                         [dropDownArray]="Type"></spot-select>
                         <app-spot-multiselect-project-autocomplete class="custom" formControlName="ProjectId" [placeholder]="'Project Ids'" [label]="'Project Ids'" name="ProjectId" [showLabel]="true">
                         </app-spot-multiselect-project-autocomplete>
-                        <spot-select class="custom" formControlName="BudgetId" name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'" [dropDownArrayType]="'string'"
+                        <!-- <spot-select class="custom" formControlName="BudgetId" name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'" [dropDownArrayType]="'string'"
                         [dropDownArray]="LookupDataBudget">
-                        </spot-select>
+                        </spot-select> -->
+                        <spot-multiselect-autocomplete class="custom" formControlName="BudgetId"
+                            name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'"
+                            [valuePointer]="'ID'" [dropDownArray]="LookupDataBudget">
+                        </spot-multiselect-autocomplete>
                     </form>
                     <div class="flex items-center justify-center" style="bottom: 45px; position: relative;">
                         <button style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="getData()"> Get Data

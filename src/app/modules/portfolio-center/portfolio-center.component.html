@@ -385,6 +385,11 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         </span>
                     </span>
                 </div>
+                <div style="top: 25px; display: inline;position: relative;left: 10px;" *ngIf="showdefault">
+                    <button class="ml-4" mat-flat-button [color]="'primary'" (click)="DefaultFilter()">
+                        Cancel Loading
+                    </button>
+                </div>
                 <div *ngIf='showContent'
                     class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full min-w-0 mt-8 " @slideInRight>
                     <!-- <div class="xl:col-span-2 flex flex-col flex-auto overflow-hidden bg-card shadow rounded-2xl"
@@ -544,6 +549,24 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         [sorts]="[{ prop: 'overallStatus', dir: 'desc' },{ prop: 'problemTitle', dir: 'asc' }]"
                         class="datatable-PO-80 font-medium text-sm text-default whitespace-nowrap"
                         [rows]="projectOverview" #projectOverviewTable>
+
+                        <ngx-datatable-column prop="dataFreshness" [width]="20" [frozenLeft]="true"
+                            [resizeable]="false">
+                            <ng-template let-column="column" ngx-datatable-header-template>
+                                <ng-container>
+                                    <span class="datatable-header-cell-wrapper">
+                                        <span></span>
+                                    </span>
+                                </ng-container>
+                            </ng-template>
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <!-- <mat-icon style="margin-left: 12px;"
+                                    svgIcon="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).icontype}}"
+                                    class="{{(indicator.getIndicators(row.overallStatusIndicator, 'overall')).iconcolor}} ">
+                                </mat-icon> -->
+                                <span *ngIf="row.dataFreshness <= 300" style="background-color: #999999; margin-left: 10px; height: 90px; display: flex;" title="{{value}}"></span>
+                            </ng-template>
+                        </ngx-datatable-column>
 
                         <ngx-datatable-column name="Overall status" prop="overallStatus"
                             [headerClass]="getFrozenHeaderClassID" [width]="70" [sortable]="true" [frozenLeft]="true"
