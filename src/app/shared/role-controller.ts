@@ -31,6 +31,7 @@ export class GeneralInfo{
    public basicFields: boolean = true
    public porfolioOwner: boolean = true
    public confidentialEdit: boolean = true
+   public SPREdit: boolean = true
 }
 export class CloseOut{
     public lessonsLearnt: boolean = true
