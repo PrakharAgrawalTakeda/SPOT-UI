@@ -89,7 +89,10 @@ export class ForecastExcelUpdateComponent {
         })
       }
       this.LookupDataLBE = LBE
-      this.LookupDataBudget = BudgetId
+      for(var i=0;i<BudgetId.length;i++){
+        this.LookupDataBudget.push({ID:BudgetId[i]})
+      }
+      // this.LookupDataBudget = BudgetId
       this.showContent = true
     })
   })
@@ -137,7 +140,7 @@ export class ForecastExcelUpdateComponent {
     }
     else{
       var projectId = ""
-      var budgetId = "NAU20-087"
+      var budgetId = ""
       var LBEPeriod = ""
       if(this.ForecastForm.controls.ProjectId.value != null){
         for(var i=0;i<this.ForecastForm.controls.ProjectId.value.length;i++){
@@ -147,6 +150,11 @@ export class ForecastExcelUpdateComponent {
       if(this.ForecastForm.controls.Reference.value != null){
         for(var i=0;i<this.ForecastForm.controls.Reference.value.length;i++){
           LBEPeriod = LBEPeriod + this.ForecastForm.controls.Reference.value[i].DateMasterId + ','
+        }
+      }
+      if(this.ForecastForm.controls.BudgetId.value != null){
+        for(var i=0;i<this.ForecastForm.controls.BudgetId.value.length;i++){
+          budgetId = budgetId + this.ForecastForm.controls.BudgetId.value[i].ID + ','
         }
       }
       if(this.ForecastForm.controls.DataType.value == "Historical"){

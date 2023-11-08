@@ -117,7 +117,7 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
         }
         const alert = this.fuseAlert.open(comfirmConfig)
       }
-    }, 3000);
+    }, 700);
   }
   ngOnInit() {
   }
