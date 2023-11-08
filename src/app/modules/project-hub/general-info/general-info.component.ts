@@ -92,8 +92,8 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
     problemId: new FormControl(''),
     businessCaseApprovedDate: new FormControl(''),
     isSprproject: new FormControl(false),
-    sprprojectCategory: new FormControl({}),
-    sprprojectGrouping: new FormControl({})
+    sprprojectCategory: new FormControl(''),
+    sprprojectGrouping: new FormControl('')
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
