@@ -75,6 +75,7 @@ export class BudgetCapexOpexTableComponent {
             return 'closed'
         }
     }
+
     isCellEditable(month: string): boolean {
         let startingMonth = this.startingMonth;
         if(startingMonth == -1){

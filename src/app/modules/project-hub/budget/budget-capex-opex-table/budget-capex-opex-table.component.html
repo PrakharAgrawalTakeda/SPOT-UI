@@ -16,7 +16,7 @@
     <div class="overflow-x-auto">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                        class="whitespace-nowrap ten-px-font-table" [rows]="data">
-            <ngx-datatable-column name="Reference" prop="active" [flexGrow]="2.5" [sortable]="false" [resizeable]="false">
+            <ngx-datatable-column name="Reference" prop="active" [flexGrow]="2" [sortable]="false" [resizeable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p>{{value}}</p>
                 </ng-template>
@@ -154,14 +154,14 @@
                     {{ y5Label }}
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column  *ngIf="mode=='Capex'" name="Total Capex" prop="cumulativeTotal" [flexGrow]="2.5" [sortable]="false" [resizeable]="false"
+            <ngx-datatable-column  *ngIf="mode=='Capex'" name="Total CAPEX" prop="cumulativeTotal" [flexGrow]="2.5" [sortable]="false" [resizeable]="false"
                                    [headerClass]="getNgxDatatableNumberHeader" [draggable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>
                     <p *ngIf="row.active == 'Current' || row.active=='Preliminary'" style="text-align:right"> {{(value ?  value : 0 ) | number : fractionSize}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column  *ngIf="mode=='Opex'" name="TotalOpex" prop="cumulativeTotal" [flexGrow]="2.5" [sortable]="false" [resizeable]="false"
+            <ngx-datatable-column  *ngIf="mode=='Opex'" name="Total OPEX" prop="cumulativeTotal" [flexGrow]="2.5" [sortable]="false" [resizeable]="false"
                                    [headerClass]="getNgxDatatableNumberHeader" [draggable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>

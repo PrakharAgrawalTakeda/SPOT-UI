@@ -1,5 +1,6 @@
 <div class="flex items-start justify-between bg-primary sidepanel-header">
-    <div class="text-on-primary" style="padding-top: 6px">Forecast Edit</div>
+    <div *ngIf="mode=='Capex'" class="text-on-primary" style="padding-top: 6px">CAPEX Forecast Edit</div>
+    <div *ngIf="mode=='Opex'" class="text-on-primary" style="padding-top: 6px">OPEX Forecast Edit</div>
     <div style="padding-top: 2px">
         <a (click)="projecthubservice.toggleDrawerOpen('', '',[],'', true)" href="javascript:void(0)" title="Close">
             <mat-icon class="text-on-primary" svgIcon="heroicons_outline:x"></mat-icon>
@@ -13,7 +14,7 @@
         </div>
         <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-4 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
             <div >
-                <mat-label class="flex"><strong>Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
+                <mat-label class="flex">Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                     <div class="pl-4" [ngStyle]="{'color': tfpColor}">
                         {{ budgetForecastForm.controls.tfpPercentage.value  }}  %
@@ -26,7 +27,7 @@
                 </div>
             </div>
             <div>
-                <mat-label class="flex"><strong>Annual Forecast Performance AFP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
+                <mat-label class="flex">Annual Forecast Performance AFP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                     <div class="pl-4" [ngStyle]="{'color': afpColor}">
                         {{ budgetForecastForm.controls.afpPercentage.value }}  %
@@ -39,7 +40,7 @@
                 </div>
             </div>
             <div>
-                <mat-label class="flex"><strong>Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
+                <mat-label class="flex">Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                     <div class="pl-4" [ngStyle]="{'color': ydtpColor}">
                         {{ budgetForecastForm.controls.ytdpPercentage.value }}  %
@@ -52,7 +53,7 @@
                 </div>
             </div>
             <div>
-                <mat-label class="flex"><strong>Month To Date Performance MTDP ({{this.localCurrency.localCurrencyAbbreviation}})</strong></mat-label>
+                <mat-label class="flex">Month To Date Performance MTDP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
                     <div class="pl-4" [ngStyle]="{'color': mdtpColor}">
                         {{ budgetForecastForm.controls.mtdpPercentage.value }}  %
@@ -65,7 +66,7 @@
                 </div>
             </div>
         </form>
-        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4 ">
+        <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-2 ">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
                 <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y0Label}} (Current Fiscal Year)</div>
             </div>
@@ -809,13 +810,30 @@
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Total Capex" prop="cumulativeTotal" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                <ngx-datatable-column *ngIf="mode=='Capex'" name="Total CAPEX" prop="cumulativeTotal" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
                                       [resizeable]="false"
                                       [sortable]="false" [draggable]="false">
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="purpleBg headBgHeight"><div class="mr-2 pt-1">Total Capex</div></span>
+                                <span class="purpleBg headBgHeight"><div class="mr-2 pt-1">Total CAPEX</div></span>
+                            </span>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+                        <a (click)="fTableEditRow(rowIndex)" [ngClass]="'closed'">
+                            <p *ngIf="row.active == 'Plan' || row.active=='Previous'">&nbsp;</p>
+                            <p *ngIf="row.active == 'Current' || row.active=='Preliminary'" style="text-align:right"> {{(value ?  value : 0 ) | number : fractionSize}}</p>
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column *ngIf="mode=='Opex'" name="Total OPEX" prop="cumulativeTotal" [flexGrow]="1" [headerClass]="getNgxDatatableNumberHeader"
+                                      [resizeable]="false"
+                                      [sortable]="false" [draggable]="false">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <ng-container>
+                            <span class="datatable-header-cell-wrapper">
+                                <span class="purpleBg headBgHeight"><div class="mr-2 pt-1">Total OPEX</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -829,9 +847,8 @@
             </ngx-datatable>
         </div>
         <form [formGroup]="budgetForecastForm" *ngIf="mode=='Capex'">
-            <div class="grid m-2 grid-cols-3 gap-x-6 gap-y-0 w-19/20" >
-                    <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
-                    </spot-input>
+            <div class="grid m-2 grid-cols-4 gap-x-6 gap-y-0 w-19/20" >
+
                     <spot-singleselect-autocomplete class="w-full" formControlName="afpDeviationCode"
                                                     [label]="'AFP Deviation Code'" [placeholder]="'AFP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
                                                     [dropDownArray]="getAfdDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
@@ -840,6 +857,11 @@
                                                     [label]="'MTDP Deviation Code'" [placeholder]="'MTP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
                                                     [dropDownArray]="getMtdpDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-singleselect-autocomplete>
+                    <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                    </spot-input>
+                    <spot-input class="w-full" formControlName="totalApprovedCapex" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                                [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'"  *ngIf="mode === 'Capex'">
+                    </spot-input>
             </div>
         </form>
     </div>

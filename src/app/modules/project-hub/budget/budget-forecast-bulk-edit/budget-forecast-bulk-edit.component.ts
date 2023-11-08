@@ -50,7 +50,8 @@ export class BudgetForecastBulkEditComponent {
         mtdpCodeId: new FormControl(''),
         afpDeviationCode: new FormControl(null),
         mtdpDeviationCode: new FormControl(null),
-        committedSpend: new FormControl(0)
+        committedSpend: new FormControl(0),
+        totalApprovedCapex: new FormControl(0),
     })
     localCurrency:any = [];
     id: string = "";
@@ -646,7 +647,7 @@ export class BudgetForecastBulkEditComponent {
         const currentMtdpDate = new Date(this.forecasts.find(x => x.active == 'Current').financialMonthStartDate)
         const planActive = this.forecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast') || 0;
         this.budgetForecastForm.patchValue({
-            mtdpPercentage:  Number((this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())]/ planActive[this.getMonthText(currentMtdpDate.getMonth())]).toFixed(2)),
+            mtdpPercentage:  Number((this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] / planActive[this.getMonthText(currentMtdpDate.getMonth())]).toFixed(2)),
             mtdpValue:this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())]-planActive[this.getMonthText(currentMtdpDate.getMonth())],
         });
     }
@@ -721,47 +722,54 @@ export class BudgetForecastBulkEditComponent {
         const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
         const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
         const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
-        switch (true) {
-            case tfpPercentage === 0:
-                this.tfpColor = 'gray';
-                break;
-            case tfpPercentage < 5:
-                this.tfpColor = 'green';
-                break;
-            case tfpPercentage >= 5 && tfpPercentage < 10:
-                this.tfpColor = 'orange';
-                break;
-            case tfpPercentage >= 10:
-                this.tfpColor = 'red';
-                break;
-            default:
-                break;
-        }
-        if(afpPercentage >= 10 || afpPercentage <= -10){
-            this.afpColor = 'red'
-        }else {
-            this.afpColor = 'green'
-        }
-        switch (true) {
-            case ydtpPercentage >= 10 || ydtpPercentage <= -10:
-                this.ydtpColor = 'red';
-                break;
-            case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
-                this.ydtpColor = 'orange';
-                break;
-            case ydtpPercentage === 0:
-                this.ydtpColor = 'gray';
-                break;
-            case ydtpPercentage > -5 && ydtpPercentage < 5:
-                this.ydtpColor = 'green';
-                break;
-            default:
-                break;
-        }
-        if(mdtpPercentage >=5 || mdtpPercentage <= -5){
-            this.mdtpColor = 'red'
+        if( this.projecthubservice.all.budget.totalApprovedCapEx == 0 ||  this.projecthubservice.all.totalApprovedCapEx == null){
+            this.tfpColor = 'gray';
+            this.afpColor = 'gray';
+            this.ydtpColor = 'gray';
+            this.mdtpColor = 'gray';
         }else{
-            this.mdtpColor = 'green'
+            switch (true) {
+                case tfpPercentage === 0:
+                    this.tfpColor = 'gray';
+                    break;
+                case tfpPercentage < 5:
+                    this.tfpColor = 'green';
+                    break;
+                case tfpPercentage >= 5 && tfpPercentage < 10:
+                    this.tfpColor = 'orange';
+                    break;
+                case tfpPercentage >= 10:
+                    this.tfpColor = 'red';
+                    break;
+                default:
+                    break;
+            }
+            if(afpPercentage >= 10 || afpPercentage <= -10){
+                this.afpColor = 'red'
+            }else {
+                this.afpColor = 'green'
+            }
+            switch (true) {
+                case ydtpPercentage >= 10 || ydtpPercentage <= -10:
+                    this.ydtpColor = 'red';
+                    break;
+                case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
+                    this.ydtpColor = 'orange';
+                    break;
+                case ydtpPercentage === 0:
+                    this.ydtpColor = 'gray';
+                    break;
+                case ydtpPercentage > -5 && ydtpPercentage < 5:
+                    this.ydtpColor = 'green';
+                    break;
+                default:
+                    break;
+            }
+            if(mdtpPercentage >=5 || mdtpPercentage <= -5){
+                this.mdtpColor = 'red'
+            }else{
+                this.mdtpColor = 'green'
+            }
         }
     }
     getAfdDeviationCodes(): any {
@@ -780,6 +788,10 @@ export class BudgetForecastBulkEditComponent {
         const planAnnualTotal = planActive?.annualTotal || 0;
         const currentHistorical = this.currentEntry?.historical || 0;
         const planHistorical = forecast.find(x => x.active === 'Plan')?.historical || 0;
+        const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
+        const planMonthText = this.getMonthText(currentMtdpDate.getMonth());
+        const currentMonthValue = this.currentEntry && this.currentEntry[currentMonthText] || 0;
+        const planMonthValue = planActive && planActive[planMonthText] || 1;
         this.budgetForecastForm.patchValue({
             tfpPercentage:  Number((totalCapexForecast / (totalApprovedCapEx != 0 ? totalApprovedCapEx : 1)).toFixed(2)),
             tfpValue: totalCapexForecast - totalApprovedCapEx,
@@ -788,11 +800,13 @@ export class BudgetForecastBulkEditComponent {
             afpCodeId: this.getLookUpName(forecast.find(x => x.active == 'Current').afpDeviationCodeID),
             ytdpPercentage: Number((currentHistorical / (planHistorical != 0 ? planHistorical : 1)).toFixed(2)),
             ytdpValue: currentHistorical - planHistorical,
-            mtdpPercentage: Number((this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())]/planActive[this.getMonthText(currentMtdpDate.getMonth())]).toFixed(2)),
+            mtdpPercentage: Number((currentMonthValue / planMonthValue).toFixed(2)),
             mtdpValue: this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  planActive[this.getMonthText(currentMtdpDate.getMonth())],
             mtdpCodeId: this.getLookUpName(this.currentEntry.mtdpDeviationCodeID),
-            committedSpend: this.forecasts.find(x => x.isopen == true).committedSpend
+            committedSpend: this.forecasts.find(x => x.isopen == true).committedSpend,
+            totalApprovedCapex: budget.totalApprovedCapEx,
         })
+        this.budgetForecastForm.controls.totalApprovedCapex.disable()
         this.setTextColors();
         this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
     }
