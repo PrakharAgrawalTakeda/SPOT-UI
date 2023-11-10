@@ -100,6 +100,11 @@ export class BudgetGeneralEditComponent {
                         }
                     }
                 }
+
+
+                if(!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+                    this.showBudgetIdButton = false;
+                }
                 // if(!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
                 //     this.budgetId.enable({emitEvent : false})
                 //     this.predefinedInvestmentId.enable({emitEvent : false})
@@ -192,8 +197,8 @@ export class BudgetGeneralEditComponent {
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
-        // this.isBudgetAdmin = true
-        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+        this.isBudgetAdmin = true
+        // this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
     }
     gmsBudgetOwnerBasicSetup() {
         this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
@@ -420,7 +425,7 @@ export class BudgetGeneralEditComponent {
         return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true && x.portfolioOwnerId==id)[0];
     }
     requestBudgetId(): any {
-        this.apiService.getNewBudgetId(this.projectHubService.projectid).then((res: any) => {
+        this.apiService.getNewBudgetId(this.projectHubService.projectid, this.gmsBudgetowner.value.portfolioOwnerId).then((res: any) => {
             this.budgetInfoForm.patchValue({
                 budgetId:  res.BudgetId,
             })
