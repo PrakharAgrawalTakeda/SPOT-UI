@@ -280,19 +280,20 @@ export class BudgetComponent implements OnInit {
         return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
     }
     getFundingStatus(id: string): string {
-        if(this.budgetPageInfo.budgetIOs.length != 0){
-            return id && id != '' ?  this.lookUpData.find(x => x.lookUpId == id)?.lookUpName : ''
-        }else{
-            let returnText = "Not Initiated Future Spend FY ";
-            const openEntry  = this.budgetPageInfo.budgetForecasts.find(x => x.isopen == true && x.budgetData== "CapEx Forecast");
+        if (this.budgetPageInfo.budgetIOs.length !== 0) {
+            return id && id !== '' ? this.lookUpData.find(x => x.lookUpId === id)?.lookUpName : '';
+        } else {
+            let returnText = 'Not Initiated Future Spend FY ';
+            const openEntry = this.budgetPageInfo.budgetForecasts.find(x => x.isopen === true && x.budgetData === 'CapEx Forecast');
             const years = [openEntry.annualTotal, openEntry.y1, openEntry.y2, openEntry.y3, openEntry.y4, openEntry.y5];
+            let foundYear = null;
             for (let i = 0; i < years.length; i++) {
                 if (years[i] !== 0) {
-                    returnText += `Y${i}`;
+                    foundYear = i;
                     break;
                 }
             }
-            return returnText;
+            return foundYear !== null ? (returnText + `Y${foundYear}`) : (id && id !== '' ? this.lookUpData.find(x => x.lookUpId === id)?.lookUpName : '');
         }
     }
     getPortfolioOwnerNameById(id: string): any {

@@ -24,6 +24,7 @@ export class BudgetGeneralEditComponent {
     isBudgetAdmin: boolean = false;
     showBudgetIdButton: boolean = false;
     required:boolean = false;
+    gmsBudgetOwnerList: any = [];
     budgetInfoForm = new FormGroup({
         capexRequired: new FormControl(false),
         assetPlaced: new FormControl(''),
@@ -80,34 +81,53 @@ export class BudgetGeneralEditComponent {
                 this.gmsBudgetowner.setValidators(Validators.required)
                 this.where.setValidators(Validators.required)
                 this.why.setValidators(Validators.required)
-                if(!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
-                    this.budgetId.enable({emitEvent : false})
-                    this.predefinedInvestmentId.enable({emitEvent : false})
-                    this.where.enable({emitEvent : false})
-                    this.why.enable({emitEvent : false})
-                    if(!this.isBudgetAdmin){
-                        this.showBudgetIdButton = false;
-                    }else{
-                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
-                        this.showBudgetIdButton = false;
+                this.gmsBudgetOwnerBasicSetup()
+                if(this.isBudgetAdmin){
+                    if(this.budgetId.disabled){
+                        this.budgetId.enable({emitEvent : false})
                     }
+                    this.showBudgetIdButton = true;
                 }else{
-                    if(!this.isBudgetAdmin){
-                        if(this.capexRequired.disabled){
-                            this.showBudgetIdButton = true;
-                            if(!this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue){
-                                this.gmsBudgetowner.disable();
-                            }
-                            this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
-                        }else{
-                            this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
-                            this.showBudgetIdButton = true;
+                    if(this.gmsBudgetowner.value && this.gmsBudgetowner.value?.portfolioOwnerId!="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+                        if(this.budgetId.enabled){
+                            this.budgetId.disable({emitEvent : false})
                         }
-                    }else{
-                        this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
                         this.showBudgetIdButton = true;
+                    }else{
+                        this.showBudgetIdButton = false;
+                        if(this.budgetId.disabled){
+                            this.budgetId.enable({emitEvent : false})
+                        }
                     }
                 }
+                // if(!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+                //     this.budgetId.enable({emitEvent : false})
+                //     this.predefinedInvestmentId.enable({emitEvent : false})
+                //     this.where.enable({emitEvent : false})
+                //     this.why.enable({emitEvent : false})
+                //     if(!this.isBudgetAdmin){
+                //         this.showBudgetIdButton = false;
+                //     }else{
+                //         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
+                //         this.showBudgetIdButton = false;
+                //     }
+                // }else{
+                //     if(!this.isBudgetAdmin){
+                //         if(this.capexRequired.disabled){
+                //             this.showBudgetIdButton = true;
+                //             if(!this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue){
+                //                 this.gmsBudgetowner.disable();
+                //             }
+                //             this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
+                //         }else{
+                //             this.budgetInfoForm.controls.budgetId.disable({emitEvent : false})
+                //             this.showBudgetIdButton = true;
+                //         }
+                //     }else{
+                //         this.budgetInfoForm.controls.budgetId.enable({emitEvent : false})
+                //         this.showBudgetIdButton = true;
+                //     }
+                // }
             }else{
                 this.budgetInfoForm.controls.budgetId.disable()
                 this.required = false;
@@ -118,10 +138,6 @@ export class BudgetGeneralEditComponent {
                 }
             }
         })
-        if(!this.isBudgetAdmin && this.capexRequired.invalid){
-            this.showBudgetIdButton = false;
-            this.gmsBudgetowner.disable();
-        }
     }
     ngOnInit(): void {
         this.dataloader();
@@ -132,31 +148,74 @@ export class BudgetGeneralEditComponent {
         this.apiService.getBudgetPageInfo(this.projectHubService.projectid).then((res: any) => {
             this.budgetInfo = res
             this.generalInfoPatchValue(res)
-            if(this.budgetInfoForm.controls.capexRequired.value ==true) {
-                this.required = true;
-            }
-            if( !this.isBudgetAdmin && this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+            if(this.capexRequired.value == true) {
+                if(this.isBudgetAdmin){
+                    if(this.budgetId.disabled){
+                        this.budgetId.enable({emitEvent : false})
+                    }
+                    if(this.gmsBudgetowner.disabled){
+                        this.gmsBudgetowner.enable({emitEvent : false})
+                    }
+                }else{
+                    if(this.budgetId.enabled){
+                        this.budgetId.disable({emitEvent : false})
+                    }
+                    if(this.gmsBudgetowner.enabled){
+                        this.gmsBudgetowner.disable({emitEvent : false})
+                    }
+                }
+            }else{
                 this.budgetId.disable()
+                this.gmsBudgetOwnerBasicSetup()
             }
             if(this.capexRequired.value ==true && !this.isBudgetAdmin){
                 this.capexRequired.disable({emitEvent : false})
-                this.gmsBudgetowner.disable();
             }
-            if(!this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue ){
-                if(!this.capexRequired.value && !this.isBudgetAdmin){
-                    this.gmsBudgetowner.disable()
-                }
-            }
-            if(this.capexRequired.value == true && (!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC")){
-                this.showBudgetIdButton = false;
-            }
-            if(this.isBudgetAdmin && (this.capexRequired.value==false || this.capexRequired.value==null)){
-                this.budgetId.disable()
-            }
+            // if( !this.isBudgetAdmin && this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC"){
+            //     this.budgetId.disable()
+            // }
+            // if(this.capexRequired.value ==true && !this.isBudgetAdmin){
+            //     this.capexRequired.disable({emitEvent : false})
+            //     this.gmsBudgetowner.disable();
+            // }
+            // if(!this.gmsBudgetowner.value.gmsbudgetOwnerDropDownValue ){
+            //     if(!this.capexRequired.value && !this.isBudgetAdmin){
+            //         this.gmsBudgetowner.disable()
+            //     }
+            // }
+            // if(this.capexRequired.value == true && (!this.gmsBudgetowner.value || this.gmsBudgetowner.value?.portfolioOwnerId=="3BAA5DAB-6A5F-4E6C-9428-D7D1A620B0EC")){
+            //     this.showBudgetIdButton = false;
+            // }
+            // if(this.isBudgetAdmin && (this.capexRequired.value==false || this.capexRequired.value==null)){
+            //     this.budgetId.disable()
+            // }
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
-        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+        this.isBudgetAdmin = true
+        // this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+    }
+    gmsBudgetOwnerBasicSetup() {
+        this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
+        if(this.isBudgetAdmin==true){
+            if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
+                this.gmsBudgetOwnerList =  this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue == true)
+            }
+            if(this.gmsBudgetowner.disabled){
+                this.gmsBudgetowner.enable({emitEvent : false})
+            }
+        }else{
+            if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
+                if(this.gmsBudgetowner.disabled){
+                    this.gmsBudgetowner.enable({emitEvent : false})
+                }
+                this.gmsBudgetOwnerList =  this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue == true)
+            }else{
+                if(this.gmsBudgetowner.enabled) {
+                    this.gmsBudgetowner.disable({emitEvent : false})
+                }
+            }
+        }
     }
 
     getPredifinedInvestment(): any {
@@ -168,6 +227,8 @@ export class BudgetGeneralEditComponent {
     getWhyLookup(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '927293cb-d4ca-4f31-8af6-c33c9e4792d1')
     }
+
+
 
     async submitBudgetInfo() {
         let isPrefixValid:boolean =true;
