@@ -854,6 +854,7 @@ export class BudgetForecastBulkEditComponent {
     showConfirmationMessage(event) {
         const confirmationMessage = 'Are you sure you want to exit? All unsaved data will be lost.';
         (event || window.event).returnValue = confirmationMessage;
+        console.log("yyyyyyyyyyyyyyyy",confirmationMessage)
         return confirmationMessage;
     }
 }
