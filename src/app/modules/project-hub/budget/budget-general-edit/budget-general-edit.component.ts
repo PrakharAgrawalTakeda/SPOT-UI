@@ -197,8 +197,7 @@ export class BudgetGeneralEditComponent {
             this.projectHubService.isFormChanged = false
             this.viewContent = true
         })
-        this.isBudgetAdmin = true
-        // this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
     }
     gmsBudgetOwnerBasicSetup() {
         this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
