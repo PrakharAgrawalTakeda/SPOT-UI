@@ -518,7 +518,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
     }
     baselineEditEnabled(): boolean {
-        debugger
         if (this.projecthubservice.roleControllerControl.roleId == "0E83F6BE-79BE-426A-A316-F523FFAECC4F") {
             return true
         }
