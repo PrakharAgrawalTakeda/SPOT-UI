@@ -9,6 +9,9 @@
         </div>
     </div>
     <div>
+        <fuse-alert [type]="'warning'" *ngIf="mode == 'Normal' && scheduleData.projectData.isSprproject && projecthubservice.roleControllerControl.roleId != '0E83F6BE-79BE-426A-A316-F523FFAECC4F'">
+            <span fuseAlertTitle>This is a SPR project, only GMS PMO can baseline SPR Projects. Please reach out to dl.SPOTSupport@takeda.com to request a baseline!</span>
+        </fuse-alert>
         <div class="flex justify-between" *ngIf="mode== 'Normal'">
             <div *ngIf="baselineCount.baselineCount > 0; else zero">
                 <h6 class="font-medium text-default text-md italic ml-4 mt-2">
@@ -95,7 +98,7 @@
             </div>
         </div>
         <div class="mt-3 pl-3 w-full" #target id="scheduleTableDiv">
-            <ngx-datatable style="height: calc(100vh - 210px); overflow-y:visible"
+            <ngx-datatable style="overflow-y:visible" [style.height]="getHeight()"
                            class=" w-full material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
                            [rows]="schedulengxdata" #scheduleTable columnMode="flex" [headerHeight]="'auto'"
                            [rowHeight]="'auto'"
