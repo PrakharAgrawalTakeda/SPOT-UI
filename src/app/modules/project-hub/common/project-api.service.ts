@@ -113,8 +113,8 @@ export class ProjectApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
-    async getNewBudgetId(projectId) {
-        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId
+    async getNewBudgetId(projectId, gmsBudgetOwnerId) {
+        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId+"/"+gmsBudgetOwnerId
         const abc$ = this.http.get(url)
         const response = await lastValueFrom(abc$)
         return response
