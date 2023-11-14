@@ -595,6 +595,9 @@
             <textarea matInput [rows]="5" [placeholder]="'Provide an explanation/justification for re-baselining'"
                       formControlName="baselineComment" name="baselineComment"></textarea>
         </mat-form-field>
+        <spot-singleselect-autocomplete [label]="'Baseline Reason Code'" [placeholder]="'Baseline Reason Code'" formControlName="baseLineReasonCode" name="baseLineReasonCode" [valuePointer]="'lookUpName'" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'"
+        [dropDownArray]="getBaselineReasonCode()"></spot-singleselect-autocomplete>
+        
         <div class="flex justify-between items-center">
             <div class="flex justify-start gap-1 items-center">Do you want to increment the baseline counter?
             </div>
@@ -609,7 +612,7 @@
         <a class="min-w-26" mat-flat-button [color]="'primary'" (click)="cancelJustification()">
             Cancel
         </a>
-        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="saveScheduleBulkEdit()">
+        <button class="min-w-26" mat-flat-button [color]="'primary'" type="button" (click)="justificationHandler()">
             Submit
         </button>
     </div>
@@ -700,7 +703,11 @@
                     <p>{{getUserName(value)}}</p>
                 </ng-template>
             </ngx-datatable-column>
-
+            <ngx-datatable-column name="Baseline Reason Code" prop="baseLineReasonCodeName" [flexGrow]="1.5" *ngIf="mode=='Normal'">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <p>{{value}}</p>
+                </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Justification" prop="baselineComment" [resizeable]="false" [sortable]="false"
                                   [flexGrow]="2.1" *ngIf="mode=='Baseline-Log'">
                 <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>

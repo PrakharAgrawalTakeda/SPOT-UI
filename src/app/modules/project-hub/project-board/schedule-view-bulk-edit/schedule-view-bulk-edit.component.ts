@@ -230,6 +230,9 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     getFunctionOwner(): any {
         return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
     }
+    getBaselineReasonCode(): any {
+        return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'fceaab50-89f3-4b64-aaba-d9fac88d03e6')
+    }
     dataloader() {
         if (this.mode == 'Baseline-Log') {
             //this.BaselineLog()
@@ -1315,7 +1318,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
 
     baselineForm = new FormGroup({
         baselineComment: new FormControl(''),
-        counter: new FormControl(true)
+        counter: new FormControl(true),
+        baseLineReasonCode: new FormControl(null)
     })
 
     submitjustification() {
@@ -1347,7 +1351,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
                         baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                         includeInCloseout: false,
-                        includeSlipChart: false
+                        includeSlipChart: false,
+                        baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
                     }
                     var baselineObjNew = {
                         projectId: this.id,
@@ -1374,7 +1379,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                         modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
                         baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                         includeInCloseout: false,
-                        includeSlipChart: false
+                        includeSlipChart: false,
+                        baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
                     }
                     this.apiService.addProjectBaselineLog(justificationObjNewnocounter).then(res => {
                         //this.viewContent = true
@@ -1395,7 +1401,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
                                 baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                                 includeInCloseout: i.includeInCloseout,
-                                includeSlipChart: i.includeSlipChart
+                                includeSlipChart: i.includeSlipChart,
+                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
                             }
                         }
                         this.apiService.addProjectBaselineLog(justjustificationObj).then(res => {
@@ -1422,7 +1429,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
                                 baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                                 includeInCloseout: i.includeInCloseout,
-                                includeSlipChart: i.includeSlipChart
+                                includeSlipChart: i.includeSlipChart,
+                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
                             }
                         }
                         this.apiService.editProjectBaseline(newbaselineObj).then((count: any) => {
@@ -1446,7 +1454,8 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                 modifiedDate: moment(this.today).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]'),
                                 baselineComment: (this.baselineForm.value.baselineComment == null || this.baselineForm.value.baselineComment == '') ? '' : this.baselineForm.value.baselineComment,
                                 includeInCloseout: i.includeInCloseout,
-                                includeSlipChart: i.includeSlipChart
+                                includeSlipChart: i.includeSlipChart,
+                                baseLineReasonCode: this.baselineForm.value.baseLineReasonCode.lookUpId
                             }
                             var baselineObj = {
                                 projectId: i.projectId,
@@ -1556,7 +1565,44 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
     //   }) : array
     // }
 
-
+    justificationHandler() {
+        console.log(this.baselineForm.controls.baseLineReasonCode.value)
+        if (this.baselineForm.controls.baseLineReasonCode.value != null) {
+            if (Object.keys(this.baselineForm.controls.baseLineReasonCode.value).length > 0) {
+                this.saveScheduleBulkEdit()
+            }
+            else {
+                this.generateComfirmationBaselineCode()
+            }
+        }
+        else {
+            this.generateComfirmationBaselineCode()
+        }
+    }
+    generateComfirmationBaselineCode() {
+        var comfirmConfig: FuseConfirmationConfig = {
+            "title": "You must select a Baseline Reason Code.",
+            "message": "",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation",
+                "color": "warning"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "Ok",
+                    "color": "primary"
+                },
+                "cancel": {
+                    "show": false,
+                    "label": "Cancel"
+                }
+            },
+            "dismissible": true
+        }
+        const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+    }
     saveScheduleBulkEdit() {
         //debugger
         this.apiService.getprojectviewdata(this.id).then((res: any) => {
@@ -1661,10 +1707,10 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     //  this.viewBaselineLogs = true
                     //  this.compareBaselineLogs = false
                     //  this.projecthubservice.isBulkEdit = false
-                    this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                    this.projecthubservice.submitbutton.next(true)
-                    this.projecthubservice.isNavChanged.next(true)
-                    // this.submitjustification()
+                    //this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                    //this.projecthubservice.submitbutton.next(true)
+                    //this.projecthubservice.isNavChanged.next(true)
+                    this.submitjustification()
                     //this.projecthubservice.submitbutton.next(true)
                 })
                 // } else if (this.formValue.length < this.scheduleData.scheduleData.length) {
@@ -1763,6 +1809,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                 //     return x.baselineFinish && x.baselineFinish != '' ? (x.baselineFinish) : x.baselineFinish
                 // })
                 // if (baselinedates.length == baselinedates2.length && JSON.stringify(baselinedates) != JSON.stringify(baselinedates2)) {
+                debugger
                 this.apiService.bulkeditSchedule(this.formValue, this.id).then(res => {
                     // this.viewBaseline = true
                     // this.viewBaselineLogs = true
@@ -1785,6 +1832,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             this.projecthubservice.toggleDrawerOpen('', '', [], '')
                         })
                     } else {
+
                         this.projecthubservice.isNavChanged.next(true)
                         this.projecthubservice.submitbutton.next(true)
                         this.projecthubservice.successSave.next(true)
@@ -2002,6 +2050,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                     for (var i of this.baselineLogData) {
                         i.logId = count
                         count = count + 1
+                        i.baseLineReasonCodeName = this.getLookupName(i.baseLineReasonCode)
                         //Baseline Log Form changes
                         // this.baselineLogForm.push(new FormGroup({
                         //   baselineLogId: new FormControl(i.baselineLogId),
