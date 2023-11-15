@@ -195,9 +195,10 @@ export class BudgetGeneralEditComponent {
             //     this.budgetId.disable()
             // }
             this.projectHubService.isFormChanged = false
+            this.gmsBudgetOwnerBasicSetup();
             this.viewContent = true
         })
-        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetEdit;
+        this.isBudgetAdmin = this.projectHubService.roleControllerControl.budgetAdmin;
     }
     gmsBudgetOwnerBasicSetup() {
         this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
@@ -236,7 +237,7 @@ export class BudgetGeneralEditComponent {
 
     async submitBudgetInfo() {
         let isPrefixValid:boolean =true;
-        if (this.budgetId.value) {
+        if (this.budgetId.value && this.isBudgetAdmin==false) {
             try {
                 isPrefixValid = await this.checkPrefix(this.budgetId.value);
             } catch (error) {

@@ -6,6 +6,7 @@ import {AuthService} from "../../../core/auth/auth.service";
 import {ProjectApiService} from "../common/project-api.service";
 import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
 import { HttpClient } from '@angular/common/http';
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
     selector: 'app-budget',
@@ -32,6 +33,7 @@ export class BudgetComponent implements OnInit {
     budgetForecastsY1Opex:any;
     headerLabel: string = ""
     preliminaryExists: boolean = false;
+    enableForecastButton: boolean = true;
     retryCount = 0;
 
     constructor(public projectHubService: ProjectHubService,
@@ -39,6 +41,7 @@ export class BudgetComponent implements OnInit {
                 private portApiService: PortfolioApiService,
                 private authService: AuthService,
                 private apiService: ProjectApiService,
+                private msalService: MsalService,
                 private http: HttpClient) {
         this.projectHubService.submitbutton.subscribe(res => {
             if (res == true) {
@@ -113,6 +116,8 @@ export class BudgetComponent implements OnInit {
                 this.budgetForecastsY1Opex = response[3].budgetForecastsY1.filter(x => x.budgetData == "OpEx Forecast");
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"), response[3].budget);
                 this.generalInfoPatchValue(response[3])
+                this.forecastEditButtonEnabler();
+                // this.projectHubService.roleControllerControl.budgetAdmin = false;
                 this.viewContent = true
             })
             .catch((error) => {
@@ -162,7 +167,6 @@ export class BudgetComponent implements OnInit {
         }
     }
     forecastPatchGeneralForm(forecast:any, budget:any){
-        const planMtdpDate = new Date(forecast.find(x => x.active == 'Plan').financialMonthStartDate)
         const currentMtdpDate = new Date(forecast.find(x => x.active == 'Current').financialMonthStartDate)
         if(forecast.find(x => x.active == 'Preliminary')){
             this.preliminaryExists = true;
@@ -359,5 +363,26 @@ export class BudgetComponent implements OnInit {
         const url = 'https://app.powerbi.com/groups/me/apps/aa1c834f-34df-4d86-8e69-246dea19b28a/reports/3d0acf48-54a4-4520-92d4-4fbf3914eec5/ReportSectionbd22354a21346769a025';
         window.open(url, '_blank');
     }
-
+    isAnyEntryOpen(): boolean {
+        return this.budgetForecasts.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast").some(entry => entry.isopen);
+    }
+    forecastEditButtonEnabler(){
+        if(this.projectHubService.roleControllerControl.budgetAdmin){
+            this.enableForecastButton = true;
+        }else{
+            if (this.isAnyEntryOpen()) {
+                if(!this.projectHubService.roleControllerControl.projectTeam){
+                    this.enableForecastButton = false;
+                }
+                // else{
+                //     this.enableForecastButton = !(this.budgetForecastsY1Capex.some(entry => entry.isopen == 2) && this.projectHubService.roleControllerControl.projectManager);
+                // }
+            }else{
+                this.enableForecastButton = false;
+            }
+        }
+        if(this.projectHubService.projectState=='Cancelled'){
+            this.enableForecastButton = false;
+        }
+    }
 }

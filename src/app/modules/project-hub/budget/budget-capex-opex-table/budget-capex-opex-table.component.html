@@ -2,10 +2,10 @@
     <div *ngIf="mode!='Y1'" class="pb-3 pt-0 flex items-center justify-between">
         <div *ngIf="mode=='Capex'" ></div>
         <div *ngIf="mode=='Opex'" class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Non-FTE OPEX</div>
-        <div  class="text-primary" *ngIf="projecthubservice.roleControllerControl.projectTeam">
+        <div  class="text-primary">
             <div class="flex items-start justify-between">
-                <div *ngIf="projecthubservice.projectState!='Cancelled'">
-                    <button *ngIf="mode !== 'Capex'" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
+                <div>
+                    <button *ngIf="mode !== 'Capex' && enableForecastButton==true" class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                             (click)="projecthubservice.toggleDrawerOpen('BudgetForecastOpexBulkEdit', '', inputData, id, true)">
                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Forecast Edit
                     </button>

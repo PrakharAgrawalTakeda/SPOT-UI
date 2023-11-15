@@ -143,7 +143,7 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
     }
 
     // Add commas as thousand separators when the field is blurred
-    if (event?.target?.value) {
+    if (event?.target?.value && this.inputType == 'Number') {
       const value = event.target.value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
       event.target.value = value;
     }

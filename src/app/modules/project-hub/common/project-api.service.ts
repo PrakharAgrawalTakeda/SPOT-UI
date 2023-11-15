@@ -901,5 +901,19 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async singleEditMetricProjectData(projectId, metricUID) {
+    var link = GlobalVariables.apiurl + "MetricProjectData/" + projectId+ "/"+metricUID
+    const abc$ = this.http.get(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async baselineProjectMetricData(projectid, body) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/Baseline/" + projectid
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
   }
 
