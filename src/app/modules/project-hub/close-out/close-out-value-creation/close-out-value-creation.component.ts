@@ -106,12 +106,37 @@ export class CloseOutValueCreationComponent implements OnInit {
                   }
                 }
               }
+              else if(res.projectsMetricsData[i].strategicCurrentList){
+                var data = res.projectsMetricsData[i].strategicCurrentList.split(',')
+                for(var z=0;z<data.length;z++){
+                  var list = data[z].split(' ')
+                  if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                    res.projectsMetricsData[i][yearList[j]][0].current = list[2]
+                  }
+                }
+              }
+              else if(res.projectsMetricsData[i].strategicActualList){
+                var data = res.projectsMetricsData[i].strategicActualList.split(',')
+                for(var z=0;z<data.length;z++){
+                  var list = data[z].split(' ')
+                  if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                    res.projectsMetricsData[i][yearList[j]][0].actual = list[2]
+                  }
+                }
+              }
+              else if(res.projectsMetricsData[i].strategicTargetList){
+                var data = res.projectsMetricsData[i].strategicTargetList.split(',')
+                for(var z=0;z<data.length;z++){
+                  var list = data[z].split(' ')
+                  if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                    res.projectsMetricsData[i][yearList[j]][0].target = list[2]
+                  }
+                }
+              }
             }
           };
           this.compare(this.columnYear)
           this.valuecreationngxdata = res.projectsMetricsData
-          //this.valuecreationngxdata.shift()
-          // this.valuecreationngxdata = res.projectsMetricsDataYearly
           this.ValueCaptureForm.disable()
           this.viewContent = true
       })
