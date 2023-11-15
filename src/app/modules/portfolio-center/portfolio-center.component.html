@@ -587,7 +587,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="300"
+                        <ngx-datatable-column name="Program/Project Name" prop="problemTitle" [width]="350"
                             [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <p (click)="OpenProject(value)" class="projectNames">{{ value }}</p>
