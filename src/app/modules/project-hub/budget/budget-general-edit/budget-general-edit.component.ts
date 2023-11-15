@@ -237,7 +237,7 @@ export class BudgetGeneralEditComponent {
 
     async submitBudgetInfo() {
         let isPrefixValid:boolean =true;
-        if (this.budgetId.value) {
+        if (this.budgetId.value && this.isBudgetAdmin==false) {
             try {
                 isPrefixValid = await this.checkPrefix(this.budgetId.value);
             } catch (error) {
