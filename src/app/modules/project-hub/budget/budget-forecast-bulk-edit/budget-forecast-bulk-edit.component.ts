@@ -7,6 +7,7 @@ import {FuseConfirmationService} from "../../../../../@fuse/services/confirmatio
 import {ActivatedRoute} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
+import {MsalService} from "@azure/msal-angular";
 
 @Component({
     selector: 'app-budget-forecast-bulk-edit',
@@ -16,7 +17,7 @@ import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.servi
 export class BudgetForecastBulkEditComponent {
     @Input() mode: 'Capex' | 'Opex' = 'Capex';
 
-    constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public authService: AuthService, public role: RoleService,
+    constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,private msalService: MsalService, public role: RoleService,
                 public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private cdRef: ChangeDetectorRef,private portApiService: PortfolioApiService,) {
         this.forecastsForm.valueChanges.subscribe(res => {
             this.formValue()
@@ -99,6 +100,7 @@ export class BudgetForecastBulkEditComponent {
     currentEntry: any;
     firstPreliminary: string = "";
     startingMonth: number;
+    editable: boolean = true;
 
     ngOnChanges(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
@@ -147,6 +149,9 @@ export class BudgetForecastBulkEditComponent {
                     this.extraEntriesY1.push(obj);
                 }
             }
+        }
+        if (this.forecasts.some(entry => entry.isopen == 2) && this.projecthubservice.roleControllerControl.projectManager) {
+            this.editable = false;
         }
         this.startingMonth=this.getStartingMonth()
         let year = new Date(this.forecasts.find(x => x.active == 'Current').financialMonthStartDate).getFullYear();
@@ -429,7 +434,7 @@ export class BudgetForecastBulkEditComponent {
     }
 
     fTableEditRow(rowIndex) {
-        if (!this.fTableEditStack.includes(rowIndex)) {
+        if (!this.fTableEditStack.includes(rowIndex) && this.editable) {
             if (this.forecasts[rowIndex].isopen) {
                 this.fTableEditStack.push(rowIndex)
             }
@@ -437,7 +442,7 @@ export class BudgetForecastBulkEditComponent {
     }
 
     fy1TableEditRow(rowIndex) {
-        if (!this.fy1TableEditStack.includes(rowIndex)) {
+        if (!this.fy1TableEditStack.includes(rowIndex) && this.editable) {
             if (this.forecastsY1[rowIndex].isopen) {
                 this.fy1TableEditStack.push(rowIndex)
             }
@@ -459,8 +464,11 @@ export class BudgetForecastBulkEditComponent {
             });
             const formValue = this.budgetForecastForm.getRawValue();
             if(this.mode=='Capex'){
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").afpDeviationCodeID = formValue.afpDeviationCode ? formValue.afpDeviationCode.lookUpId : "";
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").mtdpDeviationCodeID =  formValue.mtdpDeviationCode ? formValue.mtdpDeviationCode.lookUpId : "";
+            }else{
+                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "OpEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
             }
             this.apiService.updateBudgetPageInfo(this.id, mainObj).then(res => {
                 this.projecthubservice.isNavChanged.next(true)
@@ -854,7 +862,6 @@ export class BudgetForecastBulkEditComponent {
     showConfirmationMessage(event) {
         const confirmationMessage = 'Are you sure you want to exit? All unsaved data will be lost.';
         (event || window.event).returnValue = confirmationMessage;
-        console.log("yyyyyyyyyyyyyyyy",confirmationMessage)
         return confirmationMessage;
     }
 }

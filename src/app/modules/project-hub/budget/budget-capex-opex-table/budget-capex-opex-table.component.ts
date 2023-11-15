@@ -22,6 +22,7 @@ export class BudgetCapexOpexTableComponent {
     y0Label: string = '';
     startingMonth: number;
     hasBigValues: boolean = false;
+    enableForecastButton: boolean= true;
     constructor(private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService
         , public fuseAlert: FuseConfirmationService, private router: Router) {
         this.projecthubservice.submitbutton.subscribe(res => {
@@ -52,6 +53,7 @@ export class BudgetCapexOpexTableComponent {
         }
         if(this.mode=="Opex"){
             this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "OpEx Forecast")
+            this.forecastEditButtonEnabler();
         }
         if(this.mode=="Capex"){
             this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
@@ -105,27 +107,6 @@ export class BudgetCapexOpexTableComponent {
             }
         })
     }
-    checkIfValueExceedsThreshold(x: any, threshold: number): boolean {
-        return (
-            x.y1 > threshold ||
-            x.y2 > threshold ||
-            x.y3 > threshold ||
-            x.y4 > threshold ||
-            x.y5 > threshold ||
-            x.jan > threshold ||
-            x.feb > threshold ||
-            x.mar > threshold ||
-            x.apr > threshold ||
-            x.may > threshold ||
-            x.jun > threshold ||
-            x.jul > threshold ||
-            x.aug > threshold ||
-            x.sep > threshold ||
-            x.oct > threshold ||
-            x.nov > threshold ||
-            x.dec > threshold
-        );
-    }
 
     isCellEditable(month: string): boolean {
         let startingMonth = this.startingMonth;
@@ -176,6 +157,25 @@ export class BudgetCapexOpexTableComponent {
     }
     getNgxDatatableNumberHeader(): any {
         return ' ngx-number-header';
+    }
+    forecastEditButtonEnabler(){
+        if(this.projecthubservice.roleControllerControl.budgetAdmin){
+            this.enableForecastButton = true;
+        }else{
+            if (this.isAnyEntryOpen()) {
+                if(!this.projecthubservice.roleControllerControl.projectTeam){
+                    this.enableForecastButton = false;
+                }
+            }else{
+                this.enableForecastButton = false;
+            }
+        }
+        if(this.projecthubservice.projectState=='Cancelled'){
+            this.enableForecastButton = false;
+        }
+    }
+    isAnyEntryOpen(): boolean {
+        return this.inputData.budgetForecasts.filter(x => x.budgetData == "OpEx Forecast").some(entry => entry.isopen);
     }
 
 }
