@@ -871,7 +871,7 @@
                (click)="projecthubservice.toggleDrawerOpen('', '',[],'',true)">
                 Cancel
             </a>
-            <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitForecasts()" type="button">
+            <button class="min-w-26" mat-flat-button [color]="'primary'" [disabled]="!editable" (click)="submitForecasts()" type="button">
                 Submit
             </button>
         </div>

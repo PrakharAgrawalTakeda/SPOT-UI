@@ -62,7 +62,7 @@ export class RoleService {
         localroleController.projectHub.localAttributes = false
         localroleController.projectHub.CAPS = false
         if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
-          localroleController.budgetEdit = false
+          localroleController.budgetAdmin = false
         }
         if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
           localroleController.generalInfo.confidentialEdit = false
@@ -75,8 +75,9 @@ export class RoleService {
     else if (this.roleMaster.securityGroupId == '9E695295-DC5F-44A8-95F1-A329CD475203') {
       localroleController.generalInfo.SPREdit = false
       localroleController.generalInfo.porfolioOwner = false
+      localroleController.projectManager = true;
       if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
-        localroleController.budgetEdit = false
+        localroleController.budgetAdmin = false
       }
       if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
         localroleController.generalInfo.confidentialEdit = false
@@ -85,7 +86,7 @@ export class RoleService {
     else if (this.roleMaster.securityGroupId == 'C9F323D4-EF97-4C2A-B748-11DB5B8589D0') {
       localroleController.generalInfo.SPREdit = false
       if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='500ee862-3878-43d9-9378-53feb1832cef')) {
-        localroleController.budgetEdit = false
+        localroleController.budgetAdmin = false
       }
       if (!this.roleMaster?.secondarySecurityGroupId?.some(x=>x=='C005FB71-C1FF-44D3-8779-5CA37643D794')) {
         localroleController.generalInfo.confidentialEdit = false

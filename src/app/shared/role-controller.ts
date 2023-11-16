@@ -4,7 +4,8 @@ export class RoleController{
      public closeOut: CloseOut = new CloseOut
      public projectTeam: boolean = true
      public projectBenefits: boolean = true
-     public budgetEdit: boolean = true
+     public budgetAdmin: boolean = true
+     public projectManager: boolean = false
      public roleId: string = ''
 }
 
