@@ -197,6 +197,7 @@ export class PortfolioCenterComponent implements OnInit {
   state = {}
   changedToggleStates: Record<string, boolean[]> = {};
   showdefault:boolean = false
+  localAttributeData = []
 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
@@ -683,6 +684,27 @@ export class PortfolioCenterComponent implements OnInit {
               "localAttributes": localattribute
             }
           }
+          if( localattribute != undefined){
+          for(var i=0;i<localattribute.length;i++){
+            if(localattribute[i].dataType == "3"){
+              var localdata = {
+                "name": localattribute[i].name,
+                "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
+                "count": localattribute[i].data.length,
+                "order": 15
+              }
+            }
+            else{
+              var localdata = {
+                "name": localattribute[i].name,
+                "value": localattribute[i].data[0].value,
+                "count": localattribute[i].data.length,
+                "order": 15
+              }
+            }
+            this.localAttributeData.push(localdata)
+          }
+        }
 
           console.log("Filter Data : " + this.groupData)
           this.groupData.filterGroups.length == 0 ? this.showdefault = true : this.showdefault = false
