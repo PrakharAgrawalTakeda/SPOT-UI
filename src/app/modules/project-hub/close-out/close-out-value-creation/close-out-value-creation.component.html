@@ -46,7 +46,7 @@
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Category" prop="metricCategoryId" [width]="220" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
+        <ngx-datatable-column name="Category" prop="metricCategoryID" [width]="220" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
             </ng-template>
@@ -65,6 +65,11 @@
         <ngx-datatable-column name="Value Capture Level" prop="metricLevelId" [width]="160" [frozenLeft]="true" [headerClass]="getFrozenID">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="60" [frozenLeft]="true">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div *ngIf="row.temporaryImpact" style="height: 92px !important;"><mat-icon style="color: red;" svgIcon="heroicons_outline:clock"></mat-icon></div>
             </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="160" [frozenLeft]="true">
