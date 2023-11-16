@@ -54,12 +54,17 @@
                 </div>
                 <div class="pr-2">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
-                        [color]="'primary-200'" (click)="addYear()"> +Year
+                        [color]="'primary-200'" (click)="addYear()"> + Year
                     </button>
                 </div>
                 <div class="pr-2">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
-                        [color]="'primary-200'" (click)="removeYear()"> -Year
+                        [color]="'primary-200'" (click)="removeYear()"> - Year
+                    </button>
+                </div>
+                <div class="pr-2">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                        [color]="'primary-200'" (click)="deleteMetric()"> Delete Metric
                     </button>
                 </div>
                 <div class="pr-2">
@@ -96,11 +101,23 @@
                         <form *ngIf="ptTableEditStack.includes(rowIndex)" [formGroup]="bulkEditFormArray.at(rowIndex)"
                             (click)="preventDefault($event)">
                             <spot-input class="w-full" [formControlName]="getControlName(col.year)"
-                                [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                                [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                                (change)="onValueChange(rowIndex, col.year, $event.target.value)">
                             </spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
+                 
+                <ngx-datatable-column name="Total" [width]="120">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                     
+                      <div>
+                        {{ row.total }} <!-- Format the number as needed -->
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  
+                
             </ngx-datatable>
 
         </div>

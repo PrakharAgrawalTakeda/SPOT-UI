@@ -175,7 +175,7 @@ export class ProjectBenefitsComponent implements OnInit {
     return ' frozen-header-class';
   }
   getFrozenHeaderClass2(): any {
-    return ' frozen-header-class2';
+    return ' frozen-header-class';
   }
   getFrozenClass(): any {
     return ' frozen-header';
@@ -218,11 +218,11 @@ export class ProjectBenefitsComponent implements OnInit {
   baselinePlanAlert.afterClosed().subscribe(close => {
     if (close == 'confirmed') {
       this.valuecreationngxdata.forEach(metricData => {
-              // this.apiService.updateProjectMetrics(this.id, updatedMetricsData)
-      //   .then(response => {
-      //     console.log('Update successful', response);
+              this.apiService.baselineProjectMetricData(this.id)
+        .then(response => {
+          console.log('Update successful', response);
 
-      //   })
+        })
 
 
         // // Iterate over all keys of the metricData object

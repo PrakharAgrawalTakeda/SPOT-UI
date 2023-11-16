@@ -56,26 +56,21 @@ export class NewMetricsComponent {
     })
   }
   submitnewmetric() {
-    this.projecthubservice.isFormChanged = false;
+    // Get the selected metric name from the form control
+    const selectedMetricName = this.newMetricForm.get('metricName').value;
 
-    // Extract the selected primaryKpi value from the form
-    const selectedPrimaryKpiValue = this.newMetricForm.get('metricName').value;
-    console.log(selectedPrimaryKpiValue)
+    // Find the corresponding metric object from the metricName arr
+    //const selectedMetric = this.metricName.find(metric => metric.metricName == selectedMetricName);
+console.log(selectedMetricName.metricID)
+    // Check if we found a metric and it has a metricUID
+    if (selectedMetricName) {
 
-    // Find the corresponding lookUpId from primaryKPI array
-    const selectedPrimaryKpiObject = this.projecthubservice.lookUpMaster.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName);
-
-    // Initialize the mainObj
-    var mainObj: any = {};
-
-    // Assign other properties to mainObj if needed
-    mainObj.primaryValueDriverLookupId = selectedPrimaryKpiObject.lookUpId;
-    console.log(mainObj)
-    this.apiService.updateReportDates(this.projecthubservice.projectid, "ModifiedDate").then(secondRes => {
-      this.projecthubservice.submitbutton.next(true);
-      this.projecthubservice.isNavChanged.next(true);
-      this.projecthubservice.toggleDrawerOpen('', '', [], '');
-    })
+      this.apiService.addNewMetric(this.projecthubservice.projectid, selectedMetricName.metricID).then(secondRes => {
+        this.projecthubservice.submitbutton.next(true);
+        this.projecthubservice.isNavChanged.next(true);
+        this.projecthubservice.toggleDrawerOpen('', '', [], '');
+      })
+    }
   }
 
   OpenMetricRepo() {

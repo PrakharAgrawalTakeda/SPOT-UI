@@ -908,9 +908,23 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
-  async baselineProjectMetricData(projectid, body) {
+  async baselineProjectMetricData(projectid) {
     var url = GlobalVariables.apiurl + "MetricProjectData/Baseline/" + projectid
-    const abc$ = this.http.put(url, body)
+    const abc$ = this.http.put(url, null)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async deleteMetric(projectId, metricUID){
+    var link = GlobalVariables.apiurl+"MetricProjectData/"+projectId+"/"+metricUID
+    const abc$ = this.http.delete(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async addNewMetric(projectId, metricUID){
+    var link = GlobalVariables.apiurl+"MetricProjectData/AddMetricToProject/"+projectId+"/"+metricUID
+    const abc$ = this.http.put(link,null)
     const response = await lastValueFrom(abc$)
     return response
   }
