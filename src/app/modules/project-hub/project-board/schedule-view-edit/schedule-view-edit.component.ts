@@ -1,12 +1,12 @@
 import {
-    Component,
-    HostListener,
-    OnDestroy,
-    OnInit,
-    ElementRef,
-    ViewChild,
-    ViewEncapsulation,
-    Input
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  ViewEncapsulation,
+  Input
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ProjectHubService } from '../../project-hub.service';
@@ -15,8 +15,9 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { AuthService } from '../../../../core/auth/auth.service'
 import * as moment from 'moment';
 import { ProjectApiService } from '../../common/project-api.service';
-import {Router} from "@angular/router";
-import {GlobalBusinessCaseOptions} from "../../../../shared/global-business-case-options";
+import { Router } from "@angular/router";
+import { GlobalBusinessCaseOptions } from "../../../../shared/global-business-case-options";
+import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -48,16 +49,17 @@ export const MY_FORMATS = {
 })
 
 export class ScheduleViewEditComponent implements OnInit {
-  @Input() viewElements: any = ['milestone','plannedFinish','baselineFinish','responsiblePerson','functionOwner','comments','completionDate','includeInReport']
-    formFieldHelpers: string[] = [''];
+  @Input() viewElements: any = ['milestone', 'plannedFinish', 'baselineFinish', 'responsiblePerson', 'functionOwner', 'comments', 'completionDate', 'includeInReport']
+  formFieldHelpers: string[] = [''];
   lookupdata: any = []
   schedule: any = {}
   today = new Date();
   item: any = {}
   functionSets: any = []
+  milestoneMsReasonCodeDropDown: any = []
   milestoneName: any;
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,
-              public auth: AuthService, private _elementRef: ElementRef,  private router: Router) {
+    public auth: AuthService, private _elementRef: ElementRef, private router: Router,public fuseAlert: FuseConfirmationService) {
     //this.scheduleForm.controls.function.valueChanges.subscribe(res => (console.log(res)))
   }
 
@@ -73,16 +75,35 @@ export class ScheduleViewEditComponent implements OnInit {
     function: new FormControl(null),
     includeInCharter: new FormControl(false),
     includeInReport: new FormControl(false),
-    includeInBusinessCase: new FormControl(false)
+    includeInBusinessCase: new FormControl(false),
+    missedMsreasonCode: new FormControl(null)
   })
   ngOnInit(): void {
     this.getllookup()
   }
-
+  isReasonRequiredPassed() {
+    var formValue = this.scheduleForm.getRawValue()
+    if (formValue.completionDate) {
+      if (formValue.missedMsreasonCode && Object.keys(formValue.missedMsreasonCode).length > 0) {
+        return true
+      }
+      else {
+        if (formValue.baselineFinish) {
+          if (moment(formValue.baselineFinish).diff(moment(formValue.completionDate), "days") >= 0) {
+            return true
+          }
+          return false
+        }
+        else {
+          return true
+        }
+      }
+    }
+  }
   dataloader() {
     if (this.projecthubservice.itemid != "new") {
-        this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
-          console.log(this.projecthubservice.itemid)
+      this.apiService.scheduleSingle(this.projecthubservice.itemid).then((res: any) => {
+        console.log(this.projecthubservice.itemid)
         this.schedule = res
         console.log(this.projecthubservice)
         console.log('res')
@@ -98,7 +119,8 @@ export class ScheduleViewEditComponent implements OnInit {
           usersingleid: res.responsiblePersonId,
           includeInCharter: res.includeInCharter,
           includeInReport: res.includeInReport,
-          includeInBusinessCase: res.includeInBusinessCase
+          includeInBusinessCase: res.includeInBusinessCase,
+          missedMsreasonCode: res.missedMsreasonCode ? this.lookupdata.find(x => x.lookUpId == res.missedMsreasonCode) : null
         })
         this.scheduleForm.controls['baselineFinish'].disable()
         //this.scheduleForm.controls['plannedFinish'].disable()
@@ -114,15 +136,15 @@ export class ScheduleViewEditComponent implements OnInit {
             }
           }
           if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 8) {
-              if (this.scheduleForm.value.includeInBusinessCase != true) {
-                  this.scheduleForm.controls['includeInBusinessCase'].disable()
-              }
+            if (this.scheduleForm.value.includeInBusinessCase != true) {
+              this.scheduleForm.controls['includeInBusinessCase'].disable()
+            }
           }
           if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
             if (this.scheduleForm.value.includeInCharter != true) {
-                this.scheduleForm.controls['includeInCharter'].disable()
+              this.scheduleForm.controls['includeInCharter'].disable()
             }
-        }
+          }
         }
         this.projecthubservice.isFormChanged = false
       })
@@ -138,7 +160,8 @@ export class ScheduleViewEditComponent implements OnInit {
         usersingleid: "",
         includeInCharter: false,
         includeInReport: false,
-        includeInBusinessCase: false
+        includeInBusinessCase: false,
+        missedMsreasonCode: null
       })
       this.scheduleForm.controls['baselineFinish'].disable()
       //this.scheduleForm.controls['plannedFinish'].disable()
@@ -151,11 +174,11 @@ export class ScheduleViewEditComponent implements OnInit {
         if (this.projecthubservice.all.filter(x => x.includeInReport == true).length >= 8) {
           this.scheduleForm.controls['includeInReport'].disable()
         }
-          if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 8) {
-              this.scheduleForm.controls['includeInBusinessCase'].disable()
-          }
-          if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
-            this.scheduleForm.controls['includeInCharter'].disable()
+        if (this.projecthubservice.all.filter(x => x.includeInBusinessCase == true).length >= 8) {
+          this.scheduleForm.controls['includeInBusinessCase'].disable()
+        }
+        if (this.projecthubservice.all.filter(x => x.includeInCharter == true).length >= 10) {
+          this.scheduleForm.controls['includeInCharter'].disable()
         }
       }
       this.projecthubservice.isFormChanged = false
@@ -169,15 +192,44 @@ export class ScheduleViewEditComponent implements OnInit {
     this.auth.lookupMaster().then((resp: any) => {
       this.lookupdata = resp
       this.functionSets = this.lookupdata.filter(x => x.lookUpParentId == '0edea251-09b0-4323-80a0-9a6f90190c77')
+      this.milestoneMsReasonCodeDropDown = this.lookupdata.filter(x => x.lookUpParentId == '95eb6b0c-73dc-42c2-bb01-a2486c98fab6')
       this.dataloader()
       this.scheduleForm.controls.function.patchValue('')
-        this.projecthubservice.isFormChanged = false
+      this.projecthubservice.isFormChanged = false
     })
   }
   viewElementChecker(element: string): boolean {
-      return this.viewElements.some(x => x == element)
+    return this.viewElements.some(x => x == element)
   }
-
+  submitScheduleHandler() {
+    if (this.isReasonRequiredPassed()) {
+      this.submitschedule()
+    }
+    else {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Missed Milestone Reason Code is Required for Milestones when Completion Date is Greater than Baseline Finish Date",
+        "message": "",
+        "icon": {
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
+        },
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "Ok",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
+      }
+      const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+    }
+  }
   submitschedule() {
     this.projecthubservice.isFormChanged = false
 
@@ -201,7 +253,8 @@ export class ScheduleViewEditComponent implements OnInit {
           includeInCloseout: this.schedule.includeInCloseout,
           responsiblePersonId: this.scheduleForm.value.usersingleid,
           responsiblePersonName: this.scheduleForm.value.usersingle,
-          businessOptionId:""
+          businessOptionId: "",
+          missedMsreasonCode: this.scheduleForm.value.missedMsreasonCode ? this.scheduleForm.value.missedMsreasonCode.lookUpId : null
         }
         //Function when null
         if (this.scheduleForm.controls['function'].value == "") {
@@ -211,11 +264,11 @@ export class ScheduleViewEditComponent implements OnInit {
           mainObjnew.includeInReport = false
         }
         if (this.scheduleForm.controls['includeInBusinessCase'].disabled) {
-            mainObjnew.includeInBusinessCase = false
+          mainObjnew.includeInBusinessCase = false
         }
         if (this.scheduleForm.controls['includeInCharter'].disabled) {
           mainObjnew.includeInBusinessCase = false
-      }
+        }
 
         // //Planned Finish
         if (mainObjnew.plannedFinish == "Invalid date") {
@@ -230,36 +283,36 @@ export class ScheduleViewEditComponent implements OnInit {
         if (mainObjnew.baselineFinish == "Invalid date") {
           mainObjnew.baselineFinish = null
         }
-          if (this.router.url.includes('option-2')) {
-              mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
+        if (this.router.url.includes('option-2')) {
+          mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_2;
+          this.apiService.addTimelineForOption(mainObjnew).then(res => {
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
+          })
+        } else {
+          if (this.router.url.includes('option-3')) {
+            mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
+            this.apiService.addTimelineForOption(mainObjnew).then(res => {
+              this.projecthubservice.submitbutton.next(true)
+              this.projecthubservice.toggleDrawerOpen('', '', [], '')
+            })
+          } else {
+            if (this.router.url.includes('recommended-option')) {
+              mainObjnew.businessOptionId = "";
               this.apiService.addTimelineForOption(mainObjnew).then(res => {
-                  this.projecthubservice.submitbutton.next(true)
-                  this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
               })
-          }else{
-              if (this.router.url.includes('option-3')) {
-                  mainObjnew.businessOptionId = GlobalBusinessCaseOptions.OPTION_3;
-                  this.apiService.addTimelineForOption(mainObjnew).then(res => {
-                      this.projecthubservice.submitbutton.next(true)
-                      this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                  })
-              }else{
-                  if (this.router.url.includes('recommended-option')) {
-                      mainObjnew.businessOptionId = "";
-                      this.apiService.addTimelineForOption(mainObjnew).then(res => {
-                          this.projecthubservice.submitbutton.next(true)
-                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                      })
-                  }else{
-                      this.apiService.addSchedule(mainObjnew).then(() => {
-                          this.projecthubservice.toggleDrawerOpen('', '', [], '')
-                          this.projecthubservice.submitbutton.next(true)
-                          this.projecthubservice.isNavChanged.next(true)
-                      })
-                  }
+            } else {
+              this.apiService.addSchedule(mainObjnew).then(() => {
+                this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                this.projecthubservice.submitbutton.next(true)
+                this.projecthubservice.isNavChanged.next(true)
+              })
+            }
 
-              }
           }
+        }
       }
       else {
         console.log(this.scheduleForm.controls.baselineFinish.value)
@@ -280,7 +333,8 @@ export class ScheduleViewEditComponent implements OnInit {
           templateMilestoneId: this.schedule.templateMilestoneId,
           includeInCloseout: this.schedule.includeInCloseout,
           responsiblePersonId: this.scheduleForm.value.usersingleid,
-          responsiblePersonName: this.scheduleForm.value.usersingle
+          responsiblePersonName: this.scheduleForm.value.usersingle,
+          missedMsreasonCode: this.scheduleForm.value.missedMsreasonCode ? this.scheduleForm.value.missedMsreasonCode.lookUpId : null
         }
         //Function when null
         // console.log(this.scheduleForm.controls.baselineFinish.value)
