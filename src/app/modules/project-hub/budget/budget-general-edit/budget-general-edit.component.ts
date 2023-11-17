@@ -203,9 +203,7 @@ export class BudgetGeneralEditComponent {
     gmsBudgetOwnerBasicSetup() {
         this.gmsBudgetOwnerList = this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
         if(this.isBudgetAdmin==true){
-            if(this.gmsBudgetowner.value.gmsbudgetOwnerEditable){
-                this.gmsBudgetOwnerList =  this.filterCriteria.portfolioOwner.filter(x => x.gmsbudgetOwnerDropDownValue == true)
-            }
+            this.gmsBudgetOwnerList =  this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
             if(this.gmsBudgetowner.disabled){
                 this.gmsBudgetowner.enable({emitEvent : false})
             }
