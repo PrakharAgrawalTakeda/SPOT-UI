@@ -226,9 +226,42 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
             this.insertarray.push(projectId)
         }
     }
-
+    isReasonRequiredPassedChecker(formValue: any): boolean {
+        if (formValue.completionDate) {
+            if (formValue.missedMsreasonCode && Object.keys(formValue.missedMsreasonCode).length > 0) {
+                return true
+            }
+            else {
+                if (formValue.baselineFinish) {
+                    if (moment(formValue.baselineFinish).diff(moment(formValue.completionDate), "days") >= 0) {
+                        return true
+                    }
+                    return false
+                }
+                else {
+                    return true
+                }
+            }
+        }
+        return true
+    }
+    isReasonRequiredPassed(): boolean {
+        var formValue = this.milestoneForm.getRawValue()
+        if (formValue.length > 0) {
+            for (var form of formValue) {
+                if (!this.isReasonRequiredPassedChecker(form)) {
+                    return false
+                }
+            }
+            return true
+        }
+        return true
+    }
     getFunctionOwner(): any {
         return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == "0edea251-09b0-4323-80a0-9a6f90190c77")
+    }
+    getMissedMilestoneReasonCode(): any {
+        return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == "95eb6b0c-73dc-42c2-bb01-a2486c98fab6")
     }
     getBaselineReasonCode(): any {
         return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == 'fceaab50-89f3-4b64-aaba-d9fac88d03e6')
@@ -421,6 +454,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                         }),
                                                         functionGroupId: i.functionGroupId,
                                                         completionDate: i.plannedFinish ? moment(i.plannedFinish).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null,
+                                                        missedMsreasonCode: i.missedMsreasonCode,
                                                         comments: (i.comments),
                                                         includeInReport: (i.includeInReport),
                                                         includeInCharter: (i.includeInCharter),
@@ -447,6 +481,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                         "functionGroupId": x.functionGroupId,
                                                         "function": (this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.functionGroupId)),
                                                         "completionDate": moment(x.completionDate).format("YYYY-MM-DD HH:mm:ss"),
+                                                        "missedMsreasonCode": (this.projecthubservice.lookUpMaster.find(y => y.lookUpId == x.missedMsreasonCode)),
                                                         "comments": x.comments,
                                                         "includeInReport": x.includeInReport,
                                                         "includeInCharter": x.includeInCharter,
@@ -472,6 +507,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                                                         }),
                                                         functionGroupId: new FormControl(i.functionGroupId),
                                                         function: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == i.functionGroupId)),
+                                                        missedMsreasonCode: new FormControl(this.projecthubservice.lookUpMaster.find(x => x.lookUpId == i.missedMsreasonCode)),
                                                         completionDate: new FormControl(i.completionDate),
                                                         comments: new FormControl(i.comments),
                                                         includeInReport: new FormControl(i.projectId == this.id ? i.includeInReport : this.scheduleData.links.find(t => t.linkItemId == i.scheduleUniqueId).includeInReport),
@@ -1661,6 +1697,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             comments: i.comments,
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
+                            missedMsreasonCode: i.missedMsreasonCode?.lookUpId,
                             includeInCharter: i.includeInCharter,
                             includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
@@ -1681,6 +1718,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             comments: i.comments,
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
+                            missedMsreasonCode: i.missedMsreasonCode?.lookUpId,
                             includeInCharter: i.includeInCharter,
                             includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
@@ -1746,6 +1784,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             comments: i.comments,
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
+                            missedMsreasonCode: i.missedMsreasonCode?.lookUpId,
                             includeInCharter: i.includeInCharter,
                             includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
@@ -1769,6 +1808,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             comments: i.comments,
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
+                            missedMsreasonCode: i.missedMsreasonCode?.lookUpId,
                             includeInCharter: i.includeInCharter,
                             includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
@@ -1789,6 +1829,7 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
                             comments: i.comments,
                             includeInReport: i.includeInReport,
                             functionGroupId: i.function == null ? null : i.function.lookUpId,
+                            missedMsreasonCode: i.missedMsreasonCode?.lookUpId,
                             includeInCharter: i.includeInCharter,
                             includeInBusinessCase: i.includeInBusinessCase,
                             milestoneType: i.milestoneType,
@@ -2458,7 +2499,35 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
     }
 
-
+    submitscheduleHandler() {
+        if (this.isReasonRequiredPassed()) {
+            this.submitschedule()
+        }
+        else {
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "Missed Milestone Reason Code is Required for Milestones when Completion Date is Greater than Baseline Finish Date",
+                "message": "",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warning"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "Ok",
+                        "color": "primary"
+                    },
+                    "cancel": {
+                        "show": false,
+                        "label": "Cancel"
+                    }
+                },
+                "dismissible": true
+            }
+            const scheduleAlert = this.fuseAlert.open(comfirmConfig)
+        }
+    }
     submitschedule() {
         // debugger
         var baselineFormValue = this.milestoneForm.getRawValue()

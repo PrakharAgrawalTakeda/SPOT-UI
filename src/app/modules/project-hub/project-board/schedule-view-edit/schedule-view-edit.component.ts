@@ -99,6 +99,7 @@ export class ScheduleViewEditComponent implements OnInit {
         }
       }
     }
+    return true
   }
   dataloader() {
     if (this.projecthubservice.itemid != "new") {
