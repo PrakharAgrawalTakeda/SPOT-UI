@@ -28,6 +28,7 @@ export class CloseOutValueCreationComponent implements OnInit {
   kpi= []
   columnYear = []
   yearData = []
+  projectsMetricsData = []
   @ViewChild('valuecreationTable') table: any;
   constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,public indicator: SpotlightIndicatorsService,
     private portApiService: PortfolioApiService){
@@ -40,6 +41,20 @@ export class CloseOutValueCreationComponent implements OnInit {
       this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
     }
     this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
+      var parentId = ''
+      var parentData: any
+      for(var i=0;i<res.length;i++){
+        if(res[i].projectsMetricsData.parentProjectId != null){
+          parentId = res[i].projectsMetricsData.parentProjectId
+          break;
+        }
+      }
+      if(parentId != ''){
+      this.projectApiService.getproject(parentId).then((parent: any) => {
+        parentData = parent
+      })
+      }
+      this.projectApiService.getproject(this.id).then((problemCapture: any) => {
       this.auth.lookupMaster().then((resp: any) => {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
@@ -49,101 +64,137 @@ export class CloseOutValueCreationComponent implements OnInit {
           this.filterData = filterres
           console.log(res.projectsMetricsData)
           this.localCurrency = currency.localCurrencyAbbreviation
-          res.projectsMetricsData.forEach((element)=>{
-                element.metricCategoryId = null
-                element.metricName = ""
-                element.helpText = ""
-                element.metricPortfolioID = null
-                element.metricUnit = ""
-                element.metricTypeID = null
-                element.metricFormat = ""
-                element.FianncialType1 = "Target"
-                element.FianncialType2 = "Baseline Plan"
-                element.FianncialType3 = "Current Plan"
-                element.FianncialType4 = "Actual"
-            res.allMetrics.forEach((el)=>{
-              if(element.metricId == el.metricID){
-                var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
-                element.metricCategoryId = el.metricCategoryID
-                element.metricName = el.metricName
-                element.helpText = el.helpText
-                element.metricPortfolioID = el.metricPortfolioID
-                element.metricUnit = el.metricUnit
-                element.metricTypeID = el.metricTypeID
-                element.metricFormat = format
-                element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
-                element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
-                element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
-                element.strategicActual =element.strategicActual ? element.strategicActual : '0'
-              }
-            })
-          })
+          // res.projectsMetricsData.forEach((element)=>{
+          //       element.metricCategoryId = null
+          //       element.metricName = ""
+          //       element.helpText = ""
+          //       element.metricPortfolioID = null
+          //       element.metricUnit = ""
+          //       element.metricTypeID = null
+          //       element.metricFormat = ""
+          //       element.FianncialType1 = "Target"
+          //       element.FianncialType2 = "Baseline Plan"
+          //       element.FianncialType3 = "Current Plan"
+          //       element.FianncialType4 = "Actual"
+          //   res.allMetrics.forEach((el)=>{
+          //     if(element.metricId == el.metricID){
+          //       var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
+          //       element.metricCategoryId = el.metricCategoryID
+          //       element.metricName = el.metricName
+          //       element.helpText = el.helpText
+          //       element.metricPortfolioID = el.metricPortfolioID
+          //       element.metricUnit = el.metricUnit
+          //       element.metricTypeID = el.metricTypeID
+          //       element.metricFormat = format
+          //       element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
+          //       element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
+          //       element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
+          //       element.strategicActual =element.strategicActual ? element.strategicActual : '0'
+          //     }
+          //   })
+          // })
+
+          res.forEach((element)=>{
+            var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
+            element.metricData.metricFormat = format
+            element.metricData.FianncialType1 = "Target"
+            element.metricData.FianncialType2 = "Baseline Plan"
+            element.metricData.FianncialType3 = "Current Plan"
+            element.metricData.FianncialType4 = "Actual"
+            element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
+            this.projectsMetricsData.push({...element.metricData, ...element.projectsMetricsData})
+      })
+        
           this.ValueCaptureForm.patchValue({
-            valueCaptureStart: res.problemCapture.financialRealizationStartDate,
-            primaryValueDriver: res.problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : 
-            res.problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname : '',
-            valueCommentary: res.problemCapture.valueCommentary
+            valueCaptureStart: problemCapture.financialRealizationStartDate,
+            primaryValueDriver: problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : 
+            problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == problemCapture.primaryKpi).kpiname : '',
+            valueCommentary: problemCapture.valueCommentary
           })
           var year = []
           var yearList=[]
           
-          year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
+          if(res.length > 0){
+          year = [...new Set(res[0].projectsMetricsDataYearly.map(item => item.financialYearId))]
           for(var i=0;i<year.length;i++){
             var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
             this.columnYear.push({year: yearName})
             yearList.push(yearName)
           }
           yearList.sort()
-          for(var i=0;i<res.projectsMetricsData.length;i++){
+          for(var i=0;i<this.projectsMetricsData.length;i++){
             for(var j=0;j<yearList.length;j++){
-              res.projectsMetricsData[i][yearList[j]] = [{'target':"0",'baseline':"0",'actual':"0",'current':"0"}]
-              if(res.projectsMetricsData[i].strategicBaselineList){
-                var data = res.projectsMetricsData[i].strategicBaselineList.split(',')
+              var baseline = 0
+              var actual = 0
+              var target = 0
+              var current = 0
+              this.projectsMetricsData[i][yearList[j]] = [{'target':"0",'baseline':"0",'actual':"0",'current':"0"}]
+              if(this.projectsMetricsData[i].strategicBaselineList){
+                var data = this.projectsMetricsData[i].strategicBaselineList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
+                  baseline = baseline + Number(list[2])
+                  if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                    this.projectsMetricsData[i].strategicBaseline = baseline.toString()
+                  }
                   if(list[1].replace(':','') == yearList[j].replace(' 20','')){
-                    res.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
+                    this.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
                   }
                 }
               }
-              else if(res.projectsMetricsData[i].strategicCurrentList){
-                var data = res.projectsMetricsData[i].strategicCurrentList.split(',')
+              else if(this.projectsMetricsData[i].strategicCurrentList){
+                var data = this.projectsMetricsData[i].strategicCurrentList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
+                  current = current + Number(list[2])
+                  if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                    this.projectsMetricsData[i].strategicCurrent = current.toString()
+                  }
                   if(list[1].replace(':','') == yearList[j].replace(' 20','')){
-                    res.projectsMetricsData[i][yearList[j]][0].current = list[2]
+                    this.projectsMetricsData[i][yearList[j]][0].current = list[2]
                   }
                 }
               }
-              else if(res.projectsMetricsData[i].strategicActualList){
-                var data = res.projectsMetricsData[i].strategicActualList.split(',')
+              else if(this.projectsMetricsData[i].strategicActualList){
+                var data = this.projectsMetricsData[i].strategicActualList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
+                  actual = actual + Number(list[2])
+                  if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                    this.projectsMetricsData[i].strategicActual = actual.toString()
+                  }
                   if(list[1].replace(':','') == yearList[j].replace(' 20','')){
-                    res.projectsMetricsData[i][yearList[j]][0].actual = list[2]
+                    this.projectsMetricsData[i][yearList[j]][0].actual = list[2]
                   }
                 }
               }
-              else if(res.projectsMetricsData[i].strategicTargetList){
-                var data = res.projectsMetricsData[i].strategicTargetList.split(',')
+              else if(this.projectsMetricsData[i].strategicTargetList){
+                var data = this.projectsMetricsData[i].strategicTargetList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
+                  target = target + Number(list[2])
+                  if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                    this.projectsMetricsData[i].strategicTarget = target.toString()
+                  }
                   if(list[1].replace(':','') == yearList[j].replace(' 20','')){
-                    res.projectsMetricsData[i][yearList[j]][0].target = list[2]
+                    this.projectsMetricsData[i][yearList[j]][0].target = list[2]
                   }
                 }
               }
             }
           };
+        }
           this.compare(this.columnYear)
-          this.valuecreationngxdata = res.projectsMetricsData
+          this.valuecreationngxdata = this.projectsMetricsData
           this.ValueCaptureForm.disable()
           this.viewContent = true
       })
     })
     })
   })
-})
+  })
+  })
+// })
   }
 
   getLookup(id: any){

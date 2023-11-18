@@ -68,7 +68,7 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
     formatInput(event: any): void {
         const isFocused = document.activeElement === event.target;
         let value = event.target.value;
-        const regex = /[^\d.]/g;
+        const regex = /[^\d.-]/g;
         value = value.replace(regex, '');
         if (this.decimalCount === 0) {
             value = value.replace(/\..*/, '');
