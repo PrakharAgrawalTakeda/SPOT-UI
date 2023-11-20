@@ -92,11 +92,12 @@
                 class="font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata">
 
                 <ngx-datatable-column name="Financial Type" [width]="120" [frozenLeft]="true">
-                    <ng-template ngx-datatable-cell-template let-row="row">
-                        <p *ngIf="row.metricFormat != 'Currency (local)'">{{ row.financialType }}</p>
-                        <p *ngIf="row.metricFormat == 'Currency (local)'">{{ row.financialType }} ({{localCurrency}})</p>
+                    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                        <!-- Check if metricFormat is 'Currency (local)' and append the local currency abbreviation -->
+                        <p>{{ row.displayFinancialType }}</p>
                     </ng-template>
                 </ngx-datatable-column>
+                
 
                 <ngx-datatable-column *ngFor="let col of columnYear" [name]="col.year" [width]="90">
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>

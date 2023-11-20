@@ -131,7 +131,7 @@
                             svgIcon="heroicons_outline:clock"></mat-icon></div>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="160" [frozenLeft]="true" [resizeable]="false" [sortable]="false">
+            <ngx-datatable-column [width]="180" [frozenLeft]="true" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.metricFormat != 'Currency (local)'">{{ row.FianncialType1 }} <br>
                         {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
@@ -162,7 +162,7 @@
                     </ng-template>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total" prop="strategicTarget" [width]="190" [resizeable]="false"
+            <ngx-datatable-column name="Total" prop="strategicTarget" [width]="150" [resizeable]="false"
                 [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.metricFormat == 'Time (HH:MM)' || row.metricFormat == ''">{{ value }} <br>
@@ -179,7 +179,7 @@
                         {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="20" [resizeable]="false" [sortable]="false" [frozenRight]="true"
+            <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false" 
                 [headerClass]="getFrozenHeaderClass2">
                 <ng-template let-row="row" ngx-datatable-cell-template>
 

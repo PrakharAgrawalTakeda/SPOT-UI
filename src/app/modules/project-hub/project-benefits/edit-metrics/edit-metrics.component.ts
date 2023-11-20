@@ -67,6 +67,7 @@ export class EditMetricsComponent {
       projectId: any; metricId: any; financialYearId: string; financialTypeId: string; metricValue: any; // Ensure metricValue is a string
     }[]; isBaseLined: boolean;
   };
+  metricFormat: any;
 
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe) {
@@ -127,7 +128,6 @@ export class EditMetricsComponent {
         this.auth.lookupMaster().then((resp: any) => {
           this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
             if (res) {
-
 
               if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
                 this.captureLevel = true
@@ -296,6 +296,15 @@ export class EditMetricsComponent {
                   )
               this.viewContent = true
               console.log(this.valuecreationngxdata)
+              const isCurrencyLocal = res.projectsMetricsData.metricFormat == 'Currency (local)';
+debugger
+  this.valuecreationngxdata.forEach(item => {
+    debugger
+    // If the metric format is 'Currency (local)' and local currency is available, append it to the financial type
+    item.displayFinancialType = isCurrencyLocal && this.localCurrency 
+      ? `${item.financialType} (${this.localCurrency})` 
+      : item.financialType;
+  });
             }
           })
         })

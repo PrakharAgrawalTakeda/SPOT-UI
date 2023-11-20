@@ -125,7 +125,7 @@ console.log(problemCapture)
       console.log(problemCapture)
       this.ValueCaptureForm.patchValue({
           valueCaptureStart: problemCapture.financialRealizationStartDate,
-            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName ,
+            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : null,
             valueCommentary: problemCapture.valueCommentary
       })
           console.log(this.ValueCaptureForm.getRawValue())
