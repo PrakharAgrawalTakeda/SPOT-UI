@@ -91,7 +91,7 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
                 class="font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata">
 
-                <ngx-datatable-column name="Financial Type" [width]="120" [frozenLeft]="true">
+                <ngx-datatable-column name="Financial Type" [width]="120" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                         <!-- Check if metricFormat is 'Currency (local)' and append the local currency abbreviation -->
                         <p>{{ row.displayFinancialType }}</p>

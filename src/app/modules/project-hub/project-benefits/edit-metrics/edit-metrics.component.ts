@@ -19,7 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './edit-metrics.component.html',
   styleUrls: ['./edit-metrics.component.scss'],
   providers: [DecimalPipe],
-  encapsulation: ViewEncapsulation.None, // Provide the DecimalPipe here
+  encapsulation: ViewEncapsulation.None,
 })
 export class EditMetricsComponent {
   capexAvoidanceForm = new FormGroup({
@@ -94,6 +94,22 @@ export class EditMetricsComponent {
   ngOnInit(): void {
     this.dataloader()
 
+  }
+
+  getFrozenHeaderClassID(): any {
+    return ' frozen-header-classID';
+  }
+  getFrozenHeaderClass(): any {
+    return ' frozen-header-class';
+  }
+  getFrozenClass(): any {
+    return ' frozen-header';
+  }
+  columnstyle(): any{
+    return ' column-style';
+  }
+  getFrozenID(): any{
+    return ' frozen-header-ID'
   }
 
   onValueChange(rowIndex: number, year: string, newValue: string): void {
@@ -297,9 +313,7 @@ export class EditMetricsComponent {
               this.viewContent = true
               console.log(this.valuecreationngxdata)
               const isCurrencyLocal = res.projectsMetricsData.metricFormat == 'Currency (local)';
-debugger
   this.valuecreationngxdata.forEach(item => {
-    debugger
     // If the metric format is 'Currency (local)' and local currency is available, append it to the financial type
     item.displayFinancialType = isCurrencyLocal && this.localCurrency 
       ? `${item.financialType} (${this.localCurrency})` 
@@ -561,78 +575,138 @@ debugger
     });
   }
 
+
   addYear() {
-    const newYear = this.globalMaxYear + 1;
-    this.globalMaxYear = newYear; // Update globalMaxYear
-  
-    // Add new year to columnYear as full year for display purposes
-    this.columnYear.push({ year: `FY ${newYear}` });
-  
-    // Get the two last digits of the year for the form control keys
-    const shortYear = newYear % 100;
-  
-    // Assign '0' for the new year in each financial type's values
-    this.valuecreationngxdata.forEach(financialType => {
-      const fiscalYearKey = `FY${shortYear}`; // Use two-digit year here
-      financialType.values[fiscalYearKey] = '0';
-    });
-  
-    // Add a new control for the new year to each group in the form array
-    this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
-      if (group instanceof FormGroup) {
-        group.addControl(`FY${shortYear}`, new FormControl('0')); // Use two-digit year here
-      }
-    });
+    if(this.globalMaxYear < 2034)
+    {
+      const newYear = this.globalMaxYear + 1;
+      this.globalMaxYear = newYear; // Update globalMaxYear
+    
+      // Add new year to columnYear as full year for display purposes
+      this.columnYear.push({ year: `FY ${newYear}` });
+    
+      // Get the two last digits of the year for the form control keys
+      const shortYear = newYear % 100;
+    
+      // Assign '0' for the new year in each financial type's values
+      this.valuecreationngxdata.forEach(financialType => {
+        const fiscalYearKey = `FY${shortYear}`; // Use two-digit year here
+        financialType.values[fiscalYearKey] = '0';
+      });
+    
+      // Add a new control for the new year to each group in the form array
+      this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
+        if (group instanceof FormGroup) {
+          group.addControl(`FY${shortYear}`, new FormControl('0')); // Use two-digit year here
+        }
+      });
+    }
+    else{
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Maximum possible year is reached!",
+        "message": "",
+        "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+        },
+        "actions": {
+            "confirm": {
+                "show": true,
+                "label": "Okay",
+                "color": "primary"
+            },
+            "cancel": {
+                "show": false,
+                "label": "Cancel"
+            }
+        },
+        "dismissible": true
+    }
+    const alert = this.fuseAlert.open(comfirmConfig)
+    } 
   }
   
 
   removeYear() {
-    var comfirmConfig: FuseConfirmationConfig = {
-      "title": "Are you sure?",
-      "message": "This function will delete all Financial data for max year. Are you sure you want to continue? ",
-      "icon": {
-        "show": true,
-        "name": "heroicons_outline:exclamation",
-        "color": "warn"
-      },
-      "actions": {
-        "confirm": {
+    if(this.columnYear.length > 0)
+    {
+      var comfirmConfig: FuseConfirmationConfig = {
+        "title": "Are you sure?",
+        "message": "This function will delete all Financial data for max year. Are you sure you want to continue? ",
+        "icon": {
           "show": true,
-          "label": "OK",
+          "name": "heroicons_outline:exclamation",
           "color": "warn"
         },
-        "cancel": {
-          "show": true,
-          "label": "Cancel"
-        }
-      },
-      "dismissible": true
-    }
-    const removeYearAlert = this.fuseAlert.open(comfirmConfig)
-  removeYearAlert.afterClosed().subscribe(close => {
-    if (close == 'confirmed') {
-      if (this.columnYear.length > 0) {
-        // Remove the last year from columnYear as full year
-        const removedYearObj = this.columnYear.pop();
-        const removedYear = `FY ${this.globalMaxYear}`; // Use the full year for removal
-
-        // Update globalMaxYear
-        this.globalMaxYear = this.globalMaxYear - 1;
-
-          // Remove the year from each financial type's values
-          this.valuecreationngxdata.forEach(financialType => {
-            delete financialType.values[`FY${removedYear}`];
-          });
-
-          // Remove the form control for this year from each FormGroup
-          this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
-            if (group instanceof FormGroup) {
-              group.removeControl(`FY${removedYear}`);
-            }
-          });
-        }
+        "actions": {
+          "confirm": {
+            "show": true,
+            "label": "OK",
+            "color": "warn"
+          },
+          "cancel": {
+            "show": true,
+            "label": "Cancel"
+          }
+        },
+        "dismissible": true
       }
-    })
+      const removeYearAlert = this.fuseAlert.open(comfirmConfig)
+    removeYearAlert.afterClosed().subscribe(close => {
+      if (close == 'confirmed') {
+        if (this.columnYear.length > 0) {
+          const currentYear = new Date().getFullYear();
+                if (this.globalMaxYear == currentYear) {
+                    // Prevent deletion of current year data
+                    var comfirmConfig: FuseConfirmationConfig = {
+                      "title": "",
+                      "message": "Current Financial Year data cannot be removed! ",
+                      "icon": {
+                        "show": true,
+                        "name": "heroicons_outline:exclamation",
+                        "color": "warn"
+                      },
+                      "actions": {
+                        "confirm": {
+                          "show": true,
+                          "label": "OK",
+                          "color": "warn"
+                        },
+                        "cancel": {
+                          "show": true,
+                          "label": "Cancel"
+                        }
+                      },
+                      "dismissible": true
+                    }
+                    const removeYearAlert = this.fuseAlert.open(comfirmConfig)
+                }
+          // Remove the last year from columnYear as full year
+          const removedYearObj = this.columnYear.pop();
+          const removedYear = `FY ${this.globalMaxYear}`; // Use the full year for removal
+  
+          // Update globalMaxYear
+          this.globalMaxYear = this.globalMaxYear - 1;
+  
+            // Remove the year from each financial type's values
+            this.valuecreationngxdata.forEach(financialType => {
+              delete financialType.values[`FY${removedYear}`];
+            });
+  
+            // Remove the form control for this year from each FormGroup
+            this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
+              if (group instanceof FormGroup) {
+                group.removeControl(`FY${removedYear}`);
+              }
+            });
+          }
+        }
+      })
+    }
+   else {
+
+   } 
   }
 
   deleteMetric() {
