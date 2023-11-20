@@ -101,7 +101,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && aprEditable">
                             <spot-input-forecast formControlName="apr" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'apr')"
+                                                     (pasteEvent)="onPaste($event, rowIndex, 'apr')"
                                                      [isBlue]="firstPreliminary == 'apr' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -147,7 +147,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && junEditable">
                             <spot-input-forecast formControlName="jun" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'jun')"
+                                                      (pasteEvent)="onPaste($event, rowIndex, 'jun')"
                                                      [isBlue]="firstPreliminary == 'jun' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -169,7 +169,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && julEditable">
                             <spot-input-forecast formControlName="jul" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'jul')"
+                                                       (pasteEvent)="onPaste($event, rowIndex, 'jul')"
                                                      [isBlue]="firstPreliminary == 'jul' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -191,7 +191,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && augEditable">
                             <spot-input-forecast formControlName="aug" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'aug')"
+                                                     (pasteEvent)="onPaste($event, rowIndex, 'aug')"
                                                      [isBlue]="firstPreliminary == 'aug' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -213,7 +213,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4 px-1"
                               *ngIf="fTableEditStack.includes(rowIndex) && sepEditable">
                                 <spot-input-forecast formControlName="sep" [decimalCount]="0" [autoAddDecimal]="false"
-                                                         (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'sep')"
+                                                         (pasteEvent)="onPaste($event, rowIndex, 'sep')"
                                                          [isBlue]="firstPreliminary == 'sep' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -236,7 +236,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && octEditable">
                             <spot-input-forecast formControlName="oct" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'oct')"
+                                                     (pasteEvent)="onPaste($event, rowIndex, 'oct')"
                                                      [isBlue]="firstPreliminary == 'oct' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -280,7 +280,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && decEditable">
                             <spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'dec')"
+                                                     (pasteEvent)="onPaste($event, rowIndex, 'dec')"
                                                      [isBlue]="firstPreliminary == 'dec' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -302,7 +302,7 @@
                         <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && janEditable">
                             <spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'jan')"
+                                                     (pasteEvent)="onPaste($event, rowIndex, 'jan')"
                                                      [isBlue]="firstPreliminary == 'jan' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>

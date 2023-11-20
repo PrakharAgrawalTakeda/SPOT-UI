@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ProjectHubService} from "../../project-hub.service";
-import { FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@fuse/services/confirmation";
 import {ProjectApiService} from "../project-api.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
@@ -113,8 +113,35 @@ export class PhaseStateComponent implements OnInit {
             this.projecthubservice.submitbutton.next(true)
         }).catch(err => {
             if(err.status == 400){
-                this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
-                this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', body, '', true);
+                if(err.error.code == 204){
+                    var existingForecastAlert: FuseConfirmationConfig = {
+                        "title": "The project contains forecast",
+                        "message": "In order to cancel it please remove the forecast values in the Budget page!",
+                        "icon": {
+                            "show": true,
+                            "name": "heroicons_outline:exclamation",
+                            "color": "warning"
+                        },
+                        "actions": {
+                            "confirm": {
+                                "show": true,
+                                "label": "Okay",
+                                "color": "primary"
+                            },
+                            "cancel": {
+                                "show": false,
+                                "label": "Cancel"
+                            }
+                        },
+                        "dismissible": true
+                    }
+                    this.fuseAlert.open(existingForecastAlert);
+                }
+                else {
+                    this.projecthubservice.toggleDrawerOpen('', '', [] ,'')
+                    this.projecthubservice.toggleDrawerOpen('StateCheck', 'new', body, '', true);
+                }
+
             }
         })
     }
