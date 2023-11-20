@@ -943,5 +943,11 @@ async updateBusinessCaseFunding(body, projectId, optionid){
     return response
   }
 
+  async putProjectData(body, projectId){
+    var link = GlobalVariables.apiurl+"GeneralInfo/"+projectId
+    const abc$ = this.http.put(link,body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
   }
 

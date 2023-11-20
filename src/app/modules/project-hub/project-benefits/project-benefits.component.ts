@@ -35,7 +35,7 @@ export class ProjectBenefitsComponent implements OnInit {
     localCurrency: string = ""
   valueCreation: any;
   projectsMetricsData = []
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
+  constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
@@ -55,15 +55,29 @@ export class ProjectBenefitsComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getMetricProjectData(this.id).then((res: any) => {
+    this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
+      var parentId = ''
+      var parentData: any
+      for(var i=0;i<res.length;i++){
+        if(res[i].projectsMetricsData.parentProjectId != null){
+          parentId = res[i].projectsMetricsData.parentProjectId
+          break;
+        }
+      }
+      if(parentId != ''){
+      this.projectApiService.getproject(parentId).then((parent: any) => {
+        parentData = parent
+      })
+      }
+      this.projectApiService.getproject(this.id).then((problemCapture: any) => {
       this.auth.lookupMaster().then((resp: any) => {
-        this.apiService.getfilterlist().then(filterres => {
+        this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
               console.log(res)
               console.log(currency)
               this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
-
+console.log(problemCapture)
             this.kpi = kpi
             console.log(this.kpi)
             console.log(res.projectsMetricsData)
@@ -105,22 +119,28 @@ export class ProjectBenefitsComponent implements OnInit {
             element.metricData.FianncialType2 = "Baseline Plan"
             element.metricData.FianncialType3 = "Current Plan"
             element.metricData.FianncialType4 = "Actual"
+            element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
             this.projectsMetricsData.push({...element.metricData, ...element.projectsMetricsData})
       })
-          // No data in API so commented
-        
-          // this.ValueCaptureForm.patchValue({
-          //   valueCaptureStart: res.problemCapture.financialRealizationStartDate,
-          //   primaryValueDriver: res.problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : 
-          //   res.problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname : '',
-          //   valueCommentary: res.problemCapture.valueCommentary
-          // })
+      console.log(problemCapture)
+      this.ValueCaptureForm.patchValue({
+          valueCaptureStart: problemCapture.financialRealizationStartDate,
+            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName ,
+            valueCommentary: problemCapture.valueCommentary
+      })
           console.log(this.ValueCaptureForm.getRawValue())
           var year = []
           var yearList=[]
           
           if(res.length > 0){
-            year = [...new Set(res[0].projectsMetricsDataYearly.map(item => item.financialYearId))]
+            for(var z=0;z<res.length;z++){
+              if(res[z].projectsMetricsDataYearly.length > 0){
+                var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId))]
+                if(listYear.length > year.length){
+                  year = listYear
+                }
+              }
+            }
             for(var i=0;i<year.length;i++){
               var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
               this.columnYear.push({year: yearName})
@@ -147,7 +167,7 @@ export class ProjectBenefitsComponent implements OnInit {
                     }
                   }
                 }
-                else if(this.projectsMetricsData[i].strategicCurrentList){
+                if(this.projectsMetricsData[i].strategicCurrentList){
                   var data = this.projectsMetricsData[i].strategicCurrentList.split(',')
                   for(var z=0;z<data.length;z++){
                     var list = data[z].split(' ')
@@ -160,7 +180,7 @@ export class ProjectBenefitsComponent implements OnInit {
                     }
                   }
                 }
-                else if(this.projectsMetricsData[i].strategicActualList){
+                if(this.projectsMetricsData[i].strategicActualList){
                   var data = this.projectsMetricsData[i].strategicActualList.split(',')
                   for(var z=0;z<data.length;z++){
                     var list = data[z].split(' ')
@@ -173,7 +193,7 @@ export class ProjectBenefitsComponent implements OnInit {
                     }
                   }
                 }
-                else if(this.projectsMetricsData[i].strategicTargetList){
+                if(this.projectsMetricsData[i].strategicTargetList){
                   var data = this.projectsMetricsData[i].strategicTargetList.split(',')
                   for(var z=0;z<data.length;z++){
                     var list = data[z].split(' ')
@@ -194,6 +214,7 @@ export class ProjectBenefitsComponent implements OnInit {
             this.ValueCaptureForm.disable()
             this.viewContent = true
         })
+      })
       })
       })
     })
@@ -277,7 +298,7 @@ export class ProjectBenefitsComponent implements OnInit {
   baselinePlanAlert.afterClosed().subscribe(close => {
     if (close == 'confirmed') {
       this.valuecreationngxdata.forEach(metricData => {
-              this.apiService.baselineProjectMetricData(this.id)
+              this.projectApiService.baselineProjectMetricData(this.id)
         .then(response => {
           console.log('Update successful', response);
 

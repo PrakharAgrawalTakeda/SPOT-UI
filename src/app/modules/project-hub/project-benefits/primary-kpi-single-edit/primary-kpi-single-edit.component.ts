@@ -22,6 +22,7 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
   id: string;
   vc: any;
   lookupMasters = []
+  pc: any;
 
   constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService) {
     this.primaryKPIForm.controls.primaryKpi.valueChanges.subscribe(res => {
@@ -39,7 +40,8 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
       this.auth.lookupMaster().then((lookup: any) => {
       this.vc = vc
       this.lookupMasters = lookup
-      console.log(this.vc)
+      this.pc = pc
+      console.log(pc)
       //if (this.projecthubservice.itemid && this.projecthubservice.itemid != "") {
         console.log(this.projecthubservice.itemid)
         this.primaryKPI = lookup.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474')
@@ -62,19 +64,24 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
     console.log(selectedPrimaryKpiValue)
 
     // Find the corresponding lookUpId from primaryKPI array
-    const selectedPrimaryKpiObject = this.projecthubservice.lookUpMaster.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName);
+    const selectedPrimaryKpiObject = this.lookupMasters.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName);
 
     // Initialize the mainObj
     var mainObj: any = {};
-
+console.log(selectedPrimaryKpiObject)
     var date = this.primaryKPIForm.get('vcdate').value
     // Assign other properties to mainObj if needed
-    mainObj.financialRealizationStartDate = moment(date).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]');
+    mainObj.problemType = this.pc.problemType
+    mainObj.problemTitle = this.pc.problemTitle
+    mainObj.problemOwnerId = this.pc.problemOwnerId
+    mainObj.problemUniqueId = this.pc.problemUniqueId
+    mainObj.portfolioOwnerId = this.pc.portfolioOwnerId
+    mainObj.financialRealizationStartDate = date? moment(date).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
     mainObj.valueCommentary = this.primaryKPIForm.get('valueCommentary').value;
     mainObj.primaryKpi = selectedPrimaryKpiObject.lookUpId;
 
     console.log(mainObj)
-    this.apiService.editGeneralInfo(this.projecthubservice.projectid, mainObj).then(res => {
+    this.apiService.putProjectData(mainObj,this.id).then(res => {
     
       this.projecthubservice.submitbutton.next(true)
           this.projecthubservice.successSave.next(true)
