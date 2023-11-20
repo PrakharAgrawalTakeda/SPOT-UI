@@ -296,7 +296,7 @@ export class LocalAttributeSingleEditComponent {
               i.data[j] = []
             }
             else {
-              i.data[j] = this.lookupData.filter(x => x.lookUpId == newData[j].value)[0]
+              i.data[j] = newData[j].value?this.lookupData.filter(x => x.lookUpId == newData[j].value)[0]:[]
             }
           }
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
@@ -313,7 +313,7 @@ export class LocalAttributeSingleEditComponent {
             this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
           }
           else {
-            i.data = this.lookupData.filter(x => x.lookUpId == i.data[0].value)[0]
+            i.data = i.data[0].value?this.lookupData.filter(x => x.lookUpId == i.data[0].value)[0]:""
             this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
           }
         }
