@@ -155,7 +155,7 @@ export class BiogenicsBulkEditComponent {
     }))
     this.Biogenics = [...this.Biogenics, ...j]
     this.biogenicsTableEditStack.push(this.Biogenics.length - 1)
-    var div = document.getElementsByClassName('datatable-scroll')[0]
+    var div = document.getElementsByClassName('ngx-datatable')[0]
     setTimeout(() => {
       div.scroll({
         top: div.scrollHeight,

@@ -98,7 +98,8 @@ export class PortfolioCenterComponent implements OnInit {
     "CAPSProject": [],
     "Project/Program": [],
     "OverallStatus": [],
-    "PrimaryValueDriver": []
+    "PrimaryValueDriver": [],
+    "SPRProjectCategory": []
   }
   defaultfilter: any = {
     "PortfolioOwner": [],
@@ -118,7 +119,8 @@ export class PortfolioCenterComponent implements OnInit {
     "CAPSProject": [],
     "Project/Program": [],
     "OverallStatus": [],
-    "PrimaryValueDriver": []
+    "PrimaryValueDriver": [],
+    "SPRProjectCategory": []
   }
   PortfolioFilterForm = new FormGroup({
     PortfolioOwner: new FormControl(),
@@ -138,7 +140,8 @@ export class PortfolioCenterComponent implements OnInit {
     CAPSProject: new FormControl(),
     OverallStatus: new FormControl(),
     projectName: new FormControl(),
-    PrimaryValueDriver: new FormControl()
+    PrimaryValueDriver: new FormControl(),
+    SPRProjectCategory: new FormControl()
   })
 
   bulkreportdata: any;
@@ -188,7 +191,7 @@ export class PortfolioCenterComponent implements OnInit {
   totalPages = 0
   // The current page number
   pageNumber = 0
-  groupData: any;
+  groupData: any = [];
   showFilter = false
   toggleObject = {};
   @ViewChild('filterDrawer') filterDrawer: MatSidenav
@@ -196,6 +199,11 @@ export class PortfolioCenterComponent implements OnInit {
   user = {}
   state = {}
   changedToggleStates: Record<string, boolean[]> = {};
+  showdefault:boolean = false
+  localAttributeData = []
+  currentData
+  Date2
+  Date3
 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
@@ -400,6 +408,7 @@ export class PortfolioCenterComponent implements OnInit {
               projectName: this.filtersnew.projectName,
               OverallStatus: this.filtersnew.OverallStatus,
               PrimaryValueDriver: this.filtersnew.PrimaryValueDriver,
+              SPRProjectCategory: this.filtersnew.SPRProjectCategory
             })
             // if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
             //   if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
@@ -546,11 +555,11 @@ export class PortfolioCenterComponent implements OnInit {
                 }
                 else if (attribute == "OverallStatus") {
                   var name = "Overall Status"
-                  var order = 16
+                  var order = 17
                 }
                 else if (attribute == "PrimaryValueDriver") {
                   var name = "Primary Value Driver"
-                  var order = 17
+                  var order = 18
                 }
                 var filterdata = {
                   "name": name,
@@ -568,6 +577,23 @@ export class PortfolioCenterComponent implements OnInit {
                   "value": this.filtersnew[attribute],
                   "count": length,
                   "order": 15
+                }
+                var filterItems1 =
+                {
+                  "filterAttribute": attribute,
+                  "filterOperator": "=",
+                  "filterValue": this.filtersnew[attribute],
+                  "unionOperator": 2
+                }
+                filterItems.push(filterItems1)
+              }
+              else if (attribute == "SPRProjectCategory") {
+                var length: any = 1
+                var filterdata = {
+                  "name": "SPR Project Category",
+                  "value": this.filtersnew[attribute],
+                  "count": length,
+                  "order": 16
                 }
                 var filterItems1 =
                 {
@@ -682,8 +708,33 @@ export class PortfolioCenterComponent implements OnInit {
               "localAttributes": localattribute
             }
           }
+          if( localattribute != undefined){
+          for(var i=0;i<localattribute.length;i++){
+            if(localattribute[i].dataType == "3"){
+              var localdata = {
+                "name": localattribute[i].name,
+                "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
+                "count": localattribute[i].data.length,
+                "order": 15
+              }
+            }
+            else{
+              var localdata = {
+                "name": localattribute[i].name,
+                "value": localattribute[i].data[0].value,
+                "count": localattribute[i].data.length,
+                "order": 15
+              }
+            }
+            this.localAttributeData.push(localdata)
+          }
+        }
 
           console.log("Filter Data : " + this.groupData)
+          this.currentData = new Date().toISOString()
+          this.Date2 = new Date(Date.now() - 12096e5).toISOString()
+          this.Date3 = new Date(Date.now() - 2.592e+9).toISOString()
+          this.groupData.filterGroups.length == 0 ? this.showdefault = true : this.showdefault = false
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
@@ -870,6 +921,11 @@ export class PortfolioCenterComponent implements OnInit {
             res.trendingIndicators.sort((a, b) => {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
             })
+            if(res.overallStatusInfo){
+            res.overallStatusInfo.sort((a, b) => {
+              return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+            })
+          }
             this.projectNames = res.projectDetails;
             this.setPage(res, 0)
 
@@ -890,7 +946,7 @@ export class PortfolioCenterComponent implements OnInit {
                 }
               }
             };
-
+            this.showdefault = false
             this.showContent = true;
           })
         })
@@ -1302,6 +1358,7 @@ export class PortfolioCenterComponent implements OnInit {
       OverallStatus: [],
       projectName: [],
       PrimaryValueDriver: [],
+      SPRProjectCategory: []
     })
     this.showContent = true
     this.defaultfilter.ProjectTeamMember = this.user
@@ -1921,6 +1978,18 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+        this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
+        this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo[i] ? res.overallStatusInfo[i]?.overallStatusLastUpdate : ''
+        this.projectOverview[i].grey = false
+        this.projectOverview[i].darkGrey = false
+        if(this.projectOverview[i].overallStatusLastUpdate != ''){
+        if(this.projectOverview[i].overallStatusLastUpdate <= this.Date2 && this.projectOverview[i].overallStatusLastUpdate <= this.Date3){
+          this.projectOverview[i].grey = true
+        }
+        else if(this.projectOverview[i].overallStatusLastUpdate < this.currentData){
+          this.projectOverview[i].darkGrey = true
+        }
+      }
         this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
         this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
         this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
@@ -1961,6 +2030,11 @@ export class PortfolioCenterComponent implements OnInit {
           res.trendingIndicators.sort((a, b) => {
             return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
           })
+          if(res.overallStatusInfo){
+          res.overallStatusInfo.sort((a, b) => {
+            return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
+          })
+        }
           if (res.conditionalFormattingLabels != null) {
             res.conditionalFormattingLabels.sort((a, b) => {
               return (a.projectId < b.projectId ? -1 : a.projectId == b.projectId ? 0 : 1);
@@ -2015,6 +2089,18 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].askNeedIndicator = res.trendingIndicators[i].askNeedIndicator
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
+            this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
+            this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo ? res.overallStatusInfo[i].overallStatusLastUpdate : ''
+            this.projectOverview[i].grey = false
+            this.projectOverview[i].darkGrey = false
+            if(this.projectOverview[i].overallStatusLastUpdate != ''){
+            if(this.projectOverview[i].overallStatusLastUpdate <= this.Date2 && this.projectOverview[i].overallStatusLastUpdate <= this.Date3){
+              this.projectOverview[i].grey = true
+            }
+            else if(this.projectOverview[i].overallStatusLastUpdate < this.currentData){
+              this.projectOverview[i].darkGrey = true
+            }
+          }
             this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
             this.projectOverview[i].completed = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].completed : ''
             this.projectOverview[i].redExecutionCompleteDate = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].redExecutionCompleteDate : ''
@@ -2101,6 +2187,7 @@ export class PortfolioCenterComponent implements OnInit {
         CAPSProject: this.filtersnew.CAPSProject ? this.filtersnew.CAPSProject : [],
         projectName: this.filtersnew.projectName ? this.filtersnew.projectName : [],
         OverallStatus: this.filtersnew.OverallStatus ? this.filtersnew.OverallStatus : [],
+        SPRProjectCategory: this.filtersnew.SPRProjectCategory ? this.filtersnew.SPRProjectCategory : [],
       })
       if (Object.values(this.filtersnew).every((x: any) => x === null || x === '' || x.length === 0)) {
         if (this.filtersnew.ProjectTeamMember == null || this.filtersnew.ProjectTeamMember.length == 0) {
@@ -2508,5 +2595,14 @@ export class PortfolioCenterComponent implements OnInit {
       this.showFilter = false
     }
     this.filterDrawer.toggle();
+  }
+  DefaultFilter(){
+    this.PortfolioFilterForm.patchValue({
+      ProjectTeamMember: this.user,
+      ProjectState: this.state,
+      ProjectPhase: []
+    })
+    localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
+    this.ngOnInit()
   }
 }

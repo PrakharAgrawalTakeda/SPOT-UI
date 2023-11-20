@@ -27,7 +27,7 @@
             </div>
             <spot-singleselect-autocomplete class="w-full" formControlName="gmsBudgetowner" [label]="'GMS Budget Owner'"  [Required]="required"
                                             [valuePointer]="'portfolioOwner'"
-                                            [dropDownArray]="getGmsBudgetOwner()" [sortByType]="'custom'"
+                                            [dropDownArray]="gmsBudgetOwnerList" [sortByType]="'custom'"
                                             [customSortPointer]="'pfid'">
             </spot-singleselect-autocomplete>
             <spot-singleselect-autocomplete class="w-full" formControlName="predefinedInvestmentId"

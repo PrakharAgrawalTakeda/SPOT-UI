@@ -61,7 +61,7 @@ export class ProjectBenefitsComponent implements OnInit {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
               console.log(res)
               console.log(currency)
-              this.localCurrency = currency.localCurrencyAbbreviation
+              this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
 
             this.kpi = kpi
             console.log(this.kpi)
@@ -98,7 +98,7 @@ export class ProjectBenefitsComponent implements OnInit {
             })
           })
           this.ValueCaptureForm.patchValue({
-            valueCaptureStart: res.problemCapture.financialRealizationStartDate,
+            valueCaptureStart: res.problemCapture.financialRealizationStartDate ? res.problemCapture.financialRealizationStartDate : '',
             primaryValueDriver: res.problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : 
             res.problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname : '',
             valueCommentary: res.problemCapture.valueCommentary
@@ -174,6 +174,9 @@ export class ProjectBenefitsComponent implements OnInit {
   getFrozenHeaderClass(): any {
     return ' frozen-header-class';
   }
+  getFrozenHeaderClass2(): any {
+    return ' frozen-header-class2';
+  }
   getFrozenClass(): any {
     return ' frozen-header';
   }
@@ -215,26 +218,28 @@ export class ProjectBenefitsComponent implements OnInit {
   baselinePlanAlert.afterClosed().subscribe(close => {
     if (close == 'confirmed') {
       this.valuecreationngxdata.forEach(metricData => {
-        
-        // Iterate over all keys of the metricData object
-        Object.keys(metricData).forEach(key => {
-          // Check if the key is a fiscal year
-          if (/^FY \d+$/.test(key)) {
-            // This key represents a fiscal year
-            metricData[key].forEach(data => {
-             data.baseline = data.current;
-             console.log(data.baseline)
-            });
-          }
-        });
-      })
-      console.log(this.valuecreationngxdata)
-
-      // this.apiService.updateProjectMetrics(this.id, updatedMetricsData)
+              // this.apiService.updateProjectMetrics(this.id, updatedMetricsData)
       //   .then(response => {
       //     console.log('Update successful', response);
 
       //   })
+
+
+        // // Iterate over all keys of the metricData object
+        // Object.keys(metricData).forEach(key => {
+        //   // Check if the key is a fiscal year
+        //   if (/^FY \d+$/.test(key)) {
+        //     // This key represents a fiscal year
+        //     metricData[key].forEach(data => {
+        //      data.baseline = data.current;
+        //      console.log(data.baseline)
+        //     });
+        //   }
+        // });
+      })
+      console.log(this.valuecreationngxdata)
+
+
       }
   })
 }

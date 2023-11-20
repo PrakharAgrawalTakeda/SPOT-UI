@@ -113,8 +113,8 @@ export class ProjectApiService {
         const response = await lastValueFrom(abc$)
         return response
     }
-    async getNewBudgetId(projectId) {
-        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId
+    async getNewBudgetId(projectId, gmsBudgetOwnerId) {
+        var url = GlobalVariables.apiurl + "Budget/GenerateNewBudgetId/"+projectId+"/"+gmsBudgetOwnerId
         const abc$ = this.http.get(url)
         const response = await lastValueFrom(abc$)
         return response
@@ -897,6 +897,20 @@ async updateBusinessCaseFunding(body, projectId, optionid){
   async getMetricProjectData(projectid) {
     var url = GlobalVariables.apiurl + "MetricProjectData/" + projectid
     const abc$ = this.http.get(url)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async singleEditMetricProjectData(projectId, metricUID) {
+    var link = GlobalVariables.apiurl + "MetricProjectData/" + projectId+ "/"+metricUID
+    const abc$ = this.http.get(link)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async baselineProjectMetricData(projectid, body) {
+    var url = GlobalVariables.apiurl + "MetricProjectData/Baseline/" + projectid
+    const abc$ = this.http.put(url, body)
     const response = await lastValueFrom(abc$)
     return response
   }

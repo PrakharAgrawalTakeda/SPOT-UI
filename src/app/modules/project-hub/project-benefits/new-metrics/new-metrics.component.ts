@@ -12,14 +12,15 @@ import { AuthService } from 'app/core/auth/auth.service';
 })
 export class NewMetricsComponent {
   newMetricForm = new FormGroup({
-    primaryKpi: new FormControl(null)
+    metricName: new FormControl(null)
   })
   viewContent: boolean = false
   id: string;
-  primaryKPI: any;
+  metricName: any;
+  metric: any;
 
   constructor(public projecthubservice: ProjectHubService, public apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService, private router: Router) {
-    this.newMetricForm.controls.primaryKpi.valueChanges.subscribe(res => {
+    this.newMetricForm.controls.metricName.valueChanges.subscribe(res => {
       if (this.viewContent) {
         this.projecthubservice.isFormChanged = true
       }
@@ -31,17 +32,34 @@ export class NewMetricsComponent {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     this.apiService.getvalueCreation(this.id).then((vc: any) => {
       this.auth.lookupMaster().then((lookup: any) => {
-        this.primaryKPI = lookup.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474')
-        this.newMetricForm.controls.primaryKpi.patchValue('')
-      this.viewContent = true
+        console.log(vc)
+        this.metric = vc.projectsMetricsData.find(projectMetric => projectMetric.metricId);
+
+        if (this.metric) {
+          this.metricName = vc.allMetrics
+            .filter(x => x.metricTypeID === 'e7a9e055-1319-4a4f-b929-cd7777599e39'
+              && x.metricID !== this.metric.metricId
+              || x.metricPortfolioID === vc.problemCapture.portfolioOwnerId)
+            .filter((value, index, self) => self.findIndex(m => m.metricID === value.metricID) === index);
+        } else {
+          this.metricName = vc.allMetrics
+            .filter(x => x.metricTypeID === 'e7a9e055-1319-4a4f-b929-cd7777599e39'
+              || x.metricPortfolioID === vc.problemCapture.portfolioOwnerId)
+            .filter((value, index, self) => self.findIndex(m => m.metricID === value.metricID) === index);
+        }
+
+
+        this.newMetricForm.controls.metricName.patchValue('')
+        this.viewContent = true
+        console.log(this.metricName)
+      })
     })
-  })
   }
   submitnewmetric() {
     this.projecthubservice.isFormChanged = false;
 
     // Extract the selected primaryKpi value from the form
-    const selectedPrimaryKpiValue = this.newMetricForm.get('primaryKpi').value;
+    const selectedPrimaryKpiValue = this.newMetricForm.get('metricName').value;
     console.log(selectedPrimaryKpiValue)
 
     // Find the corresponding lookUpId from primaryKPI array
@@ -61,7 +79,8 @@ export class NewMetricsComponent {
   }
 
   OpenMetricRepo() {
+    //this.projecthubservice.toggleDrawerOpen('', '', [], '');
     window.open('my-preference/metric-repository', "_blank")
   }
-  
+
 }
