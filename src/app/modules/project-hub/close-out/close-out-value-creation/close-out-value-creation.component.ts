@@ -41,6 +41,20 @@ export class CloseOutValueCreationComponent implements OnInit {
       this.id = this._Activatedroute.parent.parent.parent.snapshot.paramMap.get("id")
     }
     this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
+      var parentId = ''
+      var parentData: any
+      for(var i=0;i<res.length;i++){
+        if(res[i].projectsMetricsData.parentProjectId != null){
+          parentId = res[i].projectsMetricsData.parentProjectId
+          break;
+        }
+      }
+      if(parentId != ''){
+      this.projectApiService.getproject(parentId).then((parent: any) => {
+        parentData = parent
+      })
+      }
+      this.projectApiService.getproject(this.id).then((problemCapture: any) => {
       this.auth.lookupMaster().then((resp: any) => {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
@@ -79,7 +93,7 @@ export class CloseOutValueCreationComponent implements OnInit {
           //     }
           //   })
           // })
-          
+
           res.forEach((element)=>{
             var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
             element.metricData.metricFormat = format
@@ -87,22 +101,29 @@ export class CloseOutValueCreationComponent implements OnInit {
             element.metricData.FianncialType2 = "Baseline Plan"
             element.metricData.FianncialType3 = "Current Plan"
             element.metricData.FianncialType4 = "Actual"
+            element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
             this.projectsMetricsData.push({...element.metricData, ...element.projectsMetricsData})
       })
-
-        // No data in API so commented
         
-          // this.ValueCaptureForm.patchValue({
-          //   valueCaptureStart: res.problemCapture.financialRealizationStartDate,
-          //   primaryValueDriver: res.problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : 
-          //   res.problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname : '',
-          //   valueCommentary: res.problemCapture.valueCommentary
-          // })
+          this.ValueCaptureForm.patchValue({
+            valueCaptureStart: problemCapture.financialRealizationStartDate,
+            primaryValueDriver: problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : 
+            problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == problemCapture.primaryKpi).kpiname : '',
+            valueCommentary: problemCapture.valueCommentary
+          })
           var year = []
           var yearList=[]
           
           if(res.length > 0){
-          year = [...new Set(res[0].projectsMetricsDataYearly.map(item => item.financialYearId))]
+          for(var z=0;z<res.length;z++){
+            if(res[z].projectsMetricsDataYearly.length > 0){
+              var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId))]
+              if(listYear.length > year.length){
+                year = listYear
+              }
+            }
+          }
+          // year = [...new Set(res[0].projectsMetricsDataYearly.map(item => item.financialYearId))]
           for(var i=0;i<year.length;i++){
             var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
             this.columnYear.push({year: yearName})
@@ -129,7 +150,7 @@ export class CloseOutValueCreationComponent implements OnInit {
                   }
                 }
               }
-              else if(this.projectsMetricsData[i].strategicCurrentList){
+              if(this.projectsMetricsData[i].strategicCurrentList){
                 var data = this.projectsMetricsData[i].strategicCurrentList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
@@ -142,7 +163,7 @@ export class CloseOutValueCreationComponent implements OnInit {
                   }
                 }
               }
-              else if(this.projectsMetricsData[i].strategicActualList){
+              if(this.projectsMetricsData[i].strategicActualList){
                 var data = this.projectsMetricsData[i].strategicActualList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
@@ -155,7 +176,7 @@ export class CloseOutValueCreationComponent implements OnInit {
                   }
                 }
               }
-              else if(this.projectsMetricsData[i].strategicTargetList){
+              if(this.projectsMetricsData[i].strategicTargetList){
                 var data = this.projectsMetricsData[i].strategicTargetList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
@@ -179,7 +200,9 @@ export class CloseOutValueCreationComponent implements OnInit {
     })
     })
   })
-})
+  })
+  })
+// })
   }
 
   getLookup(id: any){
