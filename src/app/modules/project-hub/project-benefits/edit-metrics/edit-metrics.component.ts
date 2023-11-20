@@ -42,7 +42,10 @@ export class EditMetricsComponent {
   globalMinYear: number = Infinity;
   globalMaxYear: number = -Infinity;
   tempImpactForm = new FormGroup({
-    temporaryImpact: new FormControl('')
+    temporaryImpact: new FormControl(false)
+  })
+  includeinForm = new FormGroup({
+    toggleIncludeIn: new FormControl(false)
   })
   projectData: any;
   captureLevel: boolean = false
@@ -50,6 +53,20 @@ export class EditMetricsComponent {
   disabled: boolean = false
   vcLevels = ["Capture", "Cascade"]
   status = ["On Track", "At Risk", "Will Not Meet"]
+  metricData: any;
+  isBaselined: boolean = false;
+  result: any;
+  viewContent = false
+  requestBody: {
+    metricData: any; projectsMetricsData: {
+      // Other existing fields from projectsMetricsData
+      projectId: any; metricId: any; statusId: any; metricLevelId: any; temporaryImpact: boolean;
+      // Calculated values and lists
+      strategicTarget: any; strategicBaseline: any; strategicCurrent: any; strategicActual: any; strategicTargetList: string; strategicBaselineList: string; strategicCurrentList: string; strategicActualList: string;
+    }; projectsMetricsDataYearly: {
+      projectId: any; metricId: any; financialYearId: string; financialTypeId: string; metricValue: any; // Ensure metricValue is a string
+    }[]; isBaseLined: boolean;
+  };
 
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe) {
@@ -63,6 +80,13 @@ export class EditMetricsComponent {
         this.dataloader()
       }
     })
+      if (this.viewContent) {
+        if (JSON.stringify(this.result) == JSON.stringify(this.requestBody)) {
+          this.projecthubservice.isFormChanged = false;
+        } else {
+          this.projecthubservice.isFormChanged = true;
+        }
+      }
 
   }
 
@@ -99,6 +123,7 @@ export class EditMetricsComponent {
     console.log(this.id)
     this.apiService.singleEditMetricProjectData(this.id, this.projecthubservice.itemid).then((res: any) => {
       this.apiService.getMetricProjectData(this.id).then((result: any) => {
+        this.apiService.getproject(this.id).then((pc: any) => {
         this.auth.lookupMaster().then((resp: any) => {
           this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
             if (res) {
@@ -107,11 +132,13 @@ export class EditMetricsComponent {
               if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
                 this.captureLevel = true
               }
+              this.result = res
               console.log(res)
               console.log(currency)
               this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
               console.log(this.localCurrency)
               this.lookupData = resp
+              this.metricData = res.metricData
               const element = res.projectsMetricsData;
               this.projectData = res.projectsMetricsData
               console.log(this.projectData)
@@ -168,6 +195,9 @@ export class EditMetricsComponent {
               }
               this.tempImpactForm.patchValue({
                 temporaryImpact: (res.projectsMetricsData.temporaryImpact)
+              });
+              this.includeinForm.patchValue({
+                toggleIncludeIn: (res.projectsMetricsData.includePerformanceDashboard)
               });
               this.capexAvoidanceForm.get('metricCategoryId').disable();
               this.capexAvoidanceForm.get('metricName').disable();
@@ -228,7 +258,7 @@ export class EditMetricsComponent {
               console.log(`Updated Min Year: ${this.globalMinYear}, Max Year: ${this.globalMaxYear}`);
               this.compare(this.columnYear)
               console.log(this.columnYear)
-              if (result.problemCapture.problemType == 'Strategic Initiative / Program') {
+              if (pc.problemType == 'Strategic Initiative / Program') {
                 this.valuecreationngxdata = [
                   {
                     financialType: 'Target',
@@ -252,13 +282,26 @@ export class EditMetricsComponent {
               this.valuecreationngxdata.forEach(financialType => {
                 financialType.total = this.calculateTotalForFinancialType(financialType);
               });
-
+              this.projecthubservice.isFormChanged = false
+              this.capexAvoidanceForm.valueChanges.subscribe(res => {
+                this.projecthubservice.isFormChanged = true
+              })
+              this.tempImpactForm.valueChanges.subscribe(res => {
+                this.projecthubservice.isFormChanged = true
+              }
+                )
+                this.includeinForm.valueChanges.subscribe(res => {
+                  this.projecthubservice.isFormChanged = true
+                }
+                  )
+              this.viewContent = true
               console.log(this.valuecreationngxdata)
             }
           })
         })
       })
     })
+  })
   }
 
   sumTimesHHMM(times: string[]): string {
@@ -307,11 +350,13 @@ export class EditMetricsComponent {
 
 
   toggleTemporaryImpact(event: any) {
-    // Handle the toggle change event
-    // Update the 'temporaryImpact' value in your project data
     this.projectData.temporaryImpact = event.checked;
     console.log(this.projectData.temporaryImpact)
-    // Additional logic as needed
+  }
+
+  toggleIncludeIn(event: any) {
+    this.projectData.includePerformanceDashboard = event.checked;
+    console.log(this.projectData.includePerformanceDashboard)
   }
 
 
@@ -479,21 +524,32 @@ export class EditMetricsComponent {
       },
       "dismissible": true
     }
-    const baselinePlanAlert = this.fuseAlert.open(comfirmConfig)
+    const baselinePlanAlert = this.fuseAlert.open(comfirmConfig);
     baselinePlanAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        //Add whole put object 
-        console.log(this.valuecreationngxdata)
-
-
+        // Copy 'Current Plan' values to 'Baseline Plan' in valuecreationngxdata
+        this.valuecreationngxdata.forEach((data, index) => {
+          if (data.financialType == 'Current Plan') {
+            const baselineIndex = this.valuecreationngxdata.findIndex(d => d.financialType == 'Baseline Plan');
+            if (baselineIndex !== -1) {
+              this.valuecreationngxdata[baselineIndex].values = { ...data.values };
+              this.valuecreationngxdata[baselineIndex].total = this.calculateTotalForFinancialType(this.valuecreationngxdata[baselineIndex]);
+              // Update the form array to trigger change detection
+              (this.bulkEditFormArray.at(baselineIndex) as FormGroup).patchValue({
+                ...this.valuecreationngxdata[baselineIndex].values,
+                total: this.valuecreationngxdata[baselineIndex].total,
+              });
+            }
+          }
+        });
+  
+        // Flag the data as baselined
+        this.isBaselined = true;
+  
+        // Since we have modified the data directly, trigger data loader to refresh the UI
+        //this.dataloader();
       }
-    })
-  }
-
-
-
-  submitnewmetric() {
-
+    });
   }
 
   addYear() {
@@ -606,6 +662,119 @@ export class EditMetricsComponent {
       }
     })
   }
+
+  // Helper function to create financial list string
+createFinancialList(financialType) {
+  return this.valuecreationngxdata
+    .filter(data => data.financialType === financialType)
+    .map(data => {
+      const yearlyValues = Object.entries(data.values)
+        .map(([year, value]) => `${year}: ${value}`)
+        .join(', ');
+      return yearlyValues;
+    })
+    .join(', ');
+}
+
+getFinancialYearId(year: string): string {
+  // Your mapping logic here. For simplicity, let's say it's a direct match.
+  // You need to replace this with actual lookup logic that matches the year with the lookup ID.
+  const lookupYear = `${year}`;
+  console.log(lookupYear)
+  const lookupEntry = this.lookupData.find(entry => entry.lookUpName == lookupYear);
+  console.log(lookupEntry)
+  return lookupEntry ? lookupEntry.lookUpId : '';
+}
+
+// Implement this method based on your system's logic to map financial types to their IDs
+getFinancialTypeId(financialType: string): string {
+  switch (financialType) {
+    case 'Target': return '06695f51-cee0-4da6-8a5a-c243d9ae2a58';
+    case 'Baseline Plan': return 'c56ae68f-fbc5-4373-b3ea-ea9b14e8740e';
+    case 'Current Plan': return 'd1b495c5-90e1-415d-aee6-2a6daf7002f8';
+    case 'Actual': return '8871ae56-559b-4058-a34f-37e0719b6544';
+  }
+}
+  submitnewmetric() {
+    this.projecthubservice.isFormChanged = false
+    // Constructing the lists and calculating totals
+  const strategicTargetList = this.createFinancialList('Target');
+  const strategicBaselineList = this.createFinancialList('Baseline Plan');
+  const strategicCurrentList = this.createFinancialList('Current Plan');
+  const strategicActualList = this.createFinancialList('Actual');
+
+  const strategicTargetTotal = this.calculateTotalFromList(strategicTargetList);
+  const strategicBaselineTotal = this.calculateTotalFromList(strategicBaselineList);
+  const strategicCurrentTotal = this.calculateTotalFromList(strategicCurrentList);
+  const strategicActualTotal = this.calculateTotalFromList(strategicActualList);
+  // Construct the metricData object from the form values
+  const metricData = this.metricData
+
+
+  const projectsMetricsData = {
+    // Other existing fields from projectsMetricsData
+    projectId: this.projectData.projectId, 
+    metricId: this.projectData.metricId,
+    statusId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('statusId').value).lookUpId,
+    metricLevelId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('metricLevelId').value).lookUpId,
+    temporaryImpact: this.tempImpactForm.get('temporaryImpact').value,
+    
+    // Calculated values and lists
+    strategicTarget: strategicTargetTotal.toString(),
+    strategicBaseline: strategicBaselineTotal.toString(),
+    strategicCurrent: strategicCurrentTotal.toString(),
+    strategicActual: strategicActualTotal.toString(),
+
+    strategicTargetList: strategicTargetList,
+    strategicBaselineList: strategicBaselineList,
+    strategicCurrentList: strategicCurrentList,
+    strategicActualList: strategicActualList,
+
+    // Other fields like includeProposalSlide, includeCharter, etc., if they need to be sent
+includePerformanceDashboard: this.includeinForm.get('toggleIncludeIn').value
+  };
+
+  // Generate projectsMetricsDataYearly array based on the columnYear and valuecreationngxdata
+  const projectsMetricsDataYearly = this.columnYear.flatMap(yearObj => {
+    const financialYearId = this.getFinancialYearId(yearObj.year); // Convert year to financial year ID
+    return this.valuecreationngxdata.map(financialType => {
+      const fiscalYearKey = `FY${yearObj.year.slice(-2)}`; // Extract last two digits for year
+      const financialTypeId = this.getFinancialTypeId(financialType.financialType); // Use your method to get financial type ID
+      const metricValue = financialType.values[fiscalYearKey] || '0';
+      return {
+        projectId: this.projectData.projectId,
+        metricId: this.metricData.metricID,
+        financialYearId: financialYearId,
+        financialTypeId: financialTypeId,
+        metricValue: metricValue.toString() // Ensure metricValue is a string
+      };
+    });
+  });
+console.log(metricData)
+console.log(projectsMetricsData)
+console.log(projectsMetricsDataYearly)
+  // Assemble the final data object for the PUT API
+  this.requestBody = {
+    metricData,
+    projectsMetricsData,
+    projectsMetricsDataYearly,
+    isBaseLined: this.isBaselined
+  };
+console.log(this.id)
+console.log(this.metricData.metricID)
+console.log(this.requestBody)
+
+  // Call the API service to submit the data
+  this.apiService.submitMetricProjectData(this.requestBody, this.id, this.projecthubservice.itemid).then(response => {
+    // Handle the response here
+    console.log('Metric updated successfully', response);
+    this.projecthubservice.submitbutton.next(true);
+    this.projecthubservice.isNavChanged.next(true);
+    this.projecthubservice.toggleDrawerOpen('', '', [], '');
+  })
+  }
+
+  
 
 
 }
