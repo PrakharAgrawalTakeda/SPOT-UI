@@ -75,10 +75,10 @@ console.log(selectedMetricName.metricID)
     // Check if we found a metric and it has a metricUID
     if (selectedMetricName) {
       this.apiService.addNewMetric(this.id, selectedMetricName.metricID).then(secondRes => {
-        this.projecthubservice.toggleDrawerOpen('', '', [], '')
-        this.projecthubservice.submitbutton.next(true)
         this.projecthubservice.isNavChanged.next(true)
-        this.projecthubservice.successSave.next(true)
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
       })
     }
   }

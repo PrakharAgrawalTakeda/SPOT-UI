@@ -1,4 +1,4 @@
-import { Component, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
@@ -20,8 +20,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./edit-metrics.component.scss'],
   providers: [DecimalPipe],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Default
 })
-export class EditMetricsComponent {
+export class EditMetricsComponent implements OnInit, OnChanges {
   capexAvoidanceForm = new FormGroup({
     metricCategoryId: new FormControl(''),
     metricName: new FormControl(''),
@@ -36,7 +37,7 @@ export class EditMetricsComponent {
   valuecreationngxdata: any[] = [];
   columnYear = []
   ptTableEditStack = []
-  bulkEditFormArray: FormArray;
+  bulkEditFormArray = new FormArray([]);
   localCurrency: string = ""
   globalMinYear: number = Infinity;
   globalMaxYear: number = -Infinity;
@@ -69,7 +70,7 @@ export class EditMetricsComponent {
   metricFormat: any;
 
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
-    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe) {
+    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe, private changeDetectorRef: ChangeDetectorRef) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
         this.dataloader()
@@ -80,14 +81,32 @@ export class EditMetricsComponent {
         this.dataloader()
       }
     })
-
-      if (JSON.stringify(this.result) == JSON.stringify(this.requestBody)) {
-        this.projecthubservice.isFormChanged = false;
-      } else {
-        this.projecthubservice.isFormChanged = true;
+    // this.FundingForm.valueChanges.subscribe(res => {
+    //   if (this.viewContent) {
+    //     this.changeChecker()
+    //     if (JSON.stringify(this.submitObj) == JSON.stringify(this.fundingDb)) {
+    //       this.projecthubservice.isFormChanged = false
+    //     }
+    //     else {
+    //       this.projecthubservice.isFormChanged = true
+    //     }
+    //   }
+    // })
+    this.bulkEditFormArray.valueChanges.subscribe(res => {
+      if (this.viewContent) {
+        if (JSON.stringify(this.result) == JSON.stringify(this.requestBody)) {
+          this.projecthubservice.isFormChanged = false;
+        } else {
+          this.projecthubservice.isFormChanged = true;
+        }
       }
+    })
 
 
+
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    throw new Error('Method not implemented.');
   }
 
   ngOnInit(): void {
@@ -144,7 +163,7 @@ export class EditMetricsComponent {
           this.auth.lookupMaster().then((resp: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
               if (res) {
-                
+
                 if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
                   this.captureLevel = true
                 }
@@ -295,10 +314,10 @@ export class EditMetricsComponent {
                   const currentYear = new Date().getFullYear();
                   const shortYear = currentYear % 100; // Get the last two digits of the year
                   const fiscalYearKey = `FY${shortYear}`; // Format as 'FYXX'
-            
+
                   // Add the new fiscal year to the columnYear array
                   this.columnYear.push({ year: `FY ${currentYear}` });
-            
+
                   // Initialize all values for this year to 0 in valuecreationngxdata
                   this.valuecreationngxdata.forEach(financialType => {
                     if (!financialType.values) {
@@ -307,7 +326,7 @@ export class EditMetricsComponent {
                     financialType.values[fiscalYearKey] = '0';
                   });
                 }
-console.log(this.valuecreationngxdata)
+                console.log(this.valuecreationngxdata)
                 console.log(this.valuecreationngxdata); // Add this to inspect the final data structure
 
                 this.prepareBulkEditFormArray(this.valuecreationngxdata)
@@ -315,6 +334,16 @@ console.log(this.valuecreationngxdata)
                 this.valuecreationngxdata.forEach(financialType => {
                   financialType.total = this.calculateTotalForFinancialType(financialType);
                 });
+
+                console.log(this.valuecreationngxdata)
+                const isCurrencyLocal = res.projectsMetricsData.metricFormat == 'Currency (local)';
+                this.valuecreationngxdata.forEach(item => {
+                  // If the metric format is 'Currency (local)' and local currency is available, append it to the financial type
+                  item.displayFinancialType = isCurrencyLocal && this.localCurrency
+                    ? `${item.financialType} (${this.localCurrency})`
+                    : item.financialType;
+                });
+
                 this.projecthubservice.isFormChanged = false
                 this.capexAvoidanceForm.valueChanges.subscribe(res => {
                   this.projecthubservice.isFormChanged = true
@@ -328,14 +357,6 @@ console.log(this.valuecreationngxdata)
                 }
                 )
                 this.viewContent = true
-                console.log(this.valuecreationngxdata)
-                const isCurrencyLocal = res.projectsMetricsData.metricFormat == 'Currency (local)';
-                this.valuecreationngxdata.forEach(item => {
-                  // If the metric format is 'Currency (local)' and local currency is available, append it to the financial type
-                  item.displayFinancialType = isCurrencyLocal && this.localCurrency
-                    ? `${item.financialType} (${this.localCurrency})`
-                    : item.financialType;
-                });
               }
             })
           })
@@ -886,11 +907,14 @@ console.log(this.valuecreationngxdata)
 
     // Call the API service to submit the data
     this.apiService.submitMetricProjectData(this.requestBody, this.id, this.projecthubservice.itemid).then(response => {
+      console.log(response)
+    // Trigger change detection if necessary
+    this.changeDetectorRef.detectChanges();
       // Handle the response here
-      console.log('Metric updated successfully', response);
-      this.projecthubservice.submitbutton.next(true);
-      this.projecthubservice.isNavChanged.next(true);
-      this.projecthubservice.toggleDrawerOpen('', '', [], '');
+      this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.submitbutton.next(true)
+      this.projecthubservice.successSave.next(true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
     })
   }
 
