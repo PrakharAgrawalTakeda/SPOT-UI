@@ -34,7 +34,8 @@ export class ProjectBenefitsComponent implements OnInit {
     @ViewChild('valuecreationTable') table: any;
     localCurrency: string = ""
   valueCreation: any;
-  constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
+  projectsMetricsData = []
+  constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
@@ -54,92 +55,171 @@ export class ProjectBenefitsComponent implements OnInit {
   }
   dataloader() {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
-    this.apiService.getMetricProjectData(this.id).then((res: any) => {
+    this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
+      var parentId = ''
+      var parentData: any
+      for(var i=0;i<res.length;i++){
+        if(res[i].projectsMetricsData.parentProjectId != null){
+          parentId = res[i].projectsMetricsData.parentProjectId
+          break;
+        }
+      }
+      if(parentId != ''){
+      this.projectApiService.getproject(parentId).then((parent: any) => {
+        parentData = parent
+      })
+      }
+      this.projectApiService.getproject(this.id).then((problemCapture: any) => {
       this.auth.lookupMaster().then((resp: any) => {
-        this.apiService.getfilterlist().then(filterres => {
+        this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
               console.log(res)
               console.log(currency)
               this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
-
+console.log(problemCapture)
             this.kpi = kpi
             console.log(this.kpi)
             console.log(res.projectsMetricsData)
           this.lookupData = resp
           this.filterData = filterres
-          res.projectsMetricsData.forEach((element)=>{
-                element.metricCategoryId = null
-                element.metricName = ""
-                element.helpText = ""
-                element.metricPortfolioID = null
-                element.metricUnit = ""
-                element.metricTypeID = null
-                element.metricFormat = ""
-                element.FianncialType1 = "Target"
-                element.FianncialType2 = "Baseline Plan"
-                element.FianncialType3 = "Current Plan"
-                element.FianncialType4 = "Actual"
-            res.allMetrics.forEach((el)=>{
-              if(element.metricId == el.metricID){
-                var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
-                element.metricCategoryId = el.metricCategoryID
-                element.metricName = el.metricName
-                element.helpText = el.helpText
-                element.metricPortfolioID = el.metricPortfolioID
-                element.metricUnit = el.metricUnit
-                element.metricTypeID = el.metricTypeID
-                element.metricFormat = format
-                element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
-                element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
-                element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
-                element.strategicActual =element.strategicActual ? element.strategicActual : '0'
-              }
-            })
-          })
-          this.ValueCaptureForm.patchValue({
-            valueCaptureStart: res.problemCapture.financialRealizationStartDate ? res.problemCapture.financialRealizationStartDate : '',
-            primaryValueDriver: res.problemCapture.primaryKpi && this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == res.problemCapture.primaryKpi).lookUpName : 
-            res.problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == res.problemCapture.primaryKpi).kpiname : '',
-            valueCommentary: res.problemCapture.valueCommentary
-          })
+          // res.projectsMetricsData.forEach((element)=>{
+          //       element.metricCategoryId = null
+          //       element.metricName = ""
+          //       element.helpText = ""
+          //       element.metricPortfolioID = null
+          //       element.metricUnit = ""
+          //       element.metricTypeID = null
+          //       element.metricFormat = ""
+          //       element.FianncialType1 = "Target"
+          //       element.FianncialType2 = "Baseline Plan"
+          //       element.FianncialType3 = "Current Plan"
+          //       element.FianncialType4 = "Actual"
+          //   res.allMetrics.forEach((el)=>{
+          //     if(element.metricId == el.metricID){
+          //       var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
+          //       element.metricCategoryId = el.metricCategoryID
+          //       element.metricName = el.metricName
+          //       element.helpText = el.helpText
+          //       element.metricPortfolioID = el.metricPortfolioID
+          //       element.metricUnit = el.metricUnit
+          //       element.metricTypeID = el.metricTypeID
+          //       element.metricFormat = format
+          //       element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
+          //       element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
+          //       element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
+          //       element.strategicActual =element.strategicActual ? element.strategicActual : '0'
+          //     }
+          //   })
+          // })
+          res.forEach((element)=>{
+            var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
+            element.metricData.metricFormat = format
+            element.metricData.FianncialType1 = "Target"
+            element.metricData.FianncialType2 = "Baseline Plan"
+            element.metricData.FianncialType3 = "Current Plan"
+            element.metricData.FianncialType4 = "Actual"
+            element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
+            this.projectsMetricsData.push({...element.metricData, ...element.projectsMetricsData})
+      })
+      console.log(problemCapture)
+      this.ValueCaptureForm.patchValue({
+          valueCaptureStart: problemCapture.financialRealizationStartDate,
+            primaryValueDriver: this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi) ? this.lookupData.filter(x => x.lookUpParentId == '999572a6-5aa8-4760-8082-c06774a17474').find(x => x.lookUpId == problemCapture.primaryKpi).lookUpName : null,
+            valueCommentary: problemCapture.valueCommentary
+      })
           console.log(this.ValueCaptureForm.getRawValue())
           var year = []
           var yearList=[]
           
-          year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
-          for(var i=0;i<year.length;i++){
-            var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
-            this.columnYear.push({year: yearName})
-            yearList.push(yearName)
-          }
-          yearList.sort()
-          for(var i=0;i<res.projectsMetricsData.length;i++){
-            for(var j=0;j<yearList.length;j++){
-              res.projectsMetricsData[i][yearList[j]] = [{'target':"0",'baseline':"0",'actual':"0",'current':"0"}]
-              if(res.projectsMetricsData[i].strategicBaselineList){
-                var data = res.projectsMetricsData[i].strategicBaselineList.split(',')
-                for(var z=0;z<data.length;z++){
-                  var list = data[z].split(' ')
-                  if(list[1].replace(':','') == yearList[j].replace(' 20','')){
-                    res.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
-                  }
+          if(res.length > 0){
+            for(var z=0;z<res.length;z++){
+              if(res[z].projectsMetricsDataYearly.length > 0){
+                var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId))]
+                if(listYear.length > year.length){
+                  year = listYear
                 }
               }
             }
-          };
-          this.compare(this.columnYear)
-          this.valuecreationngxdata = res.projectsMetricsData
-          console.log(this.valuecreationngxdata)
-          // this.valuecreationngxdata = res.projectsMetricsDataYearly
-          this.ValueCaptureForm.disable()
-          this.viewContent = true
+            for(var i=0;i<year.length;i++){
+              var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
+              this.columnYear.push({year: yearName})
+              yearList.push(yearName)
+            }
+            yearList.sort()
+            for(var i=0;i<this.projectsMetricsData.length;i++){
+              for(var j=0;j<yearList.length;j++){
+                var baseline = 0
+                var actual = 0
+                var target = 0
+                var current = 0
+                this.projectsMetricsData[i][yearList[j]] = [{'target':"0",'baseline':"0",'actual':"0",'current':"0"}]
+                if(this.projectsMetricsData[i].strategicBaselineList){
+                  var data = this.projectsMetricsData[i].strategicBaselineList.split(',')
+                  for(var z=0;z<data.length;z++){
+                    var list = data[z].split(' ')
+                    baseline = baseline + Number(list[2])
+                    if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                      this.projectsMetricsData[i].strategicBaseline = baseline.toString()
+                    }
+                    if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                      this.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
+                    }
+                  }
+                }
+                if(this.projectsMetricsData[i].strategicCurrentList){
+                  var data = this.projectsMetricsData[i].strategicCurrentList.split(',')
+                  for(var z=0;z<data.length;z++){
+                    var list = data[z].split(' ')
+                    current = current + Number(list[2])
+                    if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                      this.projectsMetricsData[i].strategicCurrent = current.toString()
+                    }
+                    if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                      this.projectsMetricsData[i][yearList[j]][0].current = list[2]
+                    }
+                  }
+                }
+                if(this.projectsMetricsData[i].strategicActualList){
+                  var data = this.projectsMetricsData[i].strategicActualList.split(',')
+                  for(var z=0;z<data.length;z++){
+                    var list = data[z].split(' ')
+                    actual = actual + Number(list[2])
+                    if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                      this.projectsMetricsData[i].strategicActual = actual.toString()
+                    }
+                    if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                      this.projectsMetricsData[i][yearList[j]][0].actual = list[2]
+                    }
+                  }
+                }
+                if(this.projectsMetricsData[i].strategicTargetList){
+                  var data = this.projectsMetricsData[i].strategicTargetList.split(',')
+                  for(var z=0;z<data.length;z++){
+                    var list = data[z].split(' ')
+                    target = target + Number(list[2])
+                    if(this.projectsMetricsData[i].metricFormat == "Currency (local)"){
+                      this.projectsMetricsData[i].strategicTarget = target.toString()
+                    }
+                    if(list[1].replace(':','') == yearList[j].replace(' 20','')){
+                      this.projectsMetricsData[i][yearList[j]][0].target = list[2]
+                    }
+                  }
+                }
+              }
+            };
+          }
+            this.compare(this.columnYear)
+            this.valuecreationngxdata = this.projectsMetricsData
+            this.ValueCaptureForm.disable()
+            this.viewContent = true
+        })
+      })
+      })
       })
     })
-    })
   })
-})
-  }
+}
 
   getLookup(id: any){
     return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id).lookUpName : ''
@@ -175,7 +255,7 @@ export class ProjectBenefitsComponent implements OnInit {
     return ' frozen-header-class';
   }
   getFrozenHeaderClass2(): any {
-    return ' frozen-header-class2';
+    return ' frozen-header-class';
   }
   getFrozenClass(): any {
     return ' frozen-header';
@@ -218,11 +298,11 @@ export class ProjectBenefitsComponent implements OnInit {
   baselinePlanAlert.afterClosed().subscribe(close => {
     if (close == 'confirmed') {
       this.valuecreationngxdata.forEach(metricData => {
-              // this.apiService.updateProjectMetrics(this.id, updatedMetricsData)
-      //   .then(response => {
-      //     console.log('Update successful', response);
+              this.projectApiService.baselineProjectMetricData(this.id)
+        .then(response => {
+          console.log('Update successful', response);
 
-      //   })
+        })
 
 
         // // Iterate over all keys of the metricData object

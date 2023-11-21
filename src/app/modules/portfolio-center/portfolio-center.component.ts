@@ -718,6 +718,35 @@ export class PortfolioCenterComponent implements OnInit {
                 "order": 15
               }
             }
+            else if(localattribute[i].dataType == "4"){
+              if(localattribute[i].data.length == 2){
+                var data:any = localattribute[i].data[0].value + ' to ' + localattribute[i].data[1].value
+              }
+              else{
+                var data:any = localattribute[i].data[0].value
+              }
+              localdata = {
+                "name": localattribute[i].name,
+                "value": data,
+                "count": 1,
+                "order": 15
+              }
+            }
+            else if(localattribute[i].dataType == "2"){
+              if(localattribute[i].data.length == 2){
+                
+                var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY') + ' to ' + moment(localattribute[i].data[1].value).format('DD-MMM-YYYY')
+              }
+              else{
+                var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY')
+              }
+              localdata = {
+                "name": localattribute[i].name,
+                "value": data,
+                "count": 1,
+                "order": 15
+              }
+            }
             else{
               var localdata = {
                 "name": localattribute[i].name,
@@ -2090,7 +2119,7 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
             this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-            this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo ? res.overallStatusInfo[i].overallStatusLastUpdate : ''
+            this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo ? res.overallStatusInfo[i]?.overallStatusLastUpdate : ''
             this.projectOverview[i].grey = false
             this.projectOverview[i].darkGrey = false
             if(this.projectOverview[i].overallStatusLastUpdate != ''){

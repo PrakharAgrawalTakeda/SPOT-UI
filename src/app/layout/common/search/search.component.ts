@@ -201,6 +201,7 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
      * @param event
      */
     selectedOption(event: any): void {
+        debugger
         if (this.calledFrom == 'Copy') {
             //  this.searchControl.patchValue(event.option.value.problemTitle);
             //  this.projectid = event.option.value.problemUniqueId;
@@ -211,8 +212,9 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy {
             //  this.getNgxDatatableNumberHeader()
         }
         else {
-            this.searchControl.patchValue(this.temp)
+            //this.searchControl.patchValue(this.temp)  
             this.routeProject(event.option.value.problemUniqueId)
+            this.close()
             document.getElementById('myText').blur();
         }
     }
