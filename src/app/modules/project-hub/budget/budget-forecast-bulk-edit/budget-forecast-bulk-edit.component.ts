@@ -8,6 +8,7 @@ import {ActivatedRoute} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
 import {MsalService} from "@azure/msal-angular";
+import {BudgetService} from "../budget.service";
 
 @Component({
     selector: 'app-budget-forecast-bulk-edit',
@@ -17,15 +18,15 @@ import {MsalService} from "@azure/msal-angular";
 export class BudgetForecastBulkEditComponent {
     @Input() mode: 'Capex' | 'Opex' = 'Capex';
 
-    constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,private msalService: MsalService, public role: RoleService,
-                public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private cdRef: ChangeDetectorRef,private portApiService: PortfolioApiService,) {
-        this.forecastsForm.valueChanges.subscribe(res => {
-            this.formValue()
-            this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
-            if(this.projecthubservice.isFormChanged){
+    constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService,private msalService: MsalService, public role: RoleService, public budgetService: BudgetService,
+                public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private cdRef: ChangeDetectorRef) {
+        this.forecastsForm.valueChanges.subscribe(() => {
+            this.formValue();
+            const isFormChanged = this.isFormChanged();
+            if (isFormChanged) {
                 window.onbeforeunload = this.showConfirmationMessage;
             }
-        })
+        });
         this.forecastsY1Form.valueChanges.subscribe(res => {
             this.formValue()
             this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsY1Db) != JSON.stringify(this.forecastsY1Submit);
@@ -33,6 +34,11 @@ export class BudgetForecastBulkEditComponent {
                 window.onbeforeunload = this.showConfirmationMessage;
             }
         })
+    }
+    private isFormChanged(): boolean {
+        const currentFormValue = JSON.stringify(this.forecastsDb);
+        const originalFormValue = JSON.stringify(this.forecastsSubmit);
+        return currentFormValue !== originalFormValue;
     }
     budgetForecastForm = new FormGroup({
         tfpPercentage: new FormControl(0),
@@ -50,7 +56,6 @@ export class BudgetForecastBulkEditComponent {
         committedSpend: new FormControl(0),
         totalApprovedCapex: new FormControl(0),
     })
-    localCurrency:any = [];
     id: string = "";
     forecasts = []
     forecastsY1 = []
@@ -61,7 +66,6 @@ export class BudgetForecastBulkEditComponent {
     forecastsSubmit = []
     forecastsY1Submit = []
     viewContent: boolean = false
-    lookupdata: any[]
     fTableEditStack = []
     fy1TableEditStack = []
     csTableEditStack = []
@@ -69,28 +73,6 @@ export class BudgetForecastBulkEditComponent {
     forecastsY1Form = new FormArray([])
     committedSpend: number = 0;
     csTable = []
-    aprEditable: boolean = true;
-    mayEditable: boolean = true;
-    junEditable: boolean = true;
-    julEditable: boolean = true;
-    augEditable: boolean = true;
-    sepEditable: boolean = true;
-    octEditable: boolean = true;
-    novEditable: boolean = true;
-    decEditable: boolean = true;
-    janEditable: boolean = true;
-    febEditable: boolean = true;
-    marEditable: boolean = true;
-    tfpColor: string;
-    afpColor: string;
-    ydtpColor: string;
-    mdtpColor: string;
-    y0Label: string = '';
-    y1Label: string = '';
-    y2Label: string = '';
-    y3Label: string = '';
-    y4Label: string = '';
-    y5Label: string = '';
     year1Value = 0;
     headerLabel: string = "";
     currentEntry: any;
@@ -99,8 +81,6 @@ export class BudgetForecastBulkEditComponent {
     startingMonth: number;
     editable: boolean = true;
     tfpDev: number;
-    ytdPlanTotal: number = 0;
-    ytdCurrentTotal: number = 0;
     ytdDev: number;
     mtdDev: number;
     afpDev: number;
@@ -112,9 +92,6 @@ export class BudgetForecastBulkEditComponent {
             this.currentEntry = this.projecthubservice.all.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
             this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "CapEx Forecast");
             this.planActive = this.projecthubservice.all.budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
-            this.portApiService.getOnlyLocalCurrency(this.id).then(res => {
-                this.localCurrency = res;
-            })
             for (const obj of this.projecthubservice.all.budgetForecasts) {
                 if (obj.budgetData === "CapEx Forecast") {
                     this.forecasts.push(obj);
@@ -161,80 +138,10 @@ export class BudgetForecastBulkEditComponent {
         if (this.forecastsY1.some(entry => entry.isopen == 2) && this.projecthubservice.roleControllerControl.projectManager) {
             this.editable = false;
         }
-        this.startingMonth=this.getStartingMonth()
-        let year = new Date(this.forecasts.find(x => x.active == 'Current').financialMonthStartDate).getFullYear();
-        let year2 = year+1;
-        let year3 = year+2;
-        let year4 = year+3;
-        let year5 = year+4;
-        let year6 = year+5;
-        this.y0Label= 'FY' + year;
-        this.y1Label= 'FY' + year2;
-        this.y2Label= 'FY' + year3;
-        this.y3Label= 'FY' + year4;
-        this.y4Label= 'FY' + year5;
-        this.y5Label= 'FY' + year6 + '+';
-        this.aprEditable = this.isCellEditable('apr')
-        this.mayEditable = this.isCellEditable('may')
-        this.junEditable = this.isCellEditable('jun')
-        this.julEditable = this.isCellEditable('jul')
-        this.augEditable = this.isCellEditable('aug')
-        this.sepEditable = this.isCellEditable('sep')
-        this.octEditable = this.isCellEditable('oct')
-        this.novEditable = this.isCellEditable('nov')
-        this.decEditable = this.isCellEditable('dec')
-        this.janEditable = this.isCellEditable('jan')
-        this.febEditable = this.isCellEditable('feb')
-        this.marEditable = this.isCellEditable('mar')
-        if(!this.aprEditable){
-            this.ytdPlanTotal +=  this.planActive.apr;
-            this.ytdCurrentTotal += this.openEntry.apr;
-        }
-        if(!this.mayEditable){
-            this.ytdPlanTotal +=  this.planActive.may;
-            this.ytdCurrentTotal += this.openEntry.may;
-        }
-        if(!this.junEditable){
-            this.ytdPlanTotal +=  this.planActive.jun;
-            this.ytdCurrentTotal += this.openEntry.jun;
-        }
-        if(!this.julEditable){
-            this.ytdPlanTotal += this.planActive.jul;
-            this.ytdCurrentTotal += this.openEntry.jul;
-        }
-        if(!this.augEditable){
-            this.ytdPlanTotal += this.planActive.aug;
-            this.ytdCurrentTotal += this.openEntry.aug;
-        }
-        if(!this.sepEditable){
-            this.ytdPlanTotal += this.planActive.sep;
-            this.ytdCurrentTotal += this.openEntry.sep;
-        }
-        if(!this.octEditable){
-            this.ytdPlanTotal += this.planActive.oct;
-            this.ytdCurrentTotal += this.openEntry.oct;
-        }
-        if(!this.novEditable){
-            this.ytdPlanTotal += this.planActive.nov;
-            this.ytdCurrentTotal += this.openEntry.nov;
-        }
-        if(!this.decEditable){
-            this.ytdPlanTotal += this.planActive.dec;
-            this.ytdCurrentTotal += this.openEntry.dec;
-        }
-        if(!this.janEditable){
-            this.ytdPlanTotal += this.planActive.jan;
-            this.ytdCurrentTotal += this.openEntry.jan;
-        }
-        if(!this.febEditable){
-            this.ytdPlanTotal += this.planActive.feb;
-            this.ytdCurrentTotal += this.openEntry.feb;
-        }
-        if(!this.marEditable){
-            this.ytdPlanTotal += this.planActive.mar;
-            this.ytdCurrentTotal += this.openEntry.mar;
-        }
-        this.setTextColors();
+        this.startingMonth=this.budgetService.getStartingMonth()
+        this.budgetService.setLabels();
+        this.budgetService.checkIsCellEditable();
+        this.budgetService.setTextColors();
         this.dataloader()
     }
 
@@ -539,67 +446,6 @@ export class BudgetForecastBulkEditComponent {
         }
     }
 
-    isCellEditable(month: string): boolean {
-        let startingMonth = this.startingMonth;
-        if(startingMonth == -1){
-            startingMonth = 11;
-        }
-        if(startingMonth == -2){
-            startingMonth = 10;
-        }
-        if(startingMonth == -3){
-            startingMonth = 9;
-        }
-        if(startingMonth == 0){
-            startingMonth = 12;
-        }
-        const monthNumber = this.getMonthNumber(month);
-        return startingMonth <= monthNumber;
-    }
-
-    getStartingMonth(): number {
-        let project = this.forecasts.find(x => x.isopen === true);
-        let monthPart = project.periodName.slice(-2);
-        if(project.active == 'Current'){
-            return parseInt(monthPart, 10)-3;
-        }
-        if(project.active == 'Preliminary'){
-            this.firstPreliminary = this.getMonthText((parseInt(monthPart, 10)));
-            return parseInt(monthPart, 10)-4;
-        }
-    }
-
-    getMonthNumber(month: string): number {
-        switch (month) {
-            case 'jan':
-                return 9;
-            case 'feb':
-                return 10;
-            case 'mar':
-                return 11;
-            case 'apr':
-                return 0;
-            case 'may':
-                return 1;
-            case 'jun':
-                return 2;
-            case 'jul':
-                return 3;
-            case 'aug':
-                return 4;
-            case 'sep':
-                return 5;
-            case 'oct':
-                return 6;
-            case 'nov':
-                return 7;
-            case 'dec':
-                return 8;
-            default:
-                return 12;
-        }
-    }
-
     getNgxDatatableNumberHeader(): any {
         return ' ngx-number-header-center';
     }
@@ -628,6 +474,7 @@ export class BudgetForecastBulkEditComponent {
         this.recalculateYtdp();
         this.recalculateAFP();
         this.recalculateMtdp();
+        this.budgetService.setTextColors();
     }
 
     recalculateY1() {
@@ -684,7 +531,7 @@ export class BudgetForecastBulkEditComponent {
         }
     }
     recalculateTfp() {
-        const totalCapexForecast = this.openEntry?.cumulativeTotal || 0;
+        const totalCapexForecast = this.currentEntry?.cumulativeTotal || 0;
         const totalApprovedCapEx = this.projecthubservice.all.budget.totalApprovedCapEx || 0;
         if (totalCapexForecast === 0 && totalApprovedCapEx === 0) {
             this.tfpDev = 0;
@@ -725,26 +572,26 @@ export class BudgetForecastBulkEditComponent {
         });
     }
     recalculateYtdp() {
-        if (this.ytdCurrentTotal === 0 && this.ytdPlanTotal === 0) {
+        if (this.budgetService.ytdCurrentTotal === 0 && this.budgetService.ytdPlanTotal === 0) {
             this.ytdDev = 0;
-        } else if (this.ytdCurrentTotal > 0 && this.ytdPlanTotal === 0) {
+        } else if (this.budgetService.ytdCurrentTotal > 0 && this.budgetService.ytdPlanTotal === 0) {
             this.ytdDev = 100;
-        } else if (this.ytdCurrentTotal < 0 && this.ytdPlanTotal === 0) {
+        } else if (this.budgetService.ytdCurrentTotal < 0 && this.budgetService.ytdPlanTotal === 0) {
             this.ytdDev = -100;
-        } else if (this.ytdCurrentTotal === 0 && this.ytdPlanTotal != 0) {
+        } else if (this.budgetService.ytdCurrentTotal === 0 && this.budgetService.ytdPlanTotal != 0) {
             this.ytdDev = -100;
         } else {
-            this.ytdDev = (this.ytdCurrentTotal - this.ytdPlanTotal)*100 / Math.abs(this.ytdPlanTotal);
+            this.ytdDev = (this.budgetService.ytdCurrentTotal - this.budgetService.ytdPlanTotal)*100 / Math.abs(this.budgetService.ytdPlanTotal);
         }
         this.budgetForecastForm.patchValue({
             ytdpPercentage: this.ytdDev,
-            ytdpValue: this.ytdCurrentTotal - this.ytdPlanTotal,
+            ytdpValue: this.budgetService.ytdCurrentTotal - this.budgetService.ytdPlanTotal,
         });
     }
     recalculateMtdp() {
         const currentMtdpDate = new Date(this.currentEntry.financialMonthStartDate)
-        const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
-        const planMonthText = this.getMonthText(currentMtdpDate.getMonth());
+        const currentMonthText = this.budgetService.getMonthText(currentMtdpDate.getMonth());
+        const planMonthText = this.budgetService.getMonthText(currentMtdpDate.getMonth());
         const currentMonthValue = this.currentEntry && this.currentEntry[currentMonthText] || 0;
         const planMonthValue = this.planActive && this.planActive[planMonthText] || 0;
         if (currentMonthValue === 0 && planMonthValue === 0) {
@@ -761,7 +608,7 @@ export class BudgetForecastBulkEditComponent {
         }
         this.budgetForecastForm.patchValue({
             mtdpPercentage:  this.mtdDev,
-            mtdpValue:this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())]- this.planActive[this.getMonthText(currentMtdpDate.getMonth())],
+            mtdpValue:this.currentEntry[this.budgetService.getMonthText(currentMtdpDate.getMonth())]- this.planActive[this.budgetService.getMonthText(currentMtdpDate.getMonth())],
         });
     }
     onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
@@ -785,7 +632,8 @@ export class BudgetForecastBulkEditComponent {
         const clipboardData = event.clipboardData || window['clipboardData'];
         const pastedData = clipboardData.getData('text').split('\t');
         for (let i = 0; i < pastedData.length; i++) {
-            const roundedNumber = Math.round(Number(pastedData[i]));
+            let cleanedValue = pastedData[i].replace(/,/g, '');
+            const roundedNumber = Math.round(cleanedValue);
             this.forecastsY1Form.controls[rowIndex].value[field] = roundedNumber;
             this.forecastsY1Form.controls[rowIndex].patchValue({
                 [field]: roundedNumber
@@ -831,67 +679,6 @@ export class BudgetForecastBulkEditComponent {
                 return '';
         }
     }
-    setTextColors(): void {
-        const tfpPercentage =this.budgetForecastForm.controls.tfpPercentage.value;
-        const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
-        const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
-        const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
-        if( this.projecthubservice.all.budget.totalApprovedCapEx == 0 || this.projecthubservice.all.budget.totalApprovedCapEx == null){
-            this.tfpColor = 'gray';
-            this.afpColor = 'gray';
-            this.ydtpColor = 'gray';
-            this.mdtpColor = 'gray';
-        }else{
-            switch (true) {
-                case tfpPercentage === 0:
-                    this.tfpColor = 'gray';
-                    break;
-                case tfpPercentage < 5:
-                    this.tfpColor = 'green';
-                    break;
-                case tfpPercentage >= 5 && tfpPercentage < 10:
-                    this.tfpColor = 'orange';
-                    break;
-                case tfpPercentage >= 10:
-                    this.tfpColor = 'red';
-                    break;
-                default:
-                    break;
-            }
-            if(afpPercentage >= 10 || afpPercentage <= -10){
-                this.afpColor = 'red'
-            }else {
-                this.afpColor = 'green'
-            }
-            switch (true) {
-                case ydtpPercentage >= 10 || ydtpPercentage <= -10:
-                    this.ydtpColor = 'red';
-                    break;
-                case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
-                    this.ydtpColor = 'orange';
-                    break;
-                case ydtpPercentage === 0:
-                    this.ydtpColor = 'gray';
-                    break;
-                case ydtpPercentage > -5 && ydtpPercentage < 5:
-                    this.ydtpColor = 'green';
-                    break;
-                default:
-                    break;
-            }
-            if(mdtpPercentage >=5 || mdtpPercentage <= -5){
-                this.mdtpColor = 'red'
-            }else{
-                this.mdtpColor = 'green'
-            }
-        }
-    }
-    getAfdDeviationCodes(): any {
-        return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
-    }
-    getMtdpDeviationCodes(): any {
-        return this.projecthubservice.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
-    }
     forecastPatchGeneralForm(forecast:any, budget:any){
         this.recalculateTfp();
         this.recalculateYtdp();
@@ -901,39 +688,10 @@ export class BudgetForecastBulkEditComponent {
             totalApprovedCapex: budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0,
         })
         this.budgetForecastForm.controls.totalApprovedCapex.disable()
-        this.setTextColors();
+        this.budgetService.setTextColors();
         this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
     }
-    getMonthText(month: number): string {
-        switch (month) {
-            case 1:
-                return 'jan';
-            case 2:
-                return 'feb';
-            case 3:
-                return 'mar';
-            case 4:
-                return 'apr';
-            case 5:
-                return 'may';
-            case 6:
-                return 'jun';
-            case 7:
-                return 'jul';
-            case 8:
-                return 'aug';
-            case 9:
-                return 'sep';
-            case 10:
-                return 'oct';
-            case 11:
-                return 'nov';
-            case 0:
-                return 'dec';
-            default:
-                return '';
-        }
-    }
+
     getLookUpName(id: string): string {
         return id && id != '' ?  this.projecthubservice.lookUpMaster.find(x => x.lookUpId == id)?.lookUpName : ''
     }

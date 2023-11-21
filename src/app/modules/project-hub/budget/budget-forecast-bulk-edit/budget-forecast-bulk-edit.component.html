@@ -14,12 +14,12 @@
         </div>
         <form [formGroup]="budgetForecastForm" class="grid m-2 grid-cols-4 gap-x-6 gap-y-0 w-19/20" *ngIf="mode=='Capex'">
             <div >
-                <mat-label class="flex">Total Forecast Projection TFP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                <mat-label class="flex">Total Forecast Projection TFP ({{this.budgetService.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
-                    <div class="pl-4" [ngStyle]="{'color': tfpColor}">
+                    <div class="pl-4" [ngStyle]="{'color': budgetService.tfpColor}">
                         {{ budgetForecastForm.controls.tfpPercentage.value | number: '1.2-2' }}  %
                     </div>
-                    <div class="flex justify-end" [ngStyle]="{'color': tfpColor}">
+                    <div class="flex justify-end" [ngStyle]="{'color': budgetService.tfpColor}">
                         <div class="mr-4">
                             {{budgetForecastForm.controls.tfpValue.value | number : fractionSize}}
                         </div>
@@ -27,12 +27,12 @@
                 </div>
             </div>
             <div>
-                <mat-label class="flex">Annual Forecast Performance AFP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                <mat-label class="flex">Annual Forecast Performance AFP ({{this.budgetService.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
-                    <div class="pl-4" [ngStyle]="{'color': afpColor}">
+                    <div class="pl-4" [ngStyle]="{'color': budgetService.afpColor}">
                         {{ budgetForecastForm.controls.afpPercentage.value | number: '1.2-2' }}  %
                     </div>
-                    <div class="flex justify-end" [ngStyle]="{'color': afpColor}">
+                    <div class="flex justify-end" [ngStyle]="{'color': budgetService.afpColor}">
                         <div class="mr-4">
                             {{ budgetForecastForm.controls.afpValue.value | number : fractionSize  }}
                         </div>
@@ -40,12 +40,12 @@
                 </div>
             </div>
             <div>
-                <mat-label class="flex">Year To Date Performance YTDP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                <mat-label class="flex">Year To Date Performance YTDP ({{this.budgetService.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
-                    <div class="pl-4" [ngStyle]="{'color': ydtpColor}">
+                    <div class="pl-4" [ngStyle]="{'color': budgetService.ydtpColor}">
                         {{ budgetForecastForm.controls.ytdpPercentage.value | number: '1.2-2'}}  %
                     </div>
-                    <div class="flex justify-end" [ngStyle]="{'color': ydtpColor}">
+                    <div class="flex justify-end" [ngStyle]="{'color': budgetService.ydtpColor}">
                         <div class="mr-4">
                             {{ budgetForecastForm.controls.ytdpValue.value | number : fractionSize}}
                         </div>
@@ -53,12 +53,12 @@
                 </div>
             </div>
             <div>
-                <mat-label class="flex">Month To Date Performance MTDP ({{this.localCurrency.localCurrencyAbbreviation}})</mat-label>
+                <mat-label class="flex">Month To Date Performance MTDP ({{this.budgetService.localCurrency.localCurrencyAbbreviation}})</mat-label>
                 <div class="grid grid-cols-2 divide-x-2 w-full bg-[#f1f5f9] border border-gray-300 mt-1 h-12 rounded items-center">
-                    <div class="pl-4" [ngStyle]="{'color': mdtpColor}">
+                    <div class="pl-4" [ngStyle]="{'color': budgetService.mdtpColor}">
                         {{ budgetForecastForm.controls.mtdpPercentage.value | number: '1.2-2'}}  %
                     </div>
-                    <div class="flex justify-end" [ngStyle]="{'color': mdtpColor}">
+                    <div class="flex justify-end" [ngStyle]="{'color': budgetService.mdtpColor}">
                         <div class="mr-4">
                             {{ budgetForecastForm.controls.mtdpValue.value | number : fractionSize}}
                         </div>
@@ -68,7 +68,7 @@
         </form>
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-2 ">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y0Label}} (Current Fiscal Year)</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{budgetService.y0Label}} (Current Fiscal Year)</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -94,12 +94,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !aprEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('apr', aprEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.aprEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('apr', budgetService.aprEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{value | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && aprEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.aprEditable">
                             <spot-input-forecast formControlName="apr" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (pasteEvent)="onPaste($event, rowIndex, 'apr')"
                                                      [isBlue]="firstPreliminary == 'apr' && row.active=='Preliminary'"></spot-input-forecast>
@@ -117,12 +117,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !mayEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('may', mayEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.mayEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('may', budgetService.mayEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && mayEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.mayEditable">
                             <mat-form-field class="w-full px-1" [floatLabel]="'always'">
                                 <input matInput formControlName="may" type="number"  min="0"  (input)="recalculateAnnualTotal()"  (paste)="onPaste($event, rowIndex,'may')" class="no-spinners"
                                        placeholder="0" pattern="\d*" [style.color]="{'blue' : firstPreliminary == 'may' && row.active=='Preliminary'}" [ngClass]="'text-right'"/>
@@ -140,12 +140,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !junEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jun', junEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.junEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jun', budgetService.junEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && junEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.junEditable">
                             <spot-input-forecast formControlName="jun" [decimalCount]="0" [autoAddDecimal]="false"
                                                       (pasteEvent)="onPaste($event, rowIndex, 'jun')"
                                                      [isBlue]="firstPreliminary == 'jun' && row.active=='Preliminary'"></spot-input-forecast>
@@ -162,12 +162,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !julEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jul', julEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.julEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jul', budgetService.julEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && julEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.julEditable">
                             <spot-input-forecast formControlName="jul" [decimalCount]="0" [autoAddDecimal]="false"
                                                        (pasteEvent)="onPaste($event, rowIndex, 'jul')"
                                                      [isBlue]="firstPreliminary == 'jul' && row.active=='Preliminary'"></spot-input-forecast>
@@ -184,12 +184,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !augEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('aug', augEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.augEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('aug',budgetService.augEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && augEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.augEditable">
                             <spot-input-forecast formControlName="aug" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (pasteEvent)="onPaste($event, rowIndex, 'aug')"
                                                      [isBlue]="firstPreliminary == 'aug' && row.active=='Preliminary'"></spot-input-forecast>
@@ -206,12 +206,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !sepEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('sep', sepEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.sepEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('sep',budgetService.sepEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4 px-1"
-                              *ngIf="fTableEditStack.includes(rowIndex) && sepEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.sepEditable">
                                 <spot-input-forecast formControlName="sep" [decimalCount]="0" [autoAddDecimal]="false"
                                                          (pasteEvent)="onPaste($event, rowIndex, 'sep')"
                                                          [isBlue]="firstPreliminary == 'sep' && row.active=='Preliminary'"></spot-input-forecast>
@@ -229,12 +229,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !octEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('oct', octEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.octEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('oct', budgetService.octEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && octEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.octEditable">
                             <spot-input-forecast formControlName="oct" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (pasteEvent)="onPaste($event, rowIndex, 'oct')"
                                                      [isBlue]="firstPreliminary == 'oct' && row.active=='Preliminary'"></spot-input-forecast>
@@ -251,12 +251,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !novEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('nov', novEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.novEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('nov', budgetService.novEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && novEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.novEditable">
                             <spot-input-forecast formControlName="nov" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'nov')"
                                                      [isBlue]="firstPreliminary == 'nov' && row.active=='Preliminary'"></spot-input-forecast>
@@ -273,12 +273,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !decEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('dec', decEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.decEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('dec', budgetService.decEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && decEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.decEditable">
                             <spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (pasteEvent)="onPaste($event, rowIndex, 'dec')"
                                                      [isBlue]="firstPreliminary == 'dec' && row.active=='Preliminary'"></spot-input-forecast>
@@ -295,12 +295,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !janEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jan', janEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.janEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('jan', budgetService.janEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && janEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.janEditable">
                             <spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (pasteEvent)="onPaste($event, rowIndex, 'jan')"
                                                      [isBlue]="firstPreliminary == 'jan' && row.active=='Preliminary'"></spot-input-forecast>
@@ -317,12 +317,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !febEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('feb', febEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.febEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('feb', budgetService.febEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && febEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.febEditable">
                             <spot-input-forecast formControlName="feb" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'feb')"
                                                      [isBlue]="firstPreliminary == 'feb' && row.active=='Preliminary'"></spot-input-forecast>
@@ -339,12 +339,12 @@
                         </ng-container>
                     </ng-template>
                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !marEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('mar', marEditable,row)">
+                        <a *ngIf="!fTableEditStack.includes(rowIndex) || !budgetService.marEditable" (click)="fTableEditRow(rowIndex)" [ngClass]="getRowStyle('mar', budgetService.marEditable,row)">
                             <p *ngIf="!value && value!=0">&nbsp;</p>
                             <p style="text-align:right">{{(value ?  value : 0 ) | number : fractionSize}}</p>
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
-                              *ngIf="fTableEditStack.includes(rowIndex) && marEditable">
+                              *ngIf="fTableEditStack.includes(rowIndex) && budgetService.marEditable">
                             <spot-input-forecast formControlName="mar" [decimalCount]="0" [autoAddDecimal]="false"
                                                      (valueChanged)="recalculateAnnualTotal()"  (pasteEvent)="onPaste($event, rowIndex, 'mar')"
                                                      [isBlue]="firstPreliminary == 'mar' && row.active=='Preliminary'"></spot-input-forecast>
@@ -356,7 +356,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{y0Label}}</div></span>
+                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y0Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -375,7 +375,7 @@
 
         <div class="overflow-y-hidden w-[94vw] h-auto pl-3 mt-4">
             <div class="flex items-center justify-start gap-3 pt-3 pr-3 ">
-                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{y1Label}} (Next Fiscal Year)</div>
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary mb-2">{{budgetService.y1Label}} (Next Fiscal Year)</div>
             </div>
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" columnMode="flex"
                            class="material font-medium text-sm text-default whitespace-nowrap cursor-pointer fast-load-table"
@@ -644,7 +644,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{y1Label}}</div></span>
+                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y1Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -695,7 +695,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{y0Label}}</div></span>
+                                <span class="blueBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y0Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -712,7 +712,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{y1Label}}</div></span>
+                                <span class="greenBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y1Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -729,7 +729,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{y2Label}}</div></span>
+                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y2Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -750,7 +750,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{y3Label}}</div></span>
+                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y3Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -772,7 +772,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{y4Label}}</div></span>
+                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y4Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -794,7 +794,7 @@
                     <ng-template let-column="column" ngx-datatable-header-template>
                         <ng-container>
                             <span class="datatable-header-cell-wrapper">
-                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{y5Label}}</div></span>
+                                <span class="pinkBg headBgHeight"><div class="mr-2 pt-1">{{budgetService.y5Label}}</div></span>
                             </span>
                         </ng-container>
                     </ng-template>
@@ -851,16 +851,16 @@
 
                     <spot-singleselect-autocomplete class="w-full" formControlName="afpDeviationCode"
                                                     [label]="'AFP Deviation Code'" [placeholder]="'AFP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
-                                                    [dropDownArray]="getAfdDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                                                    [dropDownArray]="budgetService.getAfdDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-singleselect-autocomplete>
                     <spot-singleselect-autocomplete class="w-full" formControlName="mtdpDeviationCode"
                                                     [label]="'MTDP Deviation Code'" [placeholder]="'MTP Deviation Code'" [valuePointer]="'lookUpName'"  [Required]="false"
-                                                    [dropDownArray]="getMtdpDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
+                                                    [dropDownArray]="budgetService.getMtdpDeviationCodes()" [sortByType]="'custom'" [customSortPointer]="'lookUpOrder'">
                     </spot-singleselect-autocomplete>
                     <spot-input class="w-full" formControlName="committedSpend" [label]="'Committed Spend'" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
                     </spot-input>
                     <spot-input class="w-full" formControlName="totalApprovedCapex" [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
-                                [label]="'Total Approved CAPEX (' + this.localCurrency.localCurrencyAbbreviation + ')'"  *ngIf="mode === 'Capex'">
+                                [label]="'Total Approved CAPEX (' + this.budgetService.localCurrency.localCurrencyAbbreviation + ')'"  *ngIf="mode === 'Capex'">
                     </spot-input>
             </div>
         </form>

@@ -6,6 +6,7 @@ import {AuthService} from "../../../core/auth/auth.service";
 import {ProjectApiService} from "../common/project-api.service";
 import {PortfolioApiService} from "../../portfolio-center/portfolio-api.service";
 import {BudgetService} from "./budget.service";
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
 
 @Component({
     selector: 'app-budget',
@@ -14,7 +15,7 @@ import {BudgetService} from "./budget.service";
 })
 export class BudgetComponent implements OnInit {
     viewContent = false;
-    id: string = "";
+
     filterCriteria: any = {}
     opexField:boolean = false;
     capexField:boolean = false;
@@ -29,7 +30,8 @@ export class BudgetComponent implements OnInit {
                 private portApiService: PortfolioApiService,
                 private authService: AuthService,
                 private apiService: ProjectApiService,
-                public budgetService: BudgetService) {
+                public budgetService: BudgetService,
+                public fuseAlert: FuseConfirmationService) {
         this.projectHubService.submitbutton.subscribe(res => {
             if (res == true) {
                 this.dataloader()
@@ -73,12 +75,12 @@ export class BudgetComponent implements OnInit {
     }
 
     dataloader(): void {
-        this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        this.budgetService.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         const promises = [
             this.portApiService.getfilterlist(),
-            this.portApiService.getOnlyLocalCurrency(this.id),
+            this.portApiService.getOnlyLocalCurrency(this.budgetService.id),
             this.authService.lookupMaster(),
-            this.apiService.getBudgetPageInfo(this.id)
+            this.apiService.getBudgetPageInfo(this.budgetService.id)
         ];
         Promise.all(promises)
             .then((response: any[]) => {
@@ -91,10 +93,11 @@ export class BudgetComponent implements OnInit {
                 this.budgetService.budgetForecastsY1Capex = response[3].budgetForecastsY1.filter(x => x.budgetData == "CapEx Forecast");
                 this.budgetService.budgetForecastsY1Opex = response[3].budgetForecastsY1.filter(x => x.budgetData == "OpEx Forecast");
                 this.budgetService.currentEntry = response[3].budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
+                this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
                 this.budgetService.planActive = response[3].budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"));
                 this.generalInfoPatchValue(response[3])
-                this.forecastEditButtonEnabler();
+                this.budgetService.forecastEditButtonEnabler();
                 this.budgetService.startingMonth=this.budgetService.getStartingMonth();
                 this.budgetService.checkIsCellEditable();
                 this.budgetService.calculateForecast();
@@ -197,22 +200,5 @@ export class BudgetComponent implements OnInit {
     lbePeriodCalendar(){
         const url = 'https://app.powerbi.com/groups/me/apps/aa1c834f-34df-4d86-8e69-246dea19b28a/reports/3d0acf48-54a4-4520-92d4-4fbf3914eec5/ReportSectionbd22354a21346769a025';
         window.open(url, '_blank');
-    }
-
-    forecastEditButtonEnabler(){
-        if(this.projectHubService.roleControllerControl.budgetAdmin){
-            this.enableForecastButton = true;
-        }else{
-            if (this.budgetService.isAnyEntryOpen()) {
-                if(!this.projectHubService.roleControllerControl.projectTeam){
-                    this.enableForecastButton = false;
-                }
-            }else{
-                this.enableForecastButton = false;
-            }
-        }
-        if(this.projectHubService.projectState=='Cancelled'){
-            this.enableForecastButton = false;
-        }
     }
 }

@@ -266,7 +266,7 @@
                     <p  [ngClass]="'closed'" style="text-align:right">{{value | number : fractionSize}} </p>
                 </ng-template>
                 <ng-template ngx-datatable-header-template>
-                    {{ y0Label }}
+                    {{ budgetService.y0Label }}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column  prop="y1" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'"
@@ -275,7 +275,7 @@
                     <p  [ngClass]="{'closed': row.isopen==false}" style="text-align:right">{{value | number : fractionSize}}</p>
                 </ng-template>
                 <ng-template ngx-datatable-header-template>
-                    {{ y1Label }}
+                    {{ budgetService.y1Label }}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column  prop="y2" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'"
@@ -284,7 +284,7 @@
                     <p  [ngClass]="{'closed': row.isopen==false}" style="text-align:right">{{value | number : fractionSize}}</p>
                 </ng-template>
                 <ng-template ngx-datatable-header-template>
-                    {{ y2Label }}
+                    {{ budgetService.y2Label }}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="y3" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'"
@@ -293,7 +293,7 @@
                     <p [ngClass]="{'closed': row.isopen==false}" style="text-align:right">{{value | number : fractionSize}}</p>
                 </ng-template>
                 <ng-template ngx-datatable-header-template>
-                    {{ y3Label }}
+                    {{ budgetService.y3Label }}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="y4" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'"
@@ -302,7 +302,7 @@
                     <p [ngClass]="{'closed': row.isopen==false}" style="text-align:right">{{value | number : fractionSize}}</p>
                 </ng-template>
                 <ng-template ngx-datatable-header-template>
-                    {{ y4Label }}
+                    {{ budgetService.y4Label }}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column prop="y5" [flexGrow]="1.5" [sortable]="false" [resizeable]="false" *ngIf="mode !== 'Y1'"
@@ -311,7 +311,7 @@
                     <p [ngClass]="{'closed': row.isopen==false}" style="text-align:right">{{value | number : fractionSize}}</p>
                 </ng-template>
                 <ng-template ngx-datatable-header-template>
-                    {{ y5Label }}
+                    {{ budgetService.y5Label }}
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column  *ngIf="mode=='Capex'" name="Total CAPEX" prop="cumulativeTotal" [flexGrow]="2.5" [sortable]="false" [resizeable]="false"
