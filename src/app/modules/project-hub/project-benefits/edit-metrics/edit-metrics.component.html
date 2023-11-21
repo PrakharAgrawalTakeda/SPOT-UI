@@ -89,7 +89,7 @@
         </div>
         <div class="w-screen ml-3  gap-3">
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
-                class="font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata">
+                class="font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata" [rowClass]="getRowClass">
 
                 <ngx-datatable-column name="Financial Type" [width]="120" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -101,21 +101,21 @@
 
                 <ngx-datatable-column *ngFor="let col of columnYear" [name]="col.year" [width]="90">
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-                        <!-- Display the value and make it clickable to enable editing -->
-                        <div *ngIf="!ptTableEditStack.includes(rowIndex)" (click)="ptTableEditRow(rowIndex)"
-                            style="padding-left:30px;">
+                        <!-- Display the value and make it clickable for editing if allowed -->
+                        <div [ngClass]="getRowClass(row.financialType)" *ngIf="!ptTableEditStack.includes(rowIndex) || !canEditRow(row.financialType)" (click)="ptTableEditRow(rowIndex)" style="padding-left:30px;">
                             {{ row.values['FY' + col.year.slice(-2)] }}
                         </div>
-                        <!-- Form field for editing -->
-                        <form *ngIf="ptTableEditStack.includes(rowIndex)" [formGroup]="bulkEditFormArray.at(rowIndex)"
-                            (click)="preventDefault($event)">
+                
+                        <!-- Form field for editing, shown only if editing is allowed -->
+                        <form *ngIf="ptTableEditStack.includes(rowIndex) && canEditRow(row.financialType)" [formGroup]="bulkEditFormArray.at(rowIndex)" (click)="preventDefault($event)">
                             <spot-input class="w-full" [formControlName]="getControlName(col.year)"
-                                [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
-                                (change)="onValueChange(rowIndex, col.year, $event.target.value)">
+                                        [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                                        (change)="onValueChange(rowIndex, col.year, $event.target.value)">
                             </spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
+                
                  
                 <ngx-datatable-column name="Total" [width]="120">
                     <ng-template let-row="row" ngx-datatable-cell-template>

@@ -33,7 +33,6 @@ export class EditMetricsComponent {
   })
   id: string;
   lookupData: any;
-
   valuecreationngxdata: any[] = [];
   columnYear = []
   ptTableEditStack = []
@@ -575,6 +574,28 @@ export class EditMetricsComponent {
     });
   }
 
+  canEditRow(financialType: string): boolean {
+    // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
+    if (this.captureLevel) {
+      return financialType == 'Baseline Plan';
+  } else {
+      // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'
+      return !(financialType == 'Baseline Plan' || financialType == 'Current Plan' || financialType == 'Actual');
+  }
+}
+
+getRowClass(financialType: string): string {
+  // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
+  if (this.captureLevel && financialType === 'Baseline Plan') {
+    return 'non-editable-row';
+  }
+  // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'
+  else if (!this.captureLevel && (financialType === 'Baseline Plan' || financialType === 'Current Plan' || financialType === 'Actual')) {
+    return 'non-editable-row';
+  }
+  // Return an empty string for editable rows
+  return '';
+}
 
   addYear() {
     if(this.globalMaxYear < 2034)
