@@ -69,7 +69,7 @@
         </div>
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
             columnMode="force" class="datatable-VC-80 pr-6 material font-medium text-sm text-default whitespace-nowrap"
-            [rows]="valuecreationngxdata" #valuecreationTable [rowClass]="getRowClass" class="custom-ngx-table">
+            [rows]="valuecreationngxdata" #valuecreationTable [sorts]="[{ prop: 'metricName', dir: 'asc' }]" [rowClass]="getRowClass" class="custom-ngx-table">
             <ngx-datatable-column [resizeable]="false" [sortable]="false" [width]="30" [frozenLeft]="true">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <div style="height: 92px !important;">
@@ -100,7 +100,7 @@
                 </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Category" prop="metricCategoryId" [width]="120" [frozenLeft]="true"
+            <ngx-datatable-column name="Category" prop="metricCategoryID" [width]="120" [frozenLeft]="true"
                 [headerClass]="getFrozenHeaderClass" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
@@ -109,8 +109,8 @@
             <ngx-datatable-column name="Metric Name" prop="metricName" [width]="160" [frozenLeft]="true"
                 [headerClass]="getFrozenClass" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                    <p style="margin-bottom: 44px;"><mat-icon *ngIf="value!= ''" class="pe" style="font-size: 17px;"
-                            [matTooltip]=row.helpText>help</mat-icon>{{value}}</p>
+                    <p style="margin-bottom: 72px;"><mat-icon *ngIf="row.parentProjectId != null" style="top: 7px;position: relative;" svgIcon="heroicons_outline:link" [matTooltip]=row.parentName></mat-icon><mat-icon *ngIf="value!= ''" class="pe" style="font-size: 17px;top: 3px;position: relative;"
+                        [matTooltip]=row.helpText>help</mat-icon>{{value}}</p>
                 </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Units" prop="metricUnit" [width]="100" [frozenLeft]="true"
@@ -125,7 +125,13 @@
                     <p style="margin-bottom: 68px;">{{getLookup(value)}}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="160" [frozenLeft]="true" [resizeable]="false" [sortable]="false">
+            <ngx-datatable-column [width]="30" [frozenLeft]="true">
+                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div *ngIf="row.temporaryImpact" style="height: 92px !important;"><mat-icon style="color: red;"
+                            svgIcon="heroicons_outline:clock"></mat-icon></div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="180" [frozenLeft]="true" [resizeable]="false" [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.metricFormat != 'Currency (local)'">{{ row.FianncialType1 }} <br>
                         {{row.FianncialType2}} <br> {{row.FianncialType3}} <br> {{row.FianncialType4}}</p>
@@ -149,14 +155,14 @@
                             {{obj.baseline | number:'1.0-1' }} <br> {{obj.current | number:'1.0-1' }} <br> {{obj.actual
                             | number:'1.0-1' }}</p>
                         <p
-                            *ngIf="row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)'">
+                            *ngIf="row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)'">
                             {{ obj.target | number:'1.0-2' }} <br> {{obj.baseline | number:'1.0-2' }} <br> {{obj.current
                             | number:'1.0-2' }} <br> {{obj.actual | number:'1.0-2' }}</p>
                         <br />
                     </ng-template>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total" prop="strategicTarget" [width]="190" [resizeable]="false"
+            <ngx-datatable-column name="Total" prop="strategicTarget" [width]="150" [resizeable]="false"
                 [sortable]="false">
                 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                     <p *ngIf="row.metricFormat == 'Time (HH:MM)' || row.metricFormat == ''">{{ value }} <br>
@@ -168,13 +174,12 @@
                         {{row.strategicBaseline | number:'1.0-1' }} <br> {{row.strategicCurrent | number:'1.0-1' }} <br>
                         {{row.strategicActual | number:'1.0-1' }}</p>
                     <p
-                        *ngIf="row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)'">
+                        *ngIf="row.metricFormat == 'Percentage (2 decimal)' || row.metricFormat == 'Decimal (2 decimals)' || row.metricFormat == 'Number (2 decimal)'">
                         {{ value | number:'1.0-2' }} <br> {{row.strategicBaseline | number:'1.0-2' }} <br>
                         {{row.strategicCurrent | number:'1.0-2' }} <br> {{row.strategicActual | number:'1.0-2' }}</p>
                 </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false"
-            [frozenRight]="true"
+            <ngx-datatable-column [width]="30" [resizeable]="false" [sortable]="false" 
                 [headerClass]="getFrozenHeaderClass2">
                 <ng-template let-row="row" ngx-datatable-cell-template>
 

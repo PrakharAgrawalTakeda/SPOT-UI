@@ -46,6 +46,14 @@
             <div></div>
             <div class="flex justify-between items-center gap-3">
                 <div class="pr-2">
+                    <form [formGroup]="includeinForm">
+                        <mat-slide-toggle class="primary slider-adjust" formControlName="toggleIncludeIn"
+                            (change)="toggleIncludeIn($event)" (checked)="projectData.includePerformanceDashboard">
+                        Include in Project Dashboard
+                        </mat-slide-toggle>
+                    </form>
+                </div>
+                <div class="pr-2">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
                         [color]="'primary-200'" (click)="baselinePlans()"
                         [matTooltip]="'Baselining plans will copy all `Current Plan` values and set them as Baseline. This will overwrite any previous baseline plans.'">
@@ -54,12 +62,17 @@
                 </div>
                 <div class="pr-2">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
-                        [color]="'primary-200'" (click)="addYear()"> +Year
+                        [color]="'primary-200'" (click)="addYear()"> + Year
                     </button>
                 </div>
                 <div class="pr-2">
                     <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
-                        [color]="'primary-200'" (click)="removeYear()"> -Year
+                        [color]="'primary-200'" (click)="removeYear()"> - Year
+                    </button>
+                </div>
+                <div class="pr-2">
+                    <button class="min-w-26 ml-4 text-primary bg-gray-200" type="button" mat-flat-button
+                        [color]="'primary-200'" (click)="deleteMetric()"> Delete Metric
                     </button>
                 </div>
                 <div class="pr-2">
@@ -78,12 +91,13 @@
             <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true" columnMode="force"
                 class="font-medium text-sm text-default whitespace-nowrap" [rows]="valuecreationngxdata">
 
-                <ngx-datatable-column name="Financial Type" [width]="120" [frozenLeft]="true">
-                    <ng-template ngx-datatable-cell-template let-row="row">
-                        <p *ngIf="row.metricFormat != 'Currency (local)'">{{ row.financialType }}</p>
-                        <p *ngIf="row.metricFormat == 'Currency (local)'">{{ row.financialType }} ({{localCurrency}})</p>
+                <ngx-datatable-column name="Financial Type" [width]="120" [frozenLeft]="true" [headerClass]="getFrozenHeaderClass" [resizeable]="false">
+                    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                        <!-- Check if metricFormat is 'Currency (local)' and append the local currency abbreviation -->
+                        <p>{{ row.displayFinancialType }}</p>
                     </ng-template>
                 </ngx-datatable-column>
+                
 
                 <ngx-datatable-column *ngFor="let col of columnYear" [name]="col.year" [width]="90">
                     <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
@@ -96,18 +110,30 @@
                         <form *ngIf="ptTableEditStack.includes(rowIndex)" [formGroup]="bulkEditFormArray.at(rowIndex)"
                             (click)="preventDefault($event)">
                             <spot-input class="w-full" [formControlName]="getControlName(col.year)"
-                                [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0">
+                                [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0"
+                                (change)="onValueChange(rowIndex, col.year, $event.target.value)">
                             </spot-input>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>
+                 
+                <ngx-datatable-column name="Total" [width]="120">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                     
+                      <div>
+                        {{ row.total }} <!-- Format the number as needed -->
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  
+                
             </ngx-datatable>
 
         </div>
         <div class="px-4 py-3 pt-20"> <!-- Footer with padding -->
             <div class="flex justify-between">
                 <a class="min-w-26" mat-flat-button [color]="'primary'"
-                    (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'')">
+                    (click)="this.projecthubservice.toggleDrawerOpen('', '',[],'',true)">
                     Cancel
                 </a>
                 <button class="min-w-26" mat-flat-button [color]="'primary'" (click)="submitnewmetric()">

@@ -22,10 +22,6 @@ export class BudgetForecastBulkEditComponent {
         this.forecastsForm.valueChanges.subscribe(res => {
             this.formValue()
             this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
-            this.recalculateTfp();
-            this.recalculateYtdp();
-            this.recalculateAFP();
-            this.recalculateMtdp()
             if(this.projecthubservice.isFormChanged){
                 window.onbeforeunload = this.showConfirmationMessage;
             }
@@ -98,6 +94,7 @@ export class BudgetForecastBulkEditComponent {
     year1Value = 0;
     headerLabel: string = "";
     currentEntry: any;
+    openEntry: any;
     firstPreliminary: string = "";
     startingMonth: number;
     editable: boolean = true;
@@ -113,6 +110,7 @@ export class BudgetForecastBulkEditComponent {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         if (this.mode == "Capex") {
             this.currentEntry = this.projecthubservice.all.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
+            this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "CapEx Forecast");
             this.planActive = this.projecthubservice.all.budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
             this.portApiService.getOnlyLocalCurrency(this.id).then(res => {
                 this.localCurrency = res;
@@ -141,6 +139,7 @@ export class BudgetForecastBulkEditComponent {
             }
         } else {
             this.currentEntry = this.projecthubservice.all.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "OpEx Forecast");
+            this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "OpEx Forecast");
             this.planActive = this.projecthubservice.all.budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'OpEx Forecast');
             for (const obj of this.projecthubservice.all.budgetForecasts) {
                 if (obj.budgetData === "OpEx Forecast") {
@@ -189,51 +188,51 @@ export class BudgetForecastBulkEditComponent {
         this.marEditable = this.isCellEditable('mar')
         if(!this.aprEditable){
             this.ytdPlanTotal +=  this.planActive.apr;
-            this.ytdCurrentTotal += this.currentEntry.apr;
+            this.ytdCurrentTotal += this.openEntry.apr;
         }
         if(!this.mayEditable){
             this.ytdPlanTotal +=  this.planActive.may;
-            this.ytdCurrentTotal += this.currentEntry.may;
+            this.ytdCurrentTotal += this.openEntry.may;
         }
         if(!this.junEditable){
             this.ytdPlanTotal +=  this.planActive.jun;
-            this.ytdCurrentTotal += this.currentEntry.jun;
+            this.ytdCurrentTotal += this.openEntry.jun;
         }
         if(!this.julEditable){
             this.ytdPlanTotal += this.planActive.jul;
-            this.ytdCurrentTotal += this.currentEntry.jul;
+            this.ytdCurrentTotal += this.openEntry.jul;
         }
         if(!this.augEditable){
             this.ytdPlanTotal += this.planActive.aug;
-            this.ytdCurrentTotal += this.currentEntry.aug;
+            this.ytdCurrentTotal += this.openEntry.aug;
         }
         if(!this.sepEditable){
             this.ytdPlanTotal += this.planActive.sep;
-            this.ytdCurrentTotal += this.currentEntry.sep;
+            this.ytdCurrentTotal += this.openEntry.sep;
         }
         if(!this.octEditable){
             this.ytdPlanTotal += this.planActive.oct;
-            this.ytdCurrentTotal += this.currentEntry.oct;
+            this.ytdCurrentTotal += this.openEntry.oct;
         }
         if(!this.novEditable){
             this.ytdPlanTotal += this.planActive.nov;
-            this.ytdCurrentTotal += this.currentEntry.nov;
+            this.ytdCurrentTotal += this.openEntry.nov;
         }
         if(!this.decEditable){
             this.ytdPlanTotal += this.planActive.dec;
-            this.ytdCurrentTotal += this.currentEntry.dec;
+            this.ytdCurrentTotal += this.openEntry.dec;
         }
         if(!this.janEditable){
             this.ytdPlanTotal += this.planActive.jan;
-            this.ytdCurrentTotal += this.currentEntry.jan;
+            this.ytdCurrentTotal += this.openEntry.jan;
         }
         if(!this.febEditable){
             this.ytdPlanTotal += this.planActive.feb;
-            this.ytdCurrentTotal += this.currentEntry.feb;
+            this.ytdCurrentTotal += this.openEntry.feb;
         }
         if(!this.marEditable){
             this.ytdPlanTotal += this.planActive.mar;
-            this.ytdCurrentTotal += this.currentEntry.mar;
+            this.ytdCurrentTotal += this.openEntry.mar;
         }
         this.setTextColors();
         this.dataloader()
@@ -625,6 +624,10 @@ export class BudgetForecastBulkEditComponent {
         });
         this.forecasts.find(value => value.isopen === true).annualTotal = newAnnualTotal;
         this.recalculateTotalCapex()
+        this.recalculateTfp();
+        this.recalculateYtdp();
+        this.recalculateAFP();
+        this.recalculateMtdp();
     }
 
     recalculateY1() {
@@ -651,7 +654,7 @@ export class BudgetForecastBulkEditComponent {
         });
         this.forecastsForm.controls.find(control => control.get('isopen').value === true).patchValue({
             y1: newAnnualTotal
-        });
+        }, {emitEvent : false});
         this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
         this.year1Value = newAnnualTotal;
         this.cdRef.detectChanges();
@@ -667,15 +670,12 @@ export class BudgetForecastBulkEditComponent {
             (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
             (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
             (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5);
-        isOpenEntry.patchValue({
-            cumulativeTotal: newTotal
-        });
         const isOpenForecast = this.forecasts.find(value => value.isopen === true);
         if (isOpenForecast) {
-            isOpenForecast.cumulativeTotal = newTotal;
+            this.openEntry.cumulativeTotal = newTotal;
             this.forecasts = this.forecasts.map(forecast => {
                 if (forecast.isopen === true) {
-                    return isOpenForecast;
+                    return this.openEntry;
                 } else {
                     return forecast;
                 }
@@ -684,7 +684,7 @@ export class BudgetForecastBulkEditComponent {
         }
     }
     recalculateTfp() {
-        const totalCapexForecast = this.currentEntry?.cumulativeTotal || 0;
+        const totalCapexForecast = this.openEntry?.cumulativeTotal || 0;
         const totalApprovedCapEx = this.projecthubservice.all.budget.totalApprovedCapEx || 0;
         if (totalCapexForecast === 0 && totalApprovedCapEx === 0) {
             this.tfpDev = 0;
@@ -698,10 +698,11 @@ export class BudgetForecastBulkEditComponent {
         else {
             this.tfpDev =  (totalCapexForecast-totalApprovedCapEx)*100 / Math.abs(totalApprovedCapEx);
         }
+
         this.budgetForecastForm.patchValue({
             tfpPercentage:  this.tfpDev,
             tfpValue: totalCapexForecast - totalApprovedCapEx,
-        });
+        }, {emitEvent : false});
     }
     recalculateAFP() {
         const currentAnnualTotal = this.currentEntry?.annualTotal || 0;
@@ -768,7 +769,8 @@ export class BudgetForecastBulkEditComponent {
         const clipboardData = event.clipboardData || window['clipboardData'];
         const pastedData = clipboardData.getData('text').split('\t');
         for (let i = 0; i < pastedData.length; i++) {
-            const roundedNumber = Math.round(Number(pastedData[i]));
+            let cleanedValue = pastedData[i].replace(/,/g, '');
+            const roundedNumber = Math.round(cleanedValue);
             this.forecastsForm.controls[rowIndex].value[field] = roundedNumber;
             this.forecastsForm.controls[rowIndex].patchValue({
                 [field]: roundedNumber
@@ -834,7 +836,7 @@ export class BudgetForecastBulkEditComponent {
         const afpPercentage = this.budgetForecastForm.controls.afpPercentage.value;
         const ydtpPercentage = this.budgetForecastForm.controls.ytdpPercentage.value;
         const mdtpPercentage = this.budgetForecastForm.controls.mtdpPercentage.value;
-        if( this.projecthubservice.all.budget.totalApprovedCapEx == 0){
+        if( this.projecthubservice.all.budget.totalApprovedCapEx == 0 || this.projecthubservice.all.budget.totalApprovedCapEx == null){
             this.tfpColor = 'gray';
             this.afpColor = 'gray';
             this.ydtpColor = 'gray';
@@ -896,7 +898,7 @@ export class BudgetForecastBulkEditComponent {
         this.recalculateAFP();
         this.recalculateMtdp()
         this.budgetForecastForm.patchValue({
-            totalApprovedCapex: budget.totalApprovedCapEx,
+            totalApprovedCapex: budget.totalApprovedCapEx ? budget.totalApprovedCapEx : 0,
         })
         this.budgetForecastForm.controls.totalApprovedCapex.disable()
         this.setTextColors();

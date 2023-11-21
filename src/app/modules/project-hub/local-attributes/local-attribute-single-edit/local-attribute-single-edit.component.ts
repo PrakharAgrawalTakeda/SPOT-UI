@@ -197,6 +197,11 @@ export class LocalAttributeSingleEditComponent {
           var data = []
           if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
             for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
+              if(mainObj[i].data.length != 0 && mainObj[i].data[j].value == undefined){
+                mainObj[i].data.splice(j,1)
+              }
+            }
+            for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
               if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
                 mainObj[i].data = []
                 mainObj[i].data[j] = {
@@ -212,7 +217,12 @@ export class LocalAttributeSingleEditComponent {
                   }
                 }
                 else {
+                  // if(mainObj[i].data[j].length == 0){
+                  //   mainObj[i].data.splice(j,1)
+                  // }
+                  // else{
                   mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
+                  // }
 
                 }
               }
@@ -296,7 +306,7 @@ export class LocalAttributeSingleEditComponent {
               i.data[j] = []
             }
             else {
-              i.data[j] = this.lookupData.filter(x => x.lookUpId == newData[j].value)[0]
+              i.data[j] = newData[j].value?this.lookupData.filter(x => x.lookUpId == newData[j].value)[0]:[]
             }
           }
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
@@ -313,7 +323,7 @@ export class LocalAttributeSingleEditComponent {
             this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
           }
           else {
-            i.data = this.lookupData.filter(x => x.lookUpId == i.data[0].value)[0]
+            i.data = i.data[0].value?this.lookupData.filter(x => x.lookUpId == i.data[0].value)[0]:""
             this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
           }
         }

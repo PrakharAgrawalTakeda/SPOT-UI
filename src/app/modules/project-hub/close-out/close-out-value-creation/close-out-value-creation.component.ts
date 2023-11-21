@@ -115,7 +115,15 @@ export class CloseOutValueCreationComponent implements OnInit {
           var yearList=[]
           
           if(res.length > 0){
-          year = [...new Set(res[0].projectsMetricsDataYearly.map(item => item.financialYearId))]
+          for(var z=0;z<res.length;z++){
+            if(res[z].projectsMetricsDataYearly.length > 0){
+              var listYear = [...new Set(res[z].projectsMetricsDataYearly.map(item => item.financialYearId))]
+              if(listYear.length > year.length){
+                year = listYear
+              }
+            }
+          }
+          // year = [...new Set(res[0].projectsMetricsDataYearly.map(item => item.financialYearId))]
           for(var i=0;i<year.length;i++){
             var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
             this.columnYear.push({year: yearName})
@@ -142,7 +150,7 @@ export class CloseOutValueCreationComponent implements OnInit {
                   }
                 }
               }
-              else if(this.projectsMetricsData[i].strategicCurrentList){
+              if(this.projectsMetricsData[i].strategicCurrentList){
                 var data = this.projectsMetricsData[i].strategicCurrentList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
@@ -155,7 +163,7 @@ export class CloseOutValueCreationComponent implements OnInit {
                   }
                 }
               }
-              else if(this.projectsMetricsData[i].strategicActualList){
+              if(this.projectsMetricsData[i].strategicActualList){
                 var data = this.projectsMetricsData[i].strategicActualList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
@@ -168,7 +176,7 @@ export class CloseOutValueCreationComponent implements OnInit {
                   }
                 }
               }
-              else if(this.projectsMetricsData[i].strategicTargetList){
+              if(this.projectsMetricsData[i].strategicTargetList){
                 var data = this.projectsMetricsData[i].strategicTargetList.split(',')
                 for(var z=0;z<data.length;z++){
                   var list = data[z].split(' ')
