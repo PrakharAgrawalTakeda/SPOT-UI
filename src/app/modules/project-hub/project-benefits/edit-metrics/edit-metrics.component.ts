@@ -615,7 +615,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
   canEditRow(financialType: string): boolean {
     // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
     if (this.captureLevel) {
-      return financialType == 'Baseline Plan';
+      return !(financialType == 'Baseline Plan');
     } else {
       // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'
       return !(financialType == 'Baseline Plan' || financialType == 'Current Plan' || financialType == 'Actual');
