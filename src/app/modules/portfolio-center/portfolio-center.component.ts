@@ -735,7 +735,7 @@ export class PortfolioCenterComponent implements OnInit {
               }
               else if(localattribute[i].dataType == "2"){
                 if(localattribute[i].data.length == 2){
-                  
+
                   var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY') + ' to ' + moment(localattribute[i].data[1].value).format('DD-MMM-YYYY')
                 }
                 else{
@@ -1602,7 +1602,7 @@ export class PortfolioCenterComponent implements OnInit {
 
             // Find the project UUIDs for which the toggle is true
             const trueProjectUUIDs = toggleValues
-              .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
+              .map((value, index) => (value ? this.bulkreportdata[index].problemId.toString() : null))
               .filter(Boolean);
 
             // Add the project UUIDs to toggleObject only if they don't exist already
@@ -1756,7 +1756,7 @@ export class PortfolioCenterComponent implements OnInit {
 
           // Find the project UUIDs for which the toggle is now true
           const trueProjectUUIDs = toggleValues
-            .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
+            .map((value, index) => (value ? this.bulkreportdata[index].problemId.toString() : null))
             .filter(Boolean);
 
           // Remove project UUIDs that are no longer selected
