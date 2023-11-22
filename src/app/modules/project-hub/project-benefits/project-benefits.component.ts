@@ -21,7 +21,8 @@ export class ProjectBenefitsComponent implements OnInit {
     primaryValueDriver: new FormControl(''),
     valueCommentary: new FormControl('')
   })
-  valuecreationngxdata: any = []
+  @Input() valuecreationngxdata: any = []
+  //valuecreationngxdata: any = []
   viewContent:boolean = false
   id:string = ""
   lookupData = []
@@ -37,23 +38,11 @@ export class ProjectBenefitsComponent implements OnInit {
   projectsMetricsData = []
   constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
-    this.projecthubservice.submitbutton.subscribe(res => {
-      if (res) {
-        this.dataloader()
-      }
-    })
-    this.projecthubservice.isNavChanged.subscribe(res => {
-      if (res) {
-        this.dataloader()
-      }
-    })
+
   }
 
   ngOnInit(): void {
-    this.dataloader()
     
-  }
-  dataloader() {
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
     this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
       var parentId = ''
@@ -219,7 +208,8 @@ console.log(problemCapture)
       })
     })
   })
-}
+  }
+
 
   getLookup(id: any){
     return id && id.lookUpId != '' ? this.lookupData.find(x => x.lookUpId == id).lookUpName : ''
@@ -303,19 +293,6 @@ console.log(problemCapture)
           console.log('Update successful', response);
 
         })
-
-
-        // // Iterate over all keys of the metricData object
-        // Object.keys(metricData).forEach(key => {
-        //   // Check if the key is a fiscal year
-        //   if (/^FY \d+$/.test(key)) {
-        //     // This key represents a fiscal year
-        //     metricData[key].forEach(data => {
-        //      data.baseline = data.current;
-        //      console.log(data.baseline)
-        //     });
-        //   }
-        // });
       })
       console.log(this.valuecreationngxdata)
 

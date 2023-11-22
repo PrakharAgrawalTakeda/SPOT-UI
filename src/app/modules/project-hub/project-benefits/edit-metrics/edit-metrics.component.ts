@@ -71,16 +71,16 @@ export class EditMetricsComponent implements OnInit, OnChanges {
 
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe, private changeDetectorRef: ChangeDetectorRef) {
-    this.projecthubservice.submitbutton.subscribe(res => {
-      if (res) {
-        this.dataloader()
-      }
-    })
-    this.projecthubservice.isNavChanged.subscribe(res => {
-      if (res) {
-        this.dataloader()
-      }
-    })
+    // this.projecthubservice.submitbutton.subscribe(res => {
+    //   if (res) {
+    //     this.dataloader()
+    //   }
+    // })
+    // this.projecthubservice.isNavChanged.subscribe(res => {
+    //   if (res) {
+    //     this.dataloader()
+    //   }
+    // })
     // this.FundingForm.valueChanges.subscribe(res => {
     //   if (this.viewContent) {
     //     this.changeChecker()
@@ -110,51 +110,6 @@ export class EditMetricsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.dataloader()
-
-  }
-
-  getFrozenHeaderClassID(): any {
-    return ' frozen-header-classID';
-  }
-  getFrozenHeaderClass(): any {
-    return ' frozen-header-class';
-  }
-  getFrozenClass(): any {
-    return ' frozen-header';
-  }
-  columnstyle(): any {
-    return ' column-style';
-  }
-  getFrozenID(): any {
-    return ' frozen-header-ID'
-  }
-
-  onValueChange(rowIndex: number, year: string, newValue: string): void {
-    const financialTypeRow = this.valuecreationngxdata[rowIndex];
-    if (financialTypeRow) {
-      const fiscalYearKey = 'FY' + year.slice(-2);
-      financialTypeRow.values[fiscalYearKey] = this.convertToNumber(newValue);
-
-      // Recalculate the total based on the metric format
-      financialTypeRow.total = this.calculateTotalForFinancialType(financialTypeRow);
-
-      // Update the form array to trigger change detection
-      (this.bulkEditFormArray.at(rowIndex) as FormGroup).patchValue({
-        [fiscalYearKey]: this.convertToNumber(newValue),
-        total: financialTypeRow.total, // Update the total in the form group
-      });
-      this.projecthubservice.isFormChanged = true
-    }
-  }
-
-
-  convertToNumber(value: string): number {
-    const parsed = parseFloat(value);
-    return isNaN(parsed) ? 0 : parsed;
-  }
-
-  dataloader() {
     this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
     console.log(this.id)
     this.apiService.singleEditMetricProjectData(this.id, this.projecthubservice.itemid).then((res: any) => {
@@ -344,7 +299,7 @@ export class EditMetricsComponent implements OnInit, OnChanges {
                     : item.financialType;
                 });
 
-                this.projecthubservice.isFormChanged = false
+                //this.projecthubservice.isFormChanged = false
                 this.capexAvoidanceForm.valueChanges.subscribe(res => {
                   this.projecthubservice.isFormChanged = true
                 })
@@ -363,6 +318,50 @@ export class EditMetricsComponent implements OnInit, OnChanges {
         })
       })
     })
+
+  }
+
+  getFrozenHeaderClassID(): any {
+    return ' frozen-header-classID';
+  }
+  getFrozenHeaderClass(): any {
+    return ' frozen-header-class';
+  }
+  getFrozenClass(): any {
+    return ' frozen-header';
+  }
+  columnstyle(): any {
+    return ' column-style';
+  }
+  getFrozenID(): any {
+    return ' frozen-header-ID'
+  }
+
+  onValueChange(rowIndex: number, year: string, newValue: string): void {
+    const financialTypeRow = this.valuecreationngxdata[rowIndex];
+    if (financialTypeRow) {
+      const fiscalYearKey = 'FY' + year.slice(-2);
+      financialTypeRow.values[fiscalYearKey] = this.convertToNumber(newValue);
+  
+      // Recalculate the total based on the metric format
+      financialTypeRow.total = this.calculateTotalForFinancialType(financialTypeRow);
+  
+      // Update the form array to trigger change detection
+      const formGroup = this.bulkEditFormArray.at(rowIndex) as FormGroup;
+      formGroup.patchValue({
+        [fiscalYearKey]: this.convertToNumber(newValue),
+        total: financialTypeRow.total, // Update the total in the form group
+      });
+  
+      this.projecthubservice.isFormChanged = true;
+    }
+  }
+  
+
+
+  convertToNumber(value: string): number {
+    const parsed = parseFloat(value);
+    return isNaN(parsed) ? 0 : parsed;
   }
 
   sumTimesHHMM(times: string[]): string {
@@ -907,14 +906,11 @@ export class EditMetricsComponent implements OnInit, OnChanges {
 
     // Call the API service to submit the data
     this.apiService.submitMetricProjectData(this.requestBody, this.id, this.projecthubservice.itemid).then(response => {
-      console.log(response)
-    // Trigger change detection if necessary
-    this.changeDetectorRef.detectChanges();
       // Handle the response here
-      this.projecthubservice.isNavChanged.next(true)
-      this.projecthubservice.submitbutton.next(true)
-      this.projecthubservice.successSave.next(true)
       this.projecthubservice.toggleDrawerOpen('', '', [], '')
+                        this.projecthubservice.submitbutton.next(true)
+                        this.projecthubservice.isNavChanged.next(true)
+                        this.projecthubservice.successSave.next(true)
     })
   }
 
