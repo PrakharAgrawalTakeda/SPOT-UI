@@ -96,8 +96,8 @@ export class PortfolioApiService {
     return response
   }
 
-  async bulkGenerateReports(body, userid) {
-    var link = GlobalVariables.apiurl + "Report/BulkGenerateReports/" + userid
+  async bulkGenerateReports(body) {
+    var link = GlobalVariables.apiurl + "Report/BulkGenerate/"
     const abc$ = this.http.put(link, body)
     const response = await lastValueFrom(abc$)
     return response
@@ -123,12 +123,12 @@ export class PortfolioApiService {
     const response = lastValueFrom(abc$)
     return response
   }
-  
+
   getHistoricalExcelData(projectId, budgetId) {
     var url = GlobalVariables.apiurl + "Budget/GetExcelUpdateData/Historical" + "?ProjectIds="+ projectId + "&BudgetIds="+ budgetId
     const abc$ = this.http.get(url)
     const response = lastValueFrom(abc$)
     return response
-  } 
+  }
 
 }

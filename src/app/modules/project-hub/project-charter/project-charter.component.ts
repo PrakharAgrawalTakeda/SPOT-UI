@@ -77,7 +77,7 @@ export class ProjectCharterComponent implements OnInit {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Charter').then(res => {
+        this.apiService.generateReports(this.projectid, 'Project Charter').then(res => {
 
           console.log("WORKS")
 
