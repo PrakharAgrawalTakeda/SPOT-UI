@@ -1,14 +1,19 @@
 import {Injectable} from '@angular/core';
+import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../@fuse/services/confirmation";
+import {ProjectHubService} from "../project-hub.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class BudgetService {
+
     budgetPageInfo: any;
     budgetForecastsY1Capex: any;
     budgetForecastsY1Opex: any;
     startingMonth: number;
     currentEntry: any;
+    openEntry: any;
+    id: string = "";
     aprEditable: boolean = true;
     mayEditable: boolean = true;
     junEditable: boolean = true;
@@ -25,7 +30,6 @@ export class BudgetService {
     afpValue: number = 0;
     ytdpValue: number = 0;
     mtdpValue: number = 0;
-
     ytdPlanTotal: number = 0;
     ytdCurrentTotal: number = 0;
     planActive: any;
@@ -38,7 +42,16 @@ export class BudgetService {
     afpColor: string;
     ydtpColor: string;
     mdtpColor: string;
-    constructor() {
+    y1Label: string = '';
+    y2Label: string = '';
+    y3Label: string = '';
+    y4Label: string = '';
+    y5Label: string = '';
+    y0Label: string = '';
+    enableForecastButton: boolean = true;
+
+    constructor( public projectHubService: ProjectHubService, public fuseAlert: FuseConfirmationService) {
+       console.log("Budget Service Started")
     }
     checkIsCellEditable() {
         this.aprEditable = this.isCellEditable('apr')
@@ -322,5 +335,66 @@ export class BudgetService {
     }
     isAnyEntryOpen(): boolean {
         return this.budgetPageInfo.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast").some(entry => entry.isopen);
+    }
+    getAfdDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
+    }
+    getMtdpDeviationCodes(): any {
+        return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
+    }
+    setLabels() {
+        let year = new Date(this.openEntry.financialMonthStartDate).getFullYear();
+        let year2 = year+1;
+        let year3 = year+2;
+        let year4 = year+3;
+        let year5 = year+4;
+        let year6 = year+5;
+        this.y0Label= 'FY' + year;
+        this.y1Label= 'FY' + year2;
+        this.y2Label= 'FY' + year3;
+        this.y3Label= 'FY' + year4;
+        this.y4Label= 'FY' + year5;
+        this.y5Label= 'FY' + year6 + '+';
+    }
+    forecastEditButtonEnabler(){
+        if(this.projectHubService.roleControllerControl.budgetAdmin){
+            this.enableForecastButton = true;
+        }else{
+            if (this.isAnyEntryOpen()) {
+                if(!this.projectHubService.roleControllerControl.projectTeam){
+                    this.enableForecastButton = false;
+                }
+            }else{
+                this.enableForecastButton = false;
+            }
+        }
+    }
+    forecastEditButtonClick(){
+        if(this.projectHubService.projectState=='Cancelled'){
+            var comfirmConfig: FuseConfirmationConfig = {
+                "title": "",
+                "message": "It is not possible to edit forecast information to a project which is in cancelled state.",
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation",
+                    "color": "warning"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": true,
+                        "label": "Okay",
+                        "color": "primary"
+                    },
+                    "cancel": {
+                        "show": false,
+                        "label": "Cancel"
+                    }
+                },
+                "dismissible": true
+            }
+            this.fuseAlert.open(comfirmConfig)
+        }else{
+            this.projectHubService.toggleDrawerOpen('BudgetForecastCapexBulkEdit', '', this.budgetPageInfo, this.id, true)
+        }
     }
 }
