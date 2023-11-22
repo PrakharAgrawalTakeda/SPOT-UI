@@ -431,13 +431,6 @@ export class BudgetGeneralEditComponent {
             this.budgetId.disable();
         })
     }
-    getGmsBudgetOwner(): any {
-        if(this.isBudgetAdmin){
-            return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
-        }else{
-            return this.filterCriteria.portfolioOwner.filter(x => x.isGmsbudgetOwner == true)
-        }
-    }
     async checkPrefix(budgetId: string) {
         try {
             const response: any = await this.apiService.checkBudgetIdPrefix(budgetId.toUpperCase());

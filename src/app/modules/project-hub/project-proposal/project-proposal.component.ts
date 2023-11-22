@@ -82,7 +82,7 @@ export class ProjectProposalComponent implements OnInit {
       if (close == 'confirmed') {
         console.log(this.projectid)
         console.log(this.msalService.instance.getActiveAccount().localAccountId)
-        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Proposal').then(res => {
+        this.apiService.generateReports(this.projectid, 'Project Proposal').then(res => {
           console.log("WORKS")
           this.projectHubService.submitbutton.next(true)
         })

@@ -710,49 +710,51 @@ export class PortfolioCenterComponent implements OnInit {
           }
           if( localattribute != undefined){
           for(var i=0;i<localattribute.length;i++){
-            if(localattribute[i].dataType == "3"){
-              var localdata = {
-                "name": localattribute[i].name,
-                "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
-                "count": localattribute[i].data.length,
-                "order": 15
+            if(localattribute[i].data.length > 0){
+              if(localattribute[i].dataType == "3"){
+                var localdata = {
+                  "name": localattribute[i].name,
+                  "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
+                  "count": localattribute[i].data.length,
+                  "order": 15
+                }
               }
-            }
-            else if(localattribute[i].dataType == "4"){
-              if(localattribute[i].data.length == 2){
-                var data:any = localattribute[i].data[0].value + ' to ' + localattribute[i].data[1].value
+              else if(localattribute[i].dataType == "4"){
+                if(localattribute[i].data.length == 2){
+                  var data:any = localattribute[i].data[0].value + ' to ' + localattribute[i].data[1].value
+                }
+                else{
+                  var data:any = localattribute[i].data[0].value
+                }
+                localdata = {
+                  "name": localattribute[i].name,
+                  "value": data,
+                  "count": 1,
+                  "order": 15
+                }
+              }
+              else if(localattribute[i].dataType == "2"){
+                if(localattribute[i].data.length == 2){
+                  
+                  var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY') + ' to ' + moment(localattribute[i].data[1].value).format('DD-MMM-YYYY')
+                }
+                else{
+                  var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY')
+                }
+                localdata = {
+                  "name": localattribute[i].name,
+                  "value": data,
+                  "count": 1,
+                  "order": 15
+                }
               }
               else{
-                var data:any = localattribute[i].data[0].value
-              }
-              localdata = {
-                "name": localattribute[i].name,
-                "value": data,
-                "count": 1,
-                "order": 15
-              }
-            }
-            else if(localattribute[i].dataType == "2"){
-              if(localattribute[i].data.length == 2){
-                
-                var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY') + ' to ' + moment(localattribute[i].data[1].value).format('DD-MMM-YYYY')
-              }
-              else{
-                var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY')
-              }
-              localdata = {
-                "name": localattribute[i].name,
-                "value": data,
-                "count": 1,
-                "order": 15
-              }
-            }
-            else{
-              var localdata = {
-                "name": localattribute[i].name,
-                "value": localattribute[i].data[0].value,
-                "count": localattribute[i].data.length,
-                "order": 15
+                var localdata = {
+                  "name": localattribute[i].name,
+                  "value": localattribute[i].data[0].value,
+                  "count": localattribute[i].data.length,
+                  "order": 15
+                }
               }
             }
             this.localAttributeData.push(localdata)
@@ -760,9 +762,9 @@ export class PortfolioCenterComponent implements OnInit {
         }
 
           console.log("Filter Data : " + this.groupData)
-          this.currentData = new Date().toISOString()
-          this.Date2 = new Date(Date.now() - 12096e5).toISOString()
-          this.Date3 = new Date(Date.now() - 2.592e+9).toISOString()
+          this.currentData = new Date().toISOString().split('T')
+          this.Date2 = new Date(Date.now() - 12096e5).toISOString().split('T')
+          this.Date3 = new Date(Date.now() - 2.592e+9).toISOString().split('T')
           this.groupData.filterGroups.length == 0 ? this.showdefault = true : this.showdefault = false
           // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
@@ -1703,7 +1705,7 @@ export class PortfolioCenterComponent implements OnInit {
         const createProjectAlert = this.fuseAlert.open(comfirmConfig);
         createProjectAlert.afterClosed().subscribe((close) => {
           if (close === 'confirmed') {
-            this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+            this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
               // Close the drawer
               this.filterDrawer.close();
               // Reset toggle states to false on all pages and all toggles
@@ -1723,7 +1725,7 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
     else {
-      this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+      this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
         // Close the drawer
         this.filterDrawer.close();
         // Reset toggle states to false on all pages and all toggles
@@ -1892,7 +1894,7 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   //     // Pass toggleObject
-  //     this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+  //     this.apiService.bulkGenerateReports(toggleObject).then(Res => {
   //       console.log('Toggle Object:', toggleObject);
 
   //       // Check if any toggle was turned on
@@ -2008,15 +2010,20 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
         this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-        this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo[i] ? res.overallStatusInfo[i]?.overallStatusLastUpdate : ''
+        this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo[i] ? res.overallStatusInfo[i]?.overallStatusLastUpdate.split('T') : ''
         this.projectOverview[i].grey = false
         this.projectOverview[i].darkGrey = false
         if(this.projectOverview[i].overallStatusLastUpdate != ''){
-        if(this.projectOverview[i].overallStatusLastUpdate <= this.Date2 && this.projectOverview[i].overallStatusLastUpdate <= this.Date3){
+        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate <= this.Date3[0]){
           this.projectOverview[i].grey = true
+          console.log("status date = " + this.projectOverview[i].overallStatusLastUpdate[0])
+          console.log("date - 14 = " + this.Date2[0])
+          console.log("date - 30 = " + this.Date3[0])
         }
-        else if(this.projectOverview[i].overallStatusLastUpdate < this.currentData){
+        else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.currentData[0]){
           this.projectOverview[i].darkGrey = true
+          console.log("status date = " + this.projectOverview[i].overallStatusLastUpdate[0])
+          console.log("current date = " + this.currentData[0])
         }
       }
         this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
@@ -2119,14 +2126,15 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
             this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-            this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo ? res.overallStatusInfo[i]?.overallStatusLastUpdate : ''
+            this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo ? res.overallStatusInfo[i]?.overallStatusLastUpdate.split('T') : ''
             this.projectOverview[i].grey = false
             this.projectOverview[i].darkGrey = false
             if(this.projectOverview[i].overallStatusLastUpdate != ''){
-            if(this.projectOverview[i].overallStatusLastUpdate <= this.Date2 && this.projectOverview[i].overallStatusLastUpdate <= this.Date3){
+            if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2.split('T') && this.projectOverview[i].overallStatusLastUpdate <= this.Date3.split('T')){
               this.projectOverview[i].grey = true
+              console.log()
             }
-            else if(this.projectOverview[i].overallStatusLastUpdate < this.currentData){
+            else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.currentData.split('T')){
               this.projectOverview[i].darkGrey = true
             }
           }

@@ -13,7 +13,7 @@ import {MsalService} from "@azure/msal-angular";
 })
 export class ProjectDashboardComponent {
   projectid: string[] = [];
-  constructor(private projectHubService: ProjectHubService,private msalService: MsalService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router) { 
+  constructor(private projectHubService: ProjectHubService,private msalService: MsalService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router) {
     this.projectHubService.submitbutton.subscribe(res=>{
       if(res == true){
         this.dataloader()
@@ -73,7 +73,7 @@ export class ProjectDashboardComponent {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Dashboard').then(res => {
+        this.apiService.generateReports(this.projectid, 'Project Dashboard').then(res => {
 
           console.log("WORKS")
 
@@ -82,7 +82,7 @@ export class ProjectDashboardComponent {
         })
       }
     })
-  } 
+  }
 
   generatePD() {
     var comfirmConfig: FuseConfirmationConfig = {
@@ -110,7 +110,7 @@ export class ProjectDashboardComponent {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Project Dashboard Performance').then(res => {
+        this.apiService.generateReports(this.projectid, 'Project Dashboard Performance').then(res => {
 
           console.log("WORKS")
 
@@ -119,7 +119,7 @@ export class ProjectDashboardComponent {
         })
       }
     })
-  } 
+  }
 
   generatePTD() {
     var comfirmConfig: FuseConfirmationConfig = {
@@ -147,7 +147,7 @@ export class ProjectDashboardComponent {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'GMSPT Program Dashboard').then(res => {
+        this.apiService.generateReports(this.projectid, 'GMSPT Program Dashboard').then(res => {
 
           console.log("WORKS")
 
@@ -156,5 +156,5 @@ export class ProjectDashboardComponent {
         })
       }
     })
-  } 
+  }
 }
