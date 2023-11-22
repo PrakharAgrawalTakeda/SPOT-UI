@@ -1,4 +1,4 @@
-import { Component, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProjectApiService } from '../../common/project-api.service';
 import { ProjectHubService } from '../../project-hub.service';
@@ -20,8 +20,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./edit-metrics.component.scss'],
   providers: [DecimalPipe],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Default
 })
-export class EditMetricsComponent {
+export class EditMetricsComponent implements OnInit, OnChanges {
   capexAvoidanceForm = new FormGroup({
     metricCategoryId: new FormControl(''),
     metricName: new FormControl(''),
@@ -33,11 +34,10 @@ export class EditMetricsComponent {
   })
   id: string;
   lookupData: any;
-
   valuecreationngxdata: any[] = [];
   columnYear = []
   ptTableEditStack = []
-  bulkEditFormArray: FormArray;
+  bulkEditFormArray = new FormArray([]);
   localCurrency: string = ""
   globalMinYear: number = Infinity;
   globalMaxYear: number = -Infinity;
@@ -70,7 +70,7 @@ export class EditMetricsComponent {
   metricFormat: any;
 
   constructor(public apiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute,
-    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe) {
+    public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService, private decimalPipe: DecimalPipe, private changeDetectorRef: ChangeDetectorRef) {
     this.projecthubservice.submitbutton.subscribe(res => {
       if (res) {
         this.dataloader()
@@ -81,6 +81,18 @@ export class EditMetricsComponent {
         this.dataloader()
       }
     })
+    // this.FundingForm.valueChanges.subscribe(res => {
+    //   if (this.viewContent) {
+    //     this.changeChecker()
+    //     if (JSON.stringify(this.submitObj) == JSON.stringify(this.fundingDb)) {
+    //       this.projecthubservice.isFormChanged = false
+    //     }
+    //     else {
+    //       this.projecthubservice.isFormChanged = true
+    //     }
+    //   }
+    // })
+    this.bulkEditFormArray.valueChanges.subscribe(res => {
       if (this.viewContent) {
         if (JSON.stringify(this.result) == JSON.stringify(this.requestBody)) {
           this.projecthubservice.isFormChanged = false;
@@ -88,7 +100,13 @@ export class EditMetricsComponent {
           this.projecthubservice.isFormChanged = true;
         }
       }
+    })
 
+
+
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    throw new Error('Method not implemented.');
   }
 
   ngOnInit(): void {
@@ -105,10 +123,10 @@ export class EditMetricsComponent {
   getFrozenClass(): any {
     return ' frozen-header';
   }
-  columnstyle(): any{
+  columnstyle(): any {
     return ' column-style';
   }
-  getFrozenID(): any{
+  getFrozenID(): any {
     return ' frozen-header-ID'
   }
 
@@ -126,6 +144,7 @@ export class EditMetricsComponent {
         [fiscalYearKey]: this.convertToNumber(newValue),
         total: financialTypeRow.total, // Update the total in the form group
       });
+      this.projecthubservice.isFormChanged = true
     }
   }
 
@@ -141,190 +160,209 @@ export class EditMetricsComponent {
     this.apiService.singleEditMetricProjectData(this.id, this.projecthubservice.itemid).then((res: any) => {
       this.apiService.getMetricProjectData(this.id).then((result: any) => {
         this.apiService.getproject(this.id).then((pc: any) => {
-        this.auth.lookupMaster().then((resp: any) => {
-          this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
-            if (res) {
+          this.auth.lookupMaster().then((resp: any) => {
+            this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
+              if (res) {
 
-              if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
-                this.captureLevel = true
-              }
-              this.result = res
-              console.log(res)
-              console.log(currency)
-              this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
-              console.log(this.localCurrency)
-              this.lookupData = resp
-              this.metricData = res.metricData
-              const element = res.projectsMetricsData;
-              this.projectData = res.projectsMetricsData
-              console.log(this.projectData)
-              // element.metricLevelId= null;
-              // element.metricName = "";
-              // element.helpText = "";
-              // element.metricPortfolioID = null;
-              // element.metricUnit = "";
-              // element.metricTypeID = null;
-              // element.metricFormat = "";
-              element.temporaryImpact = res.projectsMetricsData.temporaryImpact
-              element.FianncialType1 = "Target"
-              element.FianncialType2 = "Baseline Plan"
-              element.FianncialType3 = "Current Plan"
-              element.FianncialType4 = "Actual"
-              console.log(element)
-              const el = res.metricData;
-              // res.metricData.forEach((el) => {
-              if (element.metricId == el.metricID) {
-                var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : '';
-                element.metricCategoryId = el.metricCategoryID;
-                element.metricName = el.metricName;
-                element.helpText = el.helpText;
-                element.metricPortfolioID = el.metricPortfolioID;
-                element.metricUnit = el.metricUnit;
-                element.metricTypeID = el.metricTypeID;
-                element.metricFormat = format;
-                element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0';
-                element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0';
-                element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0';
-                element.strategicActual = element.strategicActual ? element.strategicActual : '0';
-              }
-              //});
+                if (res && res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
+                  this.captureLevel = true
+                }
+                this.result = res
+                console.log(res)
+                console.log(currency)
+                this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''
+                console.log(this.localCurrency)
+                this.lookupData = resp
+                this.metricData = res.metricData
+                const element = res.projectsMetricsData;
+                this.projectData = res.projectsMetricsData
+                console.log(this.projectData)
+                // element.metricLevelId= null;
+                // element.metricName = "";
+                // element.helpText = "";
+                // element.metricPortfolioID = null;
+                // element.metricUnit = "";
+                // element.metricTypeID = null;
+                // element.metricFormat = "";
+                element.temporaryImpact = res.projectsMetricsData.temporaryImpact
+                element.FianncialType1 = "Target"
+                element.FianncialType2 = "Baseline Plan"
+                element.FianncialType3 = "Current Plan"
+                element.FianncialType4 = "Actual"
+                console.log(element)
+                const el = res.metricData;
+                // res.metricData.forEach((el) => {
+                if (element.metricId == el.metricID) {
+                  var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : '';
+                  element.metricCategoryId = el.metricCategoryID;
+                  element.metricName = el.metricName;
+                  element.helpText = el.helpText;
+                  element.metricPortfolioID = el.metricPortfolioID;
+                  element.metricUnit = el.metricUnit;
+                  element.metricTypeID = el.metricTypeID;
+                  element.metricFormat = format;
+                  element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0';
+                  element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0';
+                  element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0';
+                  element.strategicActual = element.strategicActual ? element.strategicActual : '0';
+                }
+                //});
 
-              console.log(res.projectsMetricsData)
-              this.capexAvoidanceForm.patchValue({
-                metricName: res.projectsMetricsData.metricName,
-                metricCategoryId: this.lookupData.find(x => x.lookUpId == res.metricData.metricCategoryID).lookUpName,
-                metricUnit: res.projectsMetricsData.metricUnit,
-                metricDescription: res.metricData.metricDescription,
-                metricFormat: res.projectsMetricsData.metricFormat,
-                metricLevelId: this.lookupData.find(x => x.lookUpId == res.projectsMetricsData.metricLevelId).lookUpName,
-                statusId: this.lookupData.find(x => x.lookUpId == res.projectsMetricsData.statusId) ? this.lookupData.find(x => x.lookUpId == res.projectsMetricsData.statusId).lookUpName : ''
-              })
+                console.log(res.projectsMetricsData)
+                this.capexAvoidanceForm.patchValue({
+                  metricName: res.projectsMetricsData.metricName,
+                  metricCategoryId: this.lookupData.find(x => x.lookUpId == res.metricData.metricCategoryID).lookUpName,
+                  metricUnit: res.projectsMetricsData.metricUnit,
+                  metricDescription: res.metricData.metricDescription,
+                  metricFormat: res.projectsMetricsData.metricFormat,
+                  metricLevelId: this.lookupData.find(x => x.lookUpId == res.projectsMetricsData.metricLevelId) ? this.lookupData.find(x => x.lookUpId == res.projectsMetricsData.metricLevelId).lookUpName : null,
+                  statusId: this.lookupData.find(x => x.lookUpId == res.projectsMetricsData.statusId) ? this.lookupData.find(x => x.lookUpId == res.projectsMetricsData.statusId).lookUpName : ''
+                })
 
 
-              if (this.capexAvoidanceForm.get('metricLevelId').value == 'Capture' || res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
-                this.captureLevel = true
-              }
-              if (this.capexAvoidanceForm && this.captureLevel) {
-                this.capexAvoidanceForm.get('metricLevelId').disable();
-              } else {
-                this.capexAvoidanceForm.get('statusId').disable();
-              }
-              this.tempImpactForm.patchValue({
-                temporaryImpact: (res.projectsMetricsData.temporaryImpact)
-              });
-              this.includeinForm.patchValue({
-                toggleIncludeIn: (res.projectsMetricsData.includePerformanceDashboard)
-              });
-              this.capexAvoidanceForm.get('metricCategoryId').disable();
-              this.capexAvoidanceForm.get('metricName').disable();
-              this.capexAvoidanceForm.get('metricUnit').disable();
-              this.capexAvoidanceForm.get('metricDescription').disable();
-              this.capexAvoidanceForm.get('metricFormat').disable();
-              if (this.tempImpactForm && !this.captureLevel) {
-                this.tempImpactForm.get('temporaryImpact').disable();
-              }
-              console.log(this.status)
-              console.log(this.capexAvoidanceForm.getRawValue())
-              var year = []
-              var yearList = []
+                if (this.capexAvoidanceForm.get('metricLevelId').value == 'Capture' || res.projectsMetricsData.metricLevelId == 'd6a905be-4ff9-402e-b074-028242b6f8e0') {
+                  this.captureLevel = true
+                }
+                if (this.capexAvoidanceForm && this.captureLevel) {
+                  this.capexAvoidanceForm.get('metricLevelId').disable();
+                } else {
+                  this.capexAvoidanceForm.get('statusId').disable();
+                }
+                this.tempImpactForm.patchValue({
+                  temporaryImpact: (res.projectsMetricsData.temporaryImpact)
+                });
+                this.includeinForm.patchValue({
+                  toggleIncludeIn: (res.projectsMetricsData.includePerformanceDashboard)
+                });
+                this.capexAvoidanceForm.get('metricCategoryId').disable();
+                this.capexAvoidanceForm.get('metricName').disable();
+                this.capexAvoidanceForm.get('metricUnit').disable();
+                this.capexAvoidanceForm.get('metricDescription').disable();
+                this.capexAvoidanceForm.get('metricFormat').disable();
+                if (this.tempImpactForm && !this.captureLevel) {
+                  this.tempImpactForm.get('temporaryImpact').disable();
+                }
+                console.log(this.status)
+                console.log(this.capexAvoidanceForm.getRawValue())
+                var year = []
+                var yearList = []
 
-              year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
-              for (var i = 0; i < year.length; i++) {
-                var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
-                this.columnYear.push({ year: yearName })
-                yearList.push(yearName)
-              }
-              yearList.sort()
-              for (var i = 0; i < res.projectsMetricsData.length; i++) {
-                for (var j = 0; j < yearList.length; j++) {
-                  res.projectsMetricsData[i][yearList[j]] = [{ 'target': "0", 'baseline': "0", 'actual': "0", 'current': "0" }]
-                  if (res.projectsMetricsData[i].strategicBaselineList) {
-                    var data = res.projectsMetricsData[i].strategicBaselineList.split(',')
-                    for (var z = 0; z < data.length; z++) {
-                      var list = data[z].split(' ')
-                      if (list[1].replace(':', '') == yearList[j].replace(' 20', '')) {
-                        res.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
+                year = [...new Set(res.projectsMetricsDataYearly.map(item => item.financialYearId))]
+                for (var i = 0; i < year.length; i++) {
+                  var yearName = year[i] ? this.lookupData.find(x => x.lookUpId == year[i]).lookUpName : ''
+                  this.columnYear.push({ year: yearName })
+                  yearList.push(yearName)
+                }
+                yearList.sort()
+                for (var i = 0; i < res.projectsMetricsData.length; i++) {
+                  for (var j = 0; j < yearList.length; j++) {
+                    res.projectsMetricsData[i][yearList[j]] = [{ 'target': "0", 'baseline': "0", 'actual': "0", 'current': "0" }]
+                    if (res.projectsMetricsData[i].strategicBaselineList) {
+                      var data = res.projectsMetricsData[i].strategicBaselineList.split(',')
+                      for (var z = 0; z < data.length; z++) {
+                        var list = data[z].split(' ')
+                        if (list[1].replace(':', '') == yearList[j].replace(' 20', '')) {
+                          res.projectsMetricsData[i][yearList[j]][0].baseline = list[2]
+                        }
                       }
                     }
                   }
+                };
+
+                const updateGlobalYearRange = (listString: string) => {
+                  if (!listString) return;
+
+                  listString.split(',').forEach(item => {
+                    // Adjusted regex to match "FY" followed by two digits
+                    const yearMatch = item.trim().match(/FY(\d{2})/);
+                    if (yearMatch) {
+                      const year = parseInt(yearMatch[1]);
+                      // Assuming the years are for the 2000s, adding 2000 to convert to four digits
+                      const fullYear = year < 100 ? 2000 + year : year;
+                      this.globalMinYear = Math.min(this.globalMinYear, fullYear);
+                      this.globalMaxYear = Math.max(this.globalMaxYear, fullYear);
+                    }
+                  });
+                };
+                // Ensure you call this for each list after data is fetched
+                updateGlobalYearRange(res.projectsMetricsData.strategicTargetList);
+                updateGlobalYearRange(res.projectsMetricsData.strategicBaselineList);
+                updateGlobalYearRange(res.projectsMetricsData.strategicActualList);
+                updateGlobalYearRange(res.projectsMetricsData.strategicCurrentList);
+
+                console.log(`Updated Min Year: ${this.globalMinYear}, Max Year: ${this.globalMaxYear}`);
+                this.compare(this.columnYear)
+                console.log(this.columnYear)
+                if (pc.problemType == 'Strategic Initiative / Program') {
+                  this.valuecreationngxdata = [
+                    {
+                      financialType: 'Target',
+                      values: this.processFinancialList(res.projectsMetricsData.strategicTargetList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat)
+                    },
+                    { financialType: 'Baseline Plan', values: this.processFinancialList(res.projectsMetricsData.strategicBaselineList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
+                    { financialType: 'Current Plan', values: this.processFinancialList(res.projectsMetricsData.strategicCurrentList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
+                    { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
+                  ];
+                } else {
+                  this.valuecreationngxdata = [
+                    { financialType: 'Baseline Plan', values: this.processFinancialList(res.projectsMetricsData.strategicBaselineList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
+                    { financialType: 'Current Plan', values: this.processFinancialList(res.projectsMetricsData.strategicCurrentList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
+                    { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
+                  ];
                 }
-              };
+                if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
+                  const currentYear = new Date().getFullYear();
+                  const shortYear = currentYear % 100; // Get the last two digits of the year
+                  const fiscalYearKey = `FY${shortYear}`; // Format as 'FYXX'
 
-              const updateGlobalYearRange = (listString: string) => {
-                if (!listString) return;
+                  // Add the new fiscal year to the columnYear array
+                  this.columnYear.push({ year: `FY ${currentYear}` });
 
-                listString.split(',').forEach(item => {
-                  // Adjusted regex to match "FY" followed by two digits
-                  const yearMatch = item.trim().match(/FY(\d{2})/);
-                  if (yearMatch) {
-                    const year = parseInt(yearMatch[1]);
-                    // Assuming the years are for the 2000s, adding 2000 to convert to four digits
-                    const fullYear = year < 100 ? 2000 + year : year;
-                    this.globalMinYear = Math.min(this.globalMinYear, fullYear);
-                    this.globalMaxYear = Math.max(this.globalMaxYear, fullYear);
-                  }
+                  // Initialize all values for this year to 0 in valuecreationngxdata
+                  this.valuecreationngxdata.forEach(financialType => {
+                    if (!financialType.values) {
+                      financialType.values = {};
+                    }
+                    financialType.values[fiscalYearKey] = '0';
+                  });
+                }
+                console.log(this.valuecreationngxdata)
+                console.log(this.valuecreationngxdata); // Add this to inspect the final data structure
+
+                this.prepareBulkEditFormArray(this.valuecreationngxdata)
+                // ... inside dataloader method, after fetching and preparing data
+                this.valuecreationngxdata.forEach(financialType => {
+                  financialType.total = this.calculateTotalForFinancialType(financialType);
                 });
-              };
-              // Ensure you call this for each list after data is fetched
-              updateGlobalYearRange(res.projectsMetricsData.strategicTargetList);
-              updateGlobalYearRange(res.projectsMetricsData.strategicBaselineList);
-              updateGlobalYearRange(res.projectsMetricsData.strategicActualList);
-              updateGlobalYearRange(res.projectsMetricsData.strategicCurrentList);
 
-              console.log(`Updated Min Year: ${this.globalMinYear}, Max Year: ${this.globalMaxYear}`);
-              this.compare(this.columnYear)
-              console.log(this.columnYear)
-              if (pc.problemType == 'Strategic Initiative / Program') {
-                this.valuecreationngxdata = [
-                  {
-                    financialType: 'Target',
-                    values: this.processFinancialList(res.projectsMetricsData.strategicTargetList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat)
-                  },
-                  { financialType: 'Baseline Plan', values: this.processFinancialList(res.projectsMetricsData.strategicBaselineList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
-                  { financialType: 'Current Plan', values: this.processFinancialList(res.projectsMetricsData.strategicCurrentList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
-                  { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
-                ];
-              } else {
-                this.valuecreationngxdata = [
-                  { financialType: 'Baseline Plan', values: this.processFinancialList(res.projectsMetricsData.strategicBaselineList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
-                  { financialType: 'Current Plan', values: this.processFinancialList(res.projectsMetricsData.strategicCurrentList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) },
-                  { financialType: 'Actual', values: this.processFinancialList(res.projectsMetricsData.strategicActualList, this.globalMinYear, this.globalMaxYear, res.projectsMetricsData.metricFormat) }
-                ];
-              }
-              console.log(this.valuecreationngxdata); // Add this to inspect the final data structure
+                console.log(this.valuecreationngxdata)
+                const isCurrencyLocal = res.projectsMetricsData.metricFormat == 'Currency (local)';
+                this.valuecreationngxdata.forEach(item => {
+                  // If the metric format is 'Currency (local)' and local currency is available, append it to the financial type
+                  item.displayFinancialType = isCurrencyLocal && this.localCurrency
+                    ? `${item.financialType} (${this.localCurrency})`
+                    : item.financialType;
+                });
 
-              this.prepareBulkEditFormArray(this.valuecreationngxdata)
-              // ... inside dataloader method, after fetching and preparing data
-              this.valuecreationngxdata.forEach(financialType => {
-                financialType.total = this.calculateTotalForFinancialType(financialType);
-              });
-              this.projecthubservice.isFormChanged = false
-              this.capexAvoidanceForm.valueChanges.subscribe(res => {
-                this.projecthubservice.isFormChanged = true
-              })
-              this.tempImpactForm.valueChanges.subscribe(res => {
-                this.projecthubservice.isFormChanged = true
-              }
+                this.projecthubservice.isFormChanged = false
+                this.capexAvoidanceForm.valueChanges.subscribe(res => {
+                  this.projecthubservice.isFormChanged = true
+                })
+                this.tempImpactForm.valueChanges.subscribe(res => {
+                  this.projecthubservice.isFormChanged = true
+                }
                 )
                 this.includeinForm.valueChanges.subscribe(res => {
                   this.projecthubservice.isFormChanged = true
                 }
-                  )
-              this.viewContent = true
-              console.log(this.valuecreationngxdata)
-              const isCurrencyLocal = res.projectsMetricsData.metricFormat == 'Currency (local)';
-  this.valuecreationngxdata.forEach(item => {
-    // If the metric format is 'Currency (local)' and local currency is available, append it to the financial type
-    item.displayFinancialType = isCurrencyLocal && this.localCurrency 
-      ? `${item.financialType} (${this.localCurrency})` 
-      : item.financialType;
-  });
-            }
+                )
+                this.viewContent = true
+              }
+            })
           })
         })
       })
     })
-  })
   }
 
   sumTimesHHMM(times: string[]): string {
@@ -565,35 +603,56 @@ export class EditMetricsComponent {
             }
           }
         });
-  
+
         // Flag the data as baselined
         this.isBaselined = true;
-  
+
         // Since we have modified the data directly, trigger data loader to refresh the UI
         //this.dataloader();
       }
     });
   }
 
+  canEditRow(financialType: string): boolean {
+    // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
+    if (this.captureLevel) {
+      return financialType == 'Baseline Plan';
+    } else {
+      // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'
+      return !(financialType == 'Baseline Plan' || financialType == 'Current Plan' || financialType == 'Actual');
+    }
+  }
+
+  getRowClass(financialType: string): string {
+    // If the value capture level is 'Capture', disable editing for 'Baseline Plan' row
+    if (this.captureLevel && financialType === 'Baseline Plan') {
+      return 'non-editable-row';
+    }
+    // When value capture level is not 'Capture', disable editing for 'Baseline Plan', 'Current Plan', and 'Actual'
+    else if (!this.captureLevel && (financialType === 'Baseline Plan' || financialType === 'Current Plan' || financialType === 'Actual')) {
+      return 'non-editable-row';
+    }
+    // Return an empty string for editable rows
+    return '';
+  }
 
   addYear() {
-    if(this.globalMaxYear < 2034)
-    {
+    if (this.globalMaxYear < 2034) {
       const newYear = this.globalMaxYear + 1;
       this.globalMaxYear = newYear; // Update globalMaxYear
-    
+
       // Add new year to columnYear as full year for display purposes
       this.columnYear.push({ year: `FY ${newYear}` });
-    
+
       // Get the two last digits of the year for the form control keys
       const shortYear = newYear % 100;
-    
+
       // Assign '0' for the new year in each financial type's values
       this.valuecreationngxdata.forEach(financialType => {
         const fiscalYearKey = `FY${shortYear}`; // Use two-digit year here
         financialType.values[fiscalYearKey] = '0';
       });
-    
+
       // Add a new control for the new year to each group in the form array
       this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
         if (group instanceof FormGroup) {
@@ -601,36 +660,35 @@ export class EditMetricsComponent {
         }
       });
     }
-    else{
+    else {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Maximum possible year is reached!",
         "message": "",
         "icon": {
-            "show": true,
-            "name": "heroicons_outline:exclamation",
-            "color": "warning"
+          "show": true,
+          "name": "heroicons_outline:exclamation",
+          "color": "warning"
         },
         "actions": {
-            "confirm": {
-                "show": true,
-                "label": "Okay",
-                "color": "primary"
-            },
-            "cancel": {
-                "show": false,
-                "label": "Cancel"
-            }
+          "confirm": {
+            "show": true,
+            "label": "Okay",
+            "color": "primary"
+          },
+          "cancel": {
+            "show": false,
+            "label": "Cancel"
+          }
         },
         "dismissible": true
+      }
+      const alert = this.fuseAlert.open(comfirmConfig)
     }
-    const alert = this.fuseAlert.open(comfirmConfig)
-    } 
   }
-  
+
 
   removeYear() {
-    if(this.columnYear.length > 0)
-    {
+    if (this.columnYear.length > 0) {
       var comfirmConfig: FuseConfirmationConfig = {
         "title": "Are you sure?",
         "message": "This function will delete all Financial data for max year. Are you sure you want to continue? ",
@@ -653,47 +711,47 @@ export class EditMetricsComponent {
         "dismissible": true
       }
       const removeYearAlert = this.fuseAlert.open(comfirmConfig)
-    removeYearAlert.afterClosed().subscribe(close => {
-      if (close == 'confirmed') {
-        if (this.columnYear.length > 0) {
-          const currentYear = new Date().getFullYear();
-                if (this.globalMaxYear == currentYear) {
-                    // Prevent deletion of current year data
-                    var comfirmConfig: FuseConfirmationConfig = {
-                      "title": "",
-                      "message": "Current Financial Year data cannot be removed! ",
-                      "icon": {
-                        "show": true,
-                        "name": "heroicons_outline:exclamation",
-                        "color": "warn"
-                      },
-                      "actions": {
-                        "confirm": {
-                          "show": true,
-                          "label": "OK",
-                          "color": "warn"
-                        },
-                        "cancel": {
-                          "show": true,
-                          "label": "Cancel"
-                        }
-                      },
-                      "dismissible": true
-                    }
-                    const removeYearAlert = this.fuseAlert.open(comfirmConfig)
-                }
-          // Remove the last year from columnYear as full year
-          const removedYearObj = this.columnYear.pop();
-          const removedYear = `FY ${this.globalMaxYear}`; // Use the full year for removal
-  
-          // Update globalMaxYear
-          this.globalMaxYear = this.globalMaxYear - 1;
-  
+      removeYearAlert.afterClosed().subscribe(close => {
+        if (close == 'confirmed') {
+          if (this.columnYear.length > 0) {
+            const currentYear = new Date().getFullYear();
+            if (this.globalMaxYear == currentYear) {
+              // Prevent deletion of current year data
+              var comfirmConfig: FuseConfirmationConfig = {
+                "title": "",
+                "message": "Current Financial Year data cannot be removed! ",
+                "icon": {
+                  "show": true,
+                  "name": "heroicons_outline:exclamation",
+                  "color": "warn"
+                },
+                "actions": {
+                  "confirm": {
+                    "show": true,
+                    "label": "OK",
+                    "color": "warn"
+                  },
+                  "cancel": {
+                    "show": true,
+                    "label": "Cancel"
+                  }
+                },
+                "dismissible": true
+              }
+              const removeYearAlert = this.fuseAlert.open(comfirmConfig)
+            }
+            // Remove the last year from columnYear as full year
+            const removedYearObj = this.columnYear.pop();
+            const removedYear = `FY ${this.globalMaxYear}`; // Use the full year for removal
+
+            // Update globalMaxYear
+            this.globalMaxYear = this.globalMaxYear - 1;
+
             // Remove the year from each financial type's values
             this.valuecreationngxdata.forEach(financialType => {
               delete financialType.values[`FY${removedYear}`];
             });
-  
+
             // Remove the form control for this year from each FormGroup
             this.bulkEditFormArray.controls.forEach((group: AbstractControl) => {
               if (group instanceof FormGroup) {
@@ -704,9 +762,9 @@ export class EditMetricsComponent {
         }
       })
     }
-   else {
+    else {
 
-   } 
+    }
   }
 
   deleteMetric() {
@@ -747,117 +805,120 @@ export class EditMetricsComponent {
   }
 
   // Helper function to create financial list string
-createFinancialList(financialType) {
-  return this.valuecreationngxdata
-    .filter(data => data.financialType === financialType)
-    .map(data => {
-      const yearlyValues = Object.entries(data.values)
-        .map(([year, value]) => `${year}: ${value}`)
-        .join(', ');
-      return yearlyValues;
-    })
-    .join(', ');
-}
-
-getFinancialYearId(year: string): string {
-  // Your mapping logic here. For simplicity, let's say it's a direct match.
-  // You need to replace this with actual lookup logic that matches the year with the lookup ID.
-  const lookupYear = `${year}`;
-  console.log(lookupYear)
-  const lookupEntry = this.lookupData.find(entry => entry.lookUpName == lookupYear);
-  console.log(lookupEntry)
-  return lookupEntry ? lookupEntry.lookUpId : '';
-}
-
-// Implement this method based on your system's logic to map financial types to their IDs
-getFinancialTypeId(financialType: string): string {
-  switch (financialType) {
-    case 'Target': return '06695f51-cee0-4da6-8a5a-c243d9ae2a58';
-    case 'Baseline Plan': return 'c56ae68f-fbc5-4373-b3ea-ea9b14e8740e';
-    case 'Current Plan': return 'd1b495c5-90e1-415d-aee6-2a6daf7002f8';
-    case 'Actual': return '8871ae56-559b-4058-a34f-37e0719b6544';
+  createFinancialList(financialType) {
+    return this.valuecreationngxdata
+      .filter(data => data.financialType === financialType)
+      .map(data => {
+        const yearlyValues = Object.entries(data.values)
+          .map(([year, value]) => `${year}: ${value}`)
+          .join(', ');
+        return yearlyValues;
+      })
+      .join(', ');
   }
-}
+
+  getFinancialYearId(year: string): string {
+    // Your mapping logic here. For simplicity, let's say it's a direct match.
+    // You need to replace this with actual lookup logic that matches the year with the lookup ID.
+    const lookupYear = `${year}`;
+    console.log(lookupYear)
+    const lookupEntry = this.lookupData.find(entry => entry.lookUpName == lookupYear);
+    console.log(lookupEntry)
+    return lookupEntry ? lookupEntry.lookUpId : '';
+  }
+
+  // Implement this method based on your system's logic to map financial types to their IDs
+  getFinancialTypeId(financialType: string): string {
+    switch (financialType) {
+      case 'Target': return '06695f51-cee0-4da6-8a5a-c243d9ae2a58';
+      case 'Baseline Plan': return 'c56ae68f-fbc5-4373-b3ea-ea9b14e8740e';
+      case 'Current Plan': return 'd1b495c5-90e1-415d-aee6-2a6daf7002f8';
+      case 'Actual': return '8871ae56-559b-4058-a34f-37e0719b6544';
+    }
+  }
   submitnewmetric() {
     this.projecthubservice.isFormChanged = false
     // Constructing the lists and calculating totals
-  const strategicTargetList = this.createFinancialList('Target');
-  const strategicBaselineList = this.createFinancialList('Baseline Plan');
-  const strategicCurrentList = this.createFinancialList('Current Plan');
-  const strategicActualList = this.createFinancialList('Actual');
+    const strategicTargetList = this.createFinancialList('Target');
+    const strategicBaselineList = this.createFinancialList('Baseline Plan');
+    const strategicCurrentList = this.createFinancialList('Current Plan');
+    const strategicActualList = this.createFinancialList('Actual');
 
-  const strategicTargetTotal = this.calculateTotalFromList(strategicTargetList);
-  const strategicBaselineTotal = this.calculateTotalFromList(strategicBaselineList);
-  const strategicCurrentTotal = this.calculateTotalFromList(strategicCurrentList);
-  const strategicActualTotal = this.calculateTotalFromList(strategicActualList);
-  // Construct the metricData object from the form values
-  const metricData = this.metricData
+    const strategicTargetTotal = this.calculateTotalFromList(strategicTargetList);
+    const strategicBaselineTotal = this.calculateTotalFromList(strategicBaselineList);
+    const strategicCurrentTotal = this.calculateTotalFromList(strategicCurrentList);
+    const strategicActualTotal = this.calculateTotalFromList(strategicActualList);
+    // Construct the metricData object from the form values
+    const metricData = this.metricData
 
 
-  const projectsMetricsData = {
-    // Other existing fields from projectsMetricsData
-    projectId: this.projectData.projectId, 
-    metricId: this.projectData.metricId,
-    statusId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('statusId').value).lookUpId,
-    metricLevelId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('metricLevelId').value).lookUpId,
-    temporaryImpact: this.tempImpactForm.get('temporaryImpact').value,
-    
-    // Calculated values and lists
-    strategicTarget: strategicTargetTotal.toString(),
-    strategicBaseline: strategicBaselineTotal.toString(),
-    strategicCurrent: strategicCurrentTotal.toString(),
-    strategicActual: strategicActualTotal.toString(),
+    const projectsMetricsData = {
+      // Other existing fields from projectsMetricsData
+      projectId: this.projectData.projectId,
+      metricId: this.projectData.metricId,
+      statusId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('statusId').value).lookUpId,
+      metricLevelId: this.lookupData.find(x => x.lookUpName == this.capexAvoidanceForm.get('metricLevelId').value).lookUpId,
+      temporaryImpact: this.tempImpactForm.get('temporaryImpact').value,
 
-    strategicTargetList: strategicTargetList,
-    strategicBaselineList: strategicBaselineList,
-    strategicCurrentList: strategicCurrentList,
-    strategicActualList: strategicActualList,
+      // Calculated values and lists
+      strategicTarget: strategicTargetTotal.toString(),
+      strategicBaseline: strategicBaselineTotal.toString(),
+      strategicCurrent: strategicCurrentTotal.toString(),
+      strategicActual: strategicActualTotal.toString(),
 
-    // Other fields like includeProposalSlide, includeCharter, etc., if they need to be sent
-includePerformanceDashboard: this.includeinForm.get('toggleIncludeIn').value
-  };
+      strategicTargetList: strategicTargetList,
+      strategicBaselineList: strategicBaselineList,
+      strategicCurrentList: strategicCurrentList,
+      strategicActualList: strategicActualList,
 
-  // Generate projectsMetricsDataYearly array based on the columnYear and valuecreationngxdata
-  const projectsMetricsDataYearly = this.columnYear.flatMap(yearObj => {
-    const financialYearId = this.getFinancialYearId(yearObj.year); // Convert year to financial year ID
-    return this.valuecreationngxdata.map(financialType => {
-      const fiscalYearKey = `FY${yearObj.year.slice(-2)}`; // Extract last two digits for year
-      const financialTypeId = this.getFinancialTypeId(financialType.financialType); // Use your method to get financial type ID
-      const metricValue = financialType.values[fiscalYearKey] || '0';
-      return {
-        projectId: this.projectData.projectId,
-        metricId: this.metricData.metricID,
-        financialYearId: financialYearId,
-        financialTypeId: financialTypeId,
-        metricValue: metricValue.toString() // Ensure metricValue is a string
-      };
+      // Other fields like includeProposalSlide, includeCharter, etc., if they need to be sent
+      includePerformanceDashboard: this.includeinForm.get('toggleIncludeIn').value
+    };
+
+    // Generate projectsMetricsDataYearly array based on the columnYear and valuecreationngxdata
+    const projectsMetricsDataYearly = this.columnYear.flatMap(yearObj => {
+      const financialYearId = this.getFinancialYearId(yearObj.year); // Convert year to financial year ID
+      return this.valuecreationngxdata.map(financialType => {
+        const fiscalYearKey = `FY${yearObj.year.slice(-2)}`; // Extract last two digits for year
+        const financialTypeId = this.getFinancialTypeId(financialType.financialType); // Use your method to get financial type ID
+        const metricValue = financialType.values[fiscalYearKey] || '0';
+        return {
+          projectId: this.projectData.projectId,
+          metricId: this.metricData.metricID,
+          financialYearId: financialYearId,
+          financialTypeId: financialTypeId,
+          metricValue: metricValue.toString() // Ensure metricValue is a string
+        };
+      });
     });
-  });
-console.log(metricData)
-console.log(projectsMetricsData)
-console.log(projectsMetricsDataYearly)
-  // Assemble the final data object for the PUT API
-  this.requestBody = {
-    metricData,
-    projectsMetricsData,
-    projectsMetricsDataYearly,
-    isBaseLined: this.isBaselined
-  };
-console.log(this.id)
-console.log(this.metricData.metricID)
-console.log(this.requestBody)
+    console.log(metricData)
+    console.log(projectsMetricsData)
+    console.log(projectsMetricsDataYearly)
+    // Assemble the final data object for the PUT API
+    this.requestBody = {
+      metricData,
+      projectsMetricsData,
+      projectsMetricsDataYearly,
+      isBaseLined: this.isBaselined
+    };
+    console.log(this.id)
+    console.log(this.metricData.metricID)
+    console.log(this.requestBody)
 
-  // Call the API service to submit the data
-  this.apiService.submitMetricProjectData(this.requestBody, this.id, this.projecthubservice.itemid).then(response => {
-    // Handle the response here
-    console.log('Metric updated successfully', response);
-    this.projecthubservice.submitbutton.next(true);
-    this.projecthubservice.isNavChanged.next(true);
-    this.projecthubservice.toggleDrawerOpen('', '', [], '');
-  })
+    // Call the API service to submit the data
+    this.apiService.submitMetricProjectData(this.requestBody, this.id, this.projecthubservice.itemid).then(response => {
+      console.log(response)
+    // Trigger change detection if necessary
+    this.changeDetectorRef.detectChanges();
+      // Handle the response here
+      this.projecthubservice.isNavChanged.next(true)
+      this.projecthubservice.submitbutton.next(true)
+      this.projecthubservice.successSave.next(true)
+      this.projecthubservice.toggleDrawerOpen('', '', [], '')
+    })
   }
 
-  
+
 
 
 }

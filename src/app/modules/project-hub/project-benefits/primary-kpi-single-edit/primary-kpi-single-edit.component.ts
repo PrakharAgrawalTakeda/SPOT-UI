@@ -83,9 +83,10 @@ console.log(selectedPrimaryKpiObject)
     console.log(mainObj)
     this.apiService.putProjectData(mainObj,this.id).then(res => {
     
-      this.projecthubservice.submitbutton.next(true)
-          this.projecthubservice.successSave.next(true)
-          this.projecthubservice.toggleDrawerOpen('', '', [], '')
+      this.projecthubservice.isNavChanged.next(true)
+            this.projecthubservice.submitbutton.next(true)
+            this.projecthubservice.successSave.next(true)
+            this.projecthubservice.toggleDrawerOpen('', '', [], '')
 
     });
   }
