@@ -13,7 +13,7 @@ import {MsalService} from "@azure/msal-angular";
 })
 export class BusinessCaseComponent implements OnInit {
   projectid: string[] = [];
-  constructor(private projectHubService: ProjectHubService, 
+  constructor(private projectHubService: ProjectHubService,
     private msalService: MsalService, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, private _fuseNavigationService: FuseNavigationService, public fuseAlert: FuseConfirmationService, private router: Router) {
     this.projectHubService.submitbutton.subscribe(res => {
       console.log(res)
@@ -107,7 +107,7 @@ export class BusinessCaseComponent implements OnInit {
 
     generateAlert.afterClosed().subscribe(close => {
       if (close == 'confirmed') {
-        this.apiService.generateReports(this.projectid, this.msalService.instance.getActiveAccount().localAccountId, 'Business Case').then(res => {
+        this.apiService.generateReports(this.projectid, 'Business Case').then(res => {
           console.log("WORKS")
           this.projectHubService.submitbutton.next(true)
         })

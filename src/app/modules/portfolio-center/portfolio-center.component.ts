@@ -1705,7 +1705,7 @@ export class PortfolioCenterComponent implements OnInit {
         const createProjectAlert = this.fuseAlert.open(comfirmConfig);
         createProjectAlert.afterClosed().subscribe((close) => {
           if (close === 'confirmed') {
-            this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+            this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
               // Close the drawer
               this.filterDrawer.close();
               // Reset toggle states to false on all pages and all toggles
@@ -1725,7 +1725,7 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
     else {
-      this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+      this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
         // Close the drawer
         this.filterDrawer.close();
         // Reset toggle states to false on all pages and all toggles
@@ -1894,7 +1894,7 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   //     // Pass toggleObject
-  //     this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+  //     this.apiService.bulkGenerateReports(toggleObject).then(Res => {
   //       console.log('Toggle Object:', toggleObject);
 
   //       // Check if any toggle was turned on
