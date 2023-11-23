@@ -2014,7 +2014,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].grey = false
         this.projectOverview[i].darkGrey = false
         if(this.projectOverview[i].overallStatusLastUpdate != ''){
-        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate <= this.Date3[0]){
+        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate >= this.Date3[0]){
           this.projectOverview[i].grey = true
           console.log("status date = " + this.projectOverview[i].overallStatusLastUpdate[0])
           console.log("date - 14 = " + this.Date2[0])
