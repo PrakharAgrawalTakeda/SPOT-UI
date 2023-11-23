@@ -735,7 +735,7 @@ export class PortfolioCenterComponent implements OnInit {
               }
               else if(localattribute[i].dataType == "2"){
                 if(localattribute[i].data.length == 2){
-                  
+
                   var data:any = moment(localattribute[i].data[0].value).format('DD-MMM-YYYY') + ' to ' + moment(localattribute[i].data[1].value).format('DD-MMM-YYYY')
                 }
                 else{
@@ -1602,7 +1602,7 @@ export class PortfolioCenterComponent implements OnInit {
 
             // Find the project UUIDs for which the toggle is true
             const trueProjectUUIDs = toggleValues
-              .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
+              .map((value, index) => (value ? this.bulkreportdata[index].problemId.toString() : null))
               .filter(Boolean);
 
             // Add the project UUIDs to toggleObject only if they don't exist already
@@ -1705,7 +1705,7 @@ export class PortfolioCenterComponent implements OnInit {
         const createProjectAlert = this.fuseAlert.open(comfirmConfig);
         createProjectAlert.afterClosed().subscribe((close) => {
           if (close === 'confirmed') {
-            this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+            this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
               // Close the drawer
               this.filterDrawer.close();
               // Reset toggle states to false on all pages and all toggles
@@ -1725,7 +1725,7 @@ export class PortfolioCenterComponent implements OnInit {
 
     }
     else {
-      this.apiService.bulkGenerateReports(this.toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+      this.apiService.bulkGenerateReports(this.toggleObject).then(Res => {
         // Close the drawer
         this.filterDrawer.close();
         // Reset toggle states to false on all pages and all toggles
@@ -1756,7 +1756,7 @@ export class PortfolioCenterComponent implements OnInit {
 
           // Find the project UUIDs for which the toggle is now true
           const trueProjectUUIDs = toggleValues
-            .map((value, index) => (value ? this.bulkreportdata[index].projectUid : null))
+            .map((value, index) => (value ? this.bulkreportdata[index].problemId.toString() : null))
             .filter(Boolean);
 
           // Remove project UUIDs that are no longer selected
@@ -1894,7 +1894,7 @@ export class PortfolioCenterComponent implements OnInit {
 
 
   //     // Pass toggleObject
-  //     this.apiService.bulkGenerateReports(toggleObject, this.msal.instance.getActiveAccount().localAccountId).then(Res => {
+  //     this.apiService.bulkGenerateReports(toggleObject).then(Res => {
   //       console.log('Toggle Object:', toggleObject);
 
   //       // Check if any toggle was turned on
