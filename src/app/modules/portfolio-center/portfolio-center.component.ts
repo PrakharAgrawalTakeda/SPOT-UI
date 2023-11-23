@@ -29,6 +29,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { Constants } from 'app/shared/constants';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { PortfolioCenterService } from "./portfolio-center.service";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export const MY_FORMATS = {
   parse: {
@@ -204,10 +205,10 @@ export class PortfolioCenterComponent implements OnInit {
   currentData
   Date2
   Date3
-
+ 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
+  constructor(private snack: MatSnackBar,private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
       if (this.showContent) {
         if (this.showLA) {
@@ -231,6 +232,14 @@ export class PortfolioCenterComponent implements OnInit {
     })
 
     this.renderer.listen('window', 'scroll', this.scrollHandler.bind(this));
+    this.PortfolioCenterService.successSave.subscribe(res => {
+      if (res == true) {
+          this.snack.open("The information has been saved successfully", "", {
+              duration: 2000,
+              panelClass: ["bg-primary", "text-on-primary"]
+          })
+      }
+  })
 
   }
 
@@ -708,6 +717,7 @@ export class PortfolioCenterComponent implements OnInit {
               "localAttributes": localattribute
             }
           }
+          this.localAttributeData = []
           if( localattribute != undefined){
           for(var i=0;i<localattribute.length;i++){
             if(localattribute[i].data.length > 0){
@@ -717,6 +727,17 @@ export class PortfolioCenterComponent implements OnInit {
                   "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
                   "count": localattribute[i].data.length,
                   "order": 15
+                }
+              }
+              else if(localattribute[i].dataType == "1"){
+                var data:any = 'Yes'
+                if(localattribute[i].data[0].value != false){
+                  var localdata = {
+                    "name": localattribute[i].name,
+                    "value": data,
+                    "count": localattribute[i].data.length,
+                    "order": 15
+                  }
                 }
               }
               else if(localattribute[i].dataType == "4"){
@@ -757,7 +778,9 @@ export class PortfolioCenterComponent implements OnInit {
                 }
               }
             }
+            if(localdata != undefined){
             this.localAttributeData.push(localdata)
+            }
           }
         }
 
@@ -1397,6 +1420,9 @@ export class PortfolioCenterComponent implements OnInit {
     this.defaultfilter.ProjectPhase = []
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
     localStorage.setItem('spot-localattribute', null)
+    this.showLA = true
+    this.localAttributeForm.controls = []
+    this.localAttributeForm.value = []
     this.defaultfilter.ProjectTeamMember = []
     this.defaultfilter.ProjectState = []
     this.defaultfilter.ProjectPhase = []
@@ -2014,16 +2040,11 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].grey = false
         this.projectOverview[i].darkGrey = false
         if(this.projectOverview[i].overallStatusLastUpdate != ''){
-        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate <= this.Date3[0]){
+        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate >= this.Date3[0]){
           this.projectOverview[i].grey = true
-          console.log("status date = " + this.projectOverview[i].overallStatusLastUpdate[0])
-          console.log("date - 14 = " + this.Date2[0])
-          console.log("date - 30 = " + this.Date3[0])
         }
         else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.currentData[0]){
           this.projectOverview[i].darkGrey = true
-          console.log("status date = " + this.projectOverview[i].overallStatusLastUpdate[0])
-          console.log("current date = " + this.currentData[0])
         }
       }
         this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
@@ -2300,6 +2321,26 @@ export class PortfolioCenterComponent implements OnInit {
       }
       if (count == list.length) {
         noChangeES = true
+      }
+    }
+    if(filtersnew != null){
+      if(filtersnew.ExecutionScope == null && executionScope == ""){
+        noChangeES = true
+      }
+      else if(filtersnew.ExecutionScope != null){
+        if(filtersnew.ExecutionScope.length == 0 && executionScope == ""){
+          noChangeES = true
+        }
+      }
+    }
+    if(filtersnew != null){
+      if(filtersnew.PortfolioOwner == null && portfolioOwners == ""){
+        noChangePO = true
+      }
+      else if(filtersnew.PortfolioOwner != null){
+        if(filtersnew.PortfolioOwner.length == 0 && portfolioOwners == ""){
+          noChangePO = true
+        }
       }
     }
     var localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))

@@ -41,6 +41,7 @@ export class PortfolioCenterService {
     },
     "dismissible": true
   }
+  
   constructor(private fusealert: FuseConfirmationService) { }
   drawerOpenedChanged(event: any): void {
     if (!this.drawerOpened){
