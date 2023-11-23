@@ -307,7 +307,9 @@ export class BudgetForecastBulkEditComponent {
     }
 
     formValue() {
+
         var form = this.forecastsForm.getRawValue()
+        console.log("Aaaaaaaaaaaaa", form)
         if (form.length > 0) {
             this.forecastsSubmit = []
             for (var i of form) {
@@ -517,6 +519,9 @@ export class BudgetForecastBulkEditComponent {
             (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
             (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
             (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5);
+        isOpenEntry.patchValue({
+            cumulativeTotal: newTotal
+        });
         const isOpenForecast = this.forecasts.find(value => value.isopen === true);
         if (isOpenForecast) {
             this.openEntry.cumulativeTotal = newTotal;

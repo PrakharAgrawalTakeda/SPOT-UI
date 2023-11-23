@@ -154,7 +154,12 @@ export class BudgetService {
         }
     }
     getStartingMonth(): number {
-        let project =  this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
+        let project: any;
+        if(this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast")){
+            project =  this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast");
+        }else{
+            project = this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
+        }
         let monthPart = project.periodName.slice(-2);
         if(project.active == 'Current'){
             return parseInt(monthPart, 10)-3;
@@ -174,9 +179,10 @@ export class BudgetService {
         if(startingMonth == -3){
             startingMonth = 9;
         }
-        if(startingMonth == 0){
-            startingMonth = 12;
-        }
+        // if(startingMonth == 0){
+        //     startingMonth = 12;
+        // }
+        // // startingMonth = 0;
         const monthNumber = this.getMonthNumber(month);
         return startingMonth <= monthNumber;
     }
@@ -285,9 +291,9 @@ export class BudgetService {
         const mdtpPercentage = this.mtdDev;
         if(this.budgetPageInfo.budget.totalApprovedCapEx == 0 || this.budgetPageInfo.budget.totalApprovedCapEx == null){
             this.tfpColor = 'gray';
-            this.afpColor = 'gray';
-            this.ydtpColor = 'gray';
-            this.mdtpColor = 'gray';
+            // this.afpColor = 'gray';
+            // this.ydtpColor = 'gray';
+            // this.mdtpColor = 'gray';
         }else{
             switch (true) {
                 case tfpPercentage === 0:

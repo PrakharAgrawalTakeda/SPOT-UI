@@ -279,8 +279,8 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]" class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && budgetService.decEditable">
-                            <spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (pasteEvent)="onPaste($event, rowIndex, 'dec')"
+                            <spot-input-forecast formControlName="dec" [decimalCount]="0" [autoAddDecimal]="false" (valueChanged)="recalculateAnnualTotal()"
+                                                 (pasteEvent)="onPaste($event, rowIndex, 'dec')"
                                                      [isBlue]="firstPreliminary == 'dec' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
@@ -301,8 +301,8 @@
                         </a>
                         <form [formGroup]="forecastsForm.controls[rowIndex]"  class="mt-4"
                               *ngIf="fTableEditStack.includes(rowIndex) && budgetService.janEditable">
-                            <spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false"
-                                                     (pasteEvent)="onPaste($event, rowIndex, 'jan')"
+                            <spot-input-forecast formControlName="jan" [decimalCount]="0" [autoAddDecimal]="false" (valueChanged)="recalculateAnnualTotal()"
+                                                 (pasteEvent)="onPaste($event, rowIndex, 'jan')"
                                                      [isBlue]="firstPreliminary == 'jan' && row.active=='Preliminary'"></spot-input-forecast>
                         </form>
                     </ng-template>
