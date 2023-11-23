@@ -39,6 +39,7 @@ export class ForecastExcelUpdateComponent {
   y2Label: string = '';
   y3Label: string = '';
   y4Label: string = '';
+  forecastDB = []
   
   constructor(private portfoliService: PortfolioApiService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService, private auth: AuthService) {
     this.ForecastForm.valueChanges.subscribe(res => {
@@ -63,12 +64,82 @@ export class ForecastExcelUpdateComponent {
           this.showData = false;
           this.showDataForecast = false;
           this.forecastExcel = this.ExcelData.filter(x => x.budgetData == res.lookUpName)
+          this.forecastExcelForm.value.patchValue = []
+          this.forecastExcelForm.controls = []
+          for (var i of this.forecastExcel) {
+            this.forecastExcelForm.push(new FormGroup({
+              budgetGlobalID: new FormControl(i.budgetGlobalID),
+              dateMasterID: new FormControl(i.dateMasterID),
+              budgetDataID: new FormControl(i.budgetDataID),
+              budgetDataIDY1: new FormControl(i.budgetDataIDY1),
+              projectID: new FormControl(i.projectID),
+              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
+              budgetData: new FormControl(i.budgetData),
+              capitalBudgetID: new FormControl(i.capitalBudgetID),
+              problemID: new FormControl(i.problemID),
+              problemTitle: new FormControl(i.problemTitle),
+              periodName: new FormControl(i.periodName),
+              historicalActual: new FormControl(i.historicalActual),
+              apr: new FormControl(i.apr),
+              may: new FormControl(i.may),
+              jun: new FormControl(i.jun),
+              jul: new FormControl(i.jul),
+              aug: new FormControl(i.aug),
+              sep: new FormControl(i.sep),
+              oct: new FormControl(i.oct),
+              nov: new FormControl(i.nov),
+              dec: new FormControl(i.dec),
+              jan: new FormControl(i.jan),
+              feb: new FormControl(i.feb),
+              mar: new FormControl(i.Mar),
+              y1_Apr: new FormControl(i.y1_Apr),
+              y1_May: new FormControl(i.y1_May),
+              y1_Jun: new FormControl(i.y1_Jun),
+              y1_Jul: new FormControl(i.y1_Jul),
+              y1_Aug: new FormControl(i.y1_Aug),
+              y1_Sep: new FormControl(i.y1_Sep),
+              y1_Oct: new FormControl(i.Y1_Oct),
+              y1_Nov: new FormControl(i.y1_Nov),
+              y1_Dec: new FormControl(i.y1_Dec),
+              y1_Jan: new FormControl(i.y1_Jan),
+              y1_Feb: new FormControl(i.y1_Feb),
+              y1_Mar: new FormControl(i.y1_Mar),
+              y2: new FormControl(i.y2),
+              y3: new FormControl(i.y3),
+              y4: new FormControl(i.y4),
+              y5: new FormControl(i.y5),
+              y1: new FormControl(i.Y1),
+              annualTotal: new FormControl(i.annualTotal),
+              cumulativeTotal: new FormControl(i.cumulativeTotal),
+            }), { emitEvent: false })
+        }
           this.showDataForecast = true;
         }
         else{
           this.showData = false;
           this.showDataForecast = false
           this.forecastExcelHistorical = this.ExcelData.filter(x => x.budgetDataType == res.lookUpName)
+          this.historicalForm.value.patchValue = []
+          this.historicalForm.controls = []
+          for (var i of this.forecastExcelHistorical) {
+            this.historicalForm.push(new FormGroup({
+              budgetDataType: new FormControl(i.budgetDataType),
+              budgetDataTypeID: new FormControl(i.budgetDataTypeID),
+              budgetHistoricalActualID: new FormControl(i.budgetHistoricalActualID),
+              capitalBudgetID: new FormControl(i.capitalBudgetID),
+              problemID: new FormControl(i.problemID),
+              problemTitle: new FormControl(i.problemTitle),
+              projectID: new FormControl(i.projectID),
+              historicalActualFY14: new FormControl(i.historicalActualFY14),
+              historicalActualFY15: new FormControl(i.historicalActualFY15),
+              historicalActualFY16: new FormControl(i.historicalActualFY16),
+              historicalActualFY17: new FormControl(i.historicalActualFY17),
+              historicalActualFY18: new FormControl(i.historicalActualFY18),
+              historicalActualFY19: new FormControl(i.historicalActualFY19),
+              historicalActualFY20: new FormControl(i.historicalActualFY20),
+              historicalActualFY21: new FormControl(i.historicalActualFY21),
+            }), { emitEvent: false })
+        }
           this.showData = true;
         }
       }
@@ -163,31 +234,8 @@ export class ForecastExcelUpdateComponent {
           this.showDataForecast = false
           console.log(historicalData)
           this.ExcelData = historicalData
-          // this.col=[]
-          // this.columnNames=[]
           this.forecastExcelHistorical = historicalData.filter(x => x.budgetDataType == this.ForecastForm.controls.ForecastType.value.lookUpName)
-          // var columns = Object.keys(this.forecastExcelHistorical[0])
-          // for(var j=0;j<columns.length; j++){
-          //   if(columns[j].includes('FY')){
-          //     this.col.push(columns[j])
-          //     this.columnNames.push({name : columns[j]})
-          //   }
-          // }
-          // var data = {}
-          // this.historicalForm.clear();
-          // for(var i of this.forecastExcelHistorical){
-          //   for(var j=0;j<this.col.length;j++){
-          //     data[this.col[j]]= new FormControl(i[this.col[j]])
-          //   }
-          //   data['budgetDataType'] = new FormControl(i.budgetDataType)
-          //   data['budgetDataTypeID'] = new FormControl(i.budgetDataTypeID)
-          //   data['budgetHistoricalActualID'] = new FormControl(i.budgetHistoricalActualID)
-          //   data['capitalBudgetID'] = new FormControl(i.capitalBudgetID)
-          //   data['problemID'] = new FormControl(i.problemID)
-          //   data['problemTitle'] = new FormControl(i.problemTitle)
-          //   data['projectID'] = new FormControl(i.projectID)
-          //   this.historicalForm.push(new FormGroup(data),{ emitEvent: false })
-          // }
+          
           for (var i of this.forecastExcelHistorical) {
             this.historicalForm.push(new FormGroup({
               budgetDataType: new FormControl(i.budgetDataType),
@@ -345,16 +393,6 @@ export class ForecastExcelUpdateComponent {
   }
 
   getNextField(field: string): string {
-    // var c = 0
-    // for(var i=0;i<this.col.length;i++){
-    //   if(field == this.col[i]){
-    //     c++;
-    //     return this.col[i+1];
-    //   }
-    // }
-    // if(c==0){
-    //   return '';
-    // }
     switch (field) {
       case 'historicalActualFY14':
           return 'historicalActualFY15';
@@ -441,11 +479,6 @@ export class ForecastExcelUpdateComponent {
 
   recalculateAnnualTotal(index) {
     const isOpenEntry = this.historicalForm.controls[index];
-    // var newAnnualTotal = 0;
-    // for(var i=0;i<this.col.length;i++){
-    //   newAnnualTotal = newAnnualTotal + 
-    //   (isNaN(isOpenEntry.value[this.col[i]]) ? 0 : isOpenEntry.value[this.col[i]])
-    // }
     const newAnnualTotal =
             (isNaN(isOpenEntry.value.historicalActualFY14) ? 0 : isOpenEntry.value.historicalActualFY14) +
             (isNaN(isOpenEntry.value.historicalActualFY15) ? 0 : isOpenEntry.value.historicalActualFY15) +
@@ -525,4 +558,26 @@ recalculateAnnualTotalForecastY2(index) {
   this.forecastExcel[index].cumulativeTotal = newCummulativeTotal
   // this.forecastExcelHistorical.find(value => value.budgetHistoricalActualID === isOpenEntry.value.budgetHistoricalActualID).historicalActual = newAnnualTotal;
 }
+
+SubmitData(){
+  if(this.ForecastForm.controls.DataType.value == "Forecast"){
+    var dataToSend = this.forecastExcelForm.getRawValue()
+    this.portfoliService.putForecastExcelData(dataToSend).then((forecastData : any) => {
+      this.showDataForecast = false
+      this.getData()
+      this.fTableEditStack = []
+      this.PortfolioCenterService.successSave.next(true)
+    })
+  }
+  else{
+    var dataToSend = this.historicalForm.getRawValue()
+    this.portfoliService.putHistoricalExcelData(dataToSend).then((historicalData : any) => {
+      this.showData = false
+      this.getData()
+      this.hTableEditStack = []
+      this.PortfolioCenterService.successSave.next(true)
+    })
+  }
+}
+
 }
