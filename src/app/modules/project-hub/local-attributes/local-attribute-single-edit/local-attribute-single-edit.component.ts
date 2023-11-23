@@ -197,7 +197,7 @@ export class LocalAttributeSingleEditComponent {
           var data = []
           if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
             for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
-              if(mainObj[i].data.length != 0 && mainObj[i].data[j].value == undefined){
+              if(mainObj[i].data.length != 0 && (mainObj[i].data[j].value == undefined && mainObj[i].data[j].lookUpId == undefined)){
                 mainObj[i].data.splice(j,1)
               }
             }
@@ -217,13 +217,7 @@ export class LocalAttributeSingleEditComponent {
                   }
                 }
                 else {
-                  // if(mainObj[i].data[j].length == 0){
-                  //   mainObj[i].data.splice(j,1)
-                  // }
-                  // else{
                   mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].lookUpId
-                  // }
-
                 }
               }
             }

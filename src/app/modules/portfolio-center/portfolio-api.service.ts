@@ -118,16 +118,30 @@ export class PortfolioApiService {
   }
 
   getForecastExcelData(LBEPeriod: string, projectId, budgetId) {
-    var url = GlobalVariables.apiurl + "Budget/GetExcelUpdateData/Forecast" + "?LBEPeriodUID=" + LBEPeriod + "&ProjectIds="+ projectId + "&BudgetIds="+ budgetId
+    var url = GlobalVariables.apiurl + "Budget/ExcelBulkUpdate/Forecasts" + "?LBEPeriodUID=" + LBEPeriod + "&ProjectIds="+ projectId + "&BudgetIds="+ budgetId
     const abc$ = this.http.get(url)
     const response = lastValueFrom(abc$)
     return response
   }
 
   getHistoricalExcelData(projectId, budgetId) {
-    var url = GlobalVariables.apiurl + "Budget/GetExcelUpdateData/Historical" + "?ProjectIds="+ projectId + "&BudgetIds="+ budgetId
+    var url = GlobalVariables.apiurl + "Budget/ExcelBulkUpdate/Historical" + "?ProjectIds="+ projectId + "&BudgetIds="+ budgetId
     const abc$ = this.http.get(url)
     const response = lastValueFrom(abc$)
+    return response
+  }
+
+  async putForecastExcelData(body) {
+    var url = GlobalVariables.apiurl + "Budget/ExcelBulkUpdate/Forecasts"
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
+    return response
+  }
+
+  async putHistoricalExcelData(body) {
+    var url = GlobalVariables.apiurl + "Budget/ExcelBulkUpdate/Historical"
+    const abc$ = this.http.put(url, body)
+    const response = await lastValueFrom(abc$)
     return response
   }
 
