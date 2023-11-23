@@ -307,9 +307,7 @@ export class BudgetForecastBulkEditComponent {
     }
 
     formValue() {
-
         var form = this.forecastsForm.getRawValue()
-        console.log("Aaaaaaaaaaaaa", form)
         if (form.length > 0) {
             this.forecastsSubmit = []
             for (var i of form) {
@@ -534,6 +532,7 @@ export class BudgetForecastBulkEditComponent {
             });
             this.cdRef.detectChanges();
         }
+
     }
     recalculateTfp() {
         const totalCapexForecast = this.currentEntry?.cumulativeTotal || 0;
@@ -555,6 +554,8 @@ export class BudgetForecastBulkEditComponent {
             tfpPercentage:  this.tfpDev,
             tfpValue: totalCapexForecast - totalApprovedCapEx,
         }, {emitEvent : false});
+        this.budgetService.tfpDev = this.tfpDev;
+        this.budgetService.setTfpColor();
     }
     recalculateAFP() {
         const currentAnnualTotal = this.currentEntry?.annualTotal || 0;
@@ -575,6 +576,8 @@ export class BudgetForecastBulkEditComponent {
             afpPercentage: this.afpDev,
             afpValue: currentAnnualTotal - planAnnualTotal,
         });
+        this.budgetService.afpDev = this.afpDev;
+        this.budgetService.setAfpColor();
     }
     recalculateYtdp() {
         if (this.budgetService.ytdCurrentTotal === 0 && this.budgetService.ytdPlanTotal === 0) {
@@ -592,6 +595,8 @@ export class BudgetForecastBulkEditComponent {
             ytdpPercentage: this.ytdDev,
             ytdpValue: this.budgetService.ytdCurrentTotal - this.budgetService.ytdPlanTotal,
         });
+        this.budgetService.ytdDev = this.ytdDev;
+        this.budgetService.setYdtpColor();
     }
     recalculateMtdp() {
         const currentMtdpDate = new Date(this.currentEntry.financialMonthStartDate)
@@ -615,6 +620,8 @@ export class BudgetForecastBulkEditComponent {
             mtdpPercentage:  this.mtdDev,
             mtdpValue:this.currentEntry[this.budgetService.getMonthText(currentMtdpDate.getMonth())]- this.planActive[this.budgetService.getMonthText(currentMtdpDate.getMonth())],
         });
+        this.budgetService.mtdDev = this.mtdDev;
+        this.budgetService.setMdtpColor();
     }
     onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
         event.preventDefault();

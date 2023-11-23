@@ -285,16 +285,17 @@ export class BudgetService {
         }
     }
     setTextColors(): void {
-        const tfpPercentage =this.tfpDev;
-        const afpPercentage = this.afpDev;
-        const ydtpPercentage = this.ytdDev;
-        const mdtpPercentage = this.mtdDev;
-        if(this.budgetPageInfo.budget.totalApprovedCapEx == 0 || this.budgetPageInfo.budget.totalApprovedCapEx == null){
+        this.setTfpColor();
+        this.setAfpColor();
+        this.setYdtpColor();
+        this.setMdtpColor();
+    }
+
+    setTfpColor(): void {
+        const tfpPercentage = this.tfpDev;
+        if (this.budgetPageInfo.budget.totalApprovedCapEx == 0 || this.budgetPageInfo.budget.totalApprovedCapEx == null) {
             this.tfpColor = 'gray';
-            // this.afpColor = 'gray';
-            // this.ydtpColor = 'gray';
-            // this.mdtpColor = 'gray';
-        }else{
+        } else {
             switch (true) {
                 case tfpPercentage === 0:
                     this.tfpColor = 'gray';
@@ -311,32 +312,44 @@ export class BudgetService {
                 default:
                     break;
             }
-            if(afpPercentage >= 10 || afpPercentage <= -10){
-                this.afpColor = 'red'
-            }else {
-                this.afpColor = 'green'
-            }
-            switch (true) {
-                case ydtpPercentage >= 10 || ydtpPercentage <= -10:
-                    this.ydtpColor = 'red';
-                    break;
-                case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
-                    this.ydtpColor = 'orange';
-                    break;
-                case ydtpPercentage === 0:
-                    this.ydtpColor = 'gray';
-                    break;
-                case ydtpPercentage > -5 && ydtpPercentage < 5:
-                    this.ydtpColor = 'green';
-                    break;
-                default:
-                    break;
-            }
-            if(mdtpPercentage >=5 || mdtpPercentage <= -5){
-                this.mdtpColor = 'red'
-            }else{
-                this.mdtpColor = 'green'
-            }
+        }
+    }
+
+    setAfpColor(): void {
+        const afpPercentage = this.afpDev;
+        if (afpPercentage >= 10 || afpPercentage <= -10) {
+            this.afpColor = 'red';
+        } else {
+            this.afpColor = 'green';
+        }
+    }
+
+    setYdtpColor(): void {
+        const ydtpPercentage = this.ytdDev;
+        switch (true) {
+            case ydtpPercentage >= 10 || ydtpPercentage <= -10:
+                this.ydtpColor = 'red';
+                break;
+            case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
+                this.ydtpColor = 'orange';
+                break;
+            case ydtpPercentage === 0:
+                this.ydtpColor = 'gray';
+                break;
+            case ydtpPercentage > -5 && ydtpPercentage < 5:
+                this.ydtpColor = 'green';
+                break;
+            default:
+                break;
+        }
+    }
+
+    setMdtpColor(): void {
+        const mdtpPercentage = this.mtdDev;
+        if (mdtpPercentage >= 5 || mdtpPercentage <= -5) {
+            this.mdtpColor = 'red';
+        } else {
+            this.mdtpColor = 'green';
         }
     }
     isAnyEntryOpen(): boolean {
