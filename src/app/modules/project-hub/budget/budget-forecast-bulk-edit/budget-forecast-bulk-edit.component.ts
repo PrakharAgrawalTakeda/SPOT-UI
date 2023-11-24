@@ -495,10 +495,16 @@ export class BudgetForecastBulkEditComponent {
                 return forecast;
             }
         });
-        this.forecastsForm.controls.find(control => control.get('isopen').value === true).patchValue({
-            y1: newAnnualTotal
-        }, {emitEvent : false});
-        this.forecastsY1[0].annualTotal = newAnnualTotal;
+        if(this.mode=='Capex'){
+            this.forecastsForm.controls.find(control => control.get('budgetData').value == "CapEx Forecast").patchValue({
+                y1: newAnnualTotal
+            }, {emitEvent : false});
+        }else {
+            this.forecastsForm.controls.find(control => control.get('budgetData').value == "OpEx Forecast").patchValue({
+                y1: newAnnualTotal
+            }, {emitEvent : false});
+        }
+        // this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
         this.year1Value = newAnnualTotal;
         this.cdRef.detectChanges();
         this.recalculateTotalCapex();

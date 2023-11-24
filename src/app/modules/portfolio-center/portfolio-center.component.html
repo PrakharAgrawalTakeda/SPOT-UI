@@ -152,15 +152,15 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                             name={{item.uniqueId}} [label]=item.name [rows]="item.linesCount">
                                         </spot-textarea>
                                     </div>
-                                    <div *ngIf="!item.isMulti" #Lookup>
+                                    <!-- <div *ngIf="!item.isMulti" #Lookup>
                                         <spot-singleselect-autocomplete *ngSwitchCase="'3'"
                                             formControlName={{item.uniqueId}} class="w-full" name={{item.uniqueId}}
                                             [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
                                             [dropDownArray]="getLookup(item.lookupParentId)" [sortByType]="'custom'"
                                             [customSortPointer]="'lookUpOrder'">
                                         </spot-singleselect-autocomplete>
-                                    </div>
-                                    <div *ngIf="item.isMulti" #multiLookup>
+                                    </div> -->
+                                    <div #multiLookup>
                                         <spot-multiselect-autocomplete *ngSwitchCase="'3'"
                                             formControlName={{item.uniqueId}} class="w-full" name={{item.uniqueId}}
                                             [label]=item.name [placeholder]=item.name [valuePointer]="'lookUpName'"
@@ -191,13 +191,13 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                                             [placeholder]="'To'">
                                         </spot-input-date>
                                     </div>
-                                    <div *ngIf="!item.isMulti" #people>
+                                    <!-- <div *ngIf="!item.isMulti" #people>
                                         <spot-singleselect-user-autocomplete *ngSwitchCase="'5'"
                                             formControlName={{item.uniqueId}} [label]=item.name name={{item.uniqueId}}
                                             [showLabel]="true" [placeholder]="'Last Name, First Name'">
                                         </spot-singleselect-user-autocomplete>
-                                    </div>
-                                    <div *ngIf="item.isMulti" #multiPeople>
+                                    </div> -->
+                                    <div #multiPeople>
                                         <spot-multiselect-user-autocomplete *ngSwitchCase="'5'"
                                             formControlName={{item.uniqueId}} [label]=item.name name={{item.uniqueId}}
                                             [showLabel]="true" [placeholder]="'Last Name, First Name'">
