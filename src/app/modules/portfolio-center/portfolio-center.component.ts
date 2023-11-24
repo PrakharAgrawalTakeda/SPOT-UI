@@ -1215,11 +1215,11 @@ export class PortfolioCenterComponent implements OnInit {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
         }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-          mainObj[i].data = []
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
+        // else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+        //   mainObj[i].data = []
+        //   dataToSend.push(mainObj[i])
+        // }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
         }
@@ -1255,26 +1255,26 @@ export class PortfolioCenterComponent implements OnInit {
             dataToSend.push(mainObj[i])
           }
         }
-        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
-          if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-            mainObj[i].data[0].value = ""
-            dataToSend.push(mainObj[i])
-          }
-          else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
-            emptyObject = {
-              "uniqueId": "",
-              "value": ""
-            }
-            mainObj[i].data.push(emptyObject)
-            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-            dataToSend.push(mainObj[i])
-          }
-          else {
-            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-            dataToSend.push(mainObj[i])
-          }
-        }
-        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
+        // else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
+        //   if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+        //     mainObj[i].data[0].value = ""
+        //     dataToSend.push(mainObj[i])
+        //   }
+        //   else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
+        //     emptyObject = {
+        //       "uniqueId": "",
+        //       "value": ""
+        //     }
+        //     mainObj[i].data.push(emptyObject)
+        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+        //     dataToSend.push(mainObj[i])
+        //   }
+        //   else {
+        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+        //     dataToSend.push(mainObj[i])
+        //   }
+        // }
+        else if (mainObj[i].dataType == 3) {
           var data = []
           if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
             for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
@@ -1306,7 +1306,7 @@ export class PortfolioCenterComponent implements OnInit {
         }
         else {
           if (mainObj[i].data.length == 0) {
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
               emptyObject = {
                 "uniqueId": "",
                 "value": ""
@@ -1315,7 +1315,7 @@ export class PortfolioCenterComponent implements OnInit {
               mainObj[i].data[0].value = null
               dataToSend.push(mainObj[i])
             }
-            else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+            else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value) ) {
               emptyObject = {
                 "uniqueId": "",
                 "value": this.localAttributeForm.controls[mainObj[i].name].value
@@ -1339,11 +1339,11 @@ export class PortfolioCenterComponent implements OnInit {
             }
           }
           else {
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value)) {
               mainObj[i].data[0].value = null
               dataToSend.push(mainObj[i])
             }
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+            if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
               mainObj[i].data = []
               emptyObject = {
                 "uniqueId": "",
@@ -1366,12 +1366,38 @@ export class PortfolioCenterComponent implements OnInit {
       }
     })
     console.log(dataToSend)
-    if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)) {
-      dataToSend = []
+    // if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0 || isNaN(x.data[0].value.length))) {
+    //   dataToSend = []
+    // }
+    var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
+    if ((LA != null || LA != undefined) && dataToSend.length > 0){
+      var CommonArray = LA.filter(o => dataToSend.some(i => i.uniqueId === o.uniqueId));
+      if (CommonArray.length != 0) {
+        for (var z = 0; z < CommonArray.length; z++) {
+          for(var j=0;j<LA.length;j++){
+            if(LA[j].uniqueId == CommonArray[z].uniqueId){
+              LA.splice(j,1)
+            }
+          }
+        }
+      }
     }
-    if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
+    for(var z=0;z<dataToSend.length;z++){
+      if(dataToSend[z].data.length == 0){
+        dataToSend.splice(z,1);
+      }
+      else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
+        dataToSend.splice(z,1);
+      }
+      else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
+        dataToSend.splice(z,1);
+      }
+    }
+    if((LA == null || LA == undefined) && dataToSend.length == 0) {
+      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    }
+    else if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
       var c = 0;
-      var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
       if (LA != null || LA != undefined) {
         var secondArray = LA.filter(o => !dataToSend.some(i => i.uniqueId === o.uniqueId));
         console.log(secondArray)
@@ -1381,8 +1407,25 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
       }
+      for(var z=0;z<dataToSend.length;z++){
+        if(dataToSend[z].data.length == 0){
+          dataToSend.splice(z,1);
+        }
+        else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
+          dataToSend.splice(z,1);
+        }
+        else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
+          dataToSend.splice(z,1);
+        }
+      }
+      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
-    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    else if ((LA != null || LA != undefined) && dataToSend.length == 0){
+      for(var i=0;i<LA.length;i++){
+        dataToSend.push(LA[i])
+      }
+      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    }
     this.filterDrawer.close()
     this.resetpage()
     this.showFilter = false
@@ -2469,7 +2512,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data[1].value))
         i.data = i.data[1].value
       }
-      else if (i.dataType == 3 && i.isMulti == true) {
+      else if (i.dataType == 3) {
         if (i.data.length == 0) {
           i.data = []
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
@@ -2488,22 +2531,22 @@ export class PortfolioCenterComponent implements OnInit {
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
         }
       }
-      else if (i.dataType == 3 && i.isMulti == false) {
-        if (i.data.length == 0) {
-          i.data = ""
-          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-        }
-        else {
-          if (this.lookup.filter(x => x.lookUpId == i.data[0].value).length == 0) {
-            i.data = ""
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-          else {
-            i.data = this.lookup.filter(x => x.lookUpId == i.data[0].value)[0]
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-        }
-      }
+      // else if (i.dataType == 3 && i.isMulti == false) {
+      //   if (i.data.length == 0) {
+      //     i.data = ""
+      //     this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //   }
+      //   else {
+      //     if (this.lookup.filter(x => x.lookUpId == i.data[0].value).length == 0) {
+      //       i.data = ""
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //     else {
+      //       i.data = this.lookup.filter(x => x.lookUpId == i.data[0].value)[0]
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //   }
+      // }
       else if (i.dataType == 4 && i.data.length == 0) {
         if (i.linesCount == null) {
           i.linesCount = 13
@@ -2527,23 +2570,23 @@ export class PortfolioCenterComponent implements OnInit {
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
         }
       }
-      else if (i.dataType == 5 && i.isMulti == false) {
-        if (i.data.length == 0) {
-          i.data = ""
-          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-        }
-        else {
-          if (i.data[0].value == null) {
-            i.data = ""
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-          else {
-            i.data = i.data[0].value
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-        }
-      }
-      else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {
+      // else if (i.dataType == 5 && i.isMulti == false) {
+      //   if (i.data.length == 0) {
+      //     i.data = ""
+      //     this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //   }
+      //   else {
+      //     if (i.data[0].value == null) {
+      //       i.data = ""
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //     else {
+      //       i.data = i.data[0].value
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //   }
+      // }
+      else if (i.dataType == 5 && i.data.length == 0) {
         if (i.data.length == 0) {
           i.data = []
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))

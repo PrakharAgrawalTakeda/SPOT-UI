@@ -56,6 +56,9 @@ export class SpotInputComponent implements OnInit, ControlValueAccessor {
 
   writeValue(val: any) {
     if (this.inputType == 'Number') {
+      if(isNaN(val)){
+        val = ""
+      }
       let value = '';
       if (val != null && val !== '') {
         value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
