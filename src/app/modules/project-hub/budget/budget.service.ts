@@ -49,6 +49,8 @@ export class BudgetService {
     y5Label: string = '';
     y0Label: string = '';
     enableForecastButton: boolean = true;
+    firstPreliminary: string = "";
+    headerLabel: string = "";
 
     constructor( public projectHubService: ProjectHubService, public fuseAlert: FuseConfirmationService) {
        console.log("Budget Service Started")
@@ -165,6 +167,7 @@ export class BudgetService {
             return parseInt(monthPart, 10)-3;
         }
         if(project.active == 'Preliminary'){
+            this.firstPreliminary = this.getMonthText((parseInt(monthPart, 10)));
             return parseInt(monthPart, 10)-4;
         }
     }

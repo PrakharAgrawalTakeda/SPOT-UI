@@ -169,7 +169,7 @@ export class BudgetComponent implements OnInit {
             mtdpCodeId: this.getLookUpName( this.budgetService.currentEntry.mtdpDeviationCodeID),
             committedSpend: forecast.find(x => x.active == 'Current').committedSpend,
         })
-        this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
+        this.budgetService.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
     }
 
 
