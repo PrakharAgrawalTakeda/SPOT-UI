@@ -213,21 +213,23 @@ export class ForecastExcelUpdateComponent {
       var projectId = ""
       var budgetId = ""
       var LBEPeriod = ""
-      if(this.ForecastForm.controls.ProjectId.value != null){
-        for(var i=0;i<this.ForecastForm.controls.ProjectId.value.length;i++){
-          projectId = projectId + this.ForecastForm.controls.ProjectId.value[i].problemId + ','
-        }
-      }
+      // if(this.ForecastForm.controls.ProjectId.value != null){
+      //   for(var i=0;i<this.ForecastForm.controls.ProjectId.value.length;i++){
+      //     projectId = projectId + this.ForecastForm.controls.ProjectId.value[i].problemId + ','
+      //   }
+      // }
+      projectId = this.ForecastForm.controls.ProjectId.value ? this.ForecastForm.controls.ProjectId.value : ''
       if(this.ForecastForm.controls.Reference.value != null){
         for(var i=0;i<this.ForecastForm.controls.Reference.value.length;i++){
           LBEPeriod = LBEPeriod + this.ForecastForm.controls.Reference.value[i].DateMasterId + ','
         }
       }
-      if(this.ForecastForm.controls.BudgetId.value != null){
-        for(var i=0;i<this.ForecastForm.controls.BudgetId.value.length;i++){
-          budgetId = budgetId + this.ForecastForm.controls.BudgetId.value[i].ID + ','
-        }
-      }
+      // if(this.ForecastForm.controls.BudgetId.value != null){
+      //   for(var i=0;i<this.ForecastForm.controls.BudgetId.value.length;i++){
+      //     budgetId = budgetId + this.ForecastForm.controls.BudgetId.value[i].ID + ','
+      //   }
+      // }
+      budgetId = this.ForecastForm.controls.BudgetId.value ? this.ForecastForm.controls.BudgetId.value : ''
       if(this.ForecastForm.controls.DataType.value == "Historical"){
         this.portfoliService.getHistoricalExcelData(projectId, budgetId).then((historicalData : any) => {
           this.showData = false
