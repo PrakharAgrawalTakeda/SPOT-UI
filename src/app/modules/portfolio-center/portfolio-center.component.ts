@@ -2101,7 +2101,11 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
         this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-        this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo[i] ? res.overallStatusInfo[i]?.overallStatusLastUpdate.split('T') : ''
+        this.projectOverview[i].overallStatusLastUpdate = 
+  res.overallStatusInfo && res.overallStatusInfo[i] && res.overallStatusInfo[i].overallStatusLastUpdate
+    ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
+    : '';
+
         this.projectOverview[i].grey = false
         this.projectOverview[i].darkGrey = false
         if(this.projectOverview[i].overallStatusLastUpdate != ''){
