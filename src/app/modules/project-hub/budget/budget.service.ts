@@ -49,6 +49,8 @@ export class BudgetService {
     y5Label: string = '';
     y0Label: string = '';
     enableForecastButton: boolean = true;
+    firstPreliminary: string = "";
+    headerLabel: string = "";
 
     constructor( public projectHubService: ProjectHubService, public fuseAlert: FuseConfirmationService) {
        console.log("Budget Service Started")
@@ -154,12 +156,18 @@ export class BudgetService {
         }
     }
     getStartingMonth(): number {
-        let project =  this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
+        let project: any;
+        if(this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast")){
+            project =  this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast");
+        }else{
+            project = this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
+        }
         let monthPart = project.periodName.slice(-2);
         if(project.active == 'Current'){
             return parseInt(monthPart, 10)-3;
         }
         if(project.active == 'Preliminary'){
+            this.firstPreliminary = this.getMonthText((parseInt(monthPart, 10)));
             return parseInt(monthPart, 10)-4;
         }
     }
@@ -174,9 +182,10 @@ export class BudgetService {
         if(startingMonth == -3){
             startingMonth = 9;
         }
-        if(startingMonth == 0){
-            startingMonth = 12;
-        }
+        // if(startingMonth == 0){
+        //     startingMonth = 12;
+        // }
+        // // startingMonth = 0;
         const monthNumber = this.getMonthNumber(month);
         return startingMonth <= monthNumber;
     }
@@ -279,16 +288,17 @@ export class BudgetService {
         }
     }
     setTextColors(): void {
-        const tfpPercentage =this.tfpDev;
-        const afpPercentage = this.afpDev;
-        const ydtpPercentage = this.ytdDev;
-        const mdtpPercentage = this.mtdDev;
-        if(this.budgetPageInfo.budget.totalApprovedCapEx == 0 || this.budgetPageInfo.budget.totalApprovedCapEx == null){
+        this.setTfpColor();
+        this.setAfpColor();
+        this.setYdtpColor();
+        this.setMdtpColor();
+    }
+
+    setTfpColor(): void {
+        const tfpPercentage = this.tfpDev;
+        if (this.budgetPageInfo.budget.totalApprovedCapEx == 0 || this.budgetPageInfo.budget.totalApprovedCapEx == null) {
             this.tfpColor = 'gray';
-            this.afpColor = 'gray';
-            this.ydtpColor = 'gray';
-            this.mdtpColor = 'gray';
-        }else{
+        } else {
             switch (true) {
                 case tfpPercentage === 0:
                     this.tfpColor = 'gray';
@@ -305,32 +315,44 @@ export class BudgetService {
                 default:
                     break;
             }
-            if(afpPercentage >= 10 || afpPercentage <= -10){
-                this.afpColor = 'red'
-            }else {
-                this.afpColor = 'green'
-            }
-            switch (true) {
-                case ydtpPercentage >= 10 || ydtpPercentage <= -10:
-                    this.ydtpColor = 'red';
-                    break;
-                case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
-                    this.ydtpColor = 'orange';
-                    break;
-                case ydtpPercentage === 0:
-                    this.ydtpColor = 'gray';
-                    break;
-                case ydtpPercentage > -5 && ydtpPercentage < 5:
-                    this.ydtpColor = 'green';
-                    break;
-                default:
-                    break;
-            }
-            if(mdtpPercentage >=5 || mdtpPercentage <= -5){
-                this.mdtpColor = 'red'
-            }else{
-                this.mdtpColor = 'green'
-            }
+        }
+    }
+
+    setAfpColor(): void {
+        const afpPercentage = this.afpDev;
+        if (afpPercentage >= 10 || afpPercentage <= -10) {
+            this.afpColor = 'red';
+        } else {
+            this.afpColor = 'green';
+        }
+    }
+
+    setYdtpColor(): void {
+        const ydtpPercentage = this.ytdDev;
+        switch (true) {
+            case ydtpPercentage >= 10 || ydtpPercentage <= -10:
+                this.ydtpColor = 'red';
+                break;
+            case (ydtpPercentage > -10 && ydtpPercentage <= -5) || (ydtpPercentage >= 5 && ydtpPercentage < 10):
+                this.ydtpColor = 'orange';
+                break;
+            case ydtpPercentage === 0:
+                this.ydtpColor = 'gray';
+                break;
+            case ydtpPercentage > -5 && ydtpPercentage < 5:
+                this.ydtpColor = 'green';
+                break;
+            default:
+                break;
+        }
+    }
+
+    setMdtpColor(): void {
+        const mdtpPercentage = this.mtdDev;
+        if (mdtpPercentage >= 5 || mdtpPercentage <= -5) {
+            this.mdtpColor = 'red';
+        } else {
+            this.mdtpColor = 'green';
         }
     }
     isAnyEntryOpen(): boolean {

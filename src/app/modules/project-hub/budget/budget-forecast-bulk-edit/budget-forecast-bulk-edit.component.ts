@@ -22,8 +22,8 @@ export class BudgetForecastBulkEditComponent {
                 public fuseAlert: FuseConfirmationService, private _Activatedroute: ActivatedRoute, private cdRef: ChangeDetectorRef) {
         this.forecastsForm.valueChanges.subscribe(() => {
             this.formValue();
-            const isFormChanged = this.isFormChanged();
-            if (isFormChanged) {
+            this.projecthubservice.isFormChanged = JSON.stringify(this.forecastsDb) != JSON.stringify(this.forecastsSubmit);
+            if(this.projecthubservice.isFormChanged){
                 window.onbeforeunload = this.showConfirmationMessage;
             }
         });
@@ -34,11 +34,6 @@ export class BudgetForecastBulkEditComponent {
                 window.onbeforeunload = this.showConfirmationMessage;
             }
         })
-    }
-    private isFormChanged(): boolean {
-        const currentFormValue = JSON.stringify(this.forecastsDb);
-        const originalFormValue = JSON.stringify(this.forecastsSubmit);
-        return currentFormValue !== originalFormValue;
     }
     budgetForecastForm = new FormGroup({
         tfpPercentage: new FormControl(0),
@@ -73,11 +68,10 @@ export class BudgetForecastBulkEditComponent {
     forecastsY1Form = new FormArray([])
     committedSpend: number = 0;
     csTable = []
-    year1Value = 0;
-    headerLabel: string = "";
+    year1Value = 1;
+    preliminaryLabel: string = "";
     currentEntry: any;
     openEntry: any;
-    firstPreliminary: string = "";
     startingMonth: number;
     editable: boolean = true;
     tfpDev: number;
@@ -272,6 +266,7 @@ export class BudgetForecastBulkEditComponent {
                     userName: new FormControl(i.userName),
                 }), { emitEvent: false })
             }
+            this.year1Value = this.forecasts.find(x => x.isopen === true).y1;
             for (var i of this.forecastsY1) {
                 this.forecastsY1Form.push(new FormGroup({
                     active: new FormControl(i.active),
@@ -479,6 +474,7 @@ export class BudgetForecastBulkEditComponent {
 
     recalculateY1() {
         const isOpenEntry = this.forecastsY1Form.controls[0]
+        const y1Entry = this.forecastsForm.controls.find(control => control.get('isopen').value === true);
         const newAnnualTotal =
             (isNaN(isOpenEntry.value.apr) ? 0 : isOpenEntry.value.apr) +
             (isNaN(isOpenEntry.value.may) ? 0 : isOpenEntry.value.may) +
@@ -499,10 +495,16 @@ export class BudgetForecastBulkEditComponent {
                 return forecast;
             }
         });
-        this.forecastsForm.controls.find(control => control.get('isopen').value === true).patchValue({
-            y1: newAnnualTotal
-        }, {emitEvent : false});
-        this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
+        if(this.mode=='Capex'){
+            this.forecastsForm.controls.find(control => control.get('budgetData').value == "CapEx Forecast").patchValue({
+                y1: newAnnualTotal
+            }, {emitEvent : false});
+        }else {
+            this.forecastsForm.controls.find(control => control.get('budgetData').value == "OpEx Forecast").patchValue({
+                y1: newAnnualTotal
+            }, {emitEvent : false});
+        }
+        // this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
         this.year1Value = newAnnualTotal;
         this.cdRef.detectChanges();
         this.recalculateTotalCapex();
@@ -517,6 +519,9 @@ export class BudgetForecastBulkEditComponent {
             (isNaN(isOpenEntry.value.y3) ? 0 : isOpenEntry.value.y3) +
             (isNaN(isOpenEntry.value.y4) ? 0 : isOpenEntry.value.y4) +
             (isNaN(isOpenEntry.value.y5) ? 0 : isOpenEntry.value.y5);
+        isOpenEntry.patchValue({
+            cumulativeTotal: newTotal
+        });
         const isOpenForecast = this.forecasts.find(value => value.isopen === true);
         if (isOpenForecast) {
             this.openEntry.cumulativeTotal = newTotal;
@@ -529,6 +534,7 @@ export class BudgetForecastBulkEditComponent {
             });
             this.cdRef.detectChanges();
         }
+
     }
     recalculateTfp() {
         const totalCapexForecast = this.currentEntry?.cumulativeTotal || 0;
@@ -550,6 +556,8 @@ export class BudgetForecastBulkEditComponent {
             tfpPercentage:  this.tfpDev,
             tfpValue: totalCapexForecast - totalApprovedCapEx,
         }, {emitEvent : false});
+        this.budgetService.tfpDev = this.tfpDev;
+        this.budgetService.setTfpColor();
     }
     recalculateAFP() {
         const currentAnnualTotal = this.currentEntry?.annualTotal || 0;
@@ -570,6 +578,8 @@ export class BudgetForecastBulkEditComponent {
             afpPercentage: this.afpDev,
             afpValue: currentAnnualTotal - planAnnualTotal,
         });
+        this.budgetService.afpDev = this.afpDev;
+        this.budgetService.setAfpColor();
     }
     recalculateYtdp() {
         if (this.budgetService.ytdCurrentTotal === 0 && this.budgetService.ytdPlanTotal === 0) {
@@ -587,6 +597,8 @@ export class BudgetForecastBulkEditComponent {
             ytdpPercentage: this.ytdDev,
             ytdpValue: this.budgetService.ytdCurrentTotal - this.budgetService.ytdPlanTotal,
         });
+        this.budgetService.ytdDev = this.ytdDev;
+        this.budgetService.setYdtpColor();
     }
     recalculateMtdp() {
         const currentMtdpDate = new Date(this.currentEntry.financialMonthStartDate)
@@ -610,6 +622,8 @@ export class BudgetForecastBulkEditComponent {
             mtdpPercentage:  this.mtdDev,
             mtdpValue:this.currentEntry[this.budgetService.getMonthText(currentMtdpDate.getMonth())]- this.planActive[this.budgetService.getMonthText(currentMtdpDate.getMonth())],
         });
+        this.budgetService.mtdDev = this.mtdDev;
+        this.budgetService.setMdtpColor();
     }
     onPaste(event: ClipboardEvent, rowIndex: number, field: string): void {
         event.preventDefault();
@@ -689,7 +703,7 @@ export class BudgetForecastBulkEditComponent {
         })
         this.budgetForecastForm.controls.totalApprovedCapex.disable()
         this.budgetService.setTextColors();
-        this.headerLabel = "Current " +  forecast.find(x => x.active == 'Current').periodName + " versus Plan " +forecast.find(x => x.active == 'Plan').periodName
+        this.preliminaryLabel =  forecast.find(x => x.active == 'Preliminary') ? ("Preliminary " + forecast.find(x => x.active == 'Preliminary').periodName) : '';
     }
 
     getLookUpName(id: string): string {
@@ -699,7 +713,7 @@ export class BudgetForecastBulkEditComponent {
         if(!isEditable || !row.isopen){
             return 'closed'
         }
-        if(this.firstPreliminary==month){
+        if(this.budgetService.firstPreliminary==month){
             return 'blue-text'
         }
     }

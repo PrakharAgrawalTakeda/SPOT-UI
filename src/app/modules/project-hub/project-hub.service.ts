@@ -802,7 +802,7 @@ export class ProjectHubService {
     this.fuseDrawerSmall = fuseDrawerSmall
   }
   drawerOpenedChanged(event: any): void {
-
+      window.onbeforeunload = null;
     if (this.drawerOpenedright != event) {
       if (event == false) {
         this.drawerOpenedright = event

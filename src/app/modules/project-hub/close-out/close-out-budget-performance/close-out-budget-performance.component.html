@@ -60,7 +60,7 @@
                                     </ngx-datatable-column>
                                     <ngx-datatable-column name="Remaining Spend (Forecast)" prop="forecast"  [flexGrow]="1.5" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
                                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                            <p class="text-right">{{value | number: '1.' }}</p>
+                                            <p class="text-right">{{value | number:'1.0-0'  }}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
                                     <ngx-datatable-column name="Variance" prop="variance"   [flexGrow]="0.75" [headerClass]="getHeaderClass" [resizeable]="false" [draggable]="false">
@@ -83,16 +83,16 @@
                                             <p >{{value | date:'dd-MMM-yyyy'}}</p>
                                         </ng-template>
                                     </ngx-datatable-column>
-                                    <ngx-datatable-column name="Approved" prop="approved" [flexGrow]="0.75">
-                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                            <p >{{value | date:'dd-MMM-yyyy'}}</p>
-                                        </ng-template>
-                                    </ngx-datatable-column>
-                                    <ngx-datatable-column name="Variance (Days)" prop="variance"  [flexGrow]="1" [headerClass]="getHeaderClass">
-                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                            <p class="text-right">{{value}}</p>
-                                        </ng-template>
-                                    </ngx-datatable-column>
+<!--                                    <ngx-datatable-column name="Approved" prop="approved" [flexGrow]="0.75">-->
+<!--                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>-->
+<!--                                            <p >{{value | date:'dd-MMM-yyyy'}}</p>-->
+<!--                                        </ng-template>-->
+<!--                                    </ngx-datatable-column>-->
+<!--                                    <ngx-datatable-column name="Variance (Days)" prop="variance"  [flexGrow]="1" [headerClass]="getHeaderClass">-->
+<!--                                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>-->
+<!--                                            <p class="text-right">{{value}}</p>-->
+<!--                                        </ng-template>-->
+<!--                                    </ngx-datatable-column>-->
                                 </ngx-datatable>
                                 </div>
                             </div>
