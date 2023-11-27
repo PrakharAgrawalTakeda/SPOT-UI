@@ -7,19 +7,22 @@
                     <form class="grid-cols-2 grid" style="width: 80vw;" [formGroup]="ForecastForm">
                         <spot-multiselect-autocomplete class="custom" formControlName="Reference"
                             name="Reference" [label]="'Reference'" [placeholder]="'Reference'"
-                            [valuePointer]="'periodName'" [dropDownArray]="LookupDataLBE">
+                            [valuePointer]="'periodName'" [dropDownArray]="LookupDataLBE" [idPointer]="'periodName'">
                         </spot-multiselect-autocomplete>
                         <spot-select class="custom" formControlName="DataType" name="DataType" [showNoneOption]="false" [label]="'Data For'" [placeholder]="'Data For'" [dropDownArrayType]="'string'"
                         [dropDownArray]="Type"></spot-select>
-                        <app-spot-multiselect-project-autocomplete class="custom" formControlName="ProjectId" [placeholder]="'Project Ids'" [label]="'Project Ids'" name="ProjectId" [showLabel]="true">
-                        </app-spot-multiselect-project-autocomplete>
-                        <!-- <spot-select class="custom" formControlName="BudgetId" name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'" [dropDownArrayType]="'string'"
-                        [dropDownArray]="LookupDataBudget">
-                        </spot-select> -->
-                        <spot-multiselect-autocomplete class="custom" formControlName="BudgetId"
+                        <!-- <app-spot-multiselect-project-autocomplete class="custom" formControlName="ProjectId" [placeholder]="'Project Ids'" [label]="'Project Ids'" name="ProjectId" [showLabel]="true">
+                        </app-spot-multiselect-project-autocomplete> -->
+                        <spot-input class="custom" formControlName="ProjectId" name="ProjectId"
+                            [label]="'Project Ids'" [placeholder]="'Project Ids'">
+                        </spot-input>
+                        <!-- <spot-multiselect-autocomplete class="custom" formControlName="BudgetId"
                             name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'"
-                            [valuePointer]="'ID'" [dropDownArray]="LookupDataBudget">
-                        </spot-multiselect-autocomplete>
+                            [valuePointer]="'ID'" [dropDownArray]="LookupDataBudget" [idPointer]="'ID'">
+                        </spot-multiselect-autocomplete> -->
+                        <spot-input class="custom" formControlName="BudgetId" name="BudgetId"
+                            [label]="'Budget Ids'" [placeholder]="'Budget Ids'">
+                        </spot-input>
                     </form>
                     <div class="flex items-center justify-center" style="bottom: 45px; position: relative;">
                         <button style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="getData()"> Get Data
