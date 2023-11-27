@@ -207,6 +207,7 @@ export class ProjectHubComponent implements OnInit {
             this.projectType = this.projectDetails.problemType;
             this.titleService.setTitle(this.projectDetails.problemId + " - " + this.projectDetails.problemTitle)
             this.projecthubservice.currentSpotId = this.projectDetails.problemId;
+            this.projecthubservice.projectName = this.projectDetails.problemTitle;
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
             mainNavComponent.refresh()

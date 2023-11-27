@@ -33,11 +33,11 @@ export class BudgetService {
     ytdPlanTotal: number = 0;
     ytdCurrentTotal: number = 0;
     planActive: any;
-     tfpDev: number;
-     ytdDev: number;
-     mtdDev: number;
-     afpDev: number;
-    localCurrency:any = [];
+    tfpDev: number;
+    ytdDev: number;
+    mtdDev: number;
+    afpDev: number;
+    localCurrency: any = [];
     tfpColor: string;
     afpColor: string;
     ydtpColor: string;
@@ -52,9 +52,10 @@ export class BudgetService {
     firstPreliminary: string = "";
     headerLabel: string = "";
 
-    constructor( public projectHubService: ProjectHubService, public fuseAlert: FuseConfirmationService) {
-       console.log("Budget Service Started")
+    constructor(public projectHubService: ProjectHubService, public fuseAlert: FuseConfirmationService) {
+        console.log("Budget Service Started")
     }
+
     checkIsCellEditable() {
         this.aprEditable = this.isCellEditable('apr')
         this.mayEditable = this.isCellEditable('may')
@@ -69,52 +70,53 @@ export class BudgetService {
         this.febEditable = this.isCellEditable('feb')
         this.marEditable = this.isCellEditable('mar')
     }
-    calculateForecast(){
-        if(!this.aprEditable){
-            this.ytdPlanTotal +=  this.planActive.apr;
+
+    calculateForecast() {
+        if (!this.aprEditable) {
+            this.ytdPlanTotal += this.planActive.apr;
             this.ytdCurrentTotal += this.currentEntry.apr;
         }
-        if(!this.mayEditable){
-            this.ytdPlanTotal +=  this.planActive.may;
+        if (!this.mayEditable) {
+            this.ytdPlanTotal += this.planActive.may;
             this.ytdCurrentTotal += this.currentEntry.may;
         }
-        if(!this.junEditable){
-            this.ytdPlanTotal +=  this.planActive.jun;
+        if (!this.junEditable) {
+            this.ytdPlanTotal += this.planActive.jun;
             this.ytdCurrentTotal += this.currentEntry.jun;
         }
-        if(!this.julEditable){
+        if (!this.julEditable) {
             this.ytdPlanTotal += this.planActive.jul;
             this.ytdCurrentTotal += this.currentEntry.jul;
         }
-        if(!this.augEditable){
+        if (!this.augEditable) {
             this.ytdPlanTotal += this.planActive.aug;
             this.ytdCurrentTotal += this.currentEntry.aug;
         }
-        if(!this.sepEditable){
+        if (!this.sepEditable) {
             this.ytdPlanTotal += this.planActive.sep;
             this.ytdCurrentTotal += this.currentEntry.sep;
         }
-        if(!this.octEditable){
+        if (!this.octEditable) {
             this.ytdPlanTotal += this.planActive.oct;
             this.ytdCurrentTotal += this.currentEntry.oct;
         }
-        if(!this.novEditable){
+        if (!this.novEditable) {
             this.ytdPlanTotal += this.planActive.nov;
             this.ytdCurrentTotal += this.currentEntry.nov;
         }
-        if(!this.decEditable){
+        if (!this.decEditable) {
             this.ytdPlanTotal += this.planActive.dec;
             this.ytdCurrentTotal += this.currentEntry.dec;
         }
-        if(!this.janEditable){
+        if (!this.janEditable) {
             this.ytdPlanTotal += this.planActive.jan;
             this.ytdCurrentTotal += this.currentEntry.jan;
         }
-        if(!this.febEditable){
+        if (!this.febEditable) {
             this.ytdPlanTotal += this.planActive.feb;
             this.ytdCurrentTotal += this.currentEntry.feb;
         }
-        if(!this.marEditable){
+        if (!this.marEditable) {
             this.ytdPlanTotal += this.planActive.mar;
             this.ytdCurrentTotal += this.currentEntry.mar;
         }
@@ -155,31 +157,33 @@ export class BudgetService {
                 return 12;
         }
     }
+
     getStartingMonth(): number {
         let project: any;
-        if(this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast")){
-            project =  this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast");
-        }else{
+        if (this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast")) {
+            project = this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Preliminary' && x.budgetData == "CapEx Forecast");
+        } else {
             project = this.budgetPageInfo.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
         }
         let monthPart = project.periodName.slice(-2);
-        if(project.active == 'Current'){
-            return parseInt(monthPart, 10)-3;
+        if (project.active == 'Current') {
+            return parseInt(monthPart, 10) - 3;
         }
-        if(project.active == 'Preliminary'){
+        if (project.active == 'Preliminary') {
             this.firstPreliminary = this.getMonthText((parseInt(monthPart, 10)));
-            return parseInt(monthPart, 10)-4;
+            return parseInt(monthPart, 10) - 4;
         }
     }
+
     isCellEditable(month: string): boolean {
         let startingMonth = this.startingMonth;
-        if(startingMonth == -1){
+        if (startingMonth == -1) {
             startingMonth = 11;
         }
-        if(startingMonth == -2){
+        if (startingMonth == -2) {
             startingMonth = 10;
         }
-        if(startingMonth == -3){
+        if (startingMonth == -3) {
             startingMonth = 9;
         }
         // if(startingMonth == 0){
@@ -189,6 +193,7 @@ export class BudgetService {
         const monthNumber = this.getMonthNumber(month);
         return startingMonth <= monthNumber;
     }
+
     recalculateTfp() {
         const totalCapexForecast = this.currentEntry?.cumulativeTotal || 0;
         const totalApprovedCapEx = this.budgetPageInfo.budget.totalApprovedCapEx || 0;
@@ -198,14 +203,14 @@ export class BudgetService {
             this.tfpDev = 100;
         } else if (totalCapexForecast < 0 && totalApprovedCapEx === 0) {
             this.tfpDev = -100;
-        }  else if (totalCapexForecast === 0 && totalApprovedCapEx != 0) {
+        } else if (totalCapexForecast === 0 && totalApprovedCapEx != 0) {
             this.tfpDev = -100;
-        }
-        else {
-            this.tfpDev =  (totalCapexForecast-totalApprovedCapEx)*100 / Math.abs(totalApprovedCapEx);
+        } else {
+            this.tfpDev = (totalCapexForecast - totalApprovedCapEx) * 100 / Math.abs(totalApprovedCapEx);
         }
         this.tfpValue = (this.currentEntry.cumulativeTotal || 0) - (this.budgetPageInfo.budget.totalApprovedCapEx || 0)
     }
+
     recalculateAFP() {
         const currentAnnualTotal = this.currentEntry?.annualTotal || 0;
         const planAnnualTotal = this.planActive?.annualTotal || 0;
@@ -215,14 +220,14 @@ export class BudgetService {
             this.afpDev = 100;
         } else if (currentAnnualTotal < 0 && planAnnualTotal === 0) {
             this.afpDev = -100;
-        }else if (currentAnnualTotal === 0 && planAnnualTotal != 0) {
+        } else if (currentAnnualTotal === 0 && planAnnualTotal != 0) {
             this.afpDev = -100;
-        }
-        else {
-            this.afpDev = (currentAnnualTotal - planAnnualTotal)*100 / Math.abs(planAnnualTotal);
+        } else {
+            this.afpDev = (currentAnnualTotal - planAnnualTotal) * 100 / Math.abs(planAnnualTotal);
         }
         this.afpValue = currentAnnualTotal - planAnnualTotal
     }
+
     recalculateYtdp() {
         if (this.ytdCurrentTotal === 0 && this.ytdPlanTotal === 0) {
             this.ytdDev = 0;
@@ -233,10 +238,11 @@ export class BudgetService {
         } else if (this.ytdCurrentTotal === 0 && this.ytdPlanTotal != 0) {
             this.ytdDev = -100;
         } else {
-            this.ytdDev = (this.ytdCurrentTotal - this.ytdPlanTotal)*100 / Math.abs(this.ytdPlanTotal);
+            this.ytdDev = (this.ytdCurrentTotal - this.ytdPlanTotal) * 100 / Math.abs(this.ytdPlanTotal);
         }
         this.ytdpValue = this.ytdCurrentTotal - this.ytdPlanTotal
     }
+
     recalculateMtdp() {
         const currentMtdpDate = new Date(this.currentEntry.financialMonthStartDate)
         const currentMonthText = this.getMonthText(currentMtdpDate.getMonth());
@@ -249,14 +255,14 @@ export class BudgetService {
             this.mtdDev = 100;
         } else if (currentMonthValue < 0 && planMonthValue === 0) {
             this.mtdDev = -100;
-        }else if (currentMonthValue === 0 && planMonthValue != 0) {
+        } else if (currentMonthValue === 0 && planMonthValue != 0) {
             this.mtdDev = -100;
+        } else {
+            this.mtdDev = (currentMonthValue - planMonthValue) * 100 / Math.abs(planMonthValue);
         }
-        else {
-            this.mtdDev =  (currentMonthValue-planMonthValue)*100 / Math.abs(planMonthValue);
-        }
-        this.mtdpValue = this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] -  this.planActive[this.getMonthText(currentMtdpDate.getMonth())]
+        this.mtdpValue = this.currentEntry[this.getMonthText(currentMtdpDate.getMonth())] - this.planActive[this.getMonthText(currentMtdpDate.getMonth())]
     }
+
     getMonthText(month: number): string {
         switch (month) {
             case 1:
@@ -287,6 +293,7 @@ export class BudgetService {
                 return '';
         }
     }
+
     setTextColors(): void {
         this.setTfpColor();
         this.setAfpColor();
@@ -355,44 +362,50 @@ export class BudgetService {
             this.mdtpColor = 'green';
         }
     }
+
     isAnyEntryOpen(): boolean {
         return this.budgetPageInfo.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast").some(entry => entry.isopen);
     }
+
     getAfdDeviationCodes(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '6929db50-f72b-4ecc-9a15-7ca598f8323d')
     }
+
     getMtdpDeviationCodes(): any {
         return this.projectHubService.lookUpMaster.filter(x => x.lookUpParentId == '1391c70a-088d-435a-9bdf-c4ed6d88c09d')
     }
+
     setLabels() {
         let year = new Date(this.openEntry.financialMonthStartDate).getFullYear();
-        let year2 = year+1;
-        let year3 = year+2;
-        let year4 = year+3;
-        let year5 = year+4;
-        let year6 = year+5;
-        this.y0Label= 'FY' + year;
-        this.y1Label= 'FY' + year2;
-        this.y2Label= 'FY' + year3;
-        this.y3Label= 'FY' + year4;
-        this.y4Label= 'FY' + year5;
-        this.y5Label= 'FY' + year6 + '+';
+        let year2 = year + 1;
+        let year3 = year + 2;
+        let year4 = year + 3;
+        let year5 = year + 4;
+        let year6 = year + 5;
+        this.y0Label = 'FY' + year;
+        this.y1Label = 'FY' + year2;
+        this.y2Label = 'FY' + year3;
+        this.y3Label = 'FY' + year4;
+        this.y4Label = 'FY' + year5;
+        this.y5Label = 'FY' + year6 + '+';
     }
-    forecastEditButtonEnabler(){
-        if(this.projectHubService.roleControllerControl.budgetAdmin){
+
+    forecastEditButtonEnabler() {
+        if (this.projectHubService.roleControllerControl.budgetAdmin) {
             this.enableForecastButton = true;
-        }else{
+        } else {
             if (this.isAnyEntryOpen()) {
-                if(!this.projectHubService.roleControllerControl.projectTeam){
+                if (!this.projectHubService.roleControllerControl.projectTeam) {
                     this.enableForecastButton = false;
                 }
-            }else{
+            } else {
                 this.enableForecastButton = false;
             }
         }
     }
-    forecastEditButtonClick(){
-        if(this.projectHubService.projectState=='Cancelled'){
+
+    forecastEditButtonClick() {
+        if (this.projectHubService.projectState == 'Cancelled') {
             var comfirmConfig: FuseConfirmationConfig = {
                 "title": "",
                 "message": "It is not possible to edit forecast information to a project which is in cancelled state.",
@@ -415,7 +428,7 @@ export class BudgetService {
                 "dismissible": true
             }
             this.fuseAlert.open(comfirmConfig)
-        }else{
+        } else {
             this.projectHubService.toggleDrawerOpen('BudgetForecastCapexBulkEdit', '', this.budgetPageInfo, this.id, true)
         }
     }

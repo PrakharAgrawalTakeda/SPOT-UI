@@ -79,9 +79,11 @@ export class BudgetForecastBulkEditComponent {
     mtdDev: number;
     afpDev: number;
     planActive: any;
+    projectName: string = "";
 
     ngOnChanges(): void {
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
+        this.projectName = this.projecthubservice.currentSpotId + " - " + this.projecthubservice.projectName;
         if (this.mode == "Capex") {
             this.currentEntry = this.projecthubservice.all.budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
             this.openEntry = this.projecthubservice.all.budgetForecasts.find(x => x.isopen === true && x.budgetData == "CapEx Forecast");
@@ -466,9 +468,9 @@ export class BudgetForecastBulkEditComponent {
         this.forecasts.find(value => value.isopen === true).annualTotal = newAnnualTotal;
         this.recalculateTotalCapex()
         this.recalculateTfp();
-        this.recalculateYtdp();
+        // this.recalculateYtdp();
         this.recalculateAFP();
-        this.recalculateMtdp();
+        // this.recalculateMtdp();
         this.budgetService.setTextColors();
     }
 
@@ -496,16 +498,39 @@ export class BudgetForecastBulkEditComponent {
             }
         });
         if(this.mode=='Capex'){
-            this.forecastsForm.controls.find(control => control.get('budgetData').value == "CapEx Forecast").patchValue({
-                y1: newAnnualTotal
-            }, {emitEvent : false});
+            if(this.forecasts.find(x => x.active == 'Preliminary')){
+                this.forecasts.find(x => x.active == 'Preliminary').y1 = newAnnualTotal;
+                this.forecastsY1.find(x => x.active == 'Preliminary').annualTotal = newAnnualTotal;
+                this.year1Value =newAnnualTotal;
+                this.forecastsForm.controls.find(control => control.get('budgetData').value == "CapEx Forecast" && control.get('active').value=="Preliminary").patchValue({
+                    y1: newAnnualTotal
+                }, {emitEvent : false});
+            }else{
+                this.forecasts.find(x => x.active == 'Current').y1 = newAnnualTotal;
+                this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
+                this.year1Value =newAnnualTotal;
+                this.forecastsForm.controls.find(control => control.get('budgetData').value == "CapEx Forecast" && control.get('active').value=="Current").patchValue({
+                    y1: newAnnualTotal
+                } );
+            }
         }else {
-            this.forecastsForm.controls.find(control => control.get('budgetData').value == "OpEx Forecast").patchValue({
-                y1: newAnnualTotal
-            }, {emitEvent : false});
+            if(this.forecasts.find(x => x.active == 'Preliminary')){
+                this.forecasts.find(x => x.active == 'Preliminary').y1 = newAnnualTotal;
+                this.forecastsY1.find(x => x.active == 'Preliminary').annualTotal = newAnnualTotal;
+                this.year1Value =newAnnualTotal;
+                this.forecastsForm.controls.find(control => control.get('budgetData').value == "OpEx Forecast" && control.get('active').value=="Preliminary").patchValue({
+                    y1: newAnnualTotal
+                }, {emitEvent : false});
+            }else{
+                this.forecasts.find(x => x.active == 'Current').y1 = newAnnualTotal;
+                this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
+                this.year1Value =newAnnualTotal;
+                this.forecastsForm.controls.find(control => control.get('budgetData').value == "OpEx Forecast" && control.get('active').value=="Current").patchValue({
+                    y1: newAnnualTotal
+                }, {emitEvent : false});
+            }
         }
-        // this.forecastsY1.find(x => x.active == 'Current').annualTotal = newAnnualTotal;
-        this.year1Value = newAnnualTotal;
+
         this.cdRef.detectChanges();
         this.recalculateTotalCapex();
     }
@@ -534,7 +559,7 @@ export class BudgetForecastBulkEditComponent {
             });
             this.cdRef.detectChanges();
         }
-
+        this.formValue()
     }
     recalculateTfp() {
         const totalCapexForecast = this.currentEntry?.cumulativeTotal || 0;

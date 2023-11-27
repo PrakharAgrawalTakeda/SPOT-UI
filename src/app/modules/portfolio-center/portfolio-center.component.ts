@@ -1382,17 +1382,28 @@ export class PortfolioCenterComponent implements OnInit {
         }
       }
     }
+    var index = []
+    var updateArray = []
     for(var z=0;z<dataToSend.length;z++){
       if(dataToSend[z].data.length == 0){
-        dataToSend.splice(z,1);
+        // updateArray.splice(z,1);
       }
       else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
-        dataToSend.splice(z,1);
+        // updateArray.splice(z,1);
       }
       else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
-        dataToSend.splice(z,1);
+        // updateArray.splice(z,1);
+      }
+      else{
+        index.push(z)
       }
     }
+    if(index.length > 0){
+      for(var i=0;i<index.length;i++){
+        updateArray.push(dataToSend[index[i]])
+      }
+    }
+    dataToSend = updateArray
     if((LA == null || LA == undefined) && dataToSend.length == 0) {
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
@@ -1407,17 +1418,28 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
       }
+      var newIndex= []
+      var newArray = []
       for(var z=0;z<dataToSend.length;z++){
         if(dataToSend[z].data.length == 0){
-          dataToSend.splice(z,1);
+          // newArray.splice(z,1);
         }
         else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
-          dataToSend.splice(z,1);
+          // newArray.splice(z,1);
         }
         else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
-          dataToSend.splice(z,1);
+          // newArray.splice(z,1);
+        }
+        else{
+          newIndex.push(z)
         }
       }
+      if(newIndex.length > 0){
+        for(var i=0;i<newIndex.length;i++){
+          newArray.push(dataToSend[newIndex[i]])
+        }
+      }
+      dataToSend = newArray
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
     else if ((LA != null || LA != undefined) && dataToSend.length == 0){
@@ -2079,7 +2101,11 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
         this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-        this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo[i] ? res.overallStatusInfo[i]?.overallStatusLastUpdate.split('T') : ''
+        this.projectOverview[i].overallStatusLastUpdate = 
+  res.overallStatusInfo && res.overallStatusInfo[i] && res.overallStatusInfo[i].overallStatusLastUpdate
+    ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
+    : '';
+
         this.projectOverview[i].grey = false
         this.projectOverview[i].darkGrey = false
         if(this.projectOverview[i].overallStatusLastUpdate != ''){

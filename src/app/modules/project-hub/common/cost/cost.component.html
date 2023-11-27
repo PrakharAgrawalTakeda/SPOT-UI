@@ -1,11 +1,10 @@
 <ng-container *ngIf="viewContent">
     <div class="w-full min-w-0 p-8 pt-0" #container *ngIf="viewContent">
         <!-- Enter Content here-->
-
         <form class="w-full" [formGroup]="costFundingForm">
 
-            <div class="flex justify-end items-end">
-                <div></div>
+            <div class="flex  justify-between">
+                <div class="mr-4 text-xl font-medium tracking-tight leading-6 truncate text-primary">Cost</div>
                 <div>
                     <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
                         (click)="projectHubService.toggleDrawerOpen(costEditType, '' , cost , id)"
