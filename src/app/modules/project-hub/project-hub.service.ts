@@ -37,6 +37,7 @@ export class ProjectHubService {
   projectChildren: any[];
   projects: any[];
   currentSpotId: string;
+  projectName: string;
   isStrategicIniative: boolean = false;
 
 
