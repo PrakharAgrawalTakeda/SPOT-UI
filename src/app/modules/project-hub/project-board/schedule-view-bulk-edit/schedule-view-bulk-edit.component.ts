@@ -578,11 +578,11 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         }
         return false
     }
-    getHeight(): string {
+    getRIClass(): string {
         if (this.mode === 'Normal' && this.scheduleData.projectData.isSprproject && this.projecthubservice.roleControllerControl.roleId !== '0E83F6BE-79BE-426A-A316-F523FFAECC4F') {
-            return 'calc(100vh - 262px)';
+            return 'datatable-schedule-1';
         } else {
-            return 'calc(100vh - 210px)';
+            return 'datatable-schedule-2';
         }
     }
     toggleSchedule(event: any) {

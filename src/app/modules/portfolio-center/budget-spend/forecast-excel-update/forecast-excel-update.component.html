@@ -7,19 +7,22 @@
                     <form class="grid-cols-2 grid" style="width: 80vw;" [formGroup]="ForecastForm">
                         <spot-multiselect-autocomplete class="custom" formControlName="Reference"
                             name="Reference" [label]="'Reference'" [placeholder]="'Reference'"
-                            [valuePointer]="'periodName'" [dropDownArray]="LookupDataLBE">
+                            [valuePointer]="'periodName'" [dropDownArray]="LookupDataLBE" [idPointer]="'periodName'">
                         </spot-multiselect-autocomplete>
                         <spot-select class="custom" formControlName="DataType" name="DataType" [showNoneOption]="false" [label]="'Data For'" [placeholder]="'Data For'" [dropDownArrayType]="'string'"
                         [dropDownArray]="Type"></spot-select>
-                        <app-spot-multiselect-project-autocomplete class="custom" formControlName="ProjectId" [placeholder]="'Project Ids'" [label]="'Project Ids'" name="ProjectId" [showLabel]="true">
-                        </app-spot-multiselect-project-autocomplete>
-                        <!-- <spot-select class="custom" formControlName="BudgetId" name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'" [dropDownArrayType]="'string'"
-                        [dropDownArray]="LookupDataBudget">
-                        </spot-select> -->
-                        <spot-multiselect-autocomplete class="custom" formControlName="BudgetId"
+                        <!-- <app-spot-multiselect-project-autocomplete class="custom" formControlName="ProjectId" [placeholder]="'Project Ids'" [label]="'Project Ids'" name="ProjectId" [showLabel]="true">
+                        </app-spot-multiselect-project-autocomplete> -->
+                        <spot-input class="custom" formControlName="ProjectId" name="ProjectId"
+                            [label]="'Project Ids'" [placeholder]="'Project Ids'">
+                        </spot-input>
+                        <!-- <spot-multiselect-autocomplete class="custom" formControlName="BudgetId"
                             name="BudgetId" [label]="'Budget Ids'" [placeholder]="'Budget Ids'"
-                            [valuePointer]="'ID'" [dropDownArray]="LookupDataBudget">
-                        </spot-multiselect-autocomplete>
+                            [valuePointer]="'ID'" [dropDownArray]="LookupDataBudget" [idPointer]="'ID'">
+                        </spot-multiselect-autocomplete> -->
+                        <spot-input class="custom" formControlName="BudgetId" name="BudgetId"
+                            [label]="'Budget Ids'" [placeholder]="'Budget Ids'">
+                        </spot-input>
                     </form>
                     <div class="flex items-center justify-center" style="bottom: 45px; position: relative;">
                         <button style="margin-right: 10px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="getData()"> Get Data
@@ -35,6 +38,8 @@
                                     [valuePointer]="'lookUpName'" [dropDownArray]="forecastType" [sortByType]="'custom'"
                                     [customSortPointer]="'lookUpOrder'">
                                 </spot-singleselect-autocomplete>
+                                <button style="margin-left: 1521px;width: 10%;top: -65px;" class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" (click)="SubmitData()"> Save Changes
+                                </button>
                             </form>
 
                             <!-- Historical Excel Update -->
@@ -44,87 +49,51 @@
                                 [rows]="forecastExcelHistorical" style="margin-top: -1rem;" *ngIf="showData">
                                 <ngx-datatable-column name="Budget Data Type" prop="budgetDataType" [width]="160" [sortable]="false"
                                     [resizeable]="false">
-                                    <!-- <ng-template let-column="column" ngx-datatable-header-template>
-                                        <ng-container>
-                                            <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 10px;position: fixed;left: 9px; font-weight: bold;">{{column.name}}</span>
-                                            </span>
-                                        </ng-container>
-                                    </ng-template> -->
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Problem Id" prop="problemID" [width]="160"
                                     [sortable]="false" [resizeable]="false">
-                                    <!-- <ng-template let-column="column" ngx-datatable-header-template>
-                                        <ng-container>
-                                            <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 10px;position: fixed;left: 103px; font-weight: bold;">{{column.name}}</span>
-                                            </span>
-                                        </ng-container>
-                                    </ng-template> -->
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Capital Budget Id" prop="capitalBudgetID" [width]="160"
                                     [sortable]="false" [resizeable]="false">
-                                    <!-- <ng-template let-column="column" ngx-datatable-header-template>
-                                        <ng-container>
-                                            <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 10px;position: fixed;left: 103px; font-weight: bold;">{{column.name}}</span>
-                                            </span>
-                                        </ng-container>
-                                    </ng-template> -->
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Problem Title" prop="problemTitle" [width]="200"
                                     [sortable]="false" [resizeable]="false">
-                                    <!-- <ng-template let-column="column" ngx-datatable-header-template>
-                                        <ng-container>
-                                            <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 10px;position: fixed;left: 103px; font-weight: bold;">{{column.name}}</span>
-                                            </span>
-                                        </ng-container>
-                                    </ng-template> -->
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p>{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Historical Actual" prop="historicalActual" [width]="180"
                                     [sortable]="false" [resizeable]="false">
-                                    <!-- <ng-template let-column="column" ngx-datatable-header-template>
+                                    <ng-template let-column="column" ngx-datatable-header-template>
                                         <ng-container>
-                                            <span class="datatable-header-cell-wrapper">
-                                                <span style="top: 10px;position: fixed;left: 103px; font-weight: bold;">{{column.name}}</span>
-                                            </span>
+                                            <div style="margin-left: 50px;">
+                                                {{column.name}}
+                                            </div>
                                         </ng-container>
-                                    </ng-template> -->
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
 
-                                <!-- <ngx-datatable-column *ngFor="let col of columnNames; let i = index" [name]=col.name [prop]=col.name [width]="100"
-                                    [sortable]="false" [resizeable]="false">
-                                    <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-                                        <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
-                                            <p *ngIf="!value && value!=0">&nbsp;</p>
-                                            <p style="text-align:right">{{value}}</p>
-                                        </a>
-                                        <form [formGroup]="historicalForm.controls[rowIndex]" class="h-[45px]"
-                                              *ngIf="fTableEditStack.includes(rowIndex)">
-                                            <spot-input-forecast [formControlName]=col.name [decimalCount]="0" [autoAddDecimal]="false"
-                                                                     (valueChanged)="recalculateAnnualTotal(rowIndex)"  (pasteEvent)="onPaste($event, rowIndex, col.name)"></spot-input-forecast>
-                                        </form>
-                                    </ng-template>
-                                </ngx-datatable-column> -->
-
                                 <ngx-datatable-column name="historicalActualFY14" prop="historicalActualFY14" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 22px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -139,6 +108,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="historicalActualFY15" prop="historicalActualFY15" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 22px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -153,6 +129,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="historicalActualFY16" prop="historicalActualFY16" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 22px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -167,6 +150,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="historicalActualFY17" prop="historicalActualFY17" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 22px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -181,6 +171,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="historicalActualFY18" prop="historicalActualFY18" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 22px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -195,6 +192,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="historicalActualFY19" prop="historicalActualFY19" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 22px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -209,6 +213,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="historicalActualFY20" prop="historicalActualFY20" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 19px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -223,6 +234,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="historicalActualFY21" prop="historicalActualFY21" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 19px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!hTableEditStack.includes(rowIndex)" (click)="hTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -274,12 +292,26 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Historical Actual" prop="historicalActual" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 50px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Apr" prop="apr" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 139px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -294,6 +326,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="May" prop="may" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 135px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -308,6 +347,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jun" prop="jun" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 139px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -322,6 +368,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jul" prop="jul" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 139px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -336,6 +389,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Aug" prop="aug" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 135px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -350,6 +410,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Sep" prop="sep" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 139px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -364,6 +431,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Oct" prop="oct" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 139px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -378,6 +452,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Nov" prop="nov" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 135px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -392,6 +473,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Dec" prop="dec" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 135px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -406,6 +494,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Jan" prop="jan" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 139px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -420,6 +515,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Feb" prop="feb" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 139px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -434,6 +536,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Mar" prop="mar" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 135px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -448,6 +557,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="AprY1" prop="y1_Apr" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -462,6 +578,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="MayY1" prop="y1_May" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 118px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -476,6 +599,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="JunY1" prop="y1_Jun" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -490,6 +620,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="JulY1" prop="y1_Jul" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -504,6 +641,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="AugY1" prop="y1_Aug" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 118px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -518,6 +662,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="SepY1" prop="y1_Sep" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -532,6 +683,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="OctY1" prop="y1_Oct" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -546,6 +704,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="NovY1" prop="y1_Nov" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 122px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -560,6 +725,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="DecY1" prop="y1_Dec" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -574,6 +746,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="JanY1" prop="y1_Jan" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -588,6 +767,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="FebY1" prop="y1_Feb" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 124px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -602,6 +788,13 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="MarY1" prop="y1_Mar" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 118px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
                                         <a *ngIf="!fTableEditStack.includes(rowIndex)" (click)="fTableEditRow(rowIndex)">
                                             <p *ngIf="!value && value!=0">&nbsp;</p>
@@ -616,42 +809,91 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column [name]=y1Label prop="y2" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 104px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column [name]=y2Label prop="y3" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 104px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column [name]=y3Label prop="y4" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 104px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column [name]=y4Label prop="y5" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 94px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column [name]=y0Label prop="y1" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 104px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Annual Total" prop="annualTotal" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 77px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="Cummulative Total" prop="cumulativeTotal" [width]="180"
                                     [sortable]="false" [resizeable]="false">
+                                    <ng-template let-column="column" ngx-datatable-header-template>
+                                        <ng-container>
+                                            <div style="margin-left: 36px;">
+                                                {{column.name}}
+                                            </div>
+                                        </ng-container>
+                                    </ng-template>
                                     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                         <p style="text-align:right">{{value}}</p>
                                     </ng-template>

@@ -7,8 +7,7 @@
         </a>
         </div>
     </div>
-    <form class="w-full overflow-hidden" [formGroup]="budgetPerformanceForm" (ngSubmit)="submitBudgetPerformance()"
-          style="overflow-y: scroll; height: 95vh;">
+    <form class="overflow-auto m-2"  style="height: calc(100vh - 120px)"  [formGroup]="budgetPerformanceForm" >
         <div class=" form-ask-need h-[87vh] overflow-y-scroll">
             <div  *ngFor="let fr of finalRequirements | keyvalue" [formGroup]="finalRequirementsValueForm.controls[fr.key]">
                 <div class="flex justify-between">
@@ -23,14 +22,14 @@
             <spot-textarea class="pt-2" [label]="'Budget Commentary'" formControlName="budgetCommentary">
             </spot-textarea>
         </div>
-        <div class="flex items-start justify-between  form-ask-need">
-            <a class="w-25" mat-flat-button [color]="'primary'"
-               (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
-                Cancel
-            </a>
-            <button class="w-25" mat-flat-button [color]="'primary'" type="submit">
-                Submit
-            </button>
-        </div>
     </form>
+    <div class="w-full px-3 pr-3 flex items-start justify-between">
+        <a class="w-25" mat-flat-button [color]="'primary'"
+           (click)="this.projectHubService.toggleDrawerOpen('', '',[],'')">
+            Cancel
+        </a>
+        <button class="w-25" mat-flat-button [color]="'primary'" type="submit" (click)="submitBudgetPerformance()">
+            Submit
+        </button>
+    </div>
 </div>

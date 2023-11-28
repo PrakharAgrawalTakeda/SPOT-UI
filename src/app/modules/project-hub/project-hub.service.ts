@@ -37,6 +37,7 @@ export class ProjectHubService {
   projectChildren: any[];
   projects: any[];
   currentSpotId: string;
+  projectName: string;
   isStrategicIniative: boolean = false;
 
 
@@ -802,7 +803,7 @@ export class ProjectHubService {
     this.fuseDrawerSmall = fuseDrawerSmall
   }
   drawerOpenedChanged(event: any): void {
-
+      window.onbeforeunload = null;
     if (this.drawerOpenedright != event) {
       if (event == false) {
         this.drawerOpenedright = event

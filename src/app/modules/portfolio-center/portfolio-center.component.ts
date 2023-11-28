@@ -29,6 +29,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { Constants } from 'app/shared/constants';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { PortfolioCenterService } from "./portfolio-center.service";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export const MY_FORMATS = {
   parse: {
@@ -204,14 +205,17 @@ export class PortfolioCenterComponent implements OnInit {
   currentData
   Date2
   Date3
-
+ 
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
-  constructor(private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
+  constructor(private snack: MatSnackBar,private renderer: Renderer2, private apiService: PortfolioApiService, private router: Router, private indicator: SpotlightIndicatorsService, private msal: MsalService, private auth: AuthService, public _fuseNavigationService: FuseNavigationService, private titleService: Title, public role: RoleService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService) {
     this.PortfolioFilterForm.controls.PortfolioOwner.valueChanges.subscribe(res => {
       if (this.showContent) {
         if (this.showLA) {
           this.showLA = false
+          localStorage.setItem('spot-localattribute', JSON.stringify([]))
+          this.localAttributeForm.controls = []
+          this.localAttributeForm.values = []
         }
         this.changePO = true
       }
@@ -220,6 +224,9 @@ export class PortfolioCenterComponent implements OnInit {
       if (this.showContent) {
         if (this.showLA) {
           this.showLA = false
+          localStorage.setItem('spot-localattribute', JSON.stringify([]))
+          this.localAttributeForm.controls = []
+          this.localAttributeForm.values = []
         }
         this.changeES = true
       }
@@ -231,6 +238,14 @@ export class PortfolioCenterComponent implements OnInit {
     })
 
     this.renderer.listen('window', 'scroll', this.scrollHandler.bind(this));
+    this.PortfolioCenterService.successSave.subscribe(res => {
+      if (res == true) {
+          this.snack.open("The information has been saved successfully", "", {
+              duration: 2000,
+              panelClass: ["bg-primary", "text-on-primary"]
+          })
+      }
+  })
 
   }
 
@@ -708,6 +723,7 @@ export class PortfolioCenterComponent implements OnInit {
               "localAttributes": localattribute
             }
           }
+          this.localAttributeData = []
           if( localattribute != undefined){
           for(var i=0;i<localattribute.length;i++){
             if(localattribute[i].data.length > 0){
@@ -717,6 +733,17 @@ export class PortfolioCenterComponent implements OnInit {
                   "value": this.lookup.filter(result => result.lookUpId == localattribute[i].data[0].value)[0].lookUpName,
                   "count": localattribute[i].data.length,
                   "order": 15
+                }
+              }
+              else if(localattribute[i].dataType == "1"){
+                var data:any = 'Yes'
+                if(localattribute[i].data[0].value != false){
+                  var localdata = {
+                    "name": localattribute[i].name,
+                    "value": data,
+                    "count": localattribute[i].data.length,
+                    "order": 15
+                  }
                 }
               }
               else if(localattribute[i].dataType == "4"){
@@ -757,7 +784,9 @@ export class PortfolioCenterComponent implements OnInit {
                 }
               }
             }
+            if(localdata != undefined){
             this.localAttributeData.push(localdata)
+            }
           }
         }
 
@@ -1192,11 +1221,11 @@ export class PortfolioCenterComponent implements OnInit {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
         }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-          mainObj[i].data = []
-          dataToSend.push(mainObj[i])
-        }
-        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == true && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
+        // else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+        //   mainObj[i].data = []
+        //   dataToSend.push(mainObj[i])
+        // }
+        else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
         }
@@ -1232,26 +1261,26 @@ export class PortfolioCenterComponent implements OnInit {
             dataToSend.push(mainObj[i])
           }
         }
-        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
-          if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-            mainObj[i].data[0].value = ""
-            dataToSend.push(mainObj[i])
-          }
-          else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
-            emptyObject = {
-              "uniqueId": "",
-              "value": ""
-            }
-            mainObj[i].data.push(emptyObject)
-            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-            dataToSend.push(mainObj[i])
-          }
-          else {
-            mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-            dataToSend.push(mainObj[i])
-          }
-        }
-        else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == true) {
+        // else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
+        //   if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
+        //     mainObj[i].data[0].value = ""
+        //     dataToSend.push(mainObj[i])
+        //   }
+        //   else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
+        //     emptyObject = {
+        //       "uniqueId": "",
+        //       "value": ""
+        //     }
+        //     mainObj[i].data.push(emptyObject)
+        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+        //     dataToSend.push(mainObj[i])
+        //   }
+        //   else {
+        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
+        //     dataToSend.push(mainObj[i])
+        //   }
+        // }
+        else if (mainObj[i].dataType == 3) {
           var data = []
           if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
             for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
@@ -1283,7 +1312,7 @@ export class PortfolioCenterComponent implements OnInit {
         }
         else {
           if (mainObj[i].data.length == 0) {
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
               emptyObject = {
                 "uniqueId": "",
                 "value": ""
@@ -1292,7 +1321,7 @@ export class PortfolioCenterComponent implements OnInit {
               mainObj[i].data[0].value = null
               dataToSend.push(mainObj[i])
             }
-            else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+            else if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value) ) {
               emptyObject = {
                 "uniqueId": "",
                 "value": this.localAttributeForm.controls[mainObj[i].name].value
@@ -1316,11 +1345,11 @@ export class PortfolioCenterComponent implements OnInit {
             }
           }
           else {
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
+            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" && !isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value)) {
               mainObj[i].data[0].value = null
               dataToSend.push(mainObj[i])
             }
-            if (mainObj[i].dataType == 4 && this.localAttributeForm.controls[mainObj[i].uniqueId].value != "") {
+            if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value != "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
               mainObj[i].data = []
               emptyObject = {
                 "uniqueId": "",
@@ -1343,12 +1372,50 @@ export class PortfolioCenterComponent implements OnInit {
       }
     })
     console.log(dataToSend)
-    if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0)) {
-      dataToSend = []
+    // if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0 || isNaN(x.data[0].value.length))) {
+    //   dataToSend = []
+    // }
+    var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
+    if ((LA != null || LA != undefined) && dataToSend.length > 0){
+      var CommonArray = LA.filter(o => dataToSend.some(i => i.uniqueId === o.uniqueId));
+      if (CommonArray.length != 0) {
+        for (var z = 0; z < CommonArray.length; z++) {
+          for(var j=0;j<LA.length;j++){
+            if(LA[j].uniqueId == CommonArray[z].uniqueId){
+              LA.splice(j,1)
+            }
+          }
+        }
+      }
     }
-    if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
+    var index = []
+    var updateArray = []
+    for(var z=0;z<dataToSend.length;z++){
+      if(dataToSend[z].data.length == 0){
+        // updateArray.splice(z,1);
+      }
+      else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
+        // updateArray.splice(z,1);
+      }
+      else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
+        // updateArray.splice(z,1);
+      }
+      else{
+        index.push(z)
+      }
+    }
+    if(index.length > 0){
+      for(var i=0;i<index.length;i++){
+        updateArray.push(dataToSend[index[i]])
+      }
+    }
+    dataToSend = updateArray
+    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    if((LA == null || LA == undefined) && dataToSend.length == 0) {
+      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    }
+    else if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
       var c = 0;
-      var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
       if (LA != null || LA != undefined) {
         var secondArray = LA.filter(o => !dataToSend.some(i => i.uniqueId === o.uniqueId));
         console.log(secondArray)
@@ -1358,8 +1425,36 @@ export class PortfolioCenterComponent implements OnInit {
           }
         }
       }
+      var newIndex= []
+      var newArray = []
+      for(var z=0;z<dataToSend.length;z++){
+        if(dataToSend[z].data.length == 0){
+          // newArray.splice(z,1);
+        }
+        else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
+          // newArray.splice(z,1);
+        }
+        else if(isNaN(dataToSend[z].data[0].value) && dataToSend[z].dataType == 4){
+          // newArray.splice(z,1);
+        }
+        else{
+          newIndex.push(z)
+        }
+      }
+      if(newIndex.length > 0){
+        for(var i=0;i<newIndex.length;i++){
+          newArray.push(dataToSend[newIndex[i]])
+        }
+      }
+      dataToSend = newArray
+      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
-    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    else if ((LA != null || LA != undefined) && dataToSend.length == 0){
+      for(var i=0;i<LA.length;i++){
+        dataToSend.push(LA[i])
+      }
+      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    }
     this.filterDrawer.close()
     this.resetpage()
     this.showFilter = false
@@ -1397,6 +1492,9 @@ export class PortfolioCenterComponent implements OnInit {
     this.defaultfilter.ProjectPhase = []
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.defaultfilter))
     localStorage.setItem('spot-localattribute', null)
+    this.showLA = true
+    this.localAttributeForm.controls = []
+    this.localAttributeForm.value = []
     this.defaultfilter.ProjectTeamMember = []
     this.defaultfilter.ProjectState = []
     this.defaultfilter.ProjectPhase = []
@@ -2010,20 +2108,19 @@ export class PortfolioCenterComponent implements OnInit {
         this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
         this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
         this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-        this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo[i] ? res.overallStatusInfo[i]?.overallStatusLastUpdate.split('T') : ''
+        this.projectOverview[i].overallStatusLastUpdate = 
+  res.overallStatusInfo && res.overallStatusInfo[i] && res.overallStatusInfo[i].overallStatusLastUpdate
+    ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
+    : '';
+
         this.projectOverview[i].grey = false
         this.projectOverview[i].darkGrey = false
         if(this.projectOverview[i].overallStatusLastUpdate != ''){
-        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate <= this.Date3[0]){
+        if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate >= this.Date3[0]){
           this.projectOverview[i].grey = true
-          console.log("status date = " + this.projectOverview[i].overallStatusLastUpdate[0])
-          console.log("date - 14 = " + this.Date2[0])
-          console.log("date - 30 = " + this.Date3[0])
         }
         else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.currentData[0]){
           this.projectOverview[i].darkGrey = true
-          console.log("status date = " + this.projectOverview[i].overallStatusLastUpdate[0])
-          console.log("current date = " + this.currentData[0])
         }
       }
         this.projectOverview[i].notBaselined = res.conditionalFormattingLabels ? res.conditionalFormattingLabels.filter(index => index.projectId == this.projectOverview[i].projectUid)[0].notBaselined : ''
@@ -2126,7 +2223,10 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
             this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-            this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo ? res.overallStatusInfo[i]?.overallStatusLastUpdate.split('T') : ''
+            this.projectOverview[i].overallStatusLastUpdate = 
+            res.overallStatusInfo && res.overallStatusInfo[i] && res.overallStatusInfo[i].overallStatusLastUpdate
+              ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
+              : '';
             this.projectOverview[i].grey = false
             this.projectOverview[i].darkGrey = false
             if(this.projectOverview[i].overallStatusLastUpdate != ''){
@@ -2302,6 +2402,26 @@ export class PortfolioCenterComponent implements OnInit {
         noChangeES = true
       }
     }
+    if(filtersnew != null){
+      if(filtersnew.ExecutionScope == null && executionScope == ""){
+        noChangeES = true
+      }
+      else if(filtersnew.ExecutionScope != null){
+        if(filtersnew.ExecutionScope.length == 0 && executionScope == ""){
+          noChangeES = true
+        }
+      }
+    }
+    if(filtersnew != null){
+      if(filtersnew.PortfolioOwner == null && portfolioOwners == ""){
+        noChangePO = true
+      }
+      else if(filtersnew.PortfolioOwner != null){
+        if(filtersnew.PortfolioOwner.length == 0 && portfolioOwners == ""){
+          noChangePO = true
+        }
+      }
+    }
     var localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
     if (noChangePO == true && noChangeES == true && localattribute != null) {
       this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
@@ -2428,7 +2548,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data[1].value))
         i.data = i.data[1].value
       }
-      else if (i.dataType == 3 && i.isMulti == true) {
+      else if (i.dataType == 3) {
         if (i.data.length == 0) {
           i.data = []
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
@@ -2447,22 +2567,22 @@ export class PortfolioCenterComponent implements OnInit {
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
         }
       }
-      else if (i.dataType == 3 && i.isMulti == false) {
-        if (i.data.length == 0) {
-          i.data = ""
-          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-        }
-        else {
-          if (this.lookup.filter(x => x.lookUpId == i.data[0].value).length == 0) {
-            i.data = ""
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-          else {
-            i.data = this.lookup.filter(x => x.lookUpId == i.data[0].value)[0]
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-        }
-      }
+      // else if (i.dataType == 3 && i.isMulti == false) {
+      //   if (i.data.length == 0) {
+      //     i.data = ""
+      //     this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //   }
+      //   else {
+      //     if (this.lookup.filter(x => x.lookUpId == i.data[0].value).length == 0) {
+      //       i.data = ""
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //     else {
+      //       i.data = this.lookup.filter(x => x.lookUpId == i.data[0].value)[0]
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //   }
+      // }
       else if (i.dataType == 4 && i.data.length == 0) {
         if (i.linesCount == null) {
           i.linesCount = 13
@@ -2486,23 +2606,23 @@ export class PortfolioCenterComponent implements OnInit {
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
         }
       }
-      else if (i.dataType == 5 && i.isMulti == false) {
-        if (i.data.length == 0) {
-          i.data = ""
-          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-        }
-        else {
-          if (i.data[0].value == null) {
-            i.data = ""
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-          else {
-            i.data = i.data[0].value
-            this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
-          }
-        }
-      }
-      else if (i.dataType == 5 && i.isMulti == true && i.data.length == 0) {
+      // else if (i.dataType == 5 && i.isMulti == false) {
+      //   if (i.data.length == 0) {
+      //     i.data = ""
+      //     this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //   }
+      //   else {
+      //     if (i.data[0].value == null) {
+      //       i.data = ""
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //     else {
+      //       i.data = i.data[0].value
+      //       this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+      //     }
+      //   }
+      // }
+      else if (i.dataType == 5 && i.data.length == 0) {
         if (i.data.length == 0) {
           i.data = []
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))

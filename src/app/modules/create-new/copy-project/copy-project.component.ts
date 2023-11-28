@@ -210,12 +210,18 @@ export class CopyProjectComponent implements OnInit {
         CopyUserID: this.activeaccount.localAccountId,
         CopyProjectParameter: copyProjectParameter
       }
-      this.createApiservice.getTemplateInfo(dataToSend).then(res => {
+      this.createApiservice.getTemplateInfo(dataToSend).then((res : any) => {
         this.createApiservice.getQuality(this.projectid).then(quality => {
           console.log(quality);
           console.log(res);
           if (res != "") {
-            this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+            if(res.problemType == 'Strategic Initiative / Program'){
+              this.router.navigateByUrl('/create-project/create-strategic-initiative-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+            }
+            else{
+              this.router.navigateByUrl('/create-project/create-new-project', { state: { data: res, quality: quality, callLocation: 'CopyProject', copytemplateId: this.projectid, lookupString: this.finalData.toString(), copyParameterObject: copyProjectParameter } });
+            }
+            
           }
         })
       })
