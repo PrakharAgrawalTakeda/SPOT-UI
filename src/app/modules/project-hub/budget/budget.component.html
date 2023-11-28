@@ -7,11 +7,11 @@
                     <div class="flex items-start justify-between">
                         <div style="padding-right: 5px;" >
                                 <button class="text-primary bg-gray-200" mat-flat-button [color]="'primary-200'"
-                                        (click)="projectHubService.toggleDrawerOpen('BudgetFxRates', '', budgetService.budgetPageInfo, id, false, true)">
+                                        (click)="projectHubService.toggleDrawerOpen('BudgetFxRates', '', budgetService.budgetPageInfo, budgetService.id, false, true)">
                                     <mat-icon svgIcon="heroicons_solid:currency-dollar"></mat-icon>&nbsp; FxRates
                                 </button>
                             <button class="ml-4 text-primary bg-gray-200" mat-flat-button [color]="'primary-200'" *ngIf="projectHubService.roleControllerControl.projectHub.projectBoard.riskIssuesEdit"
-                                    (click)="projectHubService.toggleDrawerOpen('BudgetAssetPlacedServiceEdit', '', budgetService.budgetPageInfo , id)">
+                                    (click)="projectHubService.toggleDrawerOpen('BudgetAssetPlacedServiceEdit', '', budgetService.budgetPageInfo , budgetService.id)">
                                 <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>&nbsp; Edit
                             </button>
                         </div>

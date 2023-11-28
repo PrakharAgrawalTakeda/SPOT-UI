@@ -54,6 +54,9 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
         if (val != null && val !== '') {
             value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
         }
+        if (value === '0') {
+            value = '';
+        }
         if (this.decimalCount === 0) {
             value = value.replace(/\..*/, '');
         }
