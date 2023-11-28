@@ -579,7 +579,6 @@ export class ScheduleViewBulkEditComponent implements OnInit, OnDestroy {
         return false
     }
     getRIClass(): string {
-        console.log("Aaaaaaaaa", this.mode, this.scheduleData.projectData.isSprproject, this.projecthubservice.roleControllerControl.roleId)
         if (this.mode === 'Normal' && this.scheduleData.projectData.isSprproject && this.projecthubservice.roleControllerControl.roleId !== '0E83F6BE-79BE-426A-A316-F523FFAECC4F') {
             return 'datatable-schedule-1';
         } else {
