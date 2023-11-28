@@ -213,6 +213,9 @@ export class PortfolioCenterComponent implements OnInit {
       if (this.showContent) {
         if (this.showLA) {
           this.showLA = false
+          localStorage.setItem('spot-localattribute', JSON.stringify([]))
+          this.localAttributeForm.controls = []
+          this.localAttributeForm.values = []
         }
         this.changePO = true
       }
@@ -221,6 +224,9 @@ export class PortfolioCenterComponent implements OnInit {
       if (this.showContent) {
         if (this.showLA) {
           this.showLA = false
+          localStorage.setItem('spot-localattribute', JSON.stringify([]))
+          this.localAttributeForm.controls = []
+          this.localAttributeForm.values = []
         }
         this.changeES = true
       }
@@ -1404,6 +1410,7 @@ export class PortfolioCenterComponent implements OnInit {
       }
     }
     dataToSend = updateArray
+    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     if((LA == null || LA == undefined) && dataToSend.length == 0) {
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
@@ -2216,7 +2223,10 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].budgetIndicator = res.trendingIndicators[i].budgetIndicator
             this.projectOverview[i].spendIndicator = res.trendingIndicators[i].spendIndicator
             this.projectOverview[i].dataFreshness = this.projects.data[i].dataFreshness + ' days'
-            this.projectOverview[i].overallStatusLastUpdate = res.overallStatusInfo ? res.overallStatusInfo[i]?.overallStatusLastUpdate.split('T') : ''
+            this.projectOverview[i].overallStatusLastUpdate = 
+            res.overallStatusInfo && res.overallStatusInfo[i] && res.overallStatusInfo[i].overallStatusLastUpdate
+              ? res.overallStatusInfo[i].overallStatusLastUpdate.split('T')
+              : '';
             this.projectOverview[i].grey = false
             this.projectOverview[i].darkGrey = false
             if(this.projectOverview[i].overallStatusLastUpdate != ''){
