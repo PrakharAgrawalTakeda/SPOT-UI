@@ -72,6 +72,8 @@ export class BudgetService {
     }
 
     calculateForecast() {
+        this.ytdPlanTotal=0;
+        this.ytdCurrentTotal=0;
         if (!this.aprEditable) {
             this.ytdPlanTotal += this.planActive.apr;
             this.ytdCurrentTotal += this.currentEntry.apr;
