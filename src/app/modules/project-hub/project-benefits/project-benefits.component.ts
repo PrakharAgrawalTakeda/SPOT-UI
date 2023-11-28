@@ -38,12 +38,20 @@ export class ProjectBenefitsComponent implements OnInit {
   projectsMetricsData = []
   constructor(public projectApiService: ProjectApiService, public projecthubservice: ProjectHubService, public auth: AuthService, private _Activatedroute: ActivatedRoute, 
     public indicator: SpotlightIndicatorsService, private portApiService: PortfolioApiService, public fuseAlert: FuseConfirmationService) {
-
+      this.projecthubservice.submitbutton.subscribe(res => {
+        if (res) {
+          console.log(res)
+          this.ngOnInit()
+        }
+      })
   }
 
   ngOnInit(): void {
     
     this.id = this._Activatedroute.parent.parent.snapshot.paramMap.get("id");
+     // Clear the arrays before populating
+     this.columnYear = [];
+     this.projectsMetricsData = [];
     this.projectApiService.getMetricProjectData(this.id).then((res: any) => {
       var parentId = ''
       var parentData: any
@@ -63,6 +71,7 @@ export class ProjectBenefitsComponent implements OnInit {
         this.projectApiService.getfilterlist().then(filterres => {
           this.auth.KPIMaster().then((kpi: any) => {
             this.portApiService.getOnlyLocalCurrency(this.id).then((currency: any) => {
+
               console.log(res)
               console.log(currency)
               this.localCurrency = currency ? currency.localCurrencyAbbreviation : ''

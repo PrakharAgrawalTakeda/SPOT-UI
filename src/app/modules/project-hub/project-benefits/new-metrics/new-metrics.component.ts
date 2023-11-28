@@ -36,6 +36,7 @@ export class NewMetricsComponent {
 
       this.auth.lookupMaster().then((lookup: any) => {
         console.log(vc)
+
         this.metric = vc.find(projectMetric => projectMetric.metricID);
 
         if (this.metric) {
