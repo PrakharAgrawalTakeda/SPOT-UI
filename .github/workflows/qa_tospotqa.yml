@@ -27,8 +27,8 @@ jobs:
           npm run build -- --configuration=qa
 
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
         with:
           app-name: 'tospotqa'
           slot-name: 'Production'
