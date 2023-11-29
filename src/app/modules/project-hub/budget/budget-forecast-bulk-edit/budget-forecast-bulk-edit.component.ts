@@ -475,11 +475,7 @@ export class BudgetForecastBulkEditComponent {
         });
         this.forecasts.find(value => value.isopen === true).annualTotal = newAnnualTotal;
         this.recalculateTotalCapex()
-        this.recalculateTfp();
-        // this.recalculateYtdp();
-        this.recalculateAFP();
-        // this.recalculateMtdp();
-        this.budgetService.setTextColors();
+
     }
 
     recalculateY1() {
@@ -567,6 +563,11 @@ export class BudgetForecastBulkEditComponent {
             });
             this.cdRef.detectChanges();
         }
+        this.recalculateTfp();
+        // this.recalculateYtdp();
+        this.recalculateAFP();
+        // this.recalculateMtdp();
+        this.budgetService.setTextColors();
         this.formValue()
     }
     recalculateTfp() {

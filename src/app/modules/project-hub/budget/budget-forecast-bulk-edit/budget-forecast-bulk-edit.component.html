@@ -406,8 +406,7 @@
                         <form [formGroup]="forecastsY1Form.controls[rowIndex]" class="mt-4"
                               *ngIf="fy1TableEditStack.includes(rowIndex)">
                             <spot-input-forecast formControlName="apr"
-                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'apr')"
-                                                     [isBlue]="firstPreliminary == 'apr' && row.active=='Preliminary'"></spot-input-forecast>
+                                                     (valueChanged)="recalculateY1()"  (pasteEvent)="onPasteY1($event, rowIndex, 'apr')"></spot-input-forecast>
                         </form>
                     </ng-template>
                 </ngx-datatable-column>

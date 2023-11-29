@@ -182,12 +182,14 @@ export class BudgetComponent implements OnInit {
         } else {
             let returnText = 'Not Initiated Future Spend FY ';
             const openEntry =  this.budgetService.budgetPageInfo.budgetForecasts.find(x => x.isopen === true && x.budgetData === 'CapEx Forecast');
-            const years = [openEntry.annualTotal, openEntry.y1, openEntry.y2, openEntry.y3, openEntry.y4, openEntry.y5];
             let foundYear = null;
-            for (let i = 0; i < years.length; i++) {
-                if (years[i] !== 0) {
-                    foundYear = i;
-                    break;
+            if(openEntry) {
+                const years = [openEntry.annualTotal, openEntry.y1, openEntry.y2, openEntry.y3, openEntry.y4, openEntry.y5];
+                for (let i = 0; i < years.length; i++) {
+                    if (years[i] !== 0) {
+                        foundYear = i;
+                        break;
+                    }
                 }
             }
             return foundYear !== null ? (returnText + `Y${foundYear}`) : (id && id !== '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId === id)?.lookUpName : '');
