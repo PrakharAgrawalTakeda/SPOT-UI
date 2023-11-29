@@ -143,7 +143,6 @@ export class BudgetForecastBulkEditComponent {
         }
         this.fy1TableEditRow(0);
         this.startingMonth=this.budgetService.getStartingMonth()
-        this.budgetService.setLabels();
         this.budgetService.checkIsCellEditable();
         this.budgetService.setTextColors();
         this.dataloader()
@@ -475,11 +474,7 @@ export class BudgetForecastBulkEditComponent {
         });
         this.forecasts.find(value => value.isopen === true).annualTotal = newAnnualTotal;
         this.recalculateTotalCapex()
-        this.recalculateTfp();
-        // this.recalculateYtdp();
-        this.recalculateAFP();
-        // this.recalculateMtdp();
-        this.budgetService.setTextColors();
+
     }
 
     recalculateY1() {
@@ -567,6 +562,11 @@ export class BudgetForecastBulkEditComponent {
             });
             this.cdRef.detectChanges();
         }
+        this.recalculateTfp();
+        // this.recalculateYtdp();
+        this.recalculateAFP();
+        // this.recalculateMtdp();
+        this.budgetService.setTextColors();
         this.formValue()
     }
     recalculateTfp() {
