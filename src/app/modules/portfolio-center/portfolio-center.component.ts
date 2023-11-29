@@ -2119,7 +2119,7 @@ export class PortfolioCenterComponent implements OnInit {
         if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate >= this.Date3[0]){
           this.projectOverview[i].grey = true
         }
-        else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.currentData[0]){
+        else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.Date3[0]){
           this.projectOverview[i].darkGrey = true
         }
       }
@@ -2230,11 +2230,10 @@ export class PortfolioCenterComponent implements OnInit {
             this.projectOverview[i].grey = false
             this.projectOverview[i].darkGrey = false
             if(this.projectOverview[i].overallStatusLastUpdate != ''){
-            if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2.split('T') && this.projectOverview[i].overallStatusLastUpdate <= this.Date3.split('T')){
+            if(this.projectOverview[i].overallStatusLastUpdate[0] <= this.Date2[0] && this.projectOverview[i].overallStatusLastUpdate <= this.Date3[0]){
               this.projectOverview[i].grey = true
-              console.log()
             }
-            else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.currentData.split('T')){
+            else if(this.projectOverview[i].overallStatusLastUpdate[0] < this.Date3[0]){
               this.projectOverview[i].darkGrey = true
             }
           }
