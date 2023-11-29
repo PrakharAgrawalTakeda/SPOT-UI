@@ -42,7 +42,6 @@ export class BudgetCapexOpexTableComponent {
         if(this.mode=="Capex"){
             this.data = this.inputData.budgetForecasts.filter(x => x.budgetData == "CapEx Forecast")
         }
-        this.budgetService.setLabels()
         this.id = this._Activatedroute.parent.snapshot.paramMap.get("id");
         this.setTableColumnMode();
     }

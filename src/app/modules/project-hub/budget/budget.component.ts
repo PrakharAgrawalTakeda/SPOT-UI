@@ -93,7 +93,6 @@ export class BudgetComponent implements OnInit {
                 this.budgetService.budgetForecastsY1Capex = response[3].budgetForecastsY1.filter(x => x.budgetData == "CapEx Forecast");
                 this.budgetService.budgetForecastsY1Opex = response[3].budgetForecastsY1.filter(x => x.budgetData == "OpEx Forecast");
                 this.budgetService.currentEntry = response[3].budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
-                this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
                 this.budgetService.planActive = response[3].budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"));
                 this.generalInfoPatchValue(response[3])
@@ -102,6 +101,11 @@ export class BudgetComponent implements OnInit {
                 this.budgetService.checkIsCellEditable();
                 this.budgetService.calculateForecast();
                 this.budgetService.setTextColors();
+                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
+                if(this.budgetService.openEntriesExist){
+                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
+                }
+                this.budgetService.setLabels();
                 this.viewContent = true
             })
             .catch((error) => {

@@ -143,7 +143,6 @@ export class BudgetForecastBulkEditComponent {
         }
         this.fy1TableEditRow(0);
         this.startingMonth=this.budgetService.getStartingMonth()
-        this.budgetService.setLabels();
         this.budgetService.checkIsCellEditable();
         this.budgetService.setTextColors();
         this.dataloader()
