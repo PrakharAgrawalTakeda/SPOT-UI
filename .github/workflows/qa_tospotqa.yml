@@ -27,10 +27,10 @@ jobs:
           npm run build -- --configuration=qa
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'tospotqa'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3908A778AA8E4CC3B780C1ED7A653BEF }}
-          package: .
+          package: './dist/fuse'
