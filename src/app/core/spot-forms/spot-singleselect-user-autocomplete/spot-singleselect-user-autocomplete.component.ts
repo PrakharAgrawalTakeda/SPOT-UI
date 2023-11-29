@@ -98,6 +98,7 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
   onFocusout(event) {
     setTimeout(() => {
       if (this.selectedOption[this.valuePointer] === undefined && event != "") {
+        this.form.controls.control.patchValue('')
         var comfirmConfig: FuseConfirmationConfig = {
           "title": "The entered name does not exist. Please review your selection!",
           "message": "",
@@ -113,7 +114,7 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
               "color": "warn"
             },
           },
-          "dismissible": true
+          "dismissible": false
         }
         const alert = this.fuseAlert.open(comfirmConfig)
       }
