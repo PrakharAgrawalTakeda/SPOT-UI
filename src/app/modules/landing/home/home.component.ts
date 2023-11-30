@@ -19,6 +19,7 @@ export class LandingHomeComponent implements OnInit {
      */
     constructor(private authService: MsalService, private router: Router, private auth: AuthService, private titleService: Title) { }
     ngOnInit(): void {
+        debugger
         this.titleService.setTitle("SPOT");
 
         // Check if the user is already logged in
