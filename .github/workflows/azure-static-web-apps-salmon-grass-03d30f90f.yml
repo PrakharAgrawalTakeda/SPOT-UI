@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - SPOT-2.1
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - QA
 
 jobs:
   build_and_deploy_job:
