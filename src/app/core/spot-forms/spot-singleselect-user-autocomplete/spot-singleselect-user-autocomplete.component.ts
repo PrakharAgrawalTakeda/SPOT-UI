@@ -113,6 +113,10 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
               "label": "Okay",
               "color": "warn"
             },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
           },
           "dismissible": false
         }
