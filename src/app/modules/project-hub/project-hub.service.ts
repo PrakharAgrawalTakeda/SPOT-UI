@@ -517,7 +517,7 @@ export class ProjectHubService {
               link: 'project-proposal/benefits'
             },
             {
-              title: 'Planning Team',
+              title: 'Initiative Team',
               type: 'basic',
               link: 'project-proposal/planning-team'
             },
@@ -668,7 +668,7 @@ export class ProjectHubService {
               link: 'project-charter/milestones'
             },
             {
-              title: 'Project Team',
+              title: 'Initiative Team',
               type: 'basic',
               link: 'project-charter/project-team'
             },
