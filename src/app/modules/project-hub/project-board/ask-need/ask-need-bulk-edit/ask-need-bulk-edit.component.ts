@@ -413,7 +413,7 @@ export class AskNeedBulkEditComponent implements OnInit {
     this.disabler()
     this.tableData = [...this.tableData, ...j]
     this.anTableEditStack.push(this.tableData.length - 1)
-    var div = document.getElementsByClassName('ngx-datatable')[0]
+    var div = document.getElementsByClassName('datatable-scroll')[0]
     setTimeout(() => {
       div.scroll({
         top: div.scrollHeight,

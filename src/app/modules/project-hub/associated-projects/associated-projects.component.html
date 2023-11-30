@@ -48,7 +48,7 @@
                 <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [rowClass]="getRowClass" columnMode="flex"
                     class=" material font-medium text-sm text-default cursor-default" [rows]="rows"
                     [treeFromRelation]="'parentId'" [treeToRelation]="'problemUniqueId'" #table>
-                    <ngx-datatable-column name="Program / Project Name" prop="projectName" [flexGrow]="6"
+                    <ngx-datatable-column name="Program / Project Name" prop="projectName" [flexGrow]="6" [draggable]="false"
                         [resizeable]="false" [headerClass]="alignHeaderMiddleClass" [isTreeColumn]="true"
                         [treeLevelIndent]="20" [cellClass]="getCellClass" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -72,25 +72,25 @@
                             </div>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Record Type" prop="problemType" [flexGrow]="3" [resizeable]="false"
+                    <ngx-datatable-column name="Record Type" prop="problemType" [flexGrow]="3" [resizeable]="false" [draggable]="false"
                         [sortable]="false" *ngIf="projecthubservice.isStrategicIniative">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Phase (Project-Capital-OE)" prop="projectCapitalOe" [flexGrow]="3"
+                    <ngx-datatable-column name="Phase (Project-Capital-OE)" prop="projectCapitalOe" [flexGrow]="3" [draggable]="false"
                         [resizeable]="false" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="PM Sponsor" prop="pm" [flexGrow]="2" [sortable]="false"
+                    <ngx-datatable-column name="PM Sponsor" prop="pm" [flexGrow]="2" [sortable]="false" [draggable]="false"
                         [resizeable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }} <br> {{ row.sponsor }}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Overall status" prop="overallStatusArrow" [headerClass]="getHeaderClass"
+                    <ngx-datatable-column name="Overall status" prop="overallStatusArrow" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -98,7 +98,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Schedule" prop="scheduleIndicatorArrow" [headerClass]="getHeaderClass"
+                    <ngx-datatable-column name="Schedule" prop="scheduleIndicatorArrow" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -106,7 +106,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Risk/Issues" prop="riskIndicatorArrow" [headerClass]="getHeaderClass"
+                    <ngx-datatable-column name="Risk/Issues" prop="riskIndicatorArrow" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -114,7 +114,7 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Ask/Needs" prop="askNeedIndicatorArrow" [headerClass]="getHeaderClass"
+                    <ngx-datatable-column name="Ask/Needs" prop="askNeedIndicatorArrow" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
@@ -122,23 +122,23 @@
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Budget" prop="budgetIndicatorArrow" [headerClass]="getHeaderClass"
+                    <ngx-datatable-column name="Budget" prop="budgetIndicatorArrow" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'circle')).iconcolor}} ">
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorArrow" [headerClass]="getHeaderClass"
+                    <ngx-datatable-column name="Spend" prop="budgetSpendIndicatorArrow" [headerClass]="getHeaderClass" [draggable]="false"
                         [resizeable]="false" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'overall')).icontype}}"
-                                class="{{(indicator.getIndicators(value, 'overall')).iconcolor}} ">
+                            <mat-icon svgIcon="{{(indicator.getIndicators(value, 'circle')).icontype}}"
+                                class="{{(indicator.getIndicators(value, 'circle')).iconcolor}} ">
                             </mat-icon>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Milestone / Progression" prop="progression" [resizeable]="false"
+                    <ngx-datatable-column name="Milestone / Progression" prop="progression" [resizeable]="false" [draggable]="false"
                         [headerClass]="alignHeaderMiddleClass" [cellClass]="getGraphCellClass" [flexGrow]="4"
                         [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -192,13 +192,13 @@
                                         }"></apx-chart>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwnerId" [flexGrow]="3" [resizeable]="false"
+                    <ngx-datatable-column name="Portfolio Owner" prop="portfolioOwnerId" [flexGrow]="3" [resizeable]="false" [draggable]="false"
                         [sortable]="false" *ngIf="projecthubservice.isStrategicIniative">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column [cellClass]="alignRight" [headerClass]="getTotalCapexHeaderClass"
+                    <ngx-datatable-column [cellClass]="alignRight" [headerClass]="getTotalCapexHeaderClass" [draggable]="false"
                         name="Total CAPEX Approved / Forecast" [resizeable]="false" [flexGrow]="3" [sortable]="false"
                         *ngIf="!projecthubservice.isStrategicIniative">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
@@ -215,20 +215,20 @@
 
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [flexGrow]="3" [sortable]="false"
+                    <ngx-datatable-column name="Next Milestone" prop="nextMilestone" [flexGrow]="3" [sortable]="false" [draggable]="false"
                         [resizeable]="false" *ngIf="!projecthubservice.isStrategicIniative">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate"
+                    <ngx-datatable-column name="Next Milestone Planned Finish Date" prop="nextMilestoneFinishDate" [draggable]="false"
                         [resizeable]="false" [flexGrow]="2.5" [sortable]="false"
                         *ngIf="!projecthubservice.isStrategicIniative">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Planned Project Complete Date" prop="projectPlannedFinishDate"
+                    <ngx-datatable-column name="Planned Project Complete Date" prop="projectPlannedFinishDate" [draggable]="false"
                         [resizeable]="false" [flexGrow]="2.5" [sortable]="false"
                         *ngIf="!projecthubservice.isStrategicIniative">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>

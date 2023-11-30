@@ -93,7 +93,6 @@ export class BudgetComponent implements OnInit {
                 this.budgetService.budgetForecastsY1Capex = response[3].budgetForecastsY1.filter(x => x.budgetData == "CapEx Forecast");
                 this.budgetService.budgetForecastsY1Opex = response[3].budgetForecastsY1.filter(x => x.budgetData == "OpEx Forecast");
                 this.budgetService.currentEntry = response[3].budgetForecasts.find(x => x.active == 'Current' && x.budgetData == "CapEx Forecast");
-                this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
                 this.budgetService.planActive = response[3].budgetForecasts.find(x => x.active === 'Plan' || x.budgetData === 'CapEx Forecast');
                 this.forecastPatchGeneralForm(response[3].budgetForecasts.filter(x => x.budgetData == "CapEx Forecast"));
                 this.generalInfoPatchValue(response[3])
@@ -102,6 +101,11 @@ export class BudgetComponent implements OnInit {
                 this.budgetService.checkIsCellEditable();
                 this.budgetService.calculateForecast();
                 this.budgetService.setTextColors();
+                this.budgetService.openEntriesExist = response[3].budgetForecasts.some(item => item.budgetData === 'CapEx Forecast' && item.isopen === true);
+                if(this.budgetService.openEntriesExist){
+                    this.budgetService.openEntry = response[3].budgetForecasts.find(x => x.isopen == true);
+                }
+                this.budgetService.setLabels();
                 this.viewContent = true
             })
             .catch((error) => {
@@ -182,12 +186,14 @@ export class BudgetComponent implements OnInit {
         } else {
             let returnText = 'Not Initiated Future Spend FY ';
             const openEntry =  this.budgetService.budgetPageInfo.budgetForecasts.find(x => x.isopen === true && x.budgetData === 'CapEx Forecast');
-            const years = [openEntry.annualTotal, openEntry.y1, openEntry.y2, openEntry.y3, openEntry.y4, openEntry.y5];
             let foundYear = null;
-            for (let i = 0; i < years.length; i++) {
-                if (years[i] !== 0) {
-                    foundYear = i;
-                    break;
+            if(openEntry) {
+                const years = [openEntry.annualTotal, openEntry.y1, openEntry.y2, openEntry.y3, openEntry.y4, openEntry.y5];
+                for (let i = 0; i < years.length; i++) {
+                    if (years[i] !== 0) {
+                        foundYear = i;
+                        break;
+                    }
                 }
             }
             return foundYear !== null ? (returnText + `Y${foundYear}`) : (id && id !== '' ? this.projectHubService.lookUpMaster.find(x => x.lookUpId === id)?.lookUpName : '');
