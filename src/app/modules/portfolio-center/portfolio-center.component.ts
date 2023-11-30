@@ -1498,6 +1498,7 @@ export class PortfolioCenterComponent implements OnInit {
     this.defaultfilter.ProjectTeamMember = []
     this.defaultfilter.ProjectState = []
     this.defaultfilter.ProjectPhase = []
+    this.showLA = false
     // this.resetpage()
   }
 
@@ -2476,6 +2477,7 @@ export class PortfolioCenterComponent implements OnInit {
         this.dataLoader(res);
         this.originalData = originalData;
       })
+      this.dataLA = []
       this.showLA = true
     }
   }
