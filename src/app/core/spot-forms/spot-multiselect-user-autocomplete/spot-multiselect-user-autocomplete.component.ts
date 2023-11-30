@@ -124,8 +124,12 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
               "label": "Okay",
               "color": "warn"
             },
+            "cancel": {
+              "show": false,
+              "label": "Cancel"
+            }
           },
-          "dismissible": true
+          "dismissible": false
         }
         const alert = this.fuseAlert.open(comfirmConfig)
       }

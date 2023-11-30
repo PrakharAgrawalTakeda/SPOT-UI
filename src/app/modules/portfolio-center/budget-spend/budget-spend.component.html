@@ -19,5 +19,10 @@
             <app-project-performance *ngIf="item.title == 'Project Performance' && item.toggled == true"></app-project-performance>
             <app-forecast-excel-update *ngIf="item.title == 'Forecast Excel Update' && item.toggled == true"></app-forecast-excel-update>
             <app-portfolio-performance *ngIf="item.title == 'Portfolio Performance' && item.toggled == true"></app-portfolio-performance>
+            <div *ngIf="item.toggled" class="w-full pr-4 m-2 flex items-start justify-end">
+                <button type="button" mat-flat-button class="bg-primary text-on-primary text-primary'" (click)="PortfolioCenterService.toggleDrawerOpen('', '',[],'',true)">
+                    OK
+                </button>
+            </div>
         </div>
         

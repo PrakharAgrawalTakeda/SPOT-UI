@@ -21,6 +21,7 @@ export class ProjectTeamComponent implements OnInit {
   bulkEditType: string = 'ProjectTeamBulkEdit';
   addSingle: string = 'ProjectTeamAddSingle';
   chartercount: string;
+  isStrategicInitiative:boolean = false
   @Output() eventName = new EventEmitter<EventType>();
   constructor(private Router: Router, private apiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public projecthubservice: ProjectHubService) {
     this.projecthubservice.submitbutton.subscribe(res => {
@@ -53,6 +54,8 @@ export class ProjectTeamComponent implements OnInit {
       this.addSingle = 'ProjectTeamAddSingleProjectCharter'
     }
     this.apiService.getmembersbyproject(this.id).then((res) => {
+      this.apiService.getGeneralInfoData(this.id).then((result:any)=>{
+      this.isStrategicInitiative = result.projectData.problemType == "Strategic Initiative / Program"
       this.teamMembers = res
       this.chartercount = this.teamMembers.filter(x => x.includeInCharter == true).length;
       localStorage.setItem('chartercount', this.chartercount);
@@ -61,7 +64,8 @@ export class ProjectTeamComponent implements OnInit {
           this.teamMembers[i].includeInCharter = false;
         }  
       }
-    })
+    })  
+  })
   }
   getNgxDatatableNumberHeader(): any {
     return ' ngx-number-header';
