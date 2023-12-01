@@ -735,6 +735,14 @@ export class PortfolioCenterComponent implements OnInit {
                   "order": 15
                 }
               }
+              else if(localattribute[i].dataType == "5"){
+                var localdata = {
+                  "name": localattribute[i].name,
+                  "value": localattribute[i].data[0].value.userDisplayName,
+                  "count": localattribute[i].data.length,
+                  "order": 15
+                }
+              }
               else if(localattribute[i].dataType == "1"){
                 var data:any = 'Yes'
                 if(localattribute[i].data[0].value != false){
@@ -1318,18 +1326,18 @@ export class PortfolioCenterComponent implements OnInit {
                 mainObj[i].data = []
                 mainObj[i].data[j] = {
                   "uniqueId": "",
-                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].userAdid
+                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
                 }
               }
               else {
                 if (mainObj[i].data[j] == undefined) {
                   mainObj[i].data[j] = {
                     "uniqueId": "",
-                    "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].userAdid
+                    "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
                   }
                 }
                 else {
-                  mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].userAdid
+                  mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j]
 
                 }
               }
@@ -2597,6 +2605,25 @@ export class PortfolioCenterComponent implements OnInit {
             else {
               i.data[j] = this.lookup.filter(x => x.lookUpId == newData[j].value)[0]
             }
+          }
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+      }
+      else if (i.dataType == 5) {
+        if (i.data.length == 0) {
+          i.data = []
+          this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
+        }
+        else {
+          var newData = i.data
+          var dataMulti = []
+          for (var j = 0; j < newData.length; j++) {
+            // if (this.lookup.filter(x => x.lookUpId == newData[j].value).length == 0) {
+            //   i.data[j] = []
+            // }
+            // else {
+              i.data[j] = newData[j].value.userAdid
+            // }
           }
           this.localAttributeForm.addControl(i.uniqueId, new FormControl(i.data))
         }
