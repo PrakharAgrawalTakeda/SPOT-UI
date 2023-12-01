@@ -1310,6 +1310,36 @@ export class PortfolioCenterComponent implements OnInit {
           }
           dataToSend.push(mainObj[i])
         }
+        else if (mainObj[i].dataType == 5) {
+          var data = []
+          if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
+            for (var j = 0; j < this.localAttributeForm.controls[mainObj[i].uniqueId].value.length; j++) {
+              if (this.localAttributeForm.controls[mainObj[i].uniqueId].value.length < mainObj[i].data.length) {
+                mainObj[i].data = []
+                mainObj[i].data[j] = {
+                  "uniqueId": "",
+                  "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].userAdid
+                }
+              }
+              else {
+                if (mainObj[i].data[j] == undefined) {
+                  mainObj[i].data[j] = {
+                    "uniqueId": "",
+                    "value": this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].userAdid
+                  }
+                }
+                else {
+                  mainObj[i].data[j].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value[j].userAdid
+
+                }
+              }
+            }
+          }
+          else {
+            mainObj[i].data = []
+          }
+          dataToSend.push(mainObj[i])
+        }
         else {
           if (mainObj[i].data.length == 0) {
             if (mainObj[i].dataType == 4 && (this.localAttributeForm.controls[mainObj[i].uniqueId].value == "" || isNaN(this.localAttributeForm.controls[mainObj[i].uniqueId].value))) {
