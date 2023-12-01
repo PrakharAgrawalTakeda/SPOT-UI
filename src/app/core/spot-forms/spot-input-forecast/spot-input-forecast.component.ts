@@ -1,5 +1,6 @@
 import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
     selector: 'spot-input-forecast',
@@ -27,7 +28,7 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
     };
     form: FormGroup;
     disabled = false;
-
+    targetValue = new BehaviorSubject<any>('')
     constructor(private fb: FormBuilder) {
     }
 
@@ -54,8 +55,8 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
         if (val != null && val !== '') {
             value = this.autoAddDecimal ? (Number(val) ? Number(val).toFixed(this.decimalCount) : '') : val.toString();
         }
-        if (value === '0') {
-            value = '';
+        if (value === '') {
+            value = '0';
         }
         if (this.decimalCount === 0) {
             value = value.replace(/\..*/, '');
@@ -86,7 +87,14 @@ export class SpotInputForecastComponent implements OnInit, ControlValueAccessor 
             value = value.replace(/(?<!\.\d*)(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
         }
         event.target.value = value;
+        this.targetValue.next(event.target);
         this.onChange(parseFloat(value));
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'Tab') {
+            this.targetValue.value.select();
+        }
     }
 
     onBlur(event: any): void {
