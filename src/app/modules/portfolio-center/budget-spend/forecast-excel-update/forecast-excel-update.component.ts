@@ -40,7 +40,7 @@ export class ForecastExcelUpdateComponent {
   y3Label: string = '';
   y4Label: string = '';
   forecastDB = []
-  
+
   constructor(private portfoliService: PortfolioApiService, public fuseAlert: FuseConfirmationService, public PortfolioCenterService: PortfolioCenterService, private auth: AuthService) {
     this.ForecastForm.valueChanges.subscribe(res => {
       if (this.showContent) {
@@ -169,7 +169,7 @@ export class ForecastExcelUpdateComponent {
   })
 })
   }
-  
+
   getData(){
     var mandatory = true
     if(this.ForecastForm.controls.DataType.value == "Historical"){
@@ -237,7 +237,7 @@ export class ForecastExcelUpdateComponent {
           console.log(historicalData)
           this.ExcelData = historicalData
           this.forecastExcelHistorical = historicalData.filter(x => x.budgetDataType == this.ForecastForm.controls.ForecastType.value.lookUpName)
-          
+
           for (var i of this.forecastExcelHistorical) {
             this.historicalForm.push(new FormGroup({
               budgetDataType: new FormControl(i.budgetDataType),
@@ -351,7 +351,8 @@ export class ForecastExcelUpdateComponent {
     const clipboardData = event.clipboardData || window['clipboardData'];
     const pastedData = clipboardData.getData('text').split('\t');
     for (let i = 0; i < pastedData.length; i++) {
-        const roundedNumber = Math.round(Number(pastedData[i]));
+        let cleanedValue = pastedData[i].replace(/,/g, '');
+        const roundedNumber = Math.round(cleanedValue);
         this.historicalForm.controls[rowIndex].value[field] = roundedNumber;
         this.historicalForm.controls[rowIndex].patchValue({
             [field]: roundedNumber
@@ -367,7 +368,8 @@ export class ForecastExcelUpdateComponent {
     const clipboardData = event.clipboardData || window['clipboardData'];
     const pastedData = clipboardData.getData('text').split('\t');
     for (let i = 0; i < pastedData.length; i++) {
-        const roundedNumber = Math.round(Number(pastedData[i]));
+        let cleanedValue = pastedData[i].replace(/,/g, '');
+        const roundedNumber = Math.round(cleanedValue);
         this.forecastExcelForm.controls[rowIndex].value[field] = roundedNumber;
         this.forecastExcelForm.controls[rowIndex].patchValue({
             [field]: roundedNumber

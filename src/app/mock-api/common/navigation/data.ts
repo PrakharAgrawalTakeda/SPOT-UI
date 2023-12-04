@@ -9,7 +9,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
@@ -31,7 +31,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Supporting Documents',
@@ -48,7 +48,7 @@ export const compactNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
@@ -70,7 +70,7 @@ export const compactNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Documents',
@@ -87,7 +87,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
@@ -109,7 +109,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Documents',
@@ -125,7 +125,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         type : 'basic',
         link : '/portfolio-center'
     },
-    {
+    /*{
         // id   : 'create-project',
         title: 'Create Project',
         type: 'collapsable',
@@ -147,7 +147,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
                 link: '/create-project/copy-project'
             }
         ],
-    },
+    },*/
     {
         id   : 'spot-documents',
         title: 'SPOT Supporting Documents',

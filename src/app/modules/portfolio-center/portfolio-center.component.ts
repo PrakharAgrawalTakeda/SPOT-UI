@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { PortfolioApiService } from './portfolio-api.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,7 +13,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, pairwise, startWith } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -205,6 +205,7 @@ export class PortfolioCenterComponent implements OnInit {
   currentData
   Date2
   Date3
+  portfolio:any
  
   // @ViewChild('bulkreportDrawer') bulkreportDrawer: MatSidenav
   // recentTransactionsTableColumns: string[] = ['overallStatus', 'problemTitle', 'phase', 'PM', 'schedule', 'risk', 'ask', 'budget', 'capex'];
@@ -213,10 +214,9 @@ export class PortfolioCenterComponent implements OnInit {
       if (this.showContent) {
         if (this.showLA) {
           this.showLA = false
-          localStorage.setItem('spot-localattribute', JSON.stringify([]))
-          this.localAttributeForm.controls = []
-          this.localAttributeForm.values = []
         }
+        console.log(res)
+        this.portfolio = res
         this.changePO = true
       }
     })
@@ -224,9 +224,6 @@ export class PortfolioCenterComponent implements OnInit {
       if (this.showContent) {
         if (this.showLA) {
           this.showLA = false
-          localStorage.setItem('spot-localattribute', JSON.stringify([]))
-          this.localAttributeForm.controls = []
-          this.localAttributeForm.values = []
         }
         this.changeES = true
       }
@@ -250,7 +247,6 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     var executionScope = ""
     var portfolioOwners = ""
     this.activeaccount = this.msal.instance.getActiveAccount();
@@ -277,6 +273,15 @@ export class PortfolioCenterComponent implements OnInit {
           title: 'Report Navigator',
           type: 'basic',
           link: 'https://app.powerbi.com/groups/me/apps/2455a697-d480-4b4f-b83b-6be92a73a81e/reports/e6c7feb2-8dca-49ea-9eff-9596f519c64e/ReportSectiona2d604c32b4ad7a54177?ctid=57fdf63b-7e22-45a3-83dc-d37003163aae',
+          externalLink: true,
+          target: "_blank"
+
+        },
+        {
+          id: 'spot-support',
+          title: 'Need Help or Propose a Change',
+          type: 'basic',
+          link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
           externalLink: true,
           target: "_blank"
 
@@ -803,7 +808,7 @@ export class PortfolioCenterComponent implements OnInit {
           this.Date2 = new Date(Date.now() - 12096e5).toISOString().split('T')
           this.Date3 = new Date(Date.now() - 2.592e+9).toISOString().split('T')
           this.groupData.filterGroups.length == 0 ? this.showdefault = true : this.showdefault = false
-          // localStorage.setItem('filterObject', JSON.stringify(this.groupData))
+          this.portfolio = this.PortfolioFilterForm.value.PortfolioOwner
           this.apiService.FiltersByPage(this.groupData, 0, 100).then((res: any) => {
             const mainNavComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
             mainNavComponent.navigation = this.newmainnav
@@ -1211,16 +1216,35 @@ export class PortfolioCenterComponent implements OnInit {
       }
     }
     localStorage.setItem('spot-filtersNew', JSON.stringify(this.PortfolioFilterForm.getRawValue()))
+    var data = JSON.parse(localStorage.getItem('spot-filtersNew'))
     var mainObj = this.originalData
     var dataToSend = []
     var emptyObject = {
       "uniqueId": "",
       "value": ""
     }
+    if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
+      var portfolioOwners = ""
+      var executionScope = ""
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
+        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
     Object.keys(this.localAttributeForm.controls).forEach((name) => {
       const currentControl = this.localAttributeForm.controls[name];
       var i = mainObj.findIndex(x => x.uniqueId === name);
-      if (currentControl.dirty && i >= 0) {
+      if (i >= 0) {
         if (mainObj[i].data.length == 0 && mainObj[i].dataType == 1 && this.localAttributeForm.controls[mainObj[i].uniqueId].value == "") {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
@@ -1229,10 +1253,6 @@ export class PortfolioCenterComponent implements OnInit {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
         }
-        // else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-        //   mainObj[i].data = []
-        //   dataToSend.push(mainObj[i])
-        // }
         else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
@@ -1269,25 +1289,6 @@ export class PortfolioCenterComponent implements OnInit {
             dataToSend.push(mainObj[i])
           }
         }
-        // else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
-        //   if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-        //     mainObj[i].data[0].value = ""
-        //     dataToSend.push(mainObj[i])
-        //   }
-        //   else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
-        //     emptyObject = {
-        //       "uniqueId": "",
-        //       "value": ""
-        //     }
-        //     mainObj[i].data.push(emptyObject)
-        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-        //     dataToSend.push(mainObj[i])
-        //   }
-        //   else {
-        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-        //     dataToSend.push(mainObj[i])
-        //   }
-        // }
         else if (mainObj[i].dataType == 3) {
           var data = []
           if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
@@ -1410,9 +1411,6 @@ export class PortfolioCenterComponent implements OnInit {
       }
     })
     console.log(dataToSend)
-    // if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0 || isNaN(x.data[0].value.length))) {
-    //   dataToSend = []
-    // }
     var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
     if ((LA != null || LA != undefined) && dataToSend.length > 0){
       var CommonArray = LA.filter(o => dataToSend.some(i => i.uniqueId === o.uniqueId));
@@ -1429,6 +1427,11 @@ export class PortfolioCenterComponent implements OnInit {
     var index = []
     var updateArray = []
     for(var z=0;z<dataToSend.length;z++){
+      if(dataToSend[z].dataType == "4" && dataToSend[z].data.length != 0){
+        if( dataToSend[z].data[0].value == "0"){
+        index.push(z)
+        }
+      }
       if(dataToSend[z].data.length == 0){
         // updateArray.splice(z,1);
       }
@@ -1446,13 +1449,13 @@ export class PortfolioCenterComponent implements OnInit {
       for(var i=0;i<index.length;i++){
         updateArray.push(dataToSend[index[i]])
       }
+      dataToSend = updateArray
     }
-    dataToSend = updateArray
-    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     if((LA == null || LA == undefined) && dataToSend.length == 0) {
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
-    else if (this.changeES == false && this.changePO == false && dataToSend.length != 0) {
+    else if (dataToSend.length != 0) {
       var c = 0;
       if (LA != null || LA != undefined) {
         var secondArray = LA.filter(o => !dataToSend.some(i => i.uniqueId === o.uniqueId));
@@ -1466,6 +1469,9 @@ export class PortfolioCenterComponent implements OnInit {
       var newIndex= []
       var newArray = []
       for(var z=0;z<dataToSend.length;z++){
+        if(dataToSend[z].dataType == "4" && dataToSend[z].data[0].value == "0"){
+          newIndex.push(z)
+        }
         if(dataToSend[z].data.length == 0){
           // newArray.splice(z,1);
         }
@@ -1483,16 +1489,43 @@ export class PortfolioCenterComponent implements OnInit {
         for(var i=0;i<newIndex.length;i++){
           newArray.push(dataToSend[newIndex[i]])
         }
+        dataToSend = newArray
       }
-      dataToSend = newArray
-      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
     else if ((LA != null || LA != undefined) && dataToSend.length == 0){
       for(var i=0;i<LA.length;i++){
         dataToSend.push(LA[i])
       }
-      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
+    var removeEle = []
+    var removeData = []
+    if(dataToSend.length > 0){
+      for(var i=0;i<dataToSend.length;i++){
+        var count = 0
+        for(var j=0;j<res.length;j++){
+          if(dataToSend[i].uniqueId == res[j].uniqueId){
+            count++
+          }
+        }
+        if(count > 0){
+          removeEle.push(i)
+        }
+      }
+    }
+    if(removeEle.length > 0){
+      for(var i=0;i<removeEle.length;i++){
+        removeData.push(dataToSend[removeEle[i]])
+      }
+      dataToSend = removeData
+    }
+    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+  }
+      )}
+  else{
+    localStorage.setItem('spot-localattribute', JSON.stringify([]))
+  }
     this.filterDrawer.close()
     this.resetpage()
     this.showFilter = false
@@ -2463,14 +2496,47 @@ export class PortfolioCenterComponent implements OnInit {
         }
       }
     }
+    var origData: any = []
     var localattribute = JSON.parse(localStorage.getItem('spot-localattribute'))
     if (noChangePO == true && noChangeES == true && localattribute != null) {
       this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
         console.log(res);
+        origData = this.localAttributeForm.value
+        var filterKeys = Object.keys(this.localAttributeForm.value);
         this.localAttributeFormRaw.controls = {}
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
         this.localAttributeForm.value = {}
+        if(filterKeys.length != 0){
+          res.forEach(response=>{
+            filterKeys.forEach((key : any)=> {
+              if(response.uniqueId == key){
+                if(response.dataType == 2 || response.dataType == 4){
+                  response.data.push({'value': origData[response.name]})
+                  response.data.push({'value': origData[key]})
+                }
+                else{
+                  if(origData[key].length == 0 || origData[key] == ""){
+                    // response.data.push([])
+                  }
+                  else if(response.dataType == 3){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i].lookUpId})
+                    }
+                  }
+                  else if(response.dataType == 5){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i]})
+                    }
+                  }
+                  else{
+                    response.data.push({'value' : origData[key]})
+                  }
+                }
+              }
+            })
+          })
+        }
         res.forEach(response => {
           localattribute.forEach(LA => {
             if (LA.uniqueId == response.uniqueId) {
@@ -2497,18 +2563,51 @@ export class PortfolioCenterComponent implements OnInit {
     }
     else {
       this.showLA = false
-      localStorage.setItem('spot-localattribute', null)
+      // localStorage.setItem('spot-localattribute', null)
       this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
         console.log(res);
         const originalData = Object.assign([{}], res)
+        origData = this.localAttributeForm.value
         this.originalData = []
+        var filterKeys = Object.keys(this.localAttributeForm.value);
         this.localAttributeFormRaw.controls = {}
         this.localAttributeFormRaw.value = {}
         this.localAttributeForm.controls = {}
         this.localAttributeForm.value = {}
+        if(filterKeys.length != 0){
+          res.forEach(response=>{
+            filterKeys.forEach((key : any)=> {
+              if(response.uniqueId == key){
+                if(response.dataType == 2 || response.dataType == 4){
+                  response.data.push({'value': origData[response.name]})
+                  response.data.push({'value': origData[key]})
+                }
+                else{
+                  if(origData[key].length == 0 || origData[key] == ""){
+                    // response.data.push([])
+                  }
+                  else if(response.dataType == 3){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i].lookUpId})
+                    }
+                  }
+                  else if(response.dataType == 5){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i]})
+                    }
+                  }
+                  else{
+                    response.data.push({'value' : origData[key]})
+                  }
+                }
+              }
+            })
+          })
+        }
         res.forEach(i => {
           if (i.dataType == 2 || i.dataType == 4) {
-            this.localAttributeFormRaw.addControl(i.name, new FormControl(i.data))
+            this.localAttributeFormRaw.addControl(i.name, new FormControl(i.data[0]))
+            this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data[1]))
           }
           this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
         })
@@ -2568,7 +2667,7 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   dataLoader(res) {
-    this.dataLA = []
+    // this.dataLA = []
     res.forEach(data => {
       var i = Object.assign({}, data)
       if (i.dataType == 1 && i.data.length == 0) {
@@ -2808,6 +2907,47 @@ export class PortfolioCenterComponent implements OnInit {
   openDrawer(type) {
     if (type == 'Filter') {
       this.showFilter = true
+      console.log(this.PortfolioFilterForm)
+      if(this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0){
+        this.localAttributeFormRaw.controls = {}
+        this.localAttributeFormRaw.value = {}
+        this.localAttributeForm.controls = {}
+        this.localAttributeForm.value = {}
+        this.showFilter = true
+      }
+      else{
+        var portfolioOwners = ""
+      var executionScope = ""
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
+        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+        var filterKeys = Object.keys(this.localAttributeForm.value);
+        for(var i=0;i<filterKeys.length;i++){
+          var count = 0
+          for(var j=0;j<res.length;j++){
+            if(filterKeys[i] == res[j].uniqueId || filterKeys[i] == res[j].name){
+              count++
+            }
+          }
+          if(count == 0){
+            this.localAttributeForm.removeControl(filterKeys[i])
+          }
+        }
+        this.showFilter = true
+      })
+      }
     }
     else {
       this.showFilter = false

@@ -240,15 +240,15 @@
                         <app-budget-capex-opex-table class="mt-2" [mode]="'Capex'" [inputData]="budgetService.budgetPageInfo"></app-budget-capex-opex-table>
                         <div class="grid grid-cols-3 gap-x-6 gap-y-0 w-full mt-4">
                             <div>
-                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'Committed Spend'" [callLocation]="'Edit'"
-                                            formControlName="committedSpend" [disabled]="true"
-                                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [isLabelStrong]="false"></spot-input>
-                            </div>
-                            <div>
                                 <spot-input class="w-full read-only" [showLabel]="true" [label]="'AFP Deviation Code'" formControlName="afpCodeId" [isLabelStrong]="false"> </spot-input>
                             </div>
                             <div>
                                 <spot-input class="w-full read-only" [showLabel]="true" [label]="'MTDP Deviation Code'" formControlName="mtdpCodeId" [isLabelStrong]="false"> </spot-input>
+                            </div>
+                            <div>
+                                <spot-input class="w-full read-only" [showLabel]="true" [label]="'Committed Spend'" [callLocation]="'Edit'"
+                                            formControlName="committedSpend" [disabled]="true"
+                                            [autoAddDecimal]="false" [inputType]="'Number'" [decimalCount]="0" [isLabelStrong]="false"></spot-input>
                             </div>
                         </div>
                     </div>
