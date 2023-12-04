@@ -247,7 +247,6 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     var executionScope = ""
     var portfolioOwners = ""
     this.activeaccount = this.msal.instance.getActiveAccount();
@@ -2556,19 +2555,6 @@ export class PortfolioCenterComponent implements OnInit {
             }
           })
         })
-      //   if(origData.length > 0){
-      //   origData.forEach(res => {
-      //     this.localAttributeFormRaw.value.forEach(control => {
-      //       if(control.uniqueId == res.uniqueId){
-      //         if (control.dataType == 2 || control.dataType == 4) {
-      //           control.data = res.data
-      //           control.patchValue(res.data[0])
-      //           // this.localAttributeFormRaw.addControl(response.uniqueId, new FormControl(LA.data[1]))
-      //         }
-      //       }
-      //     })
-      //   })
-      // }
         const originalData = Object.assign([{}], res)
         this.dataLoader(res);
         this.originalData = originalData;
@@ -2625,19 +2611,6 @@ export class PortfolioCenterComponent implements OnInit {
           }
           this.localAttributeFormRaw.addControl(i.uniqueId, new FormControl(i.data))
         })
-      //   if(origData.length > 0){
-      //   origData.forEach(res => {
-      //     this.localAttributeFormRaw.value.forEach(control => {
-      //       if(control.uniqueId == res.uniqueId){
-      //         if (control.dataType == 2 || control.dataType == 4) {
-      //           control.data = res.data
-      //           control.patchValue(res.data[0])
-      //           // this.localAttributeFormRaw.addControl(response.uniqueId, new FormControl(LA.data[1]))
-      //         }
-      //       }
-      //     })
-      //   })
-      // }
         this.dataLoader(res);
         this.originalData = originalData;
       })
@@ -2934,6 +2907,47 @@ export class PortfolioCenterComponent implements OnInit {
   openDrawer(type) {
     if (type == 'Filter') {
       this.showFilter = true
+      console.log(this.PortfolioFilterForm)
+      if(this.PortfolioFilterForm.value.PortfolioOwner?.length == 0 && this.PortfolioFilterForm.value.ExecutionScope?.length == 0){
+        this.localAttributeFormRaw.controls = {}
+        this.localAttributeFormRaw.value = {}
+        this.localAttributeForm.controls = {}
+        this.localAttributeForm.value = {}
+        this.showFilter = true
+      }
+      else{
+        var portfolioOwners = ""
+      var executionScope = ""
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
+        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
+        var filterKeys = Object.keys(this.localAttributeForm.value);
+        for(var i=0;i<filterKeys.length;i++){
+          var count = 0
+          for(var j=0;j<res.length;j++){
+            if(filterKeys[i] == res[j].uniqueId){
+              count++
+            }
+          }
+          if(count == 0){
+            this.localAttributeForm.removeControl(filterKeys[i])
+          }
+        }
+        this.showFilter = true
+      })
+      }
     }
     else {
       this.showFilter = false
