@@ -1216,6 +1216,23 @@ export class PortfolioCenterComponent implements OnInit {
       "value": ""
     }
     if(this.PortfolioFilterForm.value.PortfolioOwner?.length > 0 || this.PortfolioFilterForm.value.ExecutionScope?.length > 0){
+      var portfolioOwners = ""
+      var executionScope = ""
+      if (this.PortfolioFilterForm.controls.PortfolioOwner.value != null) {
+        if (this.PortfolioFilterForm.controls.PortfolioOwner.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.PortfolioOwner.value.length; z++) {
+            portfolioOwners += this.PortfolioFilterForm.controls.PortfolioOwner.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      if (this.PortfolioFilterForm.controls.ExecutionScope.value != null) {
+        if (this.PortfolioFilterForm.controls.ExecutionScope.value.length != 0) {
+          for (var z = 0; z < this.PortfolioFilterForm.controls.ExecutionScope.value.length; z++) {
+            executionScope += this.PortfolioFilterForm.controls.ExecutionScope.value[z].portfolioOwnerId + ','
+          }
+        }
+      }
+      this.apiService.getLocalAttributes(portfolioOwners, executionScope).then((res: any) => {
     Object.keys(this.localAttributeForm.controls).forEach((name) => {
       const currentControl = this.localAttributeForm.controls[name];
       var i = mainObj.findIndex(x => x.uniqueId === name);
@@ -1477,11 +1494,10 @@ export class PortfolioCenterComponent implements OnInit {
     var removeEle = []
     var removeData = []
     if(dataToSend.length > 0){
-      var filterKeys = Object.keys(this.localAttributeForm.value);
       for(var i=0;i<dataToSend.length;i++){
         var count = 0
-        for(var j=0;j<filterKeys.length;j++){
-          if(dataToSend[i].uniqueId == filterKeys[j]){
+        for(var j=0;j<res.length;j++){
+          if(dataToSend[i].uniqueId == res[j].uniqueId){
             count++
           }
         }
@@ -1498,6 +1514,7 @@ export class PortfolioCenterComponent implements OnInit {
     }
     localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
   }
+      )}
   else{
     localStorage.setItem('spot-localattribute', JSON.stringify([]))
   }
