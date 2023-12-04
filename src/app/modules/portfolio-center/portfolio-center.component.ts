@@ -1432,7 +1432,7 @@ export class PortfolioCenterComponent implements OnInit {
         index.push(z)
         }
       }
-      else if(dataToSend[z].data.length == 0){
+      if(dataToSend[z].data.length == 0){
         // updateArray.splice(z,1);
       }
       else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
@@ -1472,7 +1472,7 @@ export class PortfolioCenterComponent implements OnInit {
         if(dataToSend[z].dataType == "4" && dataToSend[z].data[0].value == "0"){
           newIndex.push(z)
         }
-        else if(dataToSend[z].data.length == 0){
+        if(dataToSend[z].data.length == 0){
           // newArray.splice(z,1);
         }
         else if(dataToSend[z].data[0].value == "" || dataToSend[z].data[0].value == null || dataToSend[z].data[0].value == undefined || dataToSend[z].data[0].value.length == 0){
@@ -2937,7 +2937,7 @@ export class PortfolioCenterComponent implements OnInit {
         for(var i=0;i<filterKeys.length;i++){
           var count = 0
           for(var j=0;j<res.length;j++){
-            if(filterKeys[i] == res[j].uniqueId){
+            if(filterKeys[i] == res[j].uniqueId || filterKeys[i] == res[j].name){
               count++
             }
           }
