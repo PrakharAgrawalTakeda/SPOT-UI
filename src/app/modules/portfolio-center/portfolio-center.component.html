@@ -662,7 +662,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon
                                     svgIcon="{{(indicator.getIndicators(row.budgetIndicator, 'circle')).icontype}}"
-                                    class="{{(indicator.getIndicators(row.budgetIndicator, 'circle')).iconcolor}} ">
+                                    class="{{(indicator.getIndicators(row.budgetIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>
@@ -672,7 +672,7 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <mat-icon
                                     svgIcon="{{(indicator.getIndicators(row.spendIndicator, 'circle')).icontype}}"
-                                    class="{{(indicator.getIndicators(row.spendIndicator, 'circle')).iconcolor}} ">
+                                    class="{{(indicator.getIndicators(row.spendIndicator, 'overall')).iconcolor}} ">
                                 </mat-icon>
                             </ng-template>
                         </ngx-datatable-column>

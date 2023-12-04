@@ -432,8 +432,12 @@ export class BudgetForecastBulkEditComponent {
             const formValue = this.budgetForecastForm.getRawValue();
             if(this.mode=='Capex'){
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
-                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").afpDeviationCodeID = formValue.afpDeviationCode ? formValue.afpDeviationCode.lookUpId : "";
-                mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "CapEx Forecast").mtdpDeviationCodeID =  formValue.mtdpDeviationCode ? formValue.mtdpDeviationCode.lookUpId : "";
+                mainObj.budgetForecasts.forEach(obj => {
+                    if (obj.budgetData === "CapEx Forecast") {
+                        obj.afpDeviationCodeID = formValue.afpDeviationCode ? formValue.afpDeviationCode.lookUpId : "";
+                        obj.mtdpDeviationCodeID = formValue.mtdpDeviationCode ? formValue.mtdpDeviationCode.lookUpId : "";
+                    }
+                });
             }else{
                 mainObj.budgetForecasts.find(x => x.isopen === true && x.budgetData== "OpEx Forecast").submittedByID = this.msalService.instance.getActiveAccount().localAccountId;
             }
