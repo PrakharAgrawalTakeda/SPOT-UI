@@ -277,6 +277,15 @@ export class PortfolioCenterComponent implements OnInit {
           externalLink: true,
           target: "_blank"
 
+        },
+        {
+          id: 'spot-support',
+          title: 'Need Help or Propose a Change',
+          type: 'basic',
+          link: 'mailto:DL.SPOTSupport@takeda.com?Subject=SPOT Support Request ' + this.activeaccount.name + ' (Logged on ' + moment().format('llll') + ')',
+          externalLink: true,
+          target: "_blank"
+
         }
       ]
     }
