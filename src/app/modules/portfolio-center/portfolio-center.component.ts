@@ -13,7 +13,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map, pairwise, startWith } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { GlobalFiltersDropDown } from 'app/shared/global-filters';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -1228,10 +1228,6 @@ export class PortfolioCenterComponent implements OnInit {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
         }
-        // else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && mainObj[i].isMulti == false && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-        //   mainObj[i].data = []
-        //   dataToSend.push(mainObj[i])
-        // }
         else if (mainObj[i].data.length == 0 && mainObj[i].dataType == 3 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length == 0) {
           mainObj[i].data = []
           dataToSend.push(mainObj[i])
@@ -1268,25 +1264,6 @@ export class PortfolioCenterComponent implements OnInit {
             dataToSend.push(mainObj[i])
           }
         }
-        // else if (mainObj[i].dataType == 3 && mainObj[i].isMulti == false) {
-        //   if (mainObj[i].data.length != 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId == undefined) {
-        //     mainObj[i].data[0].value = ""
-        //     dataToSend.push(mainObj[i])
-        //   }
-        //   else if (mainObj[i].data.length == 0 && this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId != undefined) {
-        //     emptyObject = {
-        //       "uniqueId": "",
-        //       "value": ""
-        //     }
-        //     mainObj[i].data.push(emptyObject)
-        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-        //     dataToSend.push(mainObj[i])
-        //   }
-        //   else {
-        //     mainObj[i].data[0].value = this.localAttributeForm.controls[mainObj[i].uniqueId].value.lookUpId
-        //     dataToSend.push(mainObj[i])
-        //   }
-        // }
         else if (mainObj[i].dataType == 3) {
           var data = []
           if (this.localAttributeForm.controls[mainObj[i].uniqueId] != null && this.localAttributeForm.controls[mainObj[i].uniqueId].value.length != 0) {
@@ -1409,9 +1386,6 @@ export class PortfolioCenterComponent implements OnInit {
       }
     })
     console.log(dataToSend)
-    // if (Object.values(dataToSend).every(x => x.data[0].value === null || x.data[0].value === '' || x.data[0].value.length === 0 || isNaN(x.data[0].value.length))) {
-    //   dataToSend = []
-    // }
     var LA = JSON.parse(localStorage.getItem('spot-localattribute'))
     if ((LA != null || LA != undefined) && dataToSend.length > 0){
       var CommonArray = LA.filter(o => dataToSend.some(i => i.uniqueId === o.uniqueId));
@@ -1450,9 +1424,9 @@ export class PortfolioCenterComponent implements OnInit {
       for(var i=0;i<index.length;i++){
         updateArray.push(dataToSend[index[i]])
       }
+      dataToSend = updateArray
     }
-    dataToSend = updateArray
-    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+    // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     if((LA == null || LA == undefined) && dataToSend.length == 0) {
       localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
@@ -1490,16 +1464,39 @@ export class PortfolioCenterComponent implements OnInit {
         for(var i=0;i<newIndex.length;i++){
           newArray.push(dataToSend[newIndex[i]])
         }
+        dataToSend = newArray
       }
-      dataToSend = newArray
-      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
     else if ((LA != null || LA != undefined) && dataToSend.length == 0){
       for(var i=0;i<LA.length;i++){
         dataToSend.push(LA[i])
       }
-      localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
+      // localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
     }
+    var removeEle = []
+    var removeData = []
+    if(dataToSend.length > 0){
+      var filterKeys = Object.keys(this.localAttributeForm.value);
+      for(var i=0;i<dataToSend.length;i++){
+        var count = 0
+        for(var j=0;j<filterKeys.length;j++){
+          if(dataToSend[i].uniqueId == filterKeys[j]){
+            count++
+          }
+        }
+        if(count > 0){
+          removeEle.push(i)
+        }
+      }
+    }
+    if(removeEle.length > 0){
+      for(var i=0;i<removeEle.length;i++){
+        removeData.push(dataToSend[removeEle[i]])
+      }
+      dataToSend = removeData
+    }
+    localStorage.setItem('spot-localattribute', JSON.stringify(dataToSend))
   }
   else{
     localStorage.setItem('spot-localattribute', JSON.stringify([]))
@@ -2497,6 +2494,16 @@ export class PortfolioCenterComponent implements OnInit {
                   if(origData[key].length == 0 || origData[key] == ""){
                     // response.data.push([])
                   }
+                  else if(response.dataType == 3){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i].lookUpId})
+                    }
+                  }
+                  else if(response.dataType == 5){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i]})
+                    }
+                  }
                   else{
                     response.data.push({'value' : origData[key]})
                   }
@@ -2523,19 +2530,19 @@ export class PortfolioCenterComponent implements OnInit {
             }
           })
         })
-        if(origData.length > 0){
-        origData.forEach(res => {
-          this.localAttributeFormRaw.value.forEach(control => {
-            if(control.uniqueId == res.uniqueId){
-              if (control.dataType == 2 || control.dataType == 4) {
-                control.data = res.data
-                control.patchValue(res.data[0])
-                // this.localAttributeFormRaw.addControl(response.uniqueId, new FormControl(LA.data[1]))
-              }
-            }
-          })
-        })
-      }
+      //   if(origData.length > 0){
+      //   origData.forEach(res => {
+      //     this.localAttributeFormRaw.value.forEach(control => {
+      //       if(control.uniqueId == res.uniqueId){
+      //         if (control.dataType == 2 || control.dataType == 4) {
+      //           control.data = res.data
+      //           control.patchValue(res.data[0])
+      //           // this.localAttributeFormRaw.addControl(response.uniqueId, new FormControl(LA.data[1]))
+      //         }
+      //       }
+      //     })
+      //   })
+      // }
         const originalData = Object.assign([{}], res)
         this.dataLoader(res);
         this.originalData = originalData;
@@ -2567,8 +2574,18 @@ export class PortfolioCenterComponent implements OnInit {
                   if(origData[key].length == 0 || origData[key] == ""){
                     // response.data.push([])
                   }
+                  else if(response.dataType == 3){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i].lookUpId})
+                    }
+                  }
+                  else if(response.dataType == 5){
+                    for(var i=0;i<origData[key].length;i++){
+                      response.data.push({'value' : origData[key][i]})
+                    }
+                  }
                   else{
-                  response.data.push({'value' : origData[key]})
+                    response.data.push({'value' : origData[key]})
                   }
                 }
               }
