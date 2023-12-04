@@ -7,6 +7,7 @@ import {FuseConfirmationConfig, FuseConfirmationService} from "../../../../../@f
 import {Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup} from "@angular/forms";
 import {PortfolioApiService} from "../../../portfolio-center/portfolio-api.service";
+import {BudgetService} from "../budget.service";
 
 @Component({
     selector: 'app-budget-funding-information-bulk-edit',
@@ -20,7 +21,7 @@ export class BudgetFundingInformationBulkEditComponent {
                 public role: RoleService,
                 private portfoliService: PortfolioApiService,
                 public fuseAlert: FuseConfirmationService,
-                private router: Router) {
+                public budgetService: BudgetService) {
         this.fundingRequestForm.valueChanges.subscribe(res => {
             if (this.viewContent == true) {
                 this.formValue()
@@ -43,7 +44,6 @@ export class BudgetFundingInformationBulkEditComponent {
     fundingRequestForm = new FormArray([])
     localCurrency:any = [];
     showAddNewButton: boolean = false;
-    additionalNgxHeight:any;
 
     ngOnInit(): void {
         this.dataloader()
@@ -51,7 +51,7 @@ export class BudgetFundingInformationBulkEditComponent {
 
     dataloader() {
         this.budgetInfo = this.projecthubservice.all
-        this.fundingRequests = this.projecthubservice.all.budgetIOs;
+        this.fundingRequests = this.budgetService.budgetPageInfo.budgetIOs;
         this.portfoliService.getLocalCurrency().then(currency => {
             this.localCurrency = currency
             this.viewContent = true;
