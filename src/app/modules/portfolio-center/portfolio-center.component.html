@@ -80,15 +80,15 @@
                         [idPointer]="'lookUpId'" [dropDownArray]="totalCAPEX" [sortByType]="'custom'"
                         [customSortPointer]="'lookUpOrder'">
                     </spot-multiselect-autocomplete>
-                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
-                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
-                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true"
-                        [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
-                    </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="GMSBudgetOwner" class="w-full" name="GMSBudgetOwner"
                         [label]="'GMS Budget Owner'" [placeholder]="'GMS Budget Owner'"
                         [valuePointer]="'portfolioOwner'" [idPointer]="'portfolioOwnerId'"
                         [dropDownArray]="getGMSBudgetOwner()" [sortByType]="'custom'" [customSortPointer]="'pfid'">
+                    </spot-multiselect-autocomplete>
+                    <spot-multiselect-autocomplete formControlName="Product" class="w-full" name="Product"
+                        [label]="'Product(s)'" [placeholder]="'Product'" [valuePointer]="'fullProductName'"
+                        [idPointer]="'productId'" [dropDownArray]="filterlist.products" [showHint]="true"
+                        [hint]="'Select the product which is most impacted by the project. If multiple products without an obvious primary, select one out of the group'">
                     </spot-multiselect-autocomplete>
                     <spot-multiselect-autocomplete formControlName="AGILEWorkstream" class="w-full"
                         name="AGILEWorkstream" [label]="'AGILE Workstream'" [placeholder]="'AGILE Workstream'"
@@ -688,13 +688,13 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                             [width]="180">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                                 <!-- <p>{{value}}</p> -->
-                                <p class="grid grid-cols-1 text-right" style="margin-right: 10px;">
+                                <p class="grid grid-cols-1 text-right" style="margin-right: 28px;">
                                     {{
                                     row.CAPEX ? row.CAPEX.toLocaleString() : 0
                                     }} &nbsp; {{row.currencyAbb}}
                                 </p>
                                 <!-- <br /> -->
-                                <p class="text-right" style="margin-right: 12px;">
+                                <p class="text-right" style="margin-right: 28px;">
                                     {{ row.FORECAST ? row.FORECAST.toLocaleString() : 0 }} &nbsp; {{row.currencyAbb}}
                                 </p>
                             </ng-template>
@@ -703,13 +703,13 @@ CAPS Project (NO) — All other projects, even those that have an indirect impac
                         <ngx-datatable-column name="Carbon Impact (Tons CO2)" prop="calculatedEmissionsImpact"
                             [width]="130">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
+                                <p style="text-align: right;margin-right: 15px;">{{row.calculatedEmissionsImpact1}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 
-                        <ngx-datatable-column name="Water Impact (m3)" prop="waterImpactUnits" [width]="110">
+                        <ngx-datatable-column name="Water Impact (m3)" prop="waterImpactUnits" [width]="110" [sortable]="true">
                             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                                <p style="text-align: right;margin-right: 15px;">{{value}}</p>
+                                <p style="text-align: right;margin-right: 15px;">{{row.waterImpactUnits1}}</p>
                             </ng-template>
                         </ngx-datatable-column>
 

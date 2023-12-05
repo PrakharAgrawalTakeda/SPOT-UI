@@ -35,8 +35,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
   lookupdata: any = [];
   localCurrencyList: any = [];
   local: any = [];
-  projectTypeDropDrownValues1 = ["Standard Project / Program", "Simple Project"]
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", 'Strategic Initiative / Program']
+  projectTypeDropDrownValues1 = ["Standard Project / Program", "SimpleProject"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "SimpleProject", 'Strategic Initiative / Program']
   isStrategicInitiative: boolean = false
   projectNameLabel: string = "Project Name"
   owningOrganizationValues = []
@@ -297,8 +297,8 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           }
         });
         this.owningOrganizationValues = this.projectHubService.all.defaultOwningOrganizations
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'Simple Project' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
-        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
+        this.projectHubService.roleControllerControl.generalInfo.porfolioOwner || this.generalInfoForm.controls.problemType.value == 'SimpleProject' ? this.generalInfoForm.controls.portfolioOwner.enable() : this.generalInfoForm.controls.portfolioOwner.disable()
+        //this.projectHubService.roleControllerControl.generalInfo.porfolioOwner ? this.generalInfoForm.controls.problemType.enable() : this.generalInfoForm.controls.problemType.disable()
         if (this.isStrategicInitiative) {
           this.projectNameLabel = "Initiaitive Name"
           if (['ProjectCharter', 'CloseOut', 'BusinessCase'].includes(this.subCallLocation)) {
