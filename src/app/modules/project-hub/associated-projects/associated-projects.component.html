@@ -73,7 +73,7 @@
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Record Type" prop="problemType" [flexGrow]="3" [resizeable]="false" [draggable]="false"
-                        [sortable]="false" *ngIf="projecthubservice.isStrategicIniative">
+                        [sortable]="false">
                         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                             {{ value }}
                         </ng-template>

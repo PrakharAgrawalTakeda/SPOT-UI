@@ -97,7 +97,7 @@ export class GeneralInfoComponent implements OnInit, OnDestroy {
   })
   qrTableEditStack: any = []
   qualityRefForm = new FormArray([])
-  projectTypeDropDrownValues = ["Standard Project / Program", "Simple Project", "Strategic Initiative / Program"]
+  projectTypeDropDrownValues = ["Standard Project / Program", "SimpleProject", "Strategic Initiative / Program"]
   isStrategicInitiative: boolean = false
   formFieldHelpers: any
   lookUpPVD: any;
