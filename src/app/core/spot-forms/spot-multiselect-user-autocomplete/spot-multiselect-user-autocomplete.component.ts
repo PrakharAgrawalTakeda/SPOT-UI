@@ -83,17 +83,20 @@ export class SpotMultiselectUserAutocompleteComponent implements OnInit, Control
         const params = new HttpParams().set('query', value);
         this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
-            if (this.selectedOption.length > 0 && resultSets.length > 0) {
-              var select = this.selectedOption.map(x => x.userAdid).filter((obj) => obj.userIsActive)
-              resultSets.filter(x => select.includes(x.userAdid))
-            }
+            // Sort and filter logic
+          this.resultSets = resultSets
+          .filter(obj => obj.userIsActive)
+          .sort((a, b) => {
+            const lastNameA = a.userDisplayName.split(',')[0].trim();
+            const lastNameB = b.userDisplayName.split(',')[0].trim();
+            return lastNameA.localeCompare(lastNameB);
+          });
 
-            // Store the result sets
-            this.resultSets = resultSets;
-            console.log(this.resultSets)
-            console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
-            // Execute the event
-            //this.search.next(resultSets);
+            // Remove already selected options
+          if (this.selectedOption.length > 0) {
+            const selectedIds = this.selectedOption.map(x => x.userAdid);
+            this.resultSets = this.resultSets.filter(x => !selectedIds.includes(x.userAdid));
+          }
           });
       });
   }

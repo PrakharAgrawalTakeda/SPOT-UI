@@ -55,7 +55,7 @@ export class DataQualityPageComponent implements OnInit {
         if(percentage == null){
             return '#808080';
         }
-        if (this.projectType == 'Simple Project') {
+        if (this.projectType == 'SimpleProject') {
             return '#4c9bcf';
         } else {
             if (percentage < this.lowerTargetPercentage) {
