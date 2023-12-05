@@ -135,10 +135,10 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
           //IF CONDITIONS NOT MET ALERT
           //SwITCH BACK TO OG PROJECT TYPE
           //ELSE MET CONFIRMATION ALERT
-          //UPDATE PARENT 
+          //UPDATE PARENT
           //
 
-          
+
         }
       }
     })
@@ -174,11 +174,11 @@ export class GeneralInfoSingleEditComponent implements OnInit, OnChanges {
         if (res != 'Strategic Initiative / Program') {
           if (res == 'Standard Project / Program') {
             if (!this.projectHubService.roleControllerControl.generalInfo.porfolioOwner) {
-              this.generalInfoForm.controls.portfolioOwner.disable()
+              this.generalInfoForm.controls.portfolioOwner.disable({emitEvent : false})
             }
           }
           else {
-            this.generalInfoForm.controls.portfolioOwner.enable()
+            this.generalInfoForm.controls.portfolioOwner.enable({emitEvent : false})
           }
         }
       }
