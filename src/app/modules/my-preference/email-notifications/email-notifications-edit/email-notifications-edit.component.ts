@@ -23,6 +23,7 @@ export class EmailNotificationsEditComponent {
     @Input() debounce: number = 300;
     @Input() minLength: number = 4;
     @Input() appearance: 'basic' | 'bar' = 'bar';
+    @Input() confidentialProjects: 'None' | 'User' | 'Only' = 'User'
     @Output() search: EventEmitter<any> = new EventEmitter<any>();
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     emailNotiEditType: string = 'EmailNotiEdit';
@@ -199,19 +200,44 @@ export class EmailNotificationsEditComponent {
                         .subscribe((resultSets: any) => {
                             console.log(resultSets.projectData);
                             console.log(this.resultSets);
-                            // Debugging point: Check the filtered projects
-                            console.log(this.projects);
-                            const filteredProjects = resultSets.projectData.filter((project) => {
-                                // Check if the project is not already in the resultSets
+                            // Store the result sets
+                if (this.confidentialProjects != 'Only') {
+                    this.resultSets = resultSets.projectData?.filter(x => !x.isConfidential);
+                }
+                else {
+                    this.resultSets = [];
+                }
 
-                                return !this.projects || !this.projects.some(existingProject => existingProject.problemUniqueId == project.problemUniqueId);
-                            });
-
-                            console.log(filteredProjects)
-                            // Update resultSets with filtered projects
-                            this.resultSets = filteredProjects;
-                            //this.newVariable = this.resultSets
-
+                
+                if (this.confidentialProjects != 'None') {
+                    var activeaccount = this.msalService.instance.getActiveAccount();
+                    this.roleService.getCurrentRole(activeaccount.localAccountId).then((resp: any) => {
+                        debugger
+                        if (resp.confidentialProjects.length > 0) {
+                            // Filter confidential projects
+                            var confProjectUserList = resultSets.projectData.filter(x => resp.confidentialProjects.includes(x.problemUniqueId));
+                
+                            // Further filter projects that are not already in this.projects
+                            const filteredProjects = confProjectUserList.filter(project => 
+                                !this.projects || !this.projects.some(existingProject => existingProject.problemUniqueId == project.problemUniqueId)
+                            );
+                
+                            console.log(filteredProjects);
+                            // Merge the filtered projects with existing resultSets
+                            this.resultSets = [...this.resultSets, ...filteredProjects];
+                        }
+                    });
+                } else {
+                    // Logic when confidentialProjects is 'None'
+                    // Filter projects not already in this.projects
+                    const filteredProjects = resultSets.projectData.filter(project => 
+                        !this.projects || !this.projects.some(existingProject => existingProject.problemUniqueId == project.problemUniqueId)
+                    );
+                
+                    console.log(filteredProjects);
+                    // Update resultSets with filtered projects
+                    this.resultSets = filteredProjects;
+                }
 
 
                             this.budget = resultSets.budget;

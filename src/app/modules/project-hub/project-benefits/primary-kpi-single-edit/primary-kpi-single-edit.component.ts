@@ -64,7 +64,7 @@ export class PrimaryKpiSingleEditComponent implements OnInit {
     console.log(selectedPrimaryKpiValue)
 
     // Find the corresponding lookUpId from primaryKPI array
-    const selectedPrimaryKpiObject = this.lookupMasters.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName);
+    const selectedPrimaryKpiObject = selectedPrimaryKpiValue ? this.lookupMasters.find(x => x.lookUpName == selectedPrimaryKpiValue.lookUpName) : '';
 
     // Initialize the mainObj
     var mainObj: any = {};
@@ -78,7 +78,7 @@ console.log(selectedPrimaryKpiObject)
     mainObj.portfolioOwnerId = this.pc.portfolioOwnerId
     mainObj.financialRealizationStartDate = date? moment(date).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
     mainObj.valueCommentary = this.primaryKPIForm.get('valueCommentary').value;
-    mainObj.primaryKpi = selectedPrimaryKpiObject.lookUpId;
+    mainObj.primaryKpi = selectedPrimaryKpiObject ? selectedPrimaryKpiObject.lookUpId : '';
 
     console.log(mainObj)
     this.apiService.putProjectData(mainObj,this.id).then(res => {
