@@ -339,7 +339,7 @@ export class ProjectHubComponent implements OnInit {
         } else {
             this.dataQualityPercentageString = (~~this.dataQualityPercentage).toString() + "%";
         }
-        if (this.projectType == "Simple Project" || percentage == null) {
+        if (this.projectType == "SimpleProject" || percentage == null) {
             return '#4c9bcf';
         } else {
             if (percentage < this.lowerTargetPercentage) {
