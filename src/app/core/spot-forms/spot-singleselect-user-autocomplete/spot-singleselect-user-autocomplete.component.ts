@@ -83,12 +83,14 @@ export class SpotSingleselectUserAutocompleteComponent implements OnInit, Contro
         this._httpClient.post(GlobalVariables.apiurl + `ProjectTeams/UserSearch?${params.toString()}`, { body: [] })
           .subscribe((resultSets: any) => {
 
-            // Store the result sets
-            this.resultSets = resultSets.filter((obj) => obj.userIsActive!=false);
-            console.log(this.resultSets.filter((obj) => obj.userIsActive))
-            console.log(GlobalVariables.apiurl + `Projects/Search?${params.toString()}`)
-            // Execute the event
-            //this.search.next(resultSets);
+            // Sort and filter logic
+          this.resultSets = resultSets
+          .filter(obj => obj.userIsActive)
+          .sort((a, b) => {
+            const lastNameA = a.userDisplayName.split(',')[0].trim();
+            const lastNameB = b.userDisplayName.split(',')[0].trim();
+            return lastNameA.localeCompare(lastNameB);
+          })
           });
       });
   }
