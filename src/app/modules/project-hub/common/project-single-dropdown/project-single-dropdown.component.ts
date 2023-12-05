@@ -79,6 +79,7 @@ export class ProjectSingleDropdownComponent implements OnInit {
           abc$ = this._httpClient.get(GlobalVariables.apiurl + `ProjectHubData/ProjectTree/${this.projecthubservice.projectid}`)
           const response = lastValueFrom(abc$)
           response.then((res: any) => {
+            console.log(res)
             res.values.forEach(project => {
               ids.push(project.problemUniqueId);
             })
