@@ -71,7 +71,7 @@ export class PortfolioCenterComponent implements OnInit {
   data: any
   totalproject = 0;
   owningOrg = []
-  projectType = [{ name: 'Standard Project / Program' }, { name: 'Simple Project' }, { name: 'Strategic Initiative / Program' }]
+  projectType = [{ name: 'Standard Project / Program' }, { name: 'SimpleProject' }, { name: 'Strategic Initiative / Program' }]
   CAPSDropDrownValues = ["Yes", "No"]
   totalCAPEX = []
   AgileWorkstream = []
