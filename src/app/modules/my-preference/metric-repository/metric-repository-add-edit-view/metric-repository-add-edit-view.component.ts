@@ -21,7 +21,12 @@ export class MetricRepositoryAddEditViewComponent {
         public fuseAlert: FuseConfirmationService,
     ){
         this.metricRepositoryForm.controls.category.valueChanges.subscribe(res => {
-            this.categoryChanged = true;
+            if(this.myPreferenceService.itemid != "new"){
+                this.categoryChanged = true;
+            }
+        })
+        this.metricRepositoryForm.valueChanges.subscribe(res => {
+            this.myPreferenceService.isFormChanged = true
         })
     }
 

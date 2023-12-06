@@ -50,7 +50,7 @@
         <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
             let-selectFn="selectFn">
             <mat-slide-toggle class="h-full min-h-[2pc] overflow-hidden" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-slide-toggle>
-            Link        
+            Link
         </ng-template>
         <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
@@ -58,7 +58,7 @@
         </ng-template>
 
     </ngx-datatable-column>
-    <ngx-datatable-column *ngIf="mode == 'Normal'" [flexGrow]="1" [resizeable]="false" [sortable]="false"
+    <ngx-datatable-column *ngIf="mode == 'Normal'" [flexGrow]="1" [resizeable]="false" [sortable]="false"  [canAutoResize]="false"
         [draggable]="false">
         <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
             <div class="flex justify-start items-center gap-6">
