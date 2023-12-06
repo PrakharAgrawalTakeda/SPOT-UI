@@ -118,7 +118,13 @@ console.log(problemCapture)
             element.metricData.FianncialType3 = "Current Plan"
             element.metricData.FianncialType4 = "Actual"
             element.metricData.parentName = element.projectsMetricsData.parentProjectId ? parentData.problemTitle : ''
-            this.projectsMetricsData.push({...element.metricData, ...element.projectsMetricsData})
+             // Initialize null values to "0"
+      element.projectsMetricsData.strategicTarget = element.projectsMetricsData.strategicTarget ?? "0";
+      element.projectsMetricsData.strategicBaseline = element.projectsMetricsData.strategicBaseline ?? "0";
+      element.projectsMetricsData.strategicCurrent = element.projectsMetricsData.strategicCurrent ?? "0";
+      element.projectsMetricsData.strategicActual = element.projectsMetricsData.strategicActual ?? "0";
+
+      this.projectsMetricsData.push({...element.metricData, ...element.projectsMetricsData});
       })
       console.log(problemCapture)
       this.ValueCaptureForm.patchValue({
