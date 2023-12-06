@@ -196,6 +196,14 @@ export class CloseOutValueCreationComponent implements OnInit {
         }
           this.compare(this.columnYear)
           this.valuecreationngxdata = this.projectsMetricsData
+          if (!res.projectsMetricsDataYearly || res.projectsMetricsDataYearly.length === 0) {
+            const fiscalYear = this.getFiscalYearFromDate(problemCapture.financialRealizationStartDate);
+            this.initializeFinancialDataForYear(fiscalYear, this.projectsMetricsData);
+            // Push this year to columnYear if not already present
+            if (!this.columnYear.some(yearObj => yearObj.year === fiscalYear)) {
+              this.columnYear.push({ year: fiscalYear });
+            }
+          }
           this.ValueCaptureForm.disable()
           this.viewContent = true
       })
@@ -205,6 +213,31 @@ export class CloseOutValueCreationComponent implements OnInit {
   })
   })
 // })
+  }
+
+  private initializeFinancialDataForYear(fiscalYear: string, metricsData: any[]): void {
+    metricsData.forEach(metric => {
+      // Initialize year structure if not exist
+      if (!metric[fiscalYear]) {
+        metric[fiscalYear] = [{
+          target: "0",
+          baseline: "0",
+          actual: "0",
+          current: "0"
+        }];
+      }
+    });
+  }
+  
+  
+
+  private getFiscalYearFromDate(dateString: string): string {
+    const date = new Date(dateString);
+    let year = date.getFullYear();
+    if (date.getMonth() < 3) { // January, February, March
+      year--; // Fiscal year is the previous year
+    }
+    return `FY ${year}`;
   }
 
   getLookup(id: any){
