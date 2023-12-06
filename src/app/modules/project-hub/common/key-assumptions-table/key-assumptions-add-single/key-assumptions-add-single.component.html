@@ -6,7 +6,7 @@
     </a>
     </div>
 </div>
-<form class="overflow-auto m-2" style="height: calc(100vh - 120px)">
+<form class="overflow-auto m-2" [formGroup]="keyAssumptionForm" style="height: calc(100vh - 120px)">
     <spot-textarea class="w-full read-only" formControlName="keyAssumptionName" name="keyAssumptionName"
                    *ngIf="viewElementChecker('keyAssumption')"
                    [label]="'Key Assumption'">

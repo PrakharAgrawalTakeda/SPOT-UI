@@ -95,14 +95,14 @@ const selectedPrimaryKpiObject = selectedPrimaryKpiValue ? this.lookupMasters.fi
 
 // Initialize the mainObj
 var mainObj: any = {};
-console.log(selectedPrimaryKpiObject)
+console.log(this.pc)
 var date = this.primaryKPIForm.get('vcdate').value
 // Assign other properties to mainObj if needed
-mainObj.problemType = this.pc.problemType
-mainObj.problemTitle = this.pc.problemTitle
-mainObj.problemOwnerId = this.pc.problemOwnerId
+mainObj.problemType = this.pc.problemType ? this.pc.problemType : ''
+mainObj.problemTitle = this.pc.problemTitle ? this.pc.problemTitle : ''
+mainObj.problemOwnerId = this.pc.problemOwnerId ? this.pc.problemOwnerId : ''
 mainObj.problemUniqueId = this.pc.problemUniqueId
-mainObj.portfolioOwnerId = this.pc.portfolioOwnerId
+mainObj.portfolioOwnerId = this.pc.portfolioOwnerId ? this.pc.portfolioOwnerId : ''
 mainObj.financialRealizationStartDate = date? moment(date).format('YYYY-MM-DD[T]HH:mm:ss.sss[Z]') : null;
 mainObj.valueCommentary = this.primaryKPIForm.get('valueCommentary').value;
 mainObj.primaryKpi = selectedPrimaryKpiObject ? selectedPrimaryKpiObject.lookUpId : '';

@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="overflow-x-auto" *ngIf="hasBigValues">
+    <div class="overflow-x-auto" *ngIf="hasBigValues.value">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                        class="whitespace-nowrap ten-px-font-table" [rows]="data" columnMode="standard">
             <ngx-datatable-column name="Reference" prop="active" [sortable]="false" [resizeable]="false" [width]="90">
@@ -173,7 +173,7 @@
 
 
 
-    <div class="overflow-x-auto" *ngIf="!hasBigValues">
+    <div class="overflow-x-auto" *ngIf="!hasBigValues.value" (window:resize)="onResize($event)">
         <ngx-datatable [headerHeight]="'auto'" [rowHeight]="'auto'" [scrollbarV]="false" [scrollbarH]="true"
                        class="whitespace-nowrap ten-px-font-table" [rows]="data" [columnMode]="'flex'">
             <ngx-datatable-column name="Reference" prop="active" [sortable]="false" [resizeable]="false" [flexGrow]="2">
