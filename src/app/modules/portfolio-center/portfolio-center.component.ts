@@ -81,6 +81,7 @@ export class PortfolioCenterComponent implements OnInit {
   sorting: any = { name: "", dir: "" }
   viewBaseline = false
   projectOverview: any = []
+  count:number = 0
   filtersnew: any = {
     "PortfolioOwner": [],
     "ProjectTeamMember": [],
@@ -2896,7 +2897,19 @@ export class PortfolioCenterComponent implements OnInit {
   }
 
   tootlipFormatter(value, series) {
-    return value.toString();
+    this.count = this.count == undefined ? 0 : this.count
+    if(this.count == 0){
+      this.count++
+      return value.toString();
+    }
+    else if(this.count == 1){
+      this.count++
+      return '<div style="color: #775DD0;">'+value.toString()+'</div>';
+    }
+    else{
+      this.count = 0
+      return '<div style="color: rgba(0,143,251,0.85);">'+value.toString()+'</div>';
+    }
   }
 
   sort(event) {
