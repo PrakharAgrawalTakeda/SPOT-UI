@@ -29,6 +29,7 @@ export class CloseOutValueCreationComponent implements OnInit {
   columnYear = []
   yearData = []
   projectsMetricsData = []
+  isStrategicInitiative = false
   @ViewChild('valuecreationTable') table: any;
   constructor(public projectApiService: ProjectApiService, private _Activatedroute: ActivatedRoute, public auth: AuthService,public indicator: SpotlightIndicatorsService,
     private portApiService: PortfolioApiService){
@@ -64,35 +65,6 @@ export class CloseOutValueCreationComponent implements OnInit {
           this.filterData = filterres
           console.log(res.projectsMetricsData)
           this.localCurrency = currency.localCurrencyAbbreviation
-          // res.projectsMetricsData.forEach((element)=>{
-          //       element.metricCategoryId = null
-          //       element.metricName = ""
-          //       element.helpText = ""
-          //       element.metricPortfolioID = null
-          //       element.metricUnit = ""
-          //       element.metricTypeID = null
-          //       element.metricFormat = ""
-          //       element.FianncialType1 = "Target"
-          //       element.FianncialType2 = "Baseline Plan"
-          //       element.FianncialType3 = "Current Plan"
-          //       element.FianncialType4 = "Actual"
-          //   res.allMetrics.forEach((el)=>{
-          //     if(element.metricId == el.metricID){
-          //       var format = el.metricFormatID ? this.lookupData.find(x => x.lookUpId == el.metricFormatID).lookUpName : ''
-          //       element.metricCategoryId = el.metricCategoryID
-          //       element.metricName = el.metricName
-          //       element.helpText = el.helpText
-          //       element.metricPortfolioID = el.metricPortfolioID
-          //       element.metricUnit = el.metricUnit
-          //       element.metricTypeID = el.metricTypeID
-          //       element.metricFormat = format
-          //       element.strategicTarget = element.strategicTarget ? element.strategicTarget : '0'
-          //       element.strategicBaseline = element.strategicBaseline ? element.strategicBaseline : '0'
-          //       element.strategicCurrent = element.strategicCurrent ? element.strategicCurrent : '0'
-          //       element.strategicActual =element.strategicActual ? element.strategicActual : '0'
-          //     }
-          //   })
-          // })
 
           res.forEach((element)=>{
             var format = element.metricData.metricFormatID ? this.lookupData.find(x => x.lookUpId == element.metricData.metricFormatID).lookUpName : ''
@@ -113,6 +85,7 @@ export class CloseOutValueCreationComponent implements OnInit {
             problemCapture.primaryKpi ? this.kpi.find(x => x.kpiid == problemCapture.primaryKpi).kpiname : '',
             valueCommentary: problemCapture.valueCommentary
           })
+          this.isStrategicInitiative = problemCapture.problemType == 'Strategic Initiative / Program' ? true : false
           var year = []
           var yearList=[]
           
