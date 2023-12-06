@@ -44,7 +44,6 @@ export class MetricRepositoryComponent {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-            console.log(this.metricRepositoryData)
     }
 
     deleteMetricRepository(id: any) {
