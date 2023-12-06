@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FuseConfirmationConfig, FuseConfirmationService } from '@fuse/services/confirmation';
-import { SelectionType } from '@swimlane/ngx-datatable';
+import {DatatableComponent, SelectionType} from '@swimlane/ngx-datatable';
 import { SpotlightIndicatorsService } from 'app/core/spotlight-indicators/spotlight-indicators.service';
 import { ProjectApiService } from 'app/modules/project-hub/common/project-api.service';
 import { ProjectHubService } from 'app/modules/project-hub/project-hub.service';
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-ask-need-table',
@@ -20,8 +21,10 @@ export class AskNeedTableComponent implements OnInit {
   @Input() linksProblemCapture: any = []
   @Input() tableIndex: number = 0
   @Output() toggleChange = new EventEmitter();
+  @ViewChild('askNeedTable') askNeedTable: DatatableComponent;
   selected = [];
   SelectionType = SelectionType;
+  columnMode = new BehaviorSubject<string>('flex');
   getRowClass = (row) => {
     return {
       'row-color1': row.closeDate != null,

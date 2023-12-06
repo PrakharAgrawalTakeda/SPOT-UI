@@ -332,7 +332,7 @@
 
 
 
-        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Normal'">
+        <ngx-datatable-column [flexGrow]="1" [resizeable]="false" [sortable]="false" [draggable]="false" *ngIf="mode== 'Normal'" [canAutoResize]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
 
                 <div class="flex items-center justify-start gap-6">
